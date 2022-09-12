@@ -1,0 +1,40 @@
+<!--
+  ~ Copyright 2022 VastGui
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="app_name">VastUtils</string>
+    <string name="loading_page">加载页面</string>
+    <string name="swipe_list_view">仿qq滑动列表</string>
+    <string name="base_adapter">通用RecyclerView BaseAdapter</string>
+    <string name="base_bind_adapter">通用RecyclerView BaseBindingAdapter</string>
+    <string name="picture">图片</string>
+    <string name="get_camera">获取相册图片</string>
+    <string name="shape">Shape工具类</string>
+    <string name="base_intent">常用intent</string>
+    <string name="base_fragment_activity">FragmentActivity示例</string>
+    <string name="theme">换肤框架示例</string>
+    <string name="default_count">0</string>
+    <string name="add">加一</string>
+    <string name="download">下载</string>
+    <string name="file">文件存储</string>
+    <string name="zh_open_gallery">打开相册</string>
+    <string name="zh_open_snackbar">打开SnackBar</string>
+    <string name="zh_icon">图标</string>
+    <string name="zh_search">搜索</string>
+    <string name="zh_refresh">刷新</string>
+    <string name="zh_revoke">撤消</string>
+    <string name="date">日期</string>
+</resources>

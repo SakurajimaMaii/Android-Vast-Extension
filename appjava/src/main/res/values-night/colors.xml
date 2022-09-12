@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2022 VastGui
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <color name="colorPrimary">#A2C9FF</color>
+    <color name="colorOnPrimary">#00315B</color>
+    <color name="colorPrimaryContainer">#004881</color>
+    <color name="colorOnPrimaryContainer">#D3E4FF</color>
+    <color name="colorSecondary">#B7C8E2</color>
+    <color name="colorOnSecondary">#213146</color>
+    <color name="colorSecondaryContainer">#38485D</color>
+    <color name="colorOnSecondaryContainer">#D3E4FE</color>
+    <color name="colorTertiary">#DCBBEC</color>
+    <color name="colorOnTertiary">#3F264E</color>
+    <color name="colorTertiaryContainer">#573C66</color>
+    <color name="colorOnTertiaryContainer">#F4D9FF</color>
+    <color name="colorError">#FFB4AB</color>
+    <color name="colorOnError">#690005</color>
+    <color name="colorErrorContainer">#93000A</color>
+    <color name="colorOnErrorContainer">#FFB4AB</color>
+    <color name="colorBackground">#1A1C1E</color>
+    <color name="colorOnBackground">#E3E2E6</color>
+    <color name="colorSurface">#2D343E</color>
+    <color name="colorOnSurface">#E3E2E6</color>
+    <color name="colorSurfaceVariant">#43474E</color>
+    <color name="colorOnSurfaceVariant">#C3C6CF</color>
+    <color name="colorOutline">#8D9199</color>
+</resources>

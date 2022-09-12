@@ -1,0 +1,51 @@
+<!--
+  ~ Copyright 2022 VastGui
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="VastTheme" parent="Theme.Material3.DayNight">
+        <item name="colorPrimary">#0060A9</item>
+        <item name="colorOnPrimary">#ffffff</item>
+        <item name="colorPrimaryContainer">#D3E4FF</item>
+        <item name="colorOnPrimaryContainer">#001C38</item>
+        <item name="colorSecondary">#505F76</item>
+        <item name="colorOnSecondary">#ffffff</item>
+        <item name="colorSecondaryContainer">#D3E4FE</item>
+        <item name="colorOnSecondaryContainer">#0B1C30</item>
+        <item name="colorTertiary">#70547F</item>
+        <item name="colorOnTertiary">#ffffff</item>
+        <item name="colorTertiaryContainer">#F4D9FF</item>
+        <item name="colorOnTertiaryContainer">#291037</item>
+        <item name="colorError">#BA1A1A</item>
+        <item name="colorOnError">#ffffff</item>
+        <item name="colorErrorContainer">#FFDAD6</item>
+        <item name="colorOnErrorContainer">#410002</item>
+        <item name="android:colorBackground">#FDFCFF</item>
+        <item name="colorOnBackground">#1A1C1E</item>
+        <item name="colorSurface">#D9E5F3</item>
+        <item name="colorOnSurface">#1A1C1E</item>
+        <item name="colorSurfaceVariant">#DFE2EB</item>
+        <item name="colorOnSurfaceVariant">#43474E</item>
+        <item name="colorOutline">#73777F</item>
+        <item name="colorAccent">?colorOnSurface</item>
+    </style>
+
+    <style name="VastTheme.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">?colorSecondary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenAnimationDuration">2000</item>
+        <item name="postSplashScreenTheme">@style/VastTheme</item>
+    </style>
+</resources>
