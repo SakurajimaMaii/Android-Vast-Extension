@@ -25,6 +25,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModel
+import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui
@@ -42,7 +43,6 @@ sealed class VastActivity : AppCompatActivity() {
 
     /**
      * True if you want to show the ActionBar,false otherwise,
-     *
      * ```kotlin
      * override fun onCreate(savedInstanceState: Bundle?) {
      *      enableActionBar = false
@@ -58,8 +58,7 @@ sealed class VastActivity : AppCompatActivity() {
     /**
      * True if you want to set fullscreen,false otherwise.
      *
-     * If you set [enableFullScreen] to true,the ActionBar
-     * will not be shown.
+     * If you set [enableFullScreen] to true,the ActionBar will not be shown.
      *
      * ```kotlin
      * override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,7 +95,7 @@ sealed class VastActivity : AppCompatActivity() {
      *
      * @since 0.0.9
      */
-    protected lateinit var mSnackbar:Snackbar
+    protected lateinit var mSnackbar: Snackbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,18 +106,34 @@ sealed class VastActivity : AppCompatActivity() {
     /**
      * Return a [ViewModel].
      *
-     * If you want to initialization a [ViewModel] with parameters,just do like this:
+     * If you want to initialization a [ViewModel] with parameters,just do like
+     * this:
      * ```kotlin
      * override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
      *      return MainSharedVM("MyVM")
      * }
      * ```
      *
-     * @param modelClass by default, Activity will get the [ViewModel] by `modelClass.newInstance()`.
+     * @param modelClass by default, Activity will get the [ViewModel] by
+     *     `modelClass.newInstance()`.
      * @return the [ViewModel] of the Activity.
      * @since 0.0.9
      */
     protected abstract fun createViewModel(modelClass: Class<out ViewModel>): ViewModel
+
+    /**
+     * Get the activity [ViewBinding].
+     *
+     * @since 0.0.9
+     */
+    protected abstract fun getBinding(): ViewBinding
+
+    /**
+     * Get the activity [ViewModel].
+     *
+     * @since 0.0.9
+     */
+    protected abstract fun getViewModel(): ViewModel
 
     /**
      * initialize activity window.

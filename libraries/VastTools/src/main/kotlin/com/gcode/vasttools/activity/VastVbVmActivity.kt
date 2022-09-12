@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 import com.gcode.vasttools.extension.CreateViewModel
+import com.gcode.vasttools.extension.cast
 import com.gcode.vasttools.extension.reflexViewBinding
 import com.gcode.vasttools.extension.reflexViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -48,9 +49,9 @@ import com.google.android.material.snackbar.Snackbar
  */
 abstract class VastVbVmActivity<VB : ViewBinding, VM : ViewModel> : VastActivity() {
 
-    protected lateinit var mBinding: VB
+    private lateinit var mBinding: VB
 
-    protected val mViewModel: VM by lazy {
+    private val mViewModel: VM by lazy {
         reflexViewModel(object : CreateViewModel {
             override fun createVM(modelClass: Class<out ViewModel>): ViewModel {
                 return createViewModel(modelClass)
@@ -68,4 +69,13 @@ abstract class VastVbVmActivity<VB : ViewBinding, VM : ViewModel> : VastActivity
     override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
         return modelClass.newInstance()
     }
+
+    final override fun getBinding(): VB {
+        return cast(mBinding)
+    }
+
+    final override fun getViewModel(): VM {
+        return cast(mViewModel)
+    }
+
 }

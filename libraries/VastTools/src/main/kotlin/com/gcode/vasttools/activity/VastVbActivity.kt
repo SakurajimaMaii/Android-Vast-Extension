@@ -19,6 +19,7 @@ package com.gcode.vasttools.activity
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
+import com.gcode.vasttools.extension.cast
 import com.gcode.vasttools.extension.reflexViewBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -49,7 +50,7 @@ import com.google.android.material.snackbar.Snackbar
  */
 abstract class VastVbActivity<VB : ViewBinding> : VastActivity() {
 
-    protected lateinit var mBinding: VB
+    private lateinit var mBinding: VB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +61,14 @@ abstract class VastVbActivity<VB : ViewBinding> : VastActivity() {
 
     final override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
         return modelClass.newInstance()
+    }
+
+    final override fun getBinding(): VB {
+        return cast(mBinding)
+    }
+
+    final override fun getViewModel(): ViewModel {
+        throw RuntimeException("You should not call this method.")
     }
 
 }
