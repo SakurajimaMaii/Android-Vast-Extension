@@ -28,6 +28,8 @@ import com.gcode.vastadapter.adapter.VastBindAdapter
 import com.gcode.vastadapter.interfaces.VAapClickEventListener
 import com.gcode.vastadapter.interfaces.VastBindAdapterItem
 import com.gcode.vasttools.activity.VastVbActivity
+import com.gcode.vasttools.extension.cast
+import com.gcode.vasttools.utils.LogUtils
 import com.gcode.vasttools.utils.ResUtils
 import com.gcode.vastutils.BR
 import com.gcode.vastutils.R

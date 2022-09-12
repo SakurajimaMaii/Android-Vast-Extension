@@ -14,29 +14,18 @@
  * limitations under the License.
  */
 
-@file:JvmName("CastExtension")
+package com.gcode.vastswiperecyclerview.interfaces
 
-package com.gcode.vasttools.extension
+import android.view.View
 
-// Author: Vast Gui
+// Author: SakurajimaMai
 // Email: guihy2019@gmail.com
-// Date: 2022/8/28 12:06
-// Description: 
+// Date: 2022/6/14
+// Description:
 // Documentation:
 
-/**
- * Class cast.
- *
- * @param obj the object will be casted.
- * @param T type casts.
- * @since 0.0.9
- */
-@Suppress("UNCHECKED_CAST")
-@kotlin.jvm.Throws(Exception::class)
-fun <T> cast(obj: Any?): T {
-    try {
-        return obj as T
-    } catch (ex: Exception) {
-        throw ex
-    }
+interface VastSwipeItemClickListener {
+
+    fun onClickEvent(view: View, adapterPosition:Int)
+
 }

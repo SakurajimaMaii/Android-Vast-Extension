@@ -14,29 +14,27 @@
  * limitations under the License.
  */
 
-@file:JvmName("CastExtension")
-
-package com.gcode.vasttools.extension
+package com.gcode.vastskin
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/8/28 12:06
-// Description: 
-// Documentation:
+// Date: 2022/3/27 18:17
+
 
 /**
- * Class cast.
+ * If your custom view supports skinning, you need your
+ * custom view to implement [VastSkinSupport] in order to
+ * define resource replacement logic.
  *
- * @param obj the object will be casted.
- * @param T type casts.
- * @since 0.0.9
+ * @since 0.0.1
  */
-@Suppress("UNCHECKED_CAST")
-@kotlin.jvm.Throws(Exception::class)
-fun <T> cast(obj: Any?): T {
-    try {
-        return obj as T
-    } catch (ex: Exception) {
-        throw ex
-    }
+interface VastSkinSupport {
+
+    /**
+     * Custom resource replacement logic.
+     *
+     * @since 0.0.1
+     */
+    fun applySkin()
+
 }

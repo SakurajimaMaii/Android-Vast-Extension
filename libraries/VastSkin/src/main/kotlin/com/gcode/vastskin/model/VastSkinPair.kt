@@ -14,29 +14,20 @@
  * limitations under the License.
  */
 
-@file:JvmName("CastExtension")
-
-package com.gcode.vasttools.extension
+package com.gcode.vastskin.model
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/8/28 12:06
-// Description: 
-// Documentation:
+// Date: 2022/3/30 20:00
+// Description: VastSkinPair is used to store the name and id of the attr that can be changed.
 
 /**
- * Class cast.
+ * [VastSkinPair] is used to store the name and resource
+ * id of the attribute that can be changed.
  *
- * @param obj the object will be casted.
- * @param T type casts.
- * @since 0.0.9
+ * @property attributeName attribute name.
+ * @property resourceId resource id of the attribute.
+ *
+ * @since 0.0.1
  */
-@Suppress("UNCHECKED_CAST")
-@kotlin.jvm.Throws(Exception::class)
-fun <T> cast(obj: Any?): T {
-    try {
-        return obj as T
-    } catch (ex: Exception) {
-        throw ex
-    }
-}
+class VastSkinPair(internal var attributeName: String,internal var resourceId: Int)

@@ -9,10 +9,26 @@ rootProject.name = "VastUtils"
 
 val libs = arrayOf(
         "VastAdapter",
-        "VastTools",
+        "VastMenuFab",
         "VastNetStateLayout",
+        "VastSkin",
+        "VastSwipeRecyclerView",
+        "VastTools",
+        "VastUtils"
 )
 
 libs.forEach {
-     include(":libraries:$it")
+        include(":libraries:$it")
+}
+
+// =======
+// = Skin =
+// =======
+
+val skin = arrayOf(
+        "darkskin"
+)
+
+skin.forEach {
+        include(":skin:$it")
 }

@@ -12,31 +12,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-
-@file:JvmName("CastExtension")
-
-package com.gcode.vasttools.extension
-
-// Author: Vast Gui
-// Email: guihy2019@gmail.com
-// Date: 2022/8/28 12:06
-// Description: 
-// Documentation:
-
-/**
- * Class cast.
  *
- * @param obj the object will be casted.
- * @param T type casts.
- * @since 0.0.9
+ * The VastMenuFab is base on Clans/FloatingActionButton,please see
+ *
+ *     https://github.com/Clans/FloatingActionButton
+ *
+ * Thanks a lot for this project.
  */
-@Suppress("UNCHECKED_CAST")
-@kotlin.jvm.Throws(Exception::class)
-fun <T> cast(obj: Any?): T {
-    try {
-        return obj as T
-    } catch (ex: Exception) {
-        throw ex
+
+package com.gcode.vastmenufab
+
+import android.content.res.Resources
+
+internal object Util {
+
+    @JvmStatic
+    fun dp2px(dpValue: Float): Float {
+        val scale = Resources.getSystem().displayMetrics.density
+        return dpValue * scale
     }
+
 }
