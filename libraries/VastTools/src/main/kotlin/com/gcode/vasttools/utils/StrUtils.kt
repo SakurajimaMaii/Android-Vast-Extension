@@ -16,6 +16,9 @@
 
 package com.gcode.vasttools.utils
 
+import androidx.annotation.StringRes
+import com.gcode.vasttools.R
+
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/30 18:59
@@ -38,6 +41,94 @@ object StrUtils {
             sb.append(s)
         }
         return sb.toString()
+    }
+
+    /**
+     * Get the temperature string in Celsius unit.
+     *
+     * @param value the value or string res id of temperature.
+     * @return the temperature string in Celsius unit,like 39℃.
+     * @since 0.0.9
+     */
+    @JvmStatic
+    @Throws(RuntimeException::class)
+    fun getCelsius(value: Any): String {
+        return getUnitFormatString(value, R.string.unit_celsius)
+    }
+
+    /**
+     * Get the speed string in m/s.
+     *
+     * @param value the value of temperature.
+     * @return the speed string in m/s,like 39m/s.
+     * @since 0.0.9
+     */
+    @JvmStatic
+    @Throws(RuntimeException::class)
+    fun getSpeed(value: Any): String {
+        return getUnitFormatString(value, R.string.unit_speed)
+    }
+
+    /**
+     * Get the angle value string.
+     *
+     * @param value the value of angle.
+     * @return the angle value string,like 39°.
+     * @since 0.0.9
+     */
+    @JvmStatic
+    @Throws(RuntimeException::class)
+    fun getAngle(value: Any): String {
+        return getUnitFormatString(value, R.string.unit_angle)
+    }
+
+    /**
+     * Get the speed value string.
+     *
+     * @param value the value of angle.
+     * @return the speed value string,like 39km/h.
+     * @since 0.0.9
+     */
+    @JvmStatic
+    @Throws(RuntimeException::class)
+    fun getKm(value: Any): String {
+        return getUnitFormatString(value, R.string.unit_km)
+    }
+
+    /**
+     * Get the percent value string.
+     *
+     * @param value the value of angle.
+     * @return the percent value string,like 39%.
+     * @since 0.0.9
+     */
+    @JvmStatic
+    @Throws(RuntimeException::class)
+    fun getPercent(value: Any): String {
+        return getUnitFormatString(value, R.string.unit_percent)
+    }
+
+    /**
+     * Get format string with unit.
+     *
+     * @throws RuntimeException
+     * @since 0.0.9
+     */
+    @Throws(RuntimeException::class)
+    private fun getUnitFormatString(value: Any, @StringRes unit: Int): String {
+        return when (value) {
+            is Int -> String.format(
+                ResUtils.getString(unit),
+                ResUtils.getString(value)
+            )
+            is String -> String.format(
+                ResUtils.getString(unit),
+                value
+            )
+            else -> {
+                throw RuntimeException("The type of value should be ${Int.Companion::class.java.simpleName} or ${String.Companion::class.java.simpleName}")
+            }
+        }
     }
 
 }
