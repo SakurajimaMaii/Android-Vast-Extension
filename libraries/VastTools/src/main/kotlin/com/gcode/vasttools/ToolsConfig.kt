@@ -17,6 +17,7 @@
 package com.gcode.vasttools
 
 import android.app.Application
+import android.os.Looper
 import com.gcode.vasttools.helper.ContextHelper
 import com.gcode.vasttools.utils.LogUtils
 
@@ -45,5 +46,8 @@ object ToolsConfig {
         ContextHelper.init(application)
         LogUtils.init()
     }
+
+    @JvmStatic
+    fun isMainThread() = Looper.getMainLooper() == Looper.myLooper()
 
 }

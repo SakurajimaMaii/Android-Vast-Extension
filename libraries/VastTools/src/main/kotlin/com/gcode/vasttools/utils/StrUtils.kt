@@ -27,6 +27,16 @@ import com.gcode.vasttools.R
 
 object StrUtils {
 
+    enum class Unit(val unit: String) {
+        Angle(ResUtils.getString(R.string.unit_angle)),
+        Celsius(ResUtils.getString(R.string.unit_celsius)),
+        Kmh(ResUtils.getString(R.string.unit_kmh)),
+        Kilometer(ResUtils.getString(R.string.unit_km)),
+        Meter(ResUtils.getString(R.string.unit_m)),
+        Ms(ResUtils.getString(R.string.unit_ms)),
+        Percent(ResUtils.getString(R.string.unit_percent))
+    }
+
     /**
      * Concatenate the strings in the parameters in turn.
      *
@@ -35,77 +45,25 @@ object StrUtils {
      * @since 0.0.9
      */
     @JvmStatic
-    fun strConcat(vararg str:Any):String{
+    fun strConcat(vararg str: Any): String {
         val sb = StringBuilder()
-        for(s in str){
+        for (s in str) {
             sb.append(s)
         }
         return sb.toString()
     }
 
     /**
-     * Get the temperature string in Celsius unit.
+     * Get the string in [unit].
      *
-     * @param value the value or string res id of temperature.
+     * @param value the value or string res id.
      * @return the temperature string in Celsius unit,like 39℃.
      * @since 0.0.9
      */
     @JvmStatic
     @Throws(RuntimeException::class)
-    fun getCelsius(value: Any): String {
-        return getUnitFormatString(value, R.string.unit_celsius)
-    }
-
-    /**
-     * Get the speed string in m/s.
-     *
-     * @param value the value of temperature.
-     * @return the speed string in m/s,like 39m/s.
-     * @since 0.0.9
-     */
-    @JvmStatic
-    @Throws(RuntimeException::class)
-    fun getSpeed(value: Any): String {
-        return getUnitFormatString(value, R.string.unit_speed)
-    }
-
-    /**
-     * Get the angle value string.
-     *
-     * @param value the value of angle.
-     * @return the angle value string,like 39°.
-     * @since 0.0.9
-     */
-    @JvmStatic
-    @Throws(RuntimeException::class)
-    fun getAngle(value: Any): String {
-        return getUnitFormatString(value, R.string.unit_angle)
-    }
-
-    /**
-     * Get the speed value string.
-     *
-     * @param value the value of angle.
-     * @return the speed value string,like 39km/h.
-     * @since 0.0.9
-     */
-    @JvmStatic
-    @Throws(RuntimeException::class)
-    fun getKm(value: Any): String {
-        return getUnitFormatString(value, R.string.unit_km)
-    }
-
-    /**
-     * Get the percent value string.
-     *
-     * @param value the value of angle.
-     * @return the percent value string,like 39%.
-     * @since 0.0.9
-     */
-    @JvmStatic
-    @Throws(RuntimeException::class)
-    fun getPercent(value: Any): String {
-        return getUnitFormatString(value, R.string.unit_percent)
+    fun getUnitStr(value: Any, unit: Unit): String {
+        return getUnitFormatString(value, unit.unit)
     }
 
     /**
@@ -115,16 +73,10 @@ object StrUtils {
      * @since 0.0.9
      */
     @Throws(RuntimeException::class)
-    private fun getUnitFormatString(value: Any, @StringRes unit: Int): String {
+    private fun getUnitFormatString(value: Any, unit: String): String {
         return when (value) {
-            is Int -> String.format(
-                ResUtils.getString(unit),
-                ResUtils.getString(value)
-            )
-            is String -> String.format(
-                ResUtils.getString(unit),
-                value
-            )
+            is Int -> String.format(unit, ResUtils.getString(value))
+            is String -> String.format(unit, value)
             else -> {
                 throw RuntimeException("The type of value should be ${Int.Companion::class.java.simpleName} or ${String.Companion::class.java.simpleName}")
             }

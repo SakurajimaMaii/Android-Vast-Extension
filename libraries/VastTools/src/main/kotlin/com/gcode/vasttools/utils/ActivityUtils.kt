@@ -18,6 +18,7 @@ package com.gcode.vasttools.utils
 
 import android.app.Activity
 import android.os.Process
+import com.gcode.vasttools.ToolsConfig
 import kotlin.system.exitProcess
 
 
@@ -34,7 +35,7 @@ import kotlin.system.exitProcess
  */
 object ActivityUtils {
 
-    private val activities = ArrayList<Activity>()
+    private val activities:ArrayDeque<Activity> = ArrayDeque()
 
     /**
      * @param activity the activity you want to add.
@@ -43,7 +44,7 @@ object ActivityUtils {
      */
     @JvmStatic
     fun addActivity(activity: Activity) {
-        activities.add(activity)
+        activities.addFirst(activity)
     }
 
     /**
@@ -70,6 +71,25 @@ object ActivityUtils {
             if (activity.javaClass == clazz) {
                 return activity
             }
+        }
+        return null
+    }
+
+    /**
+     * Find the activity available at the top.
+     *
+     * @since 0.0.9
+     */
+    fun getCurrentActivity(): Activity? {
+        if (activities.isEmpty()) {
+            return null
+        }
+        while (activities.size > 0) {
+            val activity = activities.firstOrNull()
+            if (activity?.isFinishing == false)
+                return activity
+            else if (ToolsConfig.isMainThread())
+                activities.remove(activity)
         }
         return null
     }

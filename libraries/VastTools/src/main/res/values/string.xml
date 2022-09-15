@@ -15,9 +15,12 @@
   -->
 
 <resources>
-    <string name="unit_celsius">%s℃</string>
-    <string name="unit_speed">%sm/s</string>
+    <!-- Unit formatter string. -->
     <string name="unit_angle">%s°</string>
+    <string name="unit_celsius">%s℃</string>
+    <string name="unit_kmh">%skm/h</string>
+    <string name="unit_km">%skm</string>
+    <string name="unit_m">%sm</string>
+    <string name="unit_ms">%sm/s</string>
     <string name="unit_percent">%s%</string>
-    <string name="unit_km">%skm/h</string>
 </resources>
