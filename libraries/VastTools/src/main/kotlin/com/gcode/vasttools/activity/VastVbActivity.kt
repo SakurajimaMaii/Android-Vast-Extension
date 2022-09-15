@@ -50,17 +50,26 @@ import com.google.android.material.snackbar.Snackbar
  */
 abstract class VastVbActivity<VB : ViewBinding> : VastActivity() {
 
+    /**
+     * Default [Snackbar] for activity.
+     *
+     * @see getSnackbar
+     * @since 0.0.9
+     */
+    private lateinit var mSnackbar: Snackbar
+
     private lateinit var mBinding: VB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = reflexViewBinding(javaClass, layoutInflater)
         setContentView(mBinding.root)
-        mSnackbar = Snackbar.make(mBinding.root, defaultTag, Snackbar.LENGTH_SHORT)
+        initWindow()
+        mSnackbar = Snackbar.make(mBinding.root, getDefaultTag(), Snackbar.LENGTH_SHORT)
     }
 
     final override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        return modelClass.newInstance()
+        throw RuntimeException("You should not call this method.")
     }
 
     final override fun getBinding(): VB {
@@ -70,5 +79,7 @@ abstract class VastVbActivity<VB : ViewBinding> : VastActivity() {
     final override fun getViewModel(): ViewModel {
         throw RuntimeException("You should not call this method.")
     }
+
+    final override fun getSnackbar() = mSnackbar
 
 }

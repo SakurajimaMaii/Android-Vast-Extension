@@ -16,6 +16,7 @@
 
 package com.gcode.vasttools.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
@@ -48,6 +49,14 @@ import com.google.android.material.snackbar.Snackbar
 abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
 
     /**
+     * Default [Snackbar] for activity.
+     *
+     * @see getSnackbar
+     * @since 0.0.9
+     */
+    private lateinit var mSnackbar: Snackbar
+
+    /**
      * The layout resource id for this activity.
      *
      * @since 0.0.6
@@ -62,15 +71,16 @@ abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
         })
     }
 
+    @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (0 != layoutId) {
             setContentView(layoutId)
         } else {
-            throw RuntimeException("Please set correct layout id for the $defaultTag .")
+            throw RuntimeException("Please set correct layout id for the ${getDefaultTag()} .")
         }
         initWindow()
-        mSnackbar = Snackbar.make(findViewById(layoutId), defaultTag, Snackbar.LENGTH_SHORT)
+        mSnackbar = Snackbar.make(findViewById(layoutId), getDefaultTag(), Snackbar.LENGTH_SHORT)
     }
 
     override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
@@ -84,5 +94,7 @@ abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
     final override fun getViewModel(): VM {
         return cast(mViewModel)
     }
+
+    final override fun getSnackbar() = mSnackbar
 
 }

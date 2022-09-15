@@ -24,9 +24,8 @@ import android.view.WindowInsetsController
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModel
-import androidx.viewbinding.ViewBinding
-import com.google.android.material.snackbar.Snackbar
+import com.gcode.vasttools.base.BaseActive
+import com.gcode.vasttools.extension.NotNUllSingleVar
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -39,101 +38,50 @@ import com.google.android.material.snackbar.Snackbar
  *
  * @since 0.0.9
  */
-sealed class VastActivity : AppCompatActivity() {
+sealed class VastActivity : AppCompatActivity(), VastActivityInterface, VastActivityBaseInterface, BaseActive {
 
     /**
      * True if you want to show the ActionBar,false otherwise,
-     * ```kotlin
-     * override fun onCreate(savedInstanceState: Bundle?) {
-     *      enableActionBar = false
-     *      super.onCreate(savedInstanceState)
-     *      ... // Do something
-     * }
-     * ```
      *
+     * @see enableActionBar
      * @since 0.0.6
      */
-    protected var enableActionBar = true
+    private var mEnableActionBar = true
 
     /**
      * True if you want to set fullscreen,false otherwise.
      *
-     * If you set [enableFullScreen] to true,the ActionBar will not be shown.
-     *
-     * ```kotlin
-     * override fun onCreate(savedInstanceState: Bundle?) {
-     *      enableFullScreen = true
-     *      super.onCreate(savedInstanceState)
-     *      ... // Do something
-     * }
-     * ```
-     *
+     * @see enableFullScreen
      * @since 0.0.6
      */
-    protected var enableFullScreen = false
+    private var mEnableFullScreen = false
 
     /**
      * The [Context] of the activity.
      *
+     * @see getContext
      * @since 0.0.8
      */
-    protected lateinit var mContext: Context
-
-    /**
-     * Default tag for log.
-     *
-     * The value of [defaultTag] will be the class name that extends
-     * [VastVbActivity] , [VastVmActivity] or [VastVbVmActivity].
-     *
-     * @since 0.0.9
-     */
-    protected val defaultTag: String
-        get() = this.javaClass.simpleName
-
-    /**
-     * Default [Snackbar] for activity.
-     *
-     * @since 0.0.9
-     */
-    protected lateinit var mSnackbar: Snackbar
+    private var mContext by NotNUllSingleVar<Context>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = this
-        initWindow()
     }
 
-    /**
-     * Return a [ViewModel].
-     *
-     * If you want to initialization a [ViewModel] with parameters,just do like
-     * this:
-     * ```kotlin
-     * override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-     *      return MainSharedVM("MyVM")
-     * }
-     * ```
-     *
-     * @param modelClass by default, Activity will get the [ViewModel] by
-     *     `modelClass.newInstance()`.
-     * @return the [ViewModel] of the Activity.
-     * @since 0.0.9
-     */
-    protected abstract fun createViewModel(modelClass: Class<out ViewModel>): ViewModel
+    final override fun getContext() = mContext
 
-    /**
-     * Get the activity [ViewBinding].
-     *
-     * @since 0.0.9
-     */
-    protected abstract fun getBinding(): ViewBinding
+    final override fun getDefaultTag(): String = this.javaClass.simpleName
 
-    /**
-     * Get the activity [ViewModel].
-     *
-     * @since 0.0.9
-     */
-    protected abstract fun getViewModel(): ViewModel
+    final override fun enableActionBar(enable: Boolean) {
+        mEnableActionBar = enable
+    }
+
+    final override fun enableFullScreen(enable: Boolean) {
+        mEnableFullScreen = enable
+    }
+
+    final override fun getBaseActivity() = this
 
     /**
      * initialize activity window.
@@ -141,10 +89,10 @@ sealed class VastActivity : AppCompatActivity() {
      * @since 0.0.9
      */
     internal fun initWindow() {
-        if (!enableActionBar) {
+        if (!mEnableActionBar) {
             supportActionBar?.hide()
         }
-        if (enableFullScreen) {
+        if (mEnableFullScreen) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
                 @Suppress("DEPRECATION")
                 val flags = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE

@@ -16,6 +16,7 @@
 
 package com.gcode.vasttools.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
@@ -49,6 +50,14 @@ import com.google.android.material.snackbar.Snackbar
  */
 abstract class VastVbVmActivity<VB : ViewBinding, VM : ViewModel> : VastActivity() {
 
+    /**
+     * Default [Snackbar] for activity.
+     *
+     * @see getSnackbar
+     * @since 0.0.9
+     */
+    private lateinit var mSnackbar: Snackbar
+
     private lateinit var mBinding: VB
 
     private val mViewModel: VM by lazy {
@@ -59,11 +68,13 @@ abstract class VastVbVmActivity<VB : ViewBinding, VM : ViewModel> : VastActivity
         })
     }
 
+    @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = reflexViewBinding(javaClass, layoutInflater)
         setContentView(mBinding.root)
-        mSnackbar = Snackbar.make(mBinding.root, defaultTag, Snackbar.LENGTH_SHORT)
+        initWindow()
+        mSnackbar = Snackbar.make(mBinding.root, getDefaultTag(), Snackbar.LENGTH_SHORT)
     }
 
     override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
@@ -77,5 +88,7 @@ abstract class VastVbVmActivity<VB : ViewBinding, VM : ViewModel> : VastActivity
     final override fun getViewModel(): VM {
         return cast(mViewModel)
     }
+
+    final override fun getSnackbar() = mSnackbar
 
 }
