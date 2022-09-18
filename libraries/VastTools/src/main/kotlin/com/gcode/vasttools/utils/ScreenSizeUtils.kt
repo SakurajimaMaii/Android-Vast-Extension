@@ -24,6 +24,7 @@ import android.graphics.Point
 import android.os.Build
 import android.view.WindowManager
 import android.view.WindowMetrics
+import android.util.DisplayMetrics
 import androidx.annotation.RequiresApi
 import com.gcode.vasttools.helper.ContextHelper
 
@@ -197,4 +198,12 @@ object ScreenSizeUtils {
         }
         return result
     }
+
+    /**
+     * Get the logical density of the display.
+     *
+     * @see [DisplayMetrics.density]
+     * @since 0.0.9
+     */
+    fun getDensity() = ContextHelper.getAppContext().resources.displayMetrics.density
 }
