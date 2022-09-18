@@ -164,7 +164,7 @@ class VastNetStateLayout @JvmOverloads constructor(
                 isShow = run {
                     val view = vastNetStateMgr.loadingVs.inflate()
                     view.setOnClickListener {
-                        vastNetStateMgr.loadingListener?.onLoading()
+                        vastNetStateMgr.onLoading()
                     }
                     layoutSparseArray.put(layoutId, view)
                     true
@@ -174,7 +174,7 @@ class VastNetStateLayout @JvmOverloads constructor(
                 isShow = run {
                     val view = vastNetStateMgr.netErrorRetryVs.inflate()
                     view.setOnClickListener {
-                        vastNetStateMgr.netErrorListener?.onNetWorkError()
+                        vastNetStateMgr.onNetWorkError()
                     }
                     layoutSparseArray.put(layoutId,view)
                     true
@@ -184,7 +184,7 @@ class VastNetStateLayout @JvmOverloads constructor(
                 isShow = run {
                     val view = vastNetStateMgr.loadingErrorVs.inflate()
                     view.setOnClickListener {
-                        vastNetStateMgr.loadingErrorListener?.onLoadingError()
+                        vastNetStateMgr.onLoadingError()
                     }
                     layoutSparseArray.put(layoutId,view)
                     true
@@ -194,7 +194,7 @@ class VastNetStateLayout @JvmOverloads constructor(
                 isShow = run {
                     val view = vastNetStateMgr.emptyDataVs.inflate()
                     view.setOnClickListener {
-                        vastNetStateMgr.emptyDataListener?.onEmptyData()
+                        vastNetStateMgr.onEmptyData()
                     }
                     layoutSparseArray.put(layoutId,view)
                     true

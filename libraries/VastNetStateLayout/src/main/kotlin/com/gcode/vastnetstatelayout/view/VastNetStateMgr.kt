@@ -55,18 +55,16 @@ const val CONTENT_STATE_SHOW_SUCCESS = 0X05
 annotation class NetStateView
 
 /**
- * [VastNetStateMgr] used to manage the view
- * of different network status.
+ * [VastNetStateMgr] used to manage the view of different network status.
  *
- * Currently mainly supports four view:
- * EMPTY DATA,NET ERROR,LOADING ERROR,LOADING.
+ * Currently mainly supports four view: EMPTY DATA,NET ERROR,LOADING
+ * ERROR,LOADING.
  *
  * If you want to customize the view, you can use
- * [setEmptyDataView],[setNetErrorView],
- * [setLoadingView],[setLoadingView],
+ * [setEmptyDataView],[setNetErrorView], [setLoadingView],[setLoadingView],
  * otherwise the default view will be used.
  */
-class VastNetStateMgr(private val context: Context):BaseNetStateMgr {
+class VastNetStateMgr(private val context: Context) : BaseNetStateListener {
 
     internal var loadingVs: ViewStub
         private set
@@ -88,36 +86,33 @@ class VastNetStateMgr(private val context: Context):BaseNetStateMgr {
     var loadingErrorRetryViewId = 0
         private set
 
-    /**
-     * It will be called when the layout state is [CONTENT_STATE_SHOW_LOADING].
-     */
-    internal var loadingListener: VastLoadingListener? = null
-        private set
+    /** It will be called when the layout state is [CONTENT_STATE_SHOW_LOADING]. */
+    private var loadingListener: (() -> Unit)? = null
 
     /**
-     * It will be called when the layout state is [CONTENT_STATE_SHOW_NET_ERROR].
+     * It will be called when the layout state is
+     * [CONTENT_STATE_SHOW_NET_ERROR].
      */
-    internal var netErrorListener: VastNetErrorListener? = null
-        private set
+    private var netErrorListener: (() -> Unit)? = null
 
     /**
-     * It will be called when the layout state is [CONTENT_STATE_SHOW_EMPTY_DATA].
+     * It will be called when the layout state is
+     * [CONTENT_STATE_SHOW_EMPTY_DATA].
      */
-    internal var emptyDataListener: VastEmptyDataListener? = null
-        private set
+    private var emptyDataListener: (() -> Unit)? = null
 
     /**
-     * It will be called when the layout state is [CONTENT_STATE_SHOW_LOADING_ERROR].
+     * It will be called when the layout state is
+     * [CONTENT_STATE_SHOW_LOADING_ERROR].
      */
-    internal var loadingErrorListener: VastLoadingErrorListener? = null
-        private set
+    private var loadingErrorListener: (() -> Unit)? = null
 
     /**
      * Set [loadingViewId] and [loadingVs]
      *
      * @param loadingViewId Your custom net loading view id.
      */
-    override fun setLoadingView(@LayoutRes loadingViewId: Int){
+    fun setLoadingView(@LayoutRes loadingViewId: Int) = apply {
         this.loadingViewId = loadingViewId
         loadingVs = ViewStub(context).apply {
             layoutResource = loadingViewId
@@ -129,7 +124,7 @@ class VastNetStateMgr(private val context: Context):BaseNetStateMgr {
      *
      * @param netErrorRetryViewId Your custom net error view id.
      */
-    override fun setNetErrorView(@LayoutRes netErrorRetryViewId:Int){
+    fun setNetErrorView(@LayoutRes netErrorRetryViewId: Int) = apply {
         this.netErrorRetryViewId = netErrorRetryViewId
         netErrorRetryVs = ViewStub(context).apply {
             layoutResource = netErrorRetryViewId
@@ -141,7 +136,7 @@ class VastNetStateMgr(private val context: Context):BaseNetStateMgr {
      *
      * @param emptyDataRetryViewId Your custom empty data view id.
      */
-    override fun setEmptyDataView(@LayoutRes emptyDataRetryViewId:Int){
+    fun setEmptyDataView(@LayoutRes emptyDataRetryViewId: Int) = apply {
         this.emptyDataRetryViewId = emptyDataRetryViewId
         emptyDataVs = ViewStub(context).apply {
             layoutResource = emptyDataRetryViewId
@@ -153,7 +148,7 @@ class VastNetStateMgr(private val context: Context):BaseNetStateMgr {
      *
      * @param loadingErrorRetryViewId Your custom loading error view id.
      */
-    override fun setLoadingErrorView(@LayoutRes loadingErrorRetryViewId:Int){
+    fun setLoadingErrorView(@LayoutRes loadingErrorRetryViewId: Int) = apply {
         this.loadingErrorRetryViewId = loadingErrorRetryViewId
         loadingErrorVs = ViewStub(context).apply {
             layoutResource = loadingErrorRetryViewId
@@ -161,34 +156,42 @@ class VastNetStateMgr(private val context: Context):BaseNetStateMgr {
     }
 
     /**
-     * You can set the view click event including
-     * the following status:**NET ERROR**
+     * You can set the view click event including the following status:**NET
+     * ERROR**.
+     *
+     * @since 0.0.4
      */
-    override fun setNetErrorListener(netErrorListener: VastNetErrorListener?){
+    fun setNetErrorListener(netErrorListener: () -> Unit) = apply {
         this.netErrorListener = netErrorListener
     }
 
     /**
-     * You can set the view click event including
-     * the following status:**LOADING**
+     * You can set the view click event including the following
+     * status:**LOADING**.
+     *
+     * @since 0.0.4
      */
-    override fun setLoadingListener(loadingListener: VastLoadingListener?){
+    fun setLoadingListener(loadingListener: () -> Unit) = apply {
         this.loadingListener = loadingListener
     }
 
     /**
-     * You can set the view click event including
-     * the following status:**EMPTY DATA**
+     * You can set the view click event including the following status:**EMPTY
+     * DATA**.
+     *
+     * @since 0.0.4
      */
-    override fun setEmptyDataListener(emptyDataListener: VastEmptyDataListener?){
+    fun setEmptyDataListener(emptyDataListener: () -> Unit) = apply {
         this.emptyDataListener = emptyDataListener
     }
 
     /**
-     * You can set the view click event including
-     * the following status:**LOADING ERROR**
+     * You can set the view click event including the following
+     * status:**LOADING ERROR**.
+     *
+     * @since 0.0.4
      */
-    override fun setLoadingErrorListener(loadingErrorListener: VastLoadingErrorListener?){
+    fun setLoadingErrorListener(loadingErrorListener: () -> Unit) = apply {
         this.loadingErrorListener = loadingErrorListener
     }
 
@@ -213,5 +216,21 @@ class VastNetStateMgr(private val context: Context):BaseNetStateMgr {
             layoutResource = R.layout.simple_loading_error_view
         }
         loadingErrorRetryViewId = R.layout.simple_loading_error_view
+    }
+
+    override fun onEmptyData() {
+        emptyDataListener?.invoke()
+    }
+
+    override fun onLoadingError() {
+        loadingErrorListener?.invoke()
+    }
+
+    override fun onLoading() {
+        loadingListener?.invoke()
+    }
+
+    override fun onNetWorkError() {
+        netErrorListener?.invoke()
     }
 }
