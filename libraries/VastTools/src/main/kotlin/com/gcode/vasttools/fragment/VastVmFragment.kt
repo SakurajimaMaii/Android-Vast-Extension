@@ -50,7 +50,7 @@ import com.gcode.vasttools.extension.reflexViewModel
  * @param VM [ViewModel] of the fragment.
  * @since 0.0.6
  */
-abstract class VastVmFragment<VM : ViewModel> : Fragment(), VastFragmentInterface {
+abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
 
     private var vmBySelf by NotNUllSingleVar<Boolean>()
 

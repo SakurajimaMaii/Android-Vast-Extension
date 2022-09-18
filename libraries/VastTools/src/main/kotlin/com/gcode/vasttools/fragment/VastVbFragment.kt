@@ -47,7 +47,7 @@ import com.gcode.vasttools.extension.reflexViewBinding
  * @param VB [ViewBinding] of the fragment layout.
  * @since 0.0.6
  */
-abstract class VastVbFragment<VB : ViewBinding> : Fragment(), VastFragmentInterface {
+abstract class VastVbFragment<VB : ViewBinding> : VastFragment() {
 
     /**
      * The viewBinding of the fragment, it will be initialized in

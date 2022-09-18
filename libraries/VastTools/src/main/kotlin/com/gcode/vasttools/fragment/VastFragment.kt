@@ -1,11 +1,11 @@
 /*
- * Copyright 2022 VastGui
+ * Copyright 2022 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,26 +14,23 @@
  * limitations under the License.
  */
 
-package com.gcode.vastutilsjava.activity;
+package com.gcode.vasttools.fragment
+
+import androidx.fragment.app.Fragment
+import com.gcode.vasttools.activity.VastActivity
+import com.gcode.vasttools.base.BaseActive
+import com.gcode.vasttools.extension.cast
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/7 10:21
+// Date: 2022/9/14 17:11
 // Description: 
 // Documentation:
 
-import android.os.Bundle;
-import android.view.View;
+abstract class VastFragment : Fragment(), VastFragmentInterface, BaseActive {
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.gcode.vasttools.fragment.VastVbVmDialogFragment;
-import com.gcode.vastutilsjava.BasicVM;
-import com.gcode.vastutilsjava.databinding.FragmentDialogBinding;
-
-public class DialogFragment extends VastVbVmDialogFragment<FragmentDialogBinding,BasicVM> {
-
-
+    override fun getBaseActivity(): VastActivity {
+        return cast(requireActivity())
+    }
 
 }

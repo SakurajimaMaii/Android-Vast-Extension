@@ -78,33 +78,29 @@ dependencies {
     implementation(AndroidX.recyclerview)
     androidTestImplementation(AndroidX.espresso_core)
     androidTestImplementation(AndroidX.junit)
-
     implementation(Jetbrains.kotlin_reflect)
-
     implementation(Google.material)
-
     implementation(Squareup.okhttp3)
-
     implementation(Libraries.progressmanager)
     testImplementation(Libraries.junit)
 }
 
-val JAR_PATH = "build/intermediates/runtime_library_classes_jar/release/"
-val JAR_NAME = "classes.jar"
-val DESTINATION_PATH = "libs"
-val NEW_NAME = "VastTools_0.0.9_Cancey.jar"
+val jarPath = "build/intermediates/aar_main_jar/release/"
+val jarName = "classes.jar"
+val destinationPath = "libs"
+val newName = "VastTools_0.0.9_Cancey.jar"
 
 tasks.register("makeJar",Copy::class){
-    delete(DESTINATION_PATH + NEW_NAME)
-    from(JAR_PATH + JAR_NAME)
-    into(DESTINATION_PATH)
-    rename(JAR_NAME, NEW_NAME)
+    delete(destinationPath + newName)
+    from(jarPath + jarName)
+    into(destinationPath)
+    rename(jarName, newName)
 }.dependsOn("build")
 
 extra["PUBLISH_GROUP_ID"] = "io.github.sakurajimamaii"
 extra["PUBLISH_ARTIFACT_ID"] = "VastTools"
 extra["PUBLISH_VERSION"] = "0.0.9"
 extra["PUBLISH_DESCRIPTION"] = "Easy Quick Android Tools for you to faster project development."
-extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/VastUtils/tree/master/libraries/VastTools"
+extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/VastUtils/tree/release/libraries/VastTools"
 
 apply(from = "${rootProject.projectDir}/publish-mavencentral.gradle")

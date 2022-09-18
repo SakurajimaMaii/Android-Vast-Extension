@@ -28,10 +28,6 @@ import androidx.viewbinding.ViewBinding
 
 interface VastFragmentInterface {
 
-    companion object{
-        const val permission_request_code = 0x01
-    }
-
     /**
      * Default tag for log.
      *
