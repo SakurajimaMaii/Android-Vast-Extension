@@ -63,6 +63,7 @@ android {
 }
 
 dependencies {
+    api(Libraries.progressmanager)
     implementation(AndroidX.activity_ktx)
     implementation(AndroidX.annotation)
     implementation(AndroidX.appcompat)
@@ -81,21 +82,8 @@ dependencies {
     implementation(Jetbrains.kotlin_reflect)
     implementation(Google.material)
     implementation(Squareup.okhttp3)
-    implementation(Libraries.progressmanager)
     testImplementation(Libraries.junit)
 }
-
-val jarPath = "build/intermediates/aar_main_jar/release/"
-val jarName = "classes.jar"
-val destinationPath = "libs"
-val newName = "VastTools_0.0.9_Cancey.jar"
-
-tasks.register("makeJar",Copy::class){
-    delete(destinationPath + newName)
-    from(jarPath + jarName)
-    into(destinationPath)
-    rename(jarName, newName)
-}.dependsOn("build")
 
 extra["PUBLISH_GROUP_ID"] = "io.github.sakurajimamaii"
 extra["PUBLISH_ARTIFACT_ID"] = "VastTools"

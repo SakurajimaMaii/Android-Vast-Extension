@@ -18,7 +18,6 @@ package com.gcode.vasttools.utils
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import me.jessyan.progressmanager.ProgressListener
 import me.jessyan.progressmanager.ProgressManager
 import me.jessyan.progressmanager.body.ProgressInfo
@@ -39,24 +38,7 @@ import java.io.InputStream
  *
  * [DownloadUtils] can help you to download from network server,
  *
- * Firstly,you need to add dependencies.
- *
- * Add it in your root build.gradle at the end of repositories:
- * ```groovy
- * allprojects {
- *      repositories {
- *          ...
- *          maven { url 'https://jitpack.io' }
- *      }
- * }
- * ```
- *
- * Add the dependency:
- * ```groovy
- * implementation 'com.github.SakurajimaMaii:ProgressManager:0.0.1'
- * ```
- *
- * Secondly,use [DownloadUtils] to download from network server.
+ * Using [DownloadUtils] to download from network server.
  *
  * ```kotlin
  * // Download url
@@ -64,39 +46,96 @@ import java.io.InputStream
  * // Download save path
  * private val saveDir = ....
  * // Download
- * DownloadUtils.download(
- *      downloadUrl,
- *      saveDir,
- *      "bluetooth.apk",
- *      object :DownloadUtils.OnDownloadListener{
- *              override fun onDownloadSuccess() {
- *                  // Something to do when download successfully.
- *              }
- *              override fun onDownloading(progress: ProgressInfo?) {
- *                  // Something to do when downloading.
- *              }
- *              override fun onDownloadFailed(e: Exception?) {
- *                  // Something to do when download failed.
- *              }
- *       }
- * )
+ * DownloadUtils
+ *      .createConfig()
+ *      .setDownloadUrl(downloadUrl)
+ *      .setSaveDir(saveDir)
+ *      .setDownloading {
+ *          .. //Do something
+ *      }
+ *      .setDownloadFailed {
+ *          .. //Do something
+ *      }
+ *      .setDownloadSuccess {
+ *          .. //Do something
+ *      }
+ *      .download()
  * ```
  *
  * @since 0.0.8
  */
 object DownloadUtils {
-    private val tag = this.javaClass.simpleName
-    private val okHttpClient: OkHttpClient
-    private val mHandler: Handler = Handler(Looper.getMainLooper())
 
-    init {
-        val builder = OkHttpClient.Builder()
-        okHttpClient = ProgressManager.getInstance().with(builder).build()
+    @JvmStatic
+    fun createConfig() = DownloadConfig()
+
+    /**
+     * The config of the download.
+     *
+     * @property downloadUrl Download url.
+     * @property saveDir SDCard directory to store downloaded files.
+     * @property saveName Save name of downloaded files.If null,the default is to
+     *     truncate from the end of the download link. For example,the link is
+     *     [https://github.com/SakurajimaMaii/BluetoothDemo/blob/master/app-debug.apk],
+     *     saveName will take app-debug.apk as the value.
+     * @since 0.0.9
+     */
+    class DownloadConfig : OnDownloadListener {
+
+        internal var downloadUrl: String = ""
+        internal var saveDir: String = ""
+        internal var saveName: String? = null
+        internal var onDownloadSuccessListener: (()->Unit)? = null
+        internal var onDownloadingListener: ((progress: ProgressInfo?) -> Unit)? = null
+        internal var onDownloadFailedListener: ((e:Exception?) -> Unit)? = null
+
+        fun setDownloadUrl(url: String) = apply {
+            downloadUrl = url
+        }
+
+        fun setSaveDir(saveDir: String) = apply {
+            this.saveDir = saveDir
+        }
+
+        fun setSaveName(saveName: String) = apply {
+            this.saveName = saveName
+        }
+
+        fun setDownloadSuccess(l: ()->Unit) = apply {
+            onDownloadSuccessListener = l
+        }
+
+        fun setDownloading(l: (progress: ProgressInfo?) -> Unit) = apply {
+            onDownloadingListener = l
+        }
+
+        fun setDownloadFailed(l:(e:Exception?) -> Unit) = apply {
+            onDownloadFailedListener = l
+        }
+
+        fun download() {
+            download(this)
+        }
+
+        override fun onDownloadSuccess() {
+            onDownloadSuccessListener?.invoke()
+        }
+
+        override fun onDownloading(progress: ProgressInfo?) {
+            onDownloadingListener?.invoke(progress)
+        }
+
+        override fun onDownloadFailed(e: Exception?) {
+            onDownloadFailedListener?.invoke(e)
+        }
+
     }
 
     interface OnDownloadListener {
         /**
          * Download successfully.
+         *
+         * @since 0.0.8
          */
         fun onDownloadSuccess()
 
@@ -104,6 +143,7 @@ object DownloadUtils {
          * Downloading.
          *
          * @param progress Download progress information.
+         * @since 0.0.8
          */
         fun onDownloading(progress: ProgressInfo?)
 
@@ -111,27 +151,26 @@ object DownloadUtils {
          * Download failed.
          *
          * @param e Download exception.
+         * @since 0.0.8
          */
         fun onDownloadFailed(e: Exception?)
     }
 
+    private val okHttpClient: OkHttpClient
+    private val mHandler: Handler = Handler(Looper.getMainLooper())
+
     /**
      * Download from network server.
      *
-     * @param url      Download url.
-     * @param saveDir  SDCard directory to store downloaded files.
-     * @param saveName Save name of downloaded files.If null,the default is to truncate from the end of the download link.
-     *                 For example,the link is [https://github.com/SakurajimaMaii/BluetoothDemo/blob/master/app-debug.apk],
-     *                 saveName will take app-debug.apk as the value.
-     * @param listener Download listener.
-     *
-     * @since 0.0.8
+     * @since 0.0.9
      */
-    fun download(url: String, saveDir: String, saveName: String?, listener: OnDownloadListener) {
-        val request: Request = Request.Builder().url(url).build()
+    private fun download(
+        downloadConfig: DownloadConfig
+    ) {
+        val request: Request = Request.Builder().url(downloadConfig.downloadUrl).build()
         okHttpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: okio.IOException) {
-                listener.onDownloadFailed(e)
+                downloadConfig.onDownloadFailed(e)
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -142,11 +181,10 @@ object DownloadUtils {
 
                 try {
                     inputStream = response.body?.byteStream()
-                    Log.i(tag, response.body?.contentLength().toString())
-                    val file = if (null != saveName) {
-                        File(saveDir, saveName)
+                    val file = if (null != downloadConfig.saveName) {
+                        File(downloadConfig.saveDir, downloadConfig.saveName!!)
                     } else {
-                        File(saveDir, getNameFromUrl(url))
+                        File(downloadConfig.saveDir, getNameFromUrl(downloadConfig.downloadUrl))
                     }
                     if (!file.parentFile?.exists()!!)
                         file.parentFile?.mkdirs()
@@ -158,32 +196,33 @@ object DownloadUtils {
                     }
                     fos.flush()
                     mHandler.post {
-                        listener.onDownloadSuccess()
+                        downloadConfig.onDownloadSuccess()
                     }
                 } catch (e: Exception) {
-                    listener.onDownloadFailed(e)
+                    downloadConfig.onDownloadFailed(e)
                 } finally {
                     try {
                         inputStream?.close()
                     } catch (e: java.io.IOException) {
-                        listener.onDownloadFailed(e)
+                        downloadConfig.onDownloadFailed(e)
                     }
                     try {
                         fos?.close()
                     } catch (e: java.io.IOException) {
-                        listener.onDownloadFailed(e)
+                        downloadConfig.onDownloadFailed(e)
                     }
                 }
             }
         })
 
-        ProgressManager.getInstance().addResponseListener(url, object : ProgressListener {
+        ProgressManager.getInstance().addResponseListener(downloadConfig.downloadUrl, object :
+            ProgressListener {
             override fun onProgress(progressInfo: ProgressInfo?) {
-                listener.onDownloading(progressInfo)
+                downloadConfig.onDownloading(progressInfo)
             }
 
             override fun onError(l: Long, e: Exception?) {
-                listener.onDownloadFailed(e)
+                downloadConfig.onDownloadFailed(e)
             }
         })
     }
@@ -191,10 +230,16 @@ object DownloadUtils {
     /**
      * Get file save name for url.
      *
-     * @param url For example:[https://github.com/SakurajimaMaii/BluetoothDemo/blob/master/app-debug.apk]
+     * @param url For
+     *     example:[https://github.com/SakurajimaMaii/BluetoothDemo/blob/master/app-debug.apk]
      * @return For example:app-debug.apk
      */
     private fun getNameFromUrl(url: String): String {
         return url.substring(url.lastIndexOf("/") + 1)
+    }
+
+    init {
+        val builder = OkHttpClient.Builder()
+        okHttpClient = ProgressManager.getInstance().with(builder).build()
     }
 }
