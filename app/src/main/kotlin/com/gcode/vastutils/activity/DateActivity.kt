@@ -17,12 +17,9 @@
 package com.gcode.vastutils.activity
 
 import android.os.Bundle
-import android.util.Log
 import com.gcode.vasttools.activity.VastVbActivity
 import com.gcode.vasttools.utils.DateUtils
-import com.gcode.vasttools.utils.EncryptionUtils
 import com.gcode.vasttools.utils.LogUtils
-import com.gcode.vasttools.utils.StrUtils
 import com.gcode.vastutils.databinding.ActivityDateBinding
 import java.util.*
 
@@ -37,20 +34,20 @@ class DateActivity: VastVbActivity<ActivityDateBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LogUtils.i(defaultTag,DateUtils.getCurrentTime(DateUtils.FORMAT_HH_MM))
-        LogUtils.i(defaultTag,DateUtils.getDayBeforeOrAfterCurrentTime(DateUtils.FORMAT_MM_DD_HH_MM_SS,-2))
-        LogUtils.i(defaultTag,DateUtils.currentTimeZone)
-        LogUtils.i(defaultTag,DateUtils.minDateToString())
-        LogUtils.i(defaultTag,DateUtils.minDateToString(DateUtils.FORMAT_HH_MM))
+        LogUtils.i(getDefaultTag(),DateUtils.getCurrentTime(DateUtils.FORMAT_HH_MM))
+        LogUtils.i(getDefaultTag(),DateUtils.getDayBeforeOrAfterCurrentTime(DateUtils.FORMAT_MM_DD_HH_MM_SS,-2))
+        LogUtils.i(getDefaultTag(),DateUtils.currentTimeZone)
+        LogUtils.i(getDefaultTag(),DateUtils.minDateToString())
+        LogUtils.i(getDefaultTag(),DateUtils.minDateToString(DateUtils.FORMAT_HH_MM))
         val date: Date? = DateUtils.datetimeFromString("14:18", DateUtils.FORMAT_HH_MM)
-        LogUtils.i(defaultTag,DateUtils.datetimeToString(date!!, DateUtils.FORMAT_HH_MM_SS))
-        LogUtils.i(defaultTag,DateUtils.dateTimeToGMT())
-        LogUtils.i(defaultTag,DateUtils.dateTimeToGMT(DateUtils.GMT_PLUS_SIX,DateUtils.FORMAT_YYYY2MM2DD_HH_MM))
-        LogUtils.i(defaultTag,DateUtils.dateTimeFromGMT("07:01",DateUtils.FORMAT_HH_MM))
-        LogUtils.i(defaultTag,DateUtils.weekStartTime())
-        LogUtils.i(defaultTag,DateUtils.weekEndTime())
-        LogUtils.i(defaultTag,DateUtils.getWeekStartTime())
-        LogUtils.i(defaultTag,DateUtils.getWeekEndTime())
+        LogUtils.i(getDefaultTag(),DateUtils.datetimeToString(date!!, DateUtils.FORMAT_HH_MM_SS))
+        LogUtils.i(getDefaultTag(),DateUtils.dateTimeToGMT())
+        LogUtils.i(getDefaultTag(),DateUtils.dateTimeToGMT(DateUtils.GMT_PLUS_SIX,DateUtils.FORMAT_YYYY2MM2DD_HH_MM))
+        LogUtils.i(getDefaultTag(),DateUtils.dateTimeFromGMT("07:01",DateUtils.FORMAT_HH_MM))
+        LogUtils.i(getDefaultTag(),DateUtils.weekStartTime())
+        LogUtils.i(getDefaultTag(),DateUtils.weekEndTime())
+        LogUtils.i(getDefaultTag(),DateUtils.getWeekStartTime())
+        LogUtils.i(getDefaultTag(),DateUtils.getWeekEndTime())
     }
 
 }

@@ -32,8 +32,7 @@ class NetStateActivity : VastVbActivity<ActivityNetStateBinding>() {
     private val mHandler: Handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
-
-            mBinding.netStateLayout.showSuccess()
+            getBinding().netStateLayout.showSuccess()
         }
     }
 
@@ -50,7 +49,7 @@ class NetStateActivity : VastVbActivity<ActivityNetStateBinding>() {
                 object:Handler(Looper.getMainLooper()) {
                     override fun handleMessage(msg: Message) {
                         super.handleMessage(msg)
-                        mBinding.netStateLayout.showSuccess()
+                        getBinding().netStateLayout.showSuccess()
                     }
                 }.sendEmptyMessageDelayed(0, 1000)
             }
@@ -66,8 +65,8 @@ class NetStateActivity : VastVbActivity<ActivityNetStateBinding>() {
             }
         })
         vastNetStateMgr.setNetErrorView(R.layout.error_page)
-        mBinding.netStateLayout.setVastNetStateMgr(vastNetStateMgr)
-        mBinding.netStateLayout.showNetError()
+        getBinding().netStateLayout.setVastNetStateMgr(vastNetStateMgr)
+        getBinding().netStateLayout.showNetError()
 
         mHandler.sendEmptyMessageDelayed(0, 1000)
     }

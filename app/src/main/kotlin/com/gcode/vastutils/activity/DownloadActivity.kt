@@ -71,7 +71,7 @@ class DownloadActivity : VastVbActivity<ActivityDownloadBinding>() {
             1f
         )
 
-        mBinding.downloadCv.apply {
+        getBinding().downloadCv.apply {
             setProgressShader(LinearGradient(-700f, 0f, 700f, 0f,
                 colors,pos,
                 Shader.TileMode.CLAMP))
@@ -80,7 +80,7 @@ class DownloadActivity : VastVbActivity<ActivityDownloadBinding>() {
             setProgressStartAndEndEnabled(false)
         }
 
-        mBinding.download.setOnClickListener {
+        getBinding().download.setOnClickListener {
             downloadApk()
         }
     }
@@ -93,12 +93,12 @@ class DownloadActivity : VastVbActivity<ActivityDownloadBinding>() {
             object : DownloadUtils.OnDownloadListener {
                 override fun onDownloadSuccess() {
                     LogUtils.i(tag, "download success.")
-                    mBinding.downloadCv.setProgress(1f)
+                    getBinding().downloadCv.setProgress(1f)
                 }
 
                 override fun onDownloading(progress: ProgressInfo?) {
                     LogUtils.i(tag, "downloading ${progress?.percent?.toFloat()}")
-                    mBinding.downloadCv.setProgress((progress?.percent?.toFloat() ?: 0f) / 100f)
+                    getBinding().downloadCv.setProgress((progress?.percent?.toFloat() ?: 0f) / 100f)
                 }
 
                 override fun onDownloadFailed(e: Exception?) {

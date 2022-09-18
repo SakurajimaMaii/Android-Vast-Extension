@@ -28,14 +28,14 @@ class SampleVbVmFragment : VastVbVmFragment<FragmentSampleVbVmBinding, SampleSha
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mBinding.tv.text = mViewModel.tag
+        getBinding().tv.text = mViewModel.tag
 
-        mBinding.addOne.setOnClickListener {
+        getBinding().addOne.setOnClickListener {
             mViewModel.addOne()
         }
 
-        mViewModel.count.observe(requireActivity()) {
-            mBinding.count.text = it.toString()
+        getViewModel().count.observe(requireActivity()) {
+            getBinding().count.text = it.toString()
         }
     }
 

@@ -66,8 +66,8 @@ class BaseAdapterActivity : VastVbActivity<ActivityBaseAdapterBinding>() {
                 return true
             }
         })
-        mBinding.dataList.adapter = adapter
-        mBinding.dataList.layoutManager = LinearLayoutManager(this)
+        getBinding().dataList.adapter = adapter
+        getBinding().dataList.layoutManager = LinearLayoutManager(this)
     }
 
     private fun initData() {

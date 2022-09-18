@@ -37,9 +37,9 @@ class SampleVmFragment(override val layoutId: Int = R.layout.fragment_sample_vm)
         tv = view.findViewById(R.id.tv)
         count = view.findViewById(R.id.count)
 
-        tv.text = mViewModel.tag
+        tv.text = getViewModel().tag
 
-        mViewModel.count.observe(requireActivity()) {
+        getViewModel().count.observe(requireActivity()) {
             count.text = it.toString()
         }
     }

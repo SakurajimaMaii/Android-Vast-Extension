@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.gcode.vasttools.activity
+package com.gcode.vastutilscompose
 
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import com.gcode.vasttools.activity.VastActivityBaseInterface
 
 
 // Author: Vast Gui
@@ -33,16 +34,24 @@ import androidx.activity.ComponentActivity
  *
  * @since 0.0.9
  */
-abstract class VastComposeActivity : ComponentActivity() {
+abstract class VastComposeActivity : ComponentActivity(), VastActivityBaseInterface {
 
-    protected lateinit var mContext: Context
-
-    protected val defaultTag: String
-        get() = this.javaClass.simpleName
+    /**
+     * The [Context] of the activity.
+     *
+     * @see getContext
+     * @since 0.0.8
+     */
+    private lateinit var mContext: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = this
     }
+
+    final override fun getContext() = mContext
+
+    final override fun getDefaultTag(): String
+            = this.javaClass.simpleName
 
 }

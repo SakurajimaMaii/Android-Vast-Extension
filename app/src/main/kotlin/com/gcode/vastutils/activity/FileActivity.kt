@@ -50,17 +50,17 @@ class FileActivity : VastVbActivity<ActivityFileBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LogUtils.i(defaultTag, appInternalFilesDir().path)
-        LogUtils.i(defaultTag, appInternalCacheDir().path)
-        LogUtils.i(defaultTag, appExternalFilesDir(null)?.path)
-        LogUtils.i(defaultTag, appExternalCacheDir()?.path)
+        LogUtils.i(getDefaultTag(), appInternalFilesDir().path)
+        LogUtils.i(getDefaultTag(), appInternalCacheDir().path)
+        LogUtils.i(getDefaultTag(), appExternalFilesDir(null)?.path)
+        LogUtils.i(getDefaultTag(), appExternalCacheDir()?.path)
 
-        mBinding.openGallery.setOnClickListener {
+        getBinding().openGallery.setOnClickListener {
             openGalleryLauncher.launch("image/*")
         }
 
-        mBinding.openSnackBar.setOnClickListener {
-            mSnackbar.show()
+        getBinding().openSnackBar.setOnClickListener {
+            getSnackbar().show()
         }
 
         saveFile(File(appInternalFilesDir().path,"save.txt"))
@@ -71,7 +71,7 @@ class FileActivity : VastVbActivity<ActivityFileBinding>() {
 
         val res = deleteDir(File(appInternalFilesDir().path,"makeDir2"))
 
-        LogUtils.i(defaultTag, res.toString())
+        LogUtils.i(getDefaultTag(), res.toString())
 
         val res1 = writeFile(File(appInternalFilesDir().path, "picture.jpg"),
             object : FileUtils.WriteEventListener {
@@ -80,7 +80,7 @@ class FileActivity : VastVbActivity<ActivityFileBinding>() {
                 }
             })
 
-        LogUtils.i(defaultTag, res1.toString())
+        LogUtils.i(getDefaultTag(), res1.toString())
 
         val res2 = writeFile(File(appInternalFilesDir().path, "save.txt"),
             object : FileUtils.WriteEventListener {
@@ -89,6 +89,6 @@ class FileActivity : VastVbActivity<ActivityFileBinding>() {
                 }
             })
 
-        LogUtils.i(defaultTag, res2.toString())
+        LogUtils.i(getDefaultTag(), res2.toString())
     }
 }

@@ -25,8 +25,6 @@ class ThemeActivity : VastVbActivity<ActivityThemeBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val isColorHex = ColorUtils.isColorHex("#12c2e9")
     }
 
 }

@@ -16,7 +16,9 @@
 
 package com.gcode.vastutils
 
+import android.app.Activity
 import android.app.Application
+import android.os.Bundle
 import com.gcode.vasttools.ToolsConfig
 import com.gcode.vasttools.helper.ContextHelper
 

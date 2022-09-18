@@ -37,7 +37,7 @@ class FragmentsActivity : VastVbVmActivity<ActivityFragmentsBinding,SampleShared
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding.vp2.apply {
+        getBinding().vp2.apply {
             adapter = VastFragmentAdapter(this@FragmentsActivity,ArrayList<Fragment>().apply {
                 add(SampleVbVmFragment())
                 add(SampleVmFragment())

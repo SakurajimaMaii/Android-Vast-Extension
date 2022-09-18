@@ -34,35 +34,35 @@ class IntentActivity : VastVbActivity<ActivityIntentBinding>() {
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding.callBtn.setOnClickListener {
+        getBinding().callBtn.setOnClickListener {
             dialPhoneNumber(this, "12345678910")
         }
 
-        mBinding.searchWeb.setOnClickListener {
+        getBinding().searchWeb.setOnClickListener {
             searchWeb(this, "12345678910")
         }
 
-        mBinding.openWebPage.setOnClickListener {
+        getBinding().openWebPage.setOnClickListener {
             openWebPage(this, "http://www.baidu.com")
         }
 
-        mBinding.sendMmsMessage.setOnClickListener {
+        getBinding().sendMmsMessage.setOnClickListener {
             sendMmsMessage(this, "123456", "1238489")
         }
 
-        mBinding.sendEmail.setOnClickListener {
+        getBinding().sendEmail.setOnClickListener {
             openEmail(this, arrayOf("12345678910@qq.com"))
         }
 
-        mBinding.createOnceAlarm.setOnClickListener {
+        getBinding().createOnceAlarm.setOnClickListener {
             createOnceAlarm(this, "你好", 12, 30)
         }
 
-        mBinding.createAlarm.setOnClickListener {
+        getBinding().createAlarm.setOnClickListener {
             createAlarm(this, "你好", 12, 30)
         }
 
-        mBinding.wifiSetting.setOnClickListener {
+        getBinding().wifiSetting.setOnClickListener {
             openWirelessSettings(this)
         }
     }

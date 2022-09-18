@@ -19,7 +19,6 @@ package com.gcode.vastutils.fragment
 import android.os.Bundle
 import android.view.View
 import com.gcode.vasttools.fragment.VastVbVmDialogFragment
-import com.gcode.vasttools.utils.UnitStrUtils
 import com.gcode.vastutils.databinding.FragmentSampleDialogBinding
 import com.gcode.vastutils.viewModel.BasicViewModel
 

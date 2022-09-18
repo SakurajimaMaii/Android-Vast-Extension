@@ -16,6 +16,8 @@
 
 package com.gcode.vastutilsjava.activity;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -28,6 +30,9 @@ public class MainActivity extends VastVbActivity<ActivityMainBinding> {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getBinding().fab.setOnClickListener(view->{
+
+        });
     }
 
 }

@@ -28,11 +28,9 @@ import com.gcode.vastadapter.adapter.VastBindAdapter
 import com.gcode.vastadapter.interfaces.VAapClickEventListener
 import com.gcode.vastadapter.interfaces.VastBindAdapterItem
 import com.gcode.vasttools.activity.VastVbActivity
-import com.gcode.vasttools.extension.cast
-import com.gcode.vasttools.utils.LogUtils
 import com.gcode.vasttools.utils.ResUtils
-import com.gcode.vastutils.BR
 import com.gcode.vastutils.R
+import com.gcode.vastutils.BR
 import com.gcode.vastutils.activity.baseadpexample.BaseAdapterActivity
 import com.gcode.vastutils.activity.basebindadpexample.BaseBindingAdapterActivity
 import com.gcode.vastutils.databinding.ActivityMainBinding
@@ -56,14 +54,14 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
     private val data: MutableList<VastBindAdapterItem> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableActionBar = false
+        enableFullScreen(true)
         mSplashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         initData()
-        mBinding.rv.apply {
-            adapter = Adapter(data, mContext)
-            layoutManager = LinearLayoutManager(mContext)
-            addItemDecoration(DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL))
+        getBinding().rv.apply {
+            adapter = Adapter(data, context)
+            layoutManager = LinearLayoutManager(context)
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
     }
 
@@ -73,8 +71,8 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                 ResUtils.getString(R.string.loading_page),
                 object : VAapClickEventListener {
                     override fun vAapClickEvent(view: View, pos: Int) {
-                        mContext.startActivity(Intent(mContext, NetStateActivity::class.java))
-                        mSnackbar.setText(ResUtils.getString(R.string.loading_page)).show()
+                        getContext().startActivity(Intent(getContext(), NetStateActivity::class.java))
+                        getSnackbar().setText(ResUtils.getString(R.string.loading_page)).show()
                     }
                 }
             ))
@@ -83,9 +81,9 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                 ResUtils.getString(R.string.base_adapter),
                 object : VAapClickEventListener {
                     override fun vAapClickEvent(view: View, pos: Int) {
-                        mContext.startActivity(
+                        getContext().startActivity(
                             Intent(
-                                mContext,
+                                getContext(),
                                 BaseAdapterActivity::class.java
                             )
                         )
@@ -97,9 +95,9 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                 ResUtils.getString(R.string.base_bind_adapter),
                 object : VAapClickEventListener {
                     override fun vAapClickEvent(view: View, pos: Int) {
-                        mContext.startActivity(
+                        getContext().startActivity(
                             Intent(
-                                mContext,
+                                getContext(),
                                 BaseBindingAdapterActivity::class.java
                             )
                         )
@@ -111,7 +109,7 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                 ResUtils.getString(R.string.base_intent),
                 object : VAapClickEventListener {
                     override fun vAapClickEvent(view: View, pos: Int) {
-                        mContext.startActivity(Intent(mContext, IntentActivity::class.java))
+                        getContext().startActivity(Intent(getContext(), IntentActivity::class.java))
                     }
                 }
             ))
@@ -120,7 +118,7 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                 ResUtils.getString(R.string.shape),
                 object : VAapClickEventListener {
                     override fun vAapClickEvent(view: View, pos: Int) {
-                        mContext.startActivity(Intent(mContext, ShapeActivity::class.java))
+                        getContext().startActivity(Intent(getContext(), ShapeActivity::class.java))
                     }
                 }
             ))
@@ -129,9 +127,9 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                 ResUtils.getString(R.string.base_fragment_activity),
                 object : VAapClickEventListener {
                     override fun vAapClickEvent(view: View, pos: Int) {
-                        mContext.startActivity(
+                        getContext().startActivity(
                             Intent(
-                                mContext,
+                                getContext(),
                                 FragmentsActivity::class.java
                             )
                         )
@@ -143,7 +141,7 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                 ResUtils.getString(R.string.theme),
                 object : VAapClickEventListener {
                     override fun vAapClickEvent(view: View, pos: Int) {
-                        mContext.startActivity(Intent(mContext, ThemeActivity::class.java))
+                        getContext().startActivity(Intent(getContext(), ThemeActivity::class.java))
                     }
                 }
             ))
@@ -152,7 +150,7 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                 ResUtils.getString(R.string.download),
                 object : VAapClickEventListener {
                     override fun vAapClickEvent(view: View, pos: Int) {
-                        mContext.startActivity(Intent(mContext, DownloadActivity::class.java))
+                        getContext().startActivity(Intent(getContext(), DownloadActivity::class.java))
                     }
                 }
             ))
@@ -161,7 +159,7 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                 ResUtils.getString(R.string.file),
                 object : VAapClickEventListener {
                     override fun vAapClickEvent(view: View, pos: Int) {
-                        mContext.startActivity(Intent(mContext, FileActivity::class.java))
+                        getContext().startActivity(Intent(getContext(), FileActivity::class.java))
                     }
                 }
             ))
@@ -170,7 +168,7 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                 ResUtils.getString(R.string.date),
                 object : VAapClickEventListener {
                     override fun vAapClickEvent(view: View, pos: Int) {
-                        mContext.startActivity(Intent(mContext, DateActivity::class.java))
+                        getContext().startActivity(Intent(getContext(), DateActivity::class.java))
                     }
                 }
             ))

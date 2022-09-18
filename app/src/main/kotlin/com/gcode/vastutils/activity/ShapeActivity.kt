@@ -53,7 +53,7 @@ class ShapeActivity : VastVbActivity<ActivityShapeBinding>() {
             .setBgColorStateList(states,colorList)
             .build()
 
-        mBinding.btn1.background = btnBK
+        getBinding().btn1.background = btnBK
     }
 
 }

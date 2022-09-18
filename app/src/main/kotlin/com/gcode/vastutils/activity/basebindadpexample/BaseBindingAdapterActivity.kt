@@ -54,8 +54,8 @@ class BaseBindingAdapterActivity : VastVbActivity<ActivityBaseBindingAdapterBind
         })
 
 
-        mBinding.dataRv.adapter = adapter
-        mBinding.dataRv.layoutManager = LinearLayoutManager(this)
+        getBinding().dataRv.adapter = adapter
+        getBinding().dataRv.layoutManager = LinearLayoutManager(this)
     }
 
     private fun initData() {

@@ -62,8 +62,8 @@ public class BaseBindAdapterAppCompatActivity extends VastVbActivity<ActivityBas
             return true;
         });
 
-        mBinding.dataRv.setAdapter(adapter);
-        mBinding.dataRv.setLayoutManager(new LinearLayoutManager(this));
+        getBinding().dataRv.setAdapter(adapter);
+        getBinding().dataRv.setLayoutManager(new LinearLayoutManager(this));
     }
 
 }

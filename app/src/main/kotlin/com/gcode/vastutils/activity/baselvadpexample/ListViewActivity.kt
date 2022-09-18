@@ -36,7 +36,7 @@ class ListViewActivity : VastVbActivity<ActivityListViewBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding.dataList.adapter = ListViewAdapter(this,data, mutableListOf(LVIAVH.Factory(),
+        getBinding().dataList.adapter = ListViewAdapter(this,data, mutableListOf(LVIAVH.Factory(),
             LVIBVH.Factory()))
     }
 }

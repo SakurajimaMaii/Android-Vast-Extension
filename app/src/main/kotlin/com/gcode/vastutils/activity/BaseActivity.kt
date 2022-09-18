@@ -17,25 +17,22 @@
 package com.gcode.vastutils.activity
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import com.gcode.vasttools.activity.VastVbVmActivity
-import com.gcode.vasttools.utils.AppUtils
-import com.gcode.vasttools.utils.LogUtils
 import com.gcode.vastutils.databinding.ActivityBaseVbBinding
 import com.gcode.vastutils.viewModel.SampleSharedVM
 
 class BaseActivity : VastVbVmActivity<ActivityBaseVbBinding, SampleSharedVM>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableActionBar = false // 不显示ActionBar
+        enableActionBar(false) // 不显示ActionBar
         super.onCreate(savedInstanceState)
 
-        mBinding.addOne.setOnClickListener {
-            mViewModel.addOne()
+        getBinding().addOne.setOnClickListener {
+            getViewModel().addOne()
         }
 
-        mViewModel.count.observe(this){
-            mBinding.count.text = it.toString()
+        getViewModel().count.observe(this){
+            getBinding().count.text = it.toString()
         }
     }
 
