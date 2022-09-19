@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.gcode.vasttools.view.interfaces
+package com.gcode.vasttools.view.downloadcircle
 
 import android.graphics.Shader
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import android.graphics.Paint
-import com.gcode.vasttools.view.DownloadCircleView
 
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
@@ -33,7 +32,7 @@ import com.gcode.vasttools.view.DownloadCircleView
  *
  * @since 0.0.8
  */
-internal interface DownloadCircleViewInterface {
+internal interface DownloadCircle {
 
     /**
      * Set download progress.

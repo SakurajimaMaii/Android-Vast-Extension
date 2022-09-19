@@ -31,11 +31,11 @@ import androidx.appcompat.widget.AppCompatTextView
  *
  * @since 0.0.8
  */
-open class FocusedTextView: AppCompatTextView {
-
-    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context) : super(context)
+open class FocusedTextView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = android.R.attr.textViewStyle
+) : AppCompatTextView(context, attrs, defStyle) {
 
     override fun isFocused(): Boolean {
         return true
