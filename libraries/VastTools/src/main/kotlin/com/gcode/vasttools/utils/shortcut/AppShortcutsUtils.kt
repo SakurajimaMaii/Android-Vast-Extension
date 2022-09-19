@@ -192,12 +192,12 @@ object AppShortcutsUtils : ShortCutInterface {
             .build()
     }
 
-    fun registerShortCutListener(l: () -> Intent) = apply {
+    fun registerPinnedShortCutListener(l: () -> Intent) = apply {
         shortCutListener = l
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun settingShortCutResult(l: () -> PendingIntent) = apply {
+    fun setPinnedShortcutResult(l: () -> PendingIntent) = apply {
         shortCutResult = l
     }
 
