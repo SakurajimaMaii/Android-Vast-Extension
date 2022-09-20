@@ -16,7 +16,11 @@
 
 package com.gcode.vasttools.utils
 
+import android.app.ActivityManager
+import android.content.Context
 import android.os.Build
+import com.gcode.vasttools.extension.cast
+import com.gcode.vasttools.helper.ContextHelper
 import java.util.*
 
 // Author: Vast Gui
@@ -75,4 +79,19 @@ object SystemUtils {
     @JvmStatic
     val deviceBrand: String
         get() = Build.BRAND
+
+    /**
+     * Get system available memory.
+     *
+     * @since 0.0.9
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun getAvailableMemory(context:Context? = null):Int {
+        val mContext = context ?: ContextHelper.getAppContext()
+        val am = cast<ActivityManager>(mContext.getSystemService(Context.ACTIVITY_SERVICE))
+        val mi = ActivityManager.MemoryInfo()
+        am.getMemoryInfo(mi)
+        return (mi.availMem/(1024*1024)).toInt()
+    }
 }
