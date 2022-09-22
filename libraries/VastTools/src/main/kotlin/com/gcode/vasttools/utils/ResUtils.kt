@@ -20,6 +20,7 @@ import android.content.res.Resources
 import android.content.res.Resources.NotFoundException
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.res.ResourcesCompat
@@ -107,6 +108,24 @@ object ResUtils {
             ContextHelper.getAppContext().getColor(id)
         } catch (e: Resources.NotFoundException) {
             ColorUtils.colorHex2Int(ERROR_COLOR)
+        }
+    }
+
+    /**
+     * Retrieve a dimensional for a particular resource ID for use as an offset
+     * in raw pixels. The returned value is converted to integer pixels for
+     * you. An offset conversion involves simply truncating the base value to
+     * an integer. Otherwise 0 will be return.
+     *
+     * @param id the resource id of dimension.
+     * @since 0.0.9
+     */
+    @JvmStatic
+    fun getDimensionPixelOffset(@DimenRes id: Int): Int {
+        return try {
+            ContextHelper.getAppContext().resources.getDimensionPixelOffset(id)
+        } catch (ex: NotFoundException) {
+            0
         }
     }
 
