@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2022 VastGui
+  ~ Copyright 2022 VastGui guihy2019@gmail.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~ http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,7 @@
     android:layout_height="match_parent"
     android:background="#636e72"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <com.gcode.vasttools.view.DownloadCircleView
+    <cn.govast.vasttools.view.downloadcircle.DownloadCircleView
         android:id="@+id/downloadCv"
         android:layout_width="200dp"
         android:layout_height="200dp"
@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/download"/>
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/download"
         android:text="@string/download"
         android:layout_width="wrap_content"

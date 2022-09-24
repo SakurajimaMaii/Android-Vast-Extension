@@ -18,15 +18,14 @@
 // https://cloud.tencent.com/developer/article/1839887
 // https://mp.weixin.qq.com/s/mVqShijGTExtQ_nLslchpQ
 
-import com.android.build.gradle.internal.tasks.factory.dependsOn
-import com.gcode.plugin.version.*
+import cn.govast.plugin.version.*
 
 plugins {
     id("com.android.library")
     id("kotlin-android")
     id("kotlin-kapt")
     id("org.jetbrains.kotlin.android")
-    id("com.gcode.plugin.version")
+    id("cn.govast.plugin.version")
 }
 
 android {
@@ -63,6 +62,7 @@ android {
 }
 
 dependencies {
+    api(Libraries.zxing)
     api(Libraries.progressmanager)
     implementation(AndroidX.activity_ktx)
     implementation(AndroidX.annotation)

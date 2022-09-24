@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2022 VastGui
+  ~ Copyright 2022 VastGui guihy2019@gmail.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~ http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,8 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cn.govast.vastutils">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -22,7 +23,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.INSTALL_SHORTCUT" />
 
     <queries>
         <intent>
@@ -31,7 +33,7 @@
     </queries>
 
     <application
-        android:name=".App"
+        android:name="cn.govast.vastutils.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -42,13 +44,20 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.gcode.vastutils.fileProvider"
+            android:authorities="cn.govast.vastutils.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <receiver android:name=".broadcastreceiver.ShortcutReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.gcode.vastutils.SHORTCUT_ADDED"/>
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".activity.baselvadpexample.ListViewActivity"
@@ -69,7 +78,7 @@
             <!--            </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.DownloadActivity"
+            android:name="cn.govast.vastutils.activity.DownloadActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -132,7 +141,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.BaseActivity"
+            android:name="cn.govast.vastutils.activity.BaseActivity"
             android:exported="true">
             <!--                        <intent-filter>-->
             <!--                            <action android:name="android.intent.action.MAIN" />-->
