@@ -64,6 +64,10 @@ android {
 dependencies {
     api(Libraries.zxing)
     api(Libraries.progressmanager)
+    implementation(Squareup.okhttp3)
+    implementation(Squareup.retrofit2)
+    implementation(Squareup.retrofit2_adapter_rxjava)
+    implementation(Squareup.retrofit2_converter_gson)
     implementation(AndroidX.activity_ktx)
     implementation(AndroidX.annotation)
     implementation(AndroidX.appcompat)
@@ -81,7 +85,6 @@ dependencies {
     androidTestImplementation(AndroidX.junit)
     implementation(Jetbrains.kotlin_reflect)
     implementation(Google.material)
-    implementation(Squareup.okhttp3)
     testImplementation(Libraries.junit)
 }
 

@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.bean
+package cn.govast.vasttools
 
-//Author: Vast Gui
-//Email: guihy2019@gmail.com
-//Date: 2022/3/17 12:21
-//Documentation: [Bean](https://sakurajimamaii.github.io/VastDocs/document/en/Bean.html)
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2022/9/26
+// Description: 
+// Documentation:
+// Reference:
 
 /**
- * Base results for network requests.
- *
- * @param T Type of the result data.
+ * A placeholder function that does nothing.
  *
  * @since 0.0.9
  */
-open class ResponseBean<T:Any> ()
+internal fun nothing_to_do() = Unit

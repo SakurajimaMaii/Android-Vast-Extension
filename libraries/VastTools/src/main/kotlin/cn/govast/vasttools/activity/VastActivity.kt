@@ -25,6 +25,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import cn.govast.vasttools.base.BaseActive
+import cn.govast.vasttools.base.BaseLifecycleOwner
 import cn.govast.vasttools.extension.NotNUllSingleVar
 
 // Author: Vast Gui
@@ -39,7 +40,7 @@ import cn.govast.vasttools.extension.NotNUllSingleVar
  * @since 0.0.9
  */
 sealed class VastActivity : AppCompatActivity(), VastActivityInterface, VastActivityBaseInterface,
-    BaseActive {
+    BaseActive, BaseLifecycleOwner {
 
     /**
      * True if you want to show the ActionBar,false otherwise,
