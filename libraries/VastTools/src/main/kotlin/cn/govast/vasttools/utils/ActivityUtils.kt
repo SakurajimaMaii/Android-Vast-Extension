@@ -18,7 +18,7 @@ package cn.govast.vasttools.utils
 
 import android.app.Activity
 import android.os.Process
-import cn.govast.vasttools.ToolsConfig
+import cn.govast.vasttools.config.ToolsConfig
 import kotlin.system.exitProcess
 
 

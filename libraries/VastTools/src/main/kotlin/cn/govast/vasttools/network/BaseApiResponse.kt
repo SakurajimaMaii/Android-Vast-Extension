@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.base
-
-import androidx.lifecycle.LifecycleOwner
-import cn.govast.vasttools.network.BaseApiResponse
-import cn.govast.vasttools.network.FlowBuilder
+package cn.govast.vasttools.network
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -27,15 +23,9 @@ import cn.govast.vasttools.network.FlowBuilder
 // Documentation:
 // Reference:
 
-interface BaseLifecycleOwner:LifecycleOwner {
-
-    /**
-     * Construct a network request.
-     *
-     * @param lifecycleOwner the object that will initiate the request.
-     * @param T type of the result object class.
-     * @since 0.0.9
-     */
-    fun <T:BaseApiResponse> getFlowBuilder(lifecycleOwner: BaseLifecycleOwner) = FlowBuilder<T>(lifecycleOwner)
-
+abstract class BaseApiResponse {
+    abstract fun isSuccess(): Boolean
+    abstract fun isEmpty(): Boolean
+    open fun getErrorCode(): Int? = null
+    open fun getErrorMsg(): String? = null
 }

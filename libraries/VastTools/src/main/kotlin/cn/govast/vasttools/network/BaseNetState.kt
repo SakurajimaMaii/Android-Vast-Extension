@@ -14,40 +14,22 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools
-
-import android.app.Application
-import android.os.Looper
-import cn.govast.vasttools.helper.ContextHelper
-import cn.govast.vasttools.utils.LogUtils
-
+package cn.govast.vasttools.network
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/8/28 10:42
+// Date: 2022/9/26
 // Description: 
 // Documentation:
+// Reference:
 
-/**
- * VastUtils config.
- *
- * @since 0.0.9
- */
-object ToolsConfig {
+interface BaseNetState<T:BaseApiResponse> {
 
-    /**
-     * Initialize the tools.
-     *
-     * @param application the application of your app.
-     * @since 0.0.9
-     */
-    @JvmStatic
-    fun init(application: Application){
-        ContextHelper.init(application)
-        LogUtils.init()
-    }
-
-    @JvmStatic
-    fun isMainThread() = Looper.getMainLooper() == Looper.myLooper()
+    fun onStartState(onStart:()->Unit):BaseNetState<T>
+    fun onSuccessState(onSuccess: (data: T?) -> Unit): BaseNetState<T>
+    fun onEmptyState(onEmpty: () -> Unit): BaseNetState<T>
+    fun onFailedState(onFailed: (errorCode: Int?, errorMsg: String?) -> Unit): BaseNetState<T>
+    fun onErrorState(onError: (e: Throwable?) -> Unit): BaseNetState<T>
+    fun onCompleteState(onComplete: () -> Unit): BaseNetState<T>
 
 }

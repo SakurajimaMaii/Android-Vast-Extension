@@ -23,13 +23,6 @@ package cn.govast.vasttools.network
 // Documentation:
 // Reference: https://juejin.cn/post/6993294489125126151
 
-abstract class BaseApiResponse {
-    abstract fun isSuccess(): Boolean
-    abstract fun isEmpty(): Boolean
-    open fun getErrorCode(): Int? = null
-    open fun getErrorMsg(): String? = null
-}
-
 open class ApiResponse<T : BaseApiResponse>(
     open val data: T? = null,
     open val errorCode: Int? = null,
@@ -43,6 +36,5 @@ class ApiFailedResponse<T : BaseApiResponse>(
     override val errorCode: Int?,
     override val errorMsg: String?
 ) : ApiResponse<T>(errorCode = errorCode, errorMsg = errorMsg)
-
 class ApiErrorResponse<T : BaseApiResponse>(val throwable: Throwable?) :
     ApiResponse<T>(error = throwable)

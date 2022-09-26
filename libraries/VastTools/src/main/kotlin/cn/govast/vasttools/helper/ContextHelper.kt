@@ -18,7 +18,7 @@ package cn.govast.vasttools.helper
 
 import android.app.Application
 import android.content.Context
-import cn.govast.vasttools.ToolsConfig
+import cn.govast.vasttools.config.ToolsConfig
 
 
 // Author: Vast Gui

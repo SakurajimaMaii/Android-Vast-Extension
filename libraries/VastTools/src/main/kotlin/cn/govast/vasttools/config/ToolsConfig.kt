@@ -14,28 +14,40 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.base
+package cn.govast.vasttools.config
 
-import androidx.lifecycle.LifecycleOwner
-import cn.govast.vasttools.network.BaseApiResponse
-import cn.govast.vasttools.network.FlowBuilder
+import android.app.Application
+import android.os.Looper
+import cn.govast.vasttools.helper.ContextHelper
+import cn.govast.vasttools.utils.LogUtils
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/26
+// Date: 2022/8/28 10:42
 // Description: 
 // Documentation:
-// Reference:
 
-interface BaseLifecycleOwner:LifecycleOwner {
+/**
+ * VastUtils config.
+ *
+ * @since 0.0.9
+ */
+object ToolsConfig {
 
     /**
-     * Construct a network request.
+     * Initialize the tools.
      *
-     * @param lifecycleOwner the object that will initiate the request.
-     * @param T type of the result object class.
+     * @param application the application of your app.
      * @since 0.0.9
      */
-    fun <T:BaseApiResponse> getFlowBuilder(lifecycleOwner: BaseLifecycleOwner) = FlowBuilder<T>(lifecycleOwner)
+    @JvmStatic
+    fun init(application: Application){
+        ContextHelper.init(application)
+        LogUtils.init()
+    }
+
+    @JvmStatic
+    fun isMainThread() = Looper.getMainLooper() == Looper.myLooper()
 
 }

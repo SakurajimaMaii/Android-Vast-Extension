@@ -16,13 +16,11 @@
 
 package cn.govast.vasttools.network
 
-import androidx.lifecycle.lifecycleScope
-import cn.govast.vasttools.base.BaseLifecycleOwner
-import cn.govast.vasttools.extension.NotNUllSingleVar
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.ObservableTransformer
+import io.reactivex.rxjava3.observers.DisposableObserver
+import io.reactivex.rxjava3.schedulers.Schedulers
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -31,10 +29,19 @@ import kotlinx.coroutines.launch
 // Documentation:
 // Reference:
 
-class FlowBuilder<T : BaseApiResponse>(private val lifecycleOwner: BaseLifecycleOwner) :
-    BaseNetState<T> {
+open class ObserverBuilder<T : BaseApiResponse> :
+    BaseNetState<T>, DisposableObserver<T>() {
 
-    private var request: suspend () -> ApiResponse<T> by NotNUllSingleVar()
+    companion object{
+        @JvmStatic
+        fun <T : BaseApiResponse> applySchedulers(): ObservableTransformer<T, T> {
+            return ObservableTransformer<T, T> {
+                it.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+            }
+        }
+    }
+
     private var start: () -> Unit = {}
     private var success: (data: T?) -> Unit = {}
     private var empty: () -> Unit = {}
@@ -42,8 +49,24 @@ class FlowBuilder<T : BaseApiResponse>(private val lifecycleOwner: BaseLifecycle
     private var error: (e: Throwable?) -> Unit = { }
     private var complete: () -> Unit = {}
 
-    fun initRequest(request: suspend () -> ApiResponse<T>) = apply {
-        this.request = request
+    override fun onStart() {
+        start.invoke()
+    }
+
+    override fun onComplete() {
+        complete.invoke()
+    }
+
+    override fun onError(e: Throwable) {
+        error.invoke(e)
+    }
+
+    override fun onNext(t: T) {
+        if (t.isSuccess()) {
+            success.invoke(t)
+        } else {
+            failed.invoke(t.getErrorCode(), t.getErrorMsg())
+        }
     }
 
     override fun onStartState(onStart: () -> Unit) = apply {
@@ -68,25 +91,6 @@ class FlowBuilder<T : BaseApiResponse>(private val lifecycleOwner: BaseLifecycle
 
     override fun onSuccessState(onSuccess: (data: T?) -> Unit) = apply {
         success = onSuccess
-    }
-
-    fun launchFlow() {
-        lifecycleOwner.lifecycleScope.launch {
-            flow {
-                emit(request())
-            }.onStart {
-                start.invoke()
-            }.onCompletion {
-                complete.invoke()
-            }.collect { response ->
-                when (response) {
-                    is ApiSuccessResponse -> success.invoke(response.data)
-                    is ApiEmptyResponse -> empty.invoke()
-                    is ApiFailedResponse -> failed.invoke(response.errorCode, response.errorMsg)
-                    is ApiErrorResponse -> error.invoke(response.error)
-                }
-            }
-        }
     }
 
 }
