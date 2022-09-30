@@ -14,33 +14,17 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.activity
+package cn.govast.vastutils.network.service
 
-import android.content.Context
-
-// Author: Vast Gui
-// Email: guihy2019@gmail.com
-// Date: 2022/9/14 12:25
-// Description: 
-// Documentation:
-
-interface VastActivityBaseInterface {
-
-    /**
-     * Get the [Context] of the activity.
-     *
-     * @since 0.0.9
-     */
-    fun getContext(): Context
-
-    /**
-     * Default tag for log.
-     *
-     * The value of [getDefaultTag] will be the class
-     * name that implement [VastActivityBaseInterface].
-     *
-     * @since 0.0.9
-     */
-    fun getDefaultTag(): String
-
-}
+data class Album(
+    val alia: List<String>,
+    val artist: ArtistX,
+    val copyrightId: Int,
+    val id: Int,
+    val mark: Int,
+    val name: String,
+    val picId: Long,
+    val publishTime: Long,
+    val size: Int,
+    val status: Int
+)

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gcode.vasttools.fragment
+package cn.govast.vastutils.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,8 +24,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
+import cn.govast.vasttools.base.BaseFragment
 import cn.govast.vasttools.extension.*
-import cn.govast.vasttools.fragment.VastFragmentInterface
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -34,9 +34,9 @@ import cn.govast.vasttools.fragment.VastFragmentInterface
 // Documentation:
 
 abstract class VastVbVmDialogFragment<VB : ViewBinding, VM : ViewModel> : DialogFragment(),
-    VastFragmentInterface {
+    BaseFragment {
 
-    private var vmBySelf by NotNUllSingleVar<Boolean>()
+    private var vmBySelf by NotNUllVar<Boolean>()
 
     /**
      * The viewBinding of the fragment, it will be initialized in

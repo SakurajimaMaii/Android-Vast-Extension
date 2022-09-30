@@ -28,4 +28,4 @@ package cn.govast.vasttools
  *
  * @since 0.0.9
  */
-internal fun nothing_to_do() = Unit
+fun nothing_to_do() = Unit

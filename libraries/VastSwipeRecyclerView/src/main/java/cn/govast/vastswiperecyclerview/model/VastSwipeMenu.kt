@@ -24,8 +24,8 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import cn.govast.vastswiperecyclerview.R
 import cn.govast.vastswiperecyclerview.interfaces.VastSwipeMenuClickListener
-import com.gcode.vastswiperecyclerview.R
 
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com

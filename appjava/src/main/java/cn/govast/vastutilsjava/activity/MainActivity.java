@@ -16,6 +16,7 @@
 
 package cn.govast.vastutilsjava.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -24,13 +25,18 @@ import cn.govast.vasttools.activity.VastVbActivity;
 import cn.govast.vasttools.utils.DownloadUtils;
 import cn.govast.vasttools.utils.FileUtils;
 import cn.govast.vasttools.utils.LogUtils;
+import cn.govast.vastutilsjava.Constant;
 import cn.govast.vastutilsjava.databinding.ActivityMainBinding;
+import cn.govast.vastutilsjava.network.NetworkRetrofitBuilder;
+
 
 public class MainActivity extends VastVbActivity<ActivityMainBinding> {
 
-    private String downloadUrl = "https://alixiaobai.cn/files/coupon.apk";
-    private String saveDir = FileUtils.appInternalFilesDir().getPath();
 
+    private String saveDir = FileUtils.appInternalFilesDir().getPath();
+    private NetworkRetrofitBuilder networkRetrofitBuilder = new NetworkRetrofitBuilder();;
+
+    @SuppressLint("NewApi")
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +45,7 @@ public class MainActivity extends VastVbActivity<ActivityMainBinding> {
         });
 
         DownloadUtils.createConfig()
-                .setDownloadUrl(downloadUrl)
+                .setDownloadUrl(Constant.DOWNLOAD_URL)
                 .setSaveDir(saveDir)
                 .setDownloading(progressInfo -> {
                     LogUtils.INSTANCE.i(getDefaultTag(), "downloading" + progressInfo.getPercent());
@@ -54,6 +60,7 @@ public class MainActivity extends VastVbActivity<ActivityMainBinding> {
                     return null;
                 })
                 .download();
+
     }
 
 }

@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit
 // Documentation:
 // Reference: https://juejin.cn/post/7027675216080240647#heading-6
 
-abstract class BaseRetrofitBuilder {
+abstract class RetrofitBuilder {
 
     private val okHttpClient: OkHttpClient by lazy {
         val builder = OkHttpClient.Builder()

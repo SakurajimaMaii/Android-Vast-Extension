@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.bean
+package cn.govast.vastutils.network.service
 
-//Author: Vast Gui
-//Email: guihy2019@gmail.com
-//Date: 2022/3/17 12:21
-//Documentation: [Bean](https://sakurajimamaii.github.io/VastDocs/document/en/Bean.html)
-
-/**
- * Base results for network requests.
- *
- * @param T Type of the result data.
- *
- * @since 0.0.9
- */
-open class ResponseBean<T:Any> ()
+data class Song(
+    val album: Album,
+    val alias: List<String>,
+    val artists: List<ArtistX>,
+    val copyrightId: Int,
+    val duration: Int,
+    val fee: Int,
+    val ftype: Int,
+    val id: Int,
+    val mark: Long,
+    val mvid: Int,
+    val name: String,
+    val rUrl: Any,
+    val rtype: Int,
+    val status: Int,
+    val transNames: List<String>
+)

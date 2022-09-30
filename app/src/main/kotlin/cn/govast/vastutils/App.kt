@@ -17,7 +17,7 @@
 package cn.govast.vastutils
 
 import android.app.Application
-import cn.govast.vasttools.ToolsConfig
+import cn.govast.vasttools.config.ToolsConfig
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

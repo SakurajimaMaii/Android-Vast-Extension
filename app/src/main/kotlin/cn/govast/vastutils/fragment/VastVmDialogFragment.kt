@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gcode.vasttools.fragment
+package cn.govast.vastutils.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,11 +23,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
+import cn.govast.vasttools.base.BaseFragment
 import cn.govast.vasttools.extension.CreateViewModel
-import cn.govast.vasttools.extension.NotNUllSingleVar
+import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vasttools.extension.cast
 import cn.govast.vasttools.extension.reflexViewModel
-import cn.govast.vasttools.fragment.VastFragmentInterface
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -35,9 +35,9 @@ import cn.govast.vasttools.fragment.VastFragmentInterface
 // Description: 
 // Documentation:
 
-abstract class VastVmDialogFragment<VM : ViewModel> : DialogFragment(), VastFragmentInterface {
+abstract class VastVmDialogFragment<VM : ViewModel> : DialogFragment(), BaseFragment {
 
-    private var vmBySelf by NotNUllSingleVar<Boolean>()
+    private var vmBySelf by NotNUllVar<Boolean>()
 
     /**
      * When you are not using view binding, you should set [layoutId] to the

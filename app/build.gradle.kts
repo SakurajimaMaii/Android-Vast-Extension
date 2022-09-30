@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-import cn.govast.plugin.version.AndroidX
-import cn.govast.plugin.version.Google
-import cn.govast.plugin.version.Version
+import cn.govast.plugin.version.*
 
 plugins {
     id("com.android.application")
@@ -103,4 +101,12 @@ dependencies {
     implementation(AndroidX.constraintlayout)
     implementation(AndroidX.core_splashscreen)
     implementation(Google.material)
+    implementation(Squareup.okhttp3)
+    implementation(Squareup.retrofit2)
+    implementation(Squareup.retrofit2_adapter_rxjava3)
+    implementation(Squareup.retrofit2_converter_gson)
+    implementation(Jetbrains.kotlin_reflect)
+    implementation(Jetbrains.kotlinx_coroutines_core)
+    implementation(Jetbrains.kotlinx_coroutines_android)
+    implementation(Jetbrains.kotlinx_coroutines_rx3)
 }

@@ -27,20 +27,27 @@ import kotlin.reflect.KProperty
 // Description: 
 // Documentation:
 
-class NotNUllSingleVar<T> : ReadWriteProperty<Any?, T> {
+/**
+ * Get or set a not null parameter.
+ *
+ * @param T the parameter type.
+ * @param once if true, the parameter will only set by once, false otherwise.
+ */
+class NotNUllVar<T> @JvmOverloads constructor(private val once:Boolean = false) : ReadWriteProperty<Any?, T> {
 
     private var value: T? = null
 
-
     override fun getValue(thisRef: Any?, property: KProperty<*>): T {
-        return value ?: throw IllegalStateException("Not initialization.")
+        return value ?: throw UninitializedPropertyAccessException("${property.name} is not initialized.")
     }
 
     override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
-        this.value = if (this.value == null && value != null)
-            value
-        else
-            throw IllegalStateException("Can't be set to null, or has already been initialized")
+        when{
+            (null == value) ->
+                throw  IllegalStateException("${property.name} can't be set to null.")
+            (null == this.value || (null != this.value && !once)) -> this.value = value
+            (once) -> throw IllegalStateException("${property.name} has already been initialized.")
+        }
     }
 
 }

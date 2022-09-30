@@ -31,7 +31,6 @@ import cn.govast.vastswiperecyclerview.VastSwipeRvMgr
 import cn.govast.vastswiperecyclerview.adapter.VastSwipeWrapperAdapter
 import kotlin.math.abs
 
-
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com
 // Date: 2022/6/14

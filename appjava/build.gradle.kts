@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-import cn.govast.plugin.version.AndroidX
-import cn.govast.plugin.version.Google
-import cn.govast.plugin.version.Version
+import cn.govast.plugin.version.*
 
 plugins {
     id("com.android.application")
@@ -71,4 +69,10 @@ dependencies {
     implementation(project(":libraries:VastAdapter"))
     implementation(Google.material)
     implementation(AndroidX.core_splashscreen)
+    implementation(Libraries.rxjava3_rxjava)
+    implementation(Libraries.rxjava3_rxandroid)
+    implementation(Squareup.okhttp3)
+    implementation(Squareup.retrofit2)
+    implementation(Squareup.retrofit2_adapter_rxjava3)
+    implementation(Squareup.retrofit2_converter_gson)
 }

@@ -16,7 +16,7 @@
 
 package cn.govast.vasttools.utils
 
-import com.gcode.vasttools.R
+import cn.govast.vasttools.R
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

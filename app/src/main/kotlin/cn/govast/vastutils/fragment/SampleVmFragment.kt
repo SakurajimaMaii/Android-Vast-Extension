@@ -45,7 +45,7 @@ class SampleVmFragment(override val layoutId: Int = R.layout.fragment_sample_vm)
     }
 
     override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        return SampleSharedVM(defaultTag)
+        return SampleSharedVM(getDefaultTag())
     }
 
 }

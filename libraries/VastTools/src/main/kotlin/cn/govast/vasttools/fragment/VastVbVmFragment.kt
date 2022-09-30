@@ -49,22 +49,20 @@ import cn.govast.vasttools.extension.*
  */
 abstract class VastVbVmFragment<VB : ViewBinding, VM : ViewModel> : VastFragment() {
 
-    private var vmBySelf by NotNUllSingleVar<Boolean>()
-
     /**
      * The viewBinding of the fragment, it will be initialized in
      * [Fragment.onCreateView].
      *
      * @since 0.0.6
      */
-    private lateinit var mBinding: VB
+    private var mBinding by NotNUllVar<VB>()
 
-    protected val mViewModel: VM by lazy {
+    private val mViewModel: VM by lazy {
         reflexViewModel(object : CreateViewModel {
             override fun createVM(modelClass: Class<out ViewModel>): ViewModel {
                 return createViewModel(modelClass)
             }
-        }, vmBySelf)
+        }, setVmBySelf())
     }
 
     override fun onCreateView(
@@ -72,7 +70,6 @@ abstract class VastVbVmFragment<VB : ViewBinding, VM : ViewModel> : VastFragment
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        vmBySelf = setVmBySelf()
         mBinding = reflexViewBinding(javaClass, layoutInflater)
         return mBinding.root
     }

@@ -14,39 +14,26 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.fragment
+package cn.govast.vasttools.base
 
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-
+import cn.govast.vasttools.activity.VastActivity
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/13 7:18
+// Date: 2022/9/27
 // Description: 
 // Documentation:
+// Reference:
 
-interface VastFragmentInterface {
-
-    /**
-     * Default tag for log.
-     *
-     * The value of [defaultTag] will be the class name that extends
-     * [VastVbFragment] , [VastVmFragment] or [VastVbVmFragment].
-     *
-     * @since 0.0.9
-     */
-    val defaultTag: String
-        get() = this.javaClass.simpleName
+interface BaseVisActive : BaseActive {
 
     /**
-     * When [setVmBySelf] is true, the ViewModel representing the Fragment
-     * is retained by itself. When you want the ViewModel to be retained
-     * by its associated Activity, please set [setVmBySelf] to false.
-     *
+     * @return self or attached [VastActivity].
      * @since 0.0.9
      */
-    fun setVmBySelf(): Boolean
+    fun getBaseActivity(): VastActivity
 
     /**
      * Return a [ViewModel].
@@ -60,7 +47,7 @@ interface VastFragmentInterface {
      * }
      * ```
      *
-     * @param modelClass by default, Fragment will get the [ViewModel]
+     * @param modelClass by default, [BaseFragment] or [VastActivity] will get the [ViewModel]
      *     by `modelClass.newInstance()`.
      * @return the [ViewModel] of the Fragment.
      * @since 0.0.9
@@ -68,14 +55,14 @@ interface VastFragmentInterface {
     fun createViewModel(modelClass: Class<out ViewModel>): ViewModel
 
     /**
-     * Get the activity [ViewBinding].
+     * Get the [ViewBinding].
      *
      * @since 0.0.9
      */
     fun getBinding(): ViewBinding
 
     /**
-     * Get the activity [ViewModel].
+     * Get the [ViewModel].
      *
      * @since 0.0.9
      */

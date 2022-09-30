@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.network
+package cn.govast.vasttools.base
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -23,13 +23,10 @@ package cn.govast.vasttools.network
 // Documentation:
 // Reference:
 
-interface BaseNetState<T:BaseApiResponse> {
-
-    fun onStartState(onStart:()->Unit):BaseNetState<T>
-    fun onSuccessState(onSuccess: (data: T?) -> Unit): BaseNetState<T>
-    fun onEmptyState(onEmpty: () -> Unit): BaseNetState<T>
-    fun onFailedState(onFailed: (errorCode: Int?, errorMsg: String?) -> Unit): BaseNetState<T>
-    fun onErrorState(onError: (e: Throwable?) -> Unit): BaseNetState<T>
-    fun onCompleteState(onComplete: () -> Unit): BaseNetState<T>
-
+@JvmDefaultWithCompatibility
+interface BaseApiRsp {
+    fun isSuccess(): Boolean = true
+    fun isEmpty(): Boolean = false
+    fun getErrorCode(): Int? = null
+    fun getErrorMsg(): String? = null
 }

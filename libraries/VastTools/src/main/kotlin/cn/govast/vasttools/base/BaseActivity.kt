@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.activity
+package cn.govast.vasttools.base
 
-import androidx.lifecycle.ViewModel
-import androidx.viewbinding.ViewBinding
+import android.content.Context
 import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui
@@ -26,21 +25,14 @@ import com.google.android.material.snackbar.Snackbar
 // Description: 
 // Documentation:
 
-sealed interface VastActivityInterface {
+interface BaseActivity : BaseVisActive {
 
     /**
-     * Get the activity [ViewBinding].
+     * Get the [Context].
      *
      * @since 0.0.9
      */
-    fun getBinding(): ViewBinding
-
-    /**
-     * Get the activity [ViewModel].
-     *
-     * @since 0.0.9
-     */
-    fun getViewModel(): ViewModel
+    fun getContext(): Context
 
     /**
      * Get default [Snackbar] for activity.
@@ -50,8 +42,9 @@ sealed interface VastActivityInterface {
     fun getSnackbar(): Snackbar
 
     /**
-     * True if you want to show the ActionBar,false otherwise.
-     * Please call the method before super.onCreate.
+     * True if you want to show the ActionBar,false otherwise. Please call the
+     * method before super.onCreate.
+     *
      * ```kotlin
      * override fun onCreate(savedInstanceState: Bundle?) {
      *      enableActionBar(true)
@@ -66,8 +59,9 @@ sealed interface VastActivityInterface {
 
     /**
      * True if you want to set fullscreen,false otherwise. If you set
-     * [enableFullScreen] to true,the ActionBar will not be shown.
-     * Please call the method before super.onCreate.
+     * [enableFullScreen] to true,the ActionBar will not be shown. Please call
+     * the method before super.onCreate.
+     *
      * ```kotlin
      * override fun onCreate(savedInstanceState: Bundle?) {
      *      enableFullScreen(true)
@@ -79,23 +73,5 @@ sealed interface VastActivityInterface {
      * @since 0.0.9
      */
     fun enableFullScreen(enable: Boolean)
-
-    /**
-     * Return a [ViewModel].
-     *
-     * If you want to initialization a [ViewModel] with parameters,just do like
-     * this:
-     * ```kotlin
-     * override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-     *      return MainSharedVM("MyVM")
-     * }
-     * ```
-     *
-     * @param modelClass by default, Activity will get the [ViewModel] by
-     *     `modelClass.newInstance()`.
-     * @return the [ViewModel] of the Activity.
-     * @since 0.0.9
-     */
-    fun createViewModel(modelClass: Class<out ViewModel>): ViewModel
 
 }

@@ -16,8 +16,11 @@
 
 package cn.govast.vastutils.viewModel
 
+import android.annotation.SuppressLint
 import cn.govast.vasttools.lifecycle.VastViewModel
-import cn.govast.vasttools.utils.LogUtils
+import cn.govast.vastutils.network.NetworkRepository
+import cn.govast.vastutils.network.service.QRCodeKey
+import cn.govast.vastutils.network.service.SongResult
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -25,10 +28,18 @@ import cn.govast.vasttools.utils.LogUtils
 // Description: 
 // Documentation:
 
-class BasicViewModel: VastViewModel() {
+class BasicViewModel(
+    private val networkRepository: NetworkRepository
+) : VastViewModel() {
 
-    fun hello(){
-        LogUtils.d(defaultTag,"Hello")
+    @SuppressLint("NewApi")
+    suspend fun getQRCode(): QRCodeKey {
+        return networkRepository.getQRCode()
+    }
+
+    @SuppressLint("NewApi")
+    suspend fun searchSong(song: String): SongResult {
+        return networkRepository.searchSong(song)
     }
 
 }

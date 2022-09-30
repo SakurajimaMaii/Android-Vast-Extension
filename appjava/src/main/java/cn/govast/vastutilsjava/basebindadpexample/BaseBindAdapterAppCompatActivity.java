@@ -65,5 +65,4 @@ public class BaseBindAdapterAppCompatActivity extends VastVbActivity<ActivityBas
         getBinding().dataRv.setAdapter(adapter);
         getBinding().dataRv.setLayoutManager(new LinearLayoutManager(this));
     }
-
 }

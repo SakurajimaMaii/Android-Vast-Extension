@@ -22,8 +22,8 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
+import cn.govast.vasttools.R
 import cn.govast.vasttools.utils.ColorUtils
-import com.gcode.vasttools.R
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import kotlin.math.cos

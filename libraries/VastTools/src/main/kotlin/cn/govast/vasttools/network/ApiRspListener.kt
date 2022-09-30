@@ -18,23 +18,16 @@ package cn.govast.vasttools.network
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/25
+// Date: 2022/9/28
 // Description: 
 // Documentation:
-// Reference: https://juejin.cn/post/6993294489125126151
+// Reference:
 
-open class ApiResponse<T : BaseApiResponse>(
-    open val data: T? = null,
-    open val errorCode: Int? = null,
-    open val errorMsg: String? = null,
-    open val error: Throwable? = null,
-)
-
-class ApiSuccessResponse<T : BaseApiResponse>(private val response: T) : ApiResponse<T>(data = response)
-class ApiEmptyResponse<T : BaseApiResponse> : ApiResponse<T>()
-class ApiFailedResponse<T : BaseApiResponse>(
-    override val errorCode: Int?,
-    override val errorMsg: String?
-) : ApiResponse<T>(errorCode = errorCode, errorMsg = errorMsg)
-class ApiErrorResponse<T : BaseApiResponse>(val throwable: Throwable?) :
-    ApiResponse<T>(error = throwable)
+class ApiRspListener<T> {
+    var onStart: () -> Unit = {}
+    var onSuccess: (data: T) -> Unit = {}
+    var onEmpty: () -> Unit = {}
+    var onFailed: (errorCode: Int?, errorMsg: String?) -> Unit = { _, _ -> }
+    var onError: (t: Throwable?) -> Unit = { }
+    var onCompletion: (t: Throwable?) -> Unit = {}
+}

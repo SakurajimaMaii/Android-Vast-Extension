@@ -19,7 +19,6 @@ package cn.govast.vastutilscompose
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import cn.govast.vasttools.activity.VastActivityBaseInterface
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -28,12 +27,13 @@ import cn.govast.vasttools.activity.VastActivityBaseInterface
 // Documentation:
 
 /**
- * If you use [Jetpack Compose](https://developer.android.com/jetpack/compose),
+ * If you use
+ * [Jetpack Compose](https://developer.android.com/jetpack/compose),
  * you can make your activity extends [VastComposeActivity].
  *
  * @since 0.0.9
  */
-abstract class VastComposeActivity : ComponentActivity(), VastActivityBaseInterface {
+abstract class VastComposeActivity : ComponentActivity() {
 
     /**
      * The [Context] of the activity.
@@ -48,9 +48,8 @@ abstract class VastComposeActivity : ComponentActivity(), VastActivityBaseInterf
         mContext = this
     }
 
-    final override fun getContext() = mContext
+    fun getContext() = mContext
 
-    final override fun getDefaultTag(): String
-            = this.javaClass.simpleName
+    fun getDefaultTag(): String = this.javaClass.simpleName
 
 }

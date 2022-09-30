@@ -20,7 +20,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
-import com.gcode.vastswiperecyclerview.R
+import cn.govast.vastswiperecyclerview.R
 
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com

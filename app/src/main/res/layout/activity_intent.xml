@@ -67,4 +67,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Create shortcut" />
+    <Button
+        android:id="@+id/getQRCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get QRCode" />
 </LinearLayout>

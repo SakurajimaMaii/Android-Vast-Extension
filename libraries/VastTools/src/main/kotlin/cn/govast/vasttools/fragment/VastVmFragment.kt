@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 import cn.govast.vasttools.extension.CreateViewModel
-import cn.govast.vasttools.extension.NotNUllSingleVar
 import cn.govast.vasttools.extension.cast
 import cn.govast.vasttools.extension.reflexViewModel
 
@@ -51,8 +50,6 @@ import cn.govast.vasttools.extension.reflexViewModel
  */
 abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
 
-    private var vmBySelf by NotNUllSingleVar<Boolean>()
-
     /**
      * When you are not using view binding, you should set [layoutId] to the
      * corresponding view resource id of this Fragment.
@@ -66,7 +63,7 @@ abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
             override fun createVM(modelClass: Class<out ViewModel>): ViewModel {
                 return createViewModel(modelClass)
             }
-        }, vmBySelf)
+        }, setVmBySelf())
     }
 
     override fun onCreateView(
@@ -74,7 +71,6 @@ abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        vmBySelf = setVmBySelf()
         return inflater.inflate(layoutId, container, false)
     }
 
@@ -85,7 +81,7 @@ abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
     override fun setVmBySelf(): Boolean = false
 
     final override fun getBinding(): ViewBinding {
-        throw RuntimeException("You should not call this method.")
+        throw IllegalStateException("You should not call getBinding().")
     }
 
     final override fun getViewModel(): VM {

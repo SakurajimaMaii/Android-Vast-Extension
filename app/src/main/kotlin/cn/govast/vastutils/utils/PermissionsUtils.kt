@@ -20,9 +20,9 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
-import cn.govast.vasttools.activity.VastActivityBaseInterface
 import cn.govast.vasttools.base.BaseActive
-import cn.govast.vasttools.fragment.VastFragmentInterface
+import cn.govast.vasttools.base.BaseActivity
+import cn.govast.vasttools.base.BaseFragment
 import cn.govast.vasttools.helper.ContextHelper
 import cn.govast.vasttools.utils.ActivityUtils.getActivity
 import cn.govast.vasttools.utils.ActivityUtils.getCurrentActivity
@@ -111,8 +111,8 @@ object PermissionsUtils {
     private var permissions: Array<out String>? = null //上次请求的权限
 
     abstract class OnRequestPermissionCallBack<T : BaseActive> {
-        var baseActivityClass: Class<out VastActivityBaseInterface>? = null
-        var baseFragmentClass: Class<out VastFragmentInterface>? = null
+        var baseActivityClass: Class<out BaseActivity>? = null
+        var baseFragmentClass: Class<out BaseFragment>? = null
 
         abstract fun T.onPermissionOk()
 

@@ -21,6 +21,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 import cn.govast.vasttools.extension.CreateViewModel
+import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vasttools.extension.cast
 import cn.govast.vasttools.extension.reflexViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -54,7 +55,7 @@ abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
      * @see getSnackbar
      * @since 0.0.9
      */
-    private lateinit var mSnackbar: Snackbar
+    private var mSnackbar by NotNUllVar<Snackbar>()
 
     /**
      * The layout resource id for this activity.
@@ -88,7 +89,7 @@ abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
     }
 
     final override fun getBinding(): ViewBinding {
-        throw RuntimeException("You should not call this method.")
+        throw IllegalStateException("You should not call getBinding().")
     }
 
     final override fun getViewModel(): VM {

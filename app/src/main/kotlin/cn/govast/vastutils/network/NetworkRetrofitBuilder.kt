@@ -14,28 +14,22 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.base
+package cn.govast.vastutils.network
 
-import androidx.lifecycle.LifecycleOwner
-import cn.govast.vasttools.network.BaseApiResponse
-import cn.govast.vasttools.network.FlowBuilder
+import cn.govast.vasttools.network.RetrofitBuilder
+import cn.govast.vastutils.Constant
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/26
+// Date: 2022/9/25
 // Description: 
 // Documentation:
 // Reference:
 
-interface BaseLifecycleOwner:LifecycleOwner {
+class NetworkRetrofitBuilder: RetrofitBuilder() {
 
-    /**
-     * Construct a network request.
-     *
-     * @param lifecycleOwner the object that will initiate the request.
-     * @param T type of the result object class.
-     * @since 0.0.9
-     */
-    fun <T:BaseApiResponse> getFlowBuilder(lifecycleOwner: BaseLifecycleOwner) = FlowBuilder<T>(lifecycleOwner)
+    override fun setBaseUrl(): String {
+        return Constant.ROOT_URL
+    }
 
 }

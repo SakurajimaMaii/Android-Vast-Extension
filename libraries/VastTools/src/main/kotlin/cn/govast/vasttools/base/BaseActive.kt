@@ -16,7 +16,11 @@
 
 package cn.govast.vasttools.base
 
-import cn.govast.vasttools.activity.VastActivity
+import cn.govast.vasttools.network.RequestBuilder
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -27,9 +31,30 @@ import cn.govast.vasttools.activity.VastActivity
 interface BaseActive {
 
     /**
-     * @return self or attached [Base Activity].
+     * Default tag for log.
+     *
      * @since 0.0.9
      */
-    fun getBaseActivity(): VastActivity
+    fun getDefaultTag(): String
+
+    /**
+     * Create mainScope
+     *
+     * @since 0.0.9
+     */
+    fun createMainScope(): CoroutineScope =
+        CoroutineScope(
+            CoroutineName(getDefaultTag())
+                    + SupervisorJob()
+                    + Dispatchers.Main.immediate
+        )
+
+    /**
+     * Construct a network request builder.
+     *
+     * @param baseActive object that will initiate the request.
+     * @since 0.0.9
+     */
+    fun getRequestBuilder(baseActive: BaseActive) = RequestBuilder(baseActive)
 
 }

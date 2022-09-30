@@ -30,12 +30,12 @@ import cn.govast.vastswiperecyclerview.annotation.ONLY_ICON
 import cn.govast.vastswiperecyclerview.annotation.ONLY_TITLE
 import cn.govast.vastswiperecyclerview.model.VastSwipeMenu
 
-
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com
 // Date: 2022/6/14
 // Description: 
 // Documentation:
+
 class VastSwipeMenuView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {

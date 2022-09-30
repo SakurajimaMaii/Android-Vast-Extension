@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
+import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vasttools.extension.cast
 import cn.govast.vasttools.extension.reflexViewBinding
 
@@ -55,7 +56,7 @@ abstract class VastVbFragment<VB : ViewBinding> : VastFragment() {
      *
      * @since 0.0.6
      */
-    private lateinit var mBinding: VB
+    private var mBinding by NotNUllVar<VB>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,7 +78,7 @@ abstract class VastVbFragment<VB : ViewBinding> : VastFragment() {
     }
 
     final override fun getViewModel(): ViewModel {
-        throw RuntimeException("You should not call this method.")
+        throw IllegalStateException("You should not call getViewModel().")
     }
 
 }

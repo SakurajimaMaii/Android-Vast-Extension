@@ -14,25 +14,30 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils.fragment
-
-import android.os.Bundle
-import android.view.View
-import cn.govast.vastutils.databinding.FragmentSampleDialogBinding
-import cn.govast.vastutils.viewModel.BasicViewModel
-import com.gcode.vasttools.fragment.VastVbVmDialogFragment
+package cn.govast.vastutilsjava.network;
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/6 21:02
+// Date: 2022/9/26
 // Description: 
 // Documentation:
+// Reference:
 
-class SampleDialogFragment : VastVbVmDialogFragment<FragmentSampleDialogBinding, BasicViewModel>() {
+import androidx.annotation.NonNull;
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+import cn.govast.vasttools.network.RetrofitBuilder;
+import cn.govast.vastutilsjava.Constant;
 
+public class NetworkRetrofitBuilder extends RetrofitBuilder {
+
+    public NetworkRetrofitBuilder() {
+
+    }
+
+    @NonNull
+    @Override
+    public String setBaseUrl() {
+        return Constant.ROOT_URL;
     }
 
 }

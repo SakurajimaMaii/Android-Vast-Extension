@@ -24,7 +24,7 @@ package cn.govast.vastutilsjava;
 
 import android.app.Application;
 
-import cn.govast.vasttools.ToolsConfig;
+import cn.govast.vasttools.config.ToolsConfig;
 
 public class App extends Application {
 

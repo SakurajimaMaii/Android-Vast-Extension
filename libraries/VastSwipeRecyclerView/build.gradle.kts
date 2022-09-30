@@ -25,6 +25,7 @@ plugins {
 }
 
 android {
+
     compileSdk = Version.compile_sdk_version
 
     defaultConfig {

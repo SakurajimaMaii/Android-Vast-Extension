@@ -24,9 +24,8 @@ import android.view.WindowInsetsController
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
-import cn.govast.vasttools.base.BaseActive
-import cn.govast.vasttools.base.BaseLifecycleOwner
-import cn.govast.vasttools.extension.NotNUllSingleVar
+import cn.govast.vasttools.base.BaseActivity
+import cn.govast.vasttools.extension.NotNUllVar
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -39,8 +38,7 @@ import cn.govast.vasttools.extension.NotNUllSingleVar
  *
  * @since 0.0.9
  */
-sealed class VastActivity : AppCompatActivity(), VastActivityInterface, VastActivityBaseInterface,
-    BaseActive, BaseLifecycleOwner {
+sealed class VastActivity : AppCompatActivity(), BaseActivity {
 
     /**
      * True if you want to show the ActionBar,false otherwise,
@@ -64,7 +62,7 @@ sealed class VastActivity : AppCompatActivity(), VastActivityInterface, VastActi
      * @see getContext
      * @since 0.0.8
      */
-    private var mContext by NotNUllSingleVar<Context>()
+    private var mContext by NotNUllVar<Context>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -25,6 +25,7 @@ import cn.govast.vasttools.utils.ColorUtils
 import cn.govast.vasttools.utils.DownloadUtils
 import cn.govast.vasttools.utils.FileUtils
 import cn.govast.vasttools.utils.LogUtils
+import cn.govast.vastutils.Constant
 import cn.govast.vastutils.databinding.ActivityDownloadBinding
 
 // Author: Vast Gui 
@@ -35,7 +36,6 @@ import cn.govast.vastutils.databinding.ActivityDownloadBinding
 
 class DownloadActivity : VastVbActivity<ActivityDownloadBinding>() {
 
-    private val downloadUrl = "https://alixiaobai.cn/files/coupon.apk"
     private val saveDir = FileUtils.appInternalFilesDir().path
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +82,7 @@ class DownloadActivity : VastVbActivity<ActivityDownloadBinding>() {
     private fun downloadApk() {
         DownloadUtils
             .createConfig()
-            .setDownloadUrl(downloadUrl)
+            .setDownloadUrl(Constant.DOWNLOAD_URL)
             .setSaveDir(saveDir)
             .setDownloading { progress->
                 LogUtils.i(getDefaultTag(), "downloading ${progress?.percent?.toFloat()}")

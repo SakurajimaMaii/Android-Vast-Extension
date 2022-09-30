@@ -20,10 +20,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.extension.CreateViewModel
-import cn.govast.vasttools.extension.cast
-import cn.govast.vasttools.extension.reflexViewBinding
-import cn.govast.vasttools.extension.reflexViewModel
+import cn.govast.vasttools.extension.*
 import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui
@@ -56,9 +53,9 @@ abstract class VastVbVmActivity<VB : ViewBinding, VM : ViewModel> : VastActivity
      * @see getSnackbar
      * @since 0.0.9
      */
-    private lateinit var mSnackbar: Snackbar
+    private var mSnackbar by NotNUllVar<Snackbar>()
 
-    private lateinit var mBinding: VB
+    private var mBinding by NotNUllVar<VB>()
 
     private val mViewModel: VM by lazy {
         reflexViewModel(object : CreateViewModel {

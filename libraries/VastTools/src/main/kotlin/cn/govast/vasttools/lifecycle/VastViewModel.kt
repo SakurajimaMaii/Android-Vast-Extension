@@ -16,8 +16,8 @@
 
 package cn.govast.vasttools.lifecycle
 
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.ViewModel
+import cn.govast.vasttools.base.BaseActive
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -25,21 +25,13 @@ import androidx.lifecycle.ViewModel
 // Description: 
 // Documentation:
 
-/** Base ViewModel
+/**
+ * Base ViewModel
  *
  * @since 0.0.9
  */
-abstract class VastViewModel:ViewModel(),DefaultLifecycleObserver {
+abstract class VastViewModel : ViewModel(), BaseActive {
 
-    /**
-     * Default tag for log.
-     *
-     * The value of [defaultTag] will be the
-     * class name that extends [VastViewModel].
-     *
-     * @since 0.0.9
-     */
-    protected val defaultTag:String
-        get() = this.javaClass.simpleName
+    final override fun getDefaultTag(): String = this.javaClass.simpleName
 
 }

@@ -20,11 +20,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
+import cn.govast.vastswiperecyclerview.R
 import cn.govast.vastswiperecyclerview.VastSwipeRvMgr
 import cn.govast.vastswiperecyclerview.model.VastSwipeMenu
 import cn.govast.vastswiperecyclerview.view.VastSwipeMenuLayout
 import cn.govast.vastswiperecyclerview.view.VastSwipeMenuView
-import com.gcode.vastswiperecyclerview.R
 import java.lang.reflect.Field
 
 // Author: SakurajimaMai

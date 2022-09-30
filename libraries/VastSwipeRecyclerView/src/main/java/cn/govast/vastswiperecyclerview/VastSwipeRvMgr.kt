@@ -27,7 +27,6 @@ import cn.govast.vastswiperecyclerview.annotation.SwipeMenuContentStyle
 import cn.govast.vastswiperecyclerview.interfaces.VastSwipeItemClickListener
 import cn.govast.vastswiperecyclerview.interfaces.VastSwipeItemLongClickListener
 import cn.govast.vastswiperecyclerview.interfaces.VastSwipeMenuCreator
-import com.gcode.vastswiperecyclerview.R
 
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com

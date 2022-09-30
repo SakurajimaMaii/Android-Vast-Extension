@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.network
+package cn.govast.vastutils.network.service
 
-// Author: Vast Gui
-// Email: guihy2019@gmail.com
-// Date: 2022/9/26
-// Description: 
-// Documentation:
-// Reference:
-
-abstract class BaseApiResponse {
-    abstract fun isSuccess(): Boolean
-    abstract fun isEmpty(): Boolean
-    open fun getErrorCode(): Int? = null
-    open fun getErrorMsg(): String? = null
-}
+data class Result(
+    val hasMore: Boolean,
+    val songCount: Int,
+    val songs: List<Song>
+)

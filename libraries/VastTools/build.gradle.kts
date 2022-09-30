@@ -29,6 +29,7 @@ plugins {
 }
 
 android {
+    namespace = "cn.govast.vasttools"
     compileSdk = Version.compile_sdk_version
 
     defaultConfig {
@@ -53,6 +54,8 @@ android {
 
     kotlinOptions {
         jvmTarget = "11"
+        // https://stackoverflow.com/questions/53964192/jvmdefault-and-how-add-compiler-option
+        freeCompilerArgs = listOf("-Xjvm-default=all")
     }
 
     viewBinding.isEnabled = true
@@ -81,11 +84,11 @@ dependencies {
     implementation(AndroidX.lifecycle_viewmodel_ktx)
     implementation(AndroidX.test_monitor)
     implementation(AndroidX.recyclerview)
-    implementation(Libraries.rxjava3_rxjava)
-    implementation(Libraries.rxjava3_rxandroid)
     androidTestImplementation(AndroidX.espresso_core)
     androidTestImplementation(AndroidX.junit)
     implementation(Jetbrains.kotlin_reflect)
+    implementation(Jetbrains.kotlinx_coroutines_core)
+    implementation(Jetbrains.kotlinx_coroutines_android)
     implementation(Google.material)
     testImplementation(Libraries.junit)
 }

@@ -28,10 +28,10 @@ class SampleVbVmFragment : VastVbVmFragment<FragmentSampleVbVmBinding, SampleSha
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getBinding().tv.text = mViewModel.tag
+        getBinding().tv.text = getViewModel().tag
 
         getBinding().addOne.setOnClickListener {
-            mViewModel.addOne()
+            getViewModel().addOne()
         }
 
         getViewModel().count.observe(requireActivity()) {
@@ -40,7 +40,7 @@ class SampleVbVmFragment : VastVbVmFragment<FragmentSampleVbVmBinding, SampleSha
     }
 
     override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        return SampleSharedVM(defaultTag)
+        return SampleSharedVM(getDefaultTag())
     }
 
     override fun setVmBySelf(): Boolean = false

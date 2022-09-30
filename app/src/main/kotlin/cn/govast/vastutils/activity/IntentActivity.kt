@@ -23,7 +23,8 @@ import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
-import cn.govast.vasttools.activity.VastVbActivity
+import androidx.lifecycle.ViewModel
+import cn.govast.vasttools.activity.VastVbVmActivity
 import cn.govast.vasttools.utils.IntentUtils.createAlarm
 import cn.govast.vasttools.utils.IntentUtils.createOnceAlarm
 import cn.govast.vasttools.utils.IntentUtils.dialPhoneNumber
@@ -32,13 +33,16 @@ import cn.govast.vasttools.utils.IntentUtils.openWebPage
 import cn.govast.vasttools.utils.IntentUtils.openWirelessSettings
 import cn.govast.vasttools.utils.IntentUtils.searchWeb
 import cn.govast.vasttools.utils.IntentUtils.sendMmsMessage
+import cn.govast.vasttools.utils.LogUtils
 import cn.govast.vasttools.utils.shortcut.AppShortcutsUtils
 import cn.govast.vastutils.R
 import cn.govast.vastutils.broadcastreceiver.ShortcutReceiver
 import cn.govast.vastutils.broadcastreceiver.ShortcutReceiver.Companion.CREATE_SHORT_CUT
 import cn.govast.vastutils.databinding.ActivityIntentBinding
+import cn.govast.vastutils.network.NetworkRepository
+import cn.govast.vastutils.viewModel.BasicViewModel
 
-class IntentActivity : VastVbActivity<ActivityIntentBinding>() {
+class IntentActivity : VastVbVmActivity<ActivityIntentBinding, BasicViewModel>() {
 
     private lateinit var shortcutReceiver: ShortcutReceiver
 
@@ -86,7 +90,12 @@ class IntentActivity : VastVbActivity<ActivityIntentBinding>() {
 
         getBinding().createShortcut.setOnClickListener {
             AppShortcutsUtils.setPinnedShortcutResult {
-                return@setPinnedShortcutResult PendingIntent.getBroadcast(this@IntentActivity.getContext(),0, Intent(CREATE_SHORT_CUT),PendingIntent.FLAG_IMMUTABLE)
+                return@setPinnedShortcutResult PendingIntent.getBroadcast(
+                    this@IntentActivity.getContext(),
+                    0,
+                    Intent(CREATE_SHORT_CUT),
+                    PendingIntent.FLAG_IMMUTABLE
+                )
             }.createPinnedShortcut(
                 MainActivity::class.java,
                 "987654321",
@@ -95,6 +104,24 @@ class IntentActivity : VastVbActivity<ActivityIntentBinding>() {
                 this@IntentActivity.getContext()
             )
         }
+
+        getBinding().getQRCode.setOnClickListener {
+            getRequestBuilder(this)
+                .requestWithListener({ getViewModel().getQRCode() }) {
+                    onSuccess = { QRCodeKey ->
+                        LogUtils.i(getDefaultTag(), QRCodeKey.data.unikey)
+                    }
+                }
+                .requestWithListener({ getViewModel().searchSong("海阔天空") }) {
+                    onSuccess = { SongResult ->
+                        LogUtils.i(getDefaultTag(), SongResult.result.songCount.toString())
+                    }
+                }
+        }
+    }
+
+    override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+        return BasicViewModel(NetworkRepository())
     }
 
     override fun onDestroy() {

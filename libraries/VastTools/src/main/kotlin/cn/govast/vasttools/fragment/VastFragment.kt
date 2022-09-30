@@ -18,8 +18,7 @@ package cn.govast.vasttools.fragment
 
 import androidx.fragment.app.Fragment
 import cn.govast.vasttools.activity.VastActivity
-import cn.govast.vasttools.base.BaseActive
-import cn.govast.vasttools.base.BaseLifecycleOwner
+import cn.govast.vasttools.base.BaseFragment
 import cn.govast.vasttools.extension.cast
 
 // Author: Vast Gui
@@ -28,7 +27,9 @@ import cn.govast.vasttools.extension.cast
 // Description: 
 // Documentation:
 
-abstract class VastFragment : Fragment(), VastFragmentInterface, BaseActive, BaseLifecycleOwner {
+abstract class VastFragment : Fragment(), BaseFragment {
+
+    final override fun getDefaultTag(): String = this.javaClass.simpleName
 
     override fun getBaseActivity(): VastActivity {
         return cast(requireActivity())
