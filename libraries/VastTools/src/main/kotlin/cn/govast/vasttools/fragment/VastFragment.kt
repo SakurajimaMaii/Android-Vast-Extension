@@ -17,7 +17,7 @@
 package cn.govast.vasttools.fragment
 
 import androidx.fragment.app.Fragment
-import cn.govast.vasttools.activity.VastActivity
+import androidx.fragment.app.FragmentActivity
 import cn.govast.vasttools.base.BaseFragment
 import cn.govast.vasttools.extension.cast
 
@@ -31,7 +31,7 @@ abstract class VastFragment : Fragment(), BaseFragment {
 
     final override fun getDefaultTag(): String = this.javaClass.simpleName
 
-    override fun getBaseActivity(): VastActivity {
+    override fun getBaseActivity(): FragmentActivity {
         return cast(requireActivity())
     }
 

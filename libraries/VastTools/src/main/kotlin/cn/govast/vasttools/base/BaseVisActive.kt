@@ -16,6 +16,7 @@
 
 package cn.govast.vasttools.base
 
+import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 import cn.govast.vasttools.activity.VastActivity
@@ -30,10 +31,10 @@ import cn.govast.vasttools.activity.VastActivity
 interface BaseVisActive : BaseActive {
 
     /**
-     * @return self or attached [VastActivity].
+     * @return self or attached [Activity].
      * @since 0.0.9
      */
-    fun getBaseActivity(): VastActivity
+    fun getBaseActivity(): Activity
 
     /**
      * Return a [ViewModel].
