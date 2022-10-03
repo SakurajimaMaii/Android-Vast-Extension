@@ -18,7 +18,9 @@ package cn.govast.vasttools.utils
 
 import android.content.Context
 import android.widget.Toast
+import android.widget.Toast.makeText
 import androidx.annotation.StringRes
+import cn.govast.vasttools.helper.ContextHelper
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -30,7 +32,6 @@ import androidx.annotation.StringRes
  * ToastUtils
  *
  * Here is an example:
- *
  * ```Java
  * ToastUtils.INSTANCE.showShortMsg(this,message);
  * ```
@@ -38,42 +39,83 @@ import androidx.annotation.StringRes
  * @since 0.0.6
  */
 object ToastUtils {
+
+    private var mToast: Toast? = null
+
     /**
-     * @param context context.
      * @param msg message of the toast.
+     * @param context context.
      * @since 0.0.1
      */
     @JvmStatic
-    fun showShortMsg(context: Context, msg: String) {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+    @JvmOverloads
+    fun showShortMsg(
+        msg: String,
+        context: Context = ContextHelper.getAppContext()
+    ) {
+        if (null == mToast) {
+            mToast = makeText(context, msg, Toast.LENGTH_SHORT)
+        } else {
+            mToast!!.setText(msg)
+        }
+        mToast!!.show()
     }
 
     /**
-     * @param context context.
      * @param id message string id of the toast.
+     * @param context context.
      * @since 0.0.5
      */
     @JvmStatic
-    fun showShortMsg(context: Context, @StringRes id: Int) =
-        showShortMsg(context, ResUtils.getString(id))
+    @JvmOverloads
+    fun showShortMsg(
+        @StringRes id: Int,
+        context: Context = ContextHelper.getAppContext()
+    ) {
+        if (null == mToast) {
+            mToast = makeText(context, id, Toast.LENGTH_SHORT)
+        } else {
+            mToast!!.setText(id)
+        }
+        mToast!!.show()
+    }
 
 
     /**
-     * @param context context.
      * @param msg message of the toast.
+     * @param context context.
      * @since 0.0.1
      */
     @JvmStatic
-    fun showLongMsg(context: Context, msg: String) {
-        Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+    @JvmOverloads
+    fun showLongMsg(
+        msg: String,
+        context: Context = ContextHelper.getAppContext()
+    ) {
+        if (null == mToast) {
+            mToast = makeText(context, msg, Toast.LENGTH_LONG)
+        } else {
+            mToast!!.setText(msg)
+        }
+        mToast!!.show()
     }
 
     /**
-     * @param context context.
      * @param id message string id of the toast.
+     * @param context context.
      * @since 0.0.5
      */
     @JvmStatic
-    fun showLongMsg(context: Context, @StringRes id: Int) =
-        showShortMsg(context, ResUtils.getString(id))
+    @JvmOverloads
+    fun showLongMsg(
+        @StringRes id: Int,
+        context: Context = ContextHelper.getAppContext()
+    ) {
+        if (null == mToast) {
+            mToast = makeText(context, id, Toast.LENGTH_LONG)
+        } else {
+            mToast!!.setText(id)
+        }
+        mToast!!.show()
+    }
 }
