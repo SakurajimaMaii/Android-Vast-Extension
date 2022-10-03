@@ -20,8 +20,8 @@ import android.content.Context
 import android.view.ViewStub
 import androidx.annotation.IntDef
 import androidx.annotation.LayoutRes
+import cn.govast.vastnetstatelayout.R
 import cn.govast.vastnetstatelayout.interfaces.BaseNetStateListener
-import com.gcode.vastnetstatelayout.R
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
