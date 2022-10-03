@@ -24,6 +24,11 @@ import android.graphics.Typeface
 // Description: 
 // Documentation:
 
+/**
+ * Style of the span.
+ *
+ * @since 0.0.9
+ */
 enum class StyleMode(val value: Int) {
     NORMAL(Typeface.NORMAL),
     BOLD(Typeface.BOLD),

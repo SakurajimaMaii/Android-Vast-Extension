@@ -27,7 +27,7 @@ import android.text.Spanned
 import android.text.style.*
 import androidx.annotation.ColorRes
 import androidx.annotation.FloatRange
-import cn.govast.vasttools.extension.NotNUllSingleVar
+import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vasttools.helper.ContextHelper
 import cn.govast.vasttools.utils.ResUtils
 
@@ -44,15 +44,16 @@ object SpanStrUtils {
      *
      * @since 0.0.9
      */
+    @JvmStatic
     fun getBuilder(text: CharSequence?): Builder {
         return Builder(null, text)
     }
 
     class Builder internal constructor(builder: SpannableStringBuilder?, text: CharSequence?) {
-        private var flag by NotNUllSingleVar<Int>()
-        private var start by NotNUllSingleVar<Int>()
-        private var end by NotNUllSingleVar<Int>()
-        private var mBuilder by NotNUllSingleVar<SpannableStringBuilder>()
+        private var flag by NotNUllVar<Int>()
+        private var start by NotNUllVar<Int>()
+        private var end by NotNUllVar<Int>()
+        private var mBuilder by NotNUllVar<SpannableStringBuilder>()
 
         init {
             mBuilder = builder ?: SpannableStringBuilder()
@@ -205,8 +206,9 @@ object SpanStrUtils {
          * Set font style
          *
          * @param style
+         * @since 0.0.9
          */
-        fun setFontStyle(style: StyleMode) {
+        fun setFontStyle(style: StyleMode) = apply {
             mBuilder.setSpan(StyleSpan(style.value), start, end, flag)
         }
 

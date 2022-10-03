@@ -22,6 +22,11 @@ package cn.govast.vasttools.utils.spannablestring
 // Description: 
 // Documentation:
 
+/**
+ * Script mode.
+ *
+ * @since 0.0.9
+ */
 enum class ScriptMode {
     None,
 
