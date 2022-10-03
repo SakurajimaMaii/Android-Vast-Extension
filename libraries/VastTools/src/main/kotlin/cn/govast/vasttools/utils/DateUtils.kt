@@ -113,6 +113,7 @@ object DateUtils {
      * @return the days before or after the current time.
      * @since 0.0.9
      */
+    @JvmStatic
     fun getDayBeforeOrAfterCurrentTime(
         dateFormat: String = FORMAT_YYYY_MM_DD_HH_MM_SS,
         beforeOrAfter:Int

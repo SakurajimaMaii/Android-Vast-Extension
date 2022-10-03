@@ -110,6 +110,7 @@ object LogUtils {
      *
      * @since 0.0.5
      */
+    @JvmStatic
     fun setSingleLogCharLength(@IntRange(from = 0, to = 1000) charLength: Int) {
         singleLogCharLength = charLength
     }
@@ -119,6 +120,7 @@ object LogUtils {
      *
      * @since 0.0.5
      */
+    @JvmStatic
     fun setMaxPrintTimes(@IntRange(from = 0) maxPrint: Int) {
         maxPrintTimes = maxPrint
     }
@@ -131,6 +133,7 @@ object LogUtils {
      *
      * @since 0.0.1
      */
+    @JvmStatic
     fun i(key: String?, content: String?) {
         if (logEnabled && isDeBug) {
             logPrint(Log.INFO, key, content)
@@ -145,6 +148,7 @@ object LogUtils {
      *
      * @since 0.0.1
      */
+    @JvmStatic
     fun v(key: String?, content: String?) {
         if (logEnabled && isDeBug) {
             logPrint(Log.VERBOSE, key, content)
@@ -159,6 +163,7 @@ object LogUtils {
      *
      * @since 0.0.1
      */
+    @JvmStatic
     fun w(key: String?, content: String?) {
         if (logEnabled && isDeBug) {
             logPrint(Log.WARN, key, content)
@@ -173,6 +178,7 @@ object LogUtils {
      *
      * @since 0.0.1
      */
+    @JvmStatic
     fun d(key: String?, content: String?) {
         if (logEnabled && isDeBug) {
             logPrint(Log.DEBUG, key, content)
@@ -187,6 +193,7 @@ object LogUtils {
      *
      * @since 0.0.1
      */
+    @JvmStatic
     fun e(key: String?, content: String?) {
         if (logEnabled && isDeBug) {
             logPrint(Log.ERROR, key, content)
@@ -200,6 +207,7 @@ object LogUtils {
      *
      * @since 0.0.1
      */
+    @JvmStatic
     fun setLogContentFormat(logContent: LogContent) {
         LogUtils.logContent = logContent
     }

@@ -57,6 +57,7 @@ object QRCodeUtil {
      * @since 0.0.9
      */
     @JvmOverloads
+    @JvmStatic
     fun createQRCodeBitmap(
         content: String?,
         @IntRange(from = 0) width: Int,

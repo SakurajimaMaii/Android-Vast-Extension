@@ -58,6 +58,7 @@ object AppShortcutsUtils : ShortCutInterface {
      */
     @RequiresPermission(Manifest.permission.INSTALL_SHORTCUT)
     @JvmOverloads
+    @JvmStatic
     fun createPinnedShortcut(
         shortcutName: String? = AppUtils.getAppName(),
         shortcutIcon: Int? = null,
@@ -90,6 +91,7 @@ object AppShortcutsUtils : ShortCutInterface {
     @RequiresPermission(Manifest.permission.INSTALL_SHORTCUT)
     @RequiresApi(Build.VERSION_CODES.O)
     @JvmOverloads
+    @JvmStatic
     fun createPinnedShortcut(
         shortcutActivity: Class<out ComponentActivity>,
         shortcutId: String,
@@ -120,6 +122,7 @@ object AppShortcutsUtils : ShortCutInterface {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     @JvmOverloads
+    @JvmStatic
     fun setDynamicShortcuts(shortcutInfo: List<ShortcutInfo>, context: Context? = null) {
         val (_, shortcutManager) = getContextAndShortcutManager(context)
         shortcutManager.dynamicShortcuts = shortcutInfo
@@ -134,6 +137,7 @@ object AppShortcutsUtils : ShortCutInterface {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     @JvmOverloads
+    @JvmStatic
     fun addDynamicShortcuts(shortcutInfo: List<ShortcutInfo>, context: Context? = null) {
         val (_, shortcutManager) = getContextAndShortcutManager(context)
         shortcutManager.addDynamicShortcuts(shortcutInfo)
@@ -146,6 +150,7 @@ object AppShortcutsUtils : ShortCutInterface {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     @JvmOverloads
+    @JvmStatic
     fun removeAllDynamicShortcuts(context: Context? = null) {
         val (_, shortcutManager) = getContextAndShortcutManager(context)
         shortcutManager.removeAllDynamicShortcuts()
@@ -158,6 +163,7 @@ object AppShortcutsUtils : ShortCutInterface {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     @JvmOverloads
+    @JvmStatic
     fun removeDynamicShortcuts(shortcutIds: List<String>, context: Context? = null) {
         val (_, shortcutManager) = getContextAndShortcutManager(context)
         shortcutManager.removeDynamicShortcuts(shortcutIds)
@@ -174,6 +180,7 @@ object AppShortcutsUtils : ShortCutInterface {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     @JvmOverloads
+    @JvmStatic
     fun createShortcutInfo(
         shortcutActivity: Class<out ComponentActivity>,
         shortcutId: String,
