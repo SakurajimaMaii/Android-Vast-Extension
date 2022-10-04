@@ -40,6 +40,8 @@ docs/
 .cxx
 
 gradle.properties
+
+# Publish
 publish-mavencentral.gradle
 
 #output

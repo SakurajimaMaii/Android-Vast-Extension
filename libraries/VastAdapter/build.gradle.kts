@@ -54,6 +54,8 @@ android {
     buildFeatures {
         dataBinding = true
     }
+
+    sourceSets["main"].java.srcDir("src/main/kotlin")
 }
 
 dependencies {

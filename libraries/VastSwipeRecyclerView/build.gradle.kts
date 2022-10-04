@@ -47,9 +47,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    sourceSets["main"].java.srcDir("src/main/kotlin")
 }
 
 dependencies {
