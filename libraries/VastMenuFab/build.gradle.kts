@@ -68,8 +68,6 @@ dependencies {
     implementation(AndroidX.appcompat)
     androidTestImplementation(AndroidX.espresso_core)
     androidTestImplementation(AndroidX.junit)
-
     implementation(Google.material)
-
     testImplementation(Libraries.junit)
 }

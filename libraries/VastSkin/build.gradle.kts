@@ -65,11 +65,8 @@ dependencies {
     implementation(AndroidX.fragment_ktx)
     androidTestImplementation(AndroidX.espresso_core)
     androidTestImplementation(AndroidX.junit)
-
     implementation(Jetbrains.kotlin_reflect)
-
     implementation(Google.material)
-
     testImplementation(Libraries.junit)
 }
 

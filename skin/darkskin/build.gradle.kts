@@ -70,6 +70,5 @@ android {
 
 dependencies {
     implementation(AndroidX.appcompat)
-
     implementation(Google.material)
 }
