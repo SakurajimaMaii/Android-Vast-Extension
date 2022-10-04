@@ -68,7 +68,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.0"
+        kotlinCompilerExtensionVersion = "1.3.1"
     }
 
     sourceSets["main"].java.srcDir("src/main/kotlin")
@@ -76,7 +76,6 @@ android {
 
 dependencies {
     implementation(project(":libraries:VastTools"))
-
     implementation(Compose.compose_foundation)
     implementation(Compose.compose_foundation_layout)
     implementation(Compose.compose_activity)
@@ -86,6 +85,5 @@ dependencies {
     debugImplementation(Compose.compose_ui_tooling)
     debugImplementation(Compose.compose_ui_test_manifest)
     androidTestImplementation(Compose.compose_ui_test_junit4)
-
     implementation(AndroidX.lifecycle_runtime_ktx)
 }

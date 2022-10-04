@@ -23,7 +23,6 @@ import androidx.core.content.ContextCompat
 import cn.govast.vasttools.base.BaseActive
 import cn.govast.vasttools.base.BaseActivity
 import cn.govast.vasttools.base.BaseFragment
-import cn.govast.vasttools.helper.ContextHelper
 import cn.govast.vasttools.utils.ActivityUtils.getActivity
 import cn.govast.vasttools.utils.ActivityUtils.getCurrentActivity
 import cn.govast.vasttools.utils.ToastUtils
@@ -151,7 +150,6 @@ object PermissionsUtils {
 
         override fun onPermissionError(permission: String) {
             ToastUtils.showShortMsg(
-                ContextHelper.getAppContext(),
                 "The operation failed, please agree to enable ${
                     permissionToString(permission)
                 } then continue "

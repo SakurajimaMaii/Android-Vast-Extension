@@ -40,11 +40,11 @@ public class BaseBindAdapterAppCompatActivity extends VastVbActivity<ActivityBas
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         VAapClickEventListener click = (view, pos) -> {
-            ToastUtils.showShortMsg(this, "Click event and pos is " + pos);
+            ToastUtils.showShortMsg("Click event and pos is " + pos);
         };
 
         VAdpLongClickEventListener longClick = (view, pos) -> {
-            ToastUtils.showShortMsg(this, "Long click event and pos is " + pos);
+            ToastUtils.showShortMsg("Long click event and pos is " + pos);
             return true;
         };
 

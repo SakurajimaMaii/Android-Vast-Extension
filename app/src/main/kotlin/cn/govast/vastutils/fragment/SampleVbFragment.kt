@@ -30,7 +30,6 @@ import cn.govast.vastutils.databinding.FragmentSampleVbBinding
 class SampleVbFragment : VastVbFragment<FragmentSampleVbBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
     }
 
 }

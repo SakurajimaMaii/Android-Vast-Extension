@@ -62,13 +62,13 @@ class BaseBindingAdapterActivity : VastVbActivity<ActivityBaseBindingAdapterBind
 
         val click = object : VAapClickEventListener {
             override fun vAapClickEvent(view: View, pos: Int) {
-                showShortMsg(this@BaseBindingAdapterActivity,"Click event and pos is $pos.")
+                showShortMsg("Click event and pos is $pos.")
             }
         }
 
         val longClick = object : VAdpLongClickEventListener {
             override fun vAdpLongClickEvent(view: View, pos: Int): Boolean {
-                showShortMsg(this@BaseBindingAdapterActivity,"Long click event and pos is $pos.")
+                showShortMsg("Long click event and pos is $pos.")
                 return true
             }
         }

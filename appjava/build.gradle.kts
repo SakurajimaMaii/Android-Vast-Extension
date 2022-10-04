@@ -19,6 +19,7 @@ import cn.govast.plugin.version.*
 plugins {
     id("com.android.application")
     id("cn.govast.plugin.version")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
