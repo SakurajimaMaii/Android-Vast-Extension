@@ -21,7 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import cn.govast.vasttools.extension.NotNUllVar
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 // Author: Vast Gui
@@ -33,31 +33,37 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(context) {
 
-    private var mView by NotNUllVar<View>()
+    private var mView:View? = null
     private var viewListener: ((view: View) -> Unit)? = null
+
+    override fun setView(layoutResId: Int) = apply {
+        setView(layoutResId, context, null)
+    }
+
+    override fun setView(view: View?) = apply {
+        super.setView(view)
+    }
 
     /**
      * Get the layout of the Dialog by [layoutId].
      *
      * @since 0.0.9
      */
-    @JvmOverloads
     fun setView(
         @LayoutRes layoutId: Int,
-        context: Context = getContext(),
-        root: ViewGroup? = null
+        context: Context,
+        root: ViewGroup?
     ) = apply {
         mView = LayoutInflater.from(context).inflate(layoutId, root)
-        viewListener?.invoke(mView)
         super.setView(mView)
     }
 
     /**
-     * Get the layout of the Dialog. And you can get the view from the [layout].
+     * Set the view in layout of the Dialog.
      *
      * @since 0.0.9
      */
-    fun getView(l: (layout: View) -> Unit) = apply {
+    fun setViewInDialogLayout(l: (layout: View) -> Unit) = apply {
         viewListener = l
     }
 
@@ -67,6 +73,25 @@ class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(
      * @since 0.0.9
      */
     fun getView() = mView
+
+    /**
+     * Get the layout of the Dialog.
+     *
+     * @return the not null layout.
+     * @throws IllegalStateException
+     * @since 0.0.9
+     */
+    fun requireView():View{
+        if(null == mView){
+            throw IllegalStateException("View is null.")
+        }
+        return mView!!
+    }
+
+    override fun show(): AlertDialog {
+        viewListener?.invoke(requireView())
+        return super.show()
+    }
 
     interface ViewListener {
         fun setViewListener(view: View)
