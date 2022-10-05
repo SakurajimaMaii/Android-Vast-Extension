@@ -17,9 +17,7 @@
 package cn.govast.vasttools.fragment
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import cn.govast.vasttools.base.BaseFragment
-import cn.govast.vasttools.extension.cast
+import cn.govast.vasttools.delegate.FragmentDelegate
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -27,12 +25,27 @@ import cn.govast.vasttools.extension.cast
 // Description: 
 // Documentation:
 
-abstract class VastFragment : Fragment(), BaseFragment {
+abstract class VastFragment : Fragment() {
 
-    final override fun getDefaultTag(): String = this.javaClass.simpleName
-
-    override fun getBaseActivity(): FragmentActivity {
-        return cast(requireActivity())
+    private val mFragmentDelegate by lazy {
+        createFragmentDelegate()
     }
+
+    protected fun getDefaultTag(): String{
+        return mFragmentDelegate.getDefaultTag()
+    }
+
+    protected abstract fun createFragmentDelegate(): FragmentDelegate
+
+    /**
+     * When [setVmBySelf] is true, the ViewModel representing the Fragment is
+     * retained by itself. When you want the ViewModel to be retained by its
+     * associated Activity, please set [setVmBySelf] to false.
+     */
+    protected abstract fun setVmBySelf(): Boolean
+
+    protected fun getRequestBuilder() = mFragmentDelegate.getRequestBuilder()
+
+    protected fun createMainScope() = mFragmentDelegate.createMainScope()
 
 }

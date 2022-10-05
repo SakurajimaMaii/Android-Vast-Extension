@@ -16,16 +16,8 @@
 
 package cn.govast.vasttools.activity
 
-import android.content.Context
-import android.os.Build
-import android.os.Bundle
-import android.view.View
-import android.view.WindowInsetsController
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowInsetsCompat
-import cn.govast.vasttools.base.BaseActivity
-import cn.govast.vasttools.extension.NotNUllVar
+import cn.govast.vasttools.delegate.ActivityDelegate
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -38,88 +30,34 @@ import cn.govast.vasttools.extension.NotNUllVar
  *
  * @since 0.0.9
  */
-sealed class VastActivity : AppCompatActivity(), BaseActivity {
+sealed class VastActivity : AppCompatActivity() {
 
-    /**
-     * True if you want to show the ActionBar,false otherwise,
-     *
-     * @see enableActionBar
-     * @since 0.0.6
-     */
-    private var mEnableActionBar = true
-
-    /**
-     * True if you want to set fullscreen,false otherwise.
-     *
-     * @see enableFullScreen
-     * @since 0.0.6
-     */
-    private var mEnableFullScreen = false
-
-    /**
-     * The [Context] of the activity.
-     *
-     * @see getContext
-     * @since 0.0.8
-     */
-    private var mContext by NotNUllVar<Context>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mContext = this
+    private val mActivityDelegate by lazy {
+        createActivityDelegate()
     }
 
-    final override fun getContext() = mContext
+    protected fun getContext() = mActivityDelegate.getContext()
 
-    final override fun getDefaultTag(): String = this.javaClass.simpleName
+    protected fun getDefaultTag(): String = this.javaClass.simpleName
 
-    final override fun enableActionBar(enable: Boolean) {
-        mEnableActionBar = enable
+    protected fun enableActionBar(enable: Boolean) {
+        mActivityDelegate.enableActionBar(enable)
     }
 
-    final override fun enableFullScreen(enable: Boolean) {
-        mEnableFullScreen = enable
+    protected fun enableFullScreen(enable: Boolean) {
+        mActivityDelegate.enableFullScreen(enable)
     }
 
-    final override fun getBaseActivity() = this
-
-    /**
-     * initialize activity window.
-     *
-     * @since 0.0.9
-     */
-    internal fun initWindow() {
-        if (!mEnableActionBar) {
-            supportActionBar?.hide()
-        }
-        if (mEnableFullScreen) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-                @Suppress("DEPRECATION")
-                val flags = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-                @Suppress("DEPRECATION")
-                window.decorView.systemUiVisibility = flags
-            } else {
-                window.setDecorFitsSystemWindows(false)
-                window.insetsController?.apply {
-                    hide(WindowInsetsCompat.Type.systemBars())
-                    systemBarsBehavior =
-                        WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                }
-            }
-            supportActionBar?.hide()
-            // In order to solve the black bar when state bar is gone.
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                val lp: WindowManager.LayoutParams = window.attributes
-                lp.layoutInDisplayCutoutMode =
-                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-                window.attributes = lp
-            }
-        }
+    protected fun getBaseActivity() {
+        mActivityDelegate.getBaseActivity()
     }
+
+    protected fun getSnackbar() = mActivityDelegate.getSnackbar()
+
+    protected fun getRequestBuilder() = mActivityDelegate.getRequestBuilder()
+
+    protected fun createMainScope() = mActivityDelegate.createMainScope()
+
+    protected abstract fun createActivityDelegate(): ActivityDelegate
 
 }

@@ -30,7 +30,7 @@ interface BaseService : BaseActive {
     /**
      * Get the [Context].
      *
-     * @since 0.0.9
+     * @return context
      */
     fun getContext(): Context
 

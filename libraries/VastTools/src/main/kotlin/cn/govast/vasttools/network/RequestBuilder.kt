@@ -16,9 +16,9 @@
 
 package cn.govast.vasttools.network
 
-import cn.govast.vasttools.base.BaseActive
 import cn.govast.vasttools.base.BaseApiRsp
 import cn.govast.vasttools.extension.executeHttp
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
@@ -31,9 +31,7 @@ import kotlinx.coroutines.launch
 // Documentation:
 // Reference:
 
-class RequestBuilder(baseActive: BaseActive) {
-
-    private val mainScope = baseActive.createMainScope()
+class RequestBuilder(private val mainScope: CoroutineScope) {
 
     fun <T : BaseApiRsp> requestWithListener(
         request: suspend () -> T,

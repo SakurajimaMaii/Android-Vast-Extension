@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.lifecycle
+package cn.govast.vasttools.delegate
 
-import androidx.lifecycle.ViewModel
-import cn.govast.vasttools.base.BaseActive
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import cn.govast.vasttools.base.BaseFragment
 import cn.govast.vasttools.network.RequestBuilder
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
@@ -26,18 +27,22 @@ import kotlinx.coroutines.SupervisorJob
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/7/6
+// Date: 2022/10/5
 // Description: 
 // Documentation:
+// Reference:
 
-/**
- * Base ViewModel
- *
- * @since 0.0.9
- */
-abstract class VastViewModel : ViewModel(), BaseActive {
+open class FragmentDelegate(
+    private val fragment: Fragment
+) : BaseFragment {
 
-    final override fun getDefaultTag(): String = this.javaClass.simpleName
+    final override fun getBaseActivity(): FragmentActivity {
+        return fragment.requireActivity()
+    }
+
+    final override fun getDefaultTag(): String {
+        return fragment::class.java.simpleName
+    }
 
     final override fun getRequestBuilder(): RequestBuilder {
         return RequestBuilder(createMainScope())

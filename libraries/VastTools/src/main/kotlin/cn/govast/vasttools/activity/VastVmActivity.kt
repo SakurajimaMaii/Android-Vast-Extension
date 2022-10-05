@@ -19,12 +19,12 @@ package cn.govast.vasttools.activity
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
-import androidx.viewbinding.ViewBinding
+import cn.govast.vasttools.base.BaseFragment
+import cn.govast.vasttools.delegate.ActivityDelegate
 import cn.govast.vasttools.extension.CreateViewModel
 import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vasttools.extension.cast
 import cn.govast.vasttools.extension.reflexViewModel
-import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -50,20 +50,14 @@ import com.google.android.material.snackbar.Snackbar
 abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
 
     /**
-     * Default [Snackbar] for activity.
-     *
-     * @see getSnackbar
-     * @since 0.0.9
-     */
-    private var mSnackbar by NotNUllVar<Snackbar>()
-
-    /**
      * The layout resource id for this activity.
      *
      * @since 0.0.6
      */
     abstract val layoutId: Int
-
+    // Activity Delegate
+    private var mActivityDelegate by NotNUllVar<ActivityDelegate>()
+    // ViewModel
     private val mViewModel: VM by lazy {
         reflexViewModel(object: CreateViewModel {
             override fun createVM(modelClass: Class<out ViewModel>): ViewModel {
@@ -75,27 +69,44 @@ abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
     @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mActivityDelegate = object : ActivityDelegate(this, findViewById(layoutId)) {
+            override fun getViewModel(): ViewModel {
+                return mViewModel
+            }
+        }
         if (0 != layoutId) {
             setContentView(layoutId)
         } else {
-            throw RuntimeException("Please set correct layout id for the ${getDefaultTag()} .")
+            throw RuntimeException("Please set correct layout id for the ${mActivityDelegate.getDefaultTag()} .")
         }
-        initWindow()
-        mSnackbar = Snackbar.make(findViewById(layoutId), getDefaultTag(), Snackbar.LENGTH_SHORT)
     }
 
-    override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+    /**
+     * Return a [ViewModel].
+     *
+     * If you want to initialization a [ViewModel] with parameters,just do like
+     * this:
+     * ```kotlin
+     * override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+     *      return MainSharedVM("MyVM")
+     * }
+     * ```
+     *
+     * @param modelClass by default, [BaseFragment] or [VastActivity] will get
+     *     the [ViewModel] by `modelClass.newInstance()`.
+     * @return the [ViewModel] of the Fragment.
+     * @since 0.0.9
+     */
+    protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
         return modelClass.newInstance()
     }
 
-    final override fun getBinding(): ViewBinding {
-        throw IllegalStateException("You should not call getBinding().")
+    protected fun getViewModel(): VM {
+        return cast(mActivityDelegate.getViewModel())
     }
 
-    final override fun getViewModel(): VM {
-        return cast(mViewModel)
+    final override fun createActivityDelegate(): ActivityDelegate {
+        return mActivityDelegate
     }
-
-    final override fun getSnackbar() = mSnackbar
 
 }

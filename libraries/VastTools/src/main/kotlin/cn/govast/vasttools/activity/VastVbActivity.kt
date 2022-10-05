@@ -17,8 +17,8 @@
 package cn.govast.vasttools.activity
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
+import cn.govast.vasttools.delegate.ActivityDelegate
 import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vasttools.extension.cast
 import cn.govast.vasttools.extension.reflexViewBinding
@@ -51,36 +51,32 @@ import com.google.android.material.snackbar.Snackbar
  */
 abstract class VastVbActivity<VB : ViewBinding> : VastActivity() {
 
-    /**
-     * Default [Snackbar] for activity.
-     *
-     * @see getSnackbar
-     * @since 0.0.9
-     */
+    // Snackbar
     private var mSnackbar by NotNUllVar<Snackbar>()
 
+    // Binding View
     private var mBinding by NotNUllVar<VB>()
+
+    // Activity Delegate
+    private var mActivityDelegate by NotNUllVar<ActivityDelegate>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = reflexViewBinding(javaClass, layoutInflater)
+        mActivityDelegate = object : ActivityDelegate(this, mBinding.root) {
+            override fun getBinding(): ViewBinding {
+                return cast(mBinding)
+            }
+        }
         setContentView(mBinding.root)
-        initWindow()
-        mSnackbar = Snackbar.make(mBinding.root, getDefaultTag(), Snackbar.LENGTH_SHORT)
     }
 
-    final override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        throw IllegalStateException("You should not call this method.")
+    protected fun getBinding(): VB {
+        return cast(mActivityDelegate.getBinding())
     }
 
-    final override fun getBinding(): VB {
-        return cast(mBinding)
+    final override fun createActivityDelegate(): ActivityDelegate {
+        return mActivityDelegate
     }
-
-    final override fun getViewModel(): ViewModel {
-        throw IllegalStateException("You should not call getViewModel().")
-    }
-
-    final override fun getSnackbar() = mSnackbar
 
 }

@@ -21,8 +21,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
+import cn.govast.vasttools.delegate.FragmentDelegate
 import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vasttools.extension.cast
 import cn.govast.vasttools.extension.reflexViewBinding
@@ -53,10 +53,10 @@ abstract class VastVbFragment<VB : ViewBinding> : VastFragment() {
     /**
      * The viewBinding of the fragment, it will be initialized in
      * [Fragment.onCreateView].
-     *
-     * @since 0.0.6
      */
     private var mBinding by NotNUllVar<VB>()
+    // Fragment Delegate
+    private var mFragmentDelegate by NotNUllVar<FragmentDelegate>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,21 +64,22 @@ abstract class VastVbFragment<VB : ViewBinding> : VastFragment() {
         savedInstanceState: Bundle?
     ): View? {
         mBinding = reflexViewBinding(javaClass, layoutInflater)
+        mFragmentDelegate = object :FragmentDelegate(this){
+            override fun getBinding(): ViewBinding {
+                return mBinding
+            }
+        }
         return mBinding.root
     }
 
     final override fun setVmBySelf(): Boolean = false
 
-    final override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        return modelClass.newInstance()
+    protected fun getBinding(): VB {
+        return cast(mFragmentDelegate.getBinding())
     }
 
-    final override fun getBinding(): VB {
-        return cast(mBinding)
-    }
-
-    final override fun getViewModel(): ViewModel {
-        throw IllegalStateException("You should not call getViewModel().")
+    final override fun createFragmentDelegate(): FragmentDelegate {
+        return mFragmentDelegate
     }
 
 }

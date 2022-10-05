@@ -19,7 +19,6 @@ package cn.govast.vasttools.base
 import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.activity.VastActivity
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -28,45 +27,32 @@ import cn.govast.vasttools.activity.VastActivity
 // Documentation:
 // Reference:
 
+
 interface BaseVisActive : BaseActive {
 
     /**
      * @return self or attached [Activity].
-     * @since 0.0.9
      */
     fun getBaseActivity(): Activity
 
     /**
-     * Return a [ViewModel].
+     * Get the [ViewBinding]. By default,
+     * it will throw a [IllegalStateException].
      *
-     * If you want to initialization a [ViewModel] with parameters,just
-     * do like this:
-     *
-     * ```kotlin
-     * override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-     *      return MainSharedVM("MyVM")
-     * }
-     * ```
-     *
-     * @param modelClass by default, [BaseFragment] or [VastActivity] will get the [ViewModel]
-     *     by `modelClass.newInstance()`.
-     * @return the [ViewModel] of the Fragment.
-     * @since 0.0.9
+     * @throws IllegalStateException
      */
-    fun createViewModel(modelClass: Class<out ViewModel>): ViewModel
+    fun getBinding(): ViewBinding {
+        throw IllegalStateException("You should not call getBinding().")
+    }
 
     /**
-     * Get the [ViewBinding].
+     * Get the [ViewModel]. By default,
+     * it will throw a [IllegalStateException].
      *
-     * @since 0.0.9
+     * @throws IllegalStateException
      */
-    fun getBinding(): ViewBinding
-
-    /**
-     * Get the [ViewModel].
-     *
-     * @since 0.0.9
-     */
-    fun getViewModel(): ViewModel
+    fun getViewModel(): ViewModel {
+        throw IllegalStateException("You should not call getViewModel().")
+    }
 
 }

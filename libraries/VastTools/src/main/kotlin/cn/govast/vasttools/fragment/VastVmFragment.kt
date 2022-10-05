@@ -21,8 +21,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
-import androidx.viewbinding.ViewBinding
+import cn.govast.vasttools.delegate.FragmentDelegate
 import cn.govast.vasttools.extension.CreateViewModel
+import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vasttools.extension.cast
 import cn.govast.vasttools.extension.reflexViewModel
 
@@ -57,7 +58,7 @@ abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
      * @since 0.0.6
      */
     protected abstract val layoutId: Int
-
+    // ViewModel
     private val mViewModel: VM by lazy {
         reflexViewModel(object : CreateViewModel {
             override fun createVM(modelClass: Class<out ViewModel>): ViewModel {
@@ -65,27 +66,49 @@ abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
             }
         }, setVmBySelf())
     }
+    // Fragment Delegate
+    private var mFragmentDelegate by NotNUllVar<FragmentDelegate>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mFragmentDelegate = object :FragmentDelegate(this){
+            override fun getViewModel(): ViewModel {
+                return mViewModel
+            }
+        }
         return inflater.inflate(layoutId, container, false)
     }
 
-    override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+    /**
+     * Return a [ViewModel].
+     *
+     * If you want to initialization a [ViewModel] with parameters,just do like
+     * this:
+     * ```kotlin
+     * override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+     *      return MainSharedVM("MyVM")
+     * }
+     * ```
+     *
+     * @param modelClass by default, Activity or Fragment will get
+     *     the [ViewModel] by `modelClass.newInstance()`.
+     * @return the [ViewModel] of the Fragment.
+     */
+    protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
         return modelClass.newInstance()
     }
 
     override fun setVmBySelf(): Boolean = false
 
-    final override fun getBinding(): ViewBinding {
-        throw IllegalStateException("You should not call getBinding().")
+    protected fun getViewModel(): VM {
+        return cast(mFragmentDelegate.getViewModel())
     }
 
-    final override fun getViewModel(): VM {
-        return cast(mViewModel)
+    final override fun createFragmentDelegate(): FragmentDelegate {
+        return mFragmentDelegate
     }
 
 }
