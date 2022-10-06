@@ -17,7 +17,7 @@
 package cn.govast.vasttools.activity
 
 import androidx.appcompat.app.AppCompatActivity
-import cn.govast.vasttools.delegate.ActivityDelegate
+import cn.govast.vasttools.delegate.activity.ActivityDelegate
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

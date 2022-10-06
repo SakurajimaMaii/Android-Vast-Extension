@@ -55,4 +55,23 @@ interface BaseVisActive : BaseActive {
         throw IllegalStateException("You should not call getViewModel().")
     }
 
+    /**
+     * Return a [ViewModel].
+     *
+     * If you want to initialization a [ViewModel] with parameters,just do like
+     * this:
+     * ```kotlin
+     * override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+     *      return MainSharedVM("MyVM")
+     * }
+     * ```
+     *
+     * @param modelClass by default, Activity or Fragment will get
+     *     the [ViewModel] by `modelClass.newInstance()`.
+     * @return the [ViewModel] of the Activity or Fragment.
+     */
+    fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+        return modelClass.newInstance()
+    }
+
 }

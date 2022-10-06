@@ -20,8 +20,8 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.delegate.ActivityDelegate
-import cn.govast.vasttools.extension.*
+import cn.govast.vasttools.delegate.activity.ActivityVbVmDelegate
+import cn.govast.vasttools.extension.NotNUllVar
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -47,63 +47,33 @@ import cn.govast.vasttools.extension.*
  */
 abstract class VastVbVmActivity<VB : ViewBinding, VM : ViewModel> : VastActivity() {
 
-    // ViewBinding
-    private var mBinding by NotNUllVar<VB>()
-    // ViewModel
-    private val mViewModel: VM by lazy {
-        reflexViewModel(object : CreateViewModel {
-            override fun createVM(modelClass: Class<out ViewModel>): ViewModel {
-                return createViewModel(modelClass)
-            }
-        })
-    }
     // Activity Delegate
-    private var mActivityDelegate by NotNUllVar<ActivityDelegate>()
+    private var mActivityDelegate by NotNUllVar<ActivityVbVmDelegate<VB, VM>>()
 
     @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = reflexViewBinding(javaClass, layoutInflater)
-        mActivityDelegate = object : ActivityDelegate(this, mBinding.root) {
-            override fun getBinding(): ViewBinding {
-                return mBinding
-            }
-
-            override fun getViewModel(): ViewModel {
-                return mViewModel
+        mActivityDelegate = object : ActivityVbVmDelegate<VB, VM>(this) {
+            override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+                return this@VastVbVmActivity.createViewModel(modelClass)
             }
         }
-        setContentView(mBinding.root)
+        setContentView(mActivityDelegate.getBinding().root)
     }
 
-    /**
-     * Return a [ViewModel].
-     *
-     * If you want to initialization a [ViewModel] with parameters,just do like
-     * this:
-     * ```kotlin
-     * override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-     *      return MainSharedVM("MyVM")
-     * }
-     * ```
-     *
-     * @param modelClass by default, Activity or Fragment will get
-     *     the [ViewModel] by `modelClass.newInstance()`.
-     * @return the [ViewModel] of the Fragment.
-     */
     protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
         return modelClass.newInstance()
     }
 
     protected fun getBinding(): VB {
-        return cast(mActivityDelegate.getBinding())
+        return mActivityDelegate.getBinding()
     }
 
     protected fun getViewModel(): VM {
-        return cast(mActivityDelegate.getViewModel())
+        return mActivityDelegate.getViewModel()
     }
 
-    final override fun createActivityDelegate(): ActivityDelegate {
+    final override fun createActivityDelegate(): ActivityVbVmDelegate<VB, VM> {
         return mActivityDelegate
     }
 

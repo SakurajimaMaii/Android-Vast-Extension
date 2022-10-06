@@ -14,31 +14,30 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.fragment
+package cn.govast.vasttools.delegate.fragment
 
 import androidx.fragment.app.Fragment
-import cn.govast.vasttools.delegate.fragment.FragmentDelegate
+import androidx.viewbinding.ViewBinding
+import cn.govast.vasttools.extension.reflexViewBinding
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/14 17:11
+// Date: 2022/10/6
 // Description: 
 // Documentation:
+// Reference:
 
-abstract class VastFragment : Fragment() {
+open class FragmentVbDelegate<VB : ViewBinding>(
+    fragment: Fragment,
+) : FragmentDelegate(fragment) {
 
-    private val mFragmentDelegate by lazy {
-        createFragmentDelegate()
+    // ViewBinding
+    private val mBinding: VB by lazy {
+        reflexViewBinding(fragment.javaClass, fragment.layoutInflater)
     }
 
-    protected fun getDefaultTag(): String{
-        return mFragmentDelegate.getDefaultTag()
+    override fun getBinding(): VB {
+        return mBinding
     }
-
-    protected abstract fun createFragmentDelegate(): FragmentDelegate
-
-    protected fun getRequestBuilder() = mFragmentDelegate.getRequestBuilder()
-
-    protected fun createMainScope() = mFragmentDelegate.createMainScope()
 
 }

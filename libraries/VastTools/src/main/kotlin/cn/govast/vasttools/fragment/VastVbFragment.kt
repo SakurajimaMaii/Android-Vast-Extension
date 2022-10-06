@@ -20,12 +20,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.delegate.FragmentDelegate
+import cn.govast.vasttools.delegate.fragment.FragmentVbDelegate
 import cn.govast.vasttools.extension.NotNUllVar
-import cn.govast.vasttools.extension.cast
-import cn.govast.vasttools.extension.reflexViewBinding
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -50,35 +47,23 @@ import cn.govast.vasttools.extension.reflexViewBinding
  */
 abstract class VastVbFragment<VB : ViewBinding> : VastFragment() {
 
-    /**
-     * The viewBinding of the fragment, it will be initialized in
-     * [Fragment.onCreateView].
-     */
-    private var mBinding by NotNUllVar<VB>()
     // Fragment Delegate
-    private var mFragmentDelegate by NotNUllVar<FragmentDelegate>()
+    private var mFragmentDelegate by NotNUllVar<FragmentVbDelegate<VB>>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        mBinding = reflexViewBinding(javaClass, layoutInflater)
-        mFragmentDelegate = object :FragmentDelegate(this){
-            override fun getBinding(): ViewBinding {
-                return mBinding
-            }
-        }
-        return mBinding.root
+    ): View {
+        mFragmentDelegate = object : FragmentVbDelegate<VB>(this){}
+        return mFragmentDelegate.getBinding().root
     }
-
-    final override fun setVmBySelf(): Boolean = false
 
     protected fun getBinding(): VB {
-        return cast(mFragmentDelegate.getBinding())
+        return mFragmentDelegate.getBinding()
     }
 
-    final override fun createFragmentDelegate(): FragmentDelegate {
+    final override fun createFragmentDelegate(): FragmentVbDelegate<VB> {
         return mFragmentDelegate
     }
 

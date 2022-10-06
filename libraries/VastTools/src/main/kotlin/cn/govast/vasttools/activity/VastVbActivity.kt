@@ -18,11 +18,8 @@ package cn.govast.vasttools.activity
 
 import android.os.Bundle
 import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.delegate.ActivityDelegate
+import cn.govast.vasttools.delegate.activity.ActivityVbDelegate
 import cn.govast.vasttools.extension.NotNUllVar
-import cn.govast.vasttools.extension.cast
-import cn.govast.vasttools.extension.reflexViewBinding
-import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -51,31 +48,20 @@ import com.google.android.material.snackbar.Snackbar
  */
 abstract class VastVbActivity<VB : ViewBinding> : VastActivity() {
 
-    // Snackbar
-    private var mSnackbar by NotNUllVar<Snackbar>()
-
-    // Binding View
-    private var mBinding by NotNUllVar<VB>()
-
     // Activity Delegate
-    private var mActivityDelegate by NotNUllVar<ActivityDelegate>()
+    private var mActivityDelegate by NotNUllVar<ActivityVbDelegate<VB>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = reflexViewBinding(javaClass, layoutInflater)
-        mActivityDelegate = object : ActivityDelegate(this, mBinding.root) {
-            override fun getBinding(): ViewBinding {
-                return cast(mBinding)
-            }
-        }
-        setContentView(mBinding.root)
+        mActivityDelegate = object : ActivityVbDelegate<VB>(this) {}
+        setContentView(mActivityDelegate.getBinding().root)
     }
 
     protected fun getBinding(): VB {
-        return cast(mActivityDelegate.getBinding())
+        return mActivityDelegate.getBinding()
     }
 
-    final override fun createActivityDelegate(): ActivityDelegate {
+    final override fun createActivityDelegate(): ActivityVbDelegate<VB> {
         return mActivityDelegate
     }
 

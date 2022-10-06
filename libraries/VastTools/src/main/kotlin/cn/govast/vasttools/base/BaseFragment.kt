@@ -25,6 +25,11 @@ package cn.govast.vasttools.base
 
 interface BaseFragment : BaseVisActive {
 
-
+    /**
+     * When [setVmBySelf] is true, the ViewModel representing the Fragment is
+     * retained by itself. When you want the ViewModel to be retained by its
+     * associated Activity, please set [setVmBySelf] to false.
+     */
+    fun setVmBySelf(): Boolean = false
 
 }

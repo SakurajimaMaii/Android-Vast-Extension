@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.delegate
+package cn.govast.vasttools.delegate.fragment
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -36,19 +36,19 @@ open class FragmentDelegate(
     private val fragment: Fragment
 ) : BaseFragment {
 
-    final override fun getBaseActivity(): FragmentActivity {
+    override fun getBaseActivity(): FragmentActivity {
         return fragment.requireActivity()
     }
 
-    final override fun getDefaultTag(): String {
+    override fun getDefaultTag(): String {
         return fragment::class.java.simpleName
     }
 
-    final override fun getRequestBuilder(): RequestBuilder {
+    override fun getRequestBuilder(): RequestBuilder {
         return RequestBuilder(createMainScope())
     }
 
-    final override fun createMainScope(): CoroutineScope {
+    override fun createMainScope(): CoroutineScope {
         return CoroutineScope(
             CoroutineName(getDefaultTag()) + SupervisorJob() + Dispatchers.Main.immediate
         )

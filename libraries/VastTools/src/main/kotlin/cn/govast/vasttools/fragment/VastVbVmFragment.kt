@@ -20,11 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.delegate.FragmentDelegate
-import cn.govast.vasttools.extension.*
+import cn.govast.vasttools.delegate.fragment.FragmentVbVmDelegate
+import cn.govast.vasttools.extension.NotNUllVar
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -50,70 +49,41 @@ import cn.govast.vasttools.extension.*
  */
 abstract class VastVbVmFragment<VB : ViewBinding, VM : ViewModel> : VastFragment() {
 
-    /**
-     * The viewBinding of the fragment, it will be initialized in
-     * [Fragment.onCreateView].
-     */
-    private var mBinding by NotNUllVar<VB>()
-    // ViewModel
-    private val mViewModel: VM by lazy {
-        reflexViewModel(object : CreateViewModel {
-            override fun createVM(modelClass: Class<out ViewModel>): ViewModel {
-                return createViewModel(modelClass)
-            }
-        }, setVmBySelf())
-    }
     // Fragment Delegate
-    private var mFragmentDelegate by NotNUllVar<FragmentDelegate>()
+    private var mFragmentDelegate by NotNUllVar<FragmentVbVmDelegate<VB,VM>>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        mBinding = reflexViewBinding(javaClass, layoutInflater)
-        mFragmentDelegate = object :FragmentDelegate(this){
-            override fun getBinding(): ViewBinding {
-                return mBinding
+    ): View {
+        mFragmentDelegate = object : FragmentVbVmDelegate<VB,VM>(this){
+            override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+                return this@VastVbVmFragment.createViewModel(modelClass)
             }
 
-            override fun getViewModel(): ViewModel {
-                return mViewModel
+            override fun setVmBySelf(): Boolean {
+                return this@VastVbVmFragment.setVmBySelf()
             }
         }
-        return mBinding.root
+        return mFragmentDelegate.getBinding().root
     }
 
-    /**
-     * Return a [ViewModel].
-     *
-     * If you want to initialization a [ViewModel] with parameters,just do like
-     * this:
-     * ```kotlin
-     * override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-     *      return MainSharedVM("MyVM")
-     * }
-     * ```
-     *
-     * @param modelClass by default, Activity or Fragment will get
-     *     the [ViewModel] by `modelClass.newInstance()`.
-     * @return the [ViewModel] of the Fragment.
-     */
     protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
         return modelClass.newInstance()
     }
 
-    override fun setVmBySelf(): Boolean = false
+    protected open fun setVmBySelf(): Boolean = false
 
     protected fun getBinding(): VB {
-        return cast(mFragmentDelegate.getBinding())
+        return mFragmentDelegate.getBinding()
     }
 
     protected fun getViewModel(): VM {
-        return cast(mFragmentDelegate.getViewModel())
+        return mFragmentDelegate.getViewModel()
     }
 
-    final override fun createFragmentDelegate(): FragmentDelegate {
+    final override fun createFragmentDelegate(): FragmentVbVmDelegate<VB,VM> {
         return mFragmentDelegate
     }
 

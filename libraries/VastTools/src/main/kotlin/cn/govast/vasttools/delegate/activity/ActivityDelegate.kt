@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.delegate
+package cn.govast.vasttools.delegate.activity
 
 import android.content.Context
 import android.os.Build
@@ -25,10 +25,8 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import cn.govast.vasttools.base.BaseActivity
-import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vasttools.extension.cast
 import cn.govast.vasttools.network.RequestBuilder
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,12 +40,9 @@ import kotlinx.coroutines.SupervisorJob
 // Reference:
 
 
-open class ActivityDelegate(
-    private val activity: ComponentActivity,
-    private val view: View,
-): BaseActivity {
-
-    private var mSnackbar by NotNUllVar<Snackbar>()
+sealed class ActivityDelegate(
+    protected val activity: ComponentActivity,
+) : BaseActivity {
 
     /**
      * True if you want to show the ActionBar,false otherwise,
@@ -63,36 +58,31 @@ open class ActivityDelegate(
      */
     private var mEnableFullScreen = false
 
-    final override fun getContext(): Context {
+    override fun getContext(): Context {
         return activity
     }
 
-    final override fun getSnackbar(): Snackbar {
-        mSnackbar = Snackbar.make(view, getDefaultTag(), Snackbar.LENGTH_SHORT)
-        return mSnackbar
-    }
-
-    final override fun enableActionBar(enable: Boolean) {
+    override fun enableActionBar(enable: Boolean) {
         mEnableActionBar = enable
         initWindow()
     }
 
-    final override fun enableFullScreen(enable: Boolean) {
+    override fun enableFullScreen(enable: Boolean) {
         mEnableFullScreen = enable
         initWindow()
     }
 
-    final override fun getBaseActivity() = activity
+    override fun getBaseActivity() = activity
 
-    final override fun getDefaultTag(): String {
+    override fun getDefaultTag(): String {
         return activity::class.java.simpleName
     }
 
-    final override fun getRequestBuilder(): RequestBuilder {
+    override fun getRequestBuilder(): RequestBuilder {
         return RequestBuilder(createMainScope())
     }
 
-    final override fun createMainScope(): CoroutineScope {
+    override fun createMainScope(): CoroutineScope {
         return CoroutineScope(
             CoroutineName(getDefaultTag()) + SupervisorJob() + Dispatchers.Main.immediate
         )
@@ -121,7 +111,7 @@ open class ActivityDelegate(
                         WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 }
             }
-            if(activity is AppCompatActivity){
+            if (activity is AppCompatActivity) {
                 cast<AppCompatActivity>(activity).supportActionBar?.hide()
             }
             // In order to solve the black bar when state bar is gone.

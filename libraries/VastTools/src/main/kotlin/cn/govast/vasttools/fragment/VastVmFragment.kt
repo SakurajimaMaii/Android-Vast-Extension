@@ -21,11 +21,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
-import cn.govast.vasttools.delegate.FragmentDelegate
-import cn.govast.vasttools.extension.CreateViewModel
+import cn.govast.vasttools.delegate.fragment.FragmentVmDelegate
 import cn.govast.vasttools.extension.NotNUllVar
-import cn.govast.vasttools.extension.cast
-import cn.govast.vasttools.extension.reflexViewModel
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -58,56 +55,24 @@ abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
      * @since 0.0.6
      */
     protected abstract val layoutId: Int
-    // ViewModel
-    private val mViewModel: VM by lazy {
-        reflexViewModel(object : CreateViewModel {
-            override fun createVM(modelClass: Class<out ViewModel>): ViewModel {
-                return createViewModel(modelClass)
-            }
-        }, setVmBySelf())
-    }
+
     // Fragment Delegate
-    private var mFragmentDelegate by NotNUllVar<FragmentDelegate>()
+    private var mFragmentDelegate by NotNUllVar<FragmentVmDelegate<VM>>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mFragmentDelegate = object :FragmentDelegate(this){
-            override fun getViewModel(): ViewModel {
-                return mViewModel
-            }
-        }
+        mFragmentDelegate = object : FragmentVmDelegate<VM>(this) {}
         return inflater.inflate(layoutId, container, false)
     }
 
-    /**
-     * Return a [ViewModel].
-     *
-     * If you want to initialization a [ViewModel] with parameters,just do like
-     * this:
-     * ```kotlin
-     * override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-     *      return MainSharedVM("MyVM")
-     * }
-     * ```
-     *
-     * @param modelClass by default, Activity or Fragment will get
-     *     the [ViewModel] by `modelClass.newInstance()`.
-     * @return the [ViewModel] of the Fragment.
-     */
-    protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        return modelClass.newInstance()
-    }
-
-    override fun setVmBySelf(): Boolean = false
-
     protected fun getViewModel(): VM {
-        return cast(mFragmentDelegate.getViewModel())
+        return mFragmentDelegate.getViewModel()
     }
 
-    final override fun createFragmentDelegate(): FragmentDelegate {
+    final override fun createFragmentDelegate(): FragmentVmDelegate<VM> {
         return mFragmentDelegate
     }
 
