@@ -50,22 +50,24 @@ import cn.govast.vasttools.extension.NotNUllVar
 abstract class VastVbVmFragment<VB : ViewBinding, VM : ViewModel> : VastFragment() {
 
     // Fragment Delegate
-    private var mFragmentDelegate by NotNUllVar<FragmentVbVmDelegate<VB,VM>>()
+    protected inner class FVVD : FragmentVbVmDelegate<VB, VM>(this) {
+        override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+            return this@VastVbVmFragment.createViewModel(modelClass)
+        }
+
+        override fun setVmBySelf(): Boolean {
+            return this@VastVbVmFragment.setVmBySelf()
+        }
+    }
+
+    private var mFragmentDelegate by NotNUllVar<FVVD>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mFragmentDelegate = object : FragmentVbVmDelegate<VB,VM>(this){
-            override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-                return this@VastVbVmFragment.createViewModel(modelClass)
-            }
-
-            override fun setVmBySelf(): Boolean {
-                return this@VastVbVmFragment.setVmBySelf()
-            }
-        }
+        mFragmentDelegate = FVVD()
         return mFragmentDelegate.getBinding().root
     }
 
@@ -83,7 +85,7 @@ abstract class VastVbVmFragment<VB : ViewBinding, VM : ViewModel> : VastFragment
         return mFragmentDelegate.getViewModel()
     }
 
-    final override fun createFragmentDelegate(): FragmentVbVmDelegate<VB,VM> {
+    final override fun createFragmentDelegate(): FVVD {
         return mFragmentDelegate
     }
 

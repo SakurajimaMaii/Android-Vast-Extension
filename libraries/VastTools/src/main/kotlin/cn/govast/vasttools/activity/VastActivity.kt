@@ -48,9 +48,7 @@ sealed class VastActivity : AppCompatActivity() {
         mActivityDelegate.enableFullScreen(enable)
     }
 
-    protected fun getBaseActivity() {
-        mActivityDelegate.getBaseActivity()
-    }
+    protected fun getBaseActivity() = mActivityDelegate.getBaseActivity()
 
     protected fun getSnackbar() = mActivityDelegate.getSnackbar()
 

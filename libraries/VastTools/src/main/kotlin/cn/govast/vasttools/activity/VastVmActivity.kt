@@ -53,16 +53,18 @@ abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
     abstract val layoutId: Int
 
     // Activity Delegate
+    protected inner class AVD : ActivityVmDelegate<VM>(this, layoutId) {
+        override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+            return this@VastVmActivity.createViewModel(modelClass)
+        }
+    }
+
     private var mActivityDelegate by NotNUllVar<ActivityVmDelegate<VM>>()
 
     @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mActivityDelegate = object : ActivityVmDelegate<VM>(this, layoutId) {
-            override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-                return this@VastVmActivity.createViewModel(modelClass)
-            }
-        }
+        mActivityDelegate = AVD()
         if (0 != layoutId) {
             setContentView(layoutId)
         } else {

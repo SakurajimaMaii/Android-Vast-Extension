@@ -57,22 +57,38 @@ abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
     protected abstract val layoutId: Int
 
     // Fragment Delegate
-    private var mFragmentDelegate by NotNUllVar<FragmentVmDelegate<VM>>()
+    protected inner class FVD : FragmentVmDelegate<VM>(this) {
+        override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+            return this@VastVmFragment.createViewModel(modelClass)
+        }
+
+        override fun setVmBySelf(): Boolean {
+            return this@VastVmFragment.setVmBySelf()
+        }
+    }
+
+    private var mFragmentDelegate by NotNUllVar<FVD>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mFragmentDelegate = object : FragmentVmDelegate<VM>(this) {}
+        mFragmentDelegate = FVD()
         return inflater.inflate(layoutId, container, false)
     }
+
+    protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+        return modelClass.newInstance()
+    }
+
+    protected open fun setVmBySelf(): Boolean = false
 
     protected fun getViewModel(): VM {
         return mFragmentDelegate.getViewModel()
     }
 
-    final override fun createFragmentDelegate(): FragmentVmDelegate<VM> {
+    final override fun createFragmentDelegate(): FVD {
         return mFragmentDelegate
     }
 

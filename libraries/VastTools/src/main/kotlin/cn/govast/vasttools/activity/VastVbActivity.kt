@@ -49,11 +49,13 @@ import cn.govast.vasttools.extension.NotNUllVar
 abstract class VastVbActivity<VB : ViewBinding> : VastActivity() {
 
     // Activity Delegate
-    private var mActivityDelegate by NotNUllVar<ActivityVbDelegate<VB>>()
+    protected inner class AVD : ActivityVbDelegate<VB>(this)
+
+    private var mActivityDelegate by NotNUllVar<AVD>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mActivityDelegate = object : ActivityVbDelegate<VB>(this) {}
+        mActivityDelegate = AVD()
         setContentView(mActivityDelegate.getBinding().root)
     }
 
@@ -61,7 +63,7 @@ abstract class VastVbActivity<VB : ViewBinding> : VastActivity() {
         return mActivityDelegate.getBinding()
     }
 
-    final override fun createActivityDelegate(): ActivityVbDelegate<VB> {
+    final override fun createActivityDelegate(): AVD {
         return mActivityDelegate
     }
 

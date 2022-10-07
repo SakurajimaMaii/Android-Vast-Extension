@@ -48,16 +48,17 @@ import cn.govast.vasttools.extension.NotNUllVar
 abstract class VastVbVmActivity<VB : ViewBinding, VM : ViewModel> : VastActivity() {
 
     // Activity Delegate
-    private var mActivityDelegate by NotNUllVar<ActivityVbVmDelegate<VB, VM>>()
+    protected inner class AVVD:ActivityVbVmDelegate<VB, VM>(this){
+        override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+            return this@VastVbVmActivity.createViewModel(modelClass)
+        }
+    }
+    private var mActivityDelegate by NotNUllVar<AVVD>()
 
     @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mActivityDelegate = object : ActivityVbVmDelegate<VB, VM>(this) {
-            override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-                return this@VastVbVmActivity.createViewModel(modelClass)
-            }
-        }
+        mActivityDelegate = AVVD()
         setContentView(mActivityDelegate.getBinding().root)
     }
 

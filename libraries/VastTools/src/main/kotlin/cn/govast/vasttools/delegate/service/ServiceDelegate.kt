@@ -14,33 +14,25 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.service
+package cn.govast.vasttools.delegate.service
 
 import android.app.Service
 import android.content.Context
-import cn.govast.vasttools.delegate.service.ServiceDelegate
+import cn.govast.vasttools.base.BaseService
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/27
+// Date: 2022/10/7
 // Description: 
 // Documentation:
 // Reference:
 
-abstract class VastService : Service() {
+open class ServiceDelegate(
+    protected val service: Service
+):BaseService {
 
-    private val mServiceDelegate by lazy {
-        ServiceDelegate(this)
-    }
+    override fun getContext(): Context = service
 
-    protected fun getContext(): Context {
-        return mServiceDelegate.getContext()
-    }
-
-    protected fun getDefaultTag(): String = mServiceDelegate.getDefaultTag()
-
-    protected fun createMainScope() = mServiceDelegate.createMainScope()
-
-    protected fun getRequestBuilder() = mServiceDelegate.getRequestBuilder()
+    override fun getDefaultTag(): String = service::class.java.simpleName
 
 }

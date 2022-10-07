@@ -19,11 +19,6 @@ package cn.govast.vasttools.delegate.fragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import cn.govast.vasttools.base.BaseFragment
-import cn.govast.vasttools.network.RequestBuilder
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -42,16 +37,6 @@ open class FragmentDelegate(
 
     override fun getDefaultTag(): String {
         return fragment::class.java.simpleName
-    }
-
-    override fun getRequestBuilder(): RequestBuilder {
-        return RequestBuilder(createMainScope())
-    }
-
-    override fun createMainScope(): CoroutineScope {
-        return CoroutineScope(
-            CoroutineName(getDefaultTag()) + SupervisorJob() + Dispatchers.Main.immediate
-        )
     }
 
 }

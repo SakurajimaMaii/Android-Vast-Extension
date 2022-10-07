@@ -26,11 +26,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import cn.govast.vasttools.base.BaseActivity
 import cn.govast.vasttools.extension.cast
-import cn.govast.vasttools.network.RequestBuilder
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -76,16 +71,6 @@ sealed class ActivityDelegate(
 
     override fun getDefaultTag(): String {
         return activity::class.java.simpleName
-    }
-
-    override fun getRequestBuilder(): RequestBuilder {
-        return RequestBuilder(createMainScope())
-    }
-
-    override fun createMainScope(): CoroutineScope {
-        return CoroutineScope(
-            CoroutineName(getDefaultTag()) + SupervisorJob() + Dispatchers.Main.immediate
-        )
     }
 
     private fun initWindow() {
