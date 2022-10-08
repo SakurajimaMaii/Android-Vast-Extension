@@ -33,7 +33,7 @@ open class FragmentVbDelegate<VB : ViewBinding>(
 
     // ViewBinding
     private val mBinding: VB by lazy {
-        reflexViewBinding(fragment.javaClass, fragment.layoutInflater)
+        fragment.reflexViewBinding(fragment.layoutInflater)
     }
 
     override fun getBinding(): VB {

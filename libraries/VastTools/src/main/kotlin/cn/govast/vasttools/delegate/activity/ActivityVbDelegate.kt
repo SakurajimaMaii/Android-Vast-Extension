@@ -38,7 +38,7 @@ open class ActivityVbDelegate<VB : ViewBinding>(
 
     // ViewBinding
     private val mBinding: VB by lazy {
-        reflexViewBinding(activity.javaClass, activity.layoutInflater)
+        activity.reflexViewBinding()
     }
 
     override fun getSnackbar(): Snackbar {

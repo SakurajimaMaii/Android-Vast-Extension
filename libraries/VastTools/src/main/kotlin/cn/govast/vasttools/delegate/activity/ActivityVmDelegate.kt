@@ -18,7 +18,6 @@ package cn.govast.vasttools.delegate.activity
 
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModel
-import cn.govast.vasttools.extension.CreateViewModel
 import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vasttools.extension.reflexViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -40,11 +39,9 @@ open class ActivityVmDelegate<VM : ViewModel>(
 
     // ViewModel
     private val mViewModel:VM by lazy {
-        activity.reflexViewModel(object: CreateViewModel {
-            override fun createVM(modelClass: Class<out ViewModel>): ViewModel {
-                return createViewModel(modelClass)
-            }
-        })
+        activity.reflexViewModel {
+            return@reflexViewModel createViewModel(it)
+        }
     }
 
     override fun getViewModel(): VM {

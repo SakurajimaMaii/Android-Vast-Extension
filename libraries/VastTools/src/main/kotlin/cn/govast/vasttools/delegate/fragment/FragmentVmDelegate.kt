@@ -18,7 +18,6 @@ package cn.govast.vasttools.delegate.fragment
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
-import cn.govast.vasttools.extension.CreateViewModel
 import cn.govast.vasttools.extension.reflexViewModel
 
 // Author: Vast Gui
@@ -34,11 +33,9 @@ open class FragmentVmDelegate<VM : ViewModel>(
 
     // ViewModel
     private val mViewModel: VM by lazy {
-        fragment.reflexViewModel(object : CreateViewModel {
-            override fun createVM(modelClass: Class<out ViewModel>): ViewModel {
-                return createViewModel(modelClass)
-            }
-        }, setVmBySelf())
+        fragment.reflexViewModel(setVmBySelf()){
+            return@reflexViewModel createViewModel(it)
+        }
     }
 
     override fun getViewModel(): VM {

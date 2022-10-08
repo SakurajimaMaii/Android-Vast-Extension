@@ -19,7 +19,6 @@ package cn.govast.vasttools.delegate.activity
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.extension.CreateViewModel
 import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vasttools.extension.reflexViewBinding
 import cn.govast.vasttools.extension.reflexViewModel
@@ -41,16 +40,14 @@ open class ActivityVbVmDelegate<VB : ViewBinding, VM : ViewModel>(
 
     // ViewBinding
     private val mBinding: VB by lazy {
-        reflexViewBinding(activity.javaClass, activity.layoutInflater)
+        activity.reflexViewBinding()
     }
 
     // ViewModel
     private val mViewModel: VM by lazy {
-        activity.reflexViewModel(object : CreateViewModel {
-            override fun createVM(modelClass: Class<out ViewModel>): ViewModel {
-                return createViewModel(modelClass)
-            }
-        })
+        activity.reflexViewModel{
+            return@reflexViewModel createViewModel(it)
+        }
     }
 
     override fun getSnackbar(): Snackbar {

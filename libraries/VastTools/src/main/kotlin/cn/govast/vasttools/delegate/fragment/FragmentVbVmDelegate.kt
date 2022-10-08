@@ -19,7 +19,6 @@ package cn.govast.vasttools.delegate.fragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.extension.CreateViewModel
 import cn.govast.vasttools.extension.reflexViewBinding
 import cn.govast.vasttools.extension.reflexViewModel
 
@@ -36,16 +35,14 @@ open class FragmentVbVmDelegate<VB : ViewBinding, VM : ViewModel>(
 
     // ViewBinding
     private val mBinding: VB by lazy {
-        reflexViewBinding(fragment.javaClass, fragment.layoutInflater)
+        fragment.reflexViewBinding()
     }
 
     // ViewModel
     private val mViewModel: VM by lazy {
-        fragment.reflexViewModel(object : CreateViewModel {
-            override fun createVM(modelClass: Class<out ViewModel>): ViewModel {
-                return createViewModel(modelClass)
-            }
-        }, setVmBySelf())
+        fragment.reflexViewModel(setVmBySelf()){
+            return@reflexViewModel createViewModel(it)
+        }
     }
 
     override fun getBinding(): VB {
