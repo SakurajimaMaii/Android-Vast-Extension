@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
+import cn.govast.vasttools.base.BaseFragment
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
@@ -33,11 +34,22 @@ import java.lang.reflect.Type
 // Description: 
 // Documentation:
 
-interface CreateViewModel {
-    fun createVM(modelClass: Class<out ViewModel>): ViewModel {
-        return modelClass.newInstance()
-    }
+/**
+ * Create a [ViewModel] object by [modelClass].
+ *
+ * @since 0.0.9
+ */
+private fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+    return modelClass.newInstance()
 }
+
+@JvmOverloads
+fun <VB : ViewBinding?> ComponentActivity.reflexViewBinding(from: LayoutInflater = this.layoutInflater): VB =
+    reflexViewBinding(this.javaClass, from)
+
+@JvmOverloads
+fun <VB : ViewBinding?> Fragment.reflexViewBinding(from: LayoutInflater = this.layoutInflater): VB =
+    reflexViewBinding(this.javaClass, from)
 
 /**
  * Reflection gets ViewBinding.
@@ -48,9 +60,9 @@ interface CreateViewModel {
  * @return viewBinding instance.
  * @since 0.0.9
  */
-fun <VB : ViewBinding?> reflexViewBinding(
+private fun <VB : ViewBinding?> reflexViewBinding(
     aClass: Class<*>,
-    from: LayoutInflater?
+    from: LayoutInflater
 ): VB {
     return try {
         val genericSuperclass = aClass.genericSuperclass
@@ -71,7 +83,6 @@ fun <VB : ViewBinding?> reflexViewBinding(
         }
         reflexViewBinding(aClass.superclass, from)
     } catch (e: Exception) {
-        e.printStackTrace()
         throw RuntimeException(e.message, e)
     }
 }
@@ -87,9 +98,9 @@ fun <VB : ViewBinding?> reflexViewBinding(
  * @return viewBinding instance.
  * @since 0.0.9
  */
-fun <VB : ViewBinding?> reflexViewBinding(
+private fun <VB : ViewBinding?> reflexViewBinding(
     aClass: Class<*>,
-    from: LayoutInflater?,
+    from: LayoutInflater,
     viewGroup: ViewGroup,
     boolean: Boolean
 ): VB {
@@ -115,9 +126,8 @@ fun <VB : ViewBinding?> reflexViewBinding(
                 }
             }
         }
-        reflexViewBinding(aClass.superclass, from)
+        reflexViewBinding(aClass.superclass, from, viewGroup, boolean)
     } catch (e: Exception) {
-        e.printStackTrace()
         throw RuntimeException(e.message, e)
     }
 }
@@ -125,14 +135,15 @@ fun <VB : ViewBinding?> reflexViewBinding(
 /**
  * Reflection to get ViewModel.
  *
- * @param createViewModel create viewModel with parameters.
+ * @param createVM create viewModel with parameters.
  * @param VM ViewModel implementation class
  * @return ViewModel instance.
  * @receiver ComponentActivity.
  * @since 0.0.9
  */
+@JvmOverloads
 fun <VM : ViewModel> ComponentActivity.reflexViewModel(
-    createViewModel: CreateViewModel
+    createVM: ((vm: Class<out ViewModel>) -> ViewModel) = ::createViewModel
 ): VM {
     return try {
         val genericSuperclass = javaClass.genericSuperclass
@@ -148,15 +159,14 @@ fun <VM : ViewModel> ComponentActivity.reflexViewModel(
                 if (ViewModel::class.java.isAssignableFrom(aClass1)) {
                     return ViewModelProvider(this, object : ViewModelProvider.Factory {
                         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                            return cast(createViewModel.createVM(modelClass))
+                            return cast(createVM(modelClass))
                         }
                     })[cast(aClass1)]
                 }
             }
         }
-        reflexViewModel(createViewModel)
+        reflexViewModel(createVM)
     } catch (e: Exception) {
-        e.printStackTrace()
         throw RuntimeException(e.message, e)
     }
 }
@@ -164,8 +174,8 @@ fun <VM : ViewModel> ComponentActivity.reflexViewModel(
 /**
  * Reflection to get ViewModel.
  *
- * @param createViewModel create viewModel with parameters.
- * @param vmBySelf please refer to [VastFragment.setVmBySelf].
+ * @param vmBySelf please refer to [BaseFragment.setVmBySelf].
+ * @param createVM create viewModel with parameters.
  * @param VM ViewModel implementation class
  * @return ViewModel instance.
  * @receiver Fragment.
@@ -173,8 +183,8 @@ fun <VM : ViewModel> ComponentActivity.reflexViewModel(
  */
 @JvmOverloads
 fun <VM : ViewModel> Fragment.reflexViewModel(
-    createViewModel: CreateViewModel,
-    vmBySelf: Boolean = false
+    vmBySelf: Boolean = false,
+    createVM: ((vm: Class<out ViewModel>) -> ViewModel) = ::createViewModel
 ): VM {
     return try {
         val genericSuperclass = javaClass.genericSuperclass
@@ -191,15 +201,14 @@ fun <VM : ViewModel> Fragment.reflexViewModel(
                     return ViewModelProvider(if (vmBySelf) this else requireActivity(),
                         object : ViewModelProvider.Factory {
                             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                                return cast(createViewModel.createVM(modelClass))
+                                return cast(createVM(modelClass))
                             }
                         })[cast(aClass1)]
                 }
             }
         }
-        reflexViewModel(createViewModel, vmBySelf)
+        reflexViewModel(vmBySelf, createVM)
     } catch (e: Exception) {
-        e.printStackTrace()
         throw RuntimeException(e.message, e)
     }
 }
