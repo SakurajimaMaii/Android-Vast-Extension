@@ -20,8 +20,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 // Author: Vast Gui
@@ -34,18 +34,28 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(context) {
 
     private var mView:View? = null
-    private var viewListener: ((view: View) -> Unit)? = null
 
+    /**
+     * Sets a custom view to be the contents of the dialog.
+     *
+     * @since 0.0.9
+     */
     override fun setView(layoutResId: Int) = apply {
         setView(layoutResId, context, null)
     }
 
+    /**
+     * Sets a custom view to be the contents of the dialog.
+     *
+     * @since 0.0.9
+     */
     override fun setView(view: View?) = apply {
+        mView = view
         super.setView(view)
     }
 
     /**
-     * Get the layout of the Dialog by [layoutId].
+     * Sets a custom view to be the contents of the dialog.
      *
      * @since 0.0.9
      */
@@ -56,15 +66,6 @@ class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(
     ) = apply {
         mView = LayoutInflater.from(context).inflate(layoutId, root)
         super.setView(mView)
-    }
-
-    /**
-     * Set the view in layout of the Dialog.
-     *
-     * @since 0.0.9
-     */
-    fun setViewInDialogLayout(l: (layout: View) -> Unit) = apply {
-        viewListener = l
     }
 
     /**
@@ -88,13 +89,18 @@ class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(
         return mView!!
     }
 
-    override fun show(): AlertDialog {
-        viewListener?.invoke(requireView())
-        return super.show()
-    }
-
-    interface ViewListener {
-        fun setViewListener(view: View)
+    /**
+     * Find view from the custom view of the Dialog.
+     *
+     * @param id view id.
+     * @param T view class.
+     * @since 0.0.9
+     */
+    fun <T : View> findViewById(@IdRes id: Int): T {
+        val view = requireView().findViewById<T>(id)
+        if (null == view) {
+            throw NullPointerException("Can't find the view by id.")
+        } else return view
     }
 
 }
