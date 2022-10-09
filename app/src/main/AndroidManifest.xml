@@ -159,7 +159,7 @@
             <!--            </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.TestActivity"
             android:exported="true"
             android:theme="@style/VastTheme.Starting">
             <intent-filter>

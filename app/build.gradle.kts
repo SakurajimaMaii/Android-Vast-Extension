@@ -86,27 +86,44 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.3.1"
     }
 
     namespace = "cn.govast.vastutils"
 
-    sourceSets["main"].java.srcDir("src/main/kotlin")
+    sourceSets["main"].java.srcDirs("src/main/kotlin","src/main/java","src/main/compose")
 
 }
 
 dependencies {
-    implementation(project(":libraries:VastNetStateLayout"))
-    implementation(project(":libraries:VastTools"))
-    implementation(project(":libraries:VastAdapter"))
+    androidTestImplementation(Compose.compose_ui_test_junit4)
+    debugImplementation(Compose.compose_ui_test_manifest)
+    debugImplementation(Compose.compose_ui_tooling)
+    implementation(AndroidX.activity_ktx)
     implementation(AndroidX.constraintlayout)
     implementation(AndroidX.core_splashscreen)
+    implementation(AndroidX.fragment_ktx)
+    implementation(AndroidX.lifecycle_runtime_ktx)
+    implementation(Compose.compose_activity)
+    implementation(Compose.compose_foundation)
+    implementation(Compose.compose_foundation_layout)
+    implementation(Compose.compose_material3)
+    implementation(Compose.compose_ui)
+    implementation(Compose.compose_ui_tooling_preview)
     implementation(Google.material)
+    implementation(Jetbrains.kotlin_reflect)
+    implementation(Jetbrains.kotlinx_coroutines_android)
+    implementation(Jetbrains.kotlinx_coroutines_core)
+    implementation(Jetbrains.kotlinx_coroutines_rx3)
     implementation(Squareup.okhttp3)
     implementation(Squareup.retrofit2)
     implementation(Squareup.retrofit2_adapter_rxjava3)
     implementation(Squareup.retrofit2_converter_gson)
-    implementation(Jetbrains.kotlin_reflect)
-    implementation(Jetbrains.kotlinx_coroutines_core)
-    implementation(Jetbrains.kotlinx_coroutines_android)
-    implementation(Jetbrains.kotlinx_coroutines_rx3)
+    implementation(project(":libraries:VastAdapter"))
+    implementation(project(":libraries:VastNetStateLayout"))
+    implementation(project(":libraries:VastTools"))
 }

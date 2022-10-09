@@ -14,37 +14,24 @@
  * limitations under the License.
  */
 
-include(":app")
-includeBuild("../PluginVersion")
+package cn.govast.vastutils.network;
 
-rootProject.name = "VastUtils"
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2022/9/26
+// Description: 
+// Documentation:
+// Reference:
 
-// =======
-// = Lib =
-// =======
 
-val libs = arrayOf(
-        "VastAdapter",
-        "VastMenuFab",
-        "VastNetStateLayout",
-        "VastSkin",
-        "VastSwipeRecyclerView",
-        "VastTools",
-        "VastUtils"
-)
+import io.reactivex.rxjava3.core.Observable;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
 
-libs.forEach {
-        include(":libraries:$it")
-}
 
-// =======
-// = Skin =
-// =======
+public interface UserService {
 
-val skin = arrayOf(
-        "darkskin"
-)
+    @POST("/login/qr/key")
+    Observable<QRCodeKey> generateQRCode(@Query("timestamp") String timestamp);
 
-skin.forEach {
-        include(":skin:$it")
 }

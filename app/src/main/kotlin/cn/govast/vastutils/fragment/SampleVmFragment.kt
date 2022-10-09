@@ -19,7 +19,6 @@ package cn.govast.vastutils.fragment
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.lifecycle.ViewModel
 import cn.govast.vasttools.fragment.VastVmFragment
 import cn.govast.vastutils.R
 import cn.govast.vastutils.viewModel.SampleSharedVM
@@ -42,10 +41,6 @@ class SampleVmFragment(override val layoutId: Int = R.layout.fragment_sample_vm)
         getViewModel().count.observe(requireActivity()) {
             count.text = it.toString()
         }
-    }
-
-    override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        return SampleSharedVM(getDefaultTag())
     }
 
 }

@@ -31,12 +31,12 @@ import cn.govast.vasttools.activity.VastVbActivity
 import cn.govast.vasttools.utils.AppUtils
 import cn.govast.vasttools.utils.LogUtils
 import cn.govast.vasttools.utils.ResUtils
+import cn.govast.vastutils.BR
 import cn.govast.vastutils.R
 import cn.govast.vastutils.activity.baseadpexample.BaseAdapterActivity
 import cn.govast.vastutils.activity.basebindadpexample.BaseBindingAdapterActivity
 import cn.govast.vastutils.databinding.ActivityMainBinding
 import cn.govast.vastutils.model.IntentSelect
-import cn.govast.vastutils.BR
 
 class MainActivity : VastVbActivity<ActivityMainBinding>() {
 
@@ -56,9 +56,9 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
     private val data: MutableList<VastBindAdapterItem> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableFullScreen(true)
         mSplashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        enableFullScreen(true)
         initData()
         getBinding().rv.apply {
             adapter = Adapter(data, context)

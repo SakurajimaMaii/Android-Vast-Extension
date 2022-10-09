@@ -106,7 +106,7 @@ class IntentActivity : VastVbVmActivity<ActivityIntentBinding, BasicViewModel>()
         }
 
         getBinding().getQRCode.setOnClickListener {
-            getRequestBuilder(this)
+            getRequestBuilder()
                 .requestWithListener({ getViewModel().getQRCode() }) {
                     onSuccess = { QRCodeKey ->
                         LogUtils.i(getDefaultTag(), QRCodeKey.data.unikey)

@@ -30,11 +30,14 @@
     <string name="add">加一</string>
     <string name="download">下载</string>
     <string name="file">文件存储</string>
-    <string name="zh_open_gallery">打开相册</string>
-    <string name="zh_open_snackbar">打开SnackBar</string>
-    <string name="zh_icon">图标</string>
-    <string name="zh_search">搜索</string>
-    <string name="zh_refresh">刷新</string>
-    <string name="zh_revoke">撤消</string>
+    <string name="open_gallery">打开相册</string>
+    <string name="open_snackbar">打开SnackBar</string>
+    <string name="search">搜索</string>
+    <string name="refresh">刷新</string>
+    <string name="revoke">撤消</string>
     <string name="date">日期</string>
+    <string name="change_theme">切换主题</string>
+    <string name="test_text">测试文本</string>
+    <string name="reset_theme">重置主题</string>
+    <string name="icon">图标</string>
 </resources>

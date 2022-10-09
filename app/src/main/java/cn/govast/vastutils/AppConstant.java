@@ -14,37 +14,25 @@
  * limitations under the License.
  */
 
-include(":app")
-includeBuild("../PluginVersion")
+package cn.govast.vastutils;
 
-rootProject.name = "VastUtils"
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2022/7/15
+// Description: 
+// Documentation:
 
-// =======
-// = Lib =
-// =======
+import java.io.File;
 
-val libs = arrayOf(
-        "VastAdapter",
-        "VastMenuFab",
-        "VastNetStateLayout",
-        "VastSkin",
-        "VastSwipeRecyclerView",
-        "VastTools",
-        "VastUtils"
-)
+import cn.govast.vasttools.utils.FileUtils;
 
-libs.forEach {
-        include(":libraries:$it")
-}
+public class AppConstant {
 
-// =======
-// = Skin =
-// =======
+    // 应用内部文件夹File文件夹路径
+    public static final String APP_ROOT_PATH = FileUtils.appInternalFilesDir().getPath();
 
-val skin = arrayOf(
-        "darkskin"
-)
+    // 皮肤包名和路径
+    public static final String THEME_NAME = "darkskin-debug.apk";
+    public static final String THEME_PATH = APP_ROOT_PATH + File.separator + THEME_NAME;
 
-skin.forEach {
-        include(":skin:$it")
 }

@@ -14,37 +14,16 @@
  * limitations under the License.
  */
 
-include(":app")
-includeBuild("../PluginVersion")
+package cn.govast.vastutils;
 
-rootProject.name = "VastUtils"
+import cn.govast.vasttools.lifecycle.VastViewModel;
 
-// =======
-// = Lib =
-// =======
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2022/9/3 16:44
+// Description: 
+// Documentation:
 
-val libs = arrayOf(
-        "VastAdapter",
-        "VastMenuFab",
-        "VastNetStateLayout",
-        "VastSkin",
-        "VastSwipeRecyclerView",
-        "VastTools",
-        "VastUtils"
-)
+public class BasicVM extends VastViewModel {
 
-libs.forEach {
-        include(":libraries:$it")
-}
-
-// =======
-// = Skin =
-// =======
-
-val skin = arrayOf(
-        "darkskin"
-)
-
-skin.forEach {
-        include(":skin:$it")
 }
