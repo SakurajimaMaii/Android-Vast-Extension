@@ -14,33 +14,35 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.fragment
-
-import androidx.fragment.app.Fragment
-import cn.govast.vasttools.fragment.delegate.FragmentDelegate
+package cn.govast.vasttools.lifecycle
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/14 17:11
+// Date: 2022/10/9
 // Description: 
 // Documentation:
+// Reference:
 
-abstract class VastFragment : Fragment() {
+class NetStateLiveData<T> : StateLiveData<T>() {
 
-    private val mFragmentDelegate by lazy {
-        createFragmentDelegate()
+    override fun postLoading() {
+        throw IllegalStateException("Don't call postLoading.")
     }
 
-    protected fun getDefaultTag(): String{
-        return mFragmentDelegate.getDefaultTag()
+    fun postEmpty() {
+        state.postValue(State.Empty)
     }
 
-    protected abstract fun createFragmentDelegate(): FragmentDelegate
+    fun postStart() {
+        state.postValue(State.Start)
+    }
 
-    protected fun getRequestBuilder() = mFragmentDelegate.getRequestBuilder()
+    fun postFailed() {
+        state.postValue(State.Failed)
+    }
 
-    protected fun createMainScope() = mFragmentDelegate.createMainScope()
-
-    protected fun getBaseActivity() = mFragmentDelegate.getBaseActivity()
+    fun postCompletion() {
+        state.postValue(State.Completion)
+    }
 
 }

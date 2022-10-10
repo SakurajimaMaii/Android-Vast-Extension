@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.base
+package cn.govast.vasttools.activity.base
 
 import android.content.Context
+import cn.govast.vasttools.base.BaseVisActive
 import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui

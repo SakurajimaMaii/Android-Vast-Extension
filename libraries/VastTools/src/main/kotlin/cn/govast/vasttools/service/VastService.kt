@@ -18,7 +18,7 @@ package cn.govast.vasttools.service
 
 import android.app.Service
 import android.content.Context
-import cn.govast.vasttools.delegate.service.ServiceDelegate
+import cn.govast.vasttools.service.delegate.ServiceDelegate
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

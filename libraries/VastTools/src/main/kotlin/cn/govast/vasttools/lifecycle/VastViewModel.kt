@@ -17,12 +17,11 @@
 package cn.govast.vasttools.lifecycle
 
 import androidx.lifecycle.ViewModel
-import cn.govast.vasttools.base.BaseActive
+import cn.govast.vasttools.lifecycle.delegate.ViewModelDelegate
+import cn.govast.vasttools.network.ApiRspListener
 import cn.govast.vasttools.network.RequestBuilder
-import kotlinx.coroutines.CoroutineName
+import cn.govast.vasttools.network.base.BaseApiRsp
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -35,18 +34,41 @@ import kotlinx.coroutines.SupervisorJob
  *
  * @since 0.0.9
  */
-abstract class VastViewModel : ViewModel(), BaseActive {
+abstract class VastViewModel : ViewModel() {
 
-    final override fun getDefaultTag(): String = this.javaClass.simpleName
-
-    final override fun getRequestBuilder(): RequestBuilder {
-        return RequestBuilder(createMainScope())
+    private val viewModelDelegate by lazy {
+        ViewModelDelegate(this)
     }
 
-    final override fun createMainScope(): CoroutineScope {
-        return CoroutineScope(
-            CoroutineName(getDefaultTag()) + SupervisorJob() + Dispatchers.Main.immediate
-        )
+    protected open fun getDefaultTag(): String = viewModelDelegate.getDefaultTag()
+
+    protected open fun getRequestBuilder(): RequestBuilder {
+        return viewModelDelegate.getRequestBuilder()
     }
 
+    protected open fun createMainScope(): CoroutineScope {
+        return viewModelDelegate.createMainScope()
+    }
+
+    protected fun <T : BaseApiRsp> defaultNetStateListener(value: NetStateLiveData<T>):
+            ApiRspListener<T>.() -> Unit = {
+        onStart = {
+            value.postStart()
+        }
+        onSuccess = {
+            value.postValueAndSuccess(it)
+        }
+        onEmpty = {
+            value.postEmpty()
+        }
+        onError = {
+            value.postError()
+        }
+        onFailed = { _, _ ->
+            value.postFailed()
+        }
+        onCompletion = {
+            value.postCompletion()
+        }
+    }
 }

@@ -17,7 +17,6 @@
 package cn.govast.vasttools.broadcastreceiver
 
 import android.content.BroadcastReceiver
-import cn.govast.vasttools.base.BaseActive
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -26,8 +25,8 @@ import cn.govast.vasttools.base.BaseActive
 // Documentation:
 // Reference:
 
-abstract class VastBroadcastReceiver : BroadcastReceiver(), BaseActive {
+abstract class VastBroadcastReceiver : BroadcastReceiver() {
 
-    final override fun getDefaultTag(): String = this.javaClass.simpleName
+    protected open fun getDefaultTag(): String = this.javaClass.simpleName
 
 }

@@ -14,33 +14,19 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.fragment
-
-import androidx.fragment.app.Fragment
-import cn.govast.vasttools.fragment.delegate.FragmentDelegate
+package cn.govast.vasttools.network.base
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/14 17:11
+// Date: 2022/9/26
 // Description: 
 // Documentation:
+// Reference:
 
-abstract class VastFragment : Fragment() {
-
-    private val mFragmentDelegate by lazy {
-        createFragmentDelegate()
-    }
-
-    protected fun getDefaultTag(): String{
-        return mFragmentDelegate.getDefaultTag()
-    }
-
-    protected abstract fun createFragmentDelegate(): FragmentDelegate
-
-    protected fun getRequestBuilder() = mFragmentDelegate.getRequestBuilder()
-
-    protected fun createMainScope() = mFragmentDelegate.createMainScope()
-
-    protected fun getBaseActivity() = mFragmentDelegate.getBaseActivity()
-
+@JvmDefaultWithCompatibility
+interface BaseApiRsp {
+    fun isSuccess(): Boolean = true
+    fun isEmpty(): Boolean = false
+    fun getErrorCode(): Int? = null
+    fun getErrorMsg(): String? = null
 }

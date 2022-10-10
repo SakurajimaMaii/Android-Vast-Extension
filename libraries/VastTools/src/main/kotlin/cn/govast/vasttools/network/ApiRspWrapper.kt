@@ -16,7 +16,7 @@
 
 package cn.govast.vasttools.network
 
-import cn.govast.vasttools.base.BaseApiRsp
+import cn.govast.vasttools.network.base.BaseApiRsp
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -40,7 +40,7 @@ sealed class ApiRspWrapper<T : BaseApiRsp> {
      *
      * @since 0.0.9
      */
-    class ApiEmptyWrapper<T : BaseApiRsp>() : ApiRspWrapper<T>()
+    class ApiEmptyWrapper<T : BaseApiRsp> : ApiRspWrapper<T>()
 
     /**
      * Fail response wrapper.
@@ -57,7 +57,6 @@ sealed class ApiRspWrapper<T : BaseApiRsp> {
     /**
      * Error response wrapper.
      *
-     * @param throwable get from [BaseRepository.handleHttpError]
      * @since 0.0.9
      */
     class ApiErrorWrapper<T : BaseApiRsp>(val throwable: Throwable?) : ApiRspWrapper<T>()

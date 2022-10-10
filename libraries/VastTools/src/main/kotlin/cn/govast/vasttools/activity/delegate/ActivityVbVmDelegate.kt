@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.delegate.activity
+package cn.govast.vasttools.activity.delegate
 
 import androidx.activity.ComponentActivity
+import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vasttools.extension.reflexViewBinding
+import cn.govast.vasttools.extension.reflexViewModel
 import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui
@@ -29,7 +31,7 @@ import com.google.android.material.snackbar.Snackbar
 // Documentation:
 // Reference:
 
-open class ActivityVbDelegate<VB : ViewBinding>(
+open class ActivityVbVmDelegate<VB : ViewBinding, VM : ViewModel>(
     activity: ComponentActivity,
 ) : ActivityDelegate(activity) {
 
@@ -41,6 +43,13 @@ open class ActivityVbDelegate<VB : ViewBinding>(
         activity.reflexViewBinding()
     }
 
+    // ViewModel
+    private val mViewModel: VM by lazy {
+        activity.reflexViewModel{
+            return@reflexViewModel createViewModel(it)
+        }
+    }
+
     override fun getSnackbar(): Snackbar {
         mSnackbar = Snackbar.make(mBinding.root, getDefaultTag(), Snackbar.LENGTH_SHORT)
         return mSnackbar
@@ -48,6 +57,10 @@ open class ActivityVbDelegate<VB : ViewBinding>(
 
     override fun getBinding(): VB {
         return mBinding
+    }
+
+    override fun getViewModel(): VM {
+        return mViewModel
     }
 
 }

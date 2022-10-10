@@ -61,7 +61,11 @@ android {
     viewBinding.isEnabled = true
 
     // https://www.jianshu.com/p/2a539b497460
-    sourceSets["main"].java.srcDir("src/main/kotlin")
+    // https://www.lordcodes.com/tips/kotlin-source-directory-gradle-kotlin-dsl
+    sourceSets {
+        getByName("main").java.srcDirs("src/main/kotlin")
+    }
+
 }
 
 dependencies {

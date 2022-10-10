@@ -18,7 +18,7 @@ package cn.govast.vasttools.activity
 
 import android.os.Bundle
 import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.delegate.activity.ActivityVbDelegate
+import cn.govast.vasttools.activity.delegate.ActivityVbDelegate
 import cn.govast.vasttools.extension.NotNUllVar
 
 // Author: Vast Gui

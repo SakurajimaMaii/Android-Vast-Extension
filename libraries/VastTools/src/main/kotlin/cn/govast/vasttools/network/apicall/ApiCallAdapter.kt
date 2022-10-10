@@ -14,33 +14,30 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.fragment
+package cn.govast.vasttools.network.apicall
 
-import androidx.fragment.app.Fragment
-import cn.govast.vasttools.fragment.delegate.FragmentDelegate
+import cn.govast.vasttools.network.base.BaseApiRsp
+import retrofit2.Call
+import retrofit2.CallAdapter
+import java.lang.reflect.Type
+import java.util.concurrent.Executor
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/14 17:11
+// Date: 2022/10/9
 // Description: 
 // Documentation:
+// Reference:
 
-abstract class VastFragment : Fragment() {
+class ApiCallAdapter<T:BaseApiRsp>(private val responseType: Type, private val executor: Executor?) :
+    CallAdapter<T, ApiCall<T>> {
 
-    private val mFragmentDelegate by lazy {
-        createFragmentDelegate()
+    override fun adapt(call: Call<T>): ApiCall<T> {
+        return ApiCallImpl(call, executor)
     }
 
-    protected fun getDefaultTag(): String{
-        return mFragmentDelegate.getDefaultTag()
+    override fun responseType(): Type {
+        return responseType
     }
-
-    protected abstract fun createFragmentDelegate(): FragmentDelegate
-
-    protected fun getRequestBuilder() = mFragmentDelegate.getRequestBuilder()
-
-    protected fun createMainScope() = mFragmentDelegate.createMainScope()
-
-    protected fun getBaseActivity() = mFragmentDelegate.getBaseActivity()
 
 }

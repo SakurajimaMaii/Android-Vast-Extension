@@ -14,32 +14,24 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.delegate.fragment
+package cn.govast.vasttools.fragment.base
 
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import cn.govast.vasttools.extension.reflexViewModel
+import cn.govast.vasttools.base.BaseVisActive
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/10/6
+// Date: 2022/9/13 7:18
 // Description: 
 // Documentation:
-// Reference:
 
-open class FragmentVmDelegate<VM : ViewModel>(
-    fragment: Fragment,
-) : FragmentDelegate(fragment) {
+interface BaseFragment : BaseVisActive {
 
-    // ViewModel
-    private val mViewModel: VM by lazy {
-        fragment.reflexViewModel(setVmBySelf()){
-            return@reflexViewModel createViewModel(it)
-        }
-    }
-
-    override fun getViewModel(): VM {
-        return mViewModel
-    }
+    /**
+     * When [setVmBySelf] is true, the ViewModel representing the Fragment is
+     * retained by itself. When you want the ViewModel to be retained by its
+     * associated Activity, please set [setVmBySelf] to false.
+     */
+    fun setVmBySelf(): Boolean = false
 
 }

@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.base
+package cn.govast.vasttools.lifecycle.delegate
 
-import android.content.Context
+import androidx.lifecycle.ViewModel
+import cn.govast.vasttools.base.BaseActive
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/27
+// Date: 2022/10/9
 // Description: 
 // Documentation:
 // Reference:
 
-interface BaseService : BaseActive {
+open class ViewModelDelegate(
+    protected val viewModel: ViewModel
+) : BaseActive {
 
-    /**
-     * Get the [Context].
-     *
-     * @return context
-     */
-    fun getContext(): Context
+    override fun getDefaultTag(): String {
+        return viewModel::class.java.simpleName
+    }
 
 }

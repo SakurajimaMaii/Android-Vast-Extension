@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.delegate.activity
+package cn.govast.vasttools.activity.delegate
 
 import android.content.Context
 import android.os.Build
@@ -24,7 +24,7 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
-import cn.govast.vasttools.base.BaseActivity
+import cn.govast.vasttools.activity.base.BaseActivity
 import cn.govast.vasttools.extension.cast
 
 // Author: Vast Gui

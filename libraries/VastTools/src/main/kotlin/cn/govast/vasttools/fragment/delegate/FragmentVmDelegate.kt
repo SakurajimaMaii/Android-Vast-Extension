@@ -14,29 +14,32 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.delegate.fragment
+package cn.govast.vasttools.fragment.delegate
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import cn.govast.vasttools.base.BaseFragment
+import androidx.lifecycle.ViewModel
+import cn.govast.vasttools.extension.reflexViewModel
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/10/5
+// Date: 2022/10/6
 // Description: 
 // Documentation:
 // Reference:
 
-open class FragmentDelegate(
-    private val fragment: Fragment
-) : BaseFragment {
+open class FragmentVmDelegate<VM : ViewModel>(
+    fragment: Fragment,
+) : FragmentDelegate(fragment) {
 
-    override fun getBaseActivity(): FragmentActivity {
-        return fragment.requireActivity()
+    // ViewModel
+    private val mViewModel: VM by lazy {
+        fragment.reflexViewModel(setVmBySelf()){
+            return@reflexViewModel createViewModel(it)
+        }
     }
 
-    override fun getDefaultTag(): String {
-        return fragment::class.java.simpleName
+    override fun getViewModel(): VM {
+        return mViewModel
     }
 
 }

@@ -16,8 +16,11 @@
 
 package cn.govast.vasttools.extension
 
-import cn.govast.vasttools.base.BaseApiRsp
 import cn.govast.vasttools.network.ApiRspWrapper
+import cn.govast.vasttools.network.apicall.ApiCall
+import cn.govast.vasttools.network.base.BaseApiRsp
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -25,6 +28,25 @@ import cn.govast.vasttools.network.ApiRspWrapper
 // Description: 
 // Documentation:
 // Reference:
+
+suspend fun <T : BaseApiRsp> executeHttp(block: () -> ApiCall<T>): ApiRspWrapper<T> {
+    return suspendCoroutine {
+        block().request {
+            onSuccess = { data ->
+                it.resume(ApiRspWrapper.ApiSuccessWrapper(data))
+            }
+            onEmpty = {
+                it.resume(ApiRspWrapper.ApiEmptyWrapper())
+            }
+            onFailed = { code, msg ->
+                it.resume(ApiRspWrapper.ApiFailedWrapper(code, msg))
+            }
+            onError = { throwable ->
+                it.resume(ApiRspWrapper.ApiErrorWrapper(throwable))
+            }
+        }
+    }
+}
 
 suspend fun <T : BaseApiRsp> executeHttp(block: suspend () -> T): ApiRspWrapper<T> {
     runCatching {
@@ -47,7 +69,7 @@ private fun <T : BaseApiRsp> handleHttpError(e: Throwable): ApiRspWrapper<T> {
 }
 
 /**
- * Return 200, but also judge is success.
+ * Get data and also judge is success.
  *
  * @since 0.0.9
  */

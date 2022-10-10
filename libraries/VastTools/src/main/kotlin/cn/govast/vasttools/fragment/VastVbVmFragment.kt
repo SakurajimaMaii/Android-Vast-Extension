@@ -22,7 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.delegate.fragment.FragmentVbVmDelegate
+import cn.govast.vasttools.fragment.delegate.FragmentVbVmDelegate
 import cn.govast.vasttools.extension.NotNUllVar
 
 // Author: Vast Gui

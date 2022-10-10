@@ -14,33 +14,25 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.fragment
+package cn.govast.vasttools.service.delegate
 
-import androidx.fragment.app.Fragment
-import cn.govast.vasttools.fragment.delegate.FragmentDelegate
+import android.app.Service
+import android.content.Context
+import cn.govast.vasttools.service.base.BaseService
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/14 17:11
+// Date: 2022/10/7
 // Description: 
 // Documentation:
+// Reference:
 
-abstract class VastFragment : Fragment() {
+open class ServiceDelegate(
+    protected val service: Service
+): BaseService {
 
-    private val mFragmentDelegate by lazy {
-        createFragmentDelegate()
-    }
+    override fun getContext(): Context = service
 
-    protected fun getDefaultTag(): String{
-        return mFragmentDelegate.getDefaultTag()
-    }
-
-    protected abstract fun createFragmentDelegate(): FragmentDelegate
-
-    protected fun getRequestBuilder() = mFragmentDelegate.getRequestBuilder()
-
-    protected fun createMainScope() = mFragmentDelegate.createMainScope()
-
-    protected fun getBaseActivity() = mFragmentDelegate.getBaseActivity()
+    override fun getDefaultTag(): String = service::class.java.simpleName
 
 }

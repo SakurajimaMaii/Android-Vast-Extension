@@ -21,7 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.delegate.fragment.FragmentVbDelegate
+import cn.govast.vasttools.fragment.delegate.FragmentVbDelegate
 import cn.govast.vasttools.extension.NotNUllVar
 
 // Author: Vast Gui

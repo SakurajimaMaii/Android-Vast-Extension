@@ -14,19 +14,25 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.base
+package cn.govast.vasttools.service.base
+
+import android.content.Context
+import cn.govast.vasttools.base.BaseActive
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/26
+// Date: 2022/9/27
 // Description: 
 // Documentation:
 // Reference:
 
-@JvmDefaultWithCompatibility
-interface BaseApiRsp {
-    fun isSuccess(): Boolean = true
-    fun isEmpty(): Boolean = false
-    fun getErrorCode(): Int? = null
-    fun getErrorMsg(): String? = null
+interface BaseService : BaseActive {
+
+    /**
+     * Get the [Context].
+     *
+     * @return context
+     */
+    fun getContext(): Context
+
 }

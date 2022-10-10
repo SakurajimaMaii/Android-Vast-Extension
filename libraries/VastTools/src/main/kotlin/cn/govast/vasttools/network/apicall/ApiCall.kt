@@ -14,22 +14,24 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.base
+package cn.govast.vasttools.network.apicall
 
+import cn.govast.vasttools.network.ApiRspListener
+import cn.govast.vasttools.network.base.BaseApiRsp
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/13 7:18
+// Date: 2022/10/9
 // Description: 
 // Documentation:
+// Reference: https://juejin.cn/post/6844904047447638024
 
-interface BaseFragment : BaseVisActive {
+interface ApiCall<T:BaseApiRsp> {
 
-    /**
-     * When [setVmBySelf] is true, the ViewModel representing the Fragment is
-     * retained by itself. When you want the ViewModel to be retained by its
-     * associated Activity, please set [setVmBySelf] to false.
-     */
-    fun setVmBySelf(): Boolean = false
+    fun cancel()
+
+    fun request(listener: ApiRspListener<T>.() -> Unit)
+
+    fun clone(): ApiCall<T>
 
 }

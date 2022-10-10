@@ -19,7 +19,7 @@ package cn.govast.vasttools.activity
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
-import cn.govast.vasttools.delegate.activity.ActivityVmDelegate
+import cn.govast.vasttools.activity.delegate.ActivityVmDelegate
 import cn.govast.vasttools.extension.NotNUllVar
 
 // Author: Vast Gui

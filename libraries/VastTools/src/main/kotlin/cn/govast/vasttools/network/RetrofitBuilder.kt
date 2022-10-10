@@ -16,6 +16,7 @@
 
 package cn.govast.vasttools.network
 
+import cn.govast.vasttools.network.apicall.ApiCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -50,6 +51,7 @@ abstract class RetrofitBuilder {
         .baseUrl(setBaseUrl())
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+        .addCallAdapterFactory(ApiCallAdapterFactory())
         .client(okHttpClient)
         .build()
 

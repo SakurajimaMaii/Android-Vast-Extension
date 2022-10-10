@@ -16,8 +16,9 @@
 
 package cn.govast.vasttools.network
 
-import cn.govast.vasttools.base.BaseApiRsp
 import cn.govast.vasttools.extension.executeHttp
+import cn.govast.vasttools.network.apicall.ApiCall
+import cn.govast.vasttools.network.base.BaseApiRsp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
@@ -33,29 +34,54 @@ import kotlinx.coroutines.launch
 
 class RequestBuilder(private val mainScope: CoroutineScope) {
 
-    fun <T : BaseApiRsp> requestWithListener(
+    fun <T : BaseApiRsp> callWithListener(
+        request: () -> ApiCall<T>,
+        listener: ApiRspListener<T>.() -> Unit
+    ) = apply {
+        val mListener = ApiRspListener<T>().also(listener)
+        mainScope.launch {
+            flow {
+                emit(executeHttp(request))
+            }.onStart {
+                mListener.onStart
+            }.onCompletion {
+                mListener.onCompletion(it)
+            }.collect { response ->
+                parseData(response, mListener)
+            }
+        }
+    }
+
+    fun <T : BaseApiRsp> suspendWithListener(
         request: suspend () -> T,
         listener: ApiRspListener<T>.() -> Unit
     ) = apply {
         val mListener = ApiRspListener<T>().also(listener)
         mainScope.launch {
             flow {
-                emit(executeHttp { request() })
+                emit(executeHttp(request))
             }.onStart {
                 mListener.onStart
             }.onCompletion {
                 mListener.onCompletion(it)
             }.collect { response ->
-                when (response) {
-                    is ApiRspWrapper.ApiSuccessWrapper -> mListener.onSuccess(response.data)
-                    is ApiRspWrapper.ApiEmptyWrapper -> mListener.onEmpty()
-                    is ApiRspWrapper.ApiFailedWrapper -> mListener.onFailed(
-                        response.errorCode,
-                        response.errorMsg
-                    )
-                    is ApiRspWrapper.ApiErrorWrapper -> mListener.onError(response.throwable)
-                }
+                parseData(response, mListener)
             }
+        }
+    }
+
+    private fun <T : BaseApiRsp> parseData(
+        response: ApiRspWrapper<T>,
+        listener: ApiRspListener<T>
+    ) {
+        when (response) {
+            is ApiRspWrapper.ApiSuccessWrapper -> listener.onSuccess(response.data)
+            is ApiRspWrapper.ApiEmptyWrapper -> listener.onEmpty()
+            is ApiRspWrapper.ApiFailedWrapper -> listener.onFailed(
+                response.errorCode,
+                response.errorMsg
+            )
+            is ApiRspWrapper.ApiErrorWrapper -> listener.onError(response.throwable)
         }
     }
 

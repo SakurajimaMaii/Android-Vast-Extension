@@ -20,7 +20,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.delegate.activity.ActivityVbVmDelegate
+import cn.govast.vasttools.activity.delegate.ActivityVbVmDelegate
 import cn.govast.vasttools.extension.NotNUllVar
 
 // Author: Vast Gui
@@ -48,7 +48,7 @@ import cn.govast.vasttools.extension.NotNUllVar
 abstract class VastVbVmActivity<VB : ViewBinding, VM : ViewModel> : VastActivity() {
 
     // Activity Delegate
-    protected inner class AVVD:ActivityVbVmDelegate<VB, VM>(this){
+    protected inner class AVVD: ActivityVbVmDelegate<VB, VM>(this){
         override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
             return this@VastVbVmActivity.createViewModel(modelClass)
         }
@@ -62,16 +62,16 @@ abstract class VastVbVmActivity<VB : ViewBinding, VM : ViewModel> : VastActivity
         setContentView(mActivityDelegate.getBinding().root)
     }
 
-    protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        return modelClass.newInstance()
-    }
-
     protected fun getBinding(): VB {
         return mActivityDelegate.getBinding()
     }
 
     protected fun getViewModel(): VM {
         return mActivityDelegate.getViewModel()
+    }
+
+    protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+        return modelClass.newInstance()
     }
 
     final override fun createActivityDelegate(): ActivityVbVmDelegate<VB, VM> {

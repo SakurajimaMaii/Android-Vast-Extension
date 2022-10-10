@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.delegate.fragment
+package cn.govast.vasttools.activity.delegate
 
-import androidx.fragment.app.Fragment
+import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModel
-import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.extension.reflexViewBinding
+import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vasttools.extension.reflexViewModel
+import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -29,28 +29,28 @@ import cn.govast.vasttools.extension.reflexViewModel
 // Documentation:
 // Reference:
 
-open class FragmentVbVmDelegate<VB : ViewBinding, VM : ViewModel>(
-    fragment: Fragment,
-) : FragmentDelegate(fragment) {
+open class ActivityVmDelegate<VM : ViewModel>(
+    activity: ComponentActivity,
+    private val layoutId:Int
+) : ActivityDelegate(activity) {
 
-    // ViewBinding
-    private val mBinding: VB by lazy {
-        fragment.reflexViewBinding()
-    }
+    // Snackbar
+    private var mSnackbar by NotNUllVar<Snackbar>()
 
     // ViewModel
-    private val mViewModel: VM by lazy {
-        fragment.reflexViewModel(setVmBySelf()){
+    private val mViewModel:VM by lazy {
+        activity.reflexViewModel {
             return@reflexViewModel createViewModel(it)
         }
     }
 
-    override fun getBinding(): VB {
-        return mBinding
-    }
-
     override fun getViewModel(): VM {
         return mViewModel
+    }
+
+    override fun getSnackbar(): Snackbar {
+        mSnackbar = Snackbar.make(activity.findViewById(layoutId), getDefaultTag(), Snackbar.LENGTH_SHORT)
+        return mSnackbar
     }
 
 }

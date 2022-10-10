@@ -23,7 +23,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.base.BaseFragment
+import cn.govast.vasttools.fragment.base.BaseFragment
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
@@ -44,11 +44,11 @@ private fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
 }
 
 @JvmOverloads
-fun <VB : ViewBinding?> ComponentActivity.reflexViewBinding(from: LayoutInflater = this.layoutInflater): VB =
+fun <VB : ViewBinding> ComponentActivity.reflexViewBinding(from: LayoutInflater = this.layoutInflater): VB =
     reflexViewBinding(this.javaClass, from)
 
 @JvmOverloads
-fun <VB : ViewBinding?> Fragment.reflexViewBinding(from: LayoutInflater = this.layoutInflater): VB =
+fun <VB : ViewBinding> Fragment.reflexViewBinding(from: LayoutInflater = this.layoutInflater): VB =
     reflexViewBinding(this.javaClass, from)
 
 /**
@@ -60,7 +60,7 @@ fun <VB : ViewBinding?> Fragment.reflexViewBinding(from: LayoutInflater = this.l
  * @return viewBinding instance.
  * @since 0.0.9
  */
-private fun <VB : ViewBinding?> reflexViewBinding(
+private fun <VB : ViewBinding> reflexViewBinding(
     aClass: Class<*>,
     from: LayoutInflater
 ): VB {
@@ -98,7 +98,7 @@ private fun <VB : ViewBinding?> reflexViewBinding(
  * @return viewBinding instance.
  * @since 0.0.9
  */
-private fun <VB : ViewBinding?> reflexViewBinding(
+private fun <VB : ViewBinding> reflexViewBinding(
     aClass: Class<*>,
     from: LayoutInflater,
     viewGroup: ViewGroup,

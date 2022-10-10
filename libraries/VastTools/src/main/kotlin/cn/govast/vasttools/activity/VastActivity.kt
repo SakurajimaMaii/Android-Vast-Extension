@@ -17,7 +17,7 @@
 package cn.govast.vasttools.activity
 
 import androidx.appcompat.app.AppCompatActivity
-import cn.govast.vasttools.delegate.activity.ActivityDelegate
+import cn.govast.vasttools.activity.delegate.ActivityDelegate
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -38,7 +38,7 @@ sealed class VastActivity : AppCompatActivity() {
 
     protected fun getContext() = mActivityDelegate.getContext()
 
-    protected fun getDefaultTag(): String = this.javaClass.simpleName
+    protected fun getDefaultTag(): String = mActivityDelegate.getDefaultTag()
 
     protected fun enableActionBar(enable: Boolean) {
         mActivityDelegate.enableActionBar(enable)
