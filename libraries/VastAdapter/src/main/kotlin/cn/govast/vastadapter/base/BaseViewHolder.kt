@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package cn.govast.vastadapter.adapter
+package cn.govast.vastadapter.base
 
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import cn.govast.vastadapter.interfaces.VastAdapterItem
+import cn.govast.vastadapter.AdapterItem
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -27,11 +27,8 @@ import cn.govast.vastadapter.interfaces.VastAdapterItem
 // Description: VastAdapterVH help you to create a recyclerView adapter viewHolder.
 // Documentation: [VastAdapter](https://sakurajimamaii.github.io/VastDocs/document/en/VastAdapter.html)
 
-/**
- * @since 0.0.3
- */
-open class VastAdapterVH(itemView: View): RecyclerView.ViewHolder(itemView) {
-    open fun onBindData(item: VastAdapterItem){
+open class BaseViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    open fun onBindData(item: AdapterItem){
 
     }
 
@@ -39,7 +36,7 @@ open class VastAdapterVH(itemView: View): RecyclerView.ViewHolder(itemView) {
         /**
          * Create the current ViewHolder instance.
          */
-        fun onCreateViewHolder(parent: ViewGroup,viewType:Int): VastAdapterVH
+        fun onCreateViewHolder(parent: ViewGroup,viewType:Int): BaseViewHolder
 
         /**
          * @return A string which is same as the value you set in [VastAdapterItem.getVAdpItemType].

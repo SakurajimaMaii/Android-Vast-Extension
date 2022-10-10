@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package cn.govast.vastadapter.interfaces
+package cn.govast.vastadapter
 
 import android.view.View
 
-// @Author: Vast Gui
-// @Email: guihy2019@gmail.com
-// @Date: 2022/3/30 7:30
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2022/10/10
+// Description: 
+// Documentation:
+// Reference:
 
-// Fix https://github.com/SakurajimaMaii/VastUtils/issues/35
-/**
- * @since 0.0.4
- */
-interface VAdpLongClickEventListener {
-    fun vAdpLongClickEvent(view: View, pos: Int):Boolean
+interface AdapterClickListener {
+
+    /**
+     * A click listener for adapter.
+     */
+    fun clickEventListener(view: View, pos: Int): Unit
+
 }

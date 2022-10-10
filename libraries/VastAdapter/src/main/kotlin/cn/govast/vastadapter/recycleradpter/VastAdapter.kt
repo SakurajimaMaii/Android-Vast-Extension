@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package cn.govast.vastadapter.adapter
+package cn.govast.vastadapter.recycleradpter
 
-import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import cn.govast.vastadapter.interfaces.VastAdapterItem
+import cn.govast.vastadapter.AdapterItem
+import cn.govast.vastadapter.base.BaseAdapter
+import cn.govast.vastadapter.base.BaseViewHolder
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -45,19 +45,15 @@ import cn.govast.vastadapter.interfaces.VastAdapterItem
  * @since 0.0.1
  */
 abstract class VastAdapter(
-    protected val dataSource: MutableList<VastAdapterItem>,
-    protected val factories: MutableList<VastAdapterVH.BVAdpVHFactory>
-) : RecyclerView.Adapter<VastAdapterVH>() {
+    protected val dataSource: MutableList<AdapterItem>,
+    protected val factories: MutableList<BaseViewHolder.BVAdpVHFactory>
+) : BaseAdapter<BaseViewHolder>() {
 
     private val type2ItemType: MutableMap<String, Int> = HashMap()
 
-    // Fix https://github.com/SakurajimaMaii/VastUtils/issues/36
-    private var onItemClickListener: OnItemClickListener? = null
-    private var onItemLongClickListener: OnItemLongClickListener? = null
-
     final override fun getItemViewType(position: Int): Int {
-        val item: VastAdapterItem = dataSource[position]
-        val type: String = item.getVAdpItemType()
+        val item: AdapterItem = dataSource[position]
+        val type: String = item.getItemType()
         if (type2ItemType[type] == null) {
             throw RuntimeException("Not found the itemType according to the position.")
         } else {
@@ -65,26 +61,26 @@ abstract class VastAdapter(
         }
     }
 
-    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VastAdapterVH {
-        val targetFactory: VastAdapterVH.BVAdpVHFactory = factories[viewType]
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+        val targetFactory: BaseViewHolder.BVAdpVHFactory = factories[viewType]
         return targetFactory.onCreateViewHolder(parent, viewType)
     }
 
-    final override fun onBindViewHolder(holder: VastAdapterVH, position: Int) {
-        val itemData: VastAdapterItem = dataSource[position]
+    final override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+        val itemData: AdapterItem = dataSource[position]
         holder.onBindData(itemData)
         holder.itemView.setOnClickListener {
-            if (null != itemData.vAapClickEventListener) {
-                itemData.vAapClickEventListener!!.vAapClickEvent(holder.itemView, position)
+            if (null != itemData.getClickEvent()) {
+                itemData.getClickEvent()?.clickEventListener(holder.itemView, position)
             } else {
-                onItemClickListener?.onItemClick(holder.itemView, position)
+                onItemClickListener?.clickEventListener(holder.itemView, position)
             }
         }
         holder.itemView.setOnLongClickListener {
-            val res = if (null != itemData.vAdpLongClickEventListener) {
-                itemData.vAdpLongClickEventListener!!.vAdpLongClickEvent(holder.itemView, position)
+            val res = if (null != itemData.getLongClickEvent()) {
+                itemData.getLongClickEvent()?.longClickEventListener(holder.itemView, position)
             } else {
-                onItemLongClickListener?.onItemLongClick(holder.itemView, position)
+                onItemLongClickListener?.longClickEventListener(holder.itemView, position)
             }
             return@setOnLongClickListener res ?: false
         }
@@ -94,7 +90,7 @@ abstract class VastAdapter(
 
     init {
         for (i in factories.indices) {
-            val factory: VastAdapterVH.BVAdpVHFactory = factories[i]
+            val factory: BaseViewHolder.BVAdpVHFactory = factories[i]
             val type: String = factory.getVAdpVHType()
             val itemType = type2ItemType[type]
             if (itemType != null) {
@@ -104,46 +100,6 @@ abstract class VastAdapter(
             }
             type2ItemType[type] = i
         }
-    }
-
-    /**
-     * Register a click listener for adapter.
-     *
-     * @param onItemClickListener a click listener.
-     *
-     * @since 0.0.4
-     */
-    fun setOnItemClickListener(onItemClickListener: OnItemClickListener?) {
-        this.onItemClickListener = onItemClickListener
-    }
-
-    /**
-     * Register a long click listener for adapter.
-     *
-     * @param onItemLongClickListener a long click listener.
-     *
-     * @since 0.0.4
-     */
-    fun setOnItemLongClickListener(onItemLongClickListener: OnItemLongClickListener?) {
-        this.onItemLongClickListener = onItemLongClickListener
-    }
-
-    /**
-     * Adapter item click listener.
-     *
-     * @since 0.0.4
-     */
-    interface OnItemClickListener {
-        fun onItemClick(view: View, position: Int)
-    }
-
-    /**
-     * Adapter item click listener.
-     *
-     * @since 0.0.4
-     */
-    interface OnItemLongClickListener {
-        fun onItemLongClick(view: View, position: Int): Boolean
     }
 
 }
