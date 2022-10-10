@@ -18,9 +18,9 @@ package cn.govast.vastutils.basebindadpexample.model;
 
 import androidx.annotation.Nullable;
 
-import cn.govast.vastadapter.interfaces.VAapClickEventListener;
-import cn.govast.vastadapter.interfaces.VAdpLongClickEventListener;
-import cn.govast.vastadapter.interfaces.VastBindAdapterItem;
+import cn.govast.vastadapter.AdapterClickListener;
+import cn.govast.vastadapter.AdapterItem;
+import cn.govast.vastadapter.AdapterLongClickListener;
 import cn.govast.vastutils.R;
 
 // Author: Vast Gui
@@ -29,13 +29,13 @@ import cn.govast.vastutils.R;
 // Description:
 // Documentation:
 
-public class Picture implements VastBindAdapterItem {
+public class Picture implements AdapterItem {
 
     private int drawable;
-    private VAapClickEventListener clickEventListener;
-    private VAdpLongClickEventListener longClickEventListener;
+    private AdapterClickListener clickEventListener;
+    private AdapterLongClickListener longClickEventListener;
 
-    public Picture(int drawable, VAapClickEventListener clickEventListener, VAdpLongClickEventListener longClickEventListener) {
+    public Picture(int drawable, AdapterClickListener clickEventListener, AdapterLongClickListener longClickEventListener) {
         this.drawable = drawable;
         this.clickEventListener = clickEventListener;
         this.longClickEventListener = longClickEventListener;
@@ -50,30 +50,29 @@ public class Picture implements VastBindAdapterItem {
     }
 
     @Override
-    public int getVBAdpItemType() {
+    public int getBindType() {
         return R.layout.item_bind_imageview;
     }
 
+    @Override
+    public void registerClickEvent(@Nullable AdapterClickListener l) {
+        clickEventListener = l;
+    }
 
     @Nullable
     @Override
-    public VAapClickEventListener getVbAapClickEventListener() {
+    public AdapterClickListener getClickEvent() {
         return clickEventListener;
     }
 
     @Override
-    public void setVbAapClickEventListener(@Nullable VAapClickEventListener value) {
-        clickEventListener = value;
+    public void registerLongClickEvent(@Nullable AdapterLongClickListener l) {
+        longClickEventListener = l;
     }
 
     @Nullable
     @Override
-    public VAdpLongClickEventListener getVbAdpLongClickEventListener() {
+    public AdapterLongClickListener getLongClickEvent() {
         return longClickEventListener;
-    }
-
-    @Override
-    public void setVbAdpLongClickEventListener(@Nullable VAdpLongClickEventListener value) {
-        longClickEventListener = value;
     }
 }

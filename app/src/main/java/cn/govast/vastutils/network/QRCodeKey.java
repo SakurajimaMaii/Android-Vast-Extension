@@ -23,7 +23,7 @@ package cn.govast.vastutils.network;
 // Documentation:
 // Reference:
 
-import cn.govast.vasttools.base.BaseApiRsp;
+import cn.govast.vasttools.network.base.BaseApiRsp;
 
 public class QRCodeKey implements BaseApiRsp {
 

@@ -19,12 +19,10 @@ package cn.govast.vastutils.activity.basebindadpexample
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import cn.govast.vastadapter.adapter.VastBindAdapter
-import cn.govast.vastadapter.interfaces.VAapClickEventListener
-import cn.govast.vastadapter.interfaces.VAdpLongClickEventListener
-import cn.govast.vastadapter.interfaces.VastBindAdapterItem
+import cn.govast.vastadapter.AdapterClickListener
+import cn.govast.vastadapter.AdapterItem
+import cn.govast.vastadapter.AdapterLongClickListener
 import cn.govast.vasttools.activity.VastVbActivity
-import cn.govast.vasttools.utils.ToastUtils.showShortMsg
 import cn.govast.vastutils.R
 import cn.govast.vastutils.activity.basebindadpexample.model.Person
 import cn.govast.vastutils.activity.basebindadpexample.model.Picture
@@ -32,7 +30,7 @@ import cn.govast.vastutils.databinding.ActivityBaseBindingAdapterBinding
 
 class BaseBindingAdapterActivity : VastVbActivity<ActivityBaseBindingAdapterBinding>() {
 
-    private val datas: MutableList<VastBindAdapterItem> = ArrayList()
+    private val datas: MutableList<AdapterItem> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,13 +39,13 @@ class BaseBindingAdapterActivity : VastVbActivity<ActivityBaseBindingAdapterBind
 
         val adapter = BaseBindingAdapter(datas, this)
 
-        adapter.setOnItemClickListener(object : VastBindAdapter.OnItemClickListener {
-            override fun onItemClick(view: View, position: Int) {
+        adapter.registerClickEvent(object : AdapterClickListener {
+            override fun clickEventListener(view: View, pos: Int) {
                 // Something you want to do
             }
         })
-        adapter.setOnItemLongClickListener(object : VastBindAdapter.OnItemLongClickListener {
-            override fun onItemLongClick(view: View, position: Int): Boolean {
+        adapter.registerLongClickEvent(object : AdapterLongClickListener {
+            override fun longClickEventListener(view: View, pos: Int): Boolean {
                 // Something you want to do
                 return true
             }
@@ -60,15 +58,15 @@ class BaseBindingAdapterActivity : VastVbActivity<ActivityBaseBindingAdapterBind
 
     private fun initData() {
 
-        val click = object : VAapClickEventListener {
-            override fun vAapClickEvent(view: View, pos: Int) {
-                showShortMsg("Click event and pos is $pos.")
+        val click = object : AdapterClickListener {
+            override fun clickEventListener(view: View, pos: Int) {
+                // Something you want to do
             }
         }
 
-        val longClick = object : VAdpLongClickEventListener {
-            override fun vAdpLongClickEvent(view: View, pos: Int): Boolean {
-                showShortMsg("Long click event and pos is $pos.")
+        val longClick = object : AdapterLongClickListener {
+            override fun longClickEventListener(view: View, pos: Int): Boolean {
+                // Something you want to do
                 return true
             }
         }

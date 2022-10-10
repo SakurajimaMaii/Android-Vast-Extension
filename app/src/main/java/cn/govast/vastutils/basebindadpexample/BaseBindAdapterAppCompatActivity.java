@@ -23,9 +23,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
 
-import cn.govast.vastadapter.interfaces.VAapClickEventListener;
-import cn.govast.vastadapter.interfaces.VAdpLongClickEventListener;
-import cn.govast.vastadapter.interfaces.VastBindAdapterItem;
+import cn.govast.vastadapter.AdapterClickListener;
+import cn.govast.vastadapter.AdapterItem;
+import cn.govast.vastadapter.AdapterLongClickListener;
 import cn.govast.vasttools.activity.VastVbActivity;
 import cn.govast.vasttools.utils.ToastUtils;
 import cn.govast.vastutils.R;
@@ -34,16 +34,16 @@ import cn.govast.vastutils.databinding.ActivityBaseBindingAdapterBinding;
 
 public class BaseBindAdapterAppCompatActivity extends VastVbActivity<ActivityBaseBindingAdapterBinding> {
 
-    private ArrayList<VastBindAdapterItem> datas = new ArrayList<>();
+    private ArrayList<AdapterItem> datas = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        VAapClickEventListener click = (view, pos) -> {
+        AdapterClickListener click = (view, pos) -> {
             ToastUtils.showShortMsg("Click event and pos is " + pos);
         };
 
-        VAdpLongClickEventListener longClick = (view, pos) -> {
+        AdapterLongClickListener longClick = (view, pos) -> {
             ToastUtils.showShortMsg("Long click event and pos is " + pos);
             return true;
         };
@@ -54,10 +54,10 @@ public class BaseBindAdapterAppCompatActivity extends VastVbActivity<ActivityBas
 
         BaseBindAdapter adapter = new BaseBindAdapter(datas, this);
 
-        adapter.setOnItemClickListener((view, position) -> {
+        adapter.registerClickEvent((view, position) -> {
             // Something you want to do
         });
-        adapter.setOnItemLongClickListener((view, position) -> {
+        adapter.registerLongClickEvent((view, position) -> {
             // Something you want to do
             return true;
         });

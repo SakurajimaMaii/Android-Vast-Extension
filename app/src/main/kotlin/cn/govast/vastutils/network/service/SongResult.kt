@@ -16,7 +16,7 @@
 
 package cn.govast.vastutils.network.service
 
-import cn.govast.vasttools.base.BaseApiRsp
+import cn.govast.vasttools.network.base.BaseApiRsp
 
 data class SongResult(
     val code: Int,

@@ -16,9 +16,9 @@
 
 package cn.govast.vastutils.activity.basebindadpexample.model
 
-import cn.govast.vastadapter.interfaces.VAapClickEventListener
-import cn.govast.vastadapter.interfaces.VAdpLongClickEventListener
-import cn.govast.vastadapter.interfaces.VastBindAdapterItem
+import cn.govast.vastadapter.AdapterClickListener
+import cn.govast.vastadapter.AdapterItem
+import cn.govast.vastadapter.AdapterLongClickListener
 import cn.govast.vastutils.R
 
 // Author: Vast Gui
@@ -29,12 +29,20 @@ import cn.govast.vastutils.R
 
 class Picture(
     val drawable: Int,
-    override var vbAapClickEventListener: VAapClickEventListener?,
-    override var vbAdpLongClickEventListener: VAdpLongClickEventListener? = null,
-) : VastBindAdapterItem {
+    private val clickListener: AdapterClickListener?,
+    private val longClickListener: AdapterLongClickListener?
+) : AdapterItem {
 
-    override fun getVBAdpItemType(): Int {
+    override fun getBindType(): Int {
         return R.layout.item_bind_imageview
+    }
+
+    override fun getClickEvent(): AdapterClickListener? {
+        return clickListener
+    }
+
+    override fun getLongClickEvent(): AdapterLongClickListener? {
+        return longClickListener
     }
 
 }

@@ -1,6 +1,6 @@
 package cn.govast.vastutils.network.service
 
-import cn.govast.vasttools.base.BaseApiRsp
+import cn.govast.vasttools.network.base.BaseApiRsp
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

@@ -20,8 +20,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import cn.govast.vastadapter.adapter.VastAdapterVH
-import cn.govast.vastadapter.interfaces.VastAdapterItem
+import cn.govast.vastadapter.AdapterItem
+import cn.govast.vastadapter.base.BaseViewHolder
+import cn.govast.vasttools.extension.cast
 import cn.govast.vastutils.R
 import cn.govast.vastutils.activity.baseadpexample.model.BExample
 
@@ -31,13 +32,13 @@ import cn.govast.vastutils.activity.baseadpexample.model.BExample
 // Description:
 // Documentation:
 
-class BViewHolder(itemView: View) : VastAdapterVH(itemView) {
+class BViewHolder(itemView: View) : BaseViewHolder(itemView) {
 
     private val iv: ImageView
 
-    override fun onBindData(item: VastAdapterItem) {
+    override fun onBindData(item: AdapterItem) {
         super.onBindData(item)
-        iv.setImageResource((item as BExample).drawable)
+        iv.setImageResource(cast<BExample>(item).drawable)
     }
 
     class Factory : BVAdpVHFactory {
@@ -45,7 +46,7 @@ class BViewHolder(itemView: View) : VastAdapterVH(itemView) {
         override fun onCreateViewHolder(
             parent: ViewGroup,
             viewType: Int
-        ): VastAdapterVH {
+        ): BaseViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val itemView: View = inflater.inflate(R.layout.item_imageview, parent, false)
             return BViewHolder(itemView)

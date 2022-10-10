@@ -24,7 +24,7 @@ package cn.govast.vastutils.network;
 // Reference:
 
 
-import io.reactivex.rxjava3.core.Observable;
+import cn.govast.vasttools.network.apicall.ApiCall;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -32,6 +32,6 @@ import retrofit2.http.Query;
 public interface UserService {
 
     @POST("/login/qr/key")
-    Observable<QRCodeKey> generateQRCode(@Query("timestamp") String timestamp);
+    ApiCall<QRCodeKey> generateQRCode(@Query("timestamp") String timestamp);
 
 }

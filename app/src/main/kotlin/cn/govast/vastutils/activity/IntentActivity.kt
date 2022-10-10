@@ -25,6 +25,8 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import cn.govast.vasttools.activity.VastVbVmActivity
+import cn.govast.vasttools.lifecycle.StateLiveData
+import cn.govast.vasttools.nothing_to_do
 import cn.govast.vasttools.utils.IntentUtils.createAlarm
 import cn.govast.vasttools.utils.IntentUtils.createOnceAlarm
 import cn.govast.vasttools.utils.IntentUtils.dialPhoneNumber
@@ -107,16 +109,23 @@ class IntentActivity : VastVbVmActivity<ActivityIntentBinding, BasicViewModel>()
 
         getBinding().getQRCode.setOnClickListener {
             getRequestBuilder()
-                .requestWithListener({ getViewModel().getQRCode() }) {
+                .suspendWithListener({ getViewModel().getQRCode() }) {
                     onSuccess = { QRCodeKey ->
                         LogUtils.i(getDefaultTag(), QRCodeKey.data.unikey)
                     }
                 }
-                .requestWithListener({ getViewModel().searchSong("海阔天空") }) {
-                    onSuccess = { SongResult ->
-                        LogUtils.i(getDefaultTag(), SongResult.result.songCount.toString())
-                    }
-                }
+            getViewModel().searchSong("海阔天空")
+        }
+
+        getViewModel().songResult.state.observe(this) {
+            when (it) {
+                StateLiveData.State.Loading -> nothing_to_do()
+                else -> {}
+            }
+        }
+
+        getViewModel().songResult.observe(this) {
+            LogUtils.d(getDefaultTag(), it.result.songCount.toString())
         }
     }
 

@@ -16,9 +16,9 @@
 
 package cn.govast.vastutils.activity.baseadpexample.model
 
-import cn.govast.vastadapter.interfaces.VAapClickEventListener
-import cn.govast.vastadapter.interfaces.VAdpLongClickEventListener
-import cn.govast.vastadapter.interfaces.VastAdapterItem
+import cn.govast.vastadapter.AdapterClickListener
+import cn.govast.vastadapter.AdapterItem
+import cn.govast.vastadapter.AdapterLongClickListener
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -28,12 +28,20 @@ import cn.govast.vastadapter.interfaces.VastAdapterItem
 
 class AExample(
     val data: String,
-    override var vAapClickEventListener: VAapClickEventListener? = null,
-    override var vAdpLongClickEventListener: VAdpLongClickEventListener? = null,
-): VastAdapterItem {
+    private val clickListener: AdapterClickListener?,
+    private val longClickListener: AdapterLongClickListener?
+): AdapterItem {
 
-    override fun getVAdpItemType(): String {
+    override fun getItemType(): String {
         return AExample::class.java.simpleName
+    }
+
+    override fun getClickEvent(): AdapterClickListener? {
+        return clickListener
+    }
+
+    override fun getLongClickEvent(): AdapterLongClickListener? {
+        return longClickListener
     }
 
 }

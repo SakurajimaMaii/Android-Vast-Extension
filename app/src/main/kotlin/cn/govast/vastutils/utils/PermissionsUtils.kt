@@ -21,8 +21,8 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import cn.govast.vasttools.base.BaseActive
-import cn.govast.vasttools.base.BaseActivity
-import cn.govast.vasttools.base.BaseFragment
+import cn.govast.vasttools.activity.base.BaseActivity
+import cn.govast.vasttools.fragment.base.BaseFragment
 import cn.govast.vasttools.utils.ActivityUtils.getActivity
 import cn.govast.vasttools.utils.ActivityUtils.getCurrentActivity
 import cn.govast.vasttools.utils.ToastUtils

@@ -20,8 +20,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import cn.govast.vastadapter.adapter.VastAdapterVH
-import cn.govast.vastadapter.interfaces.VastAdapterItem
+import cn.govast.vastadapter.AdapterItem
+import cn.govast.vastadapter.base.BaseViewHolder
+import cn.govast.vasttools.extension.cast
 import cn.govast.vastutils.R
 import cn.govast.vastutils.activity.baseadpexample.model.AExample
 
@@ -31,16 +32,16 @@ import cn.govast.vastutils.activity.baseadpexample.model.AExample
 // Description:
 // Documentation:
 
-class AViewHolder(itemView: View): VastAdapterVH(itemView) {
+class AViewHolder(itemView: View): BaseViewHolder(itemView) {
     private val tv:TextView
 
-    override fun onBindData(item: VastAdapterItem) {
+    override fun onBindData(item: AdapterItem) {
         super.onBindData(item)
-        tv.text = (item as AExample).data
+        tv.text = cast<AExample>(item).data
     }
 
     class Factory:BVAdpVHFactory{
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VastAdapterVH {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
             return AViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_textview,parent,false))
         }
 

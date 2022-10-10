@@ -17,6 +17,7 @@
 package cn.govast.vastutils.viewModel
 
 import android.annotation.SuppressLint
+import cn.govast.vasttools.lifecycle.NetStateLiveData
 import cn.govast.vasttools.lifecycle.VastViewModel
 import cn.govast.vastutils.network.NetworkRepository
 import cn.govast.vastutils.network.service.QRCodeKey
@@ -37,9 +38,11 @@ class BasicViewModel(
         return networkRepository.getQRCode()
     }
 
+    val songResult = NetStateLiveData<SongResult>()
+
     @SuppressLint("NewApi")
-    suspend fun searchSong(song: String): SongResult {
-        return networkRepository.searchSong(song)
+    fun searchSong(song: String) {
+        networkRepository.searchSong(song).request(defaultNetStateListener(songResult))
     }
 
 }

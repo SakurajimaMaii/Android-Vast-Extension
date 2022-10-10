@@ -18,9 +18,9 @@ package cn.govast.vastutils.activity.baseadpexample
 
 import android.annotation.SuppressLint
 import androidx.annotation.IntRange
-import cn.govast.vastadapter.adapter.VastAdapter
-import cn.govast.vastadapter.adapter.VastAdapterVH
-import cn.govast.vastadapter.interfaces.VastAdapterItem
+import cn.govast.vastadapter.AdapterItem
+import cn.govast.vastadapter.base.BaseViewHolder
+import cn.govast.vastadapter.recycleradpter.VastAdapter
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -29,8 +29,8 @@ import cn.govast.vastadapter.interfaces.VastAdapterItem
 // Documentation:
 
 class BaseAdapter(
-    private val items: MutableList<VastAdapterItem>,
-    factories: MutableList<VastAdapterVH.BVAdpVHFactory>
+    private val items: MutableList<AdapterItem>,
+    factories: MutableList<BaseViewHolder.BVAdpVHFactory>
 ) : VastAdapter(items, factories) {
 
     /**
@@ -44,7 +44,7 @@ class BaseAdapter(
      * @param pos
      * @return item you get
      */
-    fun getItemByPos(@IntRange(from = 0) pos: Int): VastAdapterItem {
+    fun getItemByPos(@IntRange(from = 0) pos: Int): AdapterItem {
         if (pos >= items.size) {
             throw ArrayIndexOutOfBoundsException("The parameter pos should be less than ${items.size}")
         }
@@ -57,7 +57,7 @@ class BaseAdapter(
      * @param item Item you want to add.
      * @return The result `false` means adding failed or item is `null`
      */
-    fun addItem(item: VastAdapterItem?): Boolean {
+    fun addItem(item: AdapterItem?): Boolean {
         return if (item != null) {
             val flag = items.add(item)
             if (flag) {
@@ -73,7 +73,7 @@ class BaseAdapter(
      * Inserts an element into the list at the specified [pos].
      */
     @Throws(ArrayIndexOutOfBoundsException::class)
-    fun addItemByPos(item: VastAdapterItem, @IntRange(from = 0) pos: Int) {
+    fun addItemByPos(item: AdapterItem, @IntRange(from = 0) pos: Int) {
         if (pos > items.size) {
             throw ArrayIndexOutOfBoundsException("The range of the parameter pos in the addItemByPos() method is wrong")
         }
@@ -85,7 +85,7 @@ class BaseAdapter(
      * Inserts all of the elements of the specified collection [addItems] into this list at the specified [pos].
      */
     @Throws(ArrayIndexOutOfBoundsException::class)
-    fun addItemsByPos(addItems: MutableList<VastAdapterItem>, @IntRange(from = 0) pos: Int) {
+    fun addItemsByPos(addItems: MutableList<AdapterItem>, @IntRange(from = 0) pos: Int) {
         if (pos > items.size) {
             throw ArrayIndexOutOfBoundsException("The parameter pos cannot be greater than ${items.size}")
         }
@@ -98,7 +98,7 @@ class BaseAdapter(
      * @param item The object to be deleted
      * @return Return the result of the operation
      */
-    fun removeItemByObj(item: VastAdapterItem?): Boolean {
+    fun removeItemByObj(item: AdapterItem?): Boolean {
         val pos: Int = items.indexOf(item)
         if (pos >= 0 && pos < items.size) {
             removeItemByPos(pos)
@@ -112,14 +112,14 @@ class BaseAdapter(
      * @return the element that has been removed.
      */
     @Throws(ArrayIndexOutOfBoundsException::class)
-    fun removeItemByPos(@IntRange(from = 0) pos: Int): VastAdapterItem? {
+    fun removeItemByPos(@IntRange(from = 0) pos: Int): AdapterItem? {
         return if (items.isEmpty())
             null
         else {
             if (pos >= items.size || pos < 0) {
                 throw ArrayIndexOutOfBoundsException("The range of the parameter pos should be between 0 and ${items.size - 1}.")
             }
-            val item: VastAdapterItem = items.removeAt(pos)
+            val item: AdapterItem = items.removeAt(pos)
             notifyItemRemoved(pos)
             item
         }

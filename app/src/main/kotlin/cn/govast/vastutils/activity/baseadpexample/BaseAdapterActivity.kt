@@ -19,10 +19,9 @@ package cn.govast.vastutils.activity.baseadpexample
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import cn.govast.vastadapter.adapter.VastAdapter
-import cn.govast.vastadapter.interfaces.VAapClickEventListener
-import cn.govast.vastadapter.interfaces.VAdpLongClickEventListener
-import cn.govast.vastadapter.interfaces.VastAdapterItem
+import cn.govast.vastadapter.AdapterClickListener
+import cn.govast.vastadapter.AdapterItem
+import cn.govast.vastadapter.AdapterLongClickListener
 import cn.govast.vasttools.activity.VastVbActivity
 import cn.govast.vasttools.utils.ToastUtils.showShortMsg
 import cn.govast.vastutils.R
@@ -36,16 +35,16 @@ class BaseAdapterActivity : VastVbActivity<ActivityBaseAdapterBinding>() {
 
     private lateinit var adapter: BaseAdapter
 
-    private val datas: MutableList<VastAdapterItem> = ArrayList()
+    private val datas: MutableList<AdapterItem> = ArrayList()
 
-    private val click = object : VAapClickEventListener {
-        override fun vAapClickEvent(view: View, pos: Int) {
+    private val click = object : AdapterClickListener {
+        override fun clickEventListener(view: View, pos: Int) {
             showShortMsg("Click event and pos is $pos.")
         }
     }
 
-    private val longClick = object : VAdpLongClickEventListener {
-        override fun vAdpLongClickEvent(view: View, pos: Int): Boolean {
+    private val longClick = object : AdapterLongClickListener {
+        override fun longClickEventListener(view: View, pos: Int): Boolean {
             showShortMsg("Long click event and pos is $pos.")
             return true
         }
@@ -55,13 +54,13 @@ class BaseAdapterActivity : VastVbActivity<ActivityBaseAdapterBinding>() {
         super.onCreate(savedInstanceState)
         initData()
         adapter = BaseAdapter(datas, mutableListOf(AViewHolder.Factory(), BViewHolder.Factory()))
-        adapter.setOnItemClickListener(object : VastAdapter.OnItemClickListener {
-            override fun onItemClick(view: View, position: Int) {
+        adapter.registerClickEvent(object : AdapterClickListener {
+            override fun clickEventListener(view: View, pos: Int) {
                 // Something you want to do
             }
         })
-        adapter.setOnItemLongClickListener(object : VastAdapter.OnItemLongClickListener {
-            override fun onItemLongClick(view: View, position: Int): Boolean {
+        adapter.registerLongClickEvent(object : AdapterLongClickListener {
+            override fun longClickEventListener(view: View, pos: Int): Boolean {
                 // Something you want to do
                 return true
             }

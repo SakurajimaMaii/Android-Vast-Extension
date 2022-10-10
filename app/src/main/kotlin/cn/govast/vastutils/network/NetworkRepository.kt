@@ -17,6 +17,7 @@
 package cn.govast.vastutils.network
 
 import android.annotation.SuppressLint
+import cn.govast.vasttools.network.apicall.ApiCall
 import cn.govast.vastutils.network.service.QRCodeKey
 import cn.govast.vastutils.network.service.SongResult
 import cn.govast.vastutils.network.service.UserService
@@ -43,7 +44,7 @@ class NetworkRepository() {
     }
 
     @SuppressLint("NewApi")
-    suspend fun searchSong(song:String): SongResult {
+    fun searchSong(song:String): ApiCall<SongResult> {
         return service.searchSong(song,"${Instant.now().epochSecond}")
     }
 

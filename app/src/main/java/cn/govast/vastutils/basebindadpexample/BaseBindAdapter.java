@@ -22,8 +22,8 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-import cn.govast.vastadapter.adapter.VastBindAdapter;
-import cn.govast.vastadapter.interfaces.VastBindAdapterItem;
+import cn.govast.vastadapter.AdapterItem;
+import cn.govast.vastadapter.recycleradpter.VastBindAdapter;
 import cn.govast.vastutils.BR;
 
 // Author: Vast Gui
@@ -34,7 +34,7 @@ import cn.govast.vastutils.BR;
 
 public class BaseBindAdapter extends VastBindAdapter {
 
-    public BaseBindAdapter(@NonNull List<VastBindAdapterItem> dataSource, @NonNull Context mContext) {
+    public BaseBindAdapter(@NonNull List<AdapterItem> dataSource, @NonNull Context mContext) {
         super(dataSource,mContext);
     }
 
