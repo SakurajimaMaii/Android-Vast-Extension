@@ -29,7 +29,7 @@ import kotlin.coroutines.suspendCoroutine
 // Documentation:
 // Reference:
 
-suspend fun <T : BaseApiRsp> executeHttp(block: () -> ApiCall<T>): ApiRspWrapper<T> {
+suspend fun <T : BaseApiRsp> requestWithCall(block: () -> ApiCall<T>): ApiRspWrapper<T> {
     return suspendCoroutine {
         block().request {
             onSuccess = { data ->
@@ -48,7 +48,7 @@ suspend fun <T : BaseApiRsp> executeHttp(block: () -> ApiCall<T>): ApiRspWrapper
     }
 }
 
-suspend fun <T : BaseApiRsp> executeHttp(block: suspend () -> T): ApiRspWrapper<T> {
+suspend fun <T : BaseApiRsp> requestWithSuspend(block: suspend () -> T): ApiRspWrapper<T> {
     runCatching {
         block.invoke()
     }.onSuccess { data: T ->

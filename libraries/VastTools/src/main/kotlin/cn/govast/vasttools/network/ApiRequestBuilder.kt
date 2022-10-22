@@ -16,7 +16,8 @@
 
 package cn.govast.vasttools.network
 
-import cn.govast.vasttools.extension.executeHttp
+import cn.govast.vasttools.extension.requestWithCall
+import cn.govast.vasttools.extension.requestWithSuspend
 import cn.govast.vasttools.network.apicall.ApiCall
 import cn.govast.vasttools.network.base.BaseApiRsp
 import kotlinx.coroutines.CoroutineScope
@@ -32,18 +33,18 @@ import kotlinx.coroutines.launch
 // Documentation:
 // Reference:
 
-class RequestBuilder(private val mainScope: CoroutineScope) {
+class ApiRequestBuilder(private val mainScope: CoroutineScope) {
 
     fun <T : BaseApiRsp> callWithListener(
         request: () -> ApiCall<T>,
-        listener: ApiRspListener<T>.() -> Unit
-    ) = apply {
-        val mListener = ApiRspListener<T>().also(listener)
+        listener: ApiRspStateListener<T>.() -> Unit
+    ) {
+        val mListener = ApiRspStateListener<T>().also(listener)
         mainScope.launch {
             flow {
-                emit(executeHttp(request))
+                emit(requestWithCall(request))
             }.onStart {
-                mListener.onStart
+                mListener.onStart()
             }.onCompletion {
                 mListener.onCompletion(it)
             }.collect { response ->
@@ -54,14 +55,14 @@ class RequestBuilder(private val mainScope: CoroutineScope) {
 
     fun <T : BaseApiRsp> suspendWithListener(
         request: suspend () -> T,
-        listener: ApiRspListener<T>.() -> Unit
-    ) = apply {
-        val mListener = ApiRspListener<T>().also(listener)
+        listener: ApiRspStateListener<T>.() -> Unit
+    )  {
+        val mListener = ApiRspStateListener<T>().also(listener)
         mainScope.launch {
             flow {
-                emit(executeHttp(request))
+                emit(requestWithSuspend(request))
             }.onStart {
-                mListener.onStart
+                mListener.onStart()
             }.onCompletion {
                 mListener.onCompletion(it)
             }.collect { response ->
@@ -72,7 +73,7 @@ class RequestBuilder(private val mainScope: CoroutineScope) {
 
     private fun <T : BaseApiRsp> parseData(
         response: ApiRspWrapper<T>,
-        listener: ApiRspListener<T>
+        listener: ApiRspStateListener<T>
     ) {
         when (response) {
             is ApiRspWrapper.ApiSuccessWrapper -> listener.onSuccess(response.data)

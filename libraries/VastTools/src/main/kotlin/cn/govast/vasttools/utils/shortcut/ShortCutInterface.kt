@@ -30,8 +30,6 @@ interface ShortCutInterface {
     /**
      * Set an [Intent] for shortcut when it be clicked. You will use it if the
      * Android version is before [Build.VERSION_CODES.O].
-     *
-     * @since 0.0.9
      */
     fun onPinShortCutClick(): Intent?
 
@@ -39,8 +37,6 @@ interface ShortCutInterface {
      * Configure the intent by [PendingIntent.getBroadcast] so that your app's
      * broadcast receiver gets the callback successfully. You will use it if
      * the Android version is after [Build.VERSION_CODES.O].
-     *
-     * @since 0.0.9
      */
     fun onPinShortCutSuccess(): PendingIntent?
 }

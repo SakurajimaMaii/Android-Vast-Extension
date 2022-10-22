@@ -26,7 +26,5 @@ package cn.govast.vasttools.bean
  *
  * @property username username.
  * @property password password.
- *
- * @since 0.0.5
  */
 open class UserBean(val username: String, val password:String)

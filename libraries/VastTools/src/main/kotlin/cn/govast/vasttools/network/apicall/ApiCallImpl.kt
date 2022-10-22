@@ -16,7 +16,8 @@
 
 package cn.govast.vasttools.network.apicall
 
-import cn.govast.vasttools.network.ApiRspListener
+import cn.govast.vasttools.livedata.NetStateLiveData
+import cn.govast.vasttools.network.ApiRspStateListener
 import cn.govast.vasttools.network.base.BaseApiRsp
 import retrofit2.Call
 import retrofit2.Response
@@ -38,8 +39,8 @@ internal class ApiCallImpl<T : BaseApiRsp>(
         call.cancel()
     }
 
-    override fun request(listener: ApiRspListener<T>.() -> Unit) {
-        val mListener = ApiRspListener<T>().also(listener)
+    override fun request(listener: ApiRspStateListener<T>.() -> Unit) {
+        val mListener = ApiRspStateListener<T>().also(listener)
         call.enqueue(object : retrofit2.Callback<T> {
             override fun onFailure(call: Call<T>, t: Throwable) {
                 mListener.onError(t)
@@ -54,6 +55,26 @@ internal class ApiCallImpl<T : BaseApiRsp>(
                         mListener.onSuccess(body)
                     else
                         mListener.onFailed(body.getErrorCode(), body.getErrorMsg())
+                }
+            }
+        })
+    }
+
+    override fun request(netStateLiveData: NetStateLiveData<T>) {
+        call.enqueue(object : retrofit2.Callback<T> {
+            override fun onFailure(call: Call<T>, t: Throwable) {
+                netStateLiveData.postError(t)
+            }
+
+            override fun onResponse(call: Call<T>, response: Response<T>) {
+                val body = response.body()
+                if (null == body) {
+                    netStateLiveData.postError(Throwable("Response is null."))
+                } else {
+                    if (body.isSuccess())
+                        netStateLiveData.postValueAndSuccess(body)
+                    else
+                        netStateLiveData.postFailed(body.getErrorCode(), body.getErrorMsg())
                 }
             }
         })

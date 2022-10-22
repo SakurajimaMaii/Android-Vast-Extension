@@ -17,6 +17,7 @@
 package cn.govast.vastadapter.recycleradpter
 
 import android.content.Context
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -36,30 +37,29 @@ import cn.govast.vastadapter.base.BaseBindHolder
 // Documentation:
 // Reference:
 
-abstract class VastBindListAdapter constructor(
-    protected var dataSource: MutableList<AdapterItem>,
+abstract class VastBindListAdapter <T:AdapterItem> constructor(
     protected var mContext: Context,
-    protected var diffCallback: DiffUtil.ItemCallback<AdapterItem>
-) : ListAdapter<AdapterItem, BaseBindHolder>(diffCallback), AdapterClickRegister {
+    protected var diffCallback: DiffUtil.ItemCallback<T>
+) : ListAdapter<T, BaseBindHolder>(diffCallback), AdapterClickRegister {
 
     protected var onItemClickListener: AdapterClickListener? = null
     protected var onItemLongClickListener: AdapterLongClickListener? = null
 
     final override fun onBindViewHolder(holder: BaseBindHolder, position: Int) {
-        val item = dataSource[position]
+        val item = getItem(position)
         holder.bindData(setVariableId(), item)
         holder.itemView.setOnClickListener {
             if (null != item.getClickEvent()) {
-                item.getClickEvent()?.clickEventListener(holder.itemView, position)
+                item.getClickEvent()?.onItemClick(holder.itemView, position)
             } else {
-                onItemClickListener?.clickEventListener(holder.itemView, position)
+                onItemClickListener?.onItemClick(holder.itemView, position)
             }
         }
         holder.itemView.setOnLongClickListener {
             val res = if (null != item.getLongClickEvent()) {
-                item.getLongClickEvent()?.longClickEventListener(holder.itemView, position)
+                item.getLongClickEvent()?.onItemLongClick(holder.itemView, position)
             } else {
-                onItemLongClickListener?.longClickEventListener(holder.itemView, position)
+                onItemLongClickListener?.onItemLongClick(holder.itemView, position)
             }
             return@setOnLongClickListener res ?: false
         }
@@ -76,6 +76,17 @@ abstract class VastBindListAdapter constructor(
             false
         )
         return setViewHolder(binding)
+    }
+
+    final override fun getItemViewType(position: Int):Int {
+        val viewType = getItem(position).getBindType()
+        try {
+            // Identify whether there is a resource file for the resource id.
+            mContext.resources.getLayout(viewType)
+        }catch(e: Resources.NotFoundException){
+            throw RuntimeException("Please check if the return value of the getVBAdpItemType method in ${getItem(position).javaClass.simpleName} is correct.")
+        }
+        return viewType
     }
 
     /**

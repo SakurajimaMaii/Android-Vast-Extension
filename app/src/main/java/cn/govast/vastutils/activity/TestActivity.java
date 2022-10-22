@@ -42,9 +42,6 @@ public class TestActivity extends VastVbActivity<ActivityTestBinding> {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         splashScreen = SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
-        getBinding().fab.setOnClickListener(view -> {
-
-        });
 
         DownloadUtils.createConfig()
                 .setDownloadUrl(Constant.DOWNLOAD_URL)

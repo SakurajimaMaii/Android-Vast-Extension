@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.lifecycle
+package cn.govast.vasttools.viewModel
 
 import androidx.lifecycle.ViewModel
-import cn.govast.vasttools.lifecycle.delegate.ViewModelDelegate
-import cn.govast.vasttools.network.ApiRspListener
-import cn.govast.vasttools.network.RequestBuilder
-import cn.govast.vasttools.network.base.BaseApiRsp
+import cn.govast.vasttools.network.ApiRequestBuilder
+import cn.govast.vasttools.viewModel.delegate.ViewModelDelegate
 import kotlinx.coroutines.CoroutineScope
 
 // Author: Vast Gui
@@ -31,8 +29,6 @@ import kotlinx.coroutines.CoroutineScope
 
 /**
  * Base ViewModel
- *
- * @since 0.0.9
  */
 abstract class VastViewModel : ViewModel() {
 
@@ -42,33 +38,12 @@ abstract class VastViewModel : ViewModel() {
 
     protected open fun getDefaultTag(): String = viewModelDelegate.getDefaultTag()
 
-    protected open fun getRequestBuilder(): RequestBuilder {
-        return viewModelDelegate.getRequestBuilder()
+    protected open fun getRequestBuilder(): ApiRequestBuilder {
+        return viewModelDelegate.getApiRequestBuilder()
     }
 
     protected open fun createMainScope(): CoroutineScope {
         return viewModelDelegate.createMainScope()
     }
 
-    protected fun <T : BaseApiRsp> defaultNetStateListener(value: NetStateLiveData<T>):
-            ApiRspListener<T>.() -> Unit = {
-        onStart = {
-            value.postStart()
-        }
-        onSuccess = {
-            value.postValueAndSuccess(it)
-        }
-        onEmpty = {
-            value.postEmpty()
-        }
-        onError = {
-            value.postError()
-        }
-        onFailed = { _, _ ->
-            value.postFailed()
-        }
-        onCompletion = {
-            value.postCompletion()
-        }
-    }
 }

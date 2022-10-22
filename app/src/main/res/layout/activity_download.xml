@@ -16,9 +16,9 @@
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#636e72"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <cn.govast.vasttools.view.downloadcircle.DownloadCircleView
         android:id="@+id/downloadCv"
@@ -40,4 +40,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+    <androidx.appcompat.widget.AppCompatSeekBar
+        android:id="@+id/bottom_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,8 +26,6 @@ import android.text.SpannableString
 
 /**
  * Span mode
- *
- * @since 0.0.9
  */
 enum class SpanMode(val value: Int){
     SIE(SpannableString.SPAN_INCLUSIVE_EXCLUSIVE),

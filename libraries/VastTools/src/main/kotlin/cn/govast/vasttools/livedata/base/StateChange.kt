@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package cn.govast.vastadapter
+package cn.govast.vasttools.livedata.base
 
-import android.view.View
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/10/10
+// Date: 2022/10/15
 // Description: 
 // Documentation:
 // Reference:
 
-interface AdapterLongClickListener {
-
-    /**
-     * A long click listener for adapter.
-     */
-    fun onItemLongClick(view: View, pos: Int):Boolean
-
+sealed interface StateChange{
+    fun changeCompletion()
+    fun changeEmpty()
+    fun changeError(t: Throwable?)
+    fun changeFailed(errorCode: Int?, errorMsg: String?)
+    fun changeStart()
+    fun changeState(s: State)
+    fun changeSuccess()
+    fun clearState()
 }

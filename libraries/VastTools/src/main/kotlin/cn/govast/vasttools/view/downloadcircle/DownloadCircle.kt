@@ -38,8 +38,6 @@ internal interface DownloadCircle {
      * Set download progress.
      *
      * @param progress currently completed progress,range from 0.0 to 1.0.
-     *
-     * @since 0.0.8
      */
     fun setProgress(@FloatRange(from = 0.0, to = 1.0) progress: Float)
 
@@ -49,15 +47,11 @@ internal interface DownloadCircle {
      * @param currentProgress currently completed progress.
      * @param totalProgress total progress.
      * @throws RuntimeException when currentProgress is greater than the totalProgress.
-     *
-     * @since 0.0.8
      */
     fun setProgress(@FloatRange(from = 0.0) currentProgress: Float, @FloatRange(from = 0.0) totalProgress: Float)
 
     /**
      * Reset progress.
-     *
-     * @since 0.0.8
      */
     fun resetProgress()
 
@@ -65,8 +59,6 @@ internal interface DownloadCircle {
      * Set progress paint shader.
      *
      * @param shader progress paint shader.
-     *
-     * @since 0.0.8
      */
     fun setProgressShader(shader: Shader?)
 
@@ -74,8 +66,6 @@ internal interface DownloadCircle {
      * Set progress stroke cap.
      *
      * @param cap progress stroke cap.
-     *
-     * @since 0.0.8
      */
     fun setProgressStrokeCap(cap:Paint.Cap)
 
@@ -83,8 +73,6 @@ internal interface DownloadCircle {
      * Set progress background color.
      *
      * @param color progress background color.
-     *
-     * @since 0.0.8
      */
     fun setProgressBackgroundColor(@ColorInt color: Int)
 
@@ -92,8 +80,6 @@ internal interface DownloadCircle {
      * Set progress start color.
      *
      * @param color progress start color.
-     *
-     * @since 0.0.8
      */
     fun setProgressStartColor(@ColorInt color: Int)
 
@@ -101,8 +87,6 @@ internal interface DownloadCircle {
      * Set progress end color.
      *
      * @param color progress end color.
-     *
-     * @since 0.0.8
      */
     fun setProgressEndColor(@ColorInt color: Int)
 
@@ -110,8 +94,6 @@ internal interface DownloadCircle {
      * Set progress text color.
      *
      * @param color progress text color.
-     *
-     * @since 0.0.8
      */
     fun setProgressTextColor(@ColorInt color: Int)
 
@@ -119,8 +101,6 @@ internal interface DownloadCircle {
      * Show progress start and end circle.
      *
      * @param show true if you want to show,false otherwise.
-     *
-     * @since 0.0.8
      */
     fun setProgressStartAndEndEnabled(show: Boolean)
 

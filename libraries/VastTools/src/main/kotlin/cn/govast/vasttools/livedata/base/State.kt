@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.network
+package cn.govast.vasttools.livedata.base
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/28
+// Date: 2022/10/15
 // Description: 
 // Documentation:
 // Reference:
 
-class ApiRspListener<T> {
-    var onStart: () -> Unit = {}
-    var onSuccess: (data: T) -> Unit = {}
-    var onEmpty: () -> Unit = {}
-    var onFailed: (errorCode: Int?, errorMsg: String?) -> Unit = { _, _ -> }
-    var onError: (t: Throwable?) -> Unit = { }
-    var onCompletion: (t: Throwable?) -> Unit = {}
+sealed class State {
+    object Clear : State()
+    object Completion : State()
+    object Empty : State()
+    class Error @JvmOverloads constructor(val t: Throwable? = null) : State()
+    class Failed @JvmOverloads constructor(
+        val errorCode: Int? = null,
+        val errorMsg: String? = null
+    ) : State()
+    object Start : State()
+    object Success : State()
 }

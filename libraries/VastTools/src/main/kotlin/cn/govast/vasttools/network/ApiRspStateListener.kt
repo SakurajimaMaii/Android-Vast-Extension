@@ -14,35 +14,19 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.lifecycle
+package cn.govast.vasttools.network
+
+import cn.govast.vasttools.base.BaseStateListener
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/10/9
+// Date: 2022/10/15
 // Description: 
 // Documentation:
 // Reference:
 
-class NetStateLiveData<T> : StateLiveData<T>() {
-
-    override fun postLoading() {
-        throw IllegalStateException("Don't call postLoading.")
-    }
-
-    fun postEmpty() {
-        state.postValue(State.Empty)
-    }
-
-    fun postStart() {
-        state.postValue(State.Start)
-    }
-
-    fun postFailed() {
-        state.postValue(State.Failed)
-    }
-
-    fun postCompletion() {
-        state.postValue(State.Completion)
-    }
-
+class ApiRspStateListener<T>: BaseStateListener() {
+    var onStart: () -> Unit = {}
+    var onCompletion: (t: Throwable?) -> Unit = {}
+    var onSuccess: (data: T) -> Unit = {}
 }

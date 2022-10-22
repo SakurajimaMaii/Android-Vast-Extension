@@ -37,22 +37,16 @@ object ResUtils {
 
     /**
      * Resources not found tag.
-     *
-     * @since 0.0.9
      */
     const val RESOURCES_NOT_FOUND = 0
 
     /**
      * Error color hex string.
-     *
-     * @since 0.0.9
      */
     private const val ERROR_COLOR = "#c0392b"
 
     /**
      * Get string by [id].
-     *
-     * @since 0.0.9
      */
     @JvmStatic
     fun getString(@StringRes id: Int): String =
@@ -64,7 +58,6 @@ object ResUtils {
      * @param name the name of the drawable.
      * @return the drawable resource corresponding to the [name], otherwise
      *     null if the resource does not exist.
-     * @since 0.0.9
      */
     @JvmStatic
     fun getDrawable(name: String): Drawable? {
@@ -83,7 +76,6 @@ object ResUtils {
      * @param resId the resource id of the drawable.
      * @return the drawable resource corresponding to the [resId], otherwise
      *     null if the resource does not exist.
-     * @since 0.0.9
      */
     @JvmStatic
     fun getDrawable(@DrawableRes resId: Int): Drawable? {
@@ -100,7 +92,6 @@ object ResUtils {
      * [ERROR_COLOR] will be return if resource is not exist.
      *
      * @param id the resource id of color.
-     * @since 0.0.9
      */
     @JvmStatic
     fun getColor(@ColorRes id: Int): Int {
@@ -118,7 +109,6 @@ object ResUtils {
      * an integer. Otherwise 0 will be return.
      *
      * @param id the resource id of dimension.
-     * @since 0.0.9
      */
     @JvmStatic
     fun getDimensionPixelOffset(@DimenRes id: Int): Int {

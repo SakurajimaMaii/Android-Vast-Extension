@@ -36,8 +36,6 @@ import java.lang.reflect.Type
 
 /**
  * Create a [ViewModel] object by [modelClass].
- *
- * @since 0.0.9
  */
 private fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
     return modelClass.newInstance()
@@ -58,7 +56,6 @@ fun <VB : ViewBinding> Fragment.reflexViewBinding(from: LayoutInflater = this.la
  * @param from layouinflater.
  * @param VB implementation class.
  * @return viewBinding instance.
- * @since 0.0.9
  */
 private fun <VB : ViewBinding> reflexViewBinding(
     aClass: Class<*>,
@@ -96,7 +93,6 @@ private fun <VB : ViewBinding> reflexViewBinding(
  * @param boolean attachToRoot.
  * @param VB implementation class.
  * @return viewBinding instance.
- * @since 0.0.9
  */
 private fun <VB : ViewBinding> reflexViewBinding(
     aClass: Class<*>,
@@ -139,7 +135,6 @@ private fun <VB : ViewBinding> reflexViewBinding(
  * @param VM ViewModel implementation class
  * @return ViewModel instance.
  * @receiver ComponentActivity.
- * @since 0.0.9
  */
 @JvmOverloads
 fun <VM : ViewModel> ComponentActivity.reflexViewModel(
@@ -179,7 +174,6 @@ fun <VM : ViewModel> ComponentActivity.reflexViewModel(
  * @param VM ViewModel implementation class
  * @return ViewModel instance.
  * @receiver Fragment.
- * @since 0.0.9
  */
 @JvmOverloads
 fun <VM : ViewModel> Fragment.reflexViewModel(

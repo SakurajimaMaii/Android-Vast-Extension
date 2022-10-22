@@ -40,8 +40,6 @@ import cn.govast.vasttools.utils.AppUtils
 
 /**
  * Help you to create short cut launcher for app.
- *
- * @since 0.0.9
  */
 object AppShortcutsUtils : ShortCutInterface {
 
@@ -54,7 +52,6 @@ object AppShortcutsUtils : ShortCutInterface {
      *
      * @param shortcutName shortcut name.
      * @param shortcutIcon icon resource id for the shortcut.
-     * @since 0.0.9
      */
     @RequiresPermission(Manifest.permission.INSTALL_SHORTCUT)
     @JvmOverloads
@@ -86,7 +83,6 @@ object AppShortcutsUtils : ShortCutInterface {
      * @param shortcutId only id for shortcut.
      * @param shortcutIcon icon resource id for the shortcut.
      * @param shortcutName shortcut name.
-     * @since 0.0.9
      */
     @RequiresPermission(Manifest.permission.INSTALL_SHORTCUT)
     @RequiresApi(Build.VERSION_CODES.O)
@@ -118,7 +114,6 @@ object AppShortcutsUtils : ShortCutInterface {
      * shortcuts with the same IDs, the mutable pinned shortcuts are updated.
      *
      * @see ShortcutManager.setDynamicShortcuts
-     * @since 0.0.9
      */
     @RequiresApi(Build.VERSION_CODES.O)
     @JvmOverloads
@@ -133,7 +128,6 @@ object AppShortcutsUtils : ShortCutInterface {
      * pinned shortcuts with the same IDs, each mutable shortcut is updated.
      *
      * @see ShortcutManager.addDynamicShortcuts
-     * @since 0.0.9
      */
     @RequiresApi(Build.VERSION_CODES.O)
     @JvmOverloads
@@ -145,8 +139,6 @@ object AppShortcutsUtils : ShortCutInterface {
 
     /**
      * Delete all dynamic shortcuts from the caller app.
-     *
-     * @since 0.0.9
      */
     @RequiresApi(Build.VERSION_CODES.O)
     @JvmOverloads
@@ -158,8 +150,6 @@ object AppShortcutsUtils : ShortCutInterface {
 
     /**
      * Delete dynamic shortcuts by ID.
-     *
-     * @since 0.0.9
      */
     @RequiresApi(Build.VERSION_CODES.O)
     @JvmOverloads
@@ -176,7 +166,6 @@ object AppShortcutsUtils : ShortCutInterface {
      * @param shortcutId only id for shortcut.
      * @param shortcutIcon icon resource id for the shortcut.
      * @param shortcutName shortcut name.
-     * @since 0.0.9
      */
     @RequiresApi(Build.VERSION_CODES.O)
     @JvmOverloads

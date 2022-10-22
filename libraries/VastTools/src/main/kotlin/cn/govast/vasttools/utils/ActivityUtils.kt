@@ -30,8 +30,6 @@ import kotlin.system.exitProcess
 
 /**
  * Activity utils.
- *
- * @since 0.0.9
  */
 object ActivityUtils {
 
@@ -39,8 +37,6 @@ object ActivityUtils {
 
     /**
      * @param activity the activity you want to add.
-     *
-     * @since 0.0.9
      */
     @JvmStatic
     fun addActivity(activity: Activity) {
@@ -51,8 +47,6 @@ object ActivityUtils {
      * @param activity the activity you want to remove.
      * @return true if [activities] contained the [activity],false
      *     otherwise.
-     *
-     * @since 0.0.9
      */
     @JvmStatic
     fun removeActivity(activity: Activity): Boolean {
@@ -62,8 +56,6 @@ object ActivityUtils {
     /**
      * @param clazz the class of the activity you want to get.
      * @return the activity you want to get,null otherwise.
-     *
-     * @since 0.0.9
      */
     @JvmStatic
     fun getActivity(clazz: Class<*>): Activity? {
@@ -77,8 +69,6 @@ object ActivityUtils {
 
     /**
      * Find the activity available at the top.
-     *
-     * @since 0.0.9
      */
     fun getCurrentActivity(): Activity? {
         if (activities.isEmpty()) {
@@ -96,16 +86,12 @@ object ActivityUtils {
 
     /**
      * @return [activities].
-     *
-     * @since 0.0.9
      */
     @JvmStatic
     fun getActivities() = activities
 
     /**
      * Finish all activity.
-     *
-     * @since 0.0.9
      */
     @JvmStatic
     fun finishAllActivity() {

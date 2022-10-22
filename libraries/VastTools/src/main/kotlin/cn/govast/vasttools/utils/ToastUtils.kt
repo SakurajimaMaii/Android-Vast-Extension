@@ -35,8 +35,6 @@ import cn.govast.vasttools.helper.ContextHelper
  * ```Java
  * ToastUtils.INSTANCE.showShortMsg(this,message);
  * ```
- *
- * @since 0.0.6
  */
 object ToastUtils {
 
@@ -45,7 +43,6 @@ object ToastUtils {
     /**
      * @param msg message of the toast.
      * @param context context.
-     * @since 0.0.1
      */
     @JvmStatic
     @JvmOverloads
@@ -64,7 +61,6 @@ object ToastUtils {
     /**
      * @param id message string id of the toast.
      * @param context context.
-     * @since 0.0.5
      */
     @JvmStatic
     @JvmOverloads
@@ -84,7 +80,6 @@ object ToastUtils {
     /**
      * @param msg message of the toast.
      * @param context context.
-     * @since 0.0.1
      */
     @JvmStatic
     @JvmOverloads
@@ -103,7 +98,6 @@ object ToastUtils {
     /**
      * @param id message string id of the toast.
      * @param context context.
-     * @since 0.0.5
      */
     @JvmStatic
     @JvmOverloads

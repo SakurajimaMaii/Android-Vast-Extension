@@ -52,7 +52,7 @@ sealed class VastActivity : AppCompatActivity() {
 
     protected fun getSnackbar() = mActivityDelegate.getSnackbar()
 
-    protected fun getRequestBuilder() = mActivityDelegate.getRequestBuilder()
+    protected fun getRequestBuilder() = mActivityDelegate.getApiRequestBuilder()
 
     protected fun createMainScope() = mActivityDelegate.createMainScope()
 

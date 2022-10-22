@@ -26,8 +26,6 @@ import android.graphics.Typeface
 
 /**
  * Style of the span.
- *
- * @since 0.0.9
  */
 enum class StyleMode(val value: Int) {
     NORMAL(Typeface.NORMAL),

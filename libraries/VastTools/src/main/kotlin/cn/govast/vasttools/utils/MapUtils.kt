@@ -31,7 +31,6 @@ object MapUtils {
      * Determine if GPS is turned on.
      *
      * @return true if GPS is turned on, false otherwise.
-     * @since 0.0.8
      */
     @JvmStatic
     fun isGPSOPen(): Boolean {

@@ -32,7 +32,6 @@ object EncryptionUtils {
      * Encrypt [text] with MD5.
      *
      * @return encode text by MD5, "" otherwise.
-     * @since 0.0.9
      */
     @JvmStatic
     fun getMD5(text: String): String {

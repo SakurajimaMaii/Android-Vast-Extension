@@ -34,8 +34,7 @@ import java.util.*
  */
 object DateUtils {
 
-    // Time Format
-    const val FORMAT_YYYY_MM_DD = "yyyy-MM-dd"
+    const val FORMAT_YYYYhMMhDD = "yyyy-MM-dd"
     const val FORMAT_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss"
     const val FORMAT_YYYY_MM = "yyyy-MM"
     const val FORMAT_YYYY = "yyyy"

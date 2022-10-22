@@ -22,11 +22,11 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import cn.govast.vasttools.activity.VastVbVmActivity
-import cn.govast.vasttools.lifecycle.StateLiveData
-import cn.govast.vasttools.nothing_to_do
 import cn.govast.vasttools.utils.IntentUtils.createAlarm
 import cn.govast.vasttools.utils.IntentUtils.createOnceAlarm
 import cn.govast.vasttools.utils.IntentUtils.dialPhoneNumber
@@ -36,6 +36,7 @@ import cn.govast.vasttools.utils.IntentUtils.openWirelessSettings
 import cn.govast.vasttools.utils.IntentUtils.searchWeb
 import cn.govast.vasttools.utils.IntentUtils.sendMmsMessage
 import cn.govast.vasttools.utils.LogUtils
+import cn.govast.vasttools.utils.UriUtils
 import cn.govast.vasttools.utils.shortcut.AppShortcutsUtils
 import cn.govast.vastutils.R
 import cn.govast.vastutils.broadcastreceiver.ShortcutReceiver
@@ -47,6 +48,12 @@ import cn.govast.vastutils.viewModel.BasicViewModel
 class IntentActivity : VastVbVmActivity<ActivityIntentBinding, BasicViewModel>() {
 
     private lateinit var shortcutReceiver: ShortcutReceiver
+
+    private val getImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){activityResult->
+        activityResult.data?.data?.let {
+            LogUtils.d(getDefaultTag(),UriUtils.getRealPath(it))
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
@@ -90,6 +97,15 @@ class IntentActivity : VastVbVmActivity<ActivityIntentBinding, BasicViewModel>()
             openWirelessSettings(this)
         }
 
+        getBinding().openAlbum.setOnClickListener {
+            val chooseAvatarIntent = Intent(Intent.ACTION_PICK, null)
+            //使用INTERNAL_CONTENT_URI只能显示存储在内部的照片
+            chooseAvatarIntent.setDataAndType(
+                MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*"
+            )
+            getImage.launch(chooseAvatarIntent)
+        }
+
         getBinding().createShortcut.setOnClickListener {
             AppShortcutsUtils.setPinnedShortcutResult {
                 return@setPinnedShortcutResult PendingIntent.getBroadcast(
@@ -117,11 +133,7 @@ class IntentActivity : VastVbVmActivity<ActivityIntentBinding, BasicViewModel>()
             getViewModel().searchSong("海阔天空")
         }
 
-        getViewModel().songResult.state.observe(this) {
-            when (it) {
-                StateLiveData.State.Loading -> nothing_to_do()
-                else -> {}
-            }
+        getViewModel().songResult.getState().observeState(this) {
         }
 
         getViewModel().songResult.observe(this) {

@@ -41,6 +41,6 @@ abstract class VastService : Service() {
 
     protected fun createMainScope() = mServiceDelegate.createMainScope()
 
-    protected fun getRequestBuilder() = mServiceDelegate.getRequestBuilder()
+    protected fun getRequestBuilder() = mServiceDelegate.getApiRequestBuilder()
 
 }

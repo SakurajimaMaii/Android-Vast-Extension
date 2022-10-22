@@ -16,13 +16,14 @@
 
 package cn.govast.vasttools.utils
 
+import android.content.Context
 import cn.govast.vasttools.helper.ContextHelper
 import cn.govast.vasttools.utils.FileUtils.ResultSet.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileWriter
 
-// Author: SakurajimaMai
+// Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/5/30
 // Description: 
@@ -53,19 +54,31 @@ object FileUtils {
         FLAG_FAILED
     }
 
-    /** @since 0.0.9 */
+    /**
+     * @return The File which from internal storage, meant for your app's use only.
+     * @see [Context.getFilesDir]
+     */
     @JvmStatic
     fun appInternalFilesDir(): File = ContextHelper.getAppContext().filesDir
 
-    /** @since 0.0.9 */
+    /**
+     * @return The File which from internal storage, meant for your app's use only.
+     * @see [Context.getCacheDir]
+     */
     @JvmStatic
     fun appInternalCacheDir(): File = ContextHelper.getAppContext().cacheDir
 
-    /** @since 0.0.9 */
+    /**
+     * @return The File which from external storage, meant for your app's use only.
+     * @see [Context.getExternalFilesDir]
+     */
     @JvmStatic
     fun appExternalFilesDir(path: String?) = ContextHelper.getAppContext().getExternalFilesDir(path)
 
-    /** @since 0.0.9 */
+    /**
+     * @return The File which from external storage, meant for your app's use only.
+     * @see [Context.getExternalCacheDir]
+     */
     @JvmStatic
     fun appExternalCacheDir() = ContextHelper.getAppContext().externalCacheDir
 
@@ -73,7 +86,6 @@ object FileUtils {
      * Save file.
      *
      * @param file The file you want to save.
-     * @since 0.0.9
      */
     @JvmStatic
     fun saveFile(file: File):ResultSet {
@@ -92,7 +104,6 @@ object FileUtils {
      *
      * @param file the file you want to delete.
      * @return [ResultSet]
-     * @since 0.0.9
      */
     @JvmStatic
     fun deleteFile(file: File): ResultSet {
@@ -113,7 +124,6 @@ object FileUtils {
      * @param file the file you want to write.
      * @param writeEventListener register a listener for writing.
      * @return [ResultSet]
-     * @since 0.0.9
      */
     @JvmStatic
     fun writeFile(file: File, writeEventListener: WriteEventListener): ResultSet {
@@ -132,7 +142,6 @@ object FileUtils {
      *
      * @param dir The file of the directory.
      * @return [ResultSet]
-     * @since 0.0.9
      */
     @JvmStatic
     fun makeDir(dir: File): ResultSet {
@@ -153,7 +162,6 @@ object FileUtils {
      *
      * @param file The directory you want to delete.
      * @return Operations result.
-     * @since 0.0.9
      */
     @JvmStatic
     fun deleteDir(file: File): ResultSet {
@@ -181,12 +189,11 @@ object FileUtils {
      * @param file The file or directory you want to rename.
      * @param newName The new name.
      * @return Operations result.
-     * @since 0.0.9
      */
     @JvmStatic
     fun rename(file: File, newName: String): ResultSet {
         if (!file.exists()) {
-            return ResultSet.FLAG_NOT_EXISTS
+            return FLAG_NOT_EXISTS
         } else if (newName == file.name) {
             return FLAG_SUCCESS
         } else {
@@ -205,8 +212,6 @@ object FileUtils {
 
     /**
      * Get the extension name of the file.
-     *
-     * @since 0.0.9
      */
     @JvmStatic
     fun getFileExtension(file: File): String {
@@ -215,8 +220,6 @@ object FileUtils {
 
     /**
      * Register a listener when write to file.
-     *
-     * @since 0.0.9
      */
     interface WriteEventListener {
         /**
@@ -231,23 +234,17 @@ object FileUtils {
 
     /**
      * Register a listener when write result.
-     *
-     * @since 0.0.9
      */
     interface WriteEventResultListener {
 
         /**
          * On success.
-         *
-         * @since 0.0.9
          */
         fun onSuccess()
 
 
         /**
          * On failed.Default print StackTrace.
-         *
-         * @since 0.0.9
          */
         fun onFailed(e: Exception) {
             e.printStackTrace()

@@ -30,6 +30,6 @@ interface AdapterClickListener {
     /**
      * A click listener for adapter.
      */
-    fun clickEventListener(view: View, pos: Int): Unit
+    fun onItemClick(view: View, pos: Int): Unit
 
 }

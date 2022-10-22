@@ -30,7 +30,6 @@ object RegexUtils {
      *
      * @param string string to matches.
      * @return true if the String is a email address, false otherwise.
-     * @since 0.0.6
      */
     @JvmStatic
     fun isEmail(string: String): Boolean {
@@ -50,7 +49,6 @@ object RegexUtils {
      * @param minLength Minimum password length.
      * @param maxLength Maximum password length.
      * @return true if the String is a password, false otherwise.
-     * @since 0.0.6
      */
     @JvmStatic
     @JvmOverloads
@@ -87,7 +85,6 @@ object RegexUtils {
      *
      * @param string string to matches.
      * @return true if the String is a qq number, false otherwise.
-     * @since 0.0.6
      */
     @JvmStatic
     fun isQQ(string: String): Boolean {
@@ -99,7 +96,6 @@ object RegexUtils {
      *
      * @param string string to matches.
      * @return true if the String is a phone number, false otherwise.
-     * @since 0.0.8
      */
     @JvmStatic
     fun isPhoneNumber(string: String): Boolean {
@@ -113,7 +109,6 @@ object RegexUtils {
      * @param string string to matches.
      * @param otherCountryPattern Other National Phone Number Formats.
      * @return true if the String is a phone number, false otherwise.
-     * @since 0.0.6
      */
     @JvmStatic
     @Deprecated(
@@ -134,7 +129,6 @@ object RegexUtils {
      *
      * @param string string to matches.
      * @return true if the String is a number, false otherwise.
-     * @since 0.0.6
      */
     @JvmStatic
     fun isNumeric(string: String): Boolean {

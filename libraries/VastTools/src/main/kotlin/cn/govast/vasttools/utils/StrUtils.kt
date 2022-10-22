@@ -41,7 +41,6 @@ object StrUtils {
      *
      * @param str string to be concatenated.
      * @return concatenated string.
-     * @since 0.0.9
      */
     @JvmStatic
     fun strConcat(vararg str: Any): String {
@@ -57,7 +56,6 @@ object StrUtils {
      *
      * @param value the value or string res id.
      * @return the temperature string in Celsius unit,like 39℃.
-     * @since 0.0.9
      */
     @JvmStatic
     @Throws(RuntimeException::class)
@@ -69,7 +67,6 @@ object StrUtils {
      * Get format string with unit.
      *
      * @throws RuntimeException
-     * @since 0.0.9
      */
     @Throws(RuntimeException::class)
     private fun getUnitFormatString(value: Any, unit: String): String {

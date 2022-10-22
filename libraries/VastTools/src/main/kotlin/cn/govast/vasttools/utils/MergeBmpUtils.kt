@@ -34,7 +34,6 @@ object MergeBmpUtils {
      * @param bottomBitmap Bitmap at the bottom.
      * @param topBitmap Bitmap at the top.
      * @return `null` if one of the bitmaps is recycled.
-     * @since 0.0.4
      */
     @JvmStatic
     fun mergeBmp(bottomBitmap: Bitmap, topBitmap: Bitmap): Bitmap? {
@@ -59,7 +58,6 @@ object MergeBmpUtils {
      *     is stretched proportionally, `false` means that
      *     the larger image is compressed proportionally.
      * @return `null` if one of the bitmaps is recycled.
-     * @since 0.0.4
      */
     @JvmStatic
     fun mergeBmpLR(leftBitmap: Bitmap, rightBitmap: Bitmap, isBaseMax: Boolean): Bitmap? {
@@ -117,7 +115,6 @@ object MergeBmpUtils {
      *     is stretched proportionally, `false` means that
      *     the larger image is compressed proportionally
      * @return `null` if one of the bitmaps is recycled.
-     * @since 0.0.4
      */
     @JvmStatic
     fun mergeBmpTB(topBitmap: Bitmap, bottomBitmap: Bitmap, isBaseMax: Boolean): Bitmap? {

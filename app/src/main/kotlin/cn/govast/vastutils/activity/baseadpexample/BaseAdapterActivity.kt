@@ -38,13 +38,13 @@ class BaseAdapterActivity : VastVbActivity<ActivityBaseAdapterBinding>() {
     private val datas: MutableList<AdapterItem> = ArrayList()
 
     private val click = object : AdapterClickListener {
-        override fun clickEventListener(view: View, pos: Int) {
+        override fun onItemClick(view: View, pos: Int) {
             showShortMsg("Click event and pos is $pos.")
         }
     }
 
     private val longClick = object : AdapterLongClickListener {
-        override fun longClickEventListener(view: View, pos: Int): Boolean {
+        override fun onItemLongClick(view: View, pos: Int): Boolean {
             showShortMsg("Long click event and pos is $pos.")
             return true
         }
@@ -55,12 +55,12 @@ class BaseAdapterActivity : VastVbActivity<ActivityBaseAdapterBinding>() {
         initData()
         adapter = BaseAdapter(datas, mutableListOf(AViewHolder.Factory(), BViewHolder.Factory()))
         adapter.registerClickEvent(object : AdapterClickListener {
-            override fun clickEventListener(view: View, pos: Int) {
+            override fun onItemClick(view: View, pos: Int) {
                 // Something you want to do
             }
         })
         adapter.registerLongClickEvent(object : AdapterLongClickListener {
-            override fun longClickEventListener(view: View, pos: Int): Boolean {
+            override fun onItemLongClick(view: View, pos: Int): Boolean {
                 // Something you want to do
                 return true
             }

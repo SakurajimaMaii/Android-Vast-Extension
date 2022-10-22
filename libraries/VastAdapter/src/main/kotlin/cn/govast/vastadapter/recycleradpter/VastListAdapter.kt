@@ -32,18 +32,17 @@ import cn.govast.vastadapter.base.BaseViewHolder
 // Documentation:
 // Reference:
 
-abstract class VastListAdapter(
-    protected val dataSource: MutableList<AdapterItem>,
+abstract class VastListAdapter<T : AdapterItem>(
     protected val factories: MutableList<BaseViewHolder.BVAdpVHFactory>,
-    protected var diffCallback: DiffUtil.ItemCallback<AdapterItem>
-) : ListAdapter<AdapterItem, BaseViewHolder>(diffCallback), AdapterClickRegister {
+    protected var diffCallback: DiffUtil.ItemCallback<T>
+) : ListAdapter<T, BaseViewHolder>(diffCallback), AdapterClickRegister {
 
     private val type2ItemType: MutableMap<String, Int> = HashMap()
     protected var onItemClickListener: AdapterClickListener? = null
     protected var onItemLongClickListener: AdapterLongClickListener? = null
 
     final override fun getItemViewType(position: Int): Int {
-        val item: AdapterItem = dataSource[position]
+        val item = getItem(position)
         val type: String = item.getItemType()
         if (type2ItemType[type] == null) {
             throw RuntimeException("Not found the itemType according to the position.")
@@ -58,26 +57,24 @@ abstract class VastListAdapter(
     }
 
     final override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        val itemData: AdapterItem = dataSource[position]
+        val itemData = getItem(position)
         holder.onBindData(itemData)
         holder.itemView.setOnClickListener {
             if (null != itemData.getClickEvent()) {
-                itemData.getClickEvent()?.clickEventListener(holder.itemView, position)
+                itemData.getClickEvent()?.onItemClick(holder.itemView, position)
             } else {
-                onItemClickListener?.clickEventListener(holder.itemView, position)
+                onItemClickListener?.onItemClick(holder.itemView, position)
             }
         }
         holder.itemView.setOnLongClickListener {
             val res = if (null != itemData.getLongClickEvent()) {
-                itemData.getLongClickEvent()?.longClickEventListener(holder.itemView, position)
+                itemData.getLongClickEvent()?.onItemLongClick(holder.itemView, position)
             } else {
-                onItemLongClickListener?.longClickEventListener(holder.itemView, position)
+                onItemLongClickListener?.onItemLongClick(holder.itemView, position)
             }
             return@setOnLongClickListener res ?: false
         }
     }
-
-    final override fun getItemCount() = dataSource.size
 
     init {
         for (i in factories.indices) {

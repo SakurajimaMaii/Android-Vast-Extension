@@ -75,12 +75,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = Version.java_version
+        targetCompatibility = Version.java_version
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = Version.java_version.toString()
     }
 
     buildFeatures {
@@ -108,6 +108,8 @@ dependencies {
     implementation(AndroidX.core_splashscreen)
     implementation(AndroidX.fragment_ktx)
     implementation(AndroidX.lifecycle_runtime_ktx)
+    implementation(AndroidX.lifecycle_viewmodel_ktx)
+    implementation(AndroidX.lifecycle_livedata_ktx)
     implementation(Compose.compose_activity)
     implementation(Compose.compose_foundation)
     implementation(Compose.compose_foundation_layout)

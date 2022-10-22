@@ -31,7 +31,6 @@ object DensityUtils {
      *
      * @param pxValue a px value.
      * @return a dp value.
-     * @since 0.0.1
      */
     @JvmStatic
     fun px2dp(pxValue: Float): Float {
@@ -44,7 +43,6 @@ object DensityUtils {
      *
      * @param dpValue a dp value.
      * @return a px value.
-     * @since 0.0.1
      */
     @JvmStatic
     fun dp2px(dpValue: Float): Float {
@@ -57,7 +55,6 @@ object DensityUtils {
      *
      * @param pxValue a px value.
      * @return a sp value.
-     * @since 0.0.1
      */
     @JvmStatic
     fun px2sp(pxValue: Float): Float {
@@ -70,7 +67,6 @@ object DensityUtils {
      *
      * @param spValue a sp value.
      * @return a px value.
-     * @since 0.0.1
      */
     @JvmStatic
     fun sp2px(spValue: Float): Float {
@@ -83,7 +79,6 @@ object DensityUtils {
      *
      * @param dpValue a dp value.
      * @return a sp value.
-     * @since 0.0.1
      */
     @JvmStatic
     fun dp2sp(dpValue: Float): Float {
@@ -107,7 +102,6 @@ object DensityUtils {
     /**
      * @return The complex floating point value multiplied by the
      *     appropriate metrics(in density-independent pixels).
-     * @since 0.0.1
      */
     @JvmStatic
     val Float.DP
@@ -120,7 +114,6 @@ object DensityUtils {
     /**
      * @return The complex floating point value multiplied by the
      *     appropriate metrics(in scale-independent pixels).
-     * @since 0.0.1
      */
     @JvmStatic
     val Float.SP
@@ -133,7 +126,6 @@ object DensityUtils {
     /**
      * @return The complex floating point value multiplied by the
      *     appropriate metrics(in pixels).
-     * @since 0.0.6
      */
     @JvmStatic
     val Float.PX
@@ -146,7 +138,6 @@ object DensityUtils {
     /**
      * @return The complex floating point value multiplied by the
      *     appropriate metrics(in points).
-     * @since 0.0.6
      */
     @JvmStatic
     val Float.PT
@@ -159,7 +150,6 @@ object DensityUtils {
     /**
      * @return The complex floating point value multiplied by the
      *     appropriate metrics(in inches).
-     * @since 0.0.6
      */
     @JvmStatic
     val Float.INCHES
@@ -172,7 +162,6 @@ object DensityUtils {
     /**
      * @return The complex floating point value multiplied by the
      *     appropriate metrics(in millimeters).
-     * @since 0.0.6
      */
     @JvmStatic
     val Float.MM

@@ -42,8 +42,6 @@ object LogUtils {
 
     /**
      * Log content.
-     *
-     * @since 0.0.1
      */
     private var logContent: LogContent? = null
 
@@ -52,30 +50,22 @@ object LogUtils {
      *
      * Notes:Considering fault tolerance, 1000 is set here instead of
      * 1024.
-     *
-     * @since 0.0.5
      */
     private const val defaultCharLength = 1000
 
     /**
      * Default max print repeat times.
-     *
-     * @since 0.0.3
      */
     private const val defaultMaxPrintTimes = 5
 
     /**
      * Maximum length of chars printed of a single log.
-     *
-     * @since 0.0.5
      */
     var singleLogCharLength = defaultCharLength
         private set
 
     /**
      * Max print repeat times.
-     *
-     * @since 0.0.3
      */
     var maxPrintTimes: Int = defaultMaxPrintTimes
         private set
@@ -83,8 +73,6 @@ object LogUtils {
     /**
      * `true` if you want to print log,`false` if you don't want to
      * print the log.
-     *
-     * @since 0.0.1
      */
     var logEnabled = true
 
@@ -107,8 +95,6 @@ object LogUtils {
 
     /**
      * Set [singleLogCharLength].
-     *
-     * @since 0.0.5
      */
     @JvmStatic
     fun setSingleLogCharLength(@IntRange(from = 0, to = 1000) charLength: Int) {
@@ -117,8 +103,6 @@ object LogUtils {
 
     /**
      * Set [maxPrintTimes].
-     *
-     * @since 0.0.5
      */
     @JvmStatic
     fun setMaxPrintTimes(@IntRange(from = 0) maxPrint: Int) {
@@ -130,8 +114,6 @@ object LogUtils {
      *
      * @param key Message keyboard.
      * @param content Message content.
-     *
-     * @since 0.0.1
      */
     @JvmStatic
     fun i(key: String?, content: String?) {
@@ -145,8 +127,6 @@ object LogUtils {
      *
      * @param key Message keyboard.
      * @param content Message content.
-     *
-     * @since 0.0.1
      */
     @JvmStatic
     fun v(key: String?, content: String?) {
@@ -160,8 +140,6 @@ object LogUtils {
      *
      * @param key Message keyboard.
      * @param content Message content.
-     *
-     * @since 0.0.1
      */
     @JvmStatic
     fun w(key: String?, content: String?) {
@@ -175,8 +153,6 @@ object LogUtils {
      *
      * @param key Message keyboard.
      * @param content Message content.
-     *
-     * @since 0.0.1
      */
     @JvmStatic
     fun d(key: String?, content: String?) {
@@ -190,8 +166,6 @@ object LogUtils {
      *
      * @param key Message keyboard.
      * @param content Message content.
-     *
-     * @since 0.0.1
      */
     @JvmStatic
     fun e(key: String?, content: String?) {
@@ -204,8 +178,6 @@ object LogUtils {
      * Define your log format by setting [LogUtils.logContent].
      *
      * @param logContent [LogUtils].
-     *
-     * @since 0.0.1
      */
     @JvmStatic
     fun setLogContentFormat(logContent: LogContent) {
@@ -218,8 +190,6 @@ object LogUtils {
      * @param priority log level.
      * @param key log keyboard.
      * @param content log message.
-     *
-     * @since 0.0.1
      */
     private fun logPrint(
         priority: Int,
@@ -255,8 +225,6 @@ object LogUtils {
      *     usually identifies the class or
      *     activity where the log call occurs.
      * @param content The message you would like logged.
-     *
-     * @since 0.0.3
      */
     private fun print(priority: Int, tag: String, content: String) {
         /**
@@ -321,8 +289,6 @@ object LogUtils {
      *
      * @param bytes byte array.
      * @return The string obtained by [singleLogCharLength].
-     *
-     * @since 0.0.3
      */
     private fun cutStr(bytes: ByteArray?): String? {
         // Return when the bytes is null.
@@ -356,8 +322,6 @@ object LogUtils {
 
     /**
      * [LogContent] used to define the log content format.
-     *
-     * @since 0.0.1
      */
     interface LogContent {
         fun logContentFormat(methodName: String?, key: String?, content: String?): String

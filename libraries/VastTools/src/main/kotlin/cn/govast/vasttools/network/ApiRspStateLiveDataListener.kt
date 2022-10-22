@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.lifecycle.delegate
+package cn.govast.vasttools.network
 
-import androidx.lifecycle.ViewModel
-import cn.govast.vasttools.base.BaseActive
+import cn.govast.vasttools.base.BaseStateListener
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -26,12 +25,8 @@ import cn.govast.vasttools.base.BaseActive
 // Documentation:
 // Reference:
 
-open class ViewModelDelegate(
-    protected val viewModel: ViewModel
-) : BaseActive {
-
-    override fun getDefaultTag(): String {
-        return viewModel::class.java.simpleName
-    }
-
+class ApiRspStateLiveDataListener : BaseStateListener() {
+    var onStart: () -> Unit = {}
+    var onCompletion: () -> Unit = {}
+    var onSuccess: () -> Unit = {}
 }

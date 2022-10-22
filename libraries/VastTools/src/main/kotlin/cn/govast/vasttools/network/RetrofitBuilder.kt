@@ -59,8 +59,6 @@ abstract class RetrofitBuilder {
 
     /**
      * Set timeout. Default return 8L.
-     *
-     * @since 0.0.9
      */
     open fun setTimeOut(): Long {
         return 8L
@@ -68,15 +66,11 @@ abstract class RetrofitBuilder {
 
     /**
      * Set base url
-     *
-     * @since 0.0.9
      */
     abstract fun setBaseUrl(): String
 
     /**
      * Customize the configuration of OKHttpClient.
-     *
-     * @since 0.0.9
      */
     open fun handleOkHttpClientBuilder(builder: OkHttpClient.Builder){
 
@@ -84,8 +78,6 @@ abstract class RetrofitBuilder {
 
     /**
      * Register a log interceptor.
-     *
-     * @since 0.0.9
      */
     open fun registerLoggingInterceptor(): Interceptor?{
         return null

@@ -41,8 +41,6 @@ object SpanStrUtils {
 
     /**
      * Get builder.
-     *
-     * @since 0.0.9
      */
     @JvmStatic
     fun getBuilder(text: CharSequence?): Builder {
@@ -69,7 +67,6 @@ object SpanStrUtils {
          * @see Spanned.SPAN_INCLUSIVE_INCLUSIVE
          * @see Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
          * @see Spanned.SPAN_EXCLUSIVE_INCLUSIVE
-         * @since 0.0.9
          */
         fun setFlag(flag: SpanMode) = apply {
             this.flag = flag.value
@@ -77,8 +74,6 @@ object SpanStrUtils {
 
         /**
          * Set text size(in pixels).
-         *
-         * @since 0.0.9
          */
         fun setTextSize(textSize: Int) = apply {
             mBuilder.setSpan(AbsoluteSizeSpan(textSize), start, end, flag)
@@ -86,8 +81,6 @@ object SpanStrUtils {
 
         /**
          * Set foreground color.
-         *
-         * @since 0.0.9
          */
         fun setForegroundColor(@ColorRes foregroundColor: Int) = apply {
             mBuilder.setSpan(
@@ -100,8 +93,6 @@ object SpanStrUtils {
 
         /**
          * Set background color.
-         *
-         * @since 0.0.9
          */
         fun setBackgroundColor(@ColorRes backgroundColor: Int) = apply {
             mBuilder.setSpan(
@@ -114,8 +105,6 @@ object SpanStrUtils {
 
         /**
          * Set the color of the quote line.
-         *
-         * @since 0.0.9
          */
         fun setQuoteColor(@ColorRes quoteColor: Int) = apply {
             mBuilder.setSpan(QuoteSpan(ResUtils.getColor(quoteColor)), start, end, 0)
@@ -126,7 +115,6 @@ object SpanStrUtils {
          *
          * @param first First line indent.
          * @param rest Others lines indent.
-         * @since 0.0.9
          */
         fun setLinesIndent(first: Int, rest: Int) = apply {
             mBuilder.setSpan(LeadingMarginSpan.Standard(first, rest), start, end, flag)
@@ -138,7 +126,6 @@ object SpanStrUtils {
          * @param bulletGapWidth the distance, in pixels, between the bullet point
          *     and the paragraph.
          * @param bulletColor the bullet point color, as a color integer
-         * @since 0.0.9
          */
         fun setBullet(bulletGapWidth: Int, bulletColor: Int) = apply {
             mBuilder.setSpan(BulletSpan(bulletGapWidth, bulletColor), start, end, 0)
@@ -148,7 +135,6 @@ object SpanStrUtils {
          * Scale the size of the text.
          *
          * @param proportion the proportion with which the text is scaled.
-         * @since 0.0.9
          */
         fun setProportion(proportion: Float) = apply {
             mBuilder.setSpan(RelativeSizeSpan(proportion), start, end, flag)
@@ -159,7 +145,6 @@ object SpanStrUtils {
          * text narrower.
          *
          * @param xProportion the horizontal scale factor.
-         * @since 0.0.9
          */
         fun setXProportion(xProportion: Float) = apply {
             mBuilder.setSpan(ScaleXSpan(xProportion), start, end, flag)
@@ -167,8 +152,6 @@ object SpanStrUtils {
 
         /**
          * Making a span that strikes through the text it's attached to.
-         *
-         * @since 0.0.9
          */
         fun setStrikethrough() = apply {
             mBuilder.setSpan(StrikethroughSpan(), start, end, flag)
@@ -176,8 +159,6 @@ object SpanStrUtils {
 
         /**
          * Making a span that underlines the text it's attached to.
-         *
-         * @since 0.0.9
          */
         fun setUnderline() = apply {
             mBuilder.setSpan(UnderlineSpan(), start, end, flag)
@@ -188,7 +169,6 @@ object SpanStrUtils {
          * Set scriptMode.
          *
          * @see ScriptMode
-         * @since 0.0.9
          */
         fun setScriptMode(scriptMode: ScriptMode) = apply {
             when (scriptMode) {
@@ -206,7 +186,6 @@ object SpanStrUtils {
          * Set font style
          *
          * @param style
-         * @since 0.0.9
          */
         fun setFontStyle(style: StyleMode) = apply {
             mBuilder.setSpan(StyleSpan(style.value), start, end, flag)
@@ -216,7 +195,6 @@ object SpanStrUtils {
          * Set font family.
          *
          * @param fontFamily monospace, serif, sans-serif
-         * @since 0.0.9
          */
         fun setFontFamily(fontFamily: String?) = apply {
             mBuilder.setSpan(TypefaceSpan(fontFamily), start, end, flag)
@@ -228,7 +206,6 @@ object SpanStrUtils {
          * @see Alignment.ALIGN_NORMAL
          * @see Alignment.ALIGN_OPPOSITE
          * @see Alignment.ALIGN_CENTER
-         * @since 0.0.9
          */
         fun setAlign(align: Alignment) = apply {
             mBuilder.setSpan(AlignmentSpan.Standard(align), start, end, flag)
@@ -236,8 +213,6 @@ object SpanStrUtils {
 
         /**
          * Set image.
-         *
-         * @since 0.0.9
          */
         fun setImage(image: Bitmap) = apply {
             mBuilder.setSpan(ImageSpan(ContextHelper.getAppContext(), image), start, end, flag)
@@ -245,8 +220,6 @@ object SpanStrUtils {
 
         /**
          * Set image.
-         *
-         * @since 0.0.9
          */
         fun setImage(image: Drawable) = apply {
             mBuilder.setSpan(ImageSpan(image), start, end, flag)
@@ -254,8 +227,6 @@ object SpanStrUtils {
 
         /**
          * Set image.
-         *
-         * @since 0.0.9
          */
         fun setImage(image: Uri) = apply {
             mBuilder.setSpan(ImageSpan(ContextHelper.getAppContext(), image), start, end, flag)
@@ -263,8 +234,6 @@ object SpanStrUtils {
 
         /**
          * Set image.
-         *
-         * @since 0.0.9
          */
         fun setImage(image: Int) = apply {
             mBuilder.setSpan(ImageSpan(ContextHelper.getAppContext(), image), start, end, flag)
@@ -274,8 +243,6 @@ object SpanStrUtils {
         /**
          * Register a click listener. Need to add
          * view.setMovementMethod(LinkMovementMethod.getInstance())
-         *
-         * @since 0.0.9
          */
         fun setClickSpan(clickSpan: ClickableSpan?) = apply {
             mBuilder.setSpan(clickSpan, start, end, flag)
@@ -284,8 +251,6 @@ object SpanStrUtils {
         /**
          * Making the span from a url string. Need to add
          * view.setMovementMethod(LinkMovementMethod.getInstance())
-         *
-         * @since 0.0.9
          */
         fun setUrl(url: String?) = apply {
             mBuilder.setSpan(URLSpan(url), start, end, flag)
@@ -296,7 +261,6 @@ object SpanStrUtils {
          *
          * @param radius Blur radius (must be greater than 0).
          * @param blur [Blur.NORMAL] [Blur.SOLID] [Blur.OUTER] [Blur.INNER].
-         * @since 0.0.9
          */
         fun setBlur(@FloatRange(from = 0.0) radius: Float, blur: Blur?) = apply {
             mBuilder.setSpan(MaskFilterSpan(BlurMaskFilter(radius, blur)), start, end, flag)
@@ -304,8 +268,6 @@ object SpanStrUtils {
 
         /**
          * Append style string.
-         *
-         * @since 0.0.9
          */
         fun append(text: CharSequence?): Builder {
             return Builder(mBuilder, text)
@@ -313,8 +275,6 @@ object SpanStrUtils {
 
         /**
          * Create a style string.
-         *
-         * @since 0.0.9
          */
         fun build(): SpannableStringBuilder {
             return mBuilder

@@ -25,7 +25,5 @@ package cn.govast.vasttools
 
 /**
  * A placeholder function that does nothing.
- *
- * @since 0.0.9
  */
 fun nothing_to_do() = Unit

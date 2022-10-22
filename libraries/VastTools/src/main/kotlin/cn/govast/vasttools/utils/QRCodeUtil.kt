@@ -54,7 +54,6 @@ object QRCodeUtil {
      * @param color_black Custom color value for black patch.
      * @param color_white Custom color value for the white patch.
      * @return QRCode bitmap.
-     * @since 0.0.9
      */
     @JvmOverloads
     @JvmStatic
@@ -68,48 +67,35 @@ object QRCodeUtil {
         @ColorInt color_black: Int = Color.BLACK,
         @ColorInt color_white: Int = Color.WHITE
     ): Bitmap? {
-        /**
-         * 1.参数合法性判断
-         */
-        if (TextUtils.isEmpty(content)) { // 字符串内容判空
+        if (TextUtils.isEmpty(content)) {
             return null
         }
-        if (width < 0 || height < 0) { // 宽和高都需要>=0
+        if (width < 0 || height < 0) {
             return null
         }
         try {
-            /**
-             * 2.设置二维码相关配置,生成BitMatrix(位矩阵)对象
-             */
             val hints = Hashtable<EncodeHintType, String?>()
             if (!TextUtils.isEmpty(character_set)) {
-                hints[EncodeHintType.CHARACTER_SET] = character_set // 字符转码格式设置
+                hints[EncodeHintType.CHARACTER_SET] = character_set
             }
             if (!TextUtils.isEmpty(error_correction)) {
-                hints[EncodeHintType.ERROR_CORRECTION] = error_correction // 容错级别设置
+                hints[EncodeHintType.ERROR_CORRECTION] = error_correction
             }
             if (!TextUtils.isEmpty(margin)) {
-                hints[EncodeHintType.MARGIN] = margin // 空白边距设置
+                hints[EncodeHintType.MARGIN] = margin
             }
             val bitMatrix =
                 QRCodeWriter().encode(content, BarcodeFormat.QR_CODE, width, height, hints)
-
-            /**
-             * 3.创建像素数组,并根据BitMatrix(位矩阵)对象为数组元素赋颜色值
-             */
             val pixels = IntArray(width * height)
             for (y in 0 until height) {
                 for (x in 0 until width) {
                     if (bitMatrix[x, y]) {
-                        pixels[y * width + x] = color_black // 黑色色块像素设置
+                        pixels[y * width + x] = color_black
                     } else {
-                        pixels[y * width + x] = color_white // 白色色块像素设置
+                        pixels[y * width + x] = color_white
                     }
                 }
             }
-            /**
-             * 4.创建Bitmap对象,根据像素数组设置Bitmap每个像素点的颜色值,之后返回Bitmap对象
-             */
             val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             bitmap.setPixels(pixels, 0, width, 0, 0, width, height)
             return bitmap

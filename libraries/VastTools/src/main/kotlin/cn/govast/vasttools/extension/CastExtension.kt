@@ -29,7 +29,6 @@ package cn.govast.vasttools.extension
  *
  * @param obj the object will be casted.
  * @param T type casts.
- * @since 0.0.9
  */
 @Suppress("UNCHECKED_CAST")
 @kotlin.jvm.Throws(Exception::class)

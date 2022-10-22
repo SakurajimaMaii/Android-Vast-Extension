@@ -16,7 +16,6 @@
 
 package cn.govast.vasttools.utils
 
-import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -33,25 +32,18 @@ import cn.govast.vasttools.helper.ContextHelper
 // Description: Help you to get app information.
 // Documentation: [AppUtils](https://sakurajimamaii.github.io/VastDocs/document/en/AppUtils.html)
 
-/** @since 0.0.1 */
 object AppUtils {
 
     /**
      * Returns app name,like VastUtilsSampleDemo.
      *
      * @return app name,like VastUtilsSampleDemo.
-     * @since 0.0.9
      */
     @JvmStatic
     fun getAppName(): String? {
         try {
-            val context = ContextHelper.getAppContext()
-            val packageManager: PackageManager = context.packageManager
-            val packageInfo: PackageInfo = packageManager.getPackageInfo(
-                context.packageName, 0
-            )
-            val labelRes = packageInfo.applicationInfo.labelRes
-            return context.resources.getString(labelRes)
+            val labelRes = getPackageInfo().applicationInfo.labelRes
+            return ContextHelper.getAppContext().resources.getString(labelRes)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -60,17 +52,11 @@ object AppUtils {
 
     /**
      * Returns the version name of the current application,like 1.0.
-     *
-     * @since 0.0.9
      */
     @JvmStatic
     fun getVersionName(): String? {
         try {
-            val packageManager = ContextHelper.getAppContext().packageManager
-            val packageInfo = packageManager.getPackageInfo(
-                ContextHelper.getAppContext().packageName, 0
-            )
-            return packageInfo.versionName
+            return getPackageInfo().versionName
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -79,15 +65,13 @@ object AppUtils {
 
     /**
      * Returns the version code of the current application,like 1.
-     *
-     * @since 0.0.9
      */
     @JvmStatic
     fun getVersionCode() =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            getVersionCodeApi28Above(ContextHelper.getAppContext())
+            getVersionCodeApi28Above()
         } else {
-            getVersionCodeApi28Down(ContextHelper.getAppContext())
+            getVersionCodeApi28Down()
         }
 
 
@@ -95,17 +79,12 @@ object AppUtils {
      * Get VersionCode (in Api 28 Above)
      *
      * @return The version code of the current application.
-     * @since 0.0.1
      */
     @Synchronized
     @RequiresApi(Build.VERSION_CODES.P)
-    internal fun getVersionCodeApi28Above(context: Context): Int {
+    private fun getVersionCodeApi28Above(): Int {
         try {
-            val packageManager = context.packageManager
-            val packageInfo = packageManager.getPackageInfo(
-                context.packageName, 0
-            )
-            return packageInfo.longVersionCode.toInt()
+            return getPackageInfo().longVersionCode.toInt()
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -116,15 +95,10 @@ object AppUtils {
      * Get VersionCode (in Api 28 Down)
      *
      * @return The version code of the current application.
-     * @since 0.0.1
      */
-    internal fun getVersionCodeApi28Down(context: Context): Int {
+    private fun getVersionCodeApi28Down(): Int {
         try {
-            val packageManager = context.packageManager
-            val packageInfo = packageManager.getPackageInfo(
-                context.packageName, 0
-            )
-            return packageInfo.versionCode
+            return getPackageInfo().versionCode
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -134,17 +108,11 @@ object AppUtils {
     /**
      * Returns the package name of the application,like
      * com.gcode.vastutils.
-     *
-     * @since 0.0.9
      */
     @JvmStatic
     fun getPackageName(): String? {
         try {
-            val packageManager = ContextHelper.getAppContext().packageManager
-            val packageInfo = packageManager.getPackageInfo(
-                ContextHelper.getAppContext().packageName, 0
-            )
-            return packageInfo.packageName
+            return getPackageInfo().packageName
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -153,8 +121,6 @@ object AppUtils {
 
     /**
      * Returns the icon of the application.
-     *
-     * @since 0.0.9
      */
     @JvmStatic
     fun getAppBitmap(): Bitmap? {
@@ -177,8 +143,6 @@ object AppUtils {
 
     /**
      * Returns true if the app is debuggable.false otherwise.
-     *
-     * @since 0.0.9
      */
     @JvmStatic
     fun getAppDebug(): Boolean {
@@ -192,8 +156,6 @@ object AppUtils {
 
     /**
      * Return the maxMemory, freeMemory, totalMemory of the application in turn.
-     *
-     * @since 0.0.9
      */
     fun getMemoryInfo():Component3<Double,Double,Double> {
         return Component3(
@@ -201,5 +163,18 @@ object AppUtils {
             Runtime.getRuntime().freeMemory()*1.0/(1024*1024),
             Runtime.getRuntime().totalMemory()*1.0/(1024*1024)
         )
+    }
+
+    private fun getPackageInfo(): PackageInfo {
+        val packageManager: PackageManager = ContextHelper.getAppContext().packageManager
+        return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            packageManager.getPackageInfo(
+                ContextHelper.getAppContext().packageName, PackageManager.PackageInfoFlags.of(0)
+            )
+        } else {
+            packageManager.getPackageInfo(
+                ContextHelper.getAppContext().packageName, 0
+            )
+        }
     }
 }

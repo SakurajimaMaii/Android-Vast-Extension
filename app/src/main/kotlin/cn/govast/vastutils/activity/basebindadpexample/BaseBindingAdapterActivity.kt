@@ -40,12 +40,12 @@ class BaseBindingAdapterActivity : VastVbActivity<ActivityBaseBindingAdapterBind
         val adapter = BaseBindingAdapter(datas, this)
 
         adapter.registerClickEvent(object : AdapterClickListener {
-            override fun clickEventListener(view: View, pos: Int) {
+            override fun onItemClick(view: View, pos: Int) {
                 // Something you want to do
             }
         })
         adapter.registerLongClickEvent(object : AdapterLongClickListener {
-            override fun longClickEventListener(view: View, pos: Int): Boolean {
+            override fun onItemLongClick(view: View, pos: Int): Boolean {
                 // Something you want to do
                 return true
             }
@@ -59,13 +59,13 @@ class BaseBindingAdapterActivity : VastVbActivity<ActivityBaseBindingAdapterBind
     private fun initData() {
 
         val click = object : AdapterClickListener {
-            override fun clickEventListener(view: View, pos: Int) {
+            override fun onItemClick(view: View, pos: Int) {
                 // Something you want to do
             }
         }
 
         val longClick = object : AdapterLongClickListener {
-            override fun longClickEventListener(view: View, pos: Int): Boolean {
+            override fun onItemLongClick(view: View, pos: Int): Boolean {
                 // Something you want to do
                 return true
             }

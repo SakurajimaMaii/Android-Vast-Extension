@@ -29,21 +29,15 @@ import cn.govast.vasttools.config.ToolsConfig
 
 /**
  * Help utils to get context.
- *
- * @since 0.0.9
  */
 object ContextHelper{
-
-    /**
-     * @since 0.0.9
-     */
+    
     private lateinit var application: Application
 
     /**
      * Initialize [ContextHelper], please call [ToolsConfig.init]
      *
      * @param application the application of your app.
-     * @since 0.0.9
      */
     @JvmStatic
     internal fun init(application: Application){
@@ -56,7 +50,6 @@ object ContextHelper{
      * Get application of the app.
      *
      * @return application object.
-     * @since 0.0.9
      */
     @JvmStatic
     fun getApp():Application =
@@ -68,7 +61,6 @@ object ContextHelper{
      * Get applicationContext of the app.
      *
      * @return applicationContext.
-     * @since 0.0.9
      */
     @JvmStatic
     fun getAppContext(): Context =

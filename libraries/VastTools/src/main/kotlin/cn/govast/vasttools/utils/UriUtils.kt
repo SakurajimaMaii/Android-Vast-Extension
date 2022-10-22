@@ -46,7 +46,6 @@ object UriUtils {
      * @param uri the uri of the file.
      * @param context default context is [ContextHelper.getAppContext]
      * @return the path string.
-     * @since 0.0.9
      */
     @JvmStatic
     @JvmOverloads

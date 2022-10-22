@@ -48,12 +48,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = Version.java_version
+        targetCompatibility = Version.java_version
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = Version.java_version.toString()
         // https://stackoverflow.com/questions/53964192/jvmdefault-and-how-add-compiler-option
         freeCompilerArgs = listOf("-Xjvm-default=all")
     }

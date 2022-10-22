@@ -37,7 +37,7 @@ abstract class VastFragment : Fragment() {
 
     protected abstract fun createFragmentDelegate(): FragmentDelegate
 
-    protected fun getRequestBuilder() = mFragmentDelegate.getRequestBuilder()
+    protected fun getRequestBuilder() = mFragmentDelegate.getApiRequestBuilder()
 
     protected fun createMainScope() = mFragmentDelegate.createMainScope()
 

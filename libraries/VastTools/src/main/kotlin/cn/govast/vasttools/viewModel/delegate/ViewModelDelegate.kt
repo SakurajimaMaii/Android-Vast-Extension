@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.base
+package cn.govast.vasttools.viewModel.delegate
+
+import androidx.lifecycle.ViewModel
+import cn.govast.vasttools.base.BaseActive
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -23,11 +26,12 @@ package cn.govast.vasttools.base
 // Documentation:
 // Reference:
 
-interface BaseApiState<T> {
-    fun onStart(onStart: () -> Unit)
-    fun onSuccess(onSuccess: (data: T) -> Unit)
-    fun onEmpty(onEmpty: () -> Unit)
-    fun onFailed(onFailed: (errorCode: Int?, errorMsg: String?) -> Unit)
-    fun onError(onError: (t: Throwable?) -> Unit)
-    fun onCompletion(onCompletion: (t: Throwable?) -> Unit)
+open class ViewModelDelegate(
+    protected val viewModel: ViewModel
+) : BaseActive {
+
+    override fun getDefaultTag(): String {
+        return viewModel::class.java.simpleName
+    }
+
 }

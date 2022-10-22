@@ -37,8 +37,6 @@ class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(
 
     /**
      * Sets a custom view to be the contents of the dialog.
-     *
-     * @since 0.0.9
      */
     override fun setView(layoutResId: Int) = apply {
         setView(layoutResId, context, null)
@@ -46,8 +44,6 @@ class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(
 
     /**
      * Sets a custom view to be the contents of the dialog.
-     *
-     * @since 0.0.9
      */
     override fun setView(view: View?) = apply {
         mView = view
@@ -56,8 +52,6 @@ class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(
 
     /**
      * Sets a custom view to be the contents of the dialog.
-     *
-     * @since 0.0.9
      */
     fun setView(
         @LayoutRes layoutId: Int,
@@ -70,8 +64,6 @@ class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(
 
     /**
      * Get the layout of the Dialog.
-     *
-     * @since 0.0.9
      */
     fun getView() = mView
 
@@ -80,7 +72,6 @@ class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(
      *
      * @return the not null layout.
      * @throws IllegalStateException
-     * @since 0.0.9
      */
     fun requireView():View{
         if(null == mView){
@@ -94,7 +85,6 @@ class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(
      *
      * @param id view id.
      * @param T view class.
-     * @since 0.0.9
      */
     fun <T : View> findViewById(@IdRes id: Int): T {
         val view = requireView().findViewById<T>(id)

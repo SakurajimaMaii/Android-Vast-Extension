@@ -31,14 +31,12 @@ sealed class ApiRspWrapper<T : BaseApiRsp> {
      *
      * @param T json bean class.
      * @param data api response item data.
-     * @since 0.0.9
      */
     class ApiSuccessWrapper<T : BaseApiRsp>(val data: T) : ApiRspWrapper<T>()
 
     /**
      * Empty response wrapper.
      *
-     * @since 0.0.9
      */
     class ApiEmptyWrapper<T : BaseApiRsp> : ApiRspWrapper<T>()
 
@@ -49,7 +47,6 @@ sealed class ApiRspWrapper<T : BaseApiRsp> {
      *     response item.
      * @param errorMsg get by [BaseApiRsp.getErrorMsg] of the api response
      *     item.
-     * @since 0.0.9
      */
     class ApiFailedWrapper<T : BaseApiRsp>(val errorCode: Int?, val errorMsg: String?) :
         ApiRspWrapper<T>()
@@ -57,7 +54,6 @@ sealed class ApiRspWrapper<T : BaseApiRsp> {
     /**
      * Error response wrapper.
      *
-     * @since 0.0.9
      */
     class ApiErrorWrapper<T : BaseApiRsp>(val throwable: Throwable?) : ApiRspWrapper<T>()
 }

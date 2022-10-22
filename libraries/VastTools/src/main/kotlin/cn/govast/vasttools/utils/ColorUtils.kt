@@ -30,22 +30,16 @@ object ColorUtils {
 
     /**
      * Color hex regex.Supported formats are `#RRGGBB` and `#AARRGGBB`.
-     *
-     * @since 0.0.9
      */
     const val COLOR_HEX_REGEX = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$"
 
     /**
      * Color parse failed.
-     *
-     * @since 0.0.9
      */
     const val COLOR_PARSE_ERROR = 0
 
     /**
      * Wrong result when converting color to RGB.
-     *
-     * @since 0.0.9
      */
     @JvmField
     val COLOR_RGB_ARRAY_ERROR = intArrayOf(-1, -1, -1)
@@ -56,7 +50,6 @@ object ColorUtils {
      * @param colorHex Color string like #12c2e9.
      * @return the corresponding color-int of the color string,
      *     [COLOR_PARSE_ERROR] otherwise.
-     * @since 0.0.5
      */
     @JvmStatic
     fun colorHex2Int(colorHex: String): Int {
@@ -71,7 +64,6 @@ object ColorUtils {
      * @param colorHex Color hexadecimal string,for example:#12c2e9.
      * @return the corresponding color rgb array like
      *     {18,194,233},[COLOR_RGB_ARRAY_ERROR] otherwise.
-     * @since 0.0.5
      */
     @JvmStatic
     fun colorHex2RGB(colorHex: String): IntArray {
@@ -86,7 +78,6 @@ object ColorUtils {
      *
      * @param colorInt color-int.
      * @return color hexadecimal string like #3FE2C5.
-     * @since 0.0.5
      */
     @JvmStatic
     fun colorInt2Hex(@ColorInt colorInt: Int): String {
@@ -99,7 +90,6 @@ object ColorUtils {
      *
      * @param colorInt color-int.
      * @return an array of RGB,like {63,226,197}.
-     * @since 0.0.5
      */
     @JvmStatic
     fun colorInt2RGB(@ColorInt colorInt: Int): IntArray {
@@ -115,7 +105,6 @@ object ColorUtils {
      *
      * @param rgb an array of RGB like {63,226,197}.
      * @return Color hexadecimal string like #3FE2C5.
-     * @since 0.0.5
      */
     @JvmStatic
     fun colorRGB2Hex(rgb: IntArray): String {
@@ -158,7 +147,6 @@ object ColorUtils {
      *
      * @param rgb an array of RGB like {63,226,197}.
      * @return color-int.
-     * @since 0.0.5
      */
     @JvmStatic
     fun colorRGB2Int(rgb: IntArray): Int {
@@ -167,8 +155,6 @@ object ColorUtils {
 
     /**
      * Get argb by [transparency] and [colorInt].
-     *
-     * @since 0.0.9
      */
     @JvmStatic
     fun getColorTransparency(@IntRange(from = 0, to = 100) transparency: Int, colorInt: Int):String {
@@ -181,7 +167,6 @@ object ColorUtils {
      *
      * @param colorHex color hex string.
      * @return true if the color hex string is right,false otherwise.
-     * @since 0.0.9
      */
     @JvmStatic
     fun isColorHex(colorHex: String): Boolean {

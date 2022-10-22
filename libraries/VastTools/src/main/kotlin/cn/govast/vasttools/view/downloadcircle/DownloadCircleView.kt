@@ -47,8 +47,6 @@ import kotlin.math.sin
  *      app:progress_background_width="20dp"
  *      app:progress_text_size="12sp"/>
  * ```
- *
- * @since 0.0.8
  */
 class DownloadCircleView @JvmOverloads constructor(
     context: Context,
@@ -67,92 +65,66 @@ class DownloadCircleView @JvmOverloads constructor(
 
     /**
      * The rect containing the progress arc.
-     *
-     * @since 0.0.8
      */
     private val oval = RectF()
 
     /**
      * Progress text size.
-     *
-     * @since 0.0.8
      */
     var progressTextSize = 0f
 
     /**
      * Radius of the download circle.
-     *
-     * @since 0.0.8
      */
     private var circleRadius = 0f
 
     /**
      * Width of the download circle progress.
-     *
-     * @since 0.0.8
      */
     private var progressBackgroundWidth = 0f
 
     /**
      * Download progress.Range from 0.0 to 1.0.
-     *
-     * @since 0.0.8
      */
     private var progress = 0f
 
     /**
      * Progress background color int.
-     *
-     * @since 0.0.8
      */
     private var progressBackgroundColorInt: Int = Color.GRAY
 
     /**
      * Progress color int.
-     *
-     * @since 0.0.8
      */
     private var progressColorInt: Int = ColorUtils.colorHex2Int("#3B4463")
 
     /**
      * Progress shader.
-     *
-     * @since 0.0.8
      */
     private var progressShader: Shader? = null
 
     /**
      * Progress start color int.
-     *
-     * @since 0.0.8
      */
     private var progressStartColorInt: Int = ColorUtils.colorHex2Int("#f0932b")
 
     /**
      * Progress end color int.
-     *
-     * @since 0.0.8
      */
     private var progressEndColorInt: Int = ColorUtils.colorHex2Int("#f0932b")
 
     /**
      * Progress text color int.
-     *
-     * @since 0.0.8
      */
     private var progressTextColorInt: Int = Color.WHITE
 
     /**
      * Progress stroke cap.
-     *
-     * @since 0.0.8
      */
     private var progressStrokeCap: Paint.Cap = Paint.Cap.ROUND
 
     /**
      * Progress start and end circle.
-     *
-     * @since 0.0.8
      */
     private var progressStartAndEnd: Boolean = true
 
@@ -176,8 +148,6 @@ class DownloadCircleView @JvmOverloads constructor(
 
     /**
      * init paints.
-     *
-     * @since 0.0.8
      */
     private fun initPaint() {
         mProgressBackgroundPaint.apply {
@@ -324,8 +294,6 @@ class DownloadCircleView @JvmOverloads constructor(
 
     /**
      * Initialize the attributes for the DownloadCircleView.
-     *
-     * @since 0.0.8
      */
     init {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.DownloadCircleView)

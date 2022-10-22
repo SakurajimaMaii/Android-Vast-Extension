@@ -18,7 +18,7 @@ package cn.govast.vastutils.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import cn.govast.vasttools.lifecycle.VastViewModel
+import cn.govast.vasttools.viewModel.VastViewModel
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

@@ -21,7 +21,7 @@ import android.os.Bundle
 import cn.govast.vasttools.activity.VastVbActivity
 import cn.govast.vasttools.utils.ColorUtils
 import cn.govast.vasttools.utils.DensityUtils.SP
-import cn.govast.vasttools.utils.ShapeAndStateUtils
+import cn.govast.vasttools.utils.drawable.ShapeAndStateDrawable
 import cn.govast.vasttools.utils.spannablestring.ScriptMode
 import cn.govast.vasttools.utils.spannablestring.SpanMode
 import cn.govast.vasttools.utils.spannablestring.SpanStrUtils
@@ -50,7 +50,7 @@ class ShapeActivity : VastVbActivity<ActivityShapeBinding>() {
             set(5, ColorUtils.colorHex2Int("#0575E6"))
         }
 
-        val btnBK = ShapeAndStateUtils.create()
+        val btnBK = ShapeAndStateDrawable.create()
             .setShape(RECTANGLE)
             .setRadius(50f)
             .setGradient(45, ColorUtils.colorHex2Int("#0F2027"),ColorUtils.colorHex2Int("#78ffd6"))

@@ -61,8 +61,6 @@ import java.io.InputStream
  *      }
  *      .download()
  * ```
- *
- * @since 0.0.8
  */
 object DownloadUtils {
 
@@ -78,7 +76,6 @@ object DownloadUtils {
      *     truncate from the end of the download link. For example,the link is
      *     [https://github.com/SakurajimaMaii/BluetoothDemo/blob/master/app-debug.apk],
      *     saveName will take app-debug.apk as the value.
-     * @since 0.0.9
      */
     class DownloadConfig : OnDownloadListener {
 
@@ -134,8 +131,6 @@ object DownloadUtils {
     interface OnDownloadListener {
         /**
          * Download successfully.
-         *
-         * @since 0.0.8
          */
         fun onDownloadSuccess()
 
@@ -143,7 +138,6 @@ object DownloadUtils {
          * Downloading.
          *
          * @param progress Download progress information.
-         * @since 0.0.8
          */
         fun onDownloading(progress: ProgressInfo?)
 
@@ -151,7 +145,6 @@ object DownloadUtils {
          * Download failed.
          *
          * @param e Download exception.
-         * @since 0.0.8
          */
         fun onDownloadFailed(e: Exception?)
     }
@@ -161,8 +154,6 @@ object DownloadUtils {
 
     /**
      * Download from network server.
-     *
-     * @since 0.0.9
      */
     private fun download(
         downloadConfig: DownloadConfig

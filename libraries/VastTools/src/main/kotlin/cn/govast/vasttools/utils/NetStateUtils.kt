@@ -16,6 +16,7 @@
 
 package cn.govast.vasttools.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -37,8 +38,8 @@ object NetStateUtils {
      *
      * @param context context.
      * @return [NetworkInfo] object.
-     * @since 0.0.6
      */
+    @SuppressLint("MissingPermission")
     @JvmStatic
     @Throws(RuntimeException::class)
     internal fun getNetWorkInfo(context: Context): NetworkInfo? {
@@ -55,8 +56,8 @@ object NetStateUtils {
      *
      * @param context context.
      * @return [NetworkCapabilities] object.
-     * @since 0.0.6
      */
+    @SuppressLint("MissingPermission")
     @JvmStatic
     @RequiresApi(Build.VERSION_CODES.Q)
     @Throws(RuntimeException::class)
@@ -75,7 +76,6 @@ object NetStateUtils {
      *
      * @param context context.
      * @return true if network is available,false otherwise.
-     * @since 0.0.6
      */
     @JvmStatic
     fun isNetworkAvailable(context: Context): Boolean {
@@ -105,7 +105,6 @@ object NetStateUtils {
      *
      * @param context context.
      * @return true if network is wifi mode,false otherwise.
-     * @since 0.0.6
      */
     @JvmStatic
     fun isWIFI(context: Context): Boolean {
@@ -125,7 +124,6 @@ object NetStateUtils {
      *
      * @param context context.
      * @return true if network is wifi mode,false otherwise.
-     * @since 0.0.6
      */
     @JvmStatic
     fun isMobile(context: Context): Boolean {
@@ -146,7 +144,6 @@ object NetStateUtils {
      * @param context context.
      *  -1 when wifi is disconnected or unable,when wifi is connected,
      *     the signal strength is represented by 0-4.
-     * @since 0.0.6
      */
     @JvmStatic
     fun getWifiDBM(context: Context): Int {

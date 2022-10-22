@@ -30,15 +30,11 @@ interface BaseActivity : BaseVisActive {
 
     /**
      * Get the [Context].
-     *
-     * @since 0.0.9
      */
     fun getContext(): Context
 
     /**
      * Get default [Snackbar] for activity.
-     *
-     * @since 0.0.9
      */
     fun getSnackbar(): Snackbar
 
@@ -53,8 +49,6 @@ interface BaseActivity : BaseVisActive {
      *      ... //Other setting
      * }
      * ```
-     *
-     * @since 0.0.9
      */
     fun enableActionBar(enable: Boolean)
 
@@ -70,8 +64,6 @@ interface BaseActivity : BaseVisActive {
      *      ... //Other setting
      * }
      * ```
-     *
-     * @since 0.0.9
      */
     fun enableFullScreen(enable: Boolean)
 

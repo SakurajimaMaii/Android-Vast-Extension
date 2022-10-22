@@ -16,7 +16,7 @@
 
 package cn.govast.vastutils;
 
-import cn.govast.vasttools.lifecycle.VastViewModel;
+import cn.govast.vasttools.viewModel.VastViewModel;
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

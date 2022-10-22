@@ -16,7 +16,8 @@
 
 package cn.govast.vasttools.network.apicall
 
-import cn.govast.vasttools.network.ApiRspListener
+import cn.govast.vasttools.livedata.NetStateLiveData
+import cn.govast.vasttools.network.ApiRspStateListener
 import cn.govast.vasttools.network.base.BaseApiRsp
 
 // Author: Vast Gui
@@ -30,7 +31,9 @@ interface ApiCall<T:BaseApiRsp> {
 
     fun cancel()
 
-    fun request(listener: ApiRspListener<T>.() -> Unit)
+    fun request(listener: ApiRspStateListener<T>.() -> Unit)
+
+    fun request(netStateLiveData: NetStateLiveData<T>)
 
     fun clone(): ApiCall<T>
 

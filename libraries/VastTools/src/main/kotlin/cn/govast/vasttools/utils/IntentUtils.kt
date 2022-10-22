@@ -39,8 +39,6 @@ object IntentUtils {
 
     /**
      * The log tag.
-     *
-     * @since 0.0.9
      */
     private const val tag = "IntentUtils"
 
@@ -54,7 +52,6 @@ object IntentUtils {
      *
      * @param context context.
      * @param phoneNumber phone number you want to call.
-     * @since 0.0.1
      */
     @JvmStatic
     @RequiresPermission(Manifest.permission.CALL_PHONE)
@@ -70,7 +67,6 @@ object IntentUtils {
      *
      * @param context context.
      * @param query Content you want to search.
-     * @since 0.0.1
      */
     @JvmStatic
     @RequiresPermission(Manifest.permission.INTERNET)
@@ -87,7 +83,6 @@ object IntentUtils {
      *
      * @param context context.
      * @param url Url you want to open.
-     * @since 0.0.1
      */
     @JvmStatic
     fun openWebPage(context: Context, url: String) {
@@ -105,7 +100,6 @@ object IntentUtils {
      *     attached. If you are using the ACTION_SEND_MULTIPLE
      *     operation, this extra should be an ArrayList pointing to the
      *     image/video Uri to be attached.And default value is `null`.
-     * @since 0.0.1
      */
     @JvmStatic
     @JvmOverloads
@@ -134,7 +128,6 @@ object IntentUtils {
      *     addresses of the recipients of the "primary sender".
      * @param subject Subject of the email.Default value is "".
      * @param text Text of the email.Default value is "".
-     * @since 0.0.1
      */
     @JvmStatic
     @JvmOverloads
@@ -159,7 +152,6 @@ object IntentUtils {
      * [createAlarm].
      *
      * @param context context.
-     * @since 0.0.1
      */
     @JvmStatic
     @RequiresPermission(Manifest.permission.SET_ALARM)
@@ -194,7 +186,6 @@ object IntentUtils {
      *     [Calendar.SATURDAY] The [days] default is `null`.
      * @param music A ringtone to be played with this alarm. Default
      *     value is `null`.
-     * @since 0.0.1
      */
     @JvmStatic
     @RequiresPermission(Manifest.permission.SET_ALARM)
@@ -235,8 +226,6 @@ object IntentUtils {
 
     /**
      * Start intent.
-     *
-     * @since 0.0.9
      */
     private fun startIntent(context: Context, intent: Intent) {
         try {
