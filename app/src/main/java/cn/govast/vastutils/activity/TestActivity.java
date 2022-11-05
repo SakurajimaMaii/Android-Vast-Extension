@@ -24,7 +24,7 @@ import androidx.core.splashscreen.SplashScreen;
 
 import cn.govast.vasttools.activity.VastVbActivity;
 import cn.govast.vasttools.utils.DownloadUtils;
-import cn.govast.vasttools.utils.FileUtils;
+import cn.govast.vasttools.manager.filemgr.FileMgr;
 import cn.govast.vasttools.utils.LogUtils;
 import cn.govast.vastutils.Constant;
 import cn.govast.vastutils.databinding.ActivityTestBinding;
@@ -34,7 +34,7 @@ import cn.govast.vastutils.network.NetworkRetrofitBuilder;
 public class TestActivity extends VastVbActivity<ActivityTestBinding> {
 
     private SplashScreen splashScreen;
-    private final String saveDir = FileUtils.appInternalFilesDir().getPath();
+    private final String saveDir = FileMgr.appInternalFilesDir().getPath();
     private final NetworkRetrofitBuilder networkRetrofitBuilder = new NetworkRetrofitBuilder();;
 
     @SuppressLint("NewApi")
@@ -59,7 +59,6 @@ public class TestActivity extends VastVbActivity<ActivityTestBinding> {
                     return null;
                 })
                 .download();
-
     }
 
 }

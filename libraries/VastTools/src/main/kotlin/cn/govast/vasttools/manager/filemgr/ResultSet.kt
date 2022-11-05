@@ -14,27 +14,29 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils;
+package cn.govast.vasttools.manager.filemgr
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/3 16:44
+// Date: 2022/10/25
 // Description: 
 // Documentation:
+// Reference:
 
-public class BasicVM {
-
-    class Person{
-        String firstName;
-        String lastName;
-
-        public Person(String firstName, String lastName) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-        }
-    }
-
-    public static void main(String[] args) {
-
-    }
+/**
+ * File operations result.
+ *
+ * @property FLAG_SUCCESS means running successful.
+ * @property FLAG_PARENT_NOT_EXISTS means the parent of the file is not
+ * exist.
+ * @property FLAG_EXISTS means the file or directory is exist.
+ * @property FLAG_NOT_EXISTS means the file or directory is not exist.
+ * @property FLAG_FAILED means running failed.
+ */
+enum class ResultSet {
+    FLAG_SUCCESS,
+    FLAG_PARENT_NOT_EXISTS,
+    FLAG_EXISTS,
+    FLAG_NOT_EXISTS,
+    FLAG_FAILED
 }

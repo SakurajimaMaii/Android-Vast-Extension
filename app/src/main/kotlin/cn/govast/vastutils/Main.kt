@@ -14,27 +14,33 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils;
+package cn.govast.vastutils
+
+import cn.govast.vasttools.extension.AutoEnumValue
+import cn.govast.vasttools.extension.AutoField
+import cn.govast.vasttools.extension.getKeyAndValue
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/3 16:44
+// Date: 2022/11/5
 // Description: 
 // Documentation:
+// Reference:
 
-public class BasicVM {
+enum class Gender{
+    @AutoEnumValue("m") MAN,WOMAN
+}
 
-    class Person{
-        String firstName;
-        String lastName;
+fun main(){
 
-        public Person(String firstName, String lastName) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-        }
-    }
+    data class Person(
+        @AutoField("fn") val firstName: String,
+        @AutoField("ln") val lastName:String,
+        @AutoField("g") val gender: Gender)
 
-    public static void main(String[] args) {
-
+    val person = Person("张","三",Gender.MAN)
+    val map = person.getKeyAndValue()
+    map.forEach { (t, u) ->
+        println("$t $u")
     }
 }

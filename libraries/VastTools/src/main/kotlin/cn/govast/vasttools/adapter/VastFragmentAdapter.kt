@@ -41,8 +41,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
  *
  * @property activity The activity that owns the fragments.
  * @property fragments The fragments in the [activity].
- *
- * @since 0.0.8
  */
 open class VastFragmentAdapter(
     protected val activity: FragmentActivity,

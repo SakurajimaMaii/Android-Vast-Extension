@@ -17,22 +17,17 @@
 package cn.govast.vastutils.activity
 
 import android.os.Bundle
-import androidx.activity.result.contract.ActivityResultContracts
 import cn.govast.vasttools.activity.VastVbActivity
-import cn.govast.vasttools.utils.FileUtils
-import cn.govast.vasttools.utils.FileUtils.appExternalCacheDir
-import cn.govast.vasttools.utils.FileUtils.appExternalFilesDir
-import cn.govast.vasttools.utils.FileUtils.appInternalCacheDir
-import cn.govast.vasttools.utils.FileUtils.appInternalFilesDir
-import cn.govast.vasttools.utils.FileUtils.deleteDir
-import cn.govast.vasttools.utils.FileUtils.makeDir
-import cn.govast.vasttools.utils.FileUtils.saveFile
-import cn.govast.vasttools.utils.FileUtils.writeFile
+import cn.govast.vasttools.activity.result.contract.GetMediaActivityResultContract
+import cn.govast.vasttools.manager.filemgr.FileMgr
+import cn.govast.vasttools.manager.filemgr.FileMgr.appExternalCacheDir
+import cn.govast.vasttools.manager.filemgr.FileMgr.appExternalFilesDir
+import cn.govast.vasttools.manager.filemgr.FileMgr.appInternalCacheDir
+import cn.govast.vasttools.manager.filemgr.FileMgr.appInternalFilesDir
+import cn.govast.vasttools.manager.filemgr.FileMgr.saveFile
 import cn.govast.vasttools.utils.LogUtils
-import cn.govast.vasttools.utils.UriUtils
 import cn.govast.vastutils.databinding.ActivityFileBinding
 import java.io.File
-import java.io.FileWriter
 
 
 // Author: SakurajimaMai
@@ -44,8 +39,11 @@ import java.io.FileWriter
 class FileActivity : VastVbActivity<ActivityFileBinding>() {
 
     private val openGalleryLauncher =
-        registerForActivityResult(ActivityResultContracts.GetContent()) {
-            UriUtils.getRealPath(it!!)
+        registerForActivityResult(GetMediaActivityResultContract()) {
+            getBinding().video.apply {
+                setVideoURI(it)
+                start()
+            }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,36 +57,35 @@ class FileActivity : VastVbActivity<ActivityFileBinding>() {
             openGalleryLauncher.launch("image/*")
         }
 
-        getBinding().openSnackBar.setOnClickListener {
-            getSnackbar().show()
-        }
-
-        saveFile(File(appInternalFilesDir().path,"save.txt"))
-
-        makeDir(File(appInternalFilesDir().path,"makeDir"))
-
-        makeDir(File(appInternalFilesDir().path,"makeDir2"))
-
-        val res = deleteDir(File(appInternalFilesDir().path,"makeDir2"))
+        val res = FileMgr.deleteDir(File(appExternalFilesDir(null)?.path, "save.txt"))
 
         LogUtils.i(getDefaultTag(), res.toString())
 
-        val res1 = writeFile(File(appInternalFilesDir().path, "picture.jpg"),
-            object : FileUtils.WriteEventListener {
-                override fun writeEvent(fileWriter: FileWriter) {
-                    fileWriter.write("Hello")
-                }
-            })
+        val res1 = saveFile(File(appExternalFilesDir(null)?.path,"save.txt"))
 
         LogUtils.i(getDefaultTag(), res1.toString())
 
-        val res2 = writeFile(File(appInternalFilesDir().path, "save.txt"),
-            object : FileUtils.WriteEventListener {
-                override fun writeEvent(fileWriter: FileWriter) {
-                    fileWriter.write("Hello")
-                }
-            })
+//        makeDir(File(appInternalFilesDir().path,"makeDir"))
+//
+//        makeDir(File(appInternalFilesDir().path,"makeDir2"))
+//
+//
+//        val res1 = writeFile(File(appInternalFilesDir().path, "picture.jpg"),
+//            object : FileMgr.WriteEventListener {
+//                override fun writeEvent(fileWriter: FileWriter) {
+//                    fileWriter.write("Hello")
+//                }
+//            })
+//
+//        LogUtils.i(getDefaultTag(), res1.toString())
+//
+//        val res2 = writeFile(File(appInternalFilesDir().path, "save.txt"),
+//            object : FileMgr.WriteEventListener {
+//                override fun writeEvent(fileWriter: FileWriter) {
+//                    fileWriter.write("Hello")
+//                }
+//            })
 
-        LogUtils.i(getDefaultTag(), res2.toString())
+//        LogUtils.i(getDefaultTag(), res2.toString())
     }
 }

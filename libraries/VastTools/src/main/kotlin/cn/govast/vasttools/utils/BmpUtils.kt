@@ -19,6 +19,10 @@ package cn.govast.vasttools.utils
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Rect
+import cn.govast.vasttools.manager.filemgr.FileMgr
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -26,7 +30,7 @@ import android.graphics.Rect
 // Description: Provides some methods for merging Bitmaps.
 // Documentation: [MergeBmpUtils](https://sakurajimamaii.github.io/VastDocs/document/en/MergeBmpUtils.html)
 
-object MergeBmpUtils {
+object BmpUtils {
     /**
      * Merge the two bitmaps into one bitmap, based on the length and
      * width of the [bottomBitmap].
@@ -150,4 +154,35 @@ object MergeBmpUtils {
         canvas.drawBitmap(tempBitmapB, bottomRect, bottomRectT, null)
         return bitmap
     }
+
+    /**
+     * Store the Bitmap object under the local cache folder.
+     *
+     * @param bitmap The bitmap need to store.
+     * @param filePath The path to store the bitmap
+     * @return The file path after storage, or null if the storage fails.
+     */
+    fun saveBitmapAsFile(bitmap: Bitmap,filePath:String): String? {
+        val file = File(filePath).also {
+            FileMgr.saveFile(it)
+        }
+        var fos: FileOutputStream? = null
+        try {
+            fos = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+            fos.flush()
+            return file.path
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            try {
+                fos?.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
+        }
+        return null
+    }
+
 }

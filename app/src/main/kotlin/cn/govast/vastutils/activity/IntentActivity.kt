@@ -22,8 +22,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import cn.govast.vasttools.activity.VastVbVmActivity
@@ -36,7 +34,6 @@ import cn.govast.vasttools.utils.IntentUtils.openWirelessSettings
 import cn.govast.vasttools.utils.IntentUtils.searchWeb
 import cn.govast.vasttools.utils.IntentUtils.sendMmsMessage
 import cn.govast.vasttools.utils.LogUtils
-import cn.govast.vasttools.utils.UriUtils
 import cn.govast.vasttools.utils.shortcut.AppShortcutsUtils
 import cn.govast.vastutils.R
 import cn.govast.vastutils.broadcastreceiver.ShortcutReceiver
@@ -48,12 +45,6 @@ import cn.govast.vastutils.viewModel.BasicViewModel
 class IntentActivity : VastVbVmActivity<ActivityIntentBinding, BasicViewModel>() {
 
     private lateinit var shortcutReceiver: ShortcutReceiver
-
-    private val getImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){activityResult->
-        activityResult.data?.data?.let {
-            LogUtils.d(getDefaultTag(),UriUtils.getRealPath(it))
-        }
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
@@ -95,15 +86,6 @@ class IntentActivity : VastVbVmActivity<ActivityIntentBinding, BasicViewModel>()
 
         getBinding().wifiSetting.setOnClickListener {
             openWirelessSettings(this)
-        }
-
-        getBinding().openAlbum.setOnClickListener {
-            val chooseAvatarIntent = Intent(Intent.ACTION_PICK, null)
-            //使用INTERNAL_CONTENT_URI只能显示存储在内部的照片
-            chooseAvatarIntent.setDataAndType(
-                MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*"
-            )
-            getImage.launch(chooseAvatarIntent)
         }
 
         getBinding().createShortcut.setOnClickListener {

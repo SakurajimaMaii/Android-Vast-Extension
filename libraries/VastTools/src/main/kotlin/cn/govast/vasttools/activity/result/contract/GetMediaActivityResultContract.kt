@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils;
+package cn.govast.vasttools.activity.result.contract
+
+import android.content.Context
+import android.content.Intent
+import androidx.activity.result.contract.ActivityResultContracts
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/3 16:44
+// Date: 2022/10/25
 // Description: 
 // Documentation:
+// Reference:
 
-public class BasicVM {
+class GetMediaActivityResultContract : ActivityResultContracts.GetContent() {
 
-    class Person{
-        String firstName;
-        String lastName;
-
-        public Person(String firstName, String lastName) {
-            this.firstName = firstName;
-            this.lastName = lastName;
+    override fun createIntent(context: Context, input: String): Intent {
+        return super.createIntent(context, input).apply {
+            // Force only images and videos to be selectable
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "video/*"))
         }
     }
 
-    public static void main(String[] args) {
-
-    }
 }

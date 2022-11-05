@@ -38,7 +38,7 @@ interface AdapterClickRegister {
 
     /** @return a click listener for adapter. */
     fun getClickEvent(): AdapterClickListener?{
-        TODO("getClickEvent is not implement.")
+        return null
     }
 
     /**
@@ -52,7 +52,7 @@ interface AdapterClickRegister {
 
     /** @return a long click listener for adapter. */
     fun getLongClickEvent(): (AdapterLongClickListener)?{
-        TODO("getLongClickEvent is not implement.")
+        return null
     }
 
 }

@@ -82,9 +82,9 @@ object DownloadUtils {
         internal var downloadUrl: String = ""
         internal var saveDir: String = ""
         internal var saveName: String? = null
-        internal var onDownloadSuccessListener: (()->Unit)? = null
-        internal var onDownloadingListener: ((progress: ProgressInfo?) -> Unit)? = null
-        internal var onDownloadFailedListener: ((e:Exception?) -> Unit)? = null
+        private var onDownloadSuccessListener: (()->Unit)? = null
+        private var onDownloadingListener: ((progress: ProgressInfo?) -> Unit)? = null
+        private var onDownloadFailedListener: ((e:Exception?) -> Unit)? = null
 
         fun setDownloadUrl(url: String) = apply {
             downloadUrl = url

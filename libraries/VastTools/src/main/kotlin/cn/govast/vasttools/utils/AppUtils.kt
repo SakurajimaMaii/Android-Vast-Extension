@@ -98,6 +98,7 @@ object AppUtils {
      */
     private fun getVersionCodeApi28Down(): Int {
         try {
+            @Suppress("DEPRECATION")
             return getPackageInfo().versionCode
         } catch (e: Exception) {
             e.printStackTrace()
@@ -129,9 +130,7 @@ object AppUtils {
         try {
             packageManager = ContextHelper.getAppContext().applicationContext
                 .packageManager
-            applicationInfo = packageManager.getApplicationInfo(
-                ContextHelper.getAppContext().packageName, 0
-            )
+            applicationInfo = getApplicationInfo()
         } catch (e: PackageManager.NameNotFoundException) {
             applicationInfo = null
         }
@@ -172,7 +171,22 @@ object AppUtils {
                 ContextHelper.getAppContext().packageName, PackageManager.PackageInfoFlags.of(0)
             )
         } else {
+            @Suppress("DEPRECATION")
             packageManager.getPackageInfo(
+                ContextHelper.getAppContext().packageName, 0
+            )
+        }
+    }
+
+    private fun getApplicationInfo(): ApplicationInfo {
+        val packageManager: PackageManager = ContextHelper.getAppContext().packageManager
+        return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            packageManager.getApplicationInfo(
+                ContextHelper.getAppContext().packageName, PackageManager.ApplicationInfoFlags.of(0)
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            packageManager.getApplicationInfo(
                 ContextHelper.getAppContext().packageName, 0
             )
         }

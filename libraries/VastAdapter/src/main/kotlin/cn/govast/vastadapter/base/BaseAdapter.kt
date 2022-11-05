@@ -46,11 +46,11 @@ abstract class BaseAdapter <T:ViewHolder>():
     }
 
     final override fun getClickEvent(): AdapterClickListener? {
-        return super.getClickEvent()
+        throw RuntimeException("You shouldn't call this method.")
     }
 
     final override fun getLongClickEvent(): AdapterLongClickListener? {
-        return super.getLongClickEvent()
+        throw RuntimeException("You shouldn't call this method.")
     }
 
 }

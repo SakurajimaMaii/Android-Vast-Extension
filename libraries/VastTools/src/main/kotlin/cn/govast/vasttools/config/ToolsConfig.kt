@@ -30,8 +30,6 @@ import cn.govast.vasttools.utils.LogUtils
 
 /**
  * VastUtils config.
- *
- * @since 0.0.9
  */
 object ToolsConfig {
 
@@ -39,7 +37,6 @@ object ToolsConfig {
      * Initialize the tools.
      *
      * @param application the application of your app.
-     * @since 0.0.9
      */
     @JvmStatic
     fun init(application: Application){

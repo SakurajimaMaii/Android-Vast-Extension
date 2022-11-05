@@ -72,9 +72,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Get QRCode" />
-    <Button
-        android:id="@+id/openAlbum"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Open Album" />
 </LinearLayout>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.view
+package cn.govast.vasttools.view.textview
 
 import android.content.Context
 import android.util.AttributeSet

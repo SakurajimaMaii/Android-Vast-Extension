@@ -18,6 +18,7 @@ package cn.govast.vasttools.utils
 
 import android.content.Context
 import android.location.LocationManager
+import cn.govast.vasttools.extension.cast
 import cn.govast.vasttools.helper.ContextHelper
 
 // Author: Vast Gui 
@@ -34,8 +35,8 @@ object MapUtils {
      */
     @JvmStatic
     fun isGPSOPen(): Boolean {
-        val locationManager = ContextHelper.getAppContext()
-            .getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager:LocationManager = cast(ContextHelper.getAppContext()
+            .getSystemService(Context.LOCATION_SERVICE))
         // Through GPS satellite positioning, the positioning level can be accurate to the street
         // (through 24 satellite positioning, the positioning is accurate and fast in outdoor and open places).
         val gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)

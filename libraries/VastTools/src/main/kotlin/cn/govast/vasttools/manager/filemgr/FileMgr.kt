@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.utils
+package cn.govast.vasttools.manager.filemgr
 
 import android.content.Context
 import cn.govast.vasttools.helper.ContextHelper
-import cn.govast.vasttools.utils.FileUtils.ResultSet.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileWriter
@@ -29,58 +28,56 @@ import java.io.FileWriter
 // Description: 
 // Documentation:
 
-object FileUtils {
-    const val FILE_UTILS_TAG = "FileUtils"
+object FileMgr {
 
     /**
-     * File operations result.
-     *
-     * [FLAG_SUCCESS] means running successful.
-     *
-     * [FLAG_PARENT_NOT_EXISTS] means the parent of the file is not
-     * exist.
-     *
-     * [FLAG_EXISTS] means the file or directory is exist.
-     *
-     * [FLAG_NOT_EXISTS] means the file or directory is not exist.
-     *
-     * [FLAG_FAILED] means running failed.
-     */
-    enum class ResultSet {
-        FLAG_SUCCESS,
-        FLAG_PARENT_NOT_EXISTS,
-        FLAG_EXISTS,
-        FLAG_NOT_EXISTS,
-        FLAG_FAILED
-    }
-
-    /**
-     * @return The File which from internal storage, meant for your app's use only.
+     * @return The File which from internal storage, meant for your app's use
+     *     only.
      * @see [Context.getFilesDir]
      */
     @JvmStatic
     fun appInternalFilesDir(): File = ContextHelper.getAppContext().filesDir
 
     /**
-     * @return The File which from internal storage, meant for your app's use only.
+     * @return The File which from internal storage, meant for your app's use
+     *     only.
      * @see [Context.getCacheDir]
      */
     @JvmStatic
     fun appInternalCacheDir(): File = ContextHelper.getAppContext().cacheDir
 
     /**
-     * @return The File which from external storage, meant for your app's use only.
+     * @return The File which from external storage, meant for your app's use
+     *     only.
      * @see [Context.getExternalFilesDir]
      */
     @JvmStatic
-    fun appExternalFilesDir(path: String?) = ContextHelper.getAppContext().getExternalFilesDir(path)
+    fun appExternalFilesDir(path: String?): File? =
+        ContextHelper.getAppContext().getExternalFilesDir(path)
 
     /**
-     * @return The File which from external storage, meant for your app's use only.
+     * @return The File which from external storage, meant for your app's use
+     *     only.
      * @see [Context.getExternalCacheDir]
      */
     @JvmStatic
-    fun appExternalCacheDir() = ContextHelper.getAppContext().externalCacheDir
+    fun appExternalCacheDir(): File? = ContextHelper.getAppContext().externalCacheDir
+
+    /**
+     * Get file path.
+     *
+     * @param endWithSeparator If true, the path will end with
+     *     [File.separator], false otherwise.
+     * @param path file path item.
+     */
+    @JvmStatic
+    fun getPath(endWithSeparator: Boolean, vararg path: String): String {
+        var finalPath = ""
+        for (p in path) {
+            finalPath += (p + File.separator)
+        }
+        return if (endWithSeparator) finalPath.replaceFirst(".$".toRegex(), "") else finalPath
+    }
 
     /**
      * Save file.
@@ -88,15 +85,14 @@ object FileUtils {
      * @param file The file you want to save.
      */
     @JvmStatic
-    fun saveFile(file: File):ResultSet {
+    fun saveFile(file: File): ResultSet {
         if (file.exists() && file.isFile) {
             file.delete()
         }
         if (!file.parentFile?.exists()!!)
             file.parentFile?.mkdirs()
-        val fileOutputStream = FileOutputStream(file)
-        fileOutputStream.close()
-        return if (file.exists()) FLAG_SUCCESS else FLAG_FAILED
+        FileOutputStream(file).close()
+        return if (file.exists()) ResultSet.FLAG_SUCCESS else ResultSet.FLAG_FAILED
     }
 
     /**
@@ -109,12 +105,12 @@ object FileUtils {
     fun deleteFile(file: File): ResultSet {
         return if (file.isFile) {
             if (file.delete()) {
-                FLAG_SUCCESS
+                ResultSet.FLAG_SUCCESS
             } else {
-                FLAG_FAILED
+                ResultSet.FLAG_FAILED
             }
         } else {
-            FLAG_FAILED
+            ResultSet.FLAG_FAILED
         }
     }
 
@@ -128,13 +124,13 @@ object FileUtils {
     @JvmStatic
     fun writeFile(file: File, writeEventListener: WriteEventListener): ResultSet {
         return if (!file.exists())
-            FLAG_FAILED
+            ResultSet.FLAG_FAILED
         else if ("txt" == getFileExtension(file)) {
             val fileWriter = FileWriter(file)
             writeEventListener.writeEvent(fileWriter)
             fileWriter.close()
-            FLAG_SUCCESS
-        } else FLAG_FAILED
+            ResultSet.FLAG_SUCCESS
+        } else ResultSet.FLAG_FAILED
     }
 
     /**
@@ -146,15 +142,15 @@ object FileUtils {
     @JvmStatic
     fun makeDir(dir: File): ResultSet {
         if (dir.exists()) {
-            return FLAG_EXISTS
+            return ResultSet.FLAG_EXISTS
         }
         val path = if (!dir.path.endsWith(File.separator)) {
             dir.path + File.separator
         } else dir.path
         if (File(path).mkdir()) {
-            return FLAG_SUCCESS
+            return ResultSet.FLAG_SUCCESS
         }
-        return FLAG_FAILED
+        return ResultSet.FLAG_FAILED
     }
 
     /**
@@ -166,7 +162,7 @@ object FileUtils {
     @JvmStatic
     fun deleteDir(file: File): ResultSet {
         if (!file.exists()) {
-            return FLAG_FAILED
+            return ResultSet.FLAG_FAILED
         }
         if (null == file.listFiles()) {
             file.delete()
@@ -180,7 +176,7 @@ object FileUtils {
             }
         }
         file.delete()
-        return FLAG_SUCCESS
+        return ResultSet.FLAG_SUCCESS
     }
 
     /**
@@ -193,59 +189,47 @@ object FileUtils {
     @JvmStatic
     fun rename(file: File, newName: String): ResultSet {
         if (!file.exists()) {
-            return FLAG_NOT_EXISTS
+            return ResultSet.FLAG_NOT_EXISTS
         } else if (newName == file.name) {
-            return FLAG_SUCCESS
+            return ResultSet.FLAG_SUCCESS
         } else {
             return if (null == file.parent) {
-                FLAG_FAILED
+                ResultSet.FLAG_FAILED
             } else {
                 val newFile = File(file.parent!! + File.separator + newName)
                 if (!newFile.exists() && file.renameTo(newFile)) {
-                    FLAG_SUCCESS
+                    ResultSet.FLAG_SUCCESS
                 } else {
-                    FLAG_FAILED
+                    ResultSet.FLAG_FAILED
                 }
             }
         }
     }
 
-    /**
-     * Get the extension name of the file.
-     */
+    /** Get the extension name of the file. */
     @JvmStatic
     fun getFileExtension(file: File): String {
         return file.name.substring(file.name.lastIndexOf(".") + 1)
     }
 
-    /**
-     * Register a listener when write to file.
-     */
+    /** Register a listener when write to file. */
     interface WriteEventListener {
         /**
          * Define write event.
          *
-         * @param fileWriter Convenience class for writing character
-         *     files.
-         * @since 0.0.9
+         * @param fileWriter Convenience class for writing character files.
          */
         fun writeEvent(fileWriter: FileWriter)
     }
 
-    /**
-     * Register a listener when write result.
-     */
+    /** Register a listener when write result. */
     interface WriteEventResultListener {
 
-        /**
-         * On success.
-         */
+        /** On success. */
         fun onSuccess()
 
 
-        /**
-         * On failed.Default print StackTrace.
-         */
+        /** On failed.Default print StackTrace. */
         fun onFailed(e: Exception) {
             e.printStackTrace()
         }

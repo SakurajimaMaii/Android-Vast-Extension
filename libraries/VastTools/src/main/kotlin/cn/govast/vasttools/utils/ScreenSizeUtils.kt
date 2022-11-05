@@ -116,7 +116,6 @@ object ScreenSizeUtils {
      * Get mobile screen height.
      *
      * @return The height of the screen(in pixels).
-     * @since 0.0.9
      */
     @JvmStatic
     fun getMobileScreenHeight() = getMobileScreenHeight(ContextHelper.getAppContext())
@@ -141,7 +140,6 @@ object ScreenSizeUtils {
      * Get mobile screen width.
      *
      * @return The width of the screen(in pixels).
-     * @since 0.0.9
      */
     @JvmStatic
     fun getMobileScreenWidth() = getMobileScreenWidth(ContextHelper.getAppContext())
@@ -165,7 +163,6 @@ object ScreenSizeUtils {
     /**
      * Get screen orientation.
      *
-     * @since 0.0.9
      */
     fun getScreenOrientation() = ContextHelper.getAppContext().resources?.configuration?.orientation
 
@@ -174,7 +171,6 @@ object ScreenSizeUtils {
      *
      * @param activity the activity.
      * @return the height of the status height, 0 otherwise.
-     * @since 0.0.9
      */
     @SuppressLint("InternalInsetResource", "DiscouragedApi")
     @JvmStatic
@@ -195,7 +191,6 @@ object ScreenSizeUtils {
      * Get the logical density of the display.
      *
      * @see [DisplayMetrics.density]
-     * @since 0.0.9
      */
     fun getDensity() = ContextHelper.getAppContext().resources.displayMetrics.density
 }

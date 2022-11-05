@@ -35,8 +35,6 @@ import java.util.*
  * LogUtils.i(this.javaClass.simpleName,"Hello,This is a info")
  * ```
  * For more settings, please refer to the documentation.
- *
- * @since 0.0.1
  */
 object LogUtils {
 
@@ -85,8 +83,6 @@ object LogUtils {
 
     /**
      * Sync is debug.
-     *
-     * @since 0.0.6
      */
     @Synchronized
     internal fun init() {

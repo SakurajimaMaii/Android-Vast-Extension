@@ -24,7 +24,17 @@ import androidx.annotation.IntRange
 // Description: Provides regex checks for some common strings.
 // Documentation: [RegexUtils](https://sakurajimamaii.github.io/VastDocs/document/en/RegexUtils.html)
 
+enum class PasswordMode{
+    /** Password contains at least numbers and letters. */
+    EASY,
+    /** Password contains at least numbers and letters, and can have characters. */
+    NORMAL,
+    /** Password contains two or more types:numbers, letters, and characters. */
+    HARD
+}
+
 object RegexUtils {
+
     /**
      * Check if string is Email address.
      *
@@ -33,7 +43,7 @@ object RegexUtils {
      */
     @JvmStatic
     fun isEmail(string: String): Boolean {
-        return Regex("[A-Za-z0-9-_\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+").matches(
+        return Regex("[A-Za-z\\d-_\u4e00-\u9fa5]+@[a-zA-Z\\d_-]+(\\.[a-zA-Z\\d_-]+)+").matches(
             string
         )
     }
@@ -42,19 +52,17 @@ object RegexUtils {
      * Check if string meets password requirements.
      *
      * @param string string to matches.
-     * @param case 0 Password contains at least numbers and letters. 1
-     *     Password contains two or more types:numbers,
-     *     letters, and characters. 2 Password contains at
-     *     least numbers and letters, and can have characters.
+     * @param case [PasswordMode]
      * @param minLength Minimum password length.
      * @param maxLength Maximum password length.
      * @return true if the String is a password, false otherwise.
+     * @throws IllegalArgumentException
      */
     @JvmStatic
     @JvmOverloads
     fun isPwd(
         string: String,
-        @IntRange(from = 0, to = 2) case: Int = 0,
+        case: PasswordMode = PasswordMode.EASY,
         @IntRange(from = 0) minLength: Int = 6,
         @IntRange(from = 0) maxLength: Int = 20
     ): Boolean {
@@ -65,16 +73,13 @@ object RegexUtils {
             throw IllegalArgumentException("Password length does not meet requirements")
         }
         return when (case) {
-            0 -> Regex("(?![0-9]+\$)(?![a-zA-Z]+\$)[0-9A-Za-z]{$minLength,$maxLength}").matches(
+            PasswordMode.EASY -> Regex("(?!\\d+\$)(?![a-zA-Z]+\$)[\\dA-Za-z]{$minLength,$maxLength}").matches(
                 string
             )
-            1 -> Regex("(?![0-9]+\$)(?![a-z]+\$)(?![A-Z]+\$)(?!([^(0-9a-zA-Z)])+\$).{$minLength,$maxLength}").matches(
+            PasswordMode.NORMAL -> Regex("(?=.*([a-zA-Z].*))(?=.*\\d.*)[a-zA-Z\\d-*/+.~!@#\$%^&()]{$minLength,$maxLength}").matches(
                 string
             )
-            2 -> Regex("(?=.*([a-zA-Z].*))(?=.*[0-9].*)[a-zA-Z0-9-*/+.~!@#\$%^&*()]{$minLength,$maxLength}").matches(
-                string
-            )
-            else -> Regex("(?![0-9]+\$)(?![a-zA-Z]+\$)[0-9A-Za-z]{$minLength,$maxLength}").matches(
+            PasswordMode.HARD -> Regex("(?!\\d+\$)(?![a-z]+\$)(?![A-Z]+\$)(?!([^(\\da-zA-Z)])+\$).{$minLength,$maxLength}").matches(
                 string
             )
         }
@@ -88,7 +93,7 @@ object RegexUtils {
      */
     @JvmStatic
     fun isQQ(string: String): Boolean {
-        return Regex("[1-9][0-9]{4,}").matches(string)
+        return Regex("\\d{4,}").matches(string)
     }
 
     /**
@@ -132,6 +137,6 @@ object RegexUtils {
      */
     @JvmStatic
     fun isNumeric(string: String): Boolean {
-        return Regex("[0-9]*").matches(string)
+        return Regex("\\d*").matches(string)
     }
 }

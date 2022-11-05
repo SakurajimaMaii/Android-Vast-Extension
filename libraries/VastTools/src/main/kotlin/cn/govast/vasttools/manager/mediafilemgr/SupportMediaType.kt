@@ -14,27 +14,22 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils;
+package cn.govast.vasttools.manager.mediafilemgr
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/3 16:44
+// Date: 2022/11/2
 // Description: 
 // Documentation:
+// Reference:
 
-public class BasicVM {
-
-    class Person{
-        String firstName;
-        String lastName;
-
-        public Person(String firstName, String lastName) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-        }
-    }
-
-    public static void main(String[] args) {
-
-    }
+/**
+ * Currently support file type.
+ *
+ * @property Images
+ * @property Music
+ */
+enum class SupportMediaType{
+    Images,Music
 }

@@ -24,12 +24,12 @@ package cn.govast.vastutils;
 
 import java.io.File;
 
-import cn.govast.vasttools.utils.FileUtils;
+import cn.govast.vasttools.manager.filemgr.FileMgr;
 
 public class AppConstant {
 
     // 应用内部文件夹File文件夹路径
-    public static final String APP_ROOT_PATH = FileUtils.appInternalFilesDir().getPath();
+    public static final String APP_ROOT_PATH = FileMgr.appInternalFilesDir().getPath();
 
     // 皮肤包名和路径
     public static final String THEME_NAME = "darkskin-debug.apk";

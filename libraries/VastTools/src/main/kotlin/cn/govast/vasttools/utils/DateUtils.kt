@@ -29,8 +29,6 @@ import java.util.*
 
 /**
  * Date utils.
- *
- * @since 0.0.1
  */
 object DateUtils {
 
@@ -215,7 +213,7 @@ object DateUtils {
      * [gmtFormat].
      *
      * If you don't set the [gmtFormat] or [dateFormat],it will parse current
-     * local time in [TIME_FORMAT] format by default.
+     * local time in [FORMAT_YYYY_MM_DD_HH_MM_SS] format by default.
      *
      * @param gmtFormat the ID for a TimeZone.
      * @param dateFormat the pattern describing the date and time format.

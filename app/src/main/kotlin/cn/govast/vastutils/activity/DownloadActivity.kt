@@ -28,7 +28,7 @@ import androidx.annotation.RequiresApi
 import cn.govast.vasttools.activity.VastVbActivity
 import cn.govast.vasttools.utils.ColorUtils
 import cn.govast.vasttools.utils.DownloadUtils
-import cn.govast.vasttools.utils.FileUtils
+import cn.govast.vasttools.manager.filemgr.FileMgr
 import cn.govast.vasttools.utils.LogUtils
 import cn.govast.vasttools.utils.ScreenSizeUtils.getMobileScreenHeight
 import cn.govast.vasttools.utils.ScreenSizeUtils.getMobileScreenWidth
@@ -44,7 +44,7 @@ import cn.govast.vastutils.databinding.ActivityDownloadBinding
 
 class DownloadActivity : VastVbActivity<ActivityDownloadBinding>() {
 
-    private val saveDir = FileUtils.appInternalFilesDir().path
+    private val saveDir = FileMgr.appInternalFilesDir().path
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,7 +132,7 @@ class DownloadActivity : VastVbActivity<ActivityDownloadBinding>() {
             }
         })
 
-        LogUtils.d(getDefaultTag(),FileUtils.appExternalFilesDir(null)?.path)
+        LogUtils.d(getDefaultTag(), FileMgr.appExternalFilesDir(null)?.path)
         LogUtils.d(getDefaultTag(),getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath)
         LogUtils.d(getDefaultTag(),Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path)
 

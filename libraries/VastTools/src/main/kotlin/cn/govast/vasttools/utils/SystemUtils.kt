@@ -33,8 +33,8 @@ object SystemUtils {
     /**
      * Returns the language code of this Locale.
      *
-     * For example: the current setting is "Chinese-China", then "zh"
-     * will be returned.
+     * For example: the current setting is "Chinese-China", then "zh" will be
+     * returned.
      *
      * @return the language code of this Locale.
      */
@@ -60,31 +60,27 @@ object SystemUtils {
     val systemAndroidVersion: String
         get() = Build.VERSION.RELEASE
 
-    /**
-     * @return the end-user-visible name for the end product.
-     */
+    /** @return the end-user-visible name for the end product. */
     @JvmStatic
     val systemModel: String
         get() = Build.MODEL
 
     /**
-     * @return the consumer-visible brand with which the
-     *     product/hardware will be associated, if any.
+     * @return the consumer-visible brand with which the product/hardware will
+     *     be associated, if any.
      */
     @JvmStatic
     val deviceBrand: String
         get() = Build.BRAND
 
-    /**
-     * Get system available memory.
-     */
+    /** Get system available memory. */
     @JvmStatic
     @JvmOverloads
-    fun getAvailableMemory(context:Context? = null):Int {
+    fun getAvailableMemory(context: Context? = null): Int {
         val mContext = context ?: ContextHelper.getAppContext()
         val am = cast<ActivityManager>(mContext.getSystemService(Context.ACTIVITY_SERVICE))
         val mi = ActivityManager.MemoryInfo()
         am.getMemoryInfo(mi)
-        return (mi.availMem/(1024*1024)).toInt()
+        return (mi.availMem / (1024 * 1024)).toInt()
     }
 }

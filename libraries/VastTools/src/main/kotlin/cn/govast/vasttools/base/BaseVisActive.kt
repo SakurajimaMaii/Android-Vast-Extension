@@ -32,7 +32,6 @@ interface BaseVisActive : BaseActive {
 
     /**
      * @return self or attached [Activity].
-     * @since 0.0.9
      */
     fun getBaseActivity(): Activity
 
@@ -41,7 +40,6 @@ interface BaseVisActive : BaseActive {
      * [IllegalStateException].
      *
      * @throws IllegalStateException
-     * @since 0.0.9
      */
     fun getBinding(): ViewBinding {
         throw IllegalStateException("You should not call getBinding().")
@@ -52,7 +50,6 @@ interface BaseVisActive : BaseActive {
      * [IllegalStateException].
      *
      * @throws IllegalStateException
-     * @since 0.0.9
      */
     fun getViewModel(): ViewModel {
         throw IllegalStateException("You should not call getViewModel().")
@@ -72,7 +69,6 @@ interface BaseVisActive : BaseActive {
      * @param modelClass by default, Activity or Fragment will get the
      *     [ViewModel] by `modelClass.newInstance()`.
      * @return the [ViewModel] of the Activity or Fragment.
-     * @since 0.0.9
      */
     fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
         return modelClass.newInstance()

@@ -16,7 +16,7 @@
 
 package cn.govast.vasttools.utils
 
-import android.content.res.Resources
+import android.annotation.SuppressLint
 import android.content.res.Resources.NotFoundException
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorRes
@@ -59,6 +59,7 @@ object ResUtils {
      * @return the drawable resource corresponding to the [name], otherwise
      *     null if the resource does not exist.
      */
+    @SuppressLint("DiscouragedApi")
     @JvmStatic
     fun getDrawable(name: String): Drawable? {
         val context = ContextHelper.getAppContext()
@@ -97,7 +98,7 @@ object ResUtils {
     fun getColor(@ColorRes id: Int): Int {
         return try {
             ContextHelper.getAppContext().getColor(id)
-        } catch (e: Resources.NotFoundException) {
+        } catch (e: NotFoundException) {
             ColorUtils.colorHex2Int(ERROR_COLOR)
         }
     }

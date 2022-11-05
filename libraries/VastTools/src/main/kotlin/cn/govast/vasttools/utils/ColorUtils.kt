@@ -31,7 +31,7 @@ object ColorUtils {
     /**
      * Color hex regex.Supported formats are `#RRGGBB` and `#AARRGGBB`.
      */
-    const val COLOR_HEX_REGEX = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$"
+    const val COLOR_HEX_REGEX = "^#([A-Fa-f\\d]{6}|[A-Fa-f\\d]{8})$"
 
     /**
      * Color parse failed.

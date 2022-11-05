@@ -26,6 +26,7 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import androidx.annotation.RequiresApi
+import cn.govast.vasttools.manager.filemgr.FileMgr
 import cn.govast.vasttools.helper.ContextHelper
 import java.io.File
 import java.io.FileOutputStream
@@ -52,10 +53,8 @@ object UriUtils {
     fun getRealPath(uri: Uri, context: Context = ContextHelper.getAppContext()): String? {
         var filePath = ""
         try {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && DocumentsContract.isDocumentUri(
-                    context,
-                    uri
-                )
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q &&
+                DocumentsContract.isDocumentUri(context, uri)
             ) {
                 // ExternalStorageProvider
                 if (isExternalStorageDocument(uri)) {
@@ -63,7 +62,7 @@ object UriUtils {
                     val split = docId.split(":").toTypedArray()
                     val type = split[0]
                     if ("primary".equals(type, ignoreCase = true)) {
-                        return (FileUtils.appExternalFilesDir(null)?.absolutePath
+                        return (FileMgr.appExternalFilesDir(null)?.absolutePath
                             ?: "") + "/" + split[1]
                     }
                 } else if (isDownloadsDocument(uri)) {
@@ -189,7 +188,7 @@ object UriUtils {
                     android.os.FileUtils.copy(inputStream!!, fos)
                     file = cache
                 }
-            } catch (e:Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
                 fos?.close()
