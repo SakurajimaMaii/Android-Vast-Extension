@@ -32,7 +32,15 @@ import java.lang.reflect.Field
  *
  * Note: that if you use the [AutoEnumValue] annotation, when you get
  * the field according to the index, you will get the string instead
- * of the original enumeration class object
+ * of the original enumeration class object.
+ *
+ * ```kotlin
+ * // map will store "m" to replace Gender.MAN.
+ * enum class Gender{
+ *      @AutoEnumValue("m") MAN,
+ *      @AutoEnumValue("wm") WOMAN
+ * }
+ * ```
  *
  * @see getKeyAndValue
  */
@@ -43,6 +51,14 @@ annotation class AutoEnumValue(val value: String)
 /**
  * Setting the [value] as the key of the class field in map when using
  * [getKeyAndValue].
+ *
+ * ```kotlin
+ * // For example:
+ * data class Person(
+ *      @AutoField("fn") val firstName: String,
+ *      @AutoField("ln") val lastName:String,
+ *      @AutoField("g") val gender: Gender)
+ * ```
  *
  * @see getKeyAndValue
  */
