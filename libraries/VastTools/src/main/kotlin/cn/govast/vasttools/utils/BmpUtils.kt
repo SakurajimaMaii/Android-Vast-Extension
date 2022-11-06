@@ -17,8 +17,11 @@
 package cn.govast.vasttools.utils
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Rect
+import android.graphics.drawable.Drawable
+import android.util.Base64
 import cn.govast.vasttools.manager.filemgr.FileMgr
 import java.io.File
 import java.io.FileOutputStream
@@ -183,6 +186,27 @@ object BmpUtils {
 
         }
         return null
+    }
+
+    /**
+     * Get bitmap from base64.
+     */
+    fun getBitmapFromBase64(base64:String): Bitmap {
+        val decode: ByteArray = Base64.decode(base64.split(",")[1], Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(decode, 0, decode.size)
+    }
+
+    /**
+     * Convert drawable to bitmap.
+     */
+    fun drawableToBitmap(drawable: Drawable): Bitmap {
+        val w: Int = drawable.intrinsicWidth
+        val h: Int = drawable.intrinsicHeight
+        val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, w, h)
+        drawable.draw(canvas)
+        return bitmap
     }
 
 }
