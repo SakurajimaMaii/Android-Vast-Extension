@@ -24,16 +24,16 @@ import androidx.annotation.IntRange
 // Description: Provides regex checks for some common strings.
 // Documentation: [RegexUtils](https://sakurajimamaii.github.io/VastDocs/document/en/RegexUtils.html)
 
-enum class PasswordMode{
-    /** Password contains at least numbers and letters. */
-    EASY,
-    /** Password contains at least numbers and letters, and can have characters. */
-    NORMAL,
-    /** Password contains two or more types:numbers, letters, and characters. */
-    HARD
-}
-
 object RegexUtils {
+
+    enum class PasswordMode{
+        /** Password contains at least numbers and letters. */
+        EASY,
+        /** Password contains at least numbers and letters, and can have characters. */
+        NORMAL,
+        /** Password contains two or more types:numbers, letters, and characters. */
+        HARD
+    }
 
     /**
      * Check if string is Email address.
