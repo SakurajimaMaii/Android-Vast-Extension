@@ -17,15 +17,16 @@
 package cn.govast.vasttools.utils
 
 import android.util.Log
+import android.util.Log.getStackTraceString
 import androidx.annotation.IntRange
 import cn.govast.vasttools.utils.AppUtils.getAppDebug
-import java.util.*
+import java.util.Arrays
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: A log utils.
-// Documentation: [LogUtils](https://sakurajimamaii.github.io/VastDocs/document/en/IDCardUtils.html)
+// Documentation: [LogUtils](https://sakurajimamaii.github.io/VastDocs/document/en/LogUtils.html)
 
 /**
  * LogUtils
@@ -34,43 +35,35 @@ import java.util.*
  * ```kotlin
  * LogUtils.i(this.javaClass.simpleName,"Hello,This is a info")
  * ```
+ *
  * For more settings, please refer to the documentation.
  */
 object LogUtils {
 
-    /**
-     * Log content.
-     */
+    /** Log content. */
     private var logContent: LogContent? = null
 
     /**
      * Default maximum length of chars printed of a single log.
      *
-     * Notes:Considering fault tolerance, 1000 is set here instead of
-     * 1024.
+     * Notes:Considering fault tolerance, 1000 is set here instead of 1024.
      */
     private const val defaultCharLength = 1000
 
-    /**
-     * Default max print repeat times.
-     */
+    /** Default max print repeat times. */
     private const val defaultMaxPrintTimes = 5
 
-    /**
-     * Maximum length of chars printed of a single log.
-     */
+    /** Maximum length of chars printed of a single log. */
     var singleLogCharLength = defaultCharLength
         private set
 
-    /**
-     * Max print repeat times.
-     */
+    /** Max print repeat times. */
     var maxPrintTimes: Int = defaultMaxPrintTimes
         private set
 
     /**
-     * `true` if you want to print log,`false` if you don't want to
-     * print the log.
+     * `true` if you want to print log,`false` if you don't want to print the
+     * log.
      */
     var logEnabled = true
 
@@ -81,25 +74,19 @@ object LogUtils {
      */
     private var isDeBug: Boolean = true
 
-    /**
-     * Sync is debug.
-     */
+    /** Sync is debug. */
     @Synchronized
     internal fun init() {
         isDeBug = getAppDebug()
     }
 
-    /**
-     * Set [singleLogCharLength].
-     */
+    /** Set [singleLogCharLength]. */
     @JvmStatic
     fun setSingleLogCharLength(@IntRange(from = 0, to = 1000) charLength: Int) {
         singleLogCharLength = charLength
     }
 
-    /**
-     * Set [maxPrintTimes].
-     */
+    /** Set [maxPrintTimes]. */
     @JvmStatic
     fun setMaxPrintTimes(@IntRange(from = 0) maxPrint: Int) {
         maxPrintTimes = maxPrint
@@ -112,9 +99,10 @@ object LogUtils {
      * @param content Message content.
      */
     @JvmStatic
-    fun i(key: String?, content: String?) {
+    @JvmOverloads
+    fun i(key: String?, content: String?, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
-            logPrint(Log.INFO, key, content)
+            logPrint(Log.INFO, key, content + "\n" + getStackTraceString(tr))
         }
     }
 
@@ -125,9 +113,10 @@ object LogUtils {
      * @param content Message content.
      */
     @JvmStatic
-    fun v(key: String?, content: String?) {
+    @JvmOverloads
+    fun v(key: String?, content: String?, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
-            logPrint(Log.VERBOSE, key, content)
+            logPrint(Log.VERBOSE, key, content + "\n" + getStackTraceString(tr))
         }
     }
 
@@ -138,9 +127,10 @@ object LogUtils {
      * @param content Message content.
      */
     @JvmStatic
-    fun w(key: String?, content: String?) {
+    @JvmOverloads
+    fun w(key: String?, content: String?, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
-            logPrint(Log.WARN, key, content)
+            logPrint(Log.WARN, key, content + "\n" + getStackTraceString(tr))
         }
     }
 
@@ -151,9 +141,10 @@ object LogUtils {
      * @param content Message content.
      */
     @JvmStatic
-    fun d(key: String?, content: String?) {
+    @JvmOverloads
+    fun d(key: String?, content: String?, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
-            logPrint(Log.DEBUG, key, content)
+            logPrint(Log.DEBUG, key, content + "\n" + getStackTraceString(tr))
         }
     }
 
@@ -164,9 +155,10 @@ object LogUtils {
      * @param content Message content.
      */
     @JvmStatic
-    fun e(key: String?, content: String?) {
+    @JvmOverloads
+    fun e(key: String?, content: String?, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
-            logPrint(Log.ERROR, key, content)
+            logPrint(Log.ERROR, key, content + "\n" + getStackTraceString(tr))
         }
     }
 
@@ -217,25 +209,23 @@ object LogUtils {
      * Print the log(In order to solve the length limit)
      *
      * @param priority The priority/type of this log message
-     * @param tag Used to identify the source of a log message.It
-     *     usually identifies the class or
-     *     activity where the log call occurs.
+     * @param tag Used to identify the source of a log message.It usually
+     *     identifies the class or activity where the log call occurs.
      * @param content The message you would like logged.
      */
     private fun print(priority: Int, tag: String, content: String) {
         /**
-         * 1. The console can print 4062 bytes at most, and there are
-         *    slight discrepancies in different situations
-         *    (note: here are bytes, not characters!!!)
-         * 2. The default character set encoding of strings is utf-8,
-         *    which is a variable-length encoding. One
-         *    character is represented by 1 to 4 bytes.
+         * 1. The console can print 4062 bytes at most, and there are slight
+         *    discrepancies in different situations (note: here are bytes, not
+         *    characters!!!)
+         * 2. The default character set encoding of strings is utf-8, which is a
+         *    variable-length encoding. One character is represented by 1 to 4
+         *    bytes.
          */
 
         /**
-         * Here the character length is less than [singleLogCharLength],
-         * then it will be printed directly, avoiding the subsequent
-         * process.
+         * Here the character length is less than [singleLogCharLength], then it
+         * will be printed directly, avoiding the subsequent process.
          */
         if (content.length < singleLogCharLength) {
             Log.println(priority, tag, content)
@@ -280,8 +270,7 @@ object LogUtils {
 
 
     /**
-     * Truncate the byte array as a string according to
-     * [singleLogCharLength].
+     * Truncate the byte array as a string according to [singleLogCharLength].
      *
      * @param bytes byte array.
      * @return The string obtained by [singleLogCharLength].
@@ -316,9 +305,7 @@ object LogUtils {
         }
     }
 
-    /**
-     * [LogContent] used to define the log content format.
-     */
+    /** [LogContent] used to define the log content format. */
     interface LogContent {
         fun logContentFormat(methodName: String?, key: String?, content: String?): String
     }
