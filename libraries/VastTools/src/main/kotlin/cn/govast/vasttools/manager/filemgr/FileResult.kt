@@ -33,7 +33,7 @@ package cn.govast.vasttools.manager.filemgr
  * @property FLAG_NOT_EXISTS means the file or directory is not exist.
  * @property FLAG_FAILED means running failed.
  */
-enum class ResultSet {
+enum class FileResult {
     FLAG_SUCCESS,
     FLAG_PARENT_NOT_EXISTS,
     FLAG_EXISTS,

@@ -22,6 +22,7 @@ import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.util.Base64
+import androidx.annotation.IntRange
 import cn.govast.vasttools.manager.filemgr.FileMgr
 import java.io.File
 import java.io.FileOutputStream
@@ -35,8 +36,8 @@ import java.io.IOException
 
 object BmpUtils {
     /**
-     * Merge the two bitmaps into one bitmap, based on the length and
-     * width of the [bottomBitmap].
+     * Merge the two bitmaps into one bitmap, based on the length and width of
+     * the [bottomBitmap].
      *
      * @param bottomBitmap Bitmap at the bottom.
      * @param topBitmap Bitmap at the top.
@@ -60,10 +61,10 @@ object BmpUtils {
      *
      * @param leftBitmap Bitmap shown on the left.
      * @param rightBitmap Bitmap shown on the right.
-     * @param isBaseMax Whether to take the bitmap with large width as
-     *     the standard, `true` means that the small image
-     *     is stretched proportionally, `false` means that
-     *     the larger image is compressed proportionally.
+     * @param isBaseMax Whether to take the bitmap with large width as the
+     *     standard, `true` means that the small image is stretched
+     *     proportionally, `false` means that the larger image is compressed
+     *     proportionally.
      * @return `null` if one of the bitmaps is recycled.
      */
     @JvmStatic
@@ -117,10 +118,10 @@ object BmpUtils {
      *
      * @param topBitmap Bitmap shown on the top.
      * @param bottomBitmap Bitmap shown on the bottom.
-     * @param isBaseMax Whether to take the bitmap with a large height
-     *     as the standard, `true` means that the small image
-     *     is stretched proportionally, `false` means that
-     *     the larger image is compressed proportionally
+     * @param isBaseMax Whether to take the bitmap with a large height as the
+     *     standard, `true` means that the small image is stretched
+     *     proportionally, `false` means that the larger image is compressed
+     *     proportionally
      * @return `null` if one of the bitmaps is recycled.
      */
     @JvmStatic
@@ -162,17 +163,26 @@ object BmpUtils {
      * Store the Bitmap object under the local cache folder.
      *
      * @param bitmap The bitmap need to store.
-     * @param filePath The path to store the bitmap
+     * @param filePath The path to store the bitmap.
+     * @param format The format of the compressed image.
+     * @param quality Hint to the compressor, 0-100. The value is interpreted differently depending on the [Bitmap.CompressFormat].
      * @return The file path after storage, or null if the storage fails.
      */
-    fun saveBitmapAsFile(bitmap: Bitmap,filePath:String): String? {
+    @JvmStatic
+    @JvmOverloads
+    fun saveBitmapAsFile(
+        bitmap: Bitmap,
+        filePath: String,
+        format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
+        @IntRange(from = 0, to = 100) quality: Int = 100
+    ): String? {
         val file = File(filePath).also {
             FileMgr.saveFile(it)
         }
         var fos: FileOutputStream? = null
         try {
             fos = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+            bitmap.compress(format, quality, fos)
             fos.flush()
             return file.path
         } catch (e: Exception) {
@@ -183,23 +193,18 @@ object BmpUtils {
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-
         }
         return null
     }
 
-    /**
-     * Get bitmap from base64.
-     */
-    fun getBitmapFromBase64(base64:String): Bitmap {
+    /** Get bitmap from base64. */
+    fun getBitmapFromBase64(base64: String): Bitmap {
         val decode: ByteArray = Base64.decode(base64.split(",")[1], Base64.DEFAULT)
         return BitmapFactory.decodeByteArray(decode, 0, decode.size)
     }
 
-    /**
-     * Convert drawable to bitmap.
-     */
-    fun drawableToBitmap(drawable: Drawable): Bitmap {
+    /** Convert drawable to bitmap. */
+    fun getBitmapFromDrawable(drawable: Drawable): Bitmap {
         val w: Int = drawable.intrinsicWidth
         val h: Int = drawable.intrinsicHeight
         val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)

@@ -85,32 +85,32 @@ object FileMgr {
      * @param file The file you want to save.
      */
     @JvmStatic
-    fun saveFile(file: File): ResultSet {
+    fun saveFile(file: File): FileResult {
         if (file.exists() && file.isFile) {
             file.delete()
         }
         if (!file.parentFile?.exists()!!)
             file.parentFile?.mkdirs()
         FileOutputStream(file).close()
-        return if (file.exists()) ResultSet.FLAG_SUCCESS else ResultSet.FLAG_FAILED
+        return if (file.exists()) FileResult.FLAG_SUCCESS else FileResult.FLAG_FAILED
     }
 
     /**
      * Delete [file].
      *
      * @param file the file you want to delete.
-     * @return [ResultSet]
+     * @return [FileResult]
      */
     @JvmStatic
-    fun deleteFile(file: File): ResultSet {
+    fun deleteFile(file: File): FileResult {
         return if (file.isFile) {
             if (file.delete()) {
-                ResultSet.FLAG_SUCCESS
+                FileResult.FLAG_SUCCESS
             } else {
-                ResultSet.FLAG_FAILED
+                FileResult.FLAG_FAILED
             }
         } else {
-            ResultSet.FLAG_FAILED
+            FileResult.FLAG_FAILED
         }
     }
 
@@ -119,38 +119,38 @@ object FileMgr {
      *
      * @param file the file you want to write.
      * @param writeEventListener register a listener for writing.
-     * @return [ResultSet]
+     * @return [FileResult]
      */
     @JvmStatic
-    fun writeFile(file: File, writeEventListener: WriteEventListener): ResultSet {
+    fun writeFile(file: File, writeEventListener: WriteEventListener): FileResult {
         return if (!file.exists())
-            ResultSet.FLAG_FAILED
+            FileResult.FLAG_FAILED
         else if ("txt" == getFileExtension(file)) {
             val fileWriter = FileWriter(file)
             writeEventListener.writeEvent(fileWriter)
             fileWriter.close()
-            ResultSet.FLAG_SUCCESS
-        } else ResultSet.FLAG_FAILED
+            FileResult.FLAG_SUCCESS
+        } else FileResult.FLAG_FAILED
     }
 
     /**
      * Make directory.
      *
      * @param dir The file of the directory.
-     * @return [ResultSet]
+     * @return [FileResult]
      */
     @JvmStatic
-    fun makeDir(dir: File): ResultSet {
+    fun makeDir(dir: File): FileResult {
         if (dir.exists()) {
-            return ResultSet.FLAG_EXISTS
+            return FileResult.FLAG_EXISTS
         }
         val path = if (!dir.path.endsWith(File.separator)) {
             dir.path + File.separator
         } else dir.path
         if (File(path).mkdir()) {
-            return ResultSet.FLAG_SUCCESS
+            return FileResult.FLAG_SUCCESS
         }
-        return ResultSet.FLAG_FAILED
+        return FileResult.FLAG_FAILED
     }
 
     /**
@@ -160,9 +160,9 @@ object FileMgr {
      * @return Operations result.
      */
     @JvmStatic
-    fun deleteDir(file: File): ResultSet {
+    fun deleteDir(file: File): FileResult {
         if (!file.exists()) {
-            return ResultSet.FLAG_FAILED
+            return FileResult.FLAG_FAILED
         }
         if (null == file.listFiles()) {
             file.delete()
@@ -176,7 +176,7 @@ object FileMgr {
             }
         }
         file.delete()
-        return ResultSet.FLAG_SUCCESS
+        return FileResult.FLAG_SUCCESS
     }
 
     /**
@@ -187,20 +187,20 @@ object FileMgr {
      * @return Operations result.
      */
     @JvmStatic
-    fun rename(file: File, newName: String): ResultSet {
+    fun rename(file: File, newName: String): FileResult {
         if (!file.exists()) {
-            return ResultSet.FLAG_NOT_EXISTS
+            return FileResult.FLAG_NOT_EXISTS
         } else if (newName == file.name) {
-            return ResultSet.FLAG_SUCCESS
+            return FileResult.FLAG_SUCCESS
         } else {
             return if (null == file.parent) {
-                ResultSet.FLAG_FAILED
+                FileResult.FLAG_FAILED
             } else {
                 val newFile = File(file.parent!! + File.separator + newName)
                 if (!newFile.exists() && file.renameTo(newFile)) {
-                    ResultSet.FLAG_SUCCESS
+                    FileResult.FLAG_SUCCESS
                 } else {
-                    ResultSet.FLAG_FAILED
+                    FileResult.FLAG_FAILED
                 }
             }
         }
