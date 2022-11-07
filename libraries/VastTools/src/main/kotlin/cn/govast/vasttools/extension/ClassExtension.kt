@@ -19,6 +19,7 @@
 package cn.govast.vasttools.extension
 
 import java.lang.reflect.Field
+import kotlin.reflect.jvm.kotlinProperty
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -28,11 +29,11 @@ import java.lang.reflect.Field
 
 /**
  * Using the string defined by [value] to replace the enumeration class
- * object to store in the map when using [getKeyAndValue].
+ * object to store in the map when using [convertClassToMap].
  *
- * Note: that if you use the [AutoEnumValue] annotation, when you get
- * the field according to the index, you will get the string instead
- * of the original enumeration class object.
+ * Note: that if you use the [MapEnumValue] annotation, when you get the
+ * field according to the index, you will get the string instead of the
+ * original enumeration class object.
  *
  * ```kotlin
  * // map will store "m" to replace Gender.MAN.
@@ -42,15 +43,15 @@ import java.lang.reflect.Field
  * }
  * ```
  *
- * @see getKeyAndValue
+ * @see convertClassToMap
  */
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class AutoEnumValue(val value: String)
+annotation class MapEnumValue(val value: String)
 
 /**
  * Setting the [value] as the key of the class field in map when using
- * [getKeyAndValue].
+ * [convertClassToMap].
  *
  * ```kotlin
  * // For example:
@@ -60,41 +61,42 @@ annotation class AutoEnumValue(val value: String)
  *      @AutoField("g") val gender: Gender)
  * ```
  *
- * @see getKeyAndValue
+ * @see convertClassToMap
  */
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class AutoField(val value: String = "")
+annotation class MapKey(val value: String = "")
 
 /**
- * Return object as a map, where key is the declare name by [AutoField] and value is the parameter value.
- * If use [AutoEnumValue],map will use the string value declared by AutoEnumValue as the value of the
- * enumeration field.
+ * Return object as a map, where key is the declare name by [MapKey] and
+ * value is the parameter value. If use [MapEnumValue],map will use the
+ * string value declared by AutoEnumValue as the value of the enumeration
+ * field.
  *
- * @see AutoField
- * @see AutoEnumValue
+ * @see MapKey
+ * @see MapEnumValue
  */
-fun Any.getKeyAndValue(): HashMap<String,Any>{
+fun Any.convertClassToMap(): HashMap<String, Any> {
     val handlerType = this::class.java
     val clazz = handlerType.superclass
-    val fields = handlerType.declaredFields
-    val superfields = clazz.declaredFields
+    val fields = handlerType.declaredFields.filter { it.kotlinProperty != null }.toTypedArray()
+    val superfields = clazz.declaredFields.filter { it.kotlinProperty != null }.toTypedArray()
     if (fields.isNotEmpty()) {
         Field.setAccessible(fields, true)
         Field.setAccessible(superfields, true)
-        val parts = HashMap<String,Any>()
+        val parts = HashMap<String, Any>()
         for (field in fields) {
             try {
-                val autoField = field.getAnnotation(AutoField::class.java)
-                if (autoField != null) {
-                    val value = field.get(this) ?: continue
-                    val key = autoField.value.ifEmpty { field.name }
+                val mapKey = field.getAnnotation(MapKey::class.java)
+                val value = field.get(this) ?: continue
+                if (mapKey != null) {
+                    val key = mapKey.value.ifEmpty { field.name }
                     if (value is Enum<*>) {
                         val declaredFields = value.javaClass.declaredFields
                         Field.setAccessible(declaredFields, true)
                         for (enumField in declaredFields) {
-                            val autoEnumValue = enumField.getAnnotation(AutoEnumValue::class.java)
-                            val enumValue = autoEnumValue?.value ?: enumField.get(value)
+                            val mapEnumValue = enumField.getAnnotation(MapEnumValue::class.java)
+                            val enumValue = mapEnumValue?.value ?: enumField.get(value)
                             if (enumValue != null) {
                                 parts[key] = enumValue
                                 break
@@ -103,6 +105,8 @@ fun Any.getKeyAndValue(): HashMap<String,Any>{
                     } else {
                         parts[key] = value
                     }
+                } else {
+                    parts[field.name] = value
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -110,16 +114,16 @@ fun Any.getKeyAndValue(): HashMap<String,Any>{
         }
         for (field in superfields) {
             try {
-                val autoField = field.getAnnotation(AutoField::class.java)
-                if (autoField != null) {
-                    val value = field.get(this) ?: continue
-                    val key = autoField.value.ifEmpty { field.name }
+                val mapKey = field.getAnnotation(MapKey::class.java)
+                val value = field.get(this) ?: continue
+                if (mapKey != null) {
+                    val key = mapKey.value.ifEmpty { field.name }
                     if (value is Enum<*>) {
                         val declaredFields = value.javaClass.declaredFields
                         Field.setAccessible(declaredFields, true)
                         for (enumField in declaredFields) {
-                            val autoEnumValue = enumField.getAnnotation(AutoEnumValue::class.java)
-                            val enumValue = autoEnumValue?.value ?: enumField.get(value)
+                            val mapEnumValue = enumField.getAnnotation(MapEnumValue::class.java)
+                            val enumValue = mapEnumValue?.value ?: enumField.get(value)
                             if (enumValue != null) {
                                 parts[key] = enumValue
                                 break
@@ -128,6 +132,8 @@ fun Any.getKeyAndValue(): HashMap<String,Any>{
                     } else {
                         parts[key] = value
                     }
+                } else {
+                    parts[field.name] = value
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -142,7 +148,7 @@ fun Any.getKeyAndValue(): HashMap<String,Any>{
  * Return object as a map, where key is the parameter name and value is the
  * parameter value.
  */
-fun Any.getDefaultKeyAndValue() = this::class.java
+fun Any.convertClassToDefaultMap() = this::class.java
     .declaredFields
     .associate {
         it.isAccessible = true
