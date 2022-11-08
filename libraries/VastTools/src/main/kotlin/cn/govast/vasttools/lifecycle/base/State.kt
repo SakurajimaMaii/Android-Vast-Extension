@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.livedata.base
+package cn.govast.vasttools.lifecycle.base
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

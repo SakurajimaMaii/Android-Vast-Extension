@@ -14,118 +14,31 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.extension
+@file:JvmName("ViewModelExt")
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
+package cn.govast.vasttools.lifecycle
+
 import androidx.activity.ComponentActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewbinding.ViewBinding
+import cn.govast.vasttools.extension.cast
 import cn.govast.vasttools.fragment.base.BaseFragment
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/7 14:21
+// Date: 2022/11/8
 // Description: 
 // Documentation:
+// Reference:
 
 /**
  * Create a [ViewModel] object by [modelClass].
  */
 private fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
     return modelClass.newInstance()
-}
-
-@JvmOverloads
-fun <VB : ViewBinding> ComponentActivity.reflexViewBinding(from: LayoutInflater = this.layoutInflater): VB =
-    reflexViewBinding(this.javaClass, from)
-
-@JvmOverloads
-fun <VB : ViewBinding> Fragment.reflexViewBinding(from: LayoutInflater = this.layoutInflater): VB =
-    reflexViewBinding(this.javaClass, from)
-
-/**
- * Reflection gets ViewBinding.
- *
- * @param aClass current class.
- * @param from layouinflater.
- * @param VB implementation class.
- * @return viewBinding instance.
- */
-private fun <VB : ViewBinding> reflexViewBinding(
-    aClass: Class<*>,
-    from: LayoutInflater
-): VB {
-    return try {
-        val genericSuperclass = aClass.genericSuperclass
-        if (genericSuperclass is ParameterizedType) {
-            val actualTypeArguments =
-                genericSuperclass.actualTypeArguments
-            for (actualTypeArgument in actualTypeArguments) {
-                val tClass: Class<*> = try {
-                    actualTypeArgument as Class<*>
-                } catch (e: Exception) {
-                    continue
-                }
-                if (ViewBinding::class.java.isAssignableFrom(tClass)) {
-                    val inflate = tClass.getMethod("inflate", LayoutInflater::class.java)
-                    return cast(inflate.invoke(null, from))
-                }
-            }
-        }
-        reflexViewBinding(aClass.superclass, from)
-    } catch (e: Exception) {
-        throw RuntimeException(e.message, e)
-    }
-}
-
-/**
- * Reflection gets ViewBinding.
- *
- * @param aClass current class.
- * @param from layouinflater.
- * @param viewGroup viewGroup.
- * @param boolean attachToRoot.
- * @param VB implementation class.
- * @return viewBinding instance.
- */
-private fun <VB : ViewBinding> reflexViewBinding(
-    aClass: Class<*>,
-    from: LayoutInflater,
-    viewGroup: ViewGroup,
-    boolean: Boolean
-): VB {
-    return try {
-        val genericSuperclass = aClass.genericSuperclass
-        if (genericSuperclass is ParameterizedType) {
-            val actualTypeArguments =
-                genericSuperclass.actualTypeArguments
-            for (actualTypeArgument in actualTypeArguments) {
-                val tClass: Class<*> = try {
-                    actualTypeArgument as Class<*>
-                } catch (e: Exception) {
-                    continue
-                }
-                if (ViewBinding::class.java.isAssignableFrom(tClass)) {
-                    val inflate = tClass.getMethod(
-                        "inflate",
-                        LayoutInflater::class.java,
-                        ViewGroup::class.java,
-                        Boolean::class.java
-                    )
-                    return cast(inflate.invoke(null, from, viewGroup, boolean))
-                }
-            }
-        }
-        reflexViewBinding(aClass.superclass, from, viewGroup, boolean)
-    } catch (e: Exception) {
-        throw RuntimeException(e.message, e)
-    }
 }
 
 /**

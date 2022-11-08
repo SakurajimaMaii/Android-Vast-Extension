@@ -18,7 +18,7 @@ package cn.govast.vasttools.fragment.delegate
 
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.extension.reflexViewBinding
+import cn.govast.vasttools.viewbinding.reflexViewBinding
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

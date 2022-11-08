@@ -18,7 +18,7 @@ package cn.govast.vasttools.fragment.delegate
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
-import cn.govast.vasttools.extension.reflexViewModel
+import cn.govast.vasttools.lifecycle.reflexViewModel
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

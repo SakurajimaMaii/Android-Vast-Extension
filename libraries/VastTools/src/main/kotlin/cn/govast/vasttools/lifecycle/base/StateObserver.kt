@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.livedata.base
+package cn.govast.vasttools.lifecycle.base
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData

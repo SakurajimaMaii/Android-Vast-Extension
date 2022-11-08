@@ -20,8 +20,8 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 import cn.govast.vasttools.extension.NotNUllVar
-import cn.govast.vasttools.extension.reflexViewBinding
-import cn.govast.vasttools.extension.reflexViewModel
+import cn.govast.vasttools.lifecycle.reflexViewModel
+import cn.govast.vasttools.viewbinding.reflexViewBinding
 import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui

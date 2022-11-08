@@ -19,7 +19,7 @@ package cn.govast.vasttools.activity.delegate
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModel
 import cn.govast.vasttools.extension.NotNUllVar
-import cn.govast.vasttools.extension.reflexViewModel
+import cn.govast.vasttools.lifecycle.reflexViewModel
 import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui

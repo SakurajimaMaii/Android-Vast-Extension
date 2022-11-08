@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package cn.govast.vasttools.livedata
+package cn.govast.vasttools.lifecycle
 
 import androidx.lifecycle.MutableLiveData
-import cn.govast.vasttools.livedata.base.State
-import cn.govast.vasttools.livedata.base.StateObserver
+import cn.govast.vasttools.lifecycle.base.State
+import cn.govast.vasttools.lifecycle.base.StateObserver
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -27,7 +27,7 @@ import cn.govast.vasttools.livedata.base.StateObserver
 // Documentation:
 // Reference: https://juejin.cn/post/6844903855675670535
 
-open class NetStateLiveData<T> : MutableLiveData<T>() {
+open class StateLiveData<T> : MutableLiveData<T>() {
 
     private val state = StateObserver()
 
