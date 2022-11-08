@@ -28,9 +28,10 @@ import cn.govast.vasttools.base.BaseVisActive
 interface BaseFragment : BaseVisActive {
 
     /**
-     * When [setVmBySelf] is true, the ViewModel representing the Fragment is
-     * retained by itself. When you want the ViewModel to be retained by its
-     * associated Activity, please set [setVmBySelf] to false.
+     * When [setVmBySelf] is true, it means that ViewModelStoreOwner
+     * is Fragment itself. When you want ViewModelStoreOwner to be the
+     * [androidx.fragment.app.FragmentActivity] this fragment is currently
+     * associated with, set setVmBySelf to false.
      */
     fun setVmBySelf(): Boolean = false
 

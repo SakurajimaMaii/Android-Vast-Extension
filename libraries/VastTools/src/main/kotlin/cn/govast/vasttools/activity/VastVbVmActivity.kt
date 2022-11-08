@@ -43,7 +43,6 @@ import cn.govast.vasttools.extension.NotNUllVar
  *
  * @param VB [ViewBinding] of the activity layout.
  * @param VM [ViewModel] of the activity.
- * @since 0.0.6
  */
 abstract class VastVbVmActivity<VB : ViewBinding, VM : ViewModel> : VastActivity() {
 
