@@ -16,8 +16,6 @@
 
 package cn.govast.vasttools.network
 
-import cn.govast.vasttools.base.BaseStateListener
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/15
@@ -25,7 +23,10 @@ import cn.govast.vasttools.base.BaseStateListener
 // Documentation:
 // Reference:
 
-class ApiRspStateListener<T>: BaseStateListener() {
+class ApiRspStateListener<T> {
+    var onEmpty: () -> Unit = {}
+    var onFailed: (errorCode: Int?, errorMsg: String?) -> Unit = { _, _ -> }
+    var onError: (t: Throwable?) -> Unit = { }
     var onStart: () -> Unit = {}
     var onCompletion: (t: Throwable?) -> Unit = {}
     var onSuccess: (data: T) -> Unit = {}

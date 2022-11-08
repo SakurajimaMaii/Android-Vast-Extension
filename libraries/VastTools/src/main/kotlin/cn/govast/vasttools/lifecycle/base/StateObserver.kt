@@ -19,7 +19,6 @@ package cn.govast.vasttools.lifecycle.base
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import cn.govast.vasttools.network.ApiRspStateLiveDataListener
 import cn.govast.vasttools.nothing_to_do
 
 // Author: Vast Gui
@@ -70,10 +69,10 @@ class StateObserver : MutableLiveData<State>(), StateChange {
      * @param listener The observer listener. By default, you need to set the
      *     **Start**, **Completion** state by yourself.
      */
-    fun observeState(owner: LifecycleOwner, listener: ApiRspStateLiveDataListener.() -> Unit) {
+    fun observeState(owner: LifecycleOwner, listener: StateListener.() -> Unit) {
         val mObserver =
             Observer<State> { state ->
-                val mListener = ApiRspStateLiveDataListener().also(listener)
+                val mListener = StateListener().also(listener)
                 when (state) {
                     is State.Start -> {
                         mListener.onStart()
