@@ -51,9 +51,13 @@ internal class ApiCallImpl<T : BaseApiRsp>(
                 if (null == body) {
                     mListener.onError(Throwable("Response is null."))
                 } else {
-                    if (body.isSuccess())
-                        mListener.onSuccess(body)
-                    else
+                    if (body.isSuccess()) {
+                        if (body.isEmpty()) {
+                            mListener.onEmpty
+                        } else {
+                            mListener.onSuccess(body)
+                        }
+                    } else
                         mListener.onFailed(body.getErrorCode(), body.getErrorMsg())
                 }
             }
@@ -71,9 +75,13 @@ internal class ApiCallImpl<T : BaseApiRsp>(
                 if (null == body) {
                     stateLiveData.postError(Throwable("Response is null."))
                 } else {
-                    if (body.isSuccess())
-                        stateLiveData.postValueAndSuccess(body)
-                    else
+                    if (body.isSuccess()) {
+                        if (body.isEmpty()) {
+                            stateLiveData.postEmpty()
+                        } else {
+                            stateLiveData.postValueAndSuccess(body)
+                        }
+                    } else
                         stateLiveData.postFailed(body.getErrorCode(), body.getErrorMsg())
                 }
             }
