@@ -115,7 +115,6 @@ object DateUtils {
         dateFormat: String = FORMAT_YYYY_MM_DD_HH_MM_SS,
         beforeOrAfter:Int
     ):String{
-        val date = Date()
         val formatter = SimpleDateFormat(dateFormat, Locale.getDefault())
         val calendar = Calendar.getInstance().apply {
             add(Calendar.DATE, beforeOrAfter)

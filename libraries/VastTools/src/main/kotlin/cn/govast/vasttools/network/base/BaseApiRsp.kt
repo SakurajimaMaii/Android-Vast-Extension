@@ -25,8 +25,24 @@ package cn.govast.vasttools.network.base
 
 @JvmDefaultWithCompatibility
 interface BaseApiRsp {
+    /**
+     * @return True if the request was successful, false otherwise.
+     */
     fun isSuccess(): Boolean = true
+
+    /**
+     * @return True if the request was successful but the data is empty, false
+     *     otherwise.
+     */
     fun isEmpty(): Boolean = false
+
+    /**
+     * @return Error code. null by default.
+     */
     fun getErrorCode(): Int? = null
+
+    /**
+     * @return Error message. null by default.
+     */
     fun getErrorMsg(): String? = null
 }
