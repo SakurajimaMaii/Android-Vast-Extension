@@ -24,6 +24,7 @@ package cn.govast.vasttools.lifecycle.base
 // Reference:
 
 class StateListener {
+    var onClear: () -> Unit = {}
     var onEmpty: () -> Unit = {}
     var onFailed: (errorCode: Int?, errorMsg: String?) -> Unit = { _, _ -> }
     var onError: (t: Throwable?) -> Unit = { }

@@ -19,7 +19,6 @@ package cn.govast.vasttools.lifecycle.base
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import cn.govast.vasttools.nothing_to_do
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -77,6 +76,9 @@ class StateObserver : MutableLiveData<State>(), StateChange {
                     is State.Start -> {
                         mListener.onStart()
                     }
+                    is State.Success -> {
+                        mListener.onSuccess()
+                    }
                     is State.Error -> {
                         mListener.onError(state.t)
                     }
@@ -89,8 +91,8 @@ class StateObserver : MutableLiveData<State>(), StateChange {
                     is State.Completion -> {
                         mListener.onCompletion()
                     }
-                    else -> {
-                        nothing_to_do()
+                    is State.Clear -> {
+                        mListener.onClear()
                     }
                 }
             }

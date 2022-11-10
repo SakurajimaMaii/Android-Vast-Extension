@@ -73,7 +73,7 @@ open class StateLiveData<T> : MutableLiveData<T>() {
 
     fun postValueAndSuccess(value: T) {
         super.postValue(value)
-        postSuccess()
+        state.changeSuccess()
     }
 
 }
