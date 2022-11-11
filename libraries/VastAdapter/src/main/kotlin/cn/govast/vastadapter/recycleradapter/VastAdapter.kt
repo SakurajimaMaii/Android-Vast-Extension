@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.govast.vastadapter.recycleradpter
+package cn.govast.vastadapter.recycleradapter
 
 import android.view.ViewGroup
 import cn.govast.vastadapter.AdapterItem

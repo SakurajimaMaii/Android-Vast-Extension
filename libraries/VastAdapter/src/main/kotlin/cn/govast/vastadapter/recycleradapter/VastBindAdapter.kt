@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.govast.vastadapter.recycleradpter
+package cn.govast.vastadapter.recycleradapter
 
 import android.content.Context
 import android.content.res.Resources
