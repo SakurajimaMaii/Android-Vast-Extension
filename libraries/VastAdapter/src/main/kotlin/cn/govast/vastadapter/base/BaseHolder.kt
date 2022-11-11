@@ -27,7 +27,7 @@ import cn.govast.vastadapter.AdapterItem
 // Description: VastAdapterVH help you to create a recyclerView adapter viewHolder.
 // Documentation: [VastAdapter](https://sakurajimamaii.github.io/VastDocs/document/en/VastAdapter.html)
 
-open class BaseViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+open class BaseHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     open fun onBindData(item: AdapterItem){
 
     }
@@ -36,7 +36,7 @@ open class BaseViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         /**
          * Create the current ViewHolder instance.
          */
-        fun onCreateViewHolder(parent: ViewGroup,viewType:Int): BaseViewHolder
+        fun onCreateViewHolder(parent: ViewGroup,viewType:Int): BaseHolder
 
         /**
          * @return A string which is same as the value you set in [VastAdapterItem.getVAdpItemType].

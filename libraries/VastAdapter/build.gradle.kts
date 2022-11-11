@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import cn.govast.plugin.version.*
+import cn.govast.plugin.version.AndroidX
+import cn.govast.plugin.version.Google
+import cn.govast.plugin.version.Jetbrains
+import cn.govast.plugin.version.Libraries
+import cn.govast.plugin.version.Version
 import com.android.build.gradle.internal.tasks.factory.dependsOn
 
 plugins {
@@ -49,7 +53,7 @@ android {
 
     kotlinOptions {
         jvmTarget = Version.java_version.toString()
-        freeCompilerArgs = listOf("-Xjvm-default=all")
+        freeCompilerArgs = listOf("-Xjvm-default=all-compatibility")
     }
 
     buildFeatures {

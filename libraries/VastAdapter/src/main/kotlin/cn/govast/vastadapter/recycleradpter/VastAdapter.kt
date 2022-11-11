@@ -19,7 +19,7 @@ package cn.govast.vastadapter.recycleradpter
 import android.view.ViewGroup
 import cn.govast.vastadapter.AdapterItem
 import cn.govast.vastadapter.base.BaseAdapter
-import cn.govast.vastadapter.base.BaseViewHolder
+import cn.govast.vastadapter.base.BaseHolder
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -41,13 +41,11 @@ import cn.govast.vastadapter.base.BaseViewHolder
  *
  * @property dataSource data source.
  * @property factories viewHolder factories.
- *
- * @since 0.0.1
  */
 abstract class VastAdapter(
     protected val dataSource: MutableList<AdapterItem>,
-    protected val factories: MutableList<BaseViewHolder.BVAdpVHFactory>
-) : BaseAdapter<BaseViewHolder>() {
+    protected val factories: MutableList<BaseHolder.BVAdpVHFactory>
+) : BaseAdapter<BaseHolder>() {
 
     private val type2ItemType: MutableMap<String, Int> = HashMap()
 
@@ -61,12 +59,12 @@ abstract class VastAdapter(
         }
     }
 
-    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        val targetFactory: BaseViewHolder.BVAdpVHFactory = factories[viewType]
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder {
+        val targetFactory: BaseHolder.BVAdpVHFactory = factories[viewType]
         return targetFactory.onCreateViewHolder(parent, viewType)
     }
 
-    final override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+    final override fun onBindViewHolder(holder: BaseHolder, position: Int) {
         val itemData: AdapterItem = dataSource[position]
         holder.onBindData(itemData)
         holder.itemView.setOnClickListener {
@@ -90,7 +88,7 @@ abstract class VastAdapter(
 
     init {
         for (i in factories.indices) {
-            val factory: BaseViewHolder.BVAdpVHFactory = factories[i]
+            val factory: BaseHolder.BVAdpVHFactory = factories[i]
             val type: String = factory.getVAdpVHType()
             val itemType = type2ItemType[type]
             if (itemType != null) {

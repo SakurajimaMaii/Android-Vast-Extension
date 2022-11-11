@@ -23,7 +23,7 @@ import cn.govast.vastadapter.AdapterClickListener
 import cn.govast.vastadapter.AdapterClickRegister
 import cn.govast.vastadapter.AdapterItem
 import cn.govast.vastadapter.AdapterLongClickListener
-import cn.govast.vastadapter.base.BaseViewHolder
+import cn.govast.vastadapter.base.BaseHolder
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -33,9 +33,9 @@ import cn.govast.vastadapter.base.BaseViewHolder
 // Reference:
 
 abstract class VastListAdapter<T : AdapterItem>(
-    protected val factories: MutableList<BaseViewHolder.BVAdpVHFactory>,
+    protected val factories: MutableList<BaseHolder.BVAdpVHFactory>,
     protected var diffCallback: DiffUtil.ItemCallback<T>
-) : ListAdapter<T, BaseViewHolder>(diffCallback), AdapterClickRegister {
+) : ListAdapter<T, BaseHolder>(diffCallback), AdapterClickRegister {
 
     private val type2ItemType: MutableMap<String, Int> = HashMap()
     protected var onItemClickListener: AdapterClickListener? = null
@@ -51,12 +51,12 @@ abstract class VastListAdapter<T : AdapterItem>(
         }
     }
 
-    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        val targetFactory: BaseViewHolder.BVAdpVHFactory = factories[viewType]
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder {
+        val targetFactory: BaseHolder.BVAdpVHFactory = factories[viewType]
         return targetFactory.onCreateViewHolder(parent, viewType)
     }
 
-    final override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+    final override fun onBindViewHolder(holder: BaseHolder, position: Int) {
         val itemData = getItem(position)
         holder.onBindData(itemData)
         holder.itemView.setOnClickListener {
@@ -78,7 +78,7 @@ abstract class VastListAdapter<T : AdapterItem>(
 
     init {
         for (i in factories.indices) {
-            val factory: BaseViewHolder.BVAdpVHFactory = factories[i]
+            val factory: BaseHolder.BVAdpVHFactory = factories[i]
             val type: String = factory.getVAdpVHType()
             val itemType = type2ItemType[type]
             if (itemType != null) {

@@ -23,7 +23,6 @@ package cn.govast.vastadapter
 // Documentation:
 // Reference:
 
-@JvmDefaultWithCompatibility
 interface AdapterItem: AdapterClickRegister {
 
     /**

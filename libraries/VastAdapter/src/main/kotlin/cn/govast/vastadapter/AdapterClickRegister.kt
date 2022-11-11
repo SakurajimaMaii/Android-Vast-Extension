@@ -24,7 +24,6 @@ package cn.govast.vastadapter
 // Documentation:
 // Reference:
 
-@JvmDefaultWithCompatibility
 interface AdapterClickRegister {
 
     /**
@@ -33,7 +32,7 @@ interface AdapterClickRegister {
      * @param click a click listener.
      */
     fun registerClickEvent(l: AdapterClickListener?) {
-        nothing_to_do()
+
     }
 
     /** @return a click listener for adapter. */
@@ -47,7 +46,7 @@ interface AdapterClickRegister {
      * @param click a long click listener.
      */
     fun registerLongClickEvent(l: AdapterLongClickListener?) {
-        nothing_to_do()
+
     }
 
     /** @return a long click listener for adapter. */
