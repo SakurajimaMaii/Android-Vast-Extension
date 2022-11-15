@@ -16,6 +16,7 @@
 
 package cn.govast.vastnetstatelayout.interfaces
 
+import android.view.View
 import cn.govast.vastnetstatelayout.view.CONTENT_STATE_SHOW_EMPTY_DATA
 import cn.govast.vastnetstatelayout.view.CONTENT_STATE_SHOW_LOADING
 import cn.govast.vastnetstatelayout.view.CONTENT_STATE_SHOW_LOADING_ERROR
@@ -31,30 +32,22 @@ interface BaseNetStateListener {
 
     /**
      * Net state listener for the [CONTENT_STATE_SHOW_EMPTY_DATA] state.
-     *
-     * @since 0.0.3
      */
-    fun onEmptyData()
+    fun onEmptyData(view: View)
 
     /**
      * Net state listener for the [CONTENT_STATE_SHOW_LOADING_ERROR] state.
-     *
-     * @since 0.0.3
      */
-    fun onLoadingError()
+    fun onLoadingError(view: View)
 
     /**
      * Net state listener for the [CONTENT_STATE_SHOW_LOADING] state.
-     *
-     * @since 0.0.3
      */
-    fun onLoading()
+    fun onLoading(view: View)
 
     /**
      * Net state listener for the [CONTENT_STATE_SHOW_NET_ERROR] state.
-     *
-     * @since 0.0.3
      */
-    fun onNetWorkError()
+    fun onNetWorkError(view: View)
 
 }

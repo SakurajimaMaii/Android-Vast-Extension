@@ -17,6 +17,7 @@
 package cn.govast.vastnetstatelayout.view
 
 import android.content.Context
+import android.view.View
 import android.view.ViewStub
 import androidx.annotation.IntDef
 import androidx.annotation.LayoutRes
@@ -87,25 +88,25 @@ class VastNetStateMgr(private val context: Context) : BaseNetStateListener {
         private set
 
     /** It will be called when the layout state is [CONTENT_STATE_SHOW_LOADING]. */
-    private var loadingListener: (() -> Unit)? = null
+    private var loadingListener: ((view: View) -> Unit)? = null
 
     /**
      * It will be called when the layout state is
      * [CONTENT_STATE_SHOW_NET_ERROR].
      */
-    private var netErrorListener: (() -> Unit)? = null
+    private var netErrorListener: ((view: View) -> Unit)? = null
 
     /**
      * It will be called when the layout state is
      * [CONTENT_STATE_SHOW_EMPTY_DATA].
      */
-    private var emptyDataListener: (() -> Unit)? = null
+    private var emptyDataListener: ((view: View) -> Unit)? = null
 
     /**
      * It will be called when the layout state is
      * [CONTENT_STATE_SHOW_LOADING_ERROR].
      */
-    private var loadingErrorListener: (() -> Unit)? = null
+    private var loadingErrorListener: ((view: View) -> Unit)? = null
 
     /**
      * Set [loadingViewId] and [loadingVs]
@@ -158,40 +159,32 @@ class VastNetStateMgr(private val context: Context) : BaseNetStateListener {
     /**
      * You can set the view click event including the following status:**NET
      * ERROR**.
-     *
-     * @since 0.0.4
      */
-    fun setNetErrorListener(netErrorListener: () -> Unit) = apply {
+    fun setNetErrorListener(netErrorListener: (view: View) -> Unit) = apply {
         this.netErrorListener = netErrorListener
     }
 
     /**
      * You can set the view click event including the following
      * status:**LOADING**.
-     *
-     * @since 0.0.4
      */
-    fun setLoadingListener(loadingListener: () -> Unit) = apply {
+    fun setLoadingListener(loadingListener: (view: View) -> Unit) = apply {
         this.loadingListener = loadingListener
     }
 
     /**
      * You can set the view click event including the following status:**EMPTY
      * DATA**.
-     *
-     * @since 0.0.4
      */
-    fun setEmptyDataListener(emptyDataListener: () -> Unit) = apply {
+    fun setEmptyDataListener(emptyDataListener: (view: View) -> Unit) = apply {
         this.emptyDataListener = emptyDataListener
     }
 
     /**
      * You can set the view click event including the following
      * status:**LOADING ERROR**.
-     *
-     * @since 0.0.4
      */
-    fun setLoadingErrorListener(loadingErrorListener: () -> Unit) = apply {
+    fun setLoadingErrorListener(loadingErrorListener: (view: View) -> Unit) = apply {
         this.loadingErrorListener = loadingErrorListener
     }
 
@@ -218,19 +211,19 @@ class VastNetStateMgr(private val context: Context) : BaseNetStateListener {
         loadingErrorRetryViewId = R.layout.simple_loading_error_view
     }
 
-    override fun onEmptyData() {
-        emptyDataListener?.invoke()
+    override fun onEmptyData(view: View) {
+        emptyDataListener?.invoke(view)
     }
 
-    override fun onLoadingError() {
-        loadingErrorListener?.invoke()
+    override fun onLoadingError(view: View) {
+        loadingErrorListener?.invoke(view)
     }
 
-    override fun onLoading() {
-        loadingListener?.invoke()
+    override fun onLoading(view: View) {
+        loadingListener?.invoke(view)
     }
 
-    override fun onNetWorkError() {
-        netErrorListener?.invoke()
+    override fun onNetWorkError(view: View) {
+        netErrorListener?.invoke(view)
     }
 }
