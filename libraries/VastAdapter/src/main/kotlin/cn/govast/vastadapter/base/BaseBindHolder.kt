@@ -36,7 +36,7 @@ import cn.govast.vastadapter.AdapterItem
  * @property binding
  */
 open class BaseBindHolder(protected var binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
-    fun bindData(variableId: Int, item: AdapterItem?) {
+    open fun onBindData(variableId: Int, item: AdapterItem?) {
         binding.setVariable(variableId, item)
     }
 }

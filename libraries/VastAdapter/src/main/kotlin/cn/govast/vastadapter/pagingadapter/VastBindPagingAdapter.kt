@@ -47,7 +47,7 @@ abstract class VastBindPagingAdapter <T: AdapterItem> constructor(
 
     final override fun onBindViewHolder(holder: BaseBindHolder, position: Int) {
         val item = getItem(position)
-        holder.bindData(setVariableId(), item)
+        holder.onBindData(setVariableId(), item)
         holder.itemView.setOnClickListener {
             if (null != item?.getClickEvent()) {
                 item.getClickEvent()?.onItemClick(holder.itemView, position)

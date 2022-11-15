@@ -16,6 +16,8 @@
 
 package cn.govast.vastadapter
 
+import cn.govast.vastadapter.base.BaseHolder
+
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/10
@@ -23,21 +25,21 @@ package cn.govast.vastadapter
 // Documentation:
 // Reference:
 
-interface AdapterItem: AdapterClickRegister {
+interface AdapterItem : AdapterClickRegister {
 
     /**
      * @return The item layout resource id.
      */
-    fun getBindType(): Int{
+    fun getBindType(): Int {
         TODO("getVBAdpItemType() is not implement.")
     }
 
     /**
-     * @return A string which is same as the value you set in
-     *     [VastViewHolder.BVAdpVHFactory.getVAdpVHType]. In this way, the data
-     *     item can be matched to the corresponding ViewHolder.
+     * Return a string which is same as the value you set in
+     * [BaseHolder.HolderFactory.getHolderType]. In this way, the
+     * data item can be matched to the corresponding ViewHolder.
      */
-    fun getItemType(): String{
+    fun getItemType(): String {
         TODO("getVAdpItemType() is not implement.")
     }
 

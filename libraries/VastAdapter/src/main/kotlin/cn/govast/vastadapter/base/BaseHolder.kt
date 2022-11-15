@@ -32,16 +32,16 @@ open class BaseHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
     }
 
-    interface BVAdpVHFactory{
+    interface HolderFactory{
         /**
          * Create the current ViewHolder instance.
          */
-        fun onCreateViewHolder(parent: ViewGroup,viewType:Int): BaseHolder
+        fun onCreateHolder(parent: ViewGroup, viewType:Int): BaseHolder
 
         /**
          * @return A string which is same as the value you set in [VastAdapterItem.getVAdpItemType].
          *         In this way, the data item can be matched to the corresponding ViewHolder.
          */
-        fun getVAdpVHType():String
+        fun getHolderType():String
     }
 }

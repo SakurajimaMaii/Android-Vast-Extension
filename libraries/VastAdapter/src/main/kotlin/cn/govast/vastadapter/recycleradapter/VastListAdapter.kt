@@ -33,7 +33,7 @@ import cn.govast.vastadapter.base.BaseHolder
 // Reference:
 
 abstract class VastListAdapter<T : AdapterItem>(
-    protected val factories: MutableList<BaseHolder.BVAdpVHFactory>,
+    protected val factories: MutableList<BaseHolder.HolderFactory>,
     protected var diffCallback: DiffUtil.ItemCallback<T>
 ) : ListAdapter<T, BaseHolder>(diffCallback), AdapterClickRegister {
 
@@ -52,8 +52,8 @@ abstract class VastListAdapter<T : AdapterItem>(
     }
 
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder {
-        val targetFactory: BaseHolder.BVAdpVHFactory = factories[viewType]
-        return targetFactory.onCreateViewHolder(parent, viewType)
+        val targetFactory: BaseHolder.HolderFactory = factories[viewType]
+        return targetFactory.onCreateHolder(parent, viewType)
     }
 
     final override fun onBindViewHolder(holder: BaseHolder, position: Int) {
@@ -78,8 +78,8 @@ abstract class VastListAdapter<T : AdapterItem>(
 
     init {
         for (i in factories.indices) {
-            val factory: BaseHolder.BVAdpVHFactory = factories[i]
-            val type: String = factory.getVAdpVHType()
+            val factory: BaseHolder.HolderFactory = factories[i]
+            val type: String = factory.getHolderType()
             val itemType = type2ItemType[type]
             if (itemType != null) {
                 val currentFactory: String = factory.javaClass.name
