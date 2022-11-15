@@ -15,7 +15,6 @@
  */
 
 import cn.govast.plugin.version.AndroidX
-import cn.govast.plugin.version.Google
 import cn.govast.plugin.version.Jetbrains
 import cn.govast.plugin.version.Libraries
 import cn.govast.plugin.version.Version
@@ -64,17 +63,13 @@ android {
 }
 
 dependencies {
-    implementation(AndroidX.activity_ktx)
     implementation(AndroidX.annotation)
-    implementation(AndroidX.appcompat)
     implementation(AndroidX.arch_core_runtime)
     implementation(AndroidX.core_ktx)
     implementation(AndroidX.recyclerview)
-    implementation(AndroidX.start_up_runtime)
-    androidTestImplementation(AndroidX.espresso_core)
+    implementation(AndroidX.paging3)
     androidTestImplementation(AndroidX.junit)
     implementation(Jetbrains.kotlin_reflect)
-    implementation(Google.material)
     testImplementation(Libraries.junit)
 }
 
