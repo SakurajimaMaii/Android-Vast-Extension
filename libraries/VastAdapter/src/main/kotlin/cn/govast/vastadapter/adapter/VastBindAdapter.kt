@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.govast.vastadapter.recycleradapter
+package cn.govast.vastadapter.adapter
 
 import android.content.Context
 import android.content.res.Resources
@@ -22,35 +22,42 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import cn.govast.vastadapter.AdapterClickListener
-import cn.govast.vastadapter.AdapterClickRegister
 import cn.govast.vastadapter.AdapterItem
-import cn.govast.vastadapter.AdapterLongClickListener
+import cn.govast.vastadapter.base.BaseAdapter
 import cn.govast.vastadapter.base.BaseBindHolder
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/10/10
-// Description: 
-// Documentation:
-// Reference:
+// Date: 2021/4/2
+// Description: VastBindAdapter help you to create a recyclerView adapter.
+// Documentation: [VastBindAdapter](https://sakurajimamaii.github.io/VastDocs/document/en/VastBindAdapter.html)
 
-abstract class VastBindListAdapter <T:AdapterItem> constructor(
-    protected var mContext: Context,
-    protected var diffCallback: DiffUtil.ItemCallback<T>
-) : ListAdapter<T, BaseBindHolder>(diffCallback), AdapterClickRegister {
-
-    protected var onItemClickListener: AdapterClickListener? = null
-    protected var onItemLongClickListener: AdapterLongClickListener? = null
+/**
+ * VastBindAdapter.
+ *
+ * Here is an example in kotlin:
+ * ```kotlin
+ * class BaseBindingAdapter(
+ *     dataSource: MutableList<VastBindAdapterItem>,
+ *     mContext: Context
+ * ) : VastBindAdapter(dataSource, mContext)
+ * ```
+ * For more settings, please refer to the documentation.
+ *
+ * @property mDataSource data source.
+ * @property mContext [Context].
+ */
+abstract class VastBindAdapter constructor(
+    protected var mDataSource: MutableList<AdapterItem>,
+    protected var mContext: Context
+) : BaseAdapter<BaseBindHolder>() {
 
     final override fun onBindViewHolder(holder: BaseBindHolder, position: Int) {
-        val item = getItem(position)
+        val item = mDataSource[position]
         holder.onBindData(setVariableId(), item)
         holder.itemView.setOnClickListener {
             if (null != item.getClickEvent()) {
-                item.getClickEvent()?.onItemClick(holder.itemView, position)
+                item.getClickEvent()?.onItemClick(holder.itemView,position)
             } else {
                 onItemClickListener?.onItemClick(holder.itemView, position)
             }
@@ -65,10 +72,7 @@ abstract class VastBindListAdapter <T:AdapterItem> constructor(
         }
     }
 
-    final override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): BaseBindHolder {
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseBindHolder {
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
             LayoutInflater.from(parent.context),
             viewType,
@@ -78,20 +82,20 @@ abstract class VastBindListAdapter <T:AdapterItem> constructor(
         return setViewHolder(binding)
     }
 
+    final override fun getItemCount() = mDataSource.size
+
     final override fun getItemViewType(position: Int):Int {
-        val viewType = getItem(position).getBindType()
+        val viewType = mDataSource[position].getBindType()
         try {
-            // Identify whether there is a resource file for the resource id.
             mContext.resources.getLayout(viewType)
-        }catch(e: Resources.NotFoundException){
-            throw RuntimeException("Please check if the return value of the getVBAdpItemType method in ${getItem(position).javaClass.simpleName} is correct.")
+        }catch(e:Resources.NotFoundException){
+            throw RuntimeException("Please check if the return value of the getVBAdpItemType method in ${mDataSource[position].javaClass.simpleName} is correct.")
         }
         return viewType
     }
 
     /**
      * Set VariableId value.For example, in the layout file
-     *
      * ```xml
      * <data>
      *     <variable
@@ -101,6 +105,7 @@ abstract class VastBindListAdapter <T:AdapterItem> constructor(
      * ```
      *
      * Then the [setVariableId] should be like this:
+     *
      * ```kt
      * override fun setVariableId(): Int {
      *      return BR.item
@@ -111,25 +116,10 @@ abstract class VastBindListAdapter <T:AdapterItem> constructor(
      */
     protected abstract fun setVariableId(): Int
 
-    /** @return The ViewHolder you want to set. */
-    protected open fun setViewHolder(binding: ViewDataBinding): BaseBindHolder {
+    /**
+     * @return The ViewHolder you want to set.
+     */
+    protected open fun setViewHolder(binding:ViewDataBinding): BaseBindHolder {
         return BaseBindHolder(binding)
     }
-
-    final override fun registerClickEvent(l: AdapterClickListener?) {
-        onItemClickListener = l
-    }
-
-    final override fun registerLongClickEvent(l: AdapterLongClickListener?) {
-        onItemLongClickListener = l
-    }
-
-    final override fun getClickEvent(): AdapterClickListener? {
-        throw RuntimeException("You shouldn't call this method.")
-    }
-
-    final override fun getLongClickEvent(): AdapterLongClickListener? {
-        throw RuntimeException("You shouldn't call this method.")
-    }
-
 }

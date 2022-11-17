@@ -14,50 +14,66 @@
  * limitations under the License.
  */
 
-package cn.govast.vastadapter.pagingadapter
+package cn.govast.vastadapter.adapter
 
-import android.content.Context
-import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import cn.govast.vastadapter.AdapterClickListener
 import cn.govast.vastadapter.AdapterClickRegister
 import cn.govast.vastadapter.AdapterItem
 import cn.govast.vastadapter.AdapterLongClickListener
-import cn.govast.vastadapter.base.BaseBindHolder
+import cn.govast.vastadapter.base.BaseHolder
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/11/11
+// Date: 2022/11/17
 // Description: 
 // Documentation:
 // Reference:
 
-abstract class VastBindPagingAdapter <T: AdapterItem> constructor(
-    protected var mContext: Context,
-    protected val layoutId:Int,
-    protected var diffCallback: DiffUtil.ItemCallback<T>
-) : PagingDataAdapter<T, BaseBindHolder>(diffCallback), AdapterClickRegister {
+/**
+ * Paging Adapter for RecyclerView.
+ *
+ * @param T
+ * @property mFactories
+ * @property mLayoutId The layout id of the item.
+ * @property mDiffCallback
+ */
+abstract class VastPagingAdapter<T : AdapterItem>(
+    protected val mFactories: MutableList<BaseHolder.HolderFactory>,
+    protected val mLayoutId:Int,
+    protected val mDiffCallback: DiffUtil.ItemCallback<T>
+) : PagingDataAdapter<T, BaseHolder>(mDiffCallback), AdapterClickRegister {
 
+    private val type2ItemType: MutableMap<String, Int> = HashMap()
     protected var onItemClickListener: AdapterClickListener? = null
     protected var onItemLongClickListener: AdapterLongClickListener? = null
 
-    final override fun onBindViewHolder(holder: BaseBindHolder, position: Int) {
-        val item = getItem(position)
-        holder.onBindData(setVariableId(), item)
+    final override fun getItemViewType(position: Int): Int {
+        return mLayoutId
+    }
+
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder {
+        val targetFactory: BaseHolder.HolderFactory = mFactories[viewType]
+        return targetFactory.onCreateHolder(parent, viewType)
+    }
+
+    final override fun onBindViewHolder(holder: BaseHolder, position: Int) {
+        val itemData = getItem(position)
+        itemData?.apply {
+            holder.onBindData(this)
+        }
         holder.itemView.setOnClickListener {
-            if (null != item?.getClickEvent()) {
-                item.getClickEvent()?.onItemClick(holder.itemView, position)
+            if (null != itemData?.getClickEvent()) {
+                itemData.getClickEvent()?.onItemClick(holder.itemView, position)
             } else {
                 onItemClickListener?.onItemClick(holder.itemView, position)
             }
         }
         holder.itemView.setOnLongClickListener {
-            val res = if (null != item?.getLongClickEvent()) {
-                item.getLongClickEvent()?.onItemLongClick(holder.itemView, position)
+            val res = if (null != itemData?.getLongClickEvent()) {
+                itemData.getLongClickEvent()?.onItemLongClick(holder.itemView, position)
             } else {
                 onItemLongClickListener?.onItemLongClick(holder.itemView, position)
             }
@@ -65,48 +81,18 @@ abstract class VastBindPagingAdapter <T: AdapterItem> constructor(
         }
     }
 
-    final override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): BaseBindHolder {
-        val binding = DataBindingUtil.inflate<ViewDataBinding>(
-            LayoutInflater.from(parent.context),
-            viewType,
-            parent,
-            false
-        )
-        return setViewHolder(binding)
-    }
-
-    final override fun getItemViewType(position: Int):Int {
-        return layoutId
-    }
-
-    /**
-     * Set VariableId value.For example, in the layout file
-     *
-     * ```xml
-     * <data>
-     *     <variable
-     *     name="item"
-     *     type="com.example.gutilssampledemo.Person" />
-     * </data>
-     * ```
-     *
-     * Then the [setVariableId] should be like this:
-     * ```kt
-     * override fun setVariableId(): Int {
-     *      return BR.item
-     * }
-     * ```
-     *
-     * @return Int
-     */
-    protected abstract fun setVariableId(): Int
-
-    /** @return The ViewHolder you want to set. */
-    protected open fun setViewHolder(binding: ViewDataBinding): BaseBindHolder {
-        return BaseBindHolder(binding)
+    init {
+        for (i in mFactories.indices) {
+            val factory: BaseHolder.HolderFactory = mFactories[i]
+            val type: String = factory.getHolderType()
+            val itemType = type2ItemType[type]
+            if (itemType != null) {
+                val currentFactory: String = factory.javaClass.name
+                val sameFactory: String = mFactories[itemType].javaClass.name
+                throw RuntimeException("Same type found: $currentFactory and $sameFactory")
+            }
+            type2ItemType[type] = i
+        }
     }
 
     final override fun registerClickEvent(l: AdapterClickListener?) {

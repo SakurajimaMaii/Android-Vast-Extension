@@ -39,7 +39,7 @@ interface AdapterItem : AdapterClickRegister {
      * [BaseHolder.HolderFactory.getHolderType]. In this way, the
      * data item can be matched to the corresponding ViewHolder.
      */
-    fun getItemType(): String {
+    fun getHolderType(): String {
         TODO("getVAdpItemType() is not implement.")
     }
 

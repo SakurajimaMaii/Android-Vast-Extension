@@ -14,36 +14,44 @@
  * limitations under the License.
  */
 
-package cn.govast.vastadapter.recycleradapter
+package cn.govast.vastadapter.adapter
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import cn.govast.vastadapter.AdapterClickListener
-import cn.govast.vastadapter.AdapterClickRegister
 import cn.govast.vastadapter.AdapterItem
-import cn.govast.vastadapter.AdapterLongClickListener
+import cn.govast.vastadapter.base.BaseAdapter
 import cn.govast.vastadapter.base.BaseHolder
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/10/10
-// Description: 
-// Documentation:
-// Reference:
+// Date: 2021/4/2
+// Description: VastAdapter help you to create a recyclerView adapter.
+// Documentation: [VastAdapter](https://sakurajimamaii.github.io/VastDocs/document/en/VastAdapter.html)
 
-abstract class VastListAdapter<T : AdapterItem>(
-    protected val factories: MutableList<BaseHolder.HolderFactory>,
-    protected var diffCallback: DiffUtil.ItemCallback<T>
-) : ListAdapter<T, BaseHolder>(diffCallback), AdapterClickRegister {
+/**
+ * VastAdapter.
+ *
+ * Here is an example in kotlin:
+ * ```kotlin
+ * class BaseAdapter(
+ *     private val items: MutableList<VastAdapterItem>,
+ *     factories: MutableList<VastAdapterVH.BVAdpVHFactory>
+ * ) : VastAdapter(items, factories)
+ * ```
+ * For more settings, please refer to the documentation.
+ *
+ * @property mDataSource data source.
+ * @property mFactories viewHolder factories.
+ */
+abstract class VastAdapter(
+    protected val mDataSource: MutableList<AdapterItem>,
+    protected val mFactories: MutableList<BaseHolder.HolderFactory>
+) : BaseAdapter<BaseHolder>() {
 
     private val type2ItemType: MutableMap<String, Int> = HashMap()
-    protected var onItemClickListener: AdapterClickListener? = null
-    protected var onItemLongClickListener: AdapterLongClickListener? = null
 
     final override fun getItemViewType(position: Int): Int {
-        val item = getItem(position)
-        val type: String = item.getItemType()
+        val item: AdapterItem = mDataSource[position]
+        val type: String = item.getHolderType()
         if (type2ItemType[type] == null) {
             throw RuntimeException("Not found the itemType according to the position.")
         } else {
@@ -52,12 +60,12 @@ abstract class VastListAdapter<T : AdapterItem>(
     }
 
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder {
-        val targetFactory: BaseHolder.HolderFactory = factories[viewType]
+        val targetFactory: BaseHolder.HolderFactory = mFactories[viewType]
         return targetFactory.onCreateHolder(parent, viewType)
     }
 
     final override fun onBindViewHolder(holder: BaseHolder, position: Int) {
-        val itemData = getItem(position)
+        val itemData: AdapterItem = mDataSource[position]
         holder.onBindData(itemData)
         holder.itemView.setOnClickListener {
             if (null != itemData.getClickEvent()) {
@@ -76,34 +84,20 @@ abstract class VastListAdapter<T : AdapterItem>(
         }
     }
 
+    final override fun getItemCount() = mDataSource.size
+
     init {
-        for (i in factories.indices) {
-            val factory: BaseHolder.HolderFactory = factories[i]
+        for (i in mFactories.indices) {
+            val factory: BaseHolder.HolderFactory = mFactories[i]
             val type: String = factory.getHolderType()
             val itemType = type2ItemType[type]
             if (itemType != null) {
                 val currentFactory: String = factory.javaClass.name
-                val sameFactory: String = factories[itemType].javaClass.name
+                val sameFactory: String = mFactories[itemType].javaClass.name
                 throw RuntimeException("Same type found: $currentFactory and $sameFactory")
             }
             type2ItemType[type] = i
         }
-    }
-
-    final override fun registerClickEvent(l: AdapterClickListener?) {
-        onItemClickListener = l
-    }
-
-    final override fun registerLongClickEvent(l: AdapterLongClickListener?) {
-        onItemLongClickListener = l
-    }
-
-    final override fun getClickEvent(): AdapterClickListener? {
-        throw RuntimeException("You shouldn't call this method.")
-    }
-
-    final override fun getLongClickEvent(): AdapterLongClickListener? {
-        throw RuntimeException("You shouldn't call this method.")
     }
 
 }

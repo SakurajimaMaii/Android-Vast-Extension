@@ -39,8 +39,8 @@ open class BaseHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun onCreateHolder(parent: ViewGroup, viewType:Int): BaseHolder
 
         /**
-         * @return A string which is same as the value you set in [VastAdapterItem.getVAdpItemType].
-         *         In this way, the data item can be matched to the corresponding ViewHolder.
+         * Return a string which is same as the value you set in [AdapterItem.getHolderType].
+         * In this way, the data item can be matched to the corresponding ViewHolder.
          */
         fun getHolderType():String
     }
