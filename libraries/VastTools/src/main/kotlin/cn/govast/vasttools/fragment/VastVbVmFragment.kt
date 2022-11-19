@@ -22,8 +22,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import cn.govast.vasttools.fragment.delegate.FragmentVbVmDelegate
 import cn.govast.vasttools.extension.NotNUllVar
+import cn.govast.vasttools.fragment.delegate.FragmentVbVmDelegate
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -45,7 +45,6 @@ import cn.govast.vasttools.extension.NotNUllVar
  *
  * @param VB [ViewBinding] of the fragment layout.
  * @param VM [ViewModel] of the fragment.
- * @since 0.0.6
  */
 abstract class VastVbVmFragment<VB : ViewBinding, VM : ViewModel> : VastFragment() {
 

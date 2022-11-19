@@ -21,8 +21,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
-import cn.govast.vasttools.fragment.delegate.FragmentVmDelegate
 import cn.govast.vasttools.extension.NotNUllVar
+import cn.govast.vasttools.fragment.delegate.FragmentVmDelegate
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -44,15 +44,12 @@ import cn.govast.vasttools.extension.NotNUllVar
  * ```
  *
  * @param VM [ViewModel] of the fragment.
- * @since 0.0.6
  */
 abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
 
     /**
      * When you are not using view binding, you should set [layoutId] to the
      * corresponding view resource id of this Fragment.
-     *
-     * @since 0.0.6
      */
     protected abstract val layoutId: Int
 
