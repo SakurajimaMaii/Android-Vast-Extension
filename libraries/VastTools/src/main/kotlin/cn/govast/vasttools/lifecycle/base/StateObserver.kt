@@ -17,7 +17,6 @@
 package cn.govast.vasttools.lifecycle.base
 
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
 // Author: Vast Gui
@@ -27,7 +26,7 @@ import androidx.lifecycle.Observer
 // Documentation:
 // Reference:
 
-class StateObserver : MutableLiveData<State>(), StateChange {
+class StateObserver : StateChange() {
 
     override fun changeCompletion() {
         postValue(State.Completion)

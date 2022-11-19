@@ -16,6 +16,8 @@
 
 package cn.govast.vasttools.lifecycle.base
 
+import androidx.lifecycle.MutableLiveData
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -24,13 +26,13 @@ package cn.govast.vasttools.lifecycle.base
 // Documentation:
 // Reference:
 
-sealed interface StateChange{
-    fun changeCompletion()
-    fun changeEmpty()
-    fun changeError(t: Throwable?)
-    fun changeFailed(errorCode: Int?, errorMsg: String?)
-    fun changeStart()
-    fun changeState(s: State)
-    fun changeSuccess()
-    fun clearState()
+sealed class StateChange: MutableLiveData<State>(){
+    internal open fun changeCompletion(){}
+    internal open fun changeEmpty(){}
+    internal open fun changeError(t: Throwable?){}
+    internal open fun changeFailed(errorCode: Int?, errorMsg: String?){}
+    internal open fun changeStart(){}
+    internal open fun changeState(s: State){}
+    internal open fun changeSuccess(){}
+    internal open fun clearState(){}
 }
