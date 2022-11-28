@@ -54,15 +54,11 @@ object VastSkinManager : Observable() {
     /**
      * The application of your app.[originalApplication]
      * will be initialized in [initVastThemeManager].
-     *
-     * @since 0.0.1
      */
     private lateinit var originalApplication:Application
 
     /**
      * The log tag of the [VastSkinManager].
-     *
-     * @since 0.0.1
      */
     private const val tag:String = "VastSkinManager"
 
@@ -70,8 +66,6 @@ object VastSkinManager : Observable() {
 
     /**
      * The font change listener.
-     *
-     * @since 0.0.1
      */
     var fontChangeListener:FontChangeListener? = null
         private set
@@ -142,8 +136,6 @@ object VastSkinManager : Observable() {
 
     /**
      * Loading the default skin.
-     *
-     * @since 0.0.1
      */
     @JvmStatic
     fun resetSkin(){
@@ -155,8 +147,6 @@ object VastSkinManager : Observable() {
 
     /**
      * Register a font change listener.
-     *
-     * @since 0.0.1
      */
     fun registerFontChangeListener(fontChangeListener: FontChangeListener?){
         this.fontChangeListener = fontChangeListener
@@ -164,8 +154,6 @@ object VastSkinManager : Observable() {
 
     /**
      * A listener of skin file.
-     *
-     * @since 0.0.1
      */
     interface SkinFileListener{
 
@@ -177,8 +165,6 @@ object VastSkinManager : Observable() {
 
     /**
      * A listener of font
-     *
-     * @since 0.0.1
      */
     interface FontChangeListener{
 

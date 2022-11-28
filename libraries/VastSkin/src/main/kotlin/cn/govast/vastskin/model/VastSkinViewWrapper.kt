@@ -38,8 +38,6 @@ import cn.govast.vastskin.utils.VastSkinResources
  *
  * @property view view which need to change the attributes.
  * @property skinPairs list of [VastSkinPair].
- *
- * @since 0.0.1
  */
 internal class VastSkinViewWrapper(private var view: View, private var skinPairs: List<VastSkinPair>) {
 

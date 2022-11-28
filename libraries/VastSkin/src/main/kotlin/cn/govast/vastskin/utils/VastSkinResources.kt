@@ -35,22 +35,16 @@ object VastSkinResources {
 
     /**
      * If true, use default resources, otherwise use skin resources
-     *
-     * @since 0.0.1
      */
     private var isDefaultTheme = true
 
     /**
      * The original [Resources] of app.
-     *
-     * @since 0.0.1
      */
     private lateinit var mAppResources: Resources
 
     /**
      * The [Resources] of skin apk.
-     *
-     * @since 0.0.1
      */
     private var mSkinResources: Resources? = null
 
@@ -66,8 +60,6 @@ object VastSkinResources {
 
     /**
      * Update skin apk resource and package name.
-     *
-     * @since 0.0.1
      */
     internal fun update(resources: Resources?, pkgName: String?) {
         mSkinResources = resources
@@ -78,8 +70,6 @@ object VastSkinResources {
     /**
      * Obtain the resource name and resource type corresponding to the id through
      * the resource of the app, and find the resource id matching the skin package.
-     *
-     * @since 0.0.1
      */
     private fun getIdentifier(resId: Int): Int {
         if (isDefaultTheme) {
@@ -97,8 +87,6 @@ object VastSkinResources {
      * original app by [resId]. Otherwise, it will first get the resource
      * id in skin apk by [getIdentifier], if resId is a valid id, it will
      * get the resource from skin apk. Otherwise get resource from original app.
-     *
-     * @since 0.0.1
      */
     internal fun getColor(resId: Int): Int {
         if (isDefaultTheme) {
@@ -117,8 +105,6 @@ object VastSkinResources {
      * original app by [resId]. Otherwise, it will first get the resource
      * id in skin apk by [getIdentifier], if resId is a valid id, it will
      * get the resource from skin apk. Otherwise get resource from original app.
-     *
-     * @since 0.0.1
      */
     internal fun getColorStateList(resId: Int): ColorStateList {
         if (isDefaultTheme) {
@@ -137,8 +123,6 @@ object VastSkinResources {
      * original app by [resId]. Otherwise, it will first get the resource
      * id in skin apk by [getIdentifier], if resId is a valid id, it will
      * get the resource from skin apk. Otherwise get resource from original app.
-     *
-     * @since 0.0.1
      */
     internal fun getDrawable(resId: Int): Drawable? {
         if (isDefaultTheme) {
@@ -157,8 +141,6 @@ object VastSkinResources {
      * if the type of resource is color, it will use [getColor] to get
      * the color resource. Otherwise, it will use [getDrawable] to get
      * drawable resource.
-     *
-     * @since 0.0.1
      */
     internal fun getBackground(resId: Int): Any? {
         return when(mAppResources.getResourceTypeName(resId)){
@@ -176,8 +158,6 @@ object VastSkinResources {
      * during the execution process. At this time, the [getText] method will
      * catch this exception and use the string resource defined in the original
      * app as the return value.
-     *
-     * @since 0.0.1
      */
     internal fun getText(resId:Int):String{
         return if(isDefaultTheme){

@@ -32,8 +32,6 @@ internal object VastSkinUtils {
 
     /**
      * Default resource id.
-     *
-     * @since 0.0.1
      */
     private const val DEFAULT_RESOURCE_ID = 0
 
@@ -60,8 +58,6 @@ internal object VastSkinUtils {
      * </style>
      * ```
      * So that the [getResourceId] will return int value of `R.color.surface`
-     *
-     * @since 0.0.1
      */
     fun getResourceId(context: Context, attrs: IntArray): IntArray {
         val resIds = IntArray(attrs.size)

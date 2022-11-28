@@ -27,7 +27,5 @@ package cn.govast.vastskin.model
  *
  * @property attributeName attribute name.
  * @property resourceId resource id of the attribute.
- *
- * @since 0.0.1
  */
 class VastSkinPair(internal var attributeName: String,internal var resourceId: Int)

@@ -25,15 +25,11 @@ package cn.govast.vastskin
  * If your custom view supports skinning, you need your
  * custom view to implement [VastSkinSupport] in order to
  * define resource replacement logic.
- *
- * @since 0.0.1
  */
 interface VastSkinSupport {
 
     /**
      * Custom resource replacement logic.
-     *
-     * @since 0.0.1
      */
     fun applySkin()
 

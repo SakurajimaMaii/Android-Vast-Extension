@@ -65,8 +65,6 @@ internal class VastSkinLayoutInflaterFactory(private val activity: Activity) :
      * the view is custom. If the view is custom, it will return null.
      * Otherwise the prefix in the [mClassPrefixList] and the [name]
      * will be combined one by one, and finally the view will be constructed.
-     *
-     * @since 0.0.1
      */
     private fun createSDKView(name: String, context: Context, attrs: AttributeSet): View? {
         // The view is custom
@@ -87,8 +85,6 @@ internal class VastSkinLayoutInflaterFactory(private val activity: Activity) :
     /**
      * [createView] will first find the constructor,
      * then create the view.
-     *
-     * @since 0.0.1
      */
     private fun createView(name: String, context: Context, attrs: AttributeSet): View? {
         val constructor = findConstructor(context, name)
@@ -97,8 +93,6 @@ internal class VastSkinLayoutInflaterFactory(private val activity: Activity) :
 
     /**
      * Get the constructor of the class.
-     *
-     * @since 0.0.1
      */
     private fun findConstructor(context: Context, name: String): Constructor<out View>? {
         var constructor = mConstructorMap[name]

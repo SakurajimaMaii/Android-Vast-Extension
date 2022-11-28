@@ -34,8 +34,6 @@ internal class VastSkinAttribute {
 
     /**
      * Storing views and their changeably attributes pair.
-     *
-     * @since 0.0.1
      */
     private val mSkinViews: MutableList<VastSkinViewWrapper> = ArrayList()
 
@@ -49,8 +47,6 @@ internal class VastSkinAttribute {
      * [VastSkinPair], and finally the view and `mSkinPairs` are stored in
      * `mVastSkinViewWrapper`. `mVastSkinViewWrapper` calling the `applySkin`
      * of to modify the resources corresponding of the view in `mSkinPairs`.
-     *
-     * @since 0.0.1
      */
     fun look(view: View, attrs: AttributeSet) {
         val mSkinPairs: MutableList<VastSkinPair> = ArrayList()
@@ -92,8 +88,6 @@ internal class VastSkinAttribute {
     /**
      * Change the attr of view in [mSkinViews] when the [VastSkinLayoutInflaterFactory]
      * is changed. The [applySkin] is called in [VastSkinLayoutInflaterFactory.update].
-     *
-     * @since 0.0.1
      */
     fun applySkin() {
         for (mSkinView in mSkinViews) {

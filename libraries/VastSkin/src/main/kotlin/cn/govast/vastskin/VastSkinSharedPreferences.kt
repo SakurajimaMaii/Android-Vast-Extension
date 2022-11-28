@@ -36,8 +36,6 @@ object VastSkinSharedPreferences {
 
     /**
      * The [SharedPreferences] of the skin.
-     *
-     * @since 0.0.1
      */
     private lateinit var skinSharedPreferences:SharedPreferences
 
@@ -47,8 +45,6 @@ object VastSkinSharedPreferences {
 
     /**
      * Remove file path from [skinSharedPreferences].
-     *
-     * @since 0.0.1
      */
     internal fun reset() {
         skinSharedPreferences.edit().apply {
@@ -59,8 +55,6 @@ object VastSkinSharedPreferences {
 
     /**
      * Get skin file path from [skinSharedPreferences].
-     *
-     * @since 0.0.1
      */
     internal var skin: String
         get() = skinSharedPreferences.getString(THEME_PATH, null) ?: ""
