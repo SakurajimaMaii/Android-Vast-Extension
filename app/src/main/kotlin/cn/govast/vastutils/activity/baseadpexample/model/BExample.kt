@@ -32,7 +32,7 @@ class BExample(
     private val longClickListener: AdapterLongClickListener?
 ) : AdapterItem {
 
-    override fun getItemType(): String {
+    override fun getHolderType(): String {
         return BExample::class.java.simpleName
     }
 

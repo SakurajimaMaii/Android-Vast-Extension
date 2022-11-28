@@ -25,7 +25,7 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.ViewDataBinding
 import cn.govast.vastadapter.AdapterItem
 import cn.govast.vastadapter.base.BaseBindHolder
-import cn.govast.vastadapter.recycleradpter.VastBindAdapter
+import cn.govast.vastadapter.adapter.VastBindAdapter
 import cn.govast.vastutils.BR
 
 // Author: Vast Gui
@@ -53,7 +53,7 @@ class BaseBindingAdapter(
      *
      * @return Boolean
      */
-    fun isItemEmpty() = dataSource.isEmpty()
+    fun isItemEmpty() = mDataSource.isEmpty()
 
     /**
      * Return item from list by position.
@@ -64,9 +64,9 @@ class BaseBindingAdapter(
     @Throws(ArrayIndexOutOfBoundsException::class)
     fun getItemByPos(@IntRange(from = 0) position: Int): AdapterItem {
         if (position >= itemCount || position < 0) {
-            throw ArrayIndexOutOfBoundsException("The parameter pos should be less than ${dataSource.size}")
+            throw ArrayIndexOutOfBoundsException("The parameter pos should be less than ${mDataSource.size}")
         }
-        return dataSource[position]
+        return mDataSource[position]
     }
 
     /**
@@ -80,7 +80,7 @@ class BaseBindingAdapter(
         return if (item == null) {
             false
         } else {
-            val flag = dataSource.add(item)
+            val flag = mDataSource.add(item)
             if (flag) {
                 notifyItemInserted(this.itemCount - 1)
             }
@@ -91,10 +91,10 @@ class BaseBindingAdapter(
     /** Inserts an element into the list at the specified [pos]. */
     @Throws(ArrayIndexOutOfBoundsException::class)
     fun addItemByPos(item: AdapterItem, @IntRange(from = 0) pos: Int) {
-        if (pos > dataSource.size) {
+        if (pos > mDataSource.size) {
             throw ArrayIndexOutOfBoundsException("The range of the parameter pos in the addItemByPos() method is wrong")
         }
-        dataSource.add(pos, item)
+        mDataSource.add(pos, item)
         notifyItemInserted(pos)
     }
 
@@ -104,32 +104,32 @@ class BaseBindingAdapter(
      */
     @Throws(ArrayIndexOutOfBoundsException::class)
     fun addItemsByPos(addItems: MutableList<AdapterItem>, @IntRange(from = 0) pos: Int) {
-        if (pos > dataSource.size) {
-            throw ArrayIndexOutOfBoundsException("The parameter pos cannot be greater than ${dataSource.size}")
+        if (pos > mDataSource.size) {
+            throw ArrayIndexOutOfBoundsException("The parameter pos cannot be greater than ${mDataSource.size}")
         }
-        dataSource.addAll(pos, addItems)
+        mDataSource.addAll(pos, addItems)
         notifyItemRangeChanged(pos, addItems.size)
     }
 
     /** Removes an element from the list by [item]. */
     fun removeItemByObj(item: AdapterItem?): Boolean {
-        val pos: Int = dataSource.indexOf(item)
-        if (pos >= 0 && pos < dataSource.size) {
+        val pos: Int = mDataSource.indexOf(item)
+        if (pos >= 0 && pos < mDataSource.size) {
             removeItemByPos(pos)
         }
-        return pos >= 0 && pos < dataSource.size
+        return pos >= 0 && pos < mDataSource.size
     }
 
     /** Removes an element at the specified [pos] from the list. */
     @Throws(ArrayIndexOutOfBoundsException::class)
     fun removeItemByPos(@IntRange(from = 0) pos: Int): AdapterItem? {
-        return if (dataSource.isEmpty())
+        return if (mDataSource.isEmpty())
             null
         else {
-            if (pos >= dataSource.size || pos < 0) {
-                throw ArrayIndexOutOfBoundsException("The range of the parameter pos should be between 0 and ${dataSource.size - 1}.")
+            if (pos >= mDataSource.size || pos < 0) {
+                throw ArrayIndexOutOfBoundsException("The range of the parameter pos should be between 0 and ${mDataSource.size - 1}.")
             }
-            val item: AdapterItem = dataSource.removeAt(pos)
+            val item: AdapterItem = mDataSource.removeAt(pos)
             notifyItemRemoved(pos)
             item
         }
@@ -142,18 +142,18 @@ class BaseBindingAdapter(
         @IntRange(from = 0) endPos: Int,
         includeEndPos: Boolean = false
     ) {
-        if (endPos - startPos >= dataSource.size) {
+        if (endPos - startPos >= mDataSource.size) {
             throw ArrayIndexOutOfBoundsException("The deleted range is larger than the size of the array itself")
         } else if (startPos > endPos) {
             throw Exception("startPos should be smaller than endPos")
-        } else if (startPos >= dataSource.size || endPos >= dataSource.size) {
-            throw ArrayIndexOutOfBoundsException("The parameter startPos or endPos should be less than ${dataSource.size - 1}.")
+        } else if (startPos >= mDataSource.size || endPos >= mDataSource.size) {
+            throw ArrayIndexOutOfBoundsException("The parameter startPos or endPos should be less than ${mDataSource.size - 1}.")
         } else {
             // See https://www.kaelli.com/23.html
             if (includeEndPos) {
-                dataSource.subList(startPos, endPos + 1).clear()
+                mDataSource.subList(startPos, endPos + 1).clear()
             } else {
-                dataSource.subList(startPos, endPos).clear()
+                mDataSource.subList(startPos, endPos).clear()
             }
             notifyDataSetChanged()
         }
@@ -161,8 +161,8 @@ class BaseBindingAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     fun clearItem() {
-        if (dataSource.isNotEmpty()) {
-            dataSource.clear()
+        if (mDataSource.isNotEmpty()) {
+            mDataSource.clear()
             notifyDataSetChanged()
         }
     }

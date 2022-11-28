@@ -10,18 +10,20 @@ import cn.govast.vasttools.network.base.BaseApiRsp
 
 data class QRCodeKey(
     val code: Int,
-    val data: Data
+    val data: Data?
 ): BaseApiRsp {
+
+    data class Data(
+        val code: Int,
+        val unikey: String
+    )
+
     override fun isSuccess(): Boolean {
-        return true
+        return code == 200
     }
 
     override fun isEmpty(): Boolean {
-        return false
+        return data == null
     }
-}
 
-data class Data(
-    val code: Int,
-    val unikey: String
-)
+}

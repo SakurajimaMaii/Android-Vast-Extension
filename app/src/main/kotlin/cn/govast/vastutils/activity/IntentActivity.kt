@@ -23,8 +23,10 @@ import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.ViewModel
-import cn.govast.vasttools.activity.VastVbVmActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import cn.govast.vasttools.lifecycle.reflexViewModel
+import cn.govast.vasttools.network.ApiRequestBuilder
 import cn.govast.vasttools.utils.IntentUtils.createAlarm
 import cn.govast.vasttools.utils.IntentUtils.createOnceAlarm
 import cn.govast.vasttools.utils.IntentUtils.dialPhoneNumber
@@ -35,6 +37,7 @@ import cn.govast.vasttools.utils.IntentUtils.searchWeb
 import cn.govast.vasttools.utils.IntentUtils.sendMmsMessage
 import cn.govast.vasttools.utils.LogUtils
 import cn.govast.vasttools.utils.shortcut.AppShortcutsUtils
+import cn.govast.vasttools.viewbinding.reflexViewBinding
 import cn.govast.vastutils.R
 import cn.govast.vastutils.broadcastreceiver.ShortcutReceiver
 import cn.govast.vastutils.broadcastreceiver.ShortcutReceiver.Companion.CREATE_SHORT_CUT
@@ -42,9 +45,19 @@ import cn.govast.vastutils.databinding.ActivityIntentBinding
 import cn.govast.vastutils.network.NetworkRepository
 import cn.govast.vastutils.viewModel.BasicViewModel
 
-class IntentActivity : VastVbVmActivity<ActivityIntentBinding, BasicViewModel>() {
+class IntentActivity : AppCompatActivity() {
 
     private lateinit var shortcutReceiver: ShortcutReceiver
+
+    private val mBinding:ActivityIntentBinding by lazy {
+        reflexViewBinding()
+    }
+
+    private val mViewModel:BasicViewModel by lazy {
+        reflexViewModel{
+            return@reflexViewModel BasicViewModel(NetworkRepository())
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
@@ -91,7 +104,7 @@ class IntentActivity : VastVbVmActivity<ActivityIntentBinding, BasicViewModel>()
         getBinding().createShortcut.setOnClickListener {
             AppShortcutsUtils.setPinnedShortcutResult {
                 return@setPinnedShortcutResult PendingIntent.getBroadcast(
-                    this@IntentActivity.getContext(),
+                    this,
                     0,
                     Intent(CREATE_SHORT_CUT),
                     PendingIntent.FLAG_IMMUTABLE
@@ -101,15 +114,15 @@ class IntentActivity : VastVbVmActivity<ActivityIntentBinding, BasicViewModel>()
                 "987654321",
                 R.mipmap.ic_launcher,
                 "测试快捷方式",
-                this@IntentActivity.getContext()
+                this
             )
         }
 
         getBinding().getQRCode.setOnClickListener {
-            getRequestBuilder()
+            ApiRequestBuilder(lifecycleScope)
                 .suspendWithListener({ getViewModel().getQRCode() }) {
                     onSuccess = { QRCodeKey ->
-                        LogUtils.i(getDefaultTag(), QRCodeKey.data.unikey)
+                        LogUtils.i(getDefaultTag(), QRCodeKey.data?.unikey)
                     }
                 }
             getViewModel().searchSong("海阔天空")
@@ -123,12 +136,14 @@ class IntentActivity : VastVbVmActivity<ActivityIntentBinding, BasicViewModel>()
         }
     }
 
-    override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        return BasicViewModel(NetworkRepository())
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(shortcutReceiver)
     }
+
+    fun getBinding():ActivityIntentBinding = mBinding
+
+    fun getViewModel():BasicViewModel = mViewModel
+
+    fun getDefaultTag() = this.javaClass.simpleName
 }

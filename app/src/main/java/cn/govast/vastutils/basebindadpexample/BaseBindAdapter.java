@@ -23,7 +23,7 @@ import androidx.annotation.NonNull;
 import java.util.List;
 
 import cn.govast.vastadapter.AdapterItem;
-import cn.govast.vastadapter.recycleradpter.VastBindAdapter;
+import cn.govast.vastadapter.adapter.VastBindAdapter;
 import cn.govast.vastutils.BR;
 
 // Author: Vast Gui
@@ -44,7 +44,7 @@ public class BaseBindAdapter extends VastBindAdapter {
     }
 
     public Boolean isEmpty(){
-        return getDataSource().isEmpty();
+        return getMDataSource().isEmpty();
     }
 
 }

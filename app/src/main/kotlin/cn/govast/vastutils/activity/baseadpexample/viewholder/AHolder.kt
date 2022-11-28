@@ -19,12 +19,12 @@ package cn.govast.vastutils.activity.baseadpexample.viewholder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.TextView
 import cn.govast.vastadapter.AdapterItem
-import cn.govast.vastadapter.base.BaseViewHolder
+import cn.govast.vastadapter.base.BaseHolder
 import cn.govast.vasttools.extension.cast
 import cn.govast.vastutils.R
-import cn.govast.vastutils.activity.baseadpexample.model.BExample
+import cn.govast.vastutils.activity.baseadpexample.model.AExample
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -32,33 +32,25 @@ import cn.govast.vastutils.activity.baseadpexample.model.BExample
 // Description:
 // Documentation:
 
-class BViewHolder(itemView: View) : BaseViewHolder(itemView) {
-
-    private val iv: ImageView
+class AHolder(itemView: View): BaseHolder(itemView) {
+    private val tv:TextView
 
     override fun onBindData(item: AdapterItem) {
         super.onBindData(item)
-        iv.setImageResource(cast<BExample>(item).drawable)
+        tv.text = cast<AExample>(item).data
     }
 
-    class Factory : BVAdpVHFactory {
-
-        override fun onCreateViewHolder(
-            parent: ViewGroup,
-            viewType: Int
-        ): BaseViewHolder {
-            val inflater = LayoutInflater.from(parent.context)
-            val itemView: View = inflater.inflate(R.layout.item_imageview, parent, false)
-            return BViewHolder(itemView)
+    class Factory:HolderFactory{
+        override fun onCreateHolder(parent: ViewGroup, viewType: Int): BaseHolder {
+            return AHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_textview,parent,false))
         }
 
-        override fun getVAdpVHType(): String {
-            return BExample::class.java.simpleName
+        override fun getHolderType(): String {
+            return AExample::class.java.simpleName
         }
-
     }
 
     init {
-        iv = itemView.findViewById(R.id.item_image)
+        tv = itemView.findViewById(R.id.text)
     }
 }

@@ -14,27 +14,21 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils;
+package cn.govast.vastutils.network;
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/3 16:44
+// Date: 2022/11/19
 // Description: 
 // Documentation:
+// Reference:
 
-public class BasicVM {
+import cn.govast.vasttools.network.apicall.ApiCall;
+import cn.govast.vastutils.network.service.QRCodeKey;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
 
-    class Person{
-        String firstName;
-        String lastName;
-
-        public Person(String firstName, String lastName) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-        }
-    }
-
-    public static void main(String[] args) {
-
-    }
+public interface Service {
+    @POST("/login/qr/key")
+    ApiCall<QRCodeKey> generateQRCode(@Query("timestamp") String timestamp);
 }

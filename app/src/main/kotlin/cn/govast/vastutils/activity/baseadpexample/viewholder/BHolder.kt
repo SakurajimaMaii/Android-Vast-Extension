@@ -19,12 +19,12 @@ package cn.govast.vastutils.activity.baseadpexample.viewholder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.ImageView
 import cn.govast.vastadapter.AdapterItem
-import cn.govast.vastadapter.base.BaseViewHolder
+import cn.govast.vastadapter.base.BaseHolder
 import cn.govast.vasttools.extension.cast
 import cn.govast.vastutils.R
-import cn.govast.vastutils.activity.baseadpexample.model.AExample
+import cn.govast.vastutils.activity.baseadpexample.model.BExample
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -32,25 +32,33 @@ import cn.govast.vastutils.activity.baseadpexample.model.AExample
 // Description:
 // Documentation:
 
-class AViewHolder(itemView: View): BaseViewHolder(itemView) {
-    private val tv:TextView
+class BHolder(itemView: View) : BaseHolder(itemView) {
+
+    private val iv: ImageView
 
     override fun onBindData(item: AdapterItem) {
         super.onBindData(item)
-        tv.text = cast<AExample>(item).data
+        iv.setImageResource(cast<BExample>(item).drawable)
     }
 
-    class Factory:BVAdpVHFactory{
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-            return AViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_textview,parent,false))
+    class Factory : HolderFactory {
+
+        override fun onCreateHolder(
+            parent: ViewGroup,
+            viewType: Int
+        ): BaseHolder {
+            val inflater = LayoutInflater.from(parent.context)
+            val itemView: View = inflater.inflate(R.layout.item_imageview, parent, false)
+            return BHolder(itemView)
         }
 
-        override fun getVAdpVHType(): String {
-            return AExample::class.java.simpleName
+        override fun getHolderType(): String {
+            return BExample::class.java.simpleName
         }
+
     }
 
     init {
-        tv = itemView.findViewById(R.id.text)
+        iv = itemView.findViewById(R.id.item_image)
     }
 }

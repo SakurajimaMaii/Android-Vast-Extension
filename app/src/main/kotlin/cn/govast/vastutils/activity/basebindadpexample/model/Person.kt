@@ -19,6 +19,7 @@ package cn.govast.vastutils.activity.basebindadpexample.model
 import cn.govast.vastadapter.AdapterClickListener
 import cn.govast.vastadapter.AdapterItem
 import cn.govast.vastadapter.AdapterLongClickListener
+import cn.govast.vasttools.extension.MapKey
 import cn.govast.vastutils.R
 
 // Author: Vast Gui
@@ -27,10 +28,11 @@ import cn.govast.vastutils.R
 // Description:
 // Documentation:
 
-class Person(
-    val firstName: String, val lastName: String,
-    private val clickListener: AdapterClickListener?,
-    private val longClickListener: AdapterLongClickListener?
+class Person @JvmOverloads constructor(
+    @MapKey("fn") val firstName: String,
+    val lastName: String,
+    private val clickListener: AdapterClickListener? = null,
+    private val longClickListener: AdapterLongClickListener? = null
 ) : AdapterItem {
 
     override fun getBindType(): Int {

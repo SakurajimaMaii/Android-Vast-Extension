@@ -17,18 +17,38 @@
 package cn.govast.vastutils.fragment
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
-import cn.govast.vasttools.fragment.VastVmFragment
+import androidx.fragment.app.Fragment
+import cn.govast.vasttools.extension.NotNUllVar
+import cn.govast.vasttools.fragment.delegate.FragmentVmDelegate
 import cn.govast.vastutils.R
 import cn.govast.vastutils.viewModel.SampleSharedVM
 import com.google.android.material.textview.MaterialTextView
 
-class SampleVmFragment(override val layoutId: Int = R.layout.fragment_sample_vm) :
-    VastVmFragment<SampleSharedVM>() {
+class SampleVmFragment : Fragment() {
+
+    private inner class FVD : FragmentVmDelegate<SampleSharedVM>(this) {
+        override fun setVmBySelf(): Boolean {
+            return false
+        }
+    }
 
     private lateinit var tv: TextView
     private lateinit var count: MaterialTextView
+    private var mFragmentDelegate by NotNUllVar<FVD>()
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        mFragmentDelegate = FVD()
+        return inflater.inflate(R.layout.fragment_sample_vm, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,9 +56,9 @@ class SampleVmFragment(override val layoutId: Int = R.layout.fragment_sample_vm)
         tv = view.findViewById(R.id.tv)
         count = view.findViewById(R.id.count)
 
-        tv.text = getViewModel().tag
+        tv.text = mFragmentDelegate.getViewModel().tag
 
-        getViewModel().count.observe(requireActivity()) {
+        mFragmentDelegate.getViewModel().count.observe(requireActivity()) {
             count.text = it.toString()
         }
     }

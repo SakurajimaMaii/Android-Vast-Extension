@@ -19,8 +19,8 @@ package cn.govast.vastutils.activity.baseadpexample
 import android.annotation.SuppressLint
 import androidx.annotation.IntRange
 import cn.govast.vastadapter.AdapterItem
-import cn.govast.vastadapter.base.BaseViewHolder
-import cn.govast.vastadapter.recycleradpter.VastAdapter
+import cn.govast.vastadapter.base.BaseHolder
+import cn.govast.vastadapter.adapter.VastAdapter
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -30,7 +30,7 @@ import cn.govast.vastadapter.recycleradpter.VastAdapter
 
 class BaseAdapter(
     private val items: MutableList<AdapterItem>,
-    factories: MutableList<BaseViewHolder.BVAdpVHFactory>
+    factories: MutableList<BaseHolder.HolderFactory>
 ) : VastAdapter(items, factories) {
 
     /**

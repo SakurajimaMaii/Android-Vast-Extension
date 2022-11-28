@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils.basebindadpexample;
+package cn.govast.vastutils.activity;
 
 import android.os.Bundle;
 
@@ -29,10 +29,11 @@ import cn.govast.vastadapter.AdapterLongClickListener;
 import cn.govast.vasttools.activity.VastVbActivity;
 import cn.govast.vasttools.utils.ToastUtils;
 import cn.govast.vastutils.R;
+import cn.govast.vastutils.basebindadpexample.BaseBindAdapter;
 import cn.govast.vastutils.basebindadpexample.model.Picture;
 import cn.govast.vastutils.databinding.ActivityBaseBindingAdapterBinding;
 
-public class BaseBindAdapterAppCompatActivity extends VastVbActivity<ActivityBaseBindingAdapterBinding> {
+public class AdapterActivity extends VastVbActivity<ActivityBaseBindingAdapterBinding> {
 
     private ArrayList<AdapterItem> datas = new ArrayList<>();
 

@@ -17,10 +17,11 @@
 package cn.govast.vastutils.activity
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import cn.govast.vasttools.activity.VastVbVmActivity
+import cn.govast.vasttools.activity.delegate.ActivityVbVmDelegate
 import cn.govast.vasttools.adapter.VastFragmentAdapter
+import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vastutils.databinding.ActivityFragmentsBinding
 import cn.govast.vastutils.fragment.SampleVbFragment
 import cn.govast.vastutils.fragment.SampleVbVmFragment
@@ -33,21 +34,22 @@ import cn.govast.vastutils.viewModel.SampleSharedVM
 // Description:
 // Documentation:
 
-class FragmentsActivity : VastVbVmActivity<ActivityFragmentsBinding, SampleSharedVM>() {
+class FragmentsActivity : AppCompatActivity() {
+
+    private inner class AVVD:ActivityVbVmDelegate<ActivityFragmentsBinding, SampleSharedVM>(this)
+
+    private var mActivityDelegate by NotNUllVar<AVVD>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getBinding().vp2.apply {
+        mActivityDelegate = AVVD()
+        mActivityDelegate.getBinding().vp2.apply {
             adapter = VastFragmentAdapter(this@FragmentsActivity,ArrayList<Fragment>().apply {
                 add(SampleVbVmFragment())
                 add(SampleVmFragment())
                 add(SampleVbFragment())
             })
         }
-    }
-
-    override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        return SampleSharedVM("Activity")
     }
 
 }

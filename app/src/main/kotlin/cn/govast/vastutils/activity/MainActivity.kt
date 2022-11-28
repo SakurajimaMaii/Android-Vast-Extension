@@ -26,10 +26,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.govast.vastadapter.AdapterClickListener
 import cn.govast.vastadapter.AdapterItem
-import cn.govast.vastadapter.recycleradpter.VastBindAdapter
+import cn.govast.vastadapter.adapter.VastBindAdapter
 import cn.govast.vasttools.activity.VastVbActivity
-import cn.govast.vasttools.utils.AppUtils
-import cn.govast.vasttools.utils.LogUtils
 import cn.govast.vasttools.utils.ResUtils
 import cn.govast.vastutils.BR
 import cn.govast.vastutils.R

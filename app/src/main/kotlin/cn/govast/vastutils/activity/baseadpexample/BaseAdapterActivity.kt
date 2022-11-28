@@ -27,8 +27,8 @@ import cn.govast.vasttools.utils.ToastUtils.showShortMsg
 import cn.govast.vastutils.R
 import cn.govast.vastutils.activity.baseadpexample.model.AExample
 import cn.govast.vastutils.activity.baseadpexample.model.BExample
-import cn.govast.vastutils.activity.baseadpexample.viewholder.AViewHolder
-import cn.govast.vastutils.activity.baseadpexample.viewholder.BViewHolder
+import cn.govast.vastutils.activity.baseadpexample.viewholder.AHolder
+import cn.govast.vastutils.activity.baseadpexample.viewholder.BHolder
 import cn.govast.vastutils.databinding.ActivityBaseAdapterBinding
 
 class BaseAdapterActivity : VastVbActivity<ActivityBaseAdapterBinding>() {
@@ -53,7 +53,7 @@ class BaseAdapterActivity : VastVbActivity<ActivityBaseAdapterBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initData()
-        adapter = BaseAdapter(datas, mutableListOf(AViewHolder.Factory(), BViewHolder.Factory()))
+        adapter = BaseAdapter(datas, mutableListOf(AHolder.Factory(), BHolder.Factory()))
         adapter.registerClickEvent(object : AdapterClickListener {
             override fun onItemClick(view: View, pos: Int) {
                 // Something you want to do
