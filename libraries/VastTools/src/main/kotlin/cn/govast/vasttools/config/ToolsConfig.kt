@@ -18,6 +18,8 @@ package cn.govast.vasttools.config
 
 import android.app.Application
 import android.os.Looper
+import androidx.security.crypto.MasterKey
+import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vasttools.helper.ContextHelper
 import cn.govast.vasttools.utils.LogUtils
 
@@ -28,10 +30,11 @@ import cn.govast.vasttools.utils.LogUtils
 // Description: 
 // Documentation:
 
-/**
- * VastUtils config.
- */
+/** VastUtils config. */
 object ToolsConfig {
+
+    /** Is initialized */
+    private var isInitialized by NotNUllVar<Boolean>(true)
 
     /**
      * Initialize the tools.
@@ -39,12 +42,22 @@ object ToolsConfig {
      * @param application the application of your app.
      */
     @JvmStatic
-    fun init(application: Application){
+    fun init(application: Application) {
         ContextHelper.init(application)
         LogUtils.init()
+        isInitialized = true
     }
 
     @JvmStatic
     fun isMainThread() = Looper.getMainLooper() == Looper.myLooper()
+
+    /**
+     * Get master key.
+     * The key scheme is [MasterKey.KeyScheme.AES256_GCM]
+     */
+    @JvmStatic
+    fun getMasterKey() = if (isInitialized) MasterKey.Builder(ContextHelper.getAppContext())
+        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+        .build() else throw RuntimeException("Please init ToolsConfig first.")
 
 }

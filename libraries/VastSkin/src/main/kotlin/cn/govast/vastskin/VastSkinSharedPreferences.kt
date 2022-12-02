@@ -17,8 +17,9 @@
 package cn.govast.vastskin
 
 import android.app.Application
-import android.content.Context
 import android.content.SharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -29,8 +30,6 @@ import android.content.SharedPreferences
 /**
  * [VastSkinSharedPreferences] is used to
  * store the skin path in [SharedPreferences]
- *
- * @since 0.0.1
  */
 object VastSkinSharedPreferences {
 
@@ -40,7 +39,17 @@ object VastSkinSharedPreferences {
     private lateinit var skinSharedPreferences:SharedPreferences
 
     internal fun initSkinSharedPreferences(application: Application){
-        skinSharedPreferences = application.getSharedPreferences(THEME_FILE, Context.MODE_PRIVATE)
+        // Make sure using an unencrypted database is safe here.
+        val masterKey = MasterKey.Builder(application)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
+        skinSharedPreferences = EncryptedSharedPreferences.create(
+            application,
+            THEME_FILE,
+            masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
     }
 
     /**

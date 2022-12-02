@@ -34,6 +34,10 @@ object EncryptionUtils {
      * @return encode text by MD5, "" otherwise.
      */
     @JvmStatic
+    @Deprecated(
+        level = DeprecationLevel.WARNING,
+        message = "The MD5 algorithm and its successor, SHA-1, are no longer considered secure, because it is too easy to create hash collisions with them."
+    )
     fun getMD5(text: String): String {
         try {
             val instance: MessageDigest = MessageDigest.getInstance("MD5")

@@ -15,7 +15,6 @@
  */
 
 import cn.govast.plugin.version.*
-import com.android.build.gradle.internal.tasks.factory.dependsOn
 
 plugins {
     id("com.android.library")
@@ -55,6 +54,8 @@ android {
 }
 
 dependencies {
+    androidTestImplementation(AndroidX.espresso_core)
+    androidTestImplementation(AndroidX.junit)
     implementation(AndroidX.activity_ktx)
     implementation(AndroidX.annotation)
     implementation(AndroidX.appcompat)
@@ -63,25 +64,11 @@ dependencies {
     implementation(AndroidX.core_ktx)
     implementation(AndroidX.core_splashscreen)
     implementation(AndroidX.fragment_ktx)
-    androidTestImplementation(AndroidX.espresso_core)
-    androidTestImplementation(AndroidX.junit)
-    implementation(Jetbrains.kotlin_reflect)
+    implementation(AndroidX.security_crypto)
     implementation(Google.material)
+    implementation(Jetbrains.kotlin_reflect)
     testImplementation(Libraries.junit)
 }
-
-// 打包生成class.jar
-val JAR_PATH = "build/intermediates/runtime_library_classes_jar/release/" // 待打包文件的位置
-val JAR_NAME = "classes.jar" // 待打包文件的名字
-val DESTINATION_PATH = "libs" // 生成jar包的位置
-val NEW_NAME = "VastSkin_0.0.1_Cancey.jar" // 生成jar包的名字
-
-tasks.register("makeJar",Copy::class){
-    delete(DESTINATION_PATH + NEW_NAME)
-    from(JAR_PATH + JAR_NAME)
-    into(DESTINATION_PATH)
-    rename(JAR_NAME, NEW_NAME)
-}.dependsOn("build")
 
 extra["PUBLISH_GROUP_ID"] = "io.github.sakurajimamaii"
 extra["PUBLISH_ARTIFACT_ID"] = "VastSkin"
@@ -90,9 +77,3 @@ extra["PUBLISH_DESCRIPTION"] = "Vast Skin."
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/VastUtils/tree/master/libraries/VastSkin"
 
 apply(from = "${rootProject.projectDir}/publish-mavencentral.gradle")
-
-project(":libraries:VastSkin") {
-    sonarqube {
-        this.isSkipProject = true
-    }
-}

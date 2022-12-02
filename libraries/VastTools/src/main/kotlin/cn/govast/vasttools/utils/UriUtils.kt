@@ -26,12 +26,12 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import androidx.annotation.RequiresApi
-import cn.govast.vasttools.manager.filemgr.FileMgr
 import cn.govast.vasttools.helper.ContextHelper
+import cn.govast.vasttools.manager.filemgr.FileMgr
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
-import kotlin.math.roundToInt
+import java.security.SecureRandom
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -182,9 +182,9 @@ object UriUtils {
                     inputStream = contentResolver.openInputStream(uri)
                     val cache = File(
                         context.externalCacheDir!!.absolutePath,
-                        ((Math.random() + 1) * 1000).roundToInt().toString() + displayName
+                        ((SecureRandom().nextInt(10)) * 1000).toString() + displayName
                     )
-                    fos = FileOutputStream(cache)
+                    fos = FileMgr.getEncryptedFile(cache).openFileOutput()
                     android.os.FileUtils.copy(inputStream!!, fos)
                     file = cache
                 }

@@ -18,6 +18,7 @@ package cn.govast.vasttools.utils
 
 import android.os.Handler
 import android.os.Looper
+import cn.govast.vasttools.manager.filemgr.FileMgr
 import me.jessyan.progressmanager.ProgressListener
 import me.jessyan.progressmanager.ProgressManager
 import me.jessyan.progressmanager.body.ProgressInfo
@@ -72,8 +73,9 @@ object DownloadUtils {
      *
      * @property downloadUrl Download url.
      * @property saveDir SDCard directory to store downloaded files.
-     * @property saveName Save name of downloaded files.If null,the default is to
-     *     truncate from the end of the download link. For example,the link is
+     * @property saveName Save name of downloaded files.If null,the default is
+     *     to truncate from the end of the download link. For example,the link
+     *     is
      *     [https://github.com/SakurajimaMaii/BluetoothDemo/blob/master/app-debug.apk],
      *     saveName will take app-debug.apk as the value.
      */
@@ -82,9 +84,9 @@ object DownloadUtils {
         internal var downloadUrl: String = ""
         internal var saveDir: String = ""
         internal var saveName: String? = null
-        private var onDownloadSuccessListener: (()->Unit)? = null
+        private var onDownloadSuccessListener: (() -> Unit)? = null
         private var onDownloadingListener: ((progress: ProgressInfo?) -> Unit)? = null
-        private var onDownloadFailedListener: ((e:Exception?) -> Unit)? = null
+        private var onDownloadFailedListener: ((e: Exception?) -> Unit)? = null
 
         fun setDownloadUrl(url: String) = apply {
             downloadUrl = url
@@ -98,7 +100,7 @@ object DownloadUtils {
             this.saveName = saveName
         }
 
-        fun setDownloadSuccess(l: ()->Unit) = apply {
+        fun setDownloadSuccess(l: () -> Unit) = apply {
             onDownloadSuccessListener = l
         }
 
@@ -106,7 +108,7 @@ object DownloadUtils {
             onDownloadingListener = l
         }
 
-        fun setDownloadFailed(l:(e:Exception?) -> Unit) = apply {
+        fun setDownloadFailed(l: (e: Exception?) -> Unit) = apply {
             onDownloadFailedListener = l
         }
 
@@ -129,9 +131,7 @@ object DownloadUtils {
     }
 
     interface OnDownloadListener {
-        /**
-         * Download successfully.
-         */
+        /** Download successfully. */
         fun onDownloadSuccess()
 
         /**
@@ -152,9 +152,7 @@ object DownloadUtils {
     private val okHttpClient: OkHttpClient
     private val mHandler: Handler = Handler(Looper.getMainLooper())
 
-    /**
-     * Download from network server.
-     */
+    /** Download from network server. */
     private fun download(
         downloadConfig: DownloadConfig
     ) {
@@ -179,7 +177,7 @@ object DownloadUtils {
                     }
                     if (!file.parentFile?.exists()!!)
                         file.parentFile?.mkdirs()
-                    fos = FileOutputStream(file)
+                    fos = FileMgr.getEncryptedFile(file).openFileOutput()
                     if (inputStream != null) {
                         while (inputStream.read(buf).also { len = it } != -1) {
                             fos.write(buf, 0, len)

@@ -94,6 +94,7 @@ dependencies {
     implementation(AndroidX.arch_core_runtime)
     implementation(AndroidX.constraintlayout)
     implementation(AndroidX.core_ktx)
+    implementation(AndroidX.security_crypto)
     implementation(AndroidX.fragment_ktx)
     implementation(AndroidX.lifecycle_livedata_core_ktx)
     implementation(AndroidX.lifecycle_livedata_ktx)

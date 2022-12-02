@@ -22,8 +22,6 @@ import android.os.Looper
 import android.os.Message
 import cn.govast.vastnetstatelayout.view.VastNetStateMgr
 import cn.govast.vasttools.activity.VastVbActivity
-import cn.govast.vasttools.utils.BmpUtils
-import cn.govast.vasttools.utils.StrUtils
 import cn.govast.vastutils.R
 import cn.govast.vastutils.databinding.ActivityNetStateBinding
 
@@ -61,10 +59,5 @@ class NetStateActivity : VastVbActivity<ActivityNetStateBinding>() {
 
         getBinding().netStateLayout.setVastNetStateMgr(vastNetStateMgr)
         getBinding().netStateLayout.showNetError()
-
-        val base64 = StrUtils.getUnitStr("2", StrUtils.Unit.Kilometer)
-        val bitmap = BmpUtils.getBitmapFromBase64(base64)
-
-        mHandler.sendEmptyMessageDelayed(0, 1000)
     }
 }

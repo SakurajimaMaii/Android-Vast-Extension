@@ -17,10 +17,11 @@
 package cn.govast.vasttools.manager.filemgr
 
 import android.content.Context
+import androidx.security.crypto.EncryptedFile
+import cn.govast.vasttools.config.ToolsConfig
 import cn.govast.vasttools.helper.ContextHelper
 import java.io.File
 import java.io.FileOutputStream
-import java.io.FileWriter
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -85,13 +86,15 @@ object FileMgr {
      * @param file The file you want to save.
      */
     @JvmStatic
-    fun saveFile(file: File): FileResult {
+    fun saveFile(
+        file: File,
+    ): FileResult {
         if (file.exists() && file.isFile) {
             file.delete()
         }
         if (!file.parentFile?.exists()!!)
             file.parentFile?.mkdirs()
-        FileOutputStream(file).close()
+        getEncryptedFile(file).openFileOutput().close()
         return if (file.exists()) FileResult.FLAG_SUCCESS else FileResult.FLAG_FAILED
     }
 
@@ -126,9 +129,16 @@ object FileMgr {
         return if (!file.exists())
             FileResult.FLAG_FAILED
         else if ("txt" == getFileExtension(file)) {
-            val fileWriter = FileWriter(file)
-            writeEventListener.writeEvent(fileWriter)
-            fileWriter.close()
+            val fileOutputStream = getEncryptedFile(file).openFileOutput()
+            writeEventListener.writeEvent(fileOutputStream)
+            fileOutputStream.apply {
+                try {
+                    flush()
+                    close()
+                } catch (e:Exception){
+                    e.printStackTrace()
+                }
+            }
             FileResult.FLAG_SUCCESS
         } else FileResult.FLAG_FAILED
     }
@@ -212,14 +222,31 @@ object FileMgr {
         return file.name.substring(file.name.lastIndexOf(".") + 1)
     }
 
+    /**
+     * Get encrypted file.
+     *
+     * @param file
+     */
+    @JvmStatic
+    fun getEncryptedFile(
+        file: File
+    ): EncryptedFile {
+        return EncryptedFile.Builder(
+            ContextHelper.getAppContext(),
+            file,
+            ToolsConfig.getMasterKey(),
+            EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
+        ).build()
+    }
+
     /** Register a listener when write to file. */
     interface WriteEventListener {
         /**
          * Define write event.
          *
-         * @param fileWriter Convenience class for writing character files.
+         * @param fileOutputStream File output stream.
          */
-        fun writeEvent(fileWriter: FileWriter)
+        fun writeEvent(fileOutputStream: FileOutputStream)
     }
 
     /** Register a listener when write result. */
