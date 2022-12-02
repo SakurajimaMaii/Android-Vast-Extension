@@ -20,12 +20,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.ImageView
 import androidx.annotation.IntRange
-import androidx.annotation.Nullable
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ViewDataBinding
 import cn.govast.vastadapter.AdapterItem
-import cn.govast.vastadapter.base.BaseBindHolder
 import cn.govast.vastadapter.adapter.VastBindAdapter
+import cn.govast.vastadapter.base.BaseBindHolder
 import cn.govast.vastutils.BR
 
 // Author: Vast Gui
@@ -76,7 +75,7 @@ class BaseBindingAdapter(
      * @param item Item you add
      * @return The result `false` means adding failed or item is `null`
      */
-    fun addItem(@Nullable item: AdapterItem?): Boolean {
+    fun addItem(item: AdapterItem?): Boolean {
         return if (item == null) {
             false
         } else {

@@ -15,6 +15,9 @@
  */
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    id("org.sonarqube") version "3.4.0.2513"
+}
 
 buildscript {
 
@@ -25,9 +28,10 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:7.3.1")
+        classpath("com.android.tools.build:gradle:7.4.0-rc01")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
         classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.7.10")
+        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.5.0.2730")
     }
 }
 
@@ -36,6 +40,17 @@ allprojects {
         google()
         mavenCentral()
         maven("https://jitpack.io")
+        maven ("https://plugins.gradle.org/m2/")
+    }
+}
+
+sonarqube {
+    properties {
+        property("sonar.sourceEncoding", "UTF-8")
+        property("sonar.projectKey", "VastUtils")
+        property("sonar.projectName", project.name)
+        property("sonar.sources", "src")
+        property("sonar.projectVersion", project.version)
     }
 }
 

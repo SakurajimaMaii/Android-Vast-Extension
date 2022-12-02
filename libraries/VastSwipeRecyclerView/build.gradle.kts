@@ -68,3 +68,9 @@ extra["PUBLISH_DESCRIPTION"] = "A ListView that supports swipe list items."
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/VastUtils/tree/master/libraries/VastSwipeListView"
 
 apply(from = "${rootProject.projectDir}/publish-mavencentral.gradle")
+
+project(":libraries:VastSwipeRecyclerView") {
+    sonarqube {
+        this.isSkipProject = true
+    }
+}

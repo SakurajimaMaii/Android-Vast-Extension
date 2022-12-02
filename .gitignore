@@ -43,6 +43,7 @@ gradle.properties
 
 # Publish
 publish-mavencentral.gradle
+publish-mavencentral.gradle.kts
 
 #output
 debug/

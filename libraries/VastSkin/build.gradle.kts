@@ -90,3 +90,9 @@ extra["PUBLISH_DESCRIPTION"] = "Vast Skin."
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/VastUtils/tree/master/libraries/VastSkin"
 
 apply(from = "${rootProject.projectDir}/publish-mavencentral.gradle")
+
+project(":libraries:VastSkin") {
+    sonarqube {
+        this.isSkipProject = true
+    }
+}

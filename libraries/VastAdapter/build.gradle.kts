@@ -18,7 +18,6 @@ import cn.govast.plugin.version.AndroidX
 import cn.govast.plugin.version.Jetbrains
 import cn.govast.plugin.version.Libraries
 import cn.govast.plugin.version.Version
-import com.android.build.gradle.internal.tasks.factory.dependsOn
 
 plugins {
     id("com.android.library")
@@ -72,19 +71,6 @@ dependencies {
     implementation(Jetbrains.kotlin_reflect)
     testImplementation(Libraries.junit)
 }
-
-// 打包生成class.jar
-val JAR_PATH = "build/intermediates/runtime_library_classes_jar/release/" // 待打包文件的位置
-val JAR_NAME = "classes.jar" // 待打包文件的名字
-val DESTINATION_PATH = "libs" // 生成jar包的位置
-val NEW_NAME = "VastAdapter_0.0.6_Cancey.jar" // 生成jar包的名字
-
-tasks.register("makeJar", Copy::class){
-    delete(DESTINATION_PATH + NEW_NAME)
-    from(JAR_PATH + JAR_NAME)
-    into(DESTINATION_PATH)
-    rename(JAR_NAME, NEW_NAME)
-}.dependsOn("build")
 
 extra["PUBLISH_GROUP_ID"] = "io.github.sakurajimamaii"
 extra["PUBLISH_ARTIFACT_ID"] = "VastAdapter"

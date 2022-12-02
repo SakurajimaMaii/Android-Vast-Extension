@@ -26,6 +26,7 @@ plugins {
     id("kotlin-kapt")
     id("org.jetbrains.kotlin.android")
     id("cn.govast.plugin.version")
+    id("org.sonarqube") version "3.4.0.2513"
 }
 
 android {
@@ -66,6 +67,18 @@ android {
         getByName("main").java.srcDirs("src/main/kotlin")
     }
 
+}
+
+project(":libraries:VastTools"){
+    sonarqube {
+        properties {
+            property("sonar.sourceEncoding", "UTF-8")
+            property("sonar.projectKey", "VastTools")
+            property("sonar.projectName", "VastTools")
+            property("sonar.sources", "src")
+            property("sonar.projectVersion", project.version)
+        }
+    }
 }
 
 dependencies {

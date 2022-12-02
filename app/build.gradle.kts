@@ -84,8 +84,6 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
-        dataBinding = true
         compose = true
     }
 
@@ -99,10 +97,13 @@ android {
 
 }
 
+project(":app") {
+    sonarqube {
+        this.isSkipProject = true
+    }
+}
+
 dependencies {
-    implementation("androidx.appcompat:appcompat:1.5.1")
-    implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     androidTestImplementation(Compose.compose_ui_test_junit4)
     debugImplementation(Compose.compose_ui_test_manifest)
     debugImplementation(Compose.compose_ui_tooling)

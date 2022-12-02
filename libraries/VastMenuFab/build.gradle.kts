@@ -71,3 +71,9 @@ dependencies {
     implementation(Google.material)
     testImplementation(Libraries.junit)
 }
+
+project(":libraries:VastMenuFab") {
+    sonarqube {
+        this.isSkipProject = true
+    }
+}
