@@ -110,6 +110,7 @@ dependencies {
     implementation(AndroidX.activity_ktx)
     implementation(AndroidX.constraintlayout)
     implementation(AndroidX.core_splashscreen)
+    implementation(AndroidX.security_crypto)
     implementation(AndroidX.fragment_ktx)
     implementation(AndroidX.lifecycle_runtime_ktx)
     implementation(AndroidX.lifecycle_viewmodel_ktx)
