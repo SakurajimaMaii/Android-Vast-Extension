@@ -19,7 +19,7 @@ package cn.govast.vastutils.activity
 import android.os.Bundle
 import cn.govast.vasttools.activity.VastVbVmActivity
 import cn.govast.vastutils.databinding.ActivityBaseVbBinding
-import cn.govast.vastutils.viewModel.SampleSharedVM
+import cn.govast.vastutils.viewmodel.SampleSharedVM
 
 class BaseActivity : VastVbVmActivity<ActivityBaseVbBinding, SampleSharedVM>() {
 

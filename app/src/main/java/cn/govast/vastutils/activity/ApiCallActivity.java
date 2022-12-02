@@ -26,7 +26,7 @@ import cn.govast.vasttools.utils.LogUtils;
 import cn.govast.vastutils.databinding.ActivityApiCallBinding;
 import cn.govast.vastutils.network.NetworkRetrofitBuilder;
 import cn.govast.vastutils.network.Service;
-import cn.govast.vastutils.viewModel.ApiCallVM;
+import cn.govast.vastutils.viewmodel.ApiCallVM;
 
 
 public class ApiCallActivity extends VastVbVmActivity<ActivityApiCallBinding, ApiCallVM> {

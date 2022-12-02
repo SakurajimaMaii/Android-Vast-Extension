@@ -37,7 +37,6 @@ class BHolder(itemView: View) : BaseHolder(itemView) {
     private val iv: ImageView
 
     override fun onBindData(item: AdapterItem) {
-        super.onBindData(item)
         iv.setImageResource(cast<BExample>(item).drawable)
     }
 

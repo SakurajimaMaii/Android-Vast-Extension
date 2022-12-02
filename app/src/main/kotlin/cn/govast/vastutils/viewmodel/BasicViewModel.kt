@@ -14,27 +14,35 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils.viewModel
+package cn.govast.vastutils.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.annotation.SuppressLint
+import cn.govast.vasttools.lifecycle.StateLiveData
 import cn.govast.vasttools.viewModel.VastViewModel
+import cn.govast.vastutils.network.NetworkRepository
+import cn.govast.vastutils.network.service.QRCodeKey
+import cn.govast.vastutils.network.service.SongResult
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/2/19
-// Description:
+// Date: 2022/8/28 12:34
+// Description: 
 // Documentation:
 
-class SampleSharedVM(val tag:String): VastViewModel() {
+class BasicViewModel(
+    private val networkRepository: NetworkRepository
+) : VastViewModel() {
 
-    private val _count:MutableLiveData<Int> = MutableLiveData(0)
+    @SuppressLint("NewApi")
+    suspend fun getQRCode(): QRCodeKey {
+        return networkRepository.getQRCode()
+    }
 
-    val count:LiveData<Int>
-        get() = _count
+    val songResult = StateLiveData<SongResult>()
 
-    fun addOne(){
-        _count.postValue(_count.value?.plus(1) ?: 0)
+    @SuppressLint("NewApi")
+    fun searchSong(song: String) {
+        networkRepository.searchSong(song).request(songResult)
     }
 
 }

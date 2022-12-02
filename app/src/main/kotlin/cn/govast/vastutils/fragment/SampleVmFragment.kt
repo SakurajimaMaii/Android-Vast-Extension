@@ -25,7 +25,7 @@ import androidx.fragment.app.Fragment
 import cn.govast.vasttools.extension.NotNUllVar
 import cn.govast.vasttools.fragment.delegate.FragmentVmDelegate
 import cn.govast.vastutils.R
-import cn.govast.vastutils.viewModel.SampleSharedVM
+import cn.govast.vastutils.viewmodel.SampleSharedVM
 import com.google.android.material.textview.MaterialTextView
 
 class SampleVmFragment : Fragment() {

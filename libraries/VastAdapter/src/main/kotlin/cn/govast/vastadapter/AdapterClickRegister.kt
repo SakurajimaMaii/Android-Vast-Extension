@@ -29,7 +29,7 @@ interface AdapterClickRegister {
     /**
      * Register a click listener for adapter.
      *
-     * @param click a click listener.
+     * @param l a click listener.
      */
     fun registerClickEvent(l: AdapterClickListener?) {
         return
@@ -43,7 +43,7 @@ interface AdapterClickRegister {
     /**
      * Register a long click listener for adapter.
      *
-     * @param click a long click listener.
+     * @param l a long click listener.
      */
     fun registerLongClickEvent(l: AdapterLongClickListener?) {
         return

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils.viewModel;
+package cn.govast.vastutils.viewmodel;
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

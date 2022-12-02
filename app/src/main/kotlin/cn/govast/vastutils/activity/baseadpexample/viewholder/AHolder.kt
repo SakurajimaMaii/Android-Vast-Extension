@@ -36,7 +36,6 @@ class AHolder(itemView: View): BaseHolder(itemView) {
     private val tv:TextView
 
     override fun onBindData(item: AdapterItem) {
-        super.onBindData(item)
         tv.text = cast<AExample>(item).data
     }
 

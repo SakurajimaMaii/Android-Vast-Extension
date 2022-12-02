@@ -21,7 +21,7 @@ import android.view.View
 import androidx.lifecycle.ViewModel
 import cn.govast.vasttools.fragment.VastVbVmFragment
 import cn.govast.vastutils.databinding.FragmentSampleVbVmBinding
-import cn.govast.vastutils.viewModel.SampleSharedVM
+import cn.govast.vastutils.viewmodel.SampleSharedVM
 
 class SampleVbVmFragment : VastVbVmFragment<FragmentSampleVbVmBinding, SampleSharedVM>() {
 

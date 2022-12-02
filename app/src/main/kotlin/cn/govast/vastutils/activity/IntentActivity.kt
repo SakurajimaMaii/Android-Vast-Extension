@@ -43,7 +43,7 @@ import cn.govast.vastutils.broadcastreceiver.ShortcutReceiver
 import cn.govast.vastutils.broadcastreceiver.ShortcutReceiver.Companion.CREATE_SHORT_CUT
 import cn.govast.vastutils.databinding.ActivityIntentBinding
 import cn.govast.vastutils.network.NetworkRepository
-import cn.govast.vastutils.viewModel.BasicViewModel
+import cn.govast.vastutils.viewmodel.BasicViewModel
 
 class IntentActivity : AppCompatActivity() {
 
@@ -121,8 +121,8 @@ class IntentActivity : AppCompatActivity() {
         getBinding().getQRCode.setOnClickListener {
             ApiRequestBuilder(lifecycleScope)
                 .suspendWithListener({ getViewModel().getQRCode() }) {
-                    onSuccess = { QRCodeKey ->
-                        LogUtils.i(getDefaultTag(), QRCodeKey.data?.unikey)
+                    onSuccess = { qRCodeKey ->
+                        LogUtils.i(getDefaultTag(), qRCodeKey.data?.unikey)
                     }
                 }
             getViewModel().searchSong("海阔天空")

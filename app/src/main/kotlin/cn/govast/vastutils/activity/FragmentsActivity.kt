@@ -26,7 +26,7 @@ import cn.govast.vastutils.databinding.ActivityFragmentsBinding
 import cn.govast.vastutils.fragment.SampleVbFragment
 import cn.govast.vastutils.fragment.SampleVbVmFragment
 import cn.govast.vastutils.fragment.SampleVmFragment
-import cn.govast.vastutils.viewModel.SampleSharedVM
+import cn.govast.vastutils.viewmodel.SampleSharedVM
 
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
