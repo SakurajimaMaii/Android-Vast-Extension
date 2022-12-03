@@ -178,7 +178,9 @@ object SpanStrUtils {
                 ScriptMode.Subscript -> {
                     mBuilder.setSpan(SubscriptSpan(), start, end, flag)
                 }
-                else -> {}
+                ScriptMode.None -> {
+                    return this@Builder
+                }
             }
         }
 

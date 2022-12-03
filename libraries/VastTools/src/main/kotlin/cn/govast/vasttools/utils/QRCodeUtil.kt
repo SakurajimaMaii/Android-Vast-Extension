@@ -38,6 +38,17 @@ import java.util.*
 object QRCodeUtil {
 
     /**
+     * QR code color.
+     *
+     * @property color_black It will replace the black color in the original QR code. Default value is [Color.BLACK].
+     * @property color_white It will replace the white color in the original QR code. Default value is [Color.WHITE].
+     */
+    data class QRColor @JvmOverloads constructor(
+        @ColorInt val color_black: Int = Color.BLACK,
+        @ColorInt val color_white: Int = Color.WHITE
+    )
+
+    /**
      * Create QR code bitmap (support custom configuration and custom style).
      *
      * @param content QRCode string content.
@@ -51,8 +62,7 @@ object QRCodeUtil {
            uses "L" by default.
      * @param margin bitmap margin (modifiable, required: integer and >=0),
      *     when null is passed, the zxing source code uses "4" by default.
-     * @param color_black Custom color value for black patch.
-     * @param color_white Custom color value for the white patch.
+     * @param qrColor [QRColor]
      * @return QRCode bitmap.
      */
     @JvmOverloads
@@ -64,8 +74,7 @@ object QRCodeUtil {
         character_set: String? = "UTF-8",
         error_correction: String? = "H",
         margin: String? = "2",
-        @ColorInt color_black: Int = Color.BLACK,
-        @ColorInt color_white: Int = Color.WHITE
+        qrColor: QRColor = QRColor()
     ): Bitmap? {
         if (TextUtils.isEmpty(content)) {
             return null
@@ -90,9 +99,9 @@ object QRCodeUtil {
             for (y in 0 until height) {
                 for (x in 0 until width) {
                     if (bitMatrix[x, y]) {
-                        pixels[y * width + x] = color_black
+                        pixels[y * width + x] = qrColor.color_black
                     } else {
-                        pixels[y * width + x] = color_white
+                        pixels[y * width + x] = qrColor.color_white
                     }
                 }
             }
