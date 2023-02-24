@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-@file:JvmName("CastExtension")
+@file:JvmName("Cast")
 
-package cn.govast.vasttools.extension
+package com.ave.vastgui.core.extension
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/28 12:06
-// Description: 
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastCore/extension/Cast/
 
 /**
  * Class cast.

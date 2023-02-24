@@ -15,9 +15,9 @@
  */
 
 include(":app")
-includeBuild("../PluginVersion")
+includeBuild("../../PluginVersion")
 
-rootProject.name = "VastUtils"
+rootProject.name = "Android-Vast-Extension"
 
 // =======
 // = Lib =
@@ -25,12 +25,10 @@ rootProject.name = "VastUtils"
 
 val libs = arrayOf(
         "VastAdapter",
-        "VastMenuFab",
+        "VastCore",
         "VastNetStateLayout",
         "VastSkin",
-        "VastSwipeRecyclerView",
         "VastTools",
-        "VastUtils"
 )
 
 libs.forEach {

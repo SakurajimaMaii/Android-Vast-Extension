@@ -16,7 +16,7 @@
 
 @file:JvmName("InitExtension")
 
-package cn.govast.vasttools.extension
+package com.ave.vastgui.core.extension
 
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -24,8 +24,7 @@ import kotlin.reflect.KProperty
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/7/15
-// Description: 
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastCore/extension/NotNUllVar/
 
 /**
  * Get or set a not null parameter.
