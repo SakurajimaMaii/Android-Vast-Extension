@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:JvmName("InitExtension")
-
 package com.ave.vastgui.core.extension
 
 import kotlin.properties.ReadWriteProperty

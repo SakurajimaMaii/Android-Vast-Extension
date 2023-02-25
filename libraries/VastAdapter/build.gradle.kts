@@ -14,24 +14,28 @@
  * limitations under the License.
  */
 
-import cn.govast.plugin.version.AndroidX
-import cn.govast.plugin.version.Jetbrains
-import cn.govast.plugin.version.Libraries
-import cn.govast.plugin.version.Version
+import com.pluginversion.vastgui.AndroidX
+import com.pluginversion.vastgui.Jetbrains
+import com.pluginversion.vastgui.Libraries
+import com.pluginversion.vastgui.Version
 
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
-    id("cn.govast.plugin.version")
+    id("com.pluginversion.vastgui")
+    id("convention.publication")
 }
 
+group = "io.github.sakurajimamaii"
+version = "0.0.6"
+
 android {
+    namespace = "com.ave.vastgui.adapter"
     compileSdk = Version.compile_sdk_version
 
     defaultConfig {
         minSdk = Version.min_sdk_version
-        targetSdk = Version.target_sdk_version
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -62,6 +66,7 @@ android {
 }
 
 dependencies {
+    api(project(":libraries:VastCore"))
     implementation(AndroidX.annotation)
     implementation(AndroidX.arch_core_runtime)
     implementation(AndroidX.core_ktx)
@@ -72,10 +77,6 @@ dependencies {
     testImplementation(Libraries.junit)
 }
 
-extra["PUBLISH_GROUP_ID"] = "io.github.sakurajimamaii"
 extra["PUBLISH_ARTIFACT_ID"] = "VastAdapter"
-extra["PUBLISH_VERSION"] = "0.0.6"
 extra["PUBLISH_DESCRIPTION"] = "Help you quickly build an Adapter suitable for RecyclerView."
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/VastUtils/tree/master/libraries/VastAdapter"
-
-apply(from = "${rootProject.projectDir}/publish-mavencentral.gradle")

@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
-import cn.govast.plugin.version.AndroidX
-import cn.govast.plugin.version.Google
-import cn.govast.plugin.version.Libraries
-import cn.govast.plugin.version.Version
+import com.pluginversion.vastgui.AndroidX
+import com.pluginversion.vastgui.Google
+import com.pluginversion.vastgui.Libraries
+import com.pluginversion.vastgui.Version
 
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("cn.govast.plugin.version")
+    id("com.pluginversion.vastgui")
+    id("convention.publication")
 }
+
+group = "io.github.sakurajimamaii"
+version = "0.0.3"
 
 android {
     compileSdk = Version.compile_sdk_version
+    namespace = "com.ave.vastgui.netstatelayout"
 
     defaultConfig {
         minSdk = Version.min_sdk_version
-        targetSdk = Version.target_sdk_version
 
         testInstrumentationRunner ="androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -70,10 +74,6 @@ dependencies {
     testImplementation(Libraries.junit)
 }
 
-extra["PUBLISH_GROUP_ID"] = "io.github.sakurajimamaii"
 extra["PUBLISH_ARTIFACT_ID"] = "VastNetStateLayout"
-extra["PUBLISH_VERSION"] = "0.0.3"
 extra["PUBLISH_DESCRIPTION"] = "A layout to set customized network state ui."
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/VastUtils/tree/master/libraries/VastNetStateLayout"
-
-apply(from = "${rootProject.projectDir}/publish-mavencentral.gradle")

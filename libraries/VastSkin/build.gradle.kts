@@ -14,21 +14,27 @@
  * limitations under the License.
  */
 
-import cn.govast.plugin.version.*
+import com.pluginversion.vastgui.AndroidX
+import com.pluginversion.vastgui.Google
+import com.pluginversion.vastgui.Jetbrains
+import com.pluginversion.vastgui.Libraries
+import com.pluginversion.vastgui.Version
 
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("cn.govast.plugin.version")
+    id("com.pluginversion.vastgui")
 }
 
+group = "io.github.sakurajimamaii"
+version = "0.0.1"
+
 android {
-    namespace = "com.gcode.vastskin"
+    namespace = "com.ave.vastgui.skin"
     compileSdk = Version.compile_sdk_version
 
     defaultConfig {
         minSdk = Version.min_sdk_version
-        targetSdk = Version.target_sdk_version
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -70,10 +76,6 @@ dependencies {
     testImplementation(Libraries.junit)
 }
 
-extra["PUBLISH_GROUP_ID"] = "io.github.sakurajimamaii"
 extra["PUBLISH_ARTIFACT_ID"] = "VastSkin"
-extra["PUBLISH_VERSION"] = "0.0.1"
 extra["PUBLISH_DESCRIPTION"] = "Vast Skin."
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/VastUtils/tree/master/libraries/VastSkin"
-
-apply(from = "${rootProject.projectDir}/publish-mavencentral.gradle")

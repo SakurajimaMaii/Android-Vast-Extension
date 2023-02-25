@@ -18,24 +18,32 @@
 // https://cloud.tencent.com/developer/article/1839887
 // https://mp.weixin.qq.com/s/mVqShijGTExtQ_nLslchpQ
 
-import cn.govast.plugin.version.*
+import com.pluginversion.vastgui.AndroidX
+import com.pluginversion.vastgui.Google
+import com.pluginversion.vastgui.Jetbrains
+import com.pluginversion.vastgui.Libraries
+import com.pluginversion.vastgui.Squareup
+import com.pluginversion.vastgui.Version
 
 plugins {
     id("com.android.library")
     id("kotlin-android")
     id("kotlin-kapt")
     id("org.jetbrains.kotlin.android")
-    id("cn.govast.plugin.version")
+    id("com.pluginversion.vastgui")
     id("org.sonarqube") version "3.4.0.2513"
+    id("convention.publication")
 }
 
+group = "io.github.sakurajimamaii"
+version = "0.0.9"
+
 android {
-    namespace = "cn.govast.vasttools"
+    namespace = "com.ave.vastgui.tools"
     compileSdk = Version.compile_sdk_version
 
     defaultConfig {
         minSdk = Version.min_sdk_version
-        targetSdk = Version.target_sdk_version
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -84,6 +92,7 @@ project(":libraries:VastTools"){
 dependencies {
     api(Libraries.zxing)
     api(Libraries.progressmanager)
+    implementation("io.github.sakurajimamaii:VastCore:0.0.2")
     implementation(Squareup.okhttp3)
     implementation(Squareup.retrofit2)
     implementation(Squareup.retrofit2_adapter_rxjava3)
@@ -111,10 +120,6 @@ dependencies {
     testImplementation(Libraries.junit)
 }
 
-extra["PUBLISH_GROUP_ID"] = "io.github.sakurajimamaii"
 extra["PUBLISH_ARTIFACT_ID"] = "VastTools"
-extra["PUBLISH_VERSION"] = "0.0.9"
 extra["PUBLISH_DESCRIPTION"] = "Easy Quick Android Tools for you to faster project development."
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/VastUtils/tree/release/libraries/VastTools"
-
-apply(from = "${rootProject.projectDir}/publish-mavencentral.gradle")

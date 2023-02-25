@@ -16,6 +16,7 @@
 
 include(":app")
 includeBuild("../../PluginVersion")
+includeBuild("convention-plugins")
 
 rootProject.name = "Android-Vast-Extension"
 
