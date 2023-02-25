@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils.network.service
+plugins {
+    `kotlin-dsl` // Is needed to turn our build logic written in Kotlin into the Gradle Plugin
+}
 
-import cn.govast.vasttools.network.base.BaseApiRsp
-
-data class SongResult(
-    val code: Int,
-    val result: Result
-) : BaseApiRsp
+repositories {
+    gradlePluginPortal() // To use 'maven-publish' and 'signing' plugins in our own plugin
+}
