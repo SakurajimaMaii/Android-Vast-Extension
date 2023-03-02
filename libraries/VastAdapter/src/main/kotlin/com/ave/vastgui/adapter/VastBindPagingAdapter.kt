@@ -23,12 +23,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import com.ave.vastgui.adapter.base.BaseBindHolder
 import com.ave.vastgui.adapter.widget.AdapterClickListener
 import com.ave.vastgui.adapter.widget.AdapterClickRegister
+import com.ave.vastgui.adapter.widget.AdapterDiffUtil
 import com.ave.vastgui.adapter.widget.AdapterItemWrapper
 import com.ave.vastgui.adapter.widget.AdapterLongClickListener
+import com.ave.vastgui.core.extension.cast
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -44,50 +45,47 @@ import com.ave.vastgui.adapter.widget.AdapterLongClickListener
  * @property mContext The context of adapter.
  * @property mDiffCallback
  */
-abstract class VastBindPagingAdapter <T> constructor(
-    protected var mContext: Context,
-    protected val mDiffCallback: DiffUtil.ItemCallback<AdapterItemWrapper<T>>
-) : PagingDataAdapter<AdapterItemWrapper<T>, BaseBindHolder>(mDiffCallback), AdapterClickRegister {
+abstract class VastBindPagingAdapter<T, R : AdapterItemWrapper<T>> constructor(
+    protected var mContext: Context, protected val mDiffCallback: AdapterDiffUtil<T,R>
+) : PagingDataAdapter<R, BaseBindHolder>(mDiffCallback), AdapterClickRegister {
 
     protected var onItemClickListener: AdapterClickListener? = null
     protected var onItemLongClickListener: AdapterLongClickListener? = null
 
     final override fun onBindViewHolder(holder: BaseBindHolder, position: Int) {
         val item = getItem(position)
-        holder.onBindData(setVariableId(), item)
-        holder.itemView.setOnClickListener {
-            if (null != item?.getClickEvent()) {
-                item.getClickEvent()?.onItemClick(holder.itemView, position)
-            } else {
-                onItemClickListener?.onItemClick(holder.itemView, position)
+        item?.apply {
+            holder.onBindData(setVariableId(), cast<T>(this.getData()))
+            holder.itemView.setOnClickListener {
+                if (null != item.getClickEvent()) {
+                    item.getClickEvent()?.onItemClick(holder.itemView, position)
+                } else {
+                    onItemClickListener?.onItemClick(holder.itemView, position)
+                }
             }
-        }
-        holder.itemView.setOnLongClickListener {
-            val res = if (null != item?.getLongClickEvent()) {
-                item.getLongClickEvent()?.onItemLongClick(holder.itemView, position)
-            } else {
-                onItemLongClickListener?.onItemLongClick(holder.itemView, position)
+            holder.itemView.setOnLongClickListener {
+                val res = if (null != item.getLongClickEvent()) {
+                    item.getLongClickEvent()?.onItemLongClick(holder.itemView, position)
+                } else {
+                    onItemLongClickListener?.onItemLongClick(holder.itemView, position)
+                }
+                return@setOnLongClickListener res ?: false
             }
-            return@setOnLongClickListener res ?: false
         }
     }
 
     final override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): BaseBindHolder {
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
-            LayoutInflater.from(parent.context),
-            viewType,
-            parent,
-            false
+            LayoutInflater.from(parent.context), viewType, parent, false
         )
         return setViewHolder(binding)
     }
 
-    final override fun getItemViewType(position: Int):Int {
+    final override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
-        if(null != item){
+        if (null != item) {
             // Maybe throw RuntimeException.
             val viewType = item.getLayoutId()
             try {
@@ -101,7 +99,7 @@ abstract class VastBindPagingAdapter <T> constructor(
                 )
             }
             return viewType
-        }else{
+        } else {
             throw NullPointerException("The item is null.")
         }
     }

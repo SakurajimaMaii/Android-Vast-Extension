@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 abstract class BaseHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
-    abstract fun onBindData(item: Any)
+    abstract fun onBindData(item: Any?)
 
     interface HolderFactory{
         /**

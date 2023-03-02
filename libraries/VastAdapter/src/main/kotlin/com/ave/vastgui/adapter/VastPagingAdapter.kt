@@ -18,12 +18,13 @@ package com.ave.vastgui.adapter
 
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import com.ave.vastgui.adapter.base.BaseHolder
 import com.ave.vastgui.adapter.widget.AdapterClickListener
 import com.ave.vastgui.adapter.widget.AdapterClickRegister
+import com.ave.vastgui.adapter.widget.AdapterDiffUtil
 import com.ave.vastgui.adapter.widget.AdapterItemWrapper
 import com.ave.vastgui.adapter.widget.AdapterLongClickListener
+import com.ave.vastgui.core.extension.cast
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -40,11 +41,11 @@ import com.ave.vastgui.adapter.widget.AdapterLongClickListener
  * @property mLayoutId The layout id of the item.
  * @property mDiffCallback
  */
-abstract class VastPagingAdapter<T>(
+abstract class VastPagingAdapter<T, R : AdapterItemWrapper<T>>(
     protected val mFactories: MutableList<BaseHolder.HolderFactory>,
-    protected val mLayoutId:Int,
-    protected val mDiffCallback: DiffUtil.ItemCallback<AdapterItemWrapper<T>>
-) : PagingDataAdapter<AdapterItemWrapper<T>, BaseHolder>(mDiffCallback), AdapterClickRegister {
+    protected val mLayoutId: Int,
+    protected val mDiffCallback: AdapterDiffUtil<T, R>
+) : PagingDataAdapter<R, BaseHolder>(mDiffCallback), AdapterClickRegister {
 
     private val type2ItemType: MutableMap<String, Int> = HashMap()
     protected var onItemClickListener: AdapterClickListener? = null
@@ -62,22 +63,22 @@ abstract class VastPagingAdapter<T>(
     final override fun onBindViewHolder(holder: BaseHolder, position: Int) {
         val itemData = getItem(position)
         itemData?.apply {
-            holder.onBindData(this)
-        }
-        holder.itemView.setOnClickListener {
-            if (null != itemData?.getClickEvent()) {
-                itemData.getClickEvent()?.onItemClick(holder.itemView, position)
-            } else {
-                onItemClickListener?.onItemClick(holder.itemView, position)
+            holder.onBindData(cast<T>(this.getData()))
+            holder.itemView.setOnClickListener {
+                if (null != itemData.getClickEvent()) {
+                    itemData.getClickEvent()?.onItemClick(holder.itemView, position)
+                } else {
+                    onItemClickListener?.onItemClick(holder.itemView, position)
+                }
             }
-        }
-        holder.itemView.setOnLongClickListener {
-            val res = if (null != itemData?.getLongClickEvent()) {
-                itemData.getLongClickEvent()?.onItemLongClick(holder.itemView, position)
-            } else {
-                onItemLongClickListener?.onItemLongClick(holder.itemView, position)
+            holder.itemView.setOnLongClickListener {
+                val res = if (null != itemData.getLongClickEvent()) {
+                    itemData.getLongClickEvent()?.onItemLongClick(holder.itemView, position)
+                } else {
+                    onItemLongClickListener?.onItemLongClick(holder.itemView, position)
+                }
+                return@setOnLongClickListener res ?: false
             }
-            return@setOnLongClickListener res ?: false
         }
     }
 

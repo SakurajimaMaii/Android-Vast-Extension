@@ -22,13 +22,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.ave.vastgui.adapter.base.BaseBindHolder
 import com.ave.vastgui.adapter.widget.AdapterClickListener
 import com.ave.vastgui.adapter.widget.AdapterClickRegister
+import com.ave.vastgui.adapter.widget.AdapterDiffUtil
 import com.ave.vastgui.adapter.widget.AdapterItemWrapper
 import com.ave.vastgui.adapter.widget.AdapterLongClickListener
+import com.ave.vastgui.core.extension.cast
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -37,17 +38,16 @@ import com.ave.vastgui.adapter.widget.AdapterLongClickListener
 // Documentation:
 // Reference:
 
-abstract class VastBindListAdapter<T> constructor(
-    protected var mContext: Context,
-    protected var mDiffCallback: DiffUtil.ItemCallback<AdapterItemWrapper<T>>
-) : ListAdapter<AdapterItemWrapper<T>, BaseBindHolder>(mDiffCallback), AdapterClickRegister {
+abstract class VastBindListAdapter<T, R : AdapterItemWrapper<T>> constructor(
+    protected var mContext: Context, protected var mDiffCallback: AdapterDiffUtil<T, R>
+) : ListAdapter<R, BaseBindHolder>(mDiffCallback), AdapterClickRegister {
 
     protected var onItemClickListener: AdapterClickListener? = null
     protected var onItemLongClickListener: AdapterLongClickListener? = null
 
     final override fun onBindViewHolder(holder: BaseBindHolder, position: Int) {
         val item = getItem(position)
-        holder.onBindData(setVariableId(), item.getData())
+        holder.onBindData(setVariableId(), cast<T>(item.getData()))
         holder.itemView.setOnClickListener {
             if (null != item.getClickEvent()) {
                 item.getClickEvent()?.onItemClick(holder.itemView, position)
@@ -66,14 +66,10 @@ abstract class VastBindListAdapter<T> constructor(
     }
 
     final override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): BaseBindHolder {
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
-            LayoutInflater.from(parent.context),
-            viewType,
-            parent,
-            false
+            LayoutInflater.from(parent.context), viewType, parent, false
         )
         return setViewHolder(binding)
     }
