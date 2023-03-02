@@ -34,7 +34,7 @@ import com.ave.vastgui.adapter.widget.AdapterItemWrapper
  * @property mFactories viewHolder factories.
  */
 abstract class VastAdapter(
-    protected val mDataSource: MutableList<AdapterItemWrapper<Any>>,
+    protected val mDataSource: MutableList<AdapterItemWrapper<*>>,
     protected val mFactories: MutableList<BaseHolder.HolderFactory>
 ) : BaseAdapter<BaseHolder>() {
 
@@ -57,21 +57,23 @@ abstract class VastAdapter(
 
     final override fun onBindViewHolder(holder: BaseHolder, position: Int) {
         val itemData = mDataSource[position]
-        holder.onBindData(itemData.getData())
-        holder.itemView.setOnClickListener {
-            if (null != itemData.getClickEvent()) {
-                itemData.getClickEvent()?.onItemClick(holder.itemView, position)
-            } else {
-                onItemClickListener?.onItemClick(holder.itemView, position)
+        itemData.getData()?.apply {
+            holder.onBindData(this)
+            holder.itemView.setOnClickListener {
+                if (null != itemData.getClickEvent()) {
+                    itemData.getClickEvent()?.onItemClick(holder.itemView, position)
+                } else {
+                    onItemClickListener?.onItemClick(holder.itemView, position)
+                }
             }
-        }
-        holder.itemView.setOnLongClickListener {
-            val res = if (null != itemData.getLongClickEvent()) {
-                itemData.getLongClickEvent()?.onItemLongClick(holder.itemView, position)
-            } else {
-                onItemLongClickListener?.onItemLongClick(holder.itemView, position)
+            holder.itemView.setOnLongClickListener {
+                val res = if (null != itemData.getLongClickEvent()) {
+                    itemData.getLongClickEvent()?.onItemLongClick(holder.itemView, position)
+                } else {
+                    onItemLongClickListener?.onItemLongClick(holder.itemView, position)
+                }
+                return@setOnLongClickListener res ?: false
             }
-            return@setOnLongClickListener res ?: false
         }
     }
 

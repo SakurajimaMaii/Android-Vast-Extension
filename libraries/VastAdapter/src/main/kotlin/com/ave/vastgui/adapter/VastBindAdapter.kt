@@ -49,7 +49,7 @@ import com.ave.vastgui.adapter.widget.AdapterItemWrapper
  * @property mContext [Context].
  */
 abstract class VastBindAdapter constructor(
-    protected var mDataSource: MutableList<AdapterItemWrapper<Any>>,
+    protected var mDataSource: MutableList<AdapterItemWrapper<*>>,
     protected var mContext: Context
 ) : BaseAdapter<BaseBindHolder>() {
 
