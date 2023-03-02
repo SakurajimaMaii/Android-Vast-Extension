@@ -16,6 +16,8 @@
 
 package com.ave.vastgui.adapter.widget
 
+import com.ave.vastgui.adapter.base.BaseHolder
+
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/12/23
@@ -25,6 +27,8 @@ package com.ave.vastgui.adapter.widget
 
 /** The wrapper of the adapter item.
  *
+ * @property mHolderType this string value should be the same as the [BaseHolder.HolderFactory.getHolderType].
+ * @property mLayoutId layout id for the adapter item.
  * @property c Click listener.
  * @property lc Long click listener.
  */
