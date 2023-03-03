@@ -14,7 +14,7 @@
 
 Select `Android Studio Gradle` -> `libraries` -> `VastAdapter` -> `Tasks` -> `build` -> `assemble` .In this way, you can find the corresponding arr package in the path of `\build\outputs\aar`.
 
-<div align=center><img src="https://github.com/SakurajimaMaii/VastUtils/blob/release/mdResource/building.png?raw=true" style="width:50%"/></div>
+<div align=center><img src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/mdResource/building.png?raw=true" style="width:50%"/></div>
 
 ## Dependencies
 
