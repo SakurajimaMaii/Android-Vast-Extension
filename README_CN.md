@@ -6,7 +6,7 @@
 <img src="https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat"/>
 </p>
 
-<p align="center">简体中文 | <a href="https://github.com/SakurajimaMaii/VastUtils/blob/debug/README.md">English</a></p>
+<p align="center">简体中文 | <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/README.md">English</a></p>
 
 ## 构建
 

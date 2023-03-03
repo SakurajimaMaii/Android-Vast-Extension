@@ -1,6 +1,4 @@
-<h2 align="center">VastUtils-Debug</h2>
-
-<p align="center">Debug of VastUtils</p>
+<h2 align="center">Android-Vast-Extension</h2>
 
 <p align="center">
 <img src="https://img.shields.io/badge/min%20sdk%20version-23-yellowgreen"/>
@@ -8,7 +6,7 @@
 <img src="https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat"/>
 </p>
 
-<div align="center">English | <a href="https://github.com/SakurajimaMaii/VastUtils/blob/debug/README_CN.md">简体中文</a></div>
+<div align="center">English | <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/README_CN.md">简体中文</a></div>
 
 ## Building
 
