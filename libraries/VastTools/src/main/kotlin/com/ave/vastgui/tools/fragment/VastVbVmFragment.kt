@@ -29,7 +29,7 @@ import com.ave.vastgui.tools.fragment.delegate.FragmentVbVmDelegate
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 16:11
 // Description: Please make sure that the fragment extends VastVbVmFragment when the fragment using viewBinding and viewModel.
-// Documentation: [VastBaseFragment](https://sakurajimamaii.github.io/VastDocs/document/en/VastBaseFragment.html)
+// Documentation: [VastVbVmFragment](https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/Fragment/)
 
 /**
  * VastVbVmFragment.
@@ -61,13 +61,22 @@ abstract class VastVbVmFragment<VB : ViewBinding, VM : ViewModel> : VastFragment
 
     private var mFragmentDelegate by NotNUllVar<FVVD>()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mFragmentDelegate = FVVD()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mFragmentDelegate = FVVD()
         return mFragmentDelegate.getBinding().root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mFragmentDelegate.clearBinding()
     }
 
     protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {

@@ -34,23 +34,29 @@ open class FragmentVbVmDelegate<VB : ViewBinding, VM : ViewModel>(
 ) : FragmentDelegate(fragment) {
 
     // ViewBinding
-    private val mBinding: VB by lazy {
-        fragment.reflexViewBinding()
-    }
+    private var mBinding: VB? = null
 
     // ViewModel
     private val mViewModel: VM by lazy {
-        fragment.reflexViewModel(setVmBySelf()){
+        fragment.reflexViewModel(setVmBySelf()) {
             return@reflexViewModel createViewModel(it)
         }
     }
 
     override fun getBinding(): VB {
-        return mBinding
+        return mBinding ?: throw NullPointerException("mBinding is null.")
+    }
+
+    override fun clearBinding() {
+        mBinding = null
     }
 
     override fun getViewModel(): VM {
         return mViewModel
+    }
+
+    init {
+        mBinding = fragment.reflexViewBinding()
     }
 
 }

@@ -32,12 +32,18 @@ open class FragmentVbDelegate<VB : ViewBinding>(
 ) : FragmentDelegate(fragment) {
 
     // ViewBinding
-    private val mBinding: VB by lazy {
-        fragment.reflexViewBinding(fragment.layoutInflater)
-    }
+    private var mBinding: VB? = null
 
     override fun getBinding(): VB {
-        return mBinding
+        return mBinding ?: throw NullPointerException("mBinding is null.")
+    }
+
+    override fun clearBinding() {
+        mBinding = null
+    }
+
+    init {
+        mBinding = fragment.reflexViewBinding(fragment.layoutInflater)
     }
 
 }
