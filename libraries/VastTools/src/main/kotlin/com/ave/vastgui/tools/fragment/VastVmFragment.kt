@@ -28,7 +28,7 @@ import com.ave.vastgui.tools.fragment.delegate.FragmentVmDelegate
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 16:18
 // Description: Please make sure that the fragment extends VastVmFragment when the fragment using viewModel.
-// Documentation: [VastBaseFragment](https://sakurajimamaii.github.io/VastDocs/document/en/VastBaseFragment.html)
+// Documentation: [VastVmFragment](https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/Fragment/)
 
 /**
  * VastVmActivity.
@@ -66,12 +66,16 @@ abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
 
     private var mFragmentDelegate by NotNUllVar<FVD>()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mFragmentDelegate = FVD()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mFragmentDelegate = FVD()
         return inflater.inflate(layoutId, container, false)
     }
 
