@@ -25,7 +25,7 @@ import com.ave.vastgui.adapter.widget.AdapterItemWrapper
 // Email: guihy2019@gmail.com
 // Date: 2021/4/2
 // Description: VastAdapter help you to create a recyclerView adapter.
-// Documentation: [VastAdapter](https://sakurajimamaii.github.io/VastDocs/document/en/VastAdapter.html)
+// Documentation: [VastAdapter](https://ave.entropy2020.cn/documents/VastAdapter/VastAdapter/)
 
 /**
  * VastAdapter.

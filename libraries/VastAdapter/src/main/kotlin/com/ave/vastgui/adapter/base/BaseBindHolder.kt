@@ -27,15 +27,17 @@ import androidx.recyclerview.widget.RecyclerView
 // Reference:
 
 /**
- * The ViewHolder of the BindAdapter.If you want
- * to set your own ViewHolder for Adapter,you
- * should making your ViewHolder extends the [BaseBindHolder]
- * and make **setViewHolder** return it.
+ * The ViewHolder of the BindAdapter.If you want to set your own
+ * ViewHolder for Adapter,you should making your ViewHolder extends
+ * the [BaseBindHolder] and make **setViewHolder** return it.
  *
  * @property binding
  */
-open class BaseBindHolder(protected var binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+open class BaseBindHolder(protected var binding: ViewDataBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+
     open fun onBindData(variableId: Int, item: Any?) {
         binding.setVariable(variableId, item)
     }
+
 }

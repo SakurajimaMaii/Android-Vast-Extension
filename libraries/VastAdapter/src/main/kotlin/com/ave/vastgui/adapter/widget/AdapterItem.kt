@@ -38,8 +38,8 @@ sealed interface AdapterItem : AdapterClickRegister {
 
     /**
      * Return a string which is same as the value you set in
-     * [BaseHolder.HolderFactory.getHolderType]. In this way,
-     * the data item can be matched to the corresponding ViewHolder.
+     * [BaseHolder.HolderFactory.getHolderType]. In this way, the
+     * data item can be matched to the corresponding ViewHolder.
      *
      * @throws RuntimeException
      */

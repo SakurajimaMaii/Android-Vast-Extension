@@ -21,9 +21,7 @@ import androidx.recyclerview.widget.DiffUtil
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/2/27
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: [AdapterDiffUtil](https://ave.entropy2020.cn/documents/VastAdapter/Widget/)
 
 /**
  * Because of the use of [AdapterItemWrapper], the original [DiffUtil] will

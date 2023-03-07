@@ -29,10 +29,9 @@ import com.ave.vastgui.adapter.widget.AdapterLongClickListener
 // Documentation:
 // Reference:
 
-abstract class BaseAdapter <T:ViewHolder>():
+abstract class BaseAdapter<T : ViewHolder>() :
     RecyclerView.Adapter<T>(),
-    AdapterClickRegister
-{
+    AdapterClickRegister {
 
     protected var onItemClickListener: AdapterClickListener? = null
     protected var onItemLongClickListener: AdapterLongClickListener? = null

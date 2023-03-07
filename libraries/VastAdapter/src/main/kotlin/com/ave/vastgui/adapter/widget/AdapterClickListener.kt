@@ -27,9 +27,7 @@ import android.view.View
 
 interface AdapterClickListener {
 
-    /**
-     * A click listener for adapter.
-     */
+    /** A click listener for adapter. */
     fun onItemClick(view: View, pos: Int): Unit
 
 }

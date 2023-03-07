@@ -16,26 +16,24 @@
 
 package com.ave.vastgui.adapter.widget
 
-import com.ave.vastgui.adapter.base.BaseHolder
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/12/23
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: [AdapterItemWrapper](https://ave.entropy2020.cn/documents/VastAdapter/Widget/)
 
-/** The wrapper of the adapter item.
+/**
+ * The wrapper of the adapter item.
  *
- * @property mHolderType this string value should be the same as the [BaseHolder.HolderFactory.getHolderType].
+ * @property mHolderType this string value should be the same as the
+ *     [BaseHolder.HolderFactory.getHolderType].
  * @property mLayoutId layout id for the adapter item.
  * @property c Click listener.
  * @property lc Long click listener.
  */
 abstract class AdapterItemWrapper<out T> @JvmOverloads constructor(
     protected val mData: T,
-    protected val mHolderType:String? = null,
-    protected val mLayoutId:Int? = null,
+    protected val mHolderType: String? = null,
+    protected val mLayoutId: Int? = null,
     protected var c: AdapterClickListener? = null,
     protected var lc: AdapterLongClickListener? = null
 ) : AdapterItem {

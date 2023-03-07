@@ -30,20 +30,10 @@ import com.ave.vastgui.adapter.widget.AdapterItemWrapper
 // Email: guihy2019@gmail.com
 // Date: 2021/4/2
 // Description: VastBindAdapter help you to create a recyclerView adapter.
-// Documentation: [VastBindAdapter](https://sakurajimamaii.github.io/VastDocs/document/en/VastBindAdapter.html)
+// Documentation: [VastBindAdapter](https://ave.entropy2020.cn/documents/VastAdapter/VastBindAdapter/)
 
 /**
  * VastBindAdapter.
- *
- * Here is an example in kotlin:
- * ```kotlin
- * class BaseBindingAdapter(
- *     dataSource: MutableList<VastBindAdapterItem>,
- *     mContext: Context
- * ) : VastBindAdapter(dataSource, mContext)
- * ```
- *
- * For more settings, please refer to the documentation.
  *
  * @property mDataSource data source.
  * @property mContext [Context].

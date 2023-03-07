@@ -46,7 +46,7 @@ import com.ave.vastgui.core.extension.cast
  * @property mDiffCallback
  */
 abstract class VastBindPagingAdapter<T, R : AdapterItemWrapper<T>> constructor(
-    protected var mContext: Context, protected val mDiffCallback: AdapterDiffUtil<T,R>
+    protected var mContext: Context, protected val mDiffCallback: AdapterDiffUtil<T, R>
 ) : PagingDataAdapter<R, BaseBindHolder>(mDiffCallback), AdapterClickRegister {
 
     protected var onItemClickListener: AdapterClickListener? = null

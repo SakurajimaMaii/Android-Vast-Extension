@@ -27,9 +27,7 @@ import android.view.View
 
 interface AdapterLongClickListener {
 
-    /**
-     * A long click listener for adapter.
-     */
-    fun onItemLongClick(view: View, pos: Int):Boolean
+    /** A long click listener for adapter. */
+    fun onItemLongClick(view: View, pos: Int): Boolean
 
 }

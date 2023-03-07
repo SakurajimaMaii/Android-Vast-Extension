@@ -26,20 +26,19 @@ import androidx.recyclerview.widget.RecyclerView
 // Description: VastAdapterVH help you to create a recyclerView adapter viewHolder.
 // Documentation: [VastAdapter](https://sakurajimamaii.github.io/VastDocs/document/en/VastAdapter.html)
 
-abstract class BaseHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+abstract class BaseHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     abstract fun onBindData(item: Any?)
 
-    interface HolderFactory{
-        /**
-         * Create the current ViewHolder instance.
-         */
-        fun onCreateHolder(parent: ViewGroup, viewType:Int): BaseHolder
+    interface HolderFactory {
+        /** Create the current ViewHolder instance. */
+        fun onCreateHolder(parent: ViewGroup, viewType: Int): BaseHolder
 
         /**
-         * Return a string which is same as the value you set in [AdapterItem.getHolderType].
-         * In this way, the data item can be matched to the corresponding ViewHolder.
+         * Return a string which is same as the value you set in
+         * [AdapterItem.getHolderType]. In this way, the data
+         * item can be matched to the corresponding ViewHolder.
          */
-        fun getHolderType():String
+        fun getHolderType(): String
     }
 }
