@@ -19,8 +19,10 @@ package com.ave.vastgui.tools.activity
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
-import com.ave.vastgui.tools.activity.delegate.ActivityVmDelegate
 import com.ave.vastgui.core.extension.NotNUllVar
+import com.ave.vastgui.tools.activity.widget.screenConfig
+import com.ave.vastgui.tools.lifecycle.reflexViewModel
+import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -44,41 +46,33 @@ import com.ave.vastgui.core.extension.NotNUllVar
  */
 abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
 
-    /**
-     * The layout resource id for this activity.
-     */
+    // Snackbar
+    private var mSnackbar by NotNUllVar<Snackbar>()
+
+    // The layout resource id for this activity.
     abstract val layoutId: Int
 
-    // Activity Delegate
-    protected inner class AVD : ActivityVmDelegate<VM>(this, layoutId) {
-        override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-            return this@VastVmActivity.createViewModel(modelClass)
+    // ViewModel
+    private val mViewModel: VM by lazy {
+        reflexViewModel(this.javaClass, this) {
+            return@reflexViewModel createViewModel(it)
         }
     }
-
-    private var mActivityDelegate by NotNUllVar<ActivityVmDelegate<VM>>()
 
     @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mActivityDelegate = AVD()
         if (0 != layoutId) {
             setContentView(layoutId)
         } else {
-            throw RuntimeException("Please set correct layout id for the ${mActivityDelegate.getDefaultTag()} .")
+            throw RuntimeException("Please set correct layout id for the layoutId .")
         }
+        screenConfig(mEnableActionBar, mEnableFullScreen)
+        mSnackbar = Snackbar.make(findViewById(layoutId), getDefaultTag(), Snackbar.LENGTH_SHORT)
     }
 
-    protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        return modelClass.newInstance()
-    }
-
-    protected fun getViewModel(): VM {
-        return mActivityDelegate.getViewModel()
-    }
-
-    final override fun createActivityDelegate(): ActivityVmDelegate<VM> {
-        return mActivityDelegate
+    override fun getViewModel(): VM {
+        return mViewModel
     }
 
 }

@@ -17,6 +17,7 @@
 package com.ave.vastgui.tools.base
 
 import android.app.Activity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 
@@ -30,9 +31,7 @@ import androidx.viewbinding.ViewBinding
 
 interface BaseVisActive : BaseActive {
 
-    /**
-     * @return self or attached [Activity].
-     */
+    /** @return self or attached [Activity]. */
     fun getBaseActivity(): Activity
 
     /**
@@ -43,6 +42,16 @@ interface BaseVisActive : BaseActive {
      */
     fun getBinding(): ViewBinding {
         throw IllegalStateException("You should not call getBinding().")
+    }
+
+    /**
+     * This method will be called in [Fragment.onDestroyView] in order to set
+     * the value of ViewBinding to null to avoid memory leaks.
+     *
+     * @throws IllegalStateException
+     */
+    fun clearBinding() {
+        throw IllegalStateException("You should not call clearBinding().")
     }
 
     /**

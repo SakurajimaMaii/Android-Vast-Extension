@@ -22,8 +22,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import com.ave.vastgui.core.extension.NotNUllVar
-import com.ave.vastgui.tools.fragment.delegate.FragmentVbVmDelegate
+import com.ave.vastgui.tools.lifecycle.reflexViewModel
+import com.ave.vastgui.tools.viewbinding.reflexViewBinding
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -48,53 +48,40 @@ import com.ave.vastgui.tools.fragment.delegate.FragmentVbVmDelegate
  */
 abstract class VastVbVmFragment<VB : ViewBinding, VM : ViewModel> : VastFragment() {
 
-    // Fragment Delegate
-    protected inner class FVVD : FragmentVbVmDelegate<VB, VM>(this) {
-        override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-            return this@VastVbVmFragment.createViewModel(modelClass)
+    // ViewBinding
+    private var mBinding: VB? = null
+
+    // ViewModel
+    private val mViewModel: VM by lazy {
+        reflexViewModel(this.javaClass, if (setVmBySelf()) requireActivity() else this) {
+            return@reflexViewModel createViewModel(it)
         }
-
-        override fun setVmBySelf(): Boolean {
-            return this@VastVbVmFragment.setVmBySelf()
-        }
-    }
-
-    private var mFragmentDelegate by NotNUllVar<FVVD>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mFragmentDelegate = FVVD()
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        return mFragmentDelegate.getBinding().root
+        mBinding = reflexViewBinding(this,container)
+        return getBinding().root
     }
 
     override fun onDestroyView() {
+        clearBinding()
         super.onDestroyView()
-        mFragmentDelegate.clearBinding()
     }
 
-    protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        return modelClass.newInstance()
+    override fun setVmBySelf(): Boolean = false
+
+    override fun getBinding(): VB {
+        return mBinding ?: throw RuntimeException("ViewBinding is null.")
     }
 
-    protected open fun setVmBySelf(): Boolean = false
-
-    protected fun getBinding(): VB {
-        return mFragmentDelegate.getBinding()
+    override fun clearBinding() {
+        mBinding = null
     }
 
-    protected fun getViewModel(): VM {
-        return mFragmentDelegate.getViewModel()
-    }
-
-    final override fun createFragmentDelegate(): FVVD {
-        return mFragmentDelegate
+    override fun getViewModel(): VM {
+        return mViewModel
     }
 
 }

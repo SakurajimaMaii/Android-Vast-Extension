@@ -21,8 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
-import com.ave.vastgui.core.extension.NotNUllVar
-import com.ave.vastgui.tools.fragment.delegate.FragmentVmDelegate
+import com.ave.vastgui.tools.lifecycle.reflexViewModel
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -53,22 +52,11 @@ abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
      */
     protected abstract val layoutId: Int
 
-    // Fragment Delegate
-    protected inner class FVD : FragmentVmDelegate<VM>(this) {
-        override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-            return this@VastVmFragment.createViewModel(modelClass)
+    // ViewModel
+    private val mViewModel: VM by lazy {
+        reflexViewModel(this.javaClass, if (setVmBySelf()) requireActivity() else this) {
+            return@reflexViewModel createViewModel(it)
         }
-
-        override fun setVmBySelf(): Boolean {
-            return this@VastVmFragment.setVmBySelf()
-        }
-    }
-
-    private var mFragmentDelegate by NotNUllVar<FVD>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mFragmentDelegate = FVD()
     }
 
     override fun onCreateView(
@@ -79,18 +67,10 @@ abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
         return inflater.inflate(layoutId, container, false)
     }
 
-    protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        return modelClass.newInstance()
+    override fun getViewModel(): VM {
+        return mViewModel
     }
 
-    protected open fun setVmBySelf(): Boolean = false
-
-    protected fun getViewModel(): VM {
-        return mFragmentDelegate.getViewModel()
-    }
-
-    final override fun createFragmentDelegate(): FVD {
-        return mFragmentDelegate
-    }
+    override fun setVmBySelf(): Boolean = false
 
 }

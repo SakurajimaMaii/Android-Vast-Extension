@@ -21,8 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
-import com.ave.vastgui.core.extension.NotNUllVar
-import com.ave.vastgui.tools.fragment.delegate.FragmentVbDelegate
+import com.ave.vastgui.tools.viewbinding.reflexViewBinding
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -46,35 +45,31 @@ import com.ave.vastgui.tools.fragment.delegate.FragmentVbDelegate
  */
 abstract class VastVbFragment<VB : ViewBinding> : VastFragment() {
 
-    // Fragment Delegate
-    protected inner class FVD : FragmentVbDelegate<VB>(this)
-
-    private var mFragmentDelegate by NotNUllVar<FVD>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mFragmentDelegate = FVD()
-    }
+    // ViewBinding
+    private var mBinding: VB? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return mFragmentDelegate.getBinding().root
+        mBinding = reflexViewBinding(this, container)
+        return getBinding().root
     }
 
     override fun onDestroyView() {
+        mBinding = null
         super.onDestroyView()
-        mFragmentDelegate.clearBinding()
     }
 
-    protected fun getBinding(): VB {
-        return mFragmentDelegate.getBinding()
+    override fun getBinding(): VB {
+        return mBinding ?: throw RuntimeException("ViewBinding is null.")
     }
 
-    final override fun createFragmentDelegate(): FVD {
-        return mFragmentDelegate
+    override fun clearBinding() {
+        mBinding = null
     }
+
+    override fun setVmBySelf(): Boolean = false
 
 }

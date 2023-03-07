@@ -20,8 +20,11 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import com.ave.vastgui.tools.activity.delegate.ActivityVbVmDelegate
 import com.ave.vastgui.core.extension.NotNUllVar
+import com.ave.vastgui.tools.activity.widget.screenConfig
+import com.ave.vastgui.tools.lifecycle.reflexViewModel
+import com.ave.vastgui.tools.viewbinding.reflexViewBinding
+import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -46,35 +49,39 @@ import com.ave.vastgui.core.extension.NotNUllVar
  */
 abstract class VastVbVmActivity<VB : ViewBinding, VM : ViewModel> : VastActivity() {
 
-    // Activity Delegate
-    protected inner class AVVD: ActivityVbVmDelegate<VB, VM>(this){
-        override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-            return this@VastVbVmActivity.createViewModel(modelClass)
+    // Snackbar
+    private var mSnackbar by NotNUllVar<Snackbar>()
+
+    // ViewBinding
+    private val mBinding: VB by lazy {
+        reflexViewBinding(this)
+    }
+
+    // ViewModel
+    private val mViewModel: VM by lazy {
+        reflexViewModel(this.javaClass, this) {
+            return@reflexViewModel createViewModel(it)
         }
     }
-    private var mActivityDelegate by NotNUllVar<AVVD>()
 
     @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mActivityDelegate = AVVD()
-        setContentView(mActivityDelegate.getBinding().root)
+        setContentView(getBinding().root)
+        screenConfig(mEnableActionBar, mEnableFullScreen)
+        mSnackbar = Snackbar.make(mBinding.root, getDefaultTag(), Snackbar.LENGTH_SHORT)
     }
 
-    protected fun getBinding(): VB {
-        return mActivityDelegate.getBinding()
+    override fun getBinding(): VB {
+        return mBinding
     }
 
-    protected fun getViewModel(): VM {
-        return mActivityDelegate.getViewModel()
+    override fun getViewModel(): VM {
+        return mViewModel
     }
 
-    protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        return modelClass.newInstance()
-    }
-
-    final override fun createActivityDelegate(): ActivityVbVmDelegate<VB, VM> {
-        return mActivityDelegate
+    override fun getSnackbar(): Snackbar {
+        return mSnackbar
     }
 
 }

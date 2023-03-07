@@ -18,8 +18,10 @@ package com.ave.vastgui.tools.activity
 
 import android.os.Bundle
 import androidx.viewbinding.ViewBinding
-import com.ave.vastgui.tools.activity.delegate.ActivityVbDelegate
 import com.ave.vastgui.core.extension.NotNUllVar
+import com.ave.vastgui.tools.activity.widget.screenConfig
+import com.ave.vastgui.tools.viewbinding.reflexViewBinding
+import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -45,25 +47,27 @@ import com.ave.vastgui.core.extension.NotNUllVar
  *
  * @param VB [ViewBinding] of the activity layout.
  */
-abstract class VastVbActivity<VB : ViewBinding> : VastActivity() {
+abstract class VastVbActivity<VB : ViewBinding>() : VastActivity() {
 
-    // Activity Delegate
-    protected inner class AVD : ActivityVbDelegate<VB>(this)
+    // Snackbar
+    private var mSnackbar by NotNUllVar<Snackbar>()
 
-    private var mActivityDelegate by NotNUllVar<AVD>()
+    // ViewBinding
+    private val mBinding: VB by lazy {
+        reflexViewBinding(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mActivityDelegate = AVD()
-        setContentView(mActivityDelegate.getBinding().root)
+        setContentView(mBinding.root)
+        screenConfig(mEnableActionBar, mEnableFullScreen)
+        mSnackbar = Snackbar.make(mBinding.root, getDefaultTag(), Snackbar.LENGTH_SHORT)
     }
 
-    protected fun getBinding(): VB {
-        return mActivityDelegate.getBinding()
+    override fun getBinding(): VB {
+        return mBinding
     }
 
-    final override fun createActivityDelegate(): AVD {
-        return mActivityDelegate
-    }
+    override fun getSnackbar() = mSnackbar
 
 }

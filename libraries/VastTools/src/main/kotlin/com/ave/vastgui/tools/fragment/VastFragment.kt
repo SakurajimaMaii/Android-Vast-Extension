@@ -17,7 +17,13 @@
 package com.ave.vastgui.tools.fragment
 
 import androidx.fragment.app.Fragment
-import com.ave.vastgui.tools.fragment.delegate.FragmentDelegate
+import androidx.lifecycle.ViewModel
+import androidx.viewbinding.ViewBinding
+import com.ave.vastgui.core.extension.defaultLogTag
+import com.ave.vastgui.tools.coroutines.createMainScope
+import com.ave.vastgui.tools.network.response.ResponseBuilder
+import com.ave.vastgui.tools.network.response.getResponseBuilder
+import kotlinx.coroutines.CoroutineScope
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -27,20 +33,79 @@ import com.ave.vastgui.tools.fragment.delegate.FragmentDelegate
 
 abstract class VastFragment : Fragment() {
 
-    private val mFragmentDelegate by lazy {
-        createFragmentDelegate()
+    protected fun getDefaultTag(): String {
+        return defaultLogTag()
     }
 
-    protected fun getDefaultTag(): String{
-        return mFragmentDelegate.getDefaultTag()
+    /**
+     * Create mainScope.
+     */
+    protected fun createMainScope(): CoroutineScope {
+        return createMainScope(getDefaultTag())
     }
 
-    protected abstract fun createFragmentDelegate(): FragmentDelegate
+    /**
+     * Construct a network request builder.
+     */
+    protected fun getResponseBuilder(): ResponseBuilder {
+        return getResponseBuilder(createMainScope())
+    }
 
-    protected fun getRequestBuilder() = mFragmentDelegate.getApiRequestBuilder()
+    /**
+     * When [setVmBySelf] is true, it means that ViewModelStoreOwner
+     * is Fragment itself. When you want ViewModelStoreOwner to be the
+     * [androidx.fragment.app.FragmentActivity] this fragment is currently
+     * associated with, set setVmBySelf to false.
+     */
+    protected open fun setVmBySelf(): Boolean = false
 
-    protected fun createMainScope() = mFragmentDelegate.createMainScope()
+    /**
+     * Get the [ViewBinding]. By default, it will throw a
+     * [IllegalStateException].
+     *
+     * @throws IllegalStateException
+     */
+    protected open fun getBinding(): ViewBinding {
+        throw IllegalStateException("You should not call getViewModel().")
+    }
 
-    protected fun getBaseActivity() = mFragmentDelegate.getBaseActivity()
+    /**
+     * Clear the [ViewBinding]. By default, it will throw a
+     * [IllegalStateException].
+     *
+     * @throws IllegalStateException
+     */
+    protected open fun clearBinding() {
+        throw IllegalStateException("You should not call clearBinding().")
+    }
+
+    /**
+     * Get the [ViewModel]. By default, it will throw a
+     * [IllegalStateException].
+     *
+     * @throws IllegalStateException
+     */
+    protected open fun getViewModel(): ViewModel {
+        throw IllegalStateException("You should not call getViewModel().")
+    }
+
+    /**
+     * Return a [ViewModel].
+     *
+     * If you want to initialization a [ViewModel] with parameters,just do like
+     * this:
+     * ```kotlin
+     * override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+     *      return MainSharedVM("MyVM")
+     * }
+     * ```
+     *
+     * @param modelClass by default, Activity or Fragment will get the
+     *     [ViewModel] by `modelClass.newInstance()`.
+     * @return the [ViewModel] of the Activity or Fragment.
+     */
+    protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+        return modelClass.newInstance()
+    }
 
 }

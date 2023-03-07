@@ -17,7 +17,14 @@
 package com.ave.vastgui.tools.activity
 
 import androidx.appcompat.app.AppCompatActivity
-import com.ave.vastgui.tools.activity.delegate.ActivityDelegate
+import androidx.lifecycle.ViewModel
+import androidx.viewbinding.ViewBinding
+import com.ave.vastgui.core.extension.defaultLogTag
+import com.ave.vastgui.tools.coroutines.createMainScope
+import com.ave.vastgui.tools.network.response.ResponseBuilder
+import com.ave.vastgui.tools.network.response.getResponseBuilder
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -30,30 +37,107 @@ import com.ave.vastgui.tools.activity.delegate.ActivityDelegate
  */
 sealed class VastActivity : AppCompatActivity() {
 
-    private val mActivityDelegate by lazy {
-        createActivityDelegate()
-    }
+    /**
+     * True if you want to show the ActionBar,false otherwise,
+     *
+     * @see enableActionBar
+     */
+    protected var mEnableActionBar = true
 
-    protected fun getContext() = mActivityDelegate.getContext()
+    /**
+     * True if you want to set fullscreen,false otherwise.
+     *
+     * @see enableFullScreen
+     */
+    protected var mEnableFullScreen = false
 
-    protected fun getDefaultTag(): String = mActivityDelegate.getDefaultTag()
+    protected fun getContext() = this
 
+    protected fun getDefaultTag(): String = this.defaultLogTag()
+
+    /**
+     * True if you want to show the ActionBar,false otherwise.
+     *
+     * ```kotlin
+     * override fun onCreate(savedInstanceState: Bundle?) {
+     *      super.onCreate(savedInstanceState)
+     *      enableActionBar(true)
+     *      ... //Other setting
+     * }
+     * ```
+     */
     protected fun enableActionBar(enable: Boolean) {
-        mActivityDelegate.enableActionBar(enable)
+        mEnableActionBar = enable
     }
 
+    /**
+     * True if you want to set fullscreen,false otherwise. If you set
+     * [enableFullScreen] to true,the ActionBar will not be shown.
+     *
+     * ```kotlin
+     * override fun onCreate(savedInstanceState: Bundle?) {
+     *      super.onCreate(savedInstanceState)
+     *      enableFullScreen(true)
+     *      ... //Other setting
+     * }
+     * ```
+     */
     protected fun enableFullScreen(enable: Boolean) {
-        mActivityDelegate.enableFullScreen(enable)
+        mEnableFullScreen = enable
     }
 
-    protected fun getBaseActivity() = mActivityDelegate.getBaseActivity()
+    /** Create mainScope. */
+    protected fun createMainScope(): CoroutineScope {
+        return createMainScope(getDefaultTag())
+    }
 
-    protected fun getSnackbar() = mActivityDelegate.getSnackbar()
+    /** Construct a network request builder. */
+    protected fun getResponseBuilder(): ResponseBuilder {
+        return getResponseBuilder(createMainScope())
+    }
 
-    protected fun getRequestBuilder() = mActivityDelegate.getApiRequestBuilder()
+    /**
+     * Get the [ViewBinding]. By default, it will throw a
+     * [IllegalStateException].
+     *
+     * @throws IllegalStateException
+     */
+    protected open fun getBinding(): ViewBinding {
+        throw IllegalStateException("You should not call getBinding().")
+    }
 
-    protected fun createMainScope() = mActivityDelegate.createMainScope()
+    /**
+     * Get the [ViewModel]. By default, it will throw a
+     * [IllegalStateException].
+     *
+     * @throws IllegalStateException
+     */
+    protected open fun getViewModel(): ViewModel {
+        throw IllegalStateException("You should not call getViewModel().")
+    }
 
-    protected abstract fun createActivityDelegate(): ActivityDelegate
+    /** Get default [Snackbar] for activity. */
+    protected open fun getSnackbar(): Snackbar {
+        throw IllegalStateException("You should not call getSnackbar().")
+    }
+
+    /**
+     * Return a [ViewModel].
+     *
+     * If you want to initialization a [ViewModel] with parameters,just do like
+     * this:
+     * ```kotlin
+     * override fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+     *      return MainSharedVM("MyVM")
+     * }
+     * ```
+     *
+     * @param modelClass by default, Activity or Fragment will get the
+     *     [ViewModel] by `modelClass.newInstance()`.
+     * @return the [ViewModel] of the Activity or Fragment.
+     */
+    protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+        return modelClass.newInstance()
+    }
 
 }
