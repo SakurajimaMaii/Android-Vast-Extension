@@ -24,6 +24,7 @@ import androidx.activity.ComponentActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.viewbinding.ViewBinding
 import com.ave.vastgui.core.extension.cast
 import java.lang.reflect.ParameterizedType
@@ -59,24 +60,45 @@ inline fun <reified VB : ViewBinding> reflexViewBinding(layoutInflater: LayoutIn
  * @param VB ViewBinding class.
  */
 inline fun <reified VB : ViewBinding> Fragment.reflexViewBinding() =
-    FragmentViewBindingDelegate(VB::class.java)
+    FragmentViewBindingDelegate(VB::class.java, this)
 
-class FragmentViewBindingDelegate<VB : ViewBinding>(private val clazz: Class<VB>) :
-    ReadOnlyProperty<Fragment, VB> {
+class FragmentViewBindingDelegate<VB : ViewBinding>(
+    private val bindingClass: Class<VB>,
+    val fragment: Fragment,
+) : ReadOnlyProperty<Fragment, VB> {
     private var binding: VB? = null
 
-    override fun getValue(thisRef: Fragment, property: KProperty<*>): VB {
-        if (binding == null) {
-            binding = cast<VB>(
-                clazz.getMethod("bind", View::class.java).invoke(null, thisRef.requireView())
-            )
-            thisRef.viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
-                override fun onDestroy(owner: LifecycleOwner) {
+    init {
+        fragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            val viewLifecycleOwnerObserver = Observer<LifecycleOwner?> { owner ->
+                if (owner == null) {
                     binding = null
                 }
-            })
+            }
+
+            override fun onCreate(owner: LifecycleOwner) {
+                fragment.viewLifecycleOwnerLiveData.observeForever(viewLifecycleOwnerObserver)
+            }
+
+            override fun onDestroy(owner: LifecycleOwner) {
+                fragment.viewLifecycleOwnerLiveData.removeObserver(viewLifecycleOwnerObserver)
+            }
+        })
+    }
+
+    override fun getValue(thisRef: Fragment, property: KProperty<*>): VB {
+        val binding = binding
+
+        if (binding != null && binding.root === thisRef.view) {
+            return binding
         }
-        return binding!!
+
+        val view = thisRef.view
+            ?: throw IllegalStateException("Should not attempt to get bindings when the Fragment's view is null.")
+
+        return cast(
+            bindingClass.getMethod("bind", View::class.java).invoke(null, thisRef.requireView())
+        )
     }
 }
 
