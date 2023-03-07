@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 import com.ave.vastgui.core.extension.defaultLogTag
+import com.ave.vastgui.tools.activity.widget.screenConfig
 import com.ave.vastgui.tools.coroutines.createMainScope
 import com.ave.vastgui.tools.network.response.ResponseBuilder
 import com.ave.vastgui.tools.network.response.getResponseBuilder
@@ -68,6 +69,7 @@ sealed class VastActivity : AppCompatActivity() {
      */
     protected fun enableActionBar(enable: Boolean) {
         mEnableActionBar = enable
+        screenConfig(mEnableActionBar, mEnableFullScreen)
     }
 
     /**
@@ -84,6 +86,7 @@ sealed class VastActivity : AppCompatActivity() {
      */
     protected fun enableFullScreen(enable: Boolean) {
         mEnableFullScreen = enable
+        screenConfig(mEnableActionBar, mEnableFullScreen)
     }
 
     /** Create mainScope. */

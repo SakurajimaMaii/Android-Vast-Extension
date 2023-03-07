@@ -19,7 +19,6 @@ package com.ave.vastgui.tools.activity
 import android.os.Bundle
 import androidx.viewbinding.ViewBinding
 import com.ave.vastgui.core.extension.NotNUllVar
-import com.ave.vastgui.tools.activity.widget.screenConfig
 import com.ave.vastgui.tools.viewbinding.reflexViewBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -60,7 +59,6 @@ abstract class VastVbActivity<VB : ViewBinding>() : VastActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(mBinding.root)
-        screenConfig(mEnableActionBar, mEnableFullScreen)
         mSnackbar = Snackbar.make(mBinding.root, getDefaultTag(), Snackbar.LENGTH_SHORT)
     }
 

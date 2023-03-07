@@ -20,7 +20,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import com.ave.vastgui.core.extension.NotNUllVar
-import com.ave.vastgui.tools.activity.widget.screenConfig
 import com.ave.vastgui.tools.lifecycle.reflexViewModel
 import com.google.android.material.snackbar.Snackbar
 
@@ -67,7 +66,6 @@ abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
         } else {
             throw RuntimeException("Please set correct layout id for the layoutId .")
         }
-        screenConfig(mEnableActionBar, mEnableFullScreen)
         mSnackbar = Snackbar.make(findViewById(layoutId), getDefaultTag(), Snackbar.LENGTH_SHORT)
     }
 
