@@ -14,10 +14,22 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils.network.service
+@file:JvmName("Clazz")
 
-data class Result(
-    val hasMore: Boolean,
-    val songCount: Int,
-    val songs: List<Song>
-)
+package com.ave.vastgui.core.extension
+
+
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2023/3/6
+// Description: 
+// Documentation:
+// Reference:
+
+/**
+ * @receiver any
+ * @return get the receiver class name as the default name for log tag.
+ */
+fun Any.defaultLogTag():String{
+    return this.javaClass.simpleName
+}
