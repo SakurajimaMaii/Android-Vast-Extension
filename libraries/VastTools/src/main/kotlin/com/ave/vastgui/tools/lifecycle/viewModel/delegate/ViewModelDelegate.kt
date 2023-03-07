@@ -14,36 +14,24 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.viewModel
+package com.ave.vastgui.tools.lifecycle.viewModel.delegate
 
 import androidx.lifecycle.ViewModel
-import com.ave.vastgui.tools.network.response.ResponseBuilder
-import com.ave.vastgui.tools.viewModel.delegate.ViewModelDelegate
-import kotlinx.coroutines.CoroutineScope
+import com.ave.vastgui.tools.base.BaseActive
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/7/6
+// Date: 2022/10/9
 // Description: 
 // Documentation:
+// Reference:
 
-/**
- * Base ViewModel
- */
-abstract class VastViewModel : ViewModel() {
+open class ViewModelDelegate(
+    protected val viewModel: ViewModel
+) : BaseActive {
 
-    private val viewModelDelegate by lazy {
-        ViewModelDelegate(this)
-    }
-
-    protected open fun getDefaultTag(): String = viewModelDelegate.getDefaultTag()
-
-    protected open fun getRequestBuilder(): ResponseBuilder {
-        return viewModelDelegate.getApiRequestBuilder()
-    }
-
-    protected open fun createMainScope(): CoroutineScope {
-        return viewModelDelegate.createMainScope()
+    override fun getDefaultTag(): String {
+        return viewModel::class.java.simpleName
     }
 
 }

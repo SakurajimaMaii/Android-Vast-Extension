@@ -20,6 +20,11 @@ import android.content.Context
 import androidx.security.crypto.EncryptedFile
 import com.ave.vastgui.tools.config.ToolsConfig
 import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.manager.filemgr.FileMgr.FileResult.FLAG_EXISTS
+import com.ave.vastgui.tools.manager.filemgr.FileMgr.FileResult.FLAG_FAILED
+import com.ave.vastgui.tools.manager.filemgr.FileMgr.FileResult.FLAG_NOT_EXISTS
+import com.ave.vastgui.tools.manager.filemgr.FileMgr.FileResult.FLAG_PARENT_NOT_EXISTS
+import com.ave.vastgui.tools.manager.filemgr.FileMgr.FileResult.FLAG_SUCCESS
 import java.io.File
 import java.io.FileOutputStream
 
@@ -30,6 +35,24 @@ import java.io.FileOutputStream
 // Documentation:
 
 object FileMgr {
+
+    /**
+     * File operations result.
+     *
+     * @property FLAG_SUCCESS means running successful.
+     * @property FLAG_PARENT_NOT_EXISTS means the parent of the file is not
+     *     exist.
+     * @property FLAG_EXISTS means the file or directory is exist.
+     * @property FLAG_NOT_EXISTS means the file or directory is not exist.
+     * @property FLAG_FAILED means running failed.
+     */
+    enum class FileResult {
+        FLAG_SUCCESS,
+        FLAG_PARENT_NOT_EXISTS,
+        FLAG_EXISTS,
+        FLAG_NOT_EXISTS,
+        FLAG_FAILED
+    }
 
     /**
      * @return The File which from internal storage, meant for your app's use
@@ -118,14 +141,14 @@ object FileMgr {
     }
 
     /**
-     * Write to the [file].
+     * Write to the txt file.
      *
-     * @param file the file you want to write.
+     * @param file the txt file you want to write.
      * @param writeEventListener register a listener for writing.
      * @return [FileResult]
      */
     @JvmStatic
-    fun writeFile(file: File, writeEventListener: WriteEventListener): FileResult {
+    fun writeTxtFile(file: File, writeEventListener: WriteEventListener): FileResult {
         return if (!file.exists())
             FileResult.FLAG_FAILED
         else if ("txt" == getFileExtension(file)) {
@@ -135,7 +158,7 @@ object FileMgr {
                 try {
                     flush()
                     close()
-                } catch (e:Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
@@ -228,9 +251,7 @@ object FileMgr {
      * @param file
      */
     @JvmStatic
-    fun getEncryptedFile(
-        file: File
-    ): EncryptedFile {
+    fun getEncryptedFile(file: File): EncryptedFile {
         return EncryptedFile.Builder(
             ContextHelper.getAppContext(),
             file,
@@ -247,19 +268,6 @@ object FileMgr {
          * @param fileOutputStream File output stream.
          */
         fun writeEvent(fileOutputStream: FileOutputStream)
-    }
-
-    /** Register a listener when write result. */
-    interface WriteEventResultListener {
-
-        /** On success. */
-        fun onSuccess()
-
-
-        /** On failed.Default print StackTrace. */
-        fun onFailed(e: Exception) {
-            e.printStackTrace()
-        }
     }
 
 }

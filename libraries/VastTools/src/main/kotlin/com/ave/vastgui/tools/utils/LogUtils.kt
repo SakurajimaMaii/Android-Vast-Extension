@@ -69,8 +69,6 @@ object LogUtils {
 
     /**
      * `true` if app in debug,`false` otherwise.
-     *
-     * @since 0.0.6
      */
     private var isDeBug: Boolean = true
 

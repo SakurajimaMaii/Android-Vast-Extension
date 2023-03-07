@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 
 class ResponseBuilder(val mainScope: CoroutineScope) {
 
-    fun <T : ResponseApi> callWithListener(
+    fun <T : ResponseApi> requestWithListener(
         request: () -> Request<T>,
         listener: ResponseStateListener<T>.() -> Unit
     ) {
@@ -80,7 +80,6 @@ class ResponseBuilder(val mainScope: CoroutineScope) {
                 response.errorCode,
                 response.errorMsg
             )
-
             is ResponseWrapper.ErrorResponseWrapper -> listener.onError(response.throwable)
         }
     }
