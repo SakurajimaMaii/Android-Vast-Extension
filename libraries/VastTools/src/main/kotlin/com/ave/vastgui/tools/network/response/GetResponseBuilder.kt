@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.fragment.base
+package com.ave.vastgui.tools.network.response
 
-import com.ave.vastgui.tools.base.BaseVisActive
+import kotlinx.coroutines.CoroutineScope
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/13 7:18
+// Date: 2023/3/6
 // Description: 
 // Documentation:
+// Reference:
 
-interface BaseFragment : BaseVisActive {
-
-    /**
-     * When [setVmBySelf] is true, it means that ViewModelStoreOwner
-     * is Fragment itself. When you want ViewModelStoreOwner to be the
-     * [androidx.fragment.app.FragmentActivity] this fragment is currently
-     * associated with, set setVmBySelf to false.
-     */
-    fun setVmBySelf(): Boolean = false
-
+/**
+ * Create a [ResponseBuilder].
+ */
+fun getResponseBuilder(mainScope: CoroutineScope): ResponseBuilder {
+    return ResponseBuilder(mainScope)
 }
