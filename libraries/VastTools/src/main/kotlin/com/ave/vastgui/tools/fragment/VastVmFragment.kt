@@ -54,7 +54,7 @@ abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
 
     // ViewModel
     private val mViewModel: VM by lazy {
-        reflexViewModel(this.javaClass, if (setVmBySelf()) requireActivity() else this) {
+        reflexViewModel(this.javaClass, if (!setVmBySelf()) requireActivity() else this) {
             return@reflexViewModel createViewModel(it)
         }
     }
