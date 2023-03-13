@@ -94,7 +94,7 @@ dependencies {
     androidTestImplementation(AndroidX.junit)
     api(Libraries.progressmanager)
     api(Libraries.zxing)
-    implementation(project(":libraries:VastCore"))
+    api(project(":libraries:VastCore"))
     implementation(AndroidX.activity_ktx)
     implementation(AndroidX.annotation)
     implementation(AndroidX.appcompat)

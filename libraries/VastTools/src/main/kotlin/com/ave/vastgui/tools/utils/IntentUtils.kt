@@ -42,8 +42,8 @@ object IntentUtils {
     /**
      * Dial phone number.
      *
-     * This method does not verify the phone number. If you want to know
-     * if your mobile phone number meets the rules,you can click this link
+     * This method does not verify the phone number. If you want to know if
+     * your mobile phone number meets the rules,you can click this link
      * [Rules of International Mobile Phone Numbers](https://support.huaweicloud.com/intl/en-us/productdesc-msgsms/phone_numbers.html).
      *
      * @param context context.
@@ -177,6 +177,20 @@ object IntentUtils {
         startIntent(context, intent)
     }
 
+    /**
+     * Open Application details settings.
+     *
+     * @param context context.
+     */
+    fun openApplicationDetailsSettings(context: Context) {
+        val intent = Intent().apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            action = "android.settings.APPLICATION_DETAILS_SETTINGS"
+            data = Uri.fromParts("package", context.packageName, null)
+        }
+        startIntent(context, intent)
+    }
+
     /** Start intent. */
     private fun startIntent(context: Context, intent: Intent) {
         try {
@@ -214,8 +228,10 @@ object IntentUtils {
      */
     class AlarmConfig {
         internal var message: String = ""
+
         @IntRange(from = 0, to = 23)
         internal var hour: Int = 0
+
         @IntRange(from = 0, to = 59)
         internal var minutes: Int = 0
         internal var vibrate: Boolean = false
