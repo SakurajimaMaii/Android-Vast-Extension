@@ -29,7 +29,7 @@ interface ResponseApi {
     /**
      * @return true when the response is successful, false otherwise.
      */
-    fun isSuccessful(): Boolean = false
+    fun isSuccessful(): Boolean = true
 
     /**
      * @return true when the response is successful but data is empty, false otherwise.
