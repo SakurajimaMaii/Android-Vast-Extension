@@ -14,37 +14,32 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils.basebindadpexample;
+package com.ave.vastgui.tools.manager.filemgr
 
-import android.content.Context;
+import android.webkit.MimeTypeMap
+import java.io.File
+import java.util.Locale
 
-import androidx.annotation.NonNull;
-
-import java.util.List;
-
-import cn.govast.vastadapter.AdapterItem;
-import cn.govast.vastadapter.adapter.VastBindAdapter;
-import cn.govast.vastutils.BR;
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/3/31 14:11
-// Description:
+// Date: 2023/3/14
+// Description: 
 // Documentation:
+// Reference:
 
-public class BaseBindAdapter extends VastBindAdapter {
+internal class FilePropertyMgr : FileProperty {
 
-    public BaseBindAdapter(@NonNull List<AdapterItem> dataSource, @NonNull Context mContext) {
-        super(dataSource,mContext);
+    private val mimeTypeMap = MimeTypeMap.getSingleton()
+
+    override fun getExtension(file: File): String {
+        return MimeTypeMap.getFileExtensionFromUrl(file.toString())
     }
 
-    @Override
-    public int setVariableId() {
-        return BR.item;
-    }
-
-    public Boolean isEmpty(){
-        return getMDataSource().isEmpty();
+    override fun getMimeType(file: File, fallback: String): String {
+        return MimeTypeMap.getFileExtensionFromUrl(file.toString())
+            ?.run { mimeTypeMap.getMimeTypeFromExtension(lowercase(Locale.ROOT)) }
+            ?: fallback
     }
 
 }
