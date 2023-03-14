@@ -15,6 +15,7 @@
   ~ limitations under the License.
   -->
 
-<manifest>
+<manifest
+    package="com.ave.vastgui.app">
 
 </manifest>

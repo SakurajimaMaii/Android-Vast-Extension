@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import cn.govast.plugin.version.AndroidX
-import cn.govast.plugin.version.Google
-import cn.govast.plugin.version.Version
+import com.pluginversion.vastgui.AndroidX
+import com.pluginversion.vastgui.Google
+import com.pluginversion.vastgui.Version
 
 plugins {
     id("com.android.application")
     id("kotlin-android")
     id("org.jetbrains.kotlin.android")
-    id("cn.govast.plugin.version")
+    id("com.pluginversion.vastgui")
 }
 
 android {
@@ -36,7 +36,7 @@ android {
         }
     }
 
-    namespace = "com.gcode.vastutilsjava"
+    namespace = "com.ave.vastgui.app"
     compileSdk = Version.compile_sdk_version
 
     defaultConfig {
