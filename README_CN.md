@@ -27,5 +27,4 @@
 感谢 [JetBrains](https://www.jetbrains.com/) 对于项目提供的支持！这正是开源项目发展的动力！项目开发软件采用 **OSS** 许可，你可以点击 [什么是 OSS 开发许可证？谁可以获得](https://sales.jetbrains.com/hc/zh-cn/articles/360016581839-%E4%BB%80%E4%B9%88%E6%98%AF-OSS-%E5%BC%80%E5%8F%91%E8%AE%B8%E5%8F%AF%E8%AF%81-%E8%B0%81%E5%8F%AF%E4%BB%A5%E8%8E%B7%E5%BE%97-) 了解更多。
 
 ![Toolbox App logo](https://resources.jetbrains.com/storage/products/company/brand/logos/Toolbox.svg)
-![Kotlin logo](https://resources.jetbrains.com/storage/products/company/brand/logos/Kotlin.svg){ width="200" }
 ![JetBrains Logo (Main) logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
