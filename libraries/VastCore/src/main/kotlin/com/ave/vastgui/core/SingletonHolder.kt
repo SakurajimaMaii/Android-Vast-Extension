@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils.network.service
+package com.ave.vastgui.core
 
-data class Song(
-    val album: Album,
-    val alias: List<String>,
-    val artists: List<ArtistX>,
-    val copyrightId: Int,
-    val duration: Int,
-    val fee: Int,
-    val ftype: Int,
-    val id: Int,
-    val mark: Long,
-    val mvid: Int,
-    val name: String,
-    val rUrl: Any,
-    val rtype: Int,
-    val status: Int,
-    val transNames: List<String>
-)
+
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2023/3/14
+// Description: 
+// Documentation:
+// Reference: https://juejin.cn/post/6844903775669321735
+
+open class SingletonHolder<out T, in A>(private val creator: A.() -> T) {
+
+    private var instance: T? = null
+
+    fun getInstance(arg: A): T =
+        instance ?: synchronized(this) {
+            instance ?: creator(arg).apply { instance = this }
+        }
+
+}
