@@ -21,3 +21,11 @@ Since the project uses **Composingbuilds module** for project management, you ca
 ## Star
 
 [![Star History Chart](https://api.star-history.com/svg?repos=SakurajimaMaii/Android-Vast-Extension&type=Date)](https://star-history.com/#SakurajimaMaii/Android-Vast-Extension&Date)
+
+## Acknowledgments
+
+Thanks to [JetBrains](https://www.jetbrains.com/) for supporting the project! The project development software adopts the **OSS** license, you can click [What is an OSS development license and who qualifies for one?](https://sales.jetbrains.com/hc/en-gb/articles/360016581839-What-is-an-OSS-development-license-and-who-qualifies-for-one-) to learn more.
+
+![Toolbox App logo](https://resources.jetbrains.com/storage/products/company/brand/logos/Toolbox.svg)
+![Kotlin logo](https://resources.jetbrains.com/storage/products/company/brand/logos/Kotlin.svg){ width="200" }
+![JetBrains Logo (Main) logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
