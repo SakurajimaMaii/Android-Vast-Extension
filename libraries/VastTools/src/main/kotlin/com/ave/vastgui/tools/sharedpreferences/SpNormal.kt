@@ -18,7 +18,7 @@ package com.ave.vastgui.tools.sharedpreferences
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.ave.vastgui.core.SingletonHolder
+import com.ave.vastgui.core.extension.SingletonHolder
 import com.ave.vastgui.tools.helper.ContextHelper
 
 
@@ -60,12 +60,12 @@ import com.ave.vastgui.tools.helper.ContextHelper
  */
 class SpNormal private constructor(name: String) : SpDelegates() {
 
-    private val sharedPreferences by lazy {
+    private val mSharedPreferences by lazy {
         ContextHelper.getAppContext().getSharedPreferences(name, Context.MODE_PRIVATE)
     }
 
     override fun getSharedPreferences(): SharedPreferences {
-        return sharedPreferences
+        return mSharedPreferences
     }
 
     companion object : SingletonHolder<SpNormal, String>(::SpNormal)

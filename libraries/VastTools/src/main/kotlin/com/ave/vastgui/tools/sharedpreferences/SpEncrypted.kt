@@ -18,7 +18,7 @@ package com.ave.vastgui.tools.sharedpreferences
 
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
-import com.ave.vastgui.core.SingletonHolder
+import com.ave.vastgui.core.extension.SingletonHolder
 import com.ave.vastgui.tools.config.ToolsConfig
 import com.ave.vastgui.tools.helper.ContextHelper
 
@@ -61,7 +61,7 @@ import com.ave.vastgui.tools.helper.ContextHelper
  */
 class SpEncrypted private constructor(name: String) : SpDelegates() {
 
-    private val sharedPreferences by lazy {
+    private val mSharedPreferences by lazy {
         EncryptedSharedPreferences.create(
             ContextHelper.getAppContext(),
             name,
@@ -72,7 +72,7 @@ class SpEncrypted private constructor(name: String) : SpDelegates() {
     }
 
     override fun getSharedPreferences(): SharedPreferences {
-        return sharedPreferences
+        return mSharedPreferences
     }
 
     companion object : SingletonHolder<SpEncrypted, String>(::SpEncrypted)
