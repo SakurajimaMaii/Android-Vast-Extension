@@ -81,19 +81,12 @@ sealed class SpDelegates {
     }
 
     fun stringSet(defaultValue: Set<String>? = null) = object :
-        ReadWriteProperty<SpDelegates, Set<String>?> {
-        override fun getValue(
-            thisRef: SpDelegates,
-            property: KProperty<*>
-        ): Set<String>? {
+        ReadWriteProperty<Any, Set<String>?> {
+        override fun getValue(thisRef: Any, property: KProperty<*>): Set<String>? {
             return getSharedPreferences().getStringSet(property.name, defaultValue)
         }
 
-        override fun setValue(
-            thisRef: SpDelegates,
-            property: KProperty<*>,
-            value: Set<String>?
-        ) {
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: Set<String>?) {
             getSharedPreferences().edit().putStringSet(property.name, value).apply()
         }
     }
