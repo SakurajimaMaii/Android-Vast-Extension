@@ -92,6 +92,7 @@ project(":libraries:VastTools"){
 dependencies {
     androidTestImplementation(AndroidX.espresso_core)
     androidTestImplementation(AndroidX.junit)
+    api(AndroidX.security_crypto)
     api(Libraries.progressmanager)
     api(Libraries.zxing)
     api(project(":libraries:VastCore"))
@@ -107,7 +108,6 @@ dependencies {
     implementation(AndroidX.lifecycle_runtime_ktx)
     implementation(AndroidX.lifecycle_viewmodel_ktx)
     implementation(AndroidX.recyclerview)
-    implementation(AndroidX.security_crypto)
     implementation(AndroidX.test_monitor)
     implementation(Google.material)
     implementation(Jetbrains.kotlin_reflect)
