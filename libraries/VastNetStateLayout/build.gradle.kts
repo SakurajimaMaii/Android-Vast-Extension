@@ -26,9 +26,6 @@ plugins {
     id("convention.publication")
 }
 
-group = "io.github.sakurajimamaii"
-version = "0.0.3"
-
 android {
     compileSdk = Version.compile_sdk_version
     namespace = "com.ave.vastgui.netstatelayout"
@@ -57,6 +54,12 @@ android {
     }
 
     sourceSets["main"].java.srcDir("src/main/kotlin")
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 
 dependencies {
@@ -77,3 +80,17 @@ dependencies {
 extra["PUBLISH_ARTIFACT_ID"] = "VastNetStateLayout"
 extra["PUBLISH_DESCRIPTION"] = "A layout to set customized network state ui."
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/VastUtils/tree/master/libraries/VastNetStateLayout"
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "io.github.sakurajimamaii"
+            artifactId = "VastNetStateLayout"
+            version = "0.0.3"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
+}

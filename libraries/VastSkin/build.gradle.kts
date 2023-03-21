@@ -24,10 +24,8 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("com.pluginversion.vastgui")
+    id("convention.publication")
 }
-
-group = "io.github.sakurajimamaii"
-version = "0.0.1"
 
 android {
     namespace = "com.ave.vastgui.skin"
@@ -57,6 +55,12 @@ android {
     }
 
     sourceSets["main"].java.srcDir("src/main/kotlin")
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 
 dependencies {
@@ -79,3 +83,17 @@ dependencies {
 extra["PUBLISH_ARTIFACT_ID"] = "VastSkin"
 extra["PUBLISH_DESCRIPTION"] = "Vast Skin."
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/VastUtils/tree/master/libraries/VastSkin"
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "io.github.sakurajimamaii"
+            artifactId = "VastSkin"
+            version = "0.0.1"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
+}

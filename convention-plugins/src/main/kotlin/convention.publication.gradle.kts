@@ -29,7 +29,7 @@ ext["ossrhUsername"] = null
 ext["ossrhPassword"] = null
 
 // Grabbing secrets from local.properties file or from environment variables, which could be used on CI
-val secretPropsFile = project.rootProject.file("local.properties")
+val secretPropsFile: File = project.rootProject.file("local.properties")
 if (secretPropsFile.exists()) {
     secretPropsFile.reader().use {
         Properties().apply {
@@ -67,6 +67,7 @@ publishing {
 
     // Configure all publications
     publications.withType<MavenPublication> {
+
         // Stub javadoc.jar artifact
         artifact(javadocJar.get())
 

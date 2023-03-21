@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import com.pluginversion.vastgui.AndroidX
 import com.pluginversion.vastgui.Version
 
 plugins {
@@ -25,9 +24,10 @@ plugins {
 }
 
 group = "io.github.sakurajimamaii"
-version = "0.0.2"
+version = "0.0.3"
 
 android {
+    
     namespace = "com.ave.vastgui.core"
     compileSdk = Version.compile_sdk_version
 
@@ -60,12 +60,32 @@ android {
     sourceSets {
         getByName("main").java.srcDirs("src/main/kotlin")
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 
 dependencies {
-    implementation(AndroidX.core_ktx)
+
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastCore"
 extra["PUBLISH_DESCRIPTION"] = "Core for Android-Vast-Extension"
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/VastCore"
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "io.github.sakurajimamaii"
+            artifactId = "VastCore"
+            version = "0.0.3"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
+}

@@ -35,9 +35,6 @@ plugins {
     id("convention.publication")
 }
 
-group = "io.github.sakurajimamaii"
-version = "0.0.9"
-
 android {
     namespace = "com.ave.vastgui.tools"
     compileSdk = Version.compile_sdk_version
@@ -75,6 +72,11 @@ android {
         getByName("main").java.srcDirs("src/main/kotlin")
     }
 
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 
 project(":libraries:VastTools"){
@@ -123,3 +125,17 @@ dependencies {
 extra["PUBLISH_ARTIFACT_ID"] = "VastTools"
 extra["PUBLISH_DESCRIPTION"] = "Easy Quick Android Tools for you to faster project development."
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/VastUtils/tree/release/libraries/VastTools"
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "io.github.sakurajimamaii"
+            artifactId = "VastTools"
+            version = "0.0.9"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
+}

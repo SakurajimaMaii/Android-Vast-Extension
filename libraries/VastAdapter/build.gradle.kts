@@ -27,9 +27,6 @@ plugins {
     id("convention.publication")
 }
 
-group = "io.github.sakurajimamaii"
-version = "0.0.6"
-
 android {
     namespace = "com.ave.vastgui.adapter"
     compileSdk = Version.compile_sdk_version
@@ -63,6 +60,12 @@ android {
     }
 
     sourceSets["main"].java.srcDir("src/main/kotlin")
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 
 dependencies {
@@ -80,3 +83,17 @@ dependencies {
 extra["PUBLISH_ARTIFACT_ID"] = "VastAdapter"
 extra["PUBLISH_DESCRIPTION"] = "Help you quickly build an Adapter suitable for RecyclerView."
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/VastUtils/tree/master/libraries/VastAdapter"
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "io.github.sakurajimamaii"
+            artifactId = "VastAdapter"
+            version = "0.0.6"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
+}
