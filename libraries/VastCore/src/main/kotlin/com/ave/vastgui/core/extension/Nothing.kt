@@ -21,9 +21,7 @@ package com.ave.vastgui.core.extension
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/2/25
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastCore/extension/Nothing/
 
 /** A placeholder function that does nothing. */
 fun nothing_to_do() = Unit
