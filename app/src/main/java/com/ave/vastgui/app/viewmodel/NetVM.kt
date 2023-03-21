@@ -20,7 +20,7 @@ import com.ave.vastgui.app.network.NetworkRetrofitBuilder
 import com.ave.vastgui.app.network.service.QRCodeKey
 import com.ave.vastgui.app.network.service.QRService
 import com.ave.vastgui.tools.network.response.ResponseLiveData
-import com.ave.vastgui.tools.viewModel.VastViewModel
+import com.ave.vastgui.tools.lifecycle.viewModel.VastViewModel
 
 
 // Author: Vast Gui

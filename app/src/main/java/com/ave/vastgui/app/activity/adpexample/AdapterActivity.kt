@@ -23,7 +23,7 @@ import com.ave.vastgui.adapter.widget.AdapterClickListener
 import com.ave.vastgui.adapter.widget.AdapterItemWrapper
 import com.ave.vastgui.adapter.widget.AdapterLongClickListener
 import com.ave.vastgui.app.R
-import com.ave.vastgui.app.activity.adpexample.adapter.AdapterEx
+import com.ave.vastgui.app.activity.adpexample.adapter.Adapter2
 import com.ave.vastgui.app.activity.adpexample.model.Person
 import com.ave.vastgui.app.activity.adpexample.model.PersonHolder
 import com.ave.vastgui.app.activity.adpexample.model.PersonWrapper
@@ -36,9 +36,9 @@ import com.ave.vastgui.tools.utils.ToastUtils.showShortMsg
 
 class AdapterActivity : VastVbActivity<ActivityAdapterBinding>() {
 
-    private lateinit var adapter: AdapterEx
+    private lateinit var adapter: Adapter2
 
-    private val datas: MutableList<AdapterItemWrapper<Any>> = ArrayList()
+    private val datas: MutableList<AdapterItemWrapper<*>> = ArrayList()
 
     private val click = object : AdapterClickListener {
         override fun onItemClick(view: View, pos: Int) {
@@ -56,7 +56,7 @@ class AdapterActivity : VastVbActivity<ActivityAdapterBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initData()
-        adapter = AdapterEx(datas, mutableListOf(PersonHolder.Factory(), PictureHolder.Factory()))
+        adapter = Adapter2(datas, mutableListOf(PersonHolder.Factory(), PictureHolder.Factory()))
         adapter.registerClickEvent(object : AdapterClickListener {
             override fun onItemClick(view: View, pos: Int) {
                 // Something you want to do

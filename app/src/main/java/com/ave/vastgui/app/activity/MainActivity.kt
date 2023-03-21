@@ -43,7 +43,7 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
 
     // 列表rv适配器
     inner class Adapter(
-        data: MutableList<AdapterItemWrapper<Any>>,
+        data: MutableList<AdapterItemWrapper<*>>,
         context: Context
     ) : VastBindAdapter(data, context) {
         override fun setVariableId(): Int {
@@ -52,7 +52,7 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
     }
 
     // 列表数据源
-    private val data: MutableList<AdapterItemWrapper<Any>> = ArrayList()
+    private val data: MutableList<AdapterItemWrapper<*>> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mSplashScreen = installSplashScreen()
@@ -179,7 +179,7 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                         getContext().startActivity(
                             Intent(
                                 getContext(),
-                                com.ave.vastgui.app.activity.DownloadActivity::class.java
+                                DownloadActivity::class.java
                             )
                         )
                     }
@@ -192,7 +192,7 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                         getContext().startActivity(
                             Intent(
                                 getContext(),
-                                com.ave.vastgui.app.activity.FileActivity::class.java
+                                FileActivity::class.java
                             )
                         )
                     }
@@ -205,7 +205,7 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                         getContext().startActivity(
                             Intent(
                                 getContext(),
-                                com.ave.vastgui.app.activity.DateActivity::class.java
+                                DateActivity::class.java
                             )
                         )
                     }
@@ -213,4 +213,5 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
             ))
         }
     }
+
 }

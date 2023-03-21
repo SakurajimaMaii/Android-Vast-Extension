@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2022 VastGui guihy2019@gmail.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,24 +15,29 @@
   -->
 
 <layout>
+
     <data>
+
         <variable
             name="item"
-            type="cn.govast.vastutils.activity.basebindadpexample.model.Person" />
+            type="com.ave.vastgui.app.activity.adpexample.model.Person" />
     </data>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:gravity="center"
-            android:text="@{item.firstName}"/>
-        <TextView
+            android:text="@{item.firstName}" />
+
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:gravity="center"
-            android:text="@{item.lastName}"/>
+            android:text="@{item.lastName}" />
     </LinearLayout>
 </layout>

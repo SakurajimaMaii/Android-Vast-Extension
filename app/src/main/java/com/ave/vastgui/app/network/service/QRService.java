@@ -29,6 +29,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface QRService {
+
     @POST("/login/qr/key")
     Request<QRCodeKey> generateQRCode(@Query("timestamp") String timestamp);
+
 }

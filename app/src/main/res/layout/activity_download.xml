@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2022 VastGui guihy2019@gmail.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,34 +15,39 @@
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
+    tools:context="com.ave.vastgui.app.activity.DownloadActivity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <cn.govast.vasttools.view.downloadcircle.DownloadCircleView
+    android:layout_height="match_parent">
+
+    <com.ave.vastgui.tools.view.downloadcircle.DownloadCircleView
         android:id="@+id/downloadCv"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        app:progress_background_width="20dp"
-        app:progress_text_size="12sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/download"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/download"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:progress_background_width="20dp"
+        app:progress_text_size="12sp" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/download"
-        android:text="@string/download"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#2980b9"
-        app:layout_constraintTop_toBottomOf="@id/downloadCv"
+        android:text="@string/download"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/downloadCv" />
+
     <androidx.appcompat.widget.AppCompatSeekBar
         android:id="@+id/bottom_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

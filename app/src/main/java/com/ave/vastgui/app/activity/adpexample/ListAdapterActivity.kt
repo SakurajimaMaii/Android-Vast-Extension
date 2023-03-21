@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ave.vastgui.adapter.widget.AdapterClickListener
-import com.ave.vastgui.adapter.widget.AdapterItemWrapper
 import com.ave.vastgui.adapter.widget.AdapterLongClickListener
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.activity.adpexample.adapter.ListAdapterEx
@@ -40,7 +39,7 @@ import com.ave.vastgui.tools.utils.ToastUtils
 
 class ListAdapterActivity: VastVbActivity<ActivityAdapterBinding>() {
 
-    private val datas: MutableList<AdapterItemWrapper<Picture>> = ArrayList()
+    private val datas: MutableList<PictureWrapper> = ArrayList()
     private val click = object : AdapterClickListener {
         override fun onItemClick(view: View, pos: Int) {
             ToastUtils.showShortMsg("Click event and pos is $pos.")

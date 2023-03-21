@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">VastUtils</string>
+    <string name="app_name">AVE</string>
     <string name="loading_page">加载页面</string>
     <string name="swipe_list_view">仿qq滑动列表</string>
     <string name="base_adapter">通用RecyclerView BaseAdapter</string>

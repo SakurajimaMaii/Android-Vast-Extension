@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils.network.service
+package com.ave.vastgui.app.sharedpreferences
 
-data class ArtistX(
-    val albumSize: Int,
-    val alias: List<Any>,
-    val fansGroup: Any,
-    val id: Int,
-    val img1v1: Int,
-    val img1v1Url: String,
-    val name: String,
-    val picId: Int,
-    val picUrl: Any,
-    val trans: Any
-)
+import com.ave.vastgui.tools.sharedpreferences.SpNormal
+
+
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2023/3/14
+// Description: 
+// Documentation:
+// Reference:
+
+class NormalSp(name: String) {
+
+    private val sp by lazy{
+        SpNormal.getInstance(name)
+    }
+
+    // declare variables
+    var count by sp.float()
+
+}

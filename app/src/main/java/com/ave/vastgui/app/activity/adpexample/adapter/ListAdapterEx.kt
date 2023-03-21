@@ -18,8 +18,9 @@ package com.ave.vastgui.app.activity.adpexample.adapter
 
 import com.ave.vastgui.adapter.VastListAdapter
 import com.ave.vastgui.adapter.base.BaseHolder
-import com.ave.vastgui.adapter.widget.AdapterDiffUtil
 import com.ave.vastgui.app.activity.adpexample.model.Picture
+import com.ave.vastgui.app.activity.adpexample.model.PictureWrapper
+import com.ave.vastgui.app.activity.adpexample.widget.PictureDiffUtil
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -29,16 +30,4 @@ import com.ave.vastgui.app.activity.adpexample.model.Picture
 // Reference:
 
 class ListAdapterEx(holderFactory: BaseHolder.HolderFactory) :
-    VastListAdapter<Picture>(mutableListOf(holderFactory), PictureDiffUtil()) {
-
-    class PictureDiffUtil : AdapterDiffUtil<Picture>() {
-        override fun newAreItemsTheSame(oldItem: Picture, newItem: Picture): Boolean {
-            return oldItem.drawable == newItem.drawable
-        }
-
-        override fun newAreContentsTheSame(oldItem: Picture, newItem: Picture): Boolean {
-            return oldItem.drawable == newItem.drawable
-        }
-    }
-
-}
+    VastListAdapter<Picture,PictureWrapper>(mutableListOf(holderFactory), PictureDiffUtil())

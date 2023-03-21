@@ -17,42 +17,24 @@
 package com.ave.vastgui.app.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.ave.vastgui.app.R
+import com.ave.vastgui.app.databinding.FragmentSampleBinding
 import com.ave.vastgui.app.viewmodel.SampleSharedVM
-import com.google.android.material.textview.MaterialTextView
+import com.ave.vastgui.core.extension.defaultLogTag
+import com.ave.vastgui.tools.viewbinding.reflexViewBinding
 
-class SampleVmFragment : Fragment() {
+class SampleFragment : Fragment() {
 
-    private val mViewModel by viewModels<SampleSharedVM>({ requireActivity() })
+    private val mBinding by reflexViewBinding<FragmentSampleBinding>()
 
-    private lateinit var tv: TextView
-    private lateinit var count: MaterialTextView
+    private val mViewModel by viewModels<SampleSharedVM>()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_sample_vm, container, false)
-    }
+    private val mLogTag = defaultLogTag()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        tv = view.findViewById(R.id.tv)
-        count = view.findViewById(R.id.count)
-
-        tv.text = "Hello"
-
-        mViewModel.count.observe(requireActivity()) {
-            count.text = it.toString()
-        }
     }
 
 }

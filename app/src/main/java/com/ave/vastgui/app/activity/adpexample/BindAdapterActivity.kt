@@ -23,7 +23,7 @@ import com.ave.vastgui.adapter.widget.AdapterClickListener
 import com.ave.vastgui.adapter.widget.AdapterItemWrapper
 import com.ave.vastgui.adapter.widget.AdapterLongClickListener
 import com.ave.vastgui.app.R
-import com.ave.vastgui.app.activity.adpexample.adapter.BindAdapterEx
+import com.ave.vastgui.app.activity.adpexample.adapter.BindAdapter2
 import com.ave.vastgui.app.activity.adpexample.model.Person
 import com.ave.vastgui.app.activity.adpexample.model.PersonWrapper
 import com.ave.vastgui.app.activity.adpexample.model.Picture
@@ -34,14 +34,14 @@ import com.ave.vastgui.tools.utils.ToastUtils
 
 class BindAdapterActivity : VastVbActivity<ActivityAdapterBinding>() {
 
-    private val datas: MutableList<AdapterItemWrapper<Any>> = ArrayList()
+    private val datas: MutableList<AdapterItemWrapper<*>> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initData()
 
-        val adapter = BindAdapterEx(datas, this)
+        val adapter = BindAdapter2(datas, this)
 
         adapter.registerClickEvent(object : AdapterClickListener {
             override fun onItemClick(view: View, pos: Int) {
@@ -56,7 +56,6 @@ class BindAdapterActivity : VastVbActivity<ActivityAdapterBinding>() {
                 return true
             }
         })
-
 
         getBinding().dataList.adapter = adapter
         getBinding().dataList.layoutManager = LinearLayoutManager(this)

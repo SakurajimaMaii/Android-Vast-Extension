@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2022 VastGui guihy2019@gmail.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +14,20 @@
   ~ limitations under the License.
   -->
 
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/text"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="20sp"
-    android:gravity="center" />
+    android:orientation="vertical">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/firstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/lastName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" />
+</LinearLayout>

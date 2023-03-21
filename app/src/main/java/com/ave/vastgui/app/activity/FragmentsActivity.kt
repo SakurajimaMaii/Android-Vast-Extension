@@ -17,16 +17,19 @@
 package com.ave.vastgui.app.activity
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.ave.vastgui.app.databinding.ActivityFragmentsBinding
+import com.ave.vastgui.app.fragment.SampleFragment
 import com.ave.vastgui.app.fragment.SampleVbFragment
 import com.ave.vastgui.app.fragment.SampleVbVmFragment
 import com.ave.vastgui.app.fragment.SampleVmFragment
 import com.ave.vastgui.app.viewmodel.SampleSharedVM
-import com.ave.vastgui.core.extension.NotNUllVar
-import com.ave.vastgui.tools.activity.delegate.ActivityVbVmDelegate
+import com.ave.vastgui.core.extension.defaultLogTag
+import com.ave.vastgui.tools.activity.widget.screenConfig
 import com.ave.vastgui.tools.adapter.VastFragmentAdapter
+import com.ave.vastgui.tools.viewbinding.reflexViewBinding
 
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
@@ -36,18 +39,21 @@ import com.ave.vastgui.tools.adapter.VastFragmentAdapter
 
 class FragmentsActivity : AppCompatActivity() {
 
-    private inner class AVVD: ActivityVbVmDelegate<ActivityFragmentsBinding, SampleSharedVM>(this)
+    private val mBinding by reflexViewBinding<ActivityFragmentsBinding>()
 
-    private var mActivityDelegate by NotNUllVar<AVVD>()
+    private val mViewModel by viewModels<SampleSharedVM>()
+
+    private val mLogTag = defaultLogTag()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mActivityDelegate = AVVD()
-        mActivityDelegate.getBinding().vp2.apply {
+        screenConfig(false,true)
+        mBinding.vp2.apply {
             adapter = VastFragmentAdapter(this@FragmentsActivity,ArrayList<Fragment>().apply {
                 add(SampleVbVmFragment())
                 add(SampleVmFragment())
                 add(SampleVbFragment())
+                add(SampleFragment())
             })
         }
     }

@@ -25,13 +25,15 @@ import com.ave.vastgui.tools.viewbinding.reflexViewBinding
 
 abstract class BaseActivity<VB : ViewBinding, VM : ViewModel> : AppCompatActivity() {
 
+    // ViewBinding
     protected val mBinding: VB by lazy {
-        reflexViewBinding()
+        reflexViewBinding(this)
     }
 
+    // ViewModel
     protected val mViewModel: VM by lazy {
-        reflexViewModel {
-            return@reflexViewModel getViewModel()
+        reflexViewModel(this.javaClass, this) {
+            return@reflexViewModel createViewModel(it)
         }
     }
 
@@ -40,6 +42,10 @@ abstract class BaseActivity<VB : ViewBinding, VM : ViewModel> : AppCompatActivit
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(mBinding.root)
+    }
+
+    protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+        return modelClass.newInstance()
     }
 
 }

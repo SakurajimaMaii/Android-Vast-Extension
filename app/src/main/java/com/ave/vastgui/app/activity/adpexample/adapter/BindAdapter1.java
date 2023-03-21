@@ -14,34 +14,34 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils.activity.baseadpexample.model
-
-import cn.govast.vastadapter.AdapterClickListener
-import cn.govast.vastadapter.AdapterItem
-import cn.govast.vastadapter.AdapterLongClickListener
+package com.ave.vastgui.app.activity.adpexample.adapter;
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/2/16
-// Description:
+// Date: 2023/2/27
+// Description: 
 // Documentation:
+// Reference:
 
-class AExample(
-    val data: String,
-    private val clickListener: AdapterClickListener?,
-    private val longClickListener: AdapterLongClickListener?
-): AdapterItem {
+import android.content.Context;
 
-    override fun getHolderType(): String {
-        return AExample::class.java.simpleName
+import androidx.annotation.NonNull;
+
+import com.ave.vastgui.adapter.VastBindAdapter;
+import com.ave.vastgui.adapter.widget.AdapterItemWrapper;
+import com.ave.vastgui.app.BR;
+
+import java.util.List;
+
+public class BindAdapter1 extends VastBindAdapter {
+
+    public BindAdapter1(@NonNull List<AdapterItemWrapper<?>> mDataSource, @NonNull Context mContext) {
+        super(mDataSource, mContext);
     }
 
-    override fun getClickEvent(): AdapterClickListener? {
-        return clickListener
-    }
-
-    override fun getLongClickEvent(): AdapterLongClickListener? {
-        return longClickListener
+    @Override
+    public int setVariableId() {
+        return BR.item;
     }
 
 }

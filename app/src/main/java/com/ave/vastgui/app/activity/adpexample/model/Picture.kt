@@ -49,7 +49,7 @@ class PictureHolder(itemView: View) : BaseHolder(itemView) {
 
     private val iv: ImageView
 
-    override fun onBindData(item: Any) {
+    override fun onBindData(item: Any?) {
         iv.setImageResource(cast<Picture>(item).drawable)
     }
 

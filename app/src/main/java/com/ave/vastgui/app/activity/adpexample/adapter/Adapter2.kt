@@ -35,8 +35,8 @@ import com.ave.vastgui.adapter.widget.AdapterItemWrapper
  * @param factories
  * @property items
  */
-class AdapterEx(
-    private val items: MutableList<AdapterItemWrapper<Any>>,
+class Adapter2(
+    private val items: MutableList<AdapterItemWrapper<*>>,
     factories: MutableList<BaseHolder.HolderFactory>
 ) : VastAdapter(items, factories) {
 

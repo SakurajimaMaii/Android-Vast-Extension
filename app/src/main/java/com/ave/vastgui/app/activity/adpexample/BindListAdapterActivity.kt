@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ave.vastgui.adapter.widget.AdapterClickListener
-import com.ave.vastgui.adapter.widget.AdapterItemWrapper
 import com.ave.vastgui.adapter.widget.AdapterLongClickListener
 import com.ave.vastgui.app.activity.adpexample.adapter.BindListAdapterEx
 import com.ave.vastgui.app.activity.adpexample.model.Person
@@ -50,7 +49,7 @@ import com.ave.vastgui.tools.utils.spannablestring.SpanStrUtils
  */
 class BindListAdapterActivity: VastVbActivity<ActivityAdapterBinding>() {
 
-    private val datas: MutableList<AdapterItemWrapper<Person>> = ArrayList()
+    private val datas: MutableList<PersonWrapper> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

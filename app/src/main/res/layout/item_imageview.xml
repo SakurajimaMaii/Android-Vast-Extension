@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2022 VastGui guihy2019@gmail.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,10 +18,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+
     <ImageView
         android:id="@+id/item_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:contentDescription="@string/picture"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/picture" />
 </LinearLayout>

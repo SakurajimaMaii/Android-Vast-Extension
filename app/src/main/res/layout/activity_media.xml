@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright 2022 VastGui guihy2019@gmail.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,14 +20,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.RequestActivity">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/dataRv"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintTop_toTopOf="parent" />
+    tools:context=".activity.MediaActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

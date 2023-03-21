@@ -22,52 +22,47 @@
     tools:context=".activity.IntentActivity"
     android:orientation="vertical"
     android:padding="10dp">
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/callBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="call phone" />
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/searchWeb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="search web" />
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/openWebPage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Open Web Page"/>
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/sendMmsMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Send Mms Message" />
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/sendEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Send Email" />
-    <Button
-        android:id="@+id/createOnceAlarm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Create Once Alarm" />
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/createAlarm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Create Alarm" />
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/wifiSetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Wireless Setting" />
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/createShortcut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Create shortcut" />
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/getQRCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

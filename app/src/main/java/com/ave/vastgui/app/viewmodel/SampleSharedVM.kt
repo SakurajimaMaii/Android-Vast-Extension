@@ -18,7 +18,7 @@ package com.ave.vastgui.app.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.ave.vastgui.tools.viewModel.VastViewModel
+import com.ave.vastgui.tools.lifecycle.viewModel.VastViewModel
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

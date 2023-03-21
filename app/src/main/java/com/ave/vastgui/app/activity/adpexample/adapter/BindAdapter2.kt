@@ -34,8 +34,8 @@ import com.ave.vastgui.app.BR
 // Description:
 // Documentation:
 
-class BindAdapterEx(
-    dataSource: MutableList<AdapterItemWrapper<Any>>,
+class BindAdapter2(
+    dataSource: MutableList<AdapterItemWrapper<*>>,
     mContext: Context
 ) : VastBindAdapter(dataSource, mContext) {
 
@@ -76,7 +76,7 @@ class BindAdapterEx(
      * @param item Item you add
      * @return The result `false` means adding failed or item is `null`
      */
-    fun addItem(item: AdapterItemWrapper<Any>?): Boolean {
+    fun addItem(item: AdapterItemWrapper<*>?): Boolean {
         return if (item == null) {
             false
         } else {
@@ -90,7 +90,7 @@ class BindAdapterEx(
 
     /** Inserts an element into the list at the specified [pos]. */
     @Throws(ArrayIndexOutOfBoundsException::class)
-    fun addItemByPos(item: AdapterItemWrapper<Any>, @IntRange(from = 0) pos: Int) {
+    fun addItemByPos(item: AdapterItemWrapper<*>, @IntRange(from = 0) pos: Int) {
         if (pos > mDataSource.size) {
             throw ArrayIndexOutOfBoundsException("The range of the parameter pos in the addItemByPos() method is wrong")
         }

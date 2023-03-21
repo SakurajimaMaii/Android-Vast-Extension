@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity.adpexample.adapter
+package com.ave.vastgui.app.activity.adpexample.widget
 
-import android.content.Context
-import com.ave.vastgui.adapter.VastBindListAdapter
-import com.ave.vastgui.app.BR
-import com.ave.vastgui.app.activity.adpexample.model.Person
-import com.ave.vastgui.app.activity.adpexample.model.PersonWrapper
-import com.ave.vastgui.app.activity.adpexample.widget.PersonDiffUtil
+import com.ave.vastgui.adapter.widget.AdapterDiffUtil
+import com.ave.vastgui.app.activity.adpexample.model.Picture
+import com.ave.vastgui.app.activity.adpexample.model.PictureWrapper
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/1/21
+// Date: 2023/3/3
 // Description: 
 // Documentation:
 // Reference:
 
-class BindListAdapterEx(context: Context) :
-    VastBindListAdapter<Person, PersonWrapper>(context, PersonDiffUtil()) {
-
-    override fun setVariableId(): Int {
-        return BR.item
+class PictureDiffUtil : AdapterDiffUtil<Picture, PictureWrapper>() {
+    override fun newAreItemsTheSame(oldItem: Picture, newItem: Picture): Boolean {
+        return oldItem.drawable == newItem.drawable
     }
 
+    override fun newAreContentsTheSame(oldItem: Picture, newItem: Picture): Boolean {
+        return oldItem.drawable == newItem.drawable
+    }
 }

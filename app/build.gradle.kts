@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import cn.govast.plugin.version.*
+import com.pluginversion.vastgui.*
 
 plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-kapt")
     id("org.jetbrains.kotlin.android")
-    id("cn.govast.plugin.version")
+    id("com.pluginversion.vastgui")
 }
 
 android {
@@ -46,7 +46,7 @@ android {
     compileSdk = Version.compile_sdk_version
 
     defaultConfig {
-        applicationId = "cn.govast.vastutils"
+        applicationId = "com.ave.vastgui.app"
         minSdk = Version.min_sdk_version
         targetSdk = Version.target_sdk_version
         versionCode = Version.version_code
@@ -84,14 +84,10 @@ android {
     }
 
     buildFeatures {
-        compose = true
+        dataBinding = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.1"
-    }
-
-    namespace = "cn.govast.vastutils"
+    namespace = "com.ave.vastgui.app"
 
     sourceSets["main"].java.srcDirs("src/main/kotlin","src/main/java","src/main/compose")
 
@@ -104,9 +100,6 @@ project(":app") {
 }
 
 dependencies {
-    androidTestImplementation(Compose.compose_ui_test_junit4)
-    debugImplementation(Compose.compose_ui_test_manifest)
-    debugImplementation(Compose.compose_ui_tooling)
     implementation(AndroidX.activity_ktx)
     implementation(AndroidX.constraintlayout)
     implementation(AndroidX.core_splashscreen)
@@ -115,12 +108,6 @@ dependencies {
     implementation(AndroidX.lifecycle_runtime_ktx)
     implementation(AndroidX.lifecycle_viewmodel_ktx)
     implementation(AndroidX.lifecycle_livedata_ktx)
-    implementation(Compose.compose_activity)
-    implementation(Compose.compose_foundation)
-    implementation(Compose.compose_foundation_layout)
-    implementation(Compose.compose_material3)
-    implementation(Compose.compose_ui)
-    implementation(Compose.compose_ui_tooling_preview)
     implementation(Google.material)
     implementation(Jetbrains.kotlin_reflect)
     implementation(Jetbrains.kotlinx_coroutines_android)
@@ -133,4 +120,5 @@ dependencies {
     implementation(project(":libraries:VastAdapter"))
     implementation(project(":libraries:VastNetStateLayout"))
     implementation(project(":libraries:VastTools"))
+    implementation(project(":libraries:VastCore"))
 }

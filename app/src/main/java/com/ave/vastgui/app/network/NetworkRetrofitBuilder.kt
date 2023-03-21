@@ -32,4 +32,8 @@ class NetworkRetrofitBuilder: RequestBuilder() {
         return Constant.ROOT_URL
     }
 
+    override fun setTimeOut(): Long {
+        return 10L
+    }
+    
 }

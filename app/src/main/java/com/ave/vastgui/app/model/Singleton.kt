@@ -14,34 +14,19 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils.activity.baseadpexample.model
+package com.ave.vastgui.app.model
 
-import cn.govast.vastadapter.AdapterClickListener
-import cn.govast.vastadapter.AdapterItem
-import cn.govast.vastadapter.AdapterLongClickListener
+import com.ave.vastgui.core.extension.SingletonHolder
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/2/16
+// Date: 2023/3/14
 // Description:
 // Documentation:
+// Reference:
 
-class BExample(
-    val drawable:Int,
-    private val clickListener: AdapterClickListener?,
-    private val longClickListener: AdapterLongClickListener?
-) : AdapterItem {
+class Singleton private constructor(name: String) {
 
-    override fun getHolderType(): String {
-        return BExample::class.java.simpleName
-    }
-
-    override fun getClickEvent(): AdapterClickListener? {
-        return clickListener
-    }
-
-    override fun getLongClickEvent(): AdapterLongClickListener? {
-        return longClickListener
-    }
+    companion object:SingletonHolder<Singleton,String>(::Singleton)
 
 }

@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-package cn.govast.vastutils.network.service
+package com.ave.vastgui.app.activity.adpexample.model;
 
-data class Album(
-    val alia: List<String>,
-    val artist: ArtistX,
-    val copyrightId: Int,
-    val id: Int,
-    val mark: Int,
-    val name: String,
-    val picId: Long,
-    val publishTime: Long,
-    val size: Int,
-    val status: Int
-)
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2023/2/27
+// Description: 
+// Documentation:
+// Reference:
+
+import com.ave.vastgui.adapter.widget.AdapterItemWrapper;
+import com.ave.vastgui.app.R;
+
+public class PersonWrapper extends AdapterItemWrapper<Person> {
+
+    public PersonWrapper(Person mData) {
+        super(mData, "Person", R.layout.item_bind_textview);
+    }
+
+}

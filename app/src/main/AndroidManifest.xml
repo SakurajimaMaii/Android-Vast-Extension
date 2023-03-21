@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
     <queries>
@@ -21,25 +22,32 @@
 
     <application
         android:name=".App"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/VastTheme">
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
+        android:theme="@style/VastTheme"
+        android:usesCleartextTraffic="false">
+        <activity
+            android:name=".activity.MediaActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.RequestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ExampleActivity"
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="cn.govast.vastutils.fileProvider"
+            android:authorities="${applicationId}"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -52,6 +60,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -73,6 +82,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -81,6 +91,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -89,30 +100,45 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.basebindadpexample.BaseBindingAdapterActivity"
+            android:name=".activity.adpexample.BindAdapterActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".activity.baseadpexample.BaseAdapterActivity"
+            android:name=".activity.adpexample.AdapterActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity
+            android:name=".activity.adpexample.BindListAdapterActivity"
+            android:exported="true">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".activity.NetStateActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -121,6 +147,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -129,6 +156,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -137,6 +165,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -145,15 +174,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".activity.ApiCallActivity"
-            android:exported="true"
-            android:theme="@style/VastTheme.Starting">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -162,8 +183,27 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="true">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".activity.ReflexActivity"
+            android:exported="true">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
     </application>
 

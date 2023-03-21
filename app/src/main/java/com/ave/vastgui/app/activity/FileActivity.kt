@@ -58,12 +58,7 @@ class FileActivity : VastVbActivity<ActivityFileBinding>() {
         }
 
         val res = FileMgr.deleteDir(File(appExternalFilesDir(null)?.path, "save.txt"))
-
-        LogUtils.i(getDefaultTag(), res.toString())
-
         val res1 = saveFile(File(appExternalFilesDir(null)?.path,"save.txt"))
-
-        LogUtils.i(getDefaultTag(), res1.toString())
 
 //        makeDir(File(appInternalFilesDir().path,"makeDir"))
 //

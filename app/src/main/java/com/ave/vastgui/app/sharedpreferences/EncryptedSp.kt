@@ -14,27 +14,25 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity.adpexample.adapter
+package com.ave.vastgui.app.sharedpreferences
 
-import android.content.Context
-import com.ave.vastgui.adapter.VastBindListAdapter
-import com.ave.vastgui.app.BR
-import com.ave.vastgui.app.activity.adpexample.model.Person
-import com.ave.vastgui.app.activity.adpexample.model.PersonWrapper
-import com.ave.vastgui.app.activity.adpexample.widget.PersonDiffUtil
+import com.ave.vastgui.tools.sharedpreferences.SpEncrypted
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/1/21
+// Date: 2023/3/14
 // Description: 
 // Documentation:
 // Reference:
 
-class BindListAdapterEx(context: Context) :
-    VastBindListAdapter<Person, PersonWrapper>(context, PersonDiffUtil()) {
+class EncryptedSp(name: String) {
 
-    override fun setVariableId(): Int {
-        return BR.item
+    private val sp by lazy{
+        SpEncrypted.getInstance(name)
     }
+
+    // declare variables
+    var count by sp.float()
 
 }
