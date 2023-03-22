@@ -22,5 +22,5 @@
     <string name="unit_km">%skm</string>
     <string name="unit_m">%sm</string>
     <string name="unit_ms">%sm/s</string>
-    <string name="unit_percent">%s%</string>
+    <string name="unit_percent">%s%%</string>
 </resources>

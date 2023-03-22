@@ -18,12 +18,7 @@
 // https://cloud.tencent.com/developer/article/1839887
 // https://mp.weixin.qq.com/s/mVqShijGTExtQ_nLslchpQ
 
-import com.pluginversion.vastgui.AndroidX
-import com.pluginversion.vastgui.Google
-import com.pluginversion.vastgui.Jetbrains
-import com.pluginversion.vastgui.Libraries
-import com.pluginversion.vastgui.Squareup
-import com.pluginversion.vastgui.Version
+import com.pluginversion.vastgui.*
 
 plugins {
     id("com.android.library")
@@ -97,7 +92,7 @@ dependencies {
     api(AndroidX.security_crypto)
     api(Libraries.progressmanager)
     api(Libraries.zxing)
-    api(project(":libraries:VastCore"))
+    api(AVE.core)
     implementation(AndroidX.activity_ktx)
     implementation(AndroidX.annotation)
     implementation(AndroidX.appcompat)
