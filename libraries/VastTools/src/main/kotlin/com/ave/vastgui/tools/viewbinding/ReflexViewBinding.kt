@@ -93,9 +93,6 @@ class FragmentViewBindingDelegate<VB : ViewBinding>(
             return binding
         }
 
-        val view = thisRef.view
-            ?: throw IllegalStateException("Should not attempt to get bindings when the Fragment's view is null.")
-
         return cast(
             bindingClass.getMethod("bind", View::class.java).invoke(null, thisRef.requireView())
         )
