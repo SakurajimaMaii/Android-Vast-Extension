@@ -17,6 +17,7 @@
 package com.ave.vastgui.tools.manager.filemgr
 
 import android.content.Context
+import android.webkit.MimeTypeMap
 import androidx.security.crypto.EncryptedFile
 import com.ave.vastgui.tools.config.ToolsConfig
 import com.ave.vastgui.tools.helper.ContextHelper
@@ -34,7 +35,9 @@ import java.io.FileOutputStream
 // Description: 
 // Documentation:
 
-object FileMgr {
+object FileMgr : FileProperty by FilePropertyMgr() {
+
+    private val mimeTypeMap: MimeTypeMap? = MimeTypeMap.getSingleton()
 
     /**
      * File operations result.
@@ -118,7 +121,7 @@ object FileMgr {
         if (!file.parentFile?.exists()!!)
             file.parentFile?.mkdirs()
         getEncryptedFile(file).openFileOutput().close()
-        return if (file.exists()) FileResult.FLAG_SUCCESS else FileResult.FLAG_FAILED
+        return if (file.exists()) FLAG_SUCCESS else FLAG_FAILED
     }
 
     /**
@@ -131,12 +134,12 @@ object FileMgr {
     fun deleteFile(file: File): FileResult {
         return if (file.isFile) {
             if (file.delete()) {
-                FileResult.FLAG_SUCCESS
+                FLAG_SUCCESS
             } else {
-                FileResult.FLAG_FAILED
+                FLAG_FAILED
             }
         } else {
-            FileResult.FLAG_FAILED
+            FLAG_FAILED
         }
     }
 
@@ -150,8 +153,8 @@ object FileMgr {
     @JvmStatic
     fun writeTxtFile(file: File, writeEventListener: WriteEventListener): FileResult {
         return if (!file.exists())
-            FileResult.FLAG_FAILED
-        else if ("txt" == getFileExtension(file)) {
+            FLAG_FAILED
+        else if ("txt" == getExtension(file)) {
             val fileOutputStream = getEncryptedFile(file).openFileOutput()
             writeEventListener.writeEvent(fileOutputStream)
             fileOutputStream.apply {
@@ -162,8 +165,8 @@ object FileMgr {
                     e.printStackTrace()
                 }
             }
-            FileResult.FLAG_SUCCESS
-        } else FileResult.FLAG_FAILED
+            FLAG_SUCCESS
+        } else FLAG_FAILED
     }
 
     /**
@@ -175,15 +178,15 @@ object FileMgr {
     @JvmStatic
     fun makeDir(dir: File): FileResult {
         if (dir.exists()) {
-            return FileResult.FLAG_EXISTS
+            return FLAG_EXISTS
         }
         val path = if (!dir.path.endsWith(File.separator)) {
             dir.path + File.separator
         } else dir.path
         if (File(path).mkdir()) {
-            return FileResult.FLAG_SUCCESS
+            return FLAG_SUCCESS
         }
-        return FileResult.FLAG_FAILED
+        return FLAG_FAILED
     }
 
     /**
@@ -194,22 +197,21 @@ object FileMgr {
      */
     @JvmStatic
     fun deleteDir(file: File): FileResult {
-        if (!file.exists()) {
-            return FileResult.FLAG_FAILED
-        }
-        if (null == file.listFiles()) {
-            file.delete()
-        } else {
-            for (f in file.listFiles()!!) {
-                if (f.isFile) {
-                    f.delete()
-                } else if (f.isDirectory) {
-                    deleteDir(f)
+        when{
+            !file.exists() -> FLAG_FAILED
+            null == file.listFiles() -> file.delete()
+            else -> {
+                for (f in file.listFiles()!!) {
+                    if (f.isFile) {
+                        f.delete()
+                    } else if (f.isDirectory) {
+                        deleteDir(f)
+                    }
                 }
             }
         }
         file.delete()
-        return FileResult.FLAG_SUCCESS
+        return FLAG_SUCCESS
     }
 
     /**
@@ -222,27 +224,21 @@ object FileMgr {
     @JvmStatic
     fun rename(file: File, newName: String): FileResult {
         if (!file.exists()) {
-            return FileResult.FLAG_NOT_EXISTS
+            return FLAG_NOT_EXISTS
         } else if (newName == file.name) {
-            return FileResult.FLAG_SUCCESS
+            return FLAG_SUCCESS
         } else {
             return if (null == file.parent) {
-                FileResult.FLAG_FAILED
+                FLAG_FAILED
             } else {
                 val newFile = File(file.parent!! + File.separator + newName)
                 if (!newFile.exists() && file.renameTo(newFile)) {
-                    FileResult.FLAG_SUCCESS
+                    FLAG_SUCCESS
                 } else {
-                    FileResult.FLAG_FAILED
+                    FLAG_FAILED
                 }
             }
         }
-    }
-
-    /** Get the extension name of the file. */
-    @JvmStatic
-    fun getFileExtension(file: File): String {
-        return file.name.substring(file.name.lastIndexOf(".") + 1)
     }
 
     /**

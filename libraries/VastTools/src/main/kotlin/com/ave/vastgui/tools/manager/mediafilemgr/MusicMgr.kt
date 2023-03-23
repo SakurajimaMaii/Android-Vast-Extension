@@ -17,12 +17,12 @@
 package com.ave.vastgui.tools.manager.mediafilemgr
 
 import android.content.ContentValues
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr.getFileUriAboveApi30
 import java.io.File
 
 // Author: Vast Gui
@@ -34,19 +34,16 @@ import java.io.File
 
 object MusicMgr : MediaFileMgr() {
 
+    /**
+     * @return The default image file path :
+     *     /storage/emulated/0/Android/data/packageName/files/Music.
+     */
+    override fun getDefaultRootDirPath(): String? {
+        return getDefaultRootDirPath(MediaType.Music)
+    }
+
     override fun getFileByUri(uri: Uri): File? {
-        val proj = arrayOf(MediaStore.Audio.Media.DATA)
-        val cursor: Cursor? =
-            ContextHelper.getAppContext().contentResolver.query(uri, proj, null, null, null)
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                val columnIndex: Int = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
-                val path: String = cursor.getString(columnIndex)
-                cursor.close()
-                return File(path)
-            }
-        }
-        return null
+        return getFileByUri(uri, MediaType.Music)
     }
 
     /**
@@ -64,13 +61,19 @@ object MusicMgr : MediaFileMgr() {
      *      arrayOf("xxx.mp3")
      * )
      * ```
+     *
+     * By default, [getFileUriAboveApi30] will only insert
+     * the following columns: [MediaStore.Audio.Media.DATA],
+     * [MediaStore.Audio.Media.DISPLAY_NAME],
+     * [MediaStore.Audio.Media.MIME_TYPE], If you want to customize, you
+     * can refer to [getFileUriAboveApi30] by using saveOptions parameter.
      */
     @RequiresApi(Build.VERSION_CODES.R)
     override fun getFileUriAboveApi30(file: File): Uri? {
         val values = ContentValues().apply {
             put(MediaStore.Audio.Media.DATA, file.absolutePath)
             put(MediaStore.Audio.Media.DISPLAY_NAME, file.name)
-            put(MediaStore.Audio.Media.MIME_TYPE, "image/jpeg")
+            put(MediaStore.Audio.Media.MIME_TYPE, "audio/mpeg")
         }
         return try {
             ContextHelper.getAppContext().contentResolver.insert(
@@ -91,7 +94,6 @@ object MusicMgr : MediaFileMgr() {
      * So when you want to delete the image file, please also run
      * [android.content.ContentResolver.delete] to make sure that the
      * file-related information is completely deleted. For example:
-     *
      * ```kotlin
      * contentResolver.delete(
      *      MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -103,7 +105,7 @@ object MusicMgr : MediaFileMgr() {
      * @param saveOptions information about file.
      */
     @RequiresApi(Build.VERSION_CODES.R)
-    override fun getFileUriAboveApi30(saveOptions: Map<String, String>.() -> Unit): Uri? {
+    override fun getFileUriAboveApi30(saveOptions: MutableMap<String, String>.() -> Unit): Uri? {
         val values = ContentValues().apply {
             HashMap<String, String>().also(saveOptions).forEach { (key, value) ->
                 put(key, value)

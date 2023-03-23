@@ -30,6 +30,6 @@ package com.ave.vastgui.tools.manager.mediafilemgr
  * @property Images
  * @property Music
  */
-enum class SupportMediaType{
+enum class MediaType{
     Images,Music
 }

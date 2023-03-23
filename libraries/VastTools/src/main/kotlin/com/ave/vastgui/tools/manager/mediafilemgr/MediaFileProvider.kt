@@ -30,11 +30,11 @@ import java.io.File
 // Reference:
 
 /** Using to provide information about media file. */
-@JvmDefaultWithCompatibility
 interface MediaFileProvider {
-    fun getDefaultRootDirPath(type: SupportMediaType): String?
 
-    fun getDefaultFileName(type: SupportMediaType): String
+    fun getDefaultRootDirPath(): String?
+
+    fun getDefaultFileName(extension: String): String
 
     /**
      * Get file by [uri].
@@ -43,10 +43,11 @@ interface MediaFileProvider {
      */
     fun getFileByUri(uri: Uri): File?
 
+    @RequiresApi(Build.VERSION_CODES.R)
     fun getFileUriAboveApi30(file: File): Uri?
 
     @RequiresApi(Build.VERSION_CODES.R)
-    fun getFileUriAboveApi30(saveOptions: Map<String, String>.() -> Unit): Uri?
+    fun getFileUriAboveApi30(saveOptions: MutableMap<String, String>.() -> Unit): Uri?
 
     /**
      * Get the uri by [file].

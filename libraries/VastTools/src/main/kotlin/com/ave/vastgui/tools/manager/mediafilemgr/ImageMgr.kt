@@ -17,7 +17,6 @@
 package com.ave.vastgui.tools.manager.mediafilemgr
 
 import android.content.ContentValues
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -34,19 +33,16 @@ import java.io.File
 
 object ImageMgr : MediaFileMgr() {
 
+    /**
+     * @return The default image file path :
+     *     /storage/emulated/0/Android/data/packageName/files/Pictures.
+     */
+    override fun getDefaultRootDirPath(): String? {
+        return getDefaultRootDirPath(MediaType.Images)
+    }
+
     override fun getFileByUri(uri: Uri): File? {
-        val proj = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor: Cursor? =
-            ContextHelper.getAppContext().contentResolver.query(uri, proj, null, null, null)
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                val columnIndex: Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                val path: String = cursor.getString(columnIndex)
-                cursor.close()
-                return File(path)
-            }
-        }
-        return null
+        return getFileByUri(uri, MediaType.Images)
     }
 
     /**
@@ -57,7 +53,6 @@ object ImageMgr : MediaFileMgr() {
      * So when you want to delete the image file, please also run
      * [android.content.ContentResolver.delete] to make sure that the
      * file-related information is completely deleted. For example:
-     *
      * ```kotlin
      * contentResolver.delete(
      *      MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -65,6 +60,12 @@ object ImageMgr : MediaFileMgr() {
      *      arrayOf("avatar.jpg")
      * )
      * ```
+     *
+     * By default, [getFileUriAboveApi30] will only insert
+     * the following columns: [MediaStore.Images.Media.DATA],
+     * [MediaStore.Images.Media.DISPLAY_NAME],
+     * [MediaStore.Images.Media.MIME_TYPE], If you want to customize, you
+     * can refer to [getFileUriAboveApi30] by using saveOptions parameter.
      */
     @RequiresApi(Build.VERSION_CODES.R)
     override fun getFileUriAboveApi30(file: File): Uri? {
@@ -92,7 +93,6 @@ object ImageMgr : MediaFileMgr() {
      * So when you want to delete the image file, please also run
      * [android.content.ContentResolver.delete] to make sure that the
      * file-related information is completely deleted. For example:
-     *
      * ```kotlin
      * contentResolver.delete(
      *      MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -104,7 +104,7 @@ object ImageMgr : MediaFileMgr() {
      * @param saveOptions information about file.
      */
     @RequiresApi(Build.VERSION_CODES.R)
-    override fun getFileUriAboveApi30(saveOptions: Map<String, String>.() -> Unit): Uri? {
+    override fun getFileUriAboveApi30(saveOptions: MutableMap<String, String>.() -> Unit): Uri? {
         val values = ContentValues().apply {
             HashMap<String, String>().also(saveOptions).forEach { (key, value) ->
                 put(key, value)
