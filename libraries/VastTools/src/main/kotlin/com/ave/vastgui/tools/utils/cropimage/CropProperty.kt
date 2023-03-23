@@ -19,6 +19,7 @@ package com.ave.vastgui.tools.utils.cropimage
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.annotation.IntRange
+import com.ave.vastgui.tools.activity.result.contract.CropPhotoContract
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -53,7 +54,13 @@ interface CropProperty {
      */
     fun setOutput(@IntRange(from = 0) outputX: Int, @IntRange(from = 0) outputY: Int): CropProperty
 
-    /** Set the [uri] for the output image. */
+    /**
+     * Set the [uri] for the output image.
+     *
+     * You should not call this method when using [CropPhotoContract].
+     *
+     * @see CropPhotoContract
+     */
     fun setOutputUri(uri: Uri?): CropProperty
 
     /**

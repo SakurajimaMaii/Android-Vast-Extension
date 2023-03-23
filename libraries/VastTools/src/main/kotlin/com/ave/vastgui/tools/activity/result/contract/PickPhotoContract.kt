@@ -16,24 +16,30 @@
 
 package com.ave.vastgui.tools.activity.result.contract
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.activity.result.contract.ActivityResultContracts
+import android.net.Uri
+import android.provider.MediaStore
+import androidx.activity.result.contract.ActivityResultContract
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/10/25
+// Date: 2023/3/23
 // Description: 
 // Documentation:
 // Reference:
 
-class GetMediaActivityResultContract : ActivityResultContracts.GetContent() {
+class PickPhotoContract : ActivityResultContract<Any?, Uri?>() {
 
-    override fun createIntent(context: Context, input: String): Intent {
-        return super.createIntent(context, input).apply {
-            // Force only images and videos to be selectable
-            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "video/*"))
+    override fun createIntent(context: Context, input: Any?): Intent {
+        return Intent(Intent.ACTION_PICK, null).apply {
+            setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*")
         }
+    }
+
+    override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
+        return if (intent == null || resultCode != Activity.RESULT_OK) null else intent.data
     }
 
 }

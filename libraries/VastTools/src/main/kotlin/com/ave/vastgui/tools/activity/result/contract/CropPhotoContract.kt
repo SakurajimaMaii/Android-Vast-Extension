@@ -1,0 +1,70 @@
+/*
+ * Copyright 2022 VastGui guihy2019@gmail.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.ave.vastgui.tools.activity.result.contract
+
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.core.content.FileProvider
+import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
+import com.ave.vastgui.tools.utils.cropimage.CropIntent
+import java.io.File
+
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2023/3/23
+// Description: 
+// Documentation:
+// Reference:
+
+/**
+ * Cropping photo.The file path get from [ImageMgr.getDefaultRootDirPath]
+ * and the name get from [ImageMgr.getDefaultFileName] with the .jpg
+ * extension.
+ *
+ * @param authority The authority of a [FileProvider] defined in a
+ *     <provider> element in your app's manifest. If the value the
+ *     [authority] is null, the package name will be used as the default
+ *     authority for the [FileProvider] that is defined app's manifest.
+ */
+class CropPhotoContract @JvmOverloads constructor(private val authority: String? = null) :
+    ActivityResultContract<CropIntent, Uri?>() {
+
+    private var uri: Uri? = null
+
+    override fun createIntent(context: Context, input: CropIntent): Intent {
+        uri = ImageMgr.getDefaultRootDirPath()?.let { path ->
+            File(path, ImageMgr.getDefaultFileName(".jpg")).let {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    ImageMgr.getFileUriAboveApi30(it)
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    ImageMgr.getFileUriAboveApi24(it, authority)
+                } else {
+                    ImageMgr.getFileUriOnApi23(it)
+                }
+            }
+        }
+        return input.setOutputUri(uri).getIntent();
+    }
+
+    override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
+        return uri
+    }
+
+}
