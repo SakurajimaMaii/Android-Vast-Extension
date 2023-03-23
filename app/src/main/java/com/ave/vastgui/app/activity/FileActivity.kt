@@ -19,7 +19,7 @@ package com.ave.vastgui.app.activity
 import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityFileBinding
 import com.ave.vastgui.tools.activity.VastVbActivity
-import com.ave.vastgui.tools.activity.result.contract.GetMediaActivityResultContract
+import com.ave.vastgui.tools.activity.result.contract.GetMediaFileContract
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.manager.filemgr.FileMgr.appExternalCacheDir
 import com.ave.vastgui.tools.manager.filemgr.FileMgr.appExternalFilesDir
@@ -39,7 +39,7 @@ import java.io.File
 class FileActivity : VastVbActivity<ActivityFileBinding>() {
 
     private val openGalleryLauncher =
-        registerForActivityResult(GetMediaActivityResultContract()) {
+        registerForActivityResult(GetMediaFileContract()) {
             getBinding().video.apply {
                 setVideoURI(it)
                 start()

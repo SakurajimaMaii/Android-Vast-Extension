@@ -16,100 +16,87 @@
 
 package com.ave.vastgui.app.activity
 
-import android.app.Activity
-import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.activity.result.contract.ActivityResultContracts
 import com.ave.vastgui.app.databinding.ActivityImageBinding
 import com.ave.vastgui.tools.activity.VastVbActivity
-import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
+import com.ave.vastgui.tools.activity.result.contract.CropPhotoContract
+import com.ave.vastgui.tools.activity.result.contract.PickPhotoContract
+import com.ave.vastgui.tools.activity.result.contract.TakePhotoContract
 import com.ave.vastgui.tools.utils.LogUtils
-import java.io.File
+import com.ave.vastgui.tools.utils.cropimage.CropIntent
 
 class ImageActivity : VastVbActivity<ActivityImageBinding>() {
 
-    private val getImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ activityResult->
-        activityResult.data?.data?.let {
-            cropImage(it)
+    private val getImage =
+        registerForActivityResult(PickPhotoContract()) { it ->
+            it?.apply { cropImage(this) }
         }
-    }
 
     private val cropPicture =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                val bitmap: Uri = it?.data?.data
-                    ?: throw  RuntimeException("bitmap is null")
-                getBinding().image.setImageURI(bitmap)
-            }
+        registerForActivityResult(CropPhotoContract()) {
+            val bitmap: Uri = it
+                ?: throw RuntimeException("bitmap is null")
+            getBinding().image.setImageURI(bitmap)
+        }
+
+    private val takePhoto =
+        registerForActivityResult(TakePhotoContract()) {
+            val bitmap: Uri = it
+                ?: throw RuntimeException("bitmap is null")
+            getBinding().image.setImageURI(bitmap)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getBinding().openGallery.setOnClickListener {
-            val chooseAvatarIntent = Intent(Intent.ACTION_PICK, null)
-            //使用INTERNAL_CONTENT_URI只能显示存储在内部的照片
-            chooseAvatarIntent.setDataAndType(
-                MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*"
-            )
-            getImage.launch(chooseAvatarIntent)
+            getImage.launch(null)
         }
 
         getBinding().openCamera.setOnClickListener {
-            delete()
-            search()
+            takePhoto.launch(null)
         }
     }
 
-    private fun cropImage(uri: Uri){
-        val intent = Intent("com.android.camera.action.CROP").apply {
-            addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            setDataAndType(uri, "image/*")
-            // 设置裁剪
-            putExtra("crop", "true")
-            // aspectX aspectY 是宽高的比例
-            putExtra("aspectX", 1)
-            putExtra("aspectY", 1)
-            // outputX outputY 是裁剪图片宽高
-            putExtra("outputX", 300)
-            putExtra("outputY", 300)
-            val output = File("avatar.jpg").let {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-                    ImageMgr.getFileUriAboveApi30(it)
-                } else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                    ImageMgr.getFileUriAboveApi24(it,null)
-                } else {
-                    ImageMgr.getFileUriOnApi23(it)
-                }
-            }
-            putExtra(MediaStore.EXTRA_OUTPUT, output)
-            putExtra("return-data", false) //是否将数据保留在Bitmap中返回
-            putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString()) //输出格式，一般设为Bitmap格式及图片类型
-            putExtra("noFaceDetection", true) //是否去除面部检测
-        }
-        cropPicture.launch(intent)
+    private fun cropImage(uri: Uri) {
+        val cropIntent = CropIntent()
+            .setData(uri)
+            .setCorp(true)
+            .setAspect(1, 1)
+            .setOutput(200, 200)
+            .setReturnData(false)
+            .setOutputFormat(Bitmap.CompressFormat.JPEG.toString())
+            .setNoFaceDetection(true)
+        cropPicture.launch(cropIntent)
     }
 
-    private fun search(){
+    private fun search() {
         val proj = arrayOf(MediaStore.Images.Media.DATA)
         val cursor: Cursor? =
-            contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, proj, null, null, null)
+            contentResolver.query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                proj,
+                null,
+                null,
+                null
+            )
         if (cursor != null) {
             if (cursor.moveToNext()) {
                 val columnIndex: Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
                 val path: String = cursor.getString(columnIndex)
-                LogUtils.d(getDefaultTag(),path)
+                LogUtils.d(getDefaultTag(), path)
             }
             cursor.close()
         }
     }
 
-    private fun delete(){
-        contentResolver.delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,MediaStore.Images.Media.DISPLAY_NAME + "=?",
+    private fun delete() {
+        contentResolver.delete(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            MediaStore.Images.Media.DISPLAY_NAME + "=?",
             arrayOf("avatar.jpg")
         )
     }
