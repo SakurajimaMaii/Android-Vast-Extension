@@ -23,6 +23,7 @@ import android.content.res.Configuration
 import android.graphics.Point
 import android.os.Build
 import android.util.DisplayMetrics
+import android.view.Surface
 import android.view.WindowManager
 import android.view.WindowMetrics
 import androidx.annotation.RequiresApi
@@ -163,8 +164,25 @@ object ScreenSizeUtils {
     /**
      * Get screen orientation.
      *
+     * @see Configuration.ORIENTATION_LANDSCAPE
+     * @see Configuration.ORIENTATION_PORTRAIT
      */
     fun getScreenOrientation() = ContextHelper.getAppContext().resources?.configuration?.orientation
+
+    /**
+     * Get screen orientation in degrees. By default, it returns 0.
+     */
+    fun getScreenOrientationInDegree(activity: Activity): Int {
+        val rotation = getDisplay(activity)?.rotation
+        var degrees = 0
+        when (rotation) {
+            Surface.ROTATION_0 -> degrees = 0
+            Surface.ROTATION_90 -> degrees = 90
+            Surface.ROTATION_180 -> degrees = 180
+            Surface.ROTATION_270 -> degrees = 270
+        }
+        return degrees
+    }
 
     /**
      * Get the StatusBar height.
@@ -193,4 +211,12 @@ object ScreenSizeUtils {
      * @see [DisplayMetrics.density]
      */
     fun getDensity() = ContextHelper.getAppContext().resources.displayMetrics.density
+
+    /**
+     * Get [activity] display.
+     */
+    @Suppress("DEPRECATION")
+    private fun getDisplay(activity: Activity) = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+        activity.display
+    } else activity.windowManager.defaultDisplay
 }
