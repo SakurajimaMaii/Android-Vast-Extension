@@ -26,8 +26,7 @@ import com.ave.vastgui.netstatelayout.interfaces.BaseNetStateLayout
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2021/11/5
-// Description:
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastNetStateLayout/VastNetStateLayout/
 
 /**
  * [VastNetStateLayout] is a layout to set customized network state ui.

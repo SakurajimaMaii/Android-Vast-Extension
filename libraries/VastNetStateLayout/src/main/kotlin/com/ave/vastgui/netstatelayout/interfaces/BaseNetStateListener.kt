@@ -17,16 +17,14 @@
 package com.ave.vastgui.netstatelayout.interfaces
 
 import android.view.View
-import com.ave.vastgui.netstatelayout.view.CONTENT_STATE_SHOW_NET_ERROR
 import com.ave.vastgui.netstatelayout.view.CONTENT_STATE_SHOW_EMPTY_DATA
 import com.ave.vastgui.netstatelayout.view.CONTENT_STATE_SHOW_LOADING
 import com.ave.vastgui.netstatelayout.view.CONTENT_STATE_SHOW_LOADING_ERROR
+import com.ave.vastgui.netstatelayout.view.CONTENT_STATE_SHOW_NET_ERROR
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/18 21:22
-// Description: 
-// Documentation:
 
 interface BaseNetStateListener {
 

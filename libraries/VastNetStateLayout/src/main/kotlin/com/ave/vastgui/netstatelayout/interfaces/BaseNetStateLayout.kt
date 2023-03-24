@@ -21,8 +21,6 @@ import com.ave.vastgui.netstatelayout.view.VastNetStateMgr
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
 // Date: 2022/4/12 7:53
-// Description:
-// Documentation:
 
 /**
  * Interface of [VastNetStateLayout].

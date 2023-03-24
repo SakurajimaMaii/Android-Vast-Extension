@@ -14,8 +14,8 @@
   ~ limitations under the License.
   -->
 
-<vector android:height="300dp" android:viewportHeight="800"
-    android:viewportWidth="800" android:width="300dp"
+<vector android:height="200dp" android:viewportHeight="800"
+    android:viewportWidth="800" android:width="200dp"
     xmlns:aapt="http://schemas.android.com/aapt" xmlns:android="http://schemas.android.com/apk/res/android">
     <path android:pathData="M483.68,200.89c-38.37,30.29 -120.74,33.81 -181.17,-2.22s-172,-31.38 -202.22,34.87s37.19,131.33 12.78,178.98S7.31,527.56 63.1,608.92s126.6,60.62 169.22,52.45c84.17,-16.13 189.79,115.67 308.62,16.13c68.47,-57.35 170.44,42.09 210.17,-81.36c32.78,-101.86 -85.67,-139.5 -49.97,-208.03c37.96,-72.88 30.67,-159.24 -10.46,-201.06C652.37,148.09 549.93,148.59 483.68,200.89z">
         <aapt:attr name="android:fillColor">

@@ -16,7 +16,6 @@
 
 import com.pluginversion.vastgui.AndroidX
 import com.pluginversion.vastgui.Google
-import com.pluginversion.vastgui.Libraries
 import com.pluginversion.vastgui.Version
 
 plugins {
@@ -63,18 +62,10 @@ android {
 }
 
 dependencies {
-    implementation(AndroidX.activity_ktx)
     implementation(AndroidX.annotation)
-    implementation(AndroidX.appcompat)
-    implementation(AndroidX.arch_core_runtime)
     implementation(AndroidX.constraintlayout)
     implementation(AndroidX.core_ktx)
-    implementation(AndroidX.core_splashscreen)
-    implementation(AndroidX.fragment_ktx)
-    androidTestImplementation(AndroidX.espresso_core)
-    androidTestImplementation(AndroidX.junit)
     implementation(Google.material)
-    testImplementation(Libraries.junit)
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastNetStateLayout"
@@ -86,7 +77,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "VastNetStateLayout"
-            version = "0.0.3"
+            version = "0.0.4"
 
             afterEvaluate {
                 from(components["release"])

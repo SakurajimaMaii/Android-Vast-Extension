@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="retry">retry</string>
+    <string name="retry">Retry</string>
     <string name="network_error">Network error</string>
     <string name="loading_error">Loading error</string>
     <string name="empty_data">Empty data</string>

@@ -27,8 +27,7 @@ import com.ave.vastgui.netstatelayout.interfaces.BaseNetStateListener
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2021/11/16
-// Description:
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastNetStateLayout/VastNetStateLayout/
 
 // show customized network error view
 const val CONTENT_STATE_SHOW_LOADING = 0X01
@@ -58,12 +57,13 @@ annotation class NetStateView
 /**
  * [VastNetStateMgr] used to manage the view of different network status.
  *
- * Currently mainly supports four view: EMPTY DATA,NET ERROR,LOADING
- * ERROR,LOADING.
+ * Currently mainly supports four view: [CONTENT_STATE_SHOW_EMPTY_DATA],
+ * [CONTENT_STATE_SHOW_NET_ERROR], [CONTENT_STATE_SHOW_LOADING_ERROR],
+ * [CONTENT_STATE_SHOW_LOADING].
  *
- * If you want to customize the view, you can use
- * [setEmptyDataView],[setNetErrorView], [setLoadingView],[setLoadingView],
- * otherwise the default view will be used.
+ * If you want to customize the view, you can use [setEmptyDataView],
+ * [setNetErrorView], [setLoadingView], [setLoadingView], otherwise the
+ * default view will be used.
  */
 class VastNetStateMgr(private val context: Context) : BaseNetStateListener {
 
