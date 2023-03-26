@@ -25,9 +25,7 @@ import java.io.Serializable
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/22
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/intent/Intent/
 
 /**
  * Retrieve extended data from the intent.

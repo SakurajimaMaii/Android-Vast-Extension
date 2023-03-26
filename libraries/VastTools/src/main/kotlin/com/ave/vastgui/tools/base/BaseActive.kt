@@ -25,8 +25,6 @@ import kotlinx.coroutines.SupervisorJob
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/14 16:06
-// Description: 
-// Documentation:
 
 interface BaseActive {
 

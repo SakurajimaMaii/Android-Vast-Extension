@@ -21,9 +21,7 @@ import android.content.BroadcastReceiver
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/27
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/background-tasks/VastBroadcastReceiver/
 
 abstract class VastBroadcastReceiver : BroadcastReceiver() {
 

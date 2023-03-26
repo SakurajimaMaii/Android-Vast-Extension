@@ -22,7 +22,11 @@ import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import me.jessyan.progressmanager.ProgressListener
 import me.jessyan.progressmanager.ProgressManager
 import me.jessyan.progressmanager.body.ProgressInfo
-import okhttp3.*
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -32,7 +36,7 @@ import java.io.InputStream
 // Email: guihy2019@gmail.com
 // Date: 2022/4/14 18:11
 // Description: DownloadUtils is based on OKHttp3 and ProgressManager to help you download files.
-// Documentation: [DownloadUtils](https://sakurajimamaii.github.io/VastDocs/document/en/DownloadUtils.html)
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/DownloadUtils/
 
 /**
  * Download utils.

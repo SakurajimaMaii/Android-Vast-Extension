@@ -19,8 +19,7 @@ package com.ave.vastgui.tools.bean
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/19 19:47
-// Description: 
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/bean/Component/
 
 data class Component2<A : Any, B : Any>(
     val param1: A,

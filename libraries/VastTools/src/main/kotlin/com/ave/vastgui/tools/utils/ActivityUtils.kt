@@ -25,8 +25,7 @@ import kotlin.system.exitProcess
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/6/20
-// Description: 
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/ActivityUtils/
 
 /**
  * Activity utils.
@@ -70,6 +69,7 @@ object ActivityUtils {
     /**
      * Find the activity available at the top.
      */
+    @JvmStatic
     fun getCurrentActivity(): Activity? {
         if (activities.isEmpty()) {
             return null

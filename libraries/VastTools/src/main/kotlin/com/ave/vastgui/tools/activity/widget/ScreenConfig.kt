@@ -26,9 +26,7 @@ import androidx.core.view.WindowInsetsCompat
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/6
-// Description:
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/ActivityDelegate/#_3
 
 /**
  * @param mEnableActionBar True if you want to show the ActionBar,false otherwise

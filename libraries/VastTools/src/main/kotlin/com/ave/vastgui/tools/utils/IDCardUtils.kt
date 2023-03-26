@@ -19,14 +19,17 @@ package com.ave.vastgui.tools.utils
 import com.ave.vastgui.tools.utils.RegexUtils.isNumeric
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
+import java.util.Hashtable
+import java.util.Locale
 
 
 // Author: lt
 // Email: lt.dygzs@qq.com
 // Date: 2022/3/10 18:32
 // Description: Validates the Chinese ID card number.
-// Documentation: [IDCardUtils](https://sakurajimamaii.github.io/VastDocs/document/en/IDCardUtils.html)
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/IDCardUtils/
 
 object IDCardUtils {
     /**

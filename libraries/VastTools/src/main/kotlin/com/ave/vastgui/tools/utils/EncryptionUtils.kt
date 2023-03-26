@@ -23,8 +23,7 @@ import java.security.NoSuchAlgorithmException
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/6/19
-// Description: 
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/EncryptionUtils/
 
 object EncryptionUtils {
 

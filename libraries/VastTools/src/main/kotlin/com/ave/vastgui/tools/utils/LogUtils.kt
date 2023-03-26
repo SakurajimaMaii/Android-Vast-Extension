@@ -26,7 +26,7 @@ import java.util.Arrays
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: A log utils.
-// Documentation: [LogUtils](https://sakurajimamaii.github.io/VastDocs/document/en/LogUtils.html)
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/LogUtils/
 
 /**
  * LogUtils

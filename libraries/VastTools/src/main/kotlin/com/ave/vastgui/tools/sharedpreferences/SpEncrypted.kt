@@ -26,9 +26,7 @@ import com.ave.vastgui.tools.helper.ContextHelper
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/14
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/save-key-value-data/SpEncrypted/
 
 /**
  * Opens an instance of encrypted SharedPreferences.

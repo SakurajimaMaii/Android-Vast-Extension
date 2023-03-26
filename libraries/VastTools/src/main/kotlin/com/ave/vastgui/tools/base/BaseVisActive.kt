@@ -24,10 +24,6 @@ import androidx.viewbinding.ViewBinding
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/27
-// Description: 
-// Documentation:
-// Reference:
-
 
 interface BaseVisActive : BaseActive {
 

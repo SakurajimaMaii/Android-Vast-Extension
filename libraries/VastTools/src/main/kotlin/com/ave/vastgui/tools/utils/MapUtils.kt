@@ -24,8 +24,7 @@ import com.ave.vastgui.tools.helper.ContextHelper
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
 // Date: 2022/4/13 17:41
-// Description:
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/hardware/MapUtils/
 
 object MapUtils {
     /**

@@ -24,7 +24,25 @@ import android.net.Uri
 import android.text.Layout.Alignment
 import android.text.SpannableStringBuilder
 import android.text.Spanned
-import android.text.style.*
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.AlignmentSpan
+import android.text.style.BackgroundColorSpan
+import android.text.style.BulletSpan
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.ImageSpan
+import android.text.style.LeadingMarginSpan
+import android.text.style.MaskFilterSpan
+import android.text.style.QuoteSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.ScaleXSpan
+import android.text.style.StrikethroughSpan
+import android.text.style.StyleSpan
+import android.text.style.SubscriptSpan
+import android.text.style.SuperscriptSpan
+import android.text.style.TypefaceSpan
+import android.text.style.URLSpan
+import android.text.style.UnderlineSpan
 import androidx.annotation.ColorRes
 import androidx.annotation.FloatRange
 import com.ave.vastgui.core.extension.NotNUllVar
@@ -34,8 +52,7 @@ import com.ave.vastgui.tools.utils.ResUtils
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/21 16:45
-// Description: 
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/SpanUtils/
 
 object SpanStrUtils {
 

@@ -23,9 +23,7 @@ import com.ave.vastgui.tools.service.delegate.ServiceDelegate
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/27
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/service/Service/
 
 abstract class VastService : Service() {
 

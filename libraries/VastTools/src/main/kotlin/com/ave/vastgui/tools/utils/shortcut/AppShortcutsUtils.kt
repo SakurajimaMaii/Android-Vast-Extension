@@ -35,8 +35,7 @@ import com.ave.vastgui.tools.utils.AppUtils
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/19 15:37
-// Description: 
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/AppShortcuts/
 
 /**
  * Help you to create short cut launcher for app.

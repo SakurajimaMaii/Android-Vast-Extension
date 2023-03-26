@@ -27,10 +27,9 @@ import com.ave.vastgui.tools.utils.LogUtils
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/28 10:42
-// Description: 
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/ToolsConfig/
 
-/** VastUtils config. */
+/** VastTools config. */
 object ToolsConfig {
 
     /** Is initialized */

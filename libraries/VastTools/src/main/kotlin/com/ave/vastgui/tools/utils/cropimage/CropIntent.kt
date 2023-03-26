@@ -23,9 +23,7 @@ import android.provider.MediaStore
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/23
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/intent/CropIntent/
 
 class CropIntent : CropProperty {
 

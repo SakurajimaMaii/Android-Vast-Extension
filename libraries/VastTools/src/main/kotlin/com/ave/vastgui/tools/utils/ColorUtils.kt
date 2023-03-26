@@ -24,7 +24,7 @@ import androidx.annotation.IntRange
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: ColorUtils Provides methods for converting between different formats of Color.
-// Documentation: [ColorUtils](https://sakurajimamaii.github.io/VastDocs/document/en/ColorUtils.html)
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/ColorUtils/
 
 object ColorUtils {
 

@@ -21,8 +21,6 @@ import android.text.SpannableString
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/22
-// Description: 
-// Documentation:
 
 /**
  * Span mode

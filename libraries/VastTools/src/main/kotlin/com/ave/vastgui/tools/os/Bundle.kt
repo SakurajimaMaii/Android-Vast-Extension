@@ -23,9 +23,7 @@ import android.os.Parcelable
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/22
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/Bundle/
 
 /**
  * Returns the value associated with the given key.

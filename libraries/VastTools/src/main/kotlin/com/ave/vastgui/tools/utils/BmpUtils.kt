@@ -32,7 +32,7 @@ import java.io.IOException
 // Email: guihy2019@gmail.com
 // Date: 2021/11/8 15:27
 // Description: Provides some methods for merging Bitmaps.
-// Documentation: [MergeBmpUtils](https://sakurajimamaii.github.io/VastDocs/document/en/MergeBmpUtils.html)
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/images/BmpUtils/
 
 object BmpUtils {
     /**
@@ -198,12 +198,14 @@ object BmpUtils {
     }
 
     /** Get bitmap from base64. */
+    @JvmStatic
     fun getBitmapFromBase64(base64: String): Bitmap {
         val decode: ByteArray = Base64.decode(base64.split(",")[1], Base64.DEFAULT)
         return BitmapFactory.decodeByteArray(decode, 0, decode.size)
     }
 
     /** Convert drawable to bitmap. */
+    @JvmStatic
     fun getBitmapFromDrawable(drawable: Drawable): Bitmap {
         val w: Int = drawable.intrinsicWidth
         val h: Int = drawable.intrinsicHeight

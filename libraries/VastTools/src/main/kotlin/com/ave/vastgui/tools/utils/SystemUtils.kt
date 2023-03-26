@@ -23,7 +23,7 @@ import java.util.Locale
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: Help you to get the system information.
-// Documentation: [SystemUtils](https://sakurajimamaii.github.io/VastDocs/document/en/SystemUtils.html)
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/SystemUtils/
 
 object SystemUtils {
     /**

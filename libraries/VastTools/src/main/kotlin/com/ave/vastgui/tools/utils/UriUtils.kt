@@ -36,8 +36,7 @@ import java.security.SecureRandom
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/7/10
-// Description: 
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/UriUtils/
 
 object UriUtils {
 

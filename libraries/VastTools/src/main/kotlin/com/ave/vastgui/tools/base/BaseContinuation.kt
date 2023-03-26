@@ -21,9 +21,6 @@ import kotlin.coroutines.Continuation
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/27
-// Description: 
-// Documentation:
-// Reference:
 
 abstract class BaseContinuation<in T> : Continuation<T> {
     abstract fun resume(value: T)

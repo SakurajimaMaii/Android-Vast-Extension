@@ -30,8 +30,7 @@ import kotlin.math.max
 // Author: Vast Gui
 // Email: sakurajimamai2020@qq.com
 // Date: 2021/7/28
-// Description:
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/RatingView/
 
 class RatingView @JvmOverloads constructor(
     context: Context,

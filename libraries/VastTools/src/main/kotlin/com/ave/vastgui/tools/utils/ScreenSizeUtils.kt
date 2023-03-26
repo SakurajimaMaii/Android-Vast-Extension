@@ -167,11 +167,13 @@ object ScreenSizeUtils {
      * @see Configuration.ORIENTATION_LANDSCAPE
      * @see Configuration.ORIENTATION_PORTRAIT
      */
+    @JvmStatic
     fun getScreenOrientation() = ContextHelper.getAppContext().resources?.configuration?.orientation
 
     /**
      * Get screen orientation in degrees. By default, it returns 0.
      */
+    @JvmStatic
     fun getScreenOrientationInDegree(activity: Activity): Int {
         val rotation = getDisplay(activity)?.rotation
         var degrees = 0
@@ -210,6 +212,7 @@ object ScreenSizeUtils {
      *
      * @see [DisplayMetrics.density]
      */
+    @JvmStatic
     fun getDensity() = ContextHelper.getAppContext().resources.displayMetrics.density
 
     /**

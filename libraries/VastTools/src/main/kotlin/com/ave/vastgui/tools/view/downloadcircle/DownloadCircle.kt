@@ -24,8 +24,6 @@ import androidx.annotation.FloatRange
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
 // Date: 2022/4/18 20:44
-// Description:
-// Documentation:
 
 /**
  * Interface for [DownloadCircleView].

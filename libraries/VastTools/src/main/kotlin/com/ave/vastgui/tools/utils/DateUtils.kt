@@ -25,7 +25,7 @@ import java.util.*
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: Help you get time and other related information.
-// Documentation: [DateUtils](https://sakurajimamaii.github.io/VastDocs/document/en/DateUtils.html)
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/DateUtils/
 
 /**
  * Date utils.

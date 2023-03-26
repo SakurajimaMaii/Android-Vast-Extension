@@ -24,9 +24,6 @@ import com.ave.vastgui.tools.activity.result.contract.CropPhotoContract
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/23
-// Description: 
-// Documentation:
-// Reference:
 
 interface CropProperty {
 
