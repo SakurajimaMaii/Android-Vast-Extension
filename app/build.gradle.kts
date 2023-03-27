@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-import com.pluginversion.vastgui.*
+import com.pluginversion.vastgui.AVE
+import com.pluginversion.vastgui.AndroidX
+import com.pluginversion.vastgui.Google
+import com.pluginversion.vastgui.Jetbrains
+import com.pluginversion.vastgui.Squareup
+import com.pluginversion.vastgui.Version
 
 plugins {
     id("com.android.application")
@@ -118,7 +123,7 @@ dependencies {
     implementation(Squareup.retrofit2_adapter_rxjava3)
     implementation(Squareup.retrofit2_converter_gson)
     implementation(project(":libraries:VastAdapter"))
-    implementation(project(":libraries:VastNetStateLayout"))
+    implementation(AVE.netStateLayout)
     implementation(project(":libraries:VastTools"))
-    implementation(project(":libraries:VastCore"))
+    implementation(AVE.core)
 }

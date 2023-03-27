@@ -18,7 +18,15 @@
 // https://cloud.tencent.com/developer/article/1839887
 // https://mp.weixin.qq.com/s/mVqShijGTExtQ_nLslchpQ
 
-import com.pluginversion.vastgui.*
+import com.pluginversion.vastgui.AVE
+import com.pluginversion.vastgui.AndroidX
+import com.pluginversion.vastgui.Google
+import com.pluginversion.vastgui.Jetbrains
+import com.pluginversion.vastgui.Libraries
+import com.pluginversion.vastgui.Squareup
+import com.pluginversion.vastgui.Version
+import org.jetbrains.dokka.DokkaConfiguration.Visibility
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
 plugins {
     id("com.android.library")
@@ -28,6 +36,7 @@ plugins {
     id("com.pluginversion.vastgui")
     id("org.sonarqube") version "3.4.0.2513"
     id("convention.publication")
+    id("org.jetbrains.dokka") version "1.8.10"
 }
 
 android {
@@ -87,14 +96,13 @@ project(":libraries:VastTools"){
 }
 
 dependencies {
-    androidTestImplementation(AndroidX.espresso_core)
-    androidTestImplementation(AndroidX.junit)
     api(AndroidX.security_crypto)
     api(Libraries.progressmanager)
     api(Libraries.zxing)
     api(AVE.core)
     implementation(AndroidX.activity_ktx)
     implementation(AndroidX.annotation)
+    implementation(AndroidX.annotation_experimental)
     implementation(AndroidX.appcompat)
     implementation(AndroidX.arch_core_runtime)
     implementation(AndroidX.constraintlayout)
@@ -114,7 +122,17 @@ dependencies {
     implementation(Squareup.retrofit2)
     implementation(Squareup.retrofit2_adapter_rxjava3)
     implementation(Squareup.retrofit2_converter_gson)
-    testImplementation(Libraries.junit)
+}
+
+tasks.withType<DokkaTaskPartial>().configureEach {
+    dokkaSourceSets.configureEach {
+        jdkVersion.set(17)
+        languageVersion.set("1.8.10")
+        suppressInheritedMembers.set(true)
+        documentedVisibilities.set(
+            setOf(Visibility.PUBLIC, Visibility.PROTECTED)
+        )
+    }
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastTools"

@@ -15,12 +15,19 @@
  */
 
 import com.pluginversion.vastgui.Version
+import org.jetbrains.dokka.DokkaConfiguration.Visibility
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("com.pluginversion.vastgui")
     id("convention.publication")
+    id("org.jetbrains.dokka") version "1.8.10"
+}
+
+subprojects {
+    apply(plugin = "org.jetbrains.dokka")
 }
 
 group = "io.github.sakurajimamaii"
@@ -68,8 +75,15 @@ android {
     }
 }
 
-dependencies {
-
+tasks.withType<DokkaTaskPartial>().configureEach {
+    dokkaSourceSets.configureEach {
+        jdkVersion.set(17)
+        languageVersion.set("1.8.10")
+        suppressInheritedMembers.set(true)
+        documentedVisibilities.set(
+            setOf(Visibility.PUBLIC, Visibility.PROTECTED)
+        )
+    }
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastCore"
