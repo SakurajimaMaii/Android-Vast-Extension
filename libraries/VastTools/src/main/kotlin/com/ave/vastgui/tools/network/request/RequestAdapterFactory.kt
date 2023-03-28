@@ -25,9 +25,6 @@ import java.lang.reflect.Type
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/9
-// Description: 
-// Documentation:
-// Reference:
 
 class RequestAdapterFactory : CallAdapter.Factory() {
     override fun get(

@@ -16,11 +16,8 @@
 
 package com.ave.vastgui.tools.network.handle
 
-import com.ave.vastgui.tools.network.request.Request
 import com.ave.vastgui.tools.network.response.ResponseApi
 import com.ave.vastgui.tools.network.response.ResponseWrapper
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -31,37 +28,16 @@ import kotlin.coroutines.suspendCoroutine
 
 internal object HttpHandle {
 
-    suspend fun <T : ResponseApi> requestWithCall(
-        block: () -> Request<T>
-    ): ResponseWrapper<T> {
-        return suspendCoroutine {
-            block().request {
-                onSuccess = { data ->
-                    it.resume(ResponseWrapper.SuccessResponseWrapper(data))
-                }
-                onEmpty = {
-                    it.resume(ResponseWrapper.EmptyResponseWrapper())
-                }
-                onFailed = { code, msg ->
-                    it.resume(ResponseWrapper.FailedResponseWrapper(code, msg))
-                }
-                onError = { throwable ->
-                    it.resume(ResponseWrapper.ErrorResponseWrapper(throwable))
-                }
-            }
-        }
-    }
-
     suspend fun <T : ResponseApi> requestWithSuspend(
         block: suspend () -> T
     ): ResponseWrapper<T> {
         runCatching {
-            block.invoke()
+            block()
         }.onSuccess { data: T ->
             return handleHttpOk(data)
         }.onFailure { e ->
             return handleHttpError(e)
-        }.isSuccess
+        }
         return ResponseWrapper.EmptyResponseWrapper()
     }
 

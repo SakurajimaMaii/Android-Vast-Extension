@@ -23,8 +23,7 @@ import com.ave.vastgui.tools.network.response.ResponseStateListener
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/9
-// Description: 
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/Request/
 // Reference: https://juejin.cn/post/6844904047447638024
 
 interface Request<T : ResponseApi> {

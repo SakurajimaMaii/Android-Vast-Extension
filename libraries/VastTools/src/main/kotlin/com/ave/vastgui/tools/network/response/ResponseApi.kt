@@ -19,9 +19,7 @@ package com.ave.vastgui.tools.network.response
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/2/20
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/
 
 @JvmDefaultWithCompatibility
 interface ResponseApi {

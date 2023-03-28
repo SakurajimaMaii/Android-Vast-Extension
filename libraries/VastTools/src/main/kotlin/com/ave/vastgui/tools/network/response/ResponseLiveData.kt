@@ -23,19 +23,16 @@ import androidx.lifecycle.Observer
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/28
-// Description: 
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/ResponseLiveData/
 // Reference: https://juejin.cn/post/6844903855675670535
 
 class ResponseLiveData<T> : MutableLiveData<T>() {
 
     sealed class State {
         object Clear : State()
-        object Completion : State()
         object Empty : State()
         class Error(val t: Throwable?) : State()
         class Failed(val code: Int?, val message: String?) : State()
-        object Start : State()
         object Success : State()
     }
 
@@ -44,16 +41,10 @@ class ResponseLiveData<T> : MutableLiveData<T>() {
         var onEmpty: () -> Unit = {}
         var onFailed: (errorCode: Int?, errorMsg: String?) -> Unit = { _, _ -> }
         var onError: (t: Throwable?) -> Unit = { }
-        var onStart: () -> Unit = {}
-        var onCompletion: () -> Unit = {}
         var onSuccess: () -> Unit = {}
     }
 
     inner class StateObserver : MutableLiveData<State>() {
-
-        fun changeCompletion() {
-            postValue(State.Completion)
-        }
 
         fun changeEmpty() {
             postValue(State.Empty)
@@ -65,10 +56,6 @@ class ResponseLiveData<T> : MutableLiveData<T>() {
 
         fun changeFailed(code: Int?, message: String?) {
             postValue(State.Failed(code, message))
-        }
-
-        fun changeStart() {
-            postValue(State.Start)
         }
 
         fun changeState(s: State) {
@@ -87,17 +74,13 @@ class ResponseLiveData<T> : MutableLiveData<T>() {
          * Add a state observer for [StateObserver].
          *
          * @param owner The LifecycleOwner which controls the observer.
-         * @param listener The observer listener. By default, you need to set the
-         *     **Start**, **Completion** state by yourself.
+         * @param listener The observer listener.
          */
         fun observeState(owner: LifecycleOwner, listener: StateListener.() -> Unit) {
             val mObserver =
                 Observer<State> { state ->
                     val mListener = StateListener().also(listener)
                     when (state) {
-                        is State.Start -> {
-                            mListener.onStart()
-                        }
 
                         is State.Success -> {
                             mListener.onSuccess()
@@ -113,10 +96,6 @@ class ResponseLiveData<T> : MutableLiveData<T>() {
 
                         is State.Empty -> {
                             mListener.onEmpty()
-                        }
-
-                        is State.Completion -> {
-                            mListener.onCompletion()
                         }
 
                         is State.Clear -> {
@@ -145,10 +124,6 @@ class ResponseLiveData<T> : MutableLiveData<T>() {
         state.changeState(s)
     }
 
-    fun postCompletion() {
-        state.changeCompletion()
-    }
-
     fun postEmpty() {
         state.changeEmpty()
     }
@@ -161,10 +136,6 @@ class ResponseLiveData<T> : MutableLiveData<T>() {
     @JvmOverloads
     fun postFailed(errorCode: Int? = null, errorMsg: String? = null) {
         state.changeFailed(errorCode, errorMsg)
-    }
-
-    fun postStart() {
-        state.changeStart()
     }
 
     fun postSuccess() {

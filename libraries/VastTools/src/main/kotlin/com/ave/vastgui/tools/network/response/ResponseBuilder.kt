@@ -17,12 +17,8 @@
 package com.ave.vastgui.tools.network.response
 
 import com.ave.vastgui.tools.network.handle.HttpHandle
-import com.ave.vastgui.tools.network.request.Request
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
+import kotlin.coroutines.startCoroutine
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -31,57 +27,16 @@ import kotlinx.coroutines.launch
 // Documentation:
 // Reference:
 
-class ResponseBuilder(val mainScope: CoroutineScope) {
-
-    fun <T : ResponseApi> requestWithListener(
-        request: () -> Request<T>,
-        listener: ResponseStateListener<T>.() -> Unit
-    ) {
-        val mListener = ResponseStateListener<T>().also(listener)
-        mainScope.launch {
-            flow {
-                emit(HttpHandle.requestWithCall(request))
-            }.onStart {
-                mListener.onStart()
-            }.onCompletion {
-                mListener.onCompletion(it)
-            }.collect { response ->
-                parseData(response, mListener)
-            }
-        }
-    }
+class ResponseBuilder(private val mainScope: CoroutineScope) {
 
     fun <T : ResponseApi> suspendWithListener(
         request: suspend () -> T,
         listener: ResponseStateListener<T>.() -> Unit
     ) {
         val mListener = ResponseStateListener<T>().also(listener)
-        mainScope.launch {
-            flow {
-                emit(HttpHandle.requestWithSuspend(request))
-            }.onStart {
-                mListener.onStart()
-            }.onCompletion {
-                mListener.onCompletion(it)
-            }.collect { response ->
-                parseData(response, mListener)
-            }
-        }
-    }
-
-    private fun <T> parseData(
-        response: ResponseWrapper<T>,
-        listener: ResponseStateListener<T>
-    ) {
-        when (response) {
-            is ResponseWrapper.SuccessResponseWrapper -> listener.onSuccess(response.data)
-            is ResponseWrapper.EmptyResponseWrapper -> listener.onEmpty()
-            is ResponseWrapper.FailedResponseWrapper -> listener.onFailed(
-                response.errorCode,
-                response.errorMsg
-            )
-            is ResponseWrapper.ErrorResponseWrapper -> listener.onError(response.throwable)
-        }
+        suspend {
+            HttpHandle.requestWithSuspend(request)
+        }.startCoroutine(ResponseContinuation(mainScope.coroutineContext, mListener))
     }
 
 }

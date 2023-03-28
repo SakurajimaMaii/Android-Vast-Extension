@@ -25,9 +25,6 @@ import java.util.concurrent.Executor
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/9
-// Description: 
-// Documentation:
-// Reference:
 
 class RequestAdapter<T : ResponseApi>(
     private val responseType: Type,
