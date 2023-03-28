@@ -103,7 +103,7 @@ object FileMgr : FileProperty by FilePropertyMgr() {
         for (p in path) {
             finalPath += (p + File.separator)
         }
-        return if (endWithSeparator) finalPath.replaceFirst(".$".toRegex(), "") else finalPath
+        return if (!endWithSeparator) finalPath.replaceFirst(".$".toRegex(), "") else finalPath
     }
 
     /**
