@@ -119,23 +119,7 @@ object ScreenSizeUtils {
      * @return The height of the screen(in pixels).
      */
     @JvmStatic
-    fun getMobileScreenHeight() = getMobileScreenHeight(ContextHelper.getAppContext())
-
-    /**
-     * Get mobile screen height.
-     *
-     * @return The height of the screen(in pixels).
-     */
-    @JvmStatic
-    @Deprecated(
-        "The function is deprecated!It will remove in 0.1.0",
-        ReplaceWith("getMobileScreenHeight()","new.getMobileScreenHeight"),
-        DeprecationLevel.WARNING
-    )
-    fun getMobileScreenHeight(context: Context): Int {
-        mScreenSize = getMobileScreenSize(context)
-        return mScreenSize.height
-    }
+    fun getMobileScreenHeight() = getMobileScreenSize(ContextHelper.getAppContext()).height
 
     /**
      * Get mobile screen width.
@@ -143,23 +127,7 @@ object ScreenSizeUtils {
      * @return The width of the screen(in pixels).
      */
     @JvmStatic
-    fun getMobileScreenWidth() = getMobileScreenWidth(ContextHelper.getAppContext())
-
-    /**
-     * Get mobile screen width.
-     *
-     * @return The width of the screen(in pixels).
-     */
-    @JvmStatic
-    @Deprecated(
-        "The function is deprecated!It will remove in 0.1.0",
-        ReplaceWith("getMobileScreenWidth()","new.getMobileScreenWidth"),
-        DeprecationLevel.WARNING
-    )
-    fun getMobileScreenWidth(context: Context): Int {
-        mScreenSize = getMobileScreenSize(context)
-        return mScreenSize.width
-    }
+    fun getMobileScreenWidth() = getMobileScreenSize(ContextHelper.getAppContext()).width
 
     /**
      * Get screen orientation.
