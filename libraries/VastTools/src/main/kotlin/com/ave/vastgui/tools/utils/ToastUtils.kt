@@ -17,10 +17,15 @@
 package com.ave.vastgui.tools.utils
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import android.widget.Toast.makeText
+import androidx.annotation.IntDef
 import androidx.annotation.StringRes
+import com.ave.vastgui.tools.config.ToolsConfig
 import com.ave.vastgui.tools.helper.ContextHelper
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -33,10 +38,17 @@ import com.ave.vastgui.tools.helper.ContextHelper
  *
  * Here is an example:
  * ```Java
- * ToastUtils.INSTANCE.showShortMsg(this,message);
+ * ToastUtils.showShortMsg(this,message);
  * ```
  */
 object ToastUtils {
+
+    @Retention(AnnotationRetention.SOURCE)
+    @IntDef(
+        Toast.LENGTH_LONG,
+        Toast.LENGTH_SHORT
+    )
+    annotation class Duration
 
     private var mToast: Toast? = null
 
@@ -50,12 +62,7 @@ object ToastUtils {
         msg: String,
         context: Context = ContextHelper.getAppContext()
     ) {
-        if (null == mToast) {
-            mToast = makeText(context, msg, Toast.LENGTH_SHORT)
-        } else {
-            mToast!!.setText(msg)
-        }
-        mToast!!.show()
+        showToast(context, msg, Toast.LENGTH_LONG)
     }
 
     /**
@@ -68,12 +75,7 @@ object ToastUtils {
         @StringRes id: Int,
         context: Context = ContextHelper.getAppContext()
     ) {
-        if (null == mToast) {
-            mToast = makeText(context, id, Toast.LENGTH_SHORT)
-        } else {
-            mToast!!.setText(id)
-        }
-        mToast!!.show()
+        showToast(context, ResUtils.getString(id), Toast.LENGTH_SHORT)
     }
 
 
@@ -87,12 +89,7 @@ object ToastUtils {
         msg: String,
         context: Context = ContextHelper.getAppContext()
     ) {
-        if (null == mToast) {
-            mToast = makeText(context, msg, Toast.LENGTH_LONG)
-        } else {
-            mToast!!.setText(msg)
-        }
-        mToast!!.show()
+        showToast(context, msg, Toast.LENGTH_LONG)
     }
 
     /**
@@ -105,10 +102,24 @@ object ToastUtils {
         @StringRes id: Int,
         context: Context = ContextHelper.getAppContext()
     ) {
-        if (null == mToast) {
-            mToast = makeText(context, id, Toast.LENGTH_LONG)
+        showToast(context, ResUtils.getString(id), Toast.LENGTH_LONG)
+    }
+
+    private fun showToast(context: Context, msg: String, @Duration duration: Int) {
+        if (ToolsConfig.isMainThread()) {
+            makeToast(context, msg, duration)
         } else {
-            mToast!!.setText(id)
+            val handler = Handler(Looper.getMainLooper())
+            handler.post(Runnable { makeToast(context, msg, duration) })
+        }
+    }
+
+    private fun makeToast(context: Context, msg: String, @Duration duration: Int) {
+        mToast?.cancel()
+        if (null == mToast) {
+            mToast = makeText(context, msg, duration)
+        } else {
+            mToast!!.setText(msg)
         }
         mToast!!.show()
     }
