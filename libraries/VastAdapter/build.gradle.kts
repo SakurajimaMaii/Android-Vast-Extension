@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import com.pluginversion.vastgui.AVE
 import com.pluginversion.vastgui.AndroidX
 import com.pluginversion.vastgui.Jetbrains
-import com.pluginversion.vastgui.Libraries
 import com.pluginversion.vastgui.Version
 
 plugins {
@@ -69,27 +69,25 @@ android {
 }
 
 dependencies {
-    api(project(":libraries:VastCore"))
+    api(AVE.core)
     implementation(AndroidX.annotation)
     implementation(AndroidX.arch_core_runtime)
     implementation(AndroidX.core_ktx)
     implementation(AndroidX.recyclerview)
     implementation(AndroidX.paging3)
-    androidTestImplementation(AndroidX.junit)
     implementation(Jetbrains.kotlin_reflect)
-    testImplementation(Libraries.junit)
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastAdapter"
 extra["PUBLISH_DESCRIPTION"] = "Help you quickly build an Adapter suitable for RecyclerView."
-extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/VastUtils/tree/master/libraries/VastAdapter"
+extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/VastAdapter"
 
 publishing {
     publications {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "VastAdapter"
-            version = "0.0.6"
+            version = "0.1.0"
 
             afterEvaluate {
                 from(components["release"])
