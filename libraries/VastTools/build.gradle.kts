@@ -102,7 +102,6 @@ dependencies {
     api(AVE.core)
     implementation(AndroidX.activity_ktx)
     implementation(AndroidX.annotation)
-    implementation(AndroidX.annotation_experimental)
     implementation(AndroidX.appcompat)
     implementation(AndroidX.arch_core_runtime)
     implementation(AndroidX.constraintlayout)

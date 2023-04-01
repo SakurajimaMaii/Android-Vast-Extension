@@ -64,4 +64,15 @@
             <enum name="star_horizontal" value="0" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="Vp2IndicatorView">
+        <attr name="indicator_style" format="enum">
+            <enum name="style_circle" value="1" />
+        </attr>
+        <attr name="indicator_selected_color" format="color|reference"/>
+        <attr name="indicator_unselected_color" format="color|reference"/>
+        <attr name="indicator_circle_radius" format="dimension"/>
+        <attr name="indicator_item_count" format="integer"/>
+        <attr name="indicator_item_distance" format="dimension"/>
+    </declare-styleable>
 </resources>
