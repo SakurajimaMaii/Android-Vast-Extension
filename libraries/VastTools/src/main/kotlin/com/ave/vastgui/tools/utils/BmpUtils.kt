@@ -16,13 +16,20 @@
 
 package com.ave.vastgui.tools.utils
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Rect
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.VectorDrawable
 import android.util.Base64
+import androidx.annotation.DrawableRes
 import androidx.annotation.IntRange
+import androidx.core.content.ContextCompat
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
+import com.ave.vastgui.tools.helper.ContextHelper
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import java.io.File
 import java.io.FileOutputStream
@@ -165,7 +172,8 @@ object BmpUtils {
      * @param bitmap The bitmap need to store.
      * @param filePath The path to store the bitmap.
      * @param format The format of the compressed image.
-     * @param quality Hint to the compressor, 0-100. The value is interpreted differently depending on the [Bitmap.CompressFormat].
+     * @param quality Hint to the compressor, 0-100. The value is interpreted
+     *     differently depending on the [Bitmap.CompressFormat].
      * @return The file path after storage, or null if the storage fails.
      */
     @JvmStatic
@@ -205,15 +213,37 @@ object BmpUtils {
     }
 
     /** Convert drawable to bitmap. */
+    @JvmOverloads
+    fun getBitmapFromDrawable(
+        @DrawableRes id: Int,
+        context: Context = ContextHelper.getAppContext()
+    ): Bitmap {
+        val drawable = ContextCompat.getDrawable(context, id)
+        return getBitmapFromDrawable(drawable)
+    }
+
+    /** Convert drawable to bitmap. */
     @JvmStatic
-    fun getBitmapFromDrawable(drawable: Drawable): Bitmap {
-        val w: Int = drawable.intrinsicWidth
-        val h: Int = drawable.intrinsicHeight
-        val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, w, h)
-        drawable.draw(canvas)
-        return bitmap
+    fun getBitmapFromDrawable(drawable: Drawable?): Bitmap {
+        return when (drawable) {
+            is BitmapDrawable -> {
+                drawable.bitmap
+            }
+
+            is VectorDrawable, is VectorDrawableCompat -> {
+                val w: Int = drawable.intrinsicWidth
+                val h: Int = drawable.intrinsicHeight
+                val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+                val canvas = Canvas(bitmap)
+                drawable.setBounds(0, 0, w, h)
+                drawable.draw(canvas)
+                bitmap
+            }
+
+            else -> {
+                throw IllegalArgumentException("unsupported drawable type");
+            }
+        }
     }
 
 }

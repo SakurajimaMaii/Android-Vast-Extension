@@ -23,17 +23,17 @@ import com.ave.vastgui.tools.R
 // Date: 2022/8/30 18:59
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/StrUtils/
 
-object StrUtils {
+abstract class StrUnit(val unit: String)
 
-    enum class Unit(val unit: String) {
-        Angle(ResUtils.getString(R.string.unit_angle)),
-        Celsius(ResUtils.getString(R.string.unit_celsius)),
-        Kmh(ResUtils.getString(R.string.unit_kmh)),
-        Kilometer(ResUtils.getString(R.string.unit_km)),
-        Meter(ResUtils.getString(R.string.unit_m)),
-        Ms(ResUtils.getString(R.string.unit_ms)),
-        Percent(ResUtils.getString(R.string.unit_percent))
-    }
+class Angle : StrUnit(ResUtils.getString(R.string.unit_angle))
+class Celsius : StrUnit(ResUtils.getString(R.string.unit_celsius))
+class Kmh : StrUnit(ResUtils.getString(R.string.unit_kmh))
+class Kilometer : StrUnit(ResUtils.getString(R.string.unit_km))
+class Meter : StrUnit(ResUtils.getString(R.string.unit_m))
+class Ms : StrUnit(ResUtils.getString(R.string.unit_ms))
+class Percent : StrUnit(ResUtils.getString(R.string.unit_percent))
+
+object StrUtils {
 
     /**
      * Concatenate the strings in the parameters in turn.
@@ -51,15 +51,15 @@ object StrUtils {
     }
 
     /**
-     * Get the string in [unit].
+     * Get the string in [strUnit].
      *
      * @param value the value or string res id.
      * @return the temperature string in Celsius unit,like 39℃.
      */
     @JvmStatic
     @Throws(RuntimeException::class)
-    fun getUnitStr(value: Any, unit: Unit): String {
-        return getUnitFormatString(value, unit.unit)
+    fun getUnitStr(value: Any, strUnit: StrUnit): String {
+        return getUnitFormatString(value, strUnit.unit)
     }
 
     /**
