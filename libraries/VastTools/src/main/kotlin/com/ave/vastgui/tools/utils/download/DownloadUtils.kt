@@ -19,6 +19,7 @@ package com.ave.vastgui.tools.utils.download
 import com.ave.vastgui.tools.coroutines.await
 import com.ave.vastgui.tools.coroutines.createMainScope
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
+import com.ave.vastgui.tools.utils.LogUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -27,6 +28,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.BufferedInputStream
 import java.io.File
+import java.io.FileOutputStream
 
 
 // Author: Vast Gui
@@ -87,9 +89,9 @@ object DownloadUtils {
         internal var downloadUrl: String = ""
         internal var saveDir: String = ""
         internal var saveName: String? = null
-        private var onDownloadSuccessListener: (() -> Unit)? = null
+        private var onDownloadSuccessListener: ((File) -> Unit)? = null
         private var onDownloadingListener: ((progress: DownloadResult.Progress?) -> Unit)? = null
-        private var onDownloadFailedListener: ((e: Exception?) -> Unit)? = null
+        private var onDownloadFailedListener: ((e: Throwable?) -> Unit)? = null
 
         fun setDownloadUrl(url: String) = apply {
             downloadUrl = url
@@ -103,7 +105,7 @@ object DownloadUtils {
             this.saveName = saveName
         }
 
-        fun setDownloadSuccess(l: () -> Unit) = apply {
+        fun setDownloadSuccess(l: (File) -> Unit) = apply {
             onDownloadSuccessListener = l
         }
 
@@ -111,7 +113,7 @@ object DownloadUtils {
             onDownloadingListener = l
         }
 
-        fun setDownloadFailed(l: (e: Exception?) -> Unit) = apply {
+        fun setDownloadFailed(l: (e: Throwable?) -> Unit) = apply {
             onDownloadFailedListener = l
         }
 
@@ -119,15 +121,15 @@ object DownloadUtils {
             download(this)
         }
 
-        override fun onDownloadSuccess() {
-            onDownloadSuccessListener?.invoke()
+        override fun onDownloadSuccess(file: File) {
+            onDownloadSuccessListener?.invoke(file)
         }
 
         override fun onDownloading(progress: DownloadResult.Progress?) {
             onDownloadingListener?.invoke(progress)
         }
 
-        override fun onDownloadFailed(e: Exception?) {
+        override fun onDownloadFailed(e: Throwable?) {
             onDownloadFailedListener?.invoke(e)
         }
 
@@ -135,7 +137,7 @@ object DownloadUtils {
 
     interface OnDownloadListener {
         /** Download successfully. */
-        fun onDownloadSuccess()
+        fun onDownloadSuccess(file: File)
 
         /**
          * Downloading.
@@ -149,7 +151,7 @@ object DownloadUtils {
          *
          * @param e Download exception.
          */
-        fun onDownloadFailed(e: Exception?)
+        fun onDownloadFailed(e: Throwable?)
     }
 
     private val okHttpClient: OkHttpClient = OkHttpClient()
@@ -163,6 +165,7 @@ object DownloadUtils {
                     val request: Request = Request.Builder().url(downloadConfig.downloadUrl).build()
                     val body = okHttpClient.newCall(request).await()
                     val contentLength = body.contentLength()
+                    LogUtils.d("ArcProgressViewActivity", contentLength.toString())
                     val inputStream = body.byteStream()
                     val file = if (null != downloadConfig.saveName) {
                         File(downloadConfig.saveDir, downloadConfig.saveName!!)
@@ -172,7 +175,7 @@ object DownloadUtils {
                     val result = FileMgr.saveFile(file)
                     if (result == FileMgr.FileResult.FLAG_FAILED)
                         throw RuntimeException("The download file save failed.")
-                    val outputStream = FileMgr.getEncryptedFile(file).openFileOutput()
+                    val outputStream = FileOutputStream(file)
                     var currentLength = 0
                     val bufferSize = 1024 * 8
                     val buffer = ByteArray(bufferSize)
@@ -198,7 +201,21 @@ object DownloadUtils {
                 } catch (e: Exception) {
                     emit(DownloadResult.failure(e))
                 }
-            }.flowOn(Dispatchers.IO)
+            }.flowOn(Dispatchers.IO).collect {
+                it.fold(onFailure = { e ->
+                    downloadConfig.onDownloadFailed(e)
+                }, onSuccess = { file ->
+                    downloadConfig.onDownloadSuccess(file)
+                }, onLoading = { progress ->
+                    downloadConfig.onDownloading(
+                        DownloadResult.Progress(
+                            progress.currentLength,
+                            progress.length,
+                            progress.process
+                        )
+                    )
+                })
+            }
         }
     }
 
