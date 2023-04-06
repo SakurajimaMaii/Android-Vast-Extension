@@ -24,6 +24,7 @@ import android.net.Uri
 import android.text.Layout.Alignment
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.AlignmentSpan
 import android.text.style.BackgroundColorSpan
@@ -43,6 +44,7 @@ import android.text.style.SuperscriptSpan
 import android.text.style.TypefaceSpan
 import android.text.style.URLSpan
 import android.text.style.UnderlineSpan
+import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.FloatRange
 import com.ave.vastgui.core.extension.NotNUllVar
@@ -58,24 +60,68 @@ object SpanStrUtils {
 
     /**
      * Get builder.
+     *
+     * When you using this method and append a [URLSpan] in the string, you
+     * should call [TextView.setMovementMethod] as last to make sure the
+     * [URLSpan] can be clicked.
      */
     @JvmStatic
     fun getBuilder(text: CharSequence?): Builder {
         return Builder(null, text)
     }
 
-    class Builder internal constructor(builder: SpannableStringBuilder?, text: CharSequence?) {
-        private var flag by NotNUllVar<Int>()
-        private var start by NotNUllVar<Int>()
-        private var end by NotNUllVar<Int>()
-        private var mBuilder by NotNUllVar<SpannableStringBuilder>()
+    /**
+     * Get builder.
+     *
+     * When you using this method, please call
+     * [SpanStrUtils.Builder.attachToTextView] at last.
+     *
+     * @param view The TextView that the string will be attached to.
+     * @since 0.2.0
+     */
+    @JvmStatic
+    fun getBuilder(view: TextView, text: CharSequence?): Builder {
+        return Builder(view, null, text)
+    }
 
-        init {
+    class Builder {
+
+        internal constructor(builder: SpannableStringBuilder?, text: CharSequence?) {
             mBuilder = builder ?: SpannableStringBuilder()
             start = mBuilder.length
             mBuilder.append(text)
             end = mBuilder.length
         }
+
+        /**
+         * Creates a [SpanStrUtils.Builder] instance.
+         *
+         * @param view The TextView that the string will be attached to.
+         * @since 0.2.0
+         */
+        internal constructor(
+            view: TextView,
+            builder: SpannableStringBuilder?,
+            text: CharSequence?
+        ) {
+            mBuilder = builder ?: SpannableStringBuilder()
+            start = mBuilder.length
+            mBuilder.append(text)
+            end = mBuilder.length
+            mTextView = view
+        }
+
+        private var flag by NotNUllVar<Int>()
+        private var start by NotNUllVar<Int>()
+        private var end by NotNUllVar<Int>()
+        private var mBuilder by NotNUllVar<SpannableStringBuilder>()
+
+        /**
+         * The TextView that the string will be attached to.
+         *
+         * @since 0.2.0
+         */
+        private var mTextView: TextView? = null
 
         /**
          * Set span type.
@@ -89,16 +135,12 @@ object SpanStrUtils {
             this.flag = flag.value
         }
 
-        /**
-         * Set text size(in pixels).
-         */
+        /** Set text size(in pixels). */
         fun setTextSize(textSize: Int) = apply {
             mBuilder.setSpan(AbsoluteSizeSpan(textSize), start, end, flag)
         }
 
-        /**
-         * Set foreground color.
-         */
+        /** Set foreground color. */
         fun setForegroundColor(@ColorRes foregroundColor: Int) = apply {
             mBuilder.setSpan(
                 ForegroundColorSpan(ResUtils.getColor(foregroundColor)),
@@ -108,9 +150,7 @@ object SpanStrUtils {
             )
         }
 
-        /**
-         * Set background color.
-         */
+        /** Set background color. */
         fun setBackgroundColor(@ColorRes backgroundColor: Int) = apply {
             mBuilder.setSpan(
                 BackgroundColorSpan(ResUtils.getColor(backgroundColor)),
@@ -120,9 +160,7 @@ object SpanStrUtils {
             )
         }
 
-        /**
-         * Set the color of the quote line.
-         */
+        /** Set the color of the quote line. */
         fun setQuoteColor(@ColorRes quoteColor: Int) = apply {
             mBuilder.setSpan(QuoteSpan(ResUtils.getColor(quoteColor)), start, end, 0)
         }
@@ -167,16 +205,12 @@ object SpanStrUtils {
             mBuilder.setSpan(ScaleXSpan(xProportion), start, end, flag)
         }
 
-        /**
-         * Making a span that strikes through the text it's attached to.
-         */
+        /** Making a span that strikes through the text it's attached to. */
         fun setStrikethrough() = apply {
             mBuilder.setSpan(StrikethroughSpan(), start, end, flag)
         }
 
-        /**
-         * Making a span that underlines the text it's attached to.
-         */
+        /** Making a span that underlines the text it's attached to. */
         fun setUnderline() = apply {
             mBuilder.setSpan(UnderlineSpan(), start, end, flag)
         }
@@ -192,9 +226,11 @@ object SpanStrUtils {
                 ScriptMode.Superscript -> {
                     mBuilder.setSpan(SuperscriptSpan(), start, end, flag)
                 }
+
                 ScriptMode.Subscript -> {
                     mBuilder.setSpan(SubscriptSpan(), start, end, flag)
                 }
+
                 ScriptMode.None -> {
                     return this@Builder
                 }
@@ -230,49 +266,43 @@ object SpanStrUtils {
             mBuilder.setSpan(AlignmentSpan.Standard(align), start, end, flag)
         }
 
-        /**
-         * Set image.
-         */
+        /** Set image. */
         fun setImage(image: Bitmap) = apply {
             mBuilder.setSpan(ImageSpan(ContextHelper.getAppContext(), image), start, end, flag)
         }
 
-        /**
-         * Set image.
-         */
+        /** Set image. */
         fun setImage(image: Drawable) = apply {
             mBuilder.setSpan(ImageSpan(image), start, end, flag)
         }
 
-        /**
-         * Set image.
-         */
+        /** Set image. */
         fun setImage(image: Uri) = apply {
             mBuilder.setSpan(ImageSpan(ContextHelper.getAppContext(), image), start, end, flag)
         }
 
-        /**
-         * Set image.
-         */
+        /** Set image. */
         fun setImage(image: Int) = apply {
             mBuilder.setSpan(ImageSpan(ContextHelper.getAppContext(), image), start, end, flag)
         }
 
 
         /**
-         * Register a click listener. Need to add
-         * view.setMovementMethod(LinkMovementMethod.getInstance())
+         * Register a click listener. Need to call [TextView.setMovementMethod] if
+         * [mTextView] is null.
          */
         fun setClickSpan(clickSpan: ClickableSpan?) = apply {
             mBuilder.setSpan(clickSpan, start, end, flag)
+            mTextView?.movementMethod = LinkMovementMethod.getInstance()
         }
 
         /**
-         * Making the span from a url string. Need to add
-         * view.setMovementMethod(LinkMovementMethod.getInstance())
+         * Making the span from a url string.Need to call
+         * [TextView.setMovementMethod] if [mTextView] is null.
          */
         fun setUrl(url: String?) = apply {
             mBuilder.setSpan(URLSpan(url), start, end, flag)
+            mTextView?.movementMethod = LinkMovementMethod.getInstance()
         }
 
         /**
@@ -285,18 +315,23 @@ object SpanStrUtils {
             mBuilder.setSpan(MaskFilterSpan(BlurMaskFilter(radius, blur)), start, end, flag)
         }
 
-        /**
-         * Append style string.
-         */
+        /** Append style string. */
         fun append(text: CharSequence?): Builder {
             return Builder(mBuilder, text)
         }
 
-        /**
-         * Create a style string.
-         */
+        /** Create a style string. */
         fun build(): SpannableStringBuilder {
             return mBuilder
+        }
+
+        /**
+         * Attach to [mTextView].
+         *
+         * @since 0.2.0
+         */
+        fun attachToTextView() {
+            mTextView!!.text = mBuilder
         }
 
     }

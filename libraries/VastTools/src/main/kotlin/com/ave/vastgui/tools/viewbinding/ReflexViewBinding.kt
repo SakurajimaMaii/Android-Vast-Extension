@@ -56,7 +56,7 @@ import kotlin.reflect.KProperty
 
 @JvmName("viewBindingActivity")
 inline fun <V : ViewBinding> ComponentActivity.reflexViewBinding(
-    crossinline viewBinder: LayoutInflater.() -> V
+    crossinline viewBinder: (LayoutInflater) -> V
 ): ViewBindingProperty<ComponentActivity, V> =
     ActivityViewBindingProperty { activity: ComponentActivity ->
         viewBinder(activity.layoutInflater).apply {

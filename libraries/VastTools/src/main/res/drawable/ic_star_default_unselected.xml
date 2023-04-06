@@ -1,0 +1,25 @@
+<!--
+  ~ Copyright 2022 VastGui guihy2019@gmail.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="128dp"
+    android:height="128dp"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+    <path
+        android:fillColor="?colorPrimary"
+        android:pathData="M1020.1,401.8a73.7,73.7 0,0 0,-59 -48.3l-266.4,-39.6 -115.8,-240.4A74.2,74.2 0,0 0,512 32c-28.7,0 -54.7,16.2 -66.9,41.4l-115.8,240.4 -266.5,39.6A73.6,73.6 0,0 0,3.8 401.8a70.6,70.6 0,0 0,17.2 73.1l195.3,194.9 -45.3,270.4a71.2,71.2 0,0 0,30.3 70.5,75.2 75.2,0 0,0 78.4,4.2L512,889.9l232.3,125a75.7,75.7 0,0 0,78.4 -4.2,71.2 71.2,0 0,0 30.3,-70.5l-45.3,-270.4 195.3,-194.9c19.3,-19.3 25.9,-47.5 17.2,-73.1zM754.8,619.6a70.9,70.9 0,0 0,-20.1 61.9l45.3,270.4 -232.3,-125a75.5,75.5 0,0 0,-71.5 0l-232.3,125 45.3,-270.4a70.8,70.8 0,0 0,-20 -61.9L73.9,424.6l266.4,-39.7a73.8,73.8 0,0 0,55.8 -40.6L512,104l115.8,240.4a73.9,73.9 0,0 0,55.7 40.6l266.5,39.7 -195.3,194.9z" />
+</vector>

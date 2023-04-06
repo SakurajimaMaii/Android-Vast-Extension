@@ -15,12 +15,11 @@
   -->
 
 <resources>
-    <!-- Unit formatter string. -->
-    <string name="unit_angle">%s°</string>
-    <string name="unit_celsius">%s℃</string>
-    <string name="unit_kmh">%skm/h</string>
-    <string name="unit_km">%skm</string>
-    <string name="unit_m">%sm</string>
-    <string name="unit_ms">%sm/s</string>
-    <string name="unit_percent">%s%%</string>
+    <!-- Gender string. -->
+    <string name="gender_man">男性</string>
+    <string name="gender_woman">女性</string>
+    <string name="gender_unknown">未知</string>
+
+    <!-- Permissions string. -->
+
 </resources>

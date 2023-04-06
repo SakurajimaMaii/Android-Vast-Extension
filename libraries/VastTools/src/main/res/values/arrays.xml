@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2022 VastGui guihy2019@gmail.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string-array name="gender">
+        <item>@string/gender_man</item>
+        <item>@string/gender_woman</item>
+        <item>@string/gender_unknown</item>
+    </string-array>
+
+    <string-array name="mail_box_postfix">
+        <item>\&#064;gmail.com</item>
+        <item>\&#064;hotmail.com</item>
+        <item>\&#064;yahoo.com</item>
+        <item>\&#064;outlook.com</item>
+        <item>\&#064;aol.com</item>
+        <item>\&#064;hotmail.co.uk</item>
+        <item>\&#064;yahoo.co.uk</item>
+        <item>\&#064;mail.ru</item>
+        <item>\&#064;rediffmail.com</item>
+        <item>\&#064;live.com</item>
+        <item>\&#064;msn.com</item>
+        <item>\&#064;qq.com</item>
+        <item>\&#064;163.com</item>
+        <item>\&#064;126.com</item>
+        <item>\&#064;aliyun.com</item>
+        <item>\&#064;sina.com</item>
+        <item>\&#064;139.com</item>
+        <item>\&#064;189.cn</item>
+        <item>\&#064;foxmail.com</item>
+        <item>\&#064;yeah.net</item>
+        <item>\&#064;21cn.com</item>
+    </string-array>
+</resources>

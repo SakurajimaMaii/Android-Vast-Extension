@@ -17,8 +17,11 @@
 package com.ave.vastgui.tools.view.textview
 
 import android.content.Context
+import android.text.TextUtils
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
+import com.ave.vastgui.tools.R
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -27,13 +30,65 @@ import androidx.appcompat.widget.AppCompatTextView
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/FocusedTextView/
 
 /**
- * When you want to show the marquee text, you can use [FocusedTextView].
+ * MarqueeTextView
+ *
+ * @property marqueeNum Set to -1 to repeat indefinitely, the number of
+ *     repetitions is an integer greater than or equal to 0 otherwise.
+ * @since 0.2.0
  */
+class MarqueeTextView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = R.attr.Default_MarqueeTextView_Style,
+) : AppCompatTextView(context, attrs, defStyleAttr) {
+
+    private var marqueeNum = -1
+
+    /**
+     * Set [marqueeNum]
+     *
+     * @since 0.2.0
+     */
+    fun setMarqueeNum(marqueeNum: Int) {
+        this.marqueeNum = marqueeNum
+        invalidate()
+    }
+
+    /**
+     * Set related properties.
+     *
+     * @since 0.2.0
+     */
+    private fun setAttr() {
+        this.ellipsize = TextUtils.TruncateAt.MARQUEE
+        this.marqueeRepeatLimit = marqueeNum
+        this.isSingleLine = true
+    }
+
+    override fun isFocused(): Boolean {
+        return true
+    }
+
+    init {
+        setAttr()
+    }
+
+}
+
+/** When you want to show the marquee text, you can use [FocusedTextView]. */
+@Deprecated(
+    message = "Please use MarqueeTextView.",
+    replaceWith = ReplaceWith(
+        "MarqueeTextView",
+        "com.ave.vastgui.tools.view.textview.MarqueeTextView"
+    ),
+    level = DeprecationLevel.WARNING
+)
 open class FocusedTextView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyle: Int = android.R.attr.textViewStyle
-) : AppCompatTextView(context, attrs, defStyle) {
+    defStyleAttr: Int = 0,
+) : AppCompatTextView(context, attrs, defStyleAttr) {
 
     override fun isFocused(): Boolean {
         return true

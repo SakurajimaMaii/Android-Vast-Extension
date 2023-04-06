@@ -98,7 +98,7 @@ object LogUtils {
      */
     @JvmStatic
     @JvmOverloads
-    fun i(key: String?, content: String?, tr: Throwable? = null) {
+    fun i(key: String, content: String?, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
             logPrint(Log.INFO, key, content + "\n" + getStackTraceString(tr))
         }
@@ -112,7 +112,7 @@ object LogUtils {
      */
     @JvmStatic
     @JvmOverloads
-    fun v(key: String?, content: String?, tr: Throwable? = null) {
+    fun v(key: String, content: String?, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
             logPrint(Log.VERBOSE, key, content + "\n" + getStackTraceString(tr))
         }
@@ -126,7 +126,7 @@ object LogUtils {
      */
     @JvmStatic
     @JvmOverloads
-    fun w(key: String?, content: String?, tr: Throwable? = null) {
+    fun w(key: String, content: String?, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
             logPrint(Log.WARN, key, content + "\n" + getStackTraceString(tr))
         }
@@ -140,7 +140,7 @@ object LogUtils {
      */
     @JvmStatic
     @JvmOverloads
-    fun d(key: String?, content: String?, tr: Throwable? = null) {
+    fun d(key: String, content: String?, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
             logPrint(Log.DEBUG, key, content + "\n" + getStackTraceString(tr))
         }
@@ -154,7 +154,7 @@ object LogUtils {
      */
     @JvmStatic
     @JvmOverloads
-    fun e(key: String?, content: String?, tr: Throwable? = null) {
+    fun e(key: String, content: String?, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
             logPrint(Log.ERROR, key, content + "\n" + getStackTraceString(tr))
         }
@@ -179,7 +179,7 @@ object LogUtils {
      */
     private fun logPrint(
         priority: Int,
-        key: String?,
+        key: String,
         content: String?,
     ) {
         // Get the function call stack structure of the current thread.
@@ -194,13 +194,13 @@ object LogUtils {
         val tag =
             "class (${methodStackTraceElement.fileName}:${methodStackTraceElement.lineNumber}) "
         val parameter: String =
-            logContent?.logContentFormat(methodName, key, content) ?: logContentFormat(
+            logContent?.logContentFormat(methodName, tag, content) ?: logContentFormat(
                 methodName,
-                key,
+                tag,
                 content
             )
 
-        print(priority, tag, parameter)
+        print(priority, key, parameter)
     }
 
     /**
@@ -291,14 +291,14 @@ object LogUtils {
         return subStr.substring(0, subStr.length - 1)
     }
 
-    private fun logContentFormat(methodName: String?, key: String?, content: String?): String {
-        return if (key == null || key.trim { it <= ' ' }.isEmpty()) {
+    private fun logContentFormat(methodName: String?, line: String?, content: String?): String {
+        return if (line == null || line.trim { it <= ' ' }.isEmpty()) {
             "method: $methodName()  content: $content"
         } else {
             if (content?.isEmpty() == true) {
-                "method: $methodName() key: $key"
+                "method: $methodName() line: $line"
             } else {
-                "method: $methodName() key: $key content: $content"
+                "method: $methodName() line: $line content: $content"
             }
         }
     }

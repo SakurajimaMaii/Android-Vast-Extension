@@ -97,7 +97,6 @@ project(":libraries:VastTools"){
 
 dependencies {
     api(AndroidX.security_crypto)
-    api(Libraries.progressmanager)
     api(Libraries.zxing)
     api(AVE.core)
     implementation(AndroidX.activity_ktx)

@@ -17,6 +17,7 @@
 package com.ave.vastgui.tools.utils
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.Resources.NotFoundException
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorRes
@@ -34,22 +35,34 @@ import com.ave.vastgui.tools.helper.ContextHelper
 
 object ResUtils {
 
-    /**
-     * Resources not found tag.
-     */
+    /** Resources not found tag. */
     const val RESOURCES_NOT_FOUND = 0
 
-    /**
-     * Error color hex string.
-     */
+    /** Error color hex string. */
     private const val ERROR_COLOR = "#c0392b"
 
+    /** Get string by [id]. */
+    @JvmStatic
+    @JvmOverloads
+    fun getString(@StringRes id: Int, context: Context = ContextHelper.getAppContext()): String =
+        context.resources.getString(id)
+
     /**
-     * Get string by [id].
+     * Get drawable by [name].
+     *
+     * @param name the name of the drawable.
+     * @return the drawable resource corresponding to the [name], otherwise
+     *     [callback].
      */
     @JvmStatic
-    fun getString(@StringRes id: Int): String =
-        ContextHelper.getAppContext().resources.getString(id)
+    @JvmOverloads
+    fun getDrawable(
+        name: String,
+        callback: Drawable,
+        context: Context = ContextHelper.getAppContext()
+    ): Drawable {
+        return getDrawable(name, context) ?: callback
+    }
 
     /**
      * Get drawable by [name].
@@ -60,8 +73,8 @@ object ResUtils {
      */
     @SuppressLint("DiscouragedApi")
     @JvmStatic
-    fun getDrawable(name: String): Drawable? {
-        val context = ContextHelper.getAppContext()
+    @JvmOverloads
+    fun getDrawable(name: String, context: Context = ContextHelper.getAppContext()): Drawable? {
         val resId = context.resources.getIdentifier(name, "drawable", context.packageName)
         return if (RESOURCES_NOT_FOUND == resId) {
             null
@@ -75,11 +88,31 @@ object ResUtils {
      *
      * @param resId the resource id of the drawable.
      * @return the drawable resource corresponding to the [resId], otherwise
+     *     [callback].
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun getDrawable(
+        @DrawableRes resId: Int,
+        callback: Drawable,
+        context: Context = ContextHelper.getAppContext()
+    ): Drawable {
+        return getDrawable(resId, context) ?: callback
+    }
+
+    /**
+     * Get drawable by [resId].
+     *
+     * @param resId the resource id of the drawable.
+     * @return the drawable resource corresponding to the [resId], otherwise
      *     null if the resource does not exist.
      */
     @JvmStatic
-    fun getDrawable(@DrawableRes resId: Int): Drawable? {
-        val context = ContextHelper.getAppContext()
+    @JvmOverloads
+    fun getDrawable(
+        @DrawableRes resId: Int,
+        context: Context = ContextHelper.getAppContext()
+    ): Drawable? {
         return try {
             ResourcesCompat.getDrawable(context.resources, resId, context.theme)
         } catch (ex: NotFoundException) {
@@ -94,9 +127,10 @@ object ResUtils {
      * @param id the resource id of color.
      */
     @JvmStatic
-    fun getColor(@ColorRes id: Int): Int {
+    @JvmOverloads
+    fun getColor(@ColorRes id: Int, context: Context = ContextHelper.getAppContext()): Int {
         return try {
-            ContextHelper.getAppContext().getColor(id)
+            context.getColor(id)
         } catch (e: NotFoundException) {
             ColorUtils.colorHex2Int(ERROR_COLOR)
         }
@@ -111,9 +145,13 @@ object ResUtils {
      * @param id the resource id of dimension.
      */
     @JvmStatic
-    fun getDimensionPixelOffset(@DimenRes id: Int): Int {
+    @JvmOverloads
+    fun getDimensionPixelOffset(
+        @DimenRes id: Int,
+        context: Context = ContextHelper.getAppContext()
+    ): Int {
         return try {
-            ContextHelper.getAppContext().resources.getDimensionPixelOffset(id)
+            context.resources.getDimensionPixelOffset(id)
         } catch (ex: NotFoundException) {
             0
         }

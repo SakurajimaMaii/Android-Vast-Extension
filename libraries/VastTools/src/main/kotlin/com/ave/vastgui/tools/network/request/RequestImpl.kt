@@ -50,8 +50,12 @@ class RequestImpl<T : ResponseApi>(
                 if ((body == null) || (body.isEmpty())) {
                     mListener.onEmpty
                 } else {
-                    if (body.isSuccessful()) {
-                        mListener.onSuccess(body)
+                    if (response.isSuccessful) {
+                        if (body.isSuccessful()) {
+                            mListener.onSuccess(body)
+                        } else {
+                            mListener.onFailed(body.code(), body.message())
+                        }
                     } else {
                         mListener.onFailed(response.code(), response.message())
                     }
@@ -71,8 +75,12 @@ class RequestImpl<T : ResponseApi>(
                 if ((null == body) || (body.isEmpty())) {
                     stateLiveData.postEmpty()
                 } else {
-                    if (body.isSuccessful()) {
-                        stateLiveData.postValueAndSuccess(body)
+                    if (response.isSuccessful) {
+                        if (body.isSuccessful()) {
+                            stateLiveData.postValueAndSuccess(body)
+                        } else {
+                            stateLiveData.postFailed(body.code(), body.message())
+                        }
                     } else {
                         stateLiveData.postFailed(response.code(), response.message())
                     }

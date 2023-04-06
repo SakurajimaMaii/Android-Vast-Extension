@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2022 VastGui guihy2019@gmail.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <style name="BaseMarqueeTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:marqueeRepeatLimit">marquee_forever</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+    </style>
+
+    <style name="BaseProgressView">
+        <item name="progress_maximum_value">100.0</item>
+        <item name="progress_current_value">0.0</item>
+        <item name="progress_text_size">12sp</item>
+        <item name="progress_text_color">?attr/colorOnPrimary</item>
+        <item name="progress_background_color">?attr/colorPrimaryContainer</item>
+        <item name="progress_color">?attr/colorPrimary</item>
+    </style>
+
+    <style name="BaseArcProgressView" parent="BaseProgressView">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="arc_progress_background_width">10dp</item>
+        <item name="arc_progress_start_color">?attr/colorPrimary</item>
+        <item name="arc_progress_end_color">?attr/colorPrimary</item>
+        <item name="arc_progress_show_start_circle">false</item>
+        <item name="arc_progress_show_end_circle">true</item>
+    </style>
+
+    <style name="BaseHorizontalProgressView" parent="BaseProgressView">
+        <item name="horizontal_progress_stroke_width">5dp</item>
+    </style>
+
+    <style name="BaseHorizontalTextProgressView" parent="BaseProgressView">
+<!--        <item name="horizontal_text_progress_height">20dp</item>-->
+<!--        <item name="horizontal_text_progress_textbox_stroke_width">5dp</item>-->
+    </style>
+
+    <style name="BaseLineTextProgressView" parent="BaseProgressView">
+        <item name="linetext_progress_textbox_stroke_width">5dp</item>
+    </style>
+
+    <style name="BaseWaveProgressView" parent="BaseProgressView">
+        <item name="wave_progress_stroke_color">?attr/colorSecondary</item>
+    </style>
+
+    <style name="BaseRatingView">
+        <item name="star_interval_width">2dp</item>
+        <item name="star_height">40dp</item>
+        <item name="star_width">40dp</item>
+        <item name="star_select_method">star_sliding</item>
+        <item name="star_count">5</item>
+        <item name="star_orientation">star_horizontal</item>
+        <item name="star_selected">@drawable/ic_star_default_selected</item>
+        <item name="star_unselected">@drawable/ic_star_default_unselected</item>
+    </style>
+
+    <style name="BaseVp2Indicator">
+        <item name="indicator_style">style_circle</item>
+        <item name="indicator_selected_color">?attr/colorPrimary</item>
+        <item name="indicator_unselected_color">?attr/colorPrimaryContainer</item>
+        <item name="indicator_circle_radius">5dp</item>
+        <item name="indicator_item_distance">12dp</item>
+    </style>
+</resources>

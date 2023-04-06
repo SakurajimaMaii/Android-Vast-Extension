@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.utils
+package com.ave.vastgui.tools.utils.download
 
-import android.os.Handler
-import android.os.Looper
+import com.ave.vastgui.tools.coroutines.await
+import com.ave.vastgui.tools.coroutines.createMainScope
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
-import me.jessyan.progressmanager.ProgressListener
-import me.jessyan.progressmanager.ProgressManager
-import me.jessyan.progressmanager.body.ProgressInfo
-import okhttp3.Call
-import okhttp3.Callback
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
+import java.io.BufferedInputStream
 import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
 
 
 // Author: Vast Gui
@@ -69,6 +66,8 @@ import java.io.InputStream
  */
 object DownloadUtils {
 
+    private val mScope = createMainScope("DownloadUtils")
+
     @JvmStatic
     fun createConfig() = DownloadConfig()
 
@@ -89,7 +88,7 @@ object DownloadUtils {
         internal var saveDir: String = ""
         internal var saveName: String? = null
         private var onDownloadSuccessListener: (() -> Unit)? = null
-        private var onDownloadingListener: ((progress: ProgressInfo?) -> Unit)? = null
+        private var onDownloadingListener: ((progress: DownloadResult.Progress?) -> Unit)? = null
         private var onDownloadFailedListener: ((e: Exception?) -> Unit)? = null
 
         fun setDownloadUrl(url: String) = apply {
@@ -108,7 +107,7 @@ object DownloadUtils {
             onDownloadSuccessListener = l
         }
 
-        fun setDownloading(l: (progress: ProgressInfo?) -> Unit) = apply {
+        fun setDownloading(l: (progress: DownloadResult.Progress?) -> Unit) = apply {
             onDownloadingListener = l
         }
 
@@ -124,7 +123,7 @@ object DownloadUtils {
             onDownloadSuccessListener?.invoke()
         }
 
-        override fun onDownloading(progress: ProgressInfo?) {
+        override fun onDownloading(progress: DownloadResult.Progress?) {
             onDownloadingListener?.invoke(progress)
         }
 
@@ -143,7 +142,7 @@ object DownloadUtils {
          *
          * @param progress Download progress information.
          */
-        fun onDownloading(progress: ProgressInfo?)
+        fun onDownloading(progress: DownloadResult.Progress?)
 
         /**
          * Download failed.
@@ -153,71 +152,54 @@ object DownloadUtils {
         fun onDownloadFailed(e: Exception?)
     }
 
-    private val okHttpClient: OkHttpClient
-    private val mHandler: Handler = Handler(Looper.getMainLooper())
+    private val okHttpClient: OkHttpClient = OkHttpClient()
 
-    /** Download from network server. */
     private fun download(
         downloadConfig: DownloadConfig
     ) {
-        val request: Request = Request.Builder().url(downloadConfig.downloadUrl).build()
-        okHttpClient.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: okio.IOException) {
-                downloadConfig.onDownloadFailed(e)
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                var inputStream: InputStream? = null
-                val buf = ByteArray(2048)
-                var len: Int
-                var fos: FileOutputStream? = null
-
+        mScope.launch {
+            flow {
                 try {
-                    inputStream = response.body?.byteStream()
+                    val request: Request = Request.Builder().url(downloadConfig.downloadUrl).build()
+                    val body = okHttpClient.newCall(request).await()
+                    val contentLength = body.contentLength()
+                    val inputStream = body.byteStream()
                     val file = if (null != downloadConfig.saveName) {
                         File(downloadConfig.saveDir, downloadConfig.saveName!!)
                     } else {
                         File(downloadConfig.saveDir, getNameFromUrl(downloadConfig.downloadUrl))
                     }
-                    if (!file.parentFile?.exists()!!)
-                        file.parentFile?.mkdirs()
-                    fos = FileMgr.getEncryptedFile(file).openFileOutput()
-                    if (inputStream != null) {
-                        while (inputStream.read(buf).also { len = it } != -1) {
-                            fos.write(buf, 0, len)
-                        }
+                    val result = FileMgr.saveFile(file)
+                    if (result == FileMgr.FileResult.FLAG_FAILED)
+                        throw RuntimeException("The download file save failed.")
+                    val outputStream = FileMgr.getEncryptedFile(file).openFileOutput()
+                    var currentLength = 0
+                    val bufferSize = 1024 * 8
+                    val buffer = ByteArray(bufferSize)
+                    val bufferedInputStream = BufferedInputStream(inputStream, bufferSize)
+                    var readLength: Int
+                    while (bufferedInputStream.read(buffer, 0, bufferSize)
+                            .also { readLength = it } != -1
+                    ) {
+                        outputStream.write(buffer, 0, readLength)
+                        currentLength += readLength
+                        emit(
+                            DownloadResult.progress(
+                                currentLength.toLong(),
+                                contentLength,
+                                currentLength.toFloat() / contentLength.toFloat()
+                            )
+                        )
                     }
-                    fos.flush()
-                    mHandler.post {
-                        downloadConfig.onDownloadSuccess()
-                    }
+                    bufferedInputStream.close()
+                    outputStream.close()
+                    inputStream.close()
+                    emit(DownloadResult.success(file))
                 } catch (e: Exception) {
-                    downloadConfig.onDownloadFailed(e)
-                } finally {
-                    try {
-                        inputStream?.close()
-                    } catch (e: java.io.IOException) {
-                        downloadConfig.onDownloadFailed(e)
-                    }
-                    try {
-                        fos?.close()
-                    } catch (e: java.io.IOException) {
-                        downloadConfig.onDownloadFailed(e)
-                    }
+                    emit(DownloadResult.failure(e))
                 }
-            }
-        })
-
-        ProgressManager.getInstance().addResponseListener(downloadConfig.downloadUrl, object :
-            ProgressListener {
-            override fun onProgress(progressInfo: ProgressInfo?) {
-                downloadConfig.onDownloading(progressInfo)
-            }
-
-            override fun onError(l: Long, e: Exception?) {
-                downloadConfig.onDownloadFailed(e)
-            }
-        })
+            }.flowOn(Dispatchers.IO)
+        }
     }
 
     /**
@@ -231,8 +213,4 @@ object DownloadUtils {
         return url.substring(url.lastIndexOf("/") + 1)
     }
 
-    init {
-        val builder = OkHttpClient.Builder()
-        okHttpClient = ProgressManager.getInstance().with(builder).build()
-    }
 }

@@ -91,7 +91,6 @@ object DensityUtils {
      *
      * @param spValue a sp value.
      * @return a dp value.
-     * @since 0.0.5
      */
     @JvmStatic
     fun sp2dp(spValue: Float): Float {

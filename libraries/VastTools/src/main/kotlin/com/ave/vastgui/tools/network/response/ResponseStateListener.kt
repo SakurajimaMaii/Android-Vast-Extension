@@ -16,6 +16,9 @@
 
 package com.ave.vastgui.tools.network.response
 
+import com.ave.vastgui.tools.network.request.Request
+import retrofit2.Response
+
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/15
@@ -25,7 +28,23 @@ class ResponseStateListener<T> {
     /** A http response empty listener. */
     var onEmpty: () -> Unit = {}
 
-    /** A http response failed listener. */
+    /**
+     * A http response failed listener.
+     *
+     * Using with [Request]: When the [Response] returns false, errorCode
+     * and errorMsg will return the code and message carried by the response
+     * itself. When the [Response] returns true but [ResponseApi.isSuccessful]
+     * return false, errorCode and errorMsg will return the code and
+     * message carried by [ResponseApi.code] and [ResponseApi.message].
+     *
+     * Using with [ResponseBuilder]: errorCode and errorMsg will
+     * return the code and message carried by [ResponseApi.code] and
+     * [ResponseApi.message].
+     *
+     * @see Request
+     * @see ResponseApi
+     * @see ResponseBuilder
+     */
     var onFailed: (errorCode: Int?, errorMsg: String?) -> Unit = { _, _ -> }
 
     /** A http response error listener. */

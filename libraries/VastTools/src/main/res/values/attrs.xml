@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2022 VastGui guihy2019@gmail.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,63 +15,146 @@
   -->
 
 <resources>
-    <declare-styleable name="DownloadCircleView">
+    <declare-styleable name="ProgressView">
+        <attr name="progress_maximum_value" format="float" />
+        <attr name="progress_current_value" format="float" />
+        <attr name="progress_text" format="string|reference" />
+        <!-- Text size of the progress. -->
+        <attr name="progress_text_size" format="dimension|reference" />
+        <!-- Color of the progress text. -->
+        <attr name="progress_text_color" format="color|reference" />
+        <!-- Color of the progress background. -->
+        <attr name="progress_background_color" format="color|reference" />
+        <!-- Color of the progress. -->
+        <attr name="progress_color" format="color|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="ArcProgressView">
+        <attr name="progress_maximum_value" />
+        <attr name="progress_current_value" />
+        <attr name="progress_text" />
+        <attr name="progress_text_size" />
+        <attr name="progress_text_color" />
+        <attr name="progress_background_color" />
+        <attr name="progress_color" />
         <!-- Radius of the download circle.
         If you set specific values for layout_width and layout_height,
         you don't need to set this value. -->
-        <attr name="circle_radius" format="dimension|reference"/>
+        <attr name="arc_progress_radius" format="dimension|reference" />
         <!-- Width of the download circle progress background. -->
-        <attr name="progress_background_width" format="dimension"/>
-        <!-- Text size of the progress. -->
-        <attr name="progress_text_size" format="dimension|reference"/>
-        <!-- Color of the download progress. -->
-        <attr name="progress_color" format="color|reference"/>
+        <attr name="arc_progress_background_width" format="dimension|reference" />
         <!-- Color of the download progress start. -->
-        <attr name="progress_start_color" format="color|reference"/>
+        <attr name="arc_progress_start_color" format="color|reference" />
         <!-- Color of the download progress end. -->
-        <attr name="progress_end_color" format="color|reference"/>
-        <!-- Color of the download progress background. -->
-        <attr name="progress_background_color" format="color|reference"/>
-        <!-- Color of the progress. -->
-        <attr name="progress_text_color" format="dimension|reference"/>
+        <attr name="arc_progress_end_color" format="color|reference" />
+        <!-- Ture if you want to show the start and end circles, false otherwise.-->
+        <attr name="arc_progress_show_start_circle" format="boolean" />
+        <attr name="arc_progress_show_end_circle" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="HorizontalProgressView">
+        <attr name="progress_maximum_value" />
+        <attr name="progress_current_value" />
+        <attr name="progress_background_color" />
+        <attr name="progress_color" />
+        <!-- Progress background drawable. -->
+        <attr name="horizontal_progress_background_drawable" format="reference" />
+        <!-- Progress drawable. -->
+        <attr name="horizontal_progress_drawable" format="reference" />
+        <!-- Progress stroke width. -->
+        <attr name="horizontal_progress_stroke_width" format="dimension|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="HorizontalTextProgressView">
+        <attr name="progress_maximum_value" />
+        <attr name="progress_current_value" />
+        <attr name="progress_text_size" />
+        <attr name="progress_text_color" />
+        <attr name="progress_background_color" />
+        <attr name="progress_color" />
+        <attr name="horizontal_text_progress_height" format="dimension|reference" />
+        <attr name="horizontal_text_progress_textbox_stroke_width" format="dimension|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="LineTextProgressView">
+        <attr name="progress_maximum_value" />
+        <attr name="progress_current_value" />
+        <attr name="progress_text_size" />
+        <attr name="progress_text_color" />
+        <attr name="progress_background_color" />
+        <attr name="progress_color" />
+        <attr name="linetext_progress_textbox_stroke_width" format="dimension|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="WaveProgressView">
+        <attr name="progress_maximum_value" />
+        <attr name="progress_current_value" />
+        <attr name="progress_text" />
+        <attr name="progress_text_size" />
+        <attr name="progress_text_color" />
+        <attr name="progress_background_color" />
+        <attr name="progress_color" />
+        <attr name="wave_progress_wave_speed" format="float" />
+        <attr name="wave_progress_wave_width" format="float" />
+        <attr name="wave_progress_wave_height" format="float" />
+        <attr name="wave_progress_stroke_color" format="color|reference" />
+        <attr name="wave_progress_hint_text" format="string|reference" />
+        <attr name="wave_progress_hint_color" format="color|reference" />
+        <attr name="wave_progress_hint_size" format="dimension|reference" />
+        <attr name="wave_progress_text_space" format="dimension|reference" />
+        <!-- The sum of wave_progress_stroke_ratio and wave_progress_space_ratio must be less than 1.0.
+        If the value is 0.0, the wave_progress_stroke_color will be set to the transparent. -->
+        <attr name="wave_progress_stroke_ratio" format="float" />
+        <!-- The sum of wave_progress_stroke_ratio and wave_progress_space_ratio must be less than 1.0. -->
+        <attr name="wave_progress_space_ratio" format="float" />
     </declare-styleable>
 
     <declare-styleable name="RatingView">
-        <!--Star bitmap interval width-->
+        <!--Star bitmap interval width. -->
         <attr name="star_interval_width" format="dimension" />
-        <!--Star bitmap width-->
+        <!--Star bitmap width. -->
         <attr name="star_width" format="dimension" />
-        <!--Star bitmap height-->
+        <!--Star bitmap height. -->
         <attr name="star_height" format="dimension" />
-        <!--Number of star-->
-        <attr name="star_max" format="integer" />
-        <!--Star rating-->
+        <!--Star count number. -->
+        <attr name="star_count" format="integer" />
+        <!--The progress of the currently selected star. -->
         <attr name="star_rating" format="float" />
-        <!--Star unselected bitmap-->
+        <!--Star unselected bitmap. -->
         <attr name="star_unselected" format="reference" />
-        <!--Star selected bitmap-->
+        <!--Star selected bitmap. -->
         <attr name="star_selected" format="reference" />
-        <!--StarBar select method-->
+        <!--StarBar select method. -->
         <attr name="star_select_method" format="enum">
             <enum name="star_unable" value="0" />
             <enum name="star_click" value="1" />
             <enum name="star_sliding" value="2" />
         </attr>
-        <!--Star orientation-->
+        <!--Star orientation. -->
         <attr name="star_orientation" format="enum">
             <enum name="star_vertical" value="1" />
             <enum name="star_horizontal" value="0" />
         </attr>
     </declare-styleable>
 
-    <declare-styleable name="Vp2IndicatorView">
+    <declare-styleable name="Vp2Indicator">
         <attr name="indicator_style" format="enum">
             <enum name="style_circle" value="1" />
         </attr>
-        <attr name="indicator_selected_color" format="color|reference"/>
-        <attr name="indicator_unselected_color" format="color|reference"/>
-        <attr name="indicator_circle_radius" format="dimension"/>
-        <attr name="indicator_item_count" format="integer"/>
-        <attr name="indicator_item_distance" format="dimension"/>
+        <attr name="indicator_selected_color" format="color|reference" />
+        <attr name="indicator_unselected_color" format="color|reference" />
+        <attr name="indicator_circle_radius" format="dimension" />
+        <attr name="indicator_item_count" format="integer" />
+        <attr name="indicator_item_distance" format="dimension" />
     </declare-styleable>
+
+    <!-- Theme default style. -->
+    <attr name="Default_MarqueeTextView_Style" format="reference" />
+    <attr name="Default_ArcProgressView_Style" format="reference" />
+    <attr name="Default_HorizontalProgressView_Style" format="reference" />
+    <attr name="Default_HorizontalTextProgressView_Style" format="reference" />
+    <attr name="Default_LineTextProgressView_Style" format="reference" />
+    <attr name="Default_WaveProgressView_Style" format="reference" />
+    <attr name="Default_RatingView_Style" format="reference" />
+    <attr name="Default_Vp2IndicatorView_Style" format="reference" />
 </resources>

@@ -28,6 +28,7 @@ import com.ave.vastgui.tools.manager.filemgr.FileMgr.FileResult.FLAG_PARENT_NOT_
 import com.ave.vastgui.tools.manager.filemgr.FileMgr.FileResult.FLAG_SUCCESS
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -254,6 +255,29 @@ object FileMgr : FileProperty by FilePropertyMgr() {
             ToolsConfig.getMasterKey(),
             EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
         ).build()
+    }
+
+    /**
+     * Get assets cache file.
+     *
+     * @since 0.2.0
+     */
+    fun getAssetsCacheFile(fileName: String): String {
+        val cacheFile = File(FileMgr.appExternalCacheDir(), fileName)
+        try {
+            ContextHelper.getAppContext().assets.open(fileName).use { inputStream ->
+                FileOutputStream(cacheFile).use { outputStream ->
+                    val buf = ByteArray(1024)
+                    var len: Int
+                    while (inputStream.read(buf).also { len = it } > 0) {
+                        outputStream.write(buf, 0, len)
+                    }
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return cacheFile.absolutePath
     }
 
     /** Register a listener when write to file. */

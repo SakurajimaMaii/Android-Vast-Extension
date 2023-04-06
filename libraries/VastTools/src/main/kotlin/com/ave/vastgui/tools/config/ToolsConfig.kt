@@ -22,6 +22,7 @@ import androidx.security.crypto.MasterKey
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.helper.ContextHelper
 import com.ave.vastgui.tools.utils.LogUtils
+import com.ave.vastgui.tools.utils.permission.PermissionRegister
 
 
 // Author: Vast Gui
@@ -44,16 +45,14 @@ object ToolsConfig {
     fun init(application: Application) {
         ContextHelper.init(application)
         LogUtils.init()
+        application.registerActivityLifecycleCallbacks(PermissionRegister())
         isInitialized = true
     }
 
     @JvmStatic
     fun isMainThread() = Looper.getMainLooper() == Looper.myLooper()
 
-    /**
-     * Get master key.
-     * The key scheme is [MasterKey.KeyScheme.AES256_GCM]
-     */
+    /** Get master key. The key scheme is [MasterKey.KeyScheme.AES256_GCM] */
     @JvmStatic
     fun getMasterKey() = if (isInitialized) MasterKey.Builder(ContextHelper.getAppContext())
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)

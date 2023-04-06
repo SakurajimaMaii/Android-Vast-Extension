@@ -1,0 +1,70 @@
+
+<!--
+  ~ Copyright 2022 VastGui guihy2019@gmail.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <color name="md_theme_primary">#0062A0</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#D0E4FF</color>
+    <color name="md_theme_onPrimaryContainer">#001D35</color>
+    <color name="md_theme_primaryFixed">#D0E4FF</color>
+    <color name="md_theme_onPrimaryFixed">#001D35</color>
+    <color name="md_theme_primaryFixedDim">#9BCAFF</color>
+    <color name="md_theme_onPrimaryFixedVariant">#004A7A</color>
+    <color name="md_theme_secondary">#526070</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#D6E4F7</color>
+    <color name="md_theme_onSecondaryContainer">#0F1D2A</color>
+    <color name="md_theme_secondaryFixed">#D6E4F7</color>
+    <color name="md_theme_onSecondaryFixed">#0F1D2A</color>
+    <color name="md_theme_secondaryFixedDim">#BAC8DB</color>
+    <color name="md_theme_onSecondaryFixedVariant">#3B4857</color>
+    <color name="md_theme_tertiary">#6A5779</color>
+    <color name="md_theme_onTertiary">#FFFFFF</color>
+    <color name="md_theme_tertiaryContainer">#F1DBFF</color>
+    <color name="md_theme_onTertiaryContainer">#241532</color>
+    <color name="md_theme_tertiaryFixed">#F1DBFF</color>
+    <color name="md_theme_onTertiaryFixed">#241532</color>
+    <color name="md_theme_tertiaryFixedDim">#D5BEE5</color>
+    <color name="md_theme_onTertiaryFixedVariant">#514060</color>
+    <color name="md_theme_error">#BA1A1A</color>
+    <color name="md_theme_errorContainer">#FFDAD6</color>
+    <color name="md_theme_onError">#FFFFFF</color>
+    <color name="md_theme_onErrorContainer">#410002</color>
+    <color name="md_theme_background">#FDFCFF</color>
+    <color name="md_theme_onBackground">#1A1C1E</color>
+    <color name="md_theme_outline">#73777F</color>
+    <color name="md_theme_inverseOnSurface">#F1F0F4</color>
+    <color name="md_theme_inverseSurface">#2F3033</color>
+    <color name="md_theme_inversePrimary">#9BCAFF</color>
+    <color name="md_theme_shadow">#000000</color>
+    <color name="md_theme_surfaceTint">#0062A0</color>
+    <color name="md_theme_outlineVariant">#C2C7CF</color>
+    <color name="md_theme_scrim">#000000</color>
+    <color name="md_theme_surface">#F9F9FC</color>
+    <color name="md_theme_onSurface">#1A1C1E</color>
+    <color name="md_theme_surfaceVariant">#DFE3EB</color>
+    <color name="md_theme_onSurfaceVariant">#42474E</color>
+    <color name="md_theme_surfaceContainerHighest">#E2E2E6</color>
+    <color name="md_theme_surfaceContainerHigh">#E8E8EB</color>
+    <color name="md_theme_surfaceContainer">#EEEDF1</color>
+    <color name="md_theme_surfaceContainerLow">#F4F3F7</color>
+    <color name="md_theme_surfaceContainerLowest">#FFFFFF</color>
+    <color name="md_theme_surfaceDim">#DADADD</color>
+    <color name="md_theme_surfaceBright">#F9F9FC</color>
+
+    <color name="transparent">#00000000</color>
+</resources>

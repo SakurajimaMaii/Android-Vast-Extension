@@ -23,6 +23,12 @@ import com.ave.vastgui.tools.R
 // Date: 2022/8/30 18:59
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/StrUtils/
 
+/**
+ * StrUnit
+ *
+ * @property unit The unit format string.
+ * @since 0.2.0
+ */
 abstract class StrUnit(val unit: String)
 
 class Angle : StrUnit(ResUtils.getString(R.string.unit_angle))

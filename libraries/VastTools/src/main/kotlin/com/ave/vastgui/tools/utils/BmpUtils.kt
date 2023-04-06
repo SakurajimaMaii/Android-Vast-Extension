@@ -212,7 +212,11 @@ object BmpUtils {
         return BitmapFactory.decodeByteArray(decode, 0, decode.size)
     }
 
-    /** Convert drawable to bitmap. */
+    /**
+     * Convert drawable to bitmap.
+     *
+     * @since 0.2.0
+     */
     @JvmOverloads
     fun getBitmapFromDrawable(
         @DrawableRes id: Int,
