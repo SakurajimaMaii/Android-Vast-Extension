@@ -48,8 +48,8 @@
     </style>
 
     <style name="BaseHorizontalTextProgressView" parent="BaseProgressView">
-<!--        <item name="horizontal_text_progress_height">20dp</item>-->
-<!--        <item name="horizontal_text_progress_textbox_stroke_width">5dp</item>-->
+        <item name="horizontal_text_progress_height">20dp</item>
+        <item name="horizontal_text_progress_textbox_stroke_width">5dp</item>
     </style>
 
     <style name="BaseLineTextProgressView" parent="BaseProgressView">

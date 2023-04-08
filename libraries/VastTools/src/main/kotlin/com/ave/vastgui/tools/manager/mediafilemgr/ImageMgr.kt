@@ -27,9 +27,7 @@ import java.io.File
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/21
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/ImageMgr/
 
 object ImageMgr : MediaFileMgr() {
 

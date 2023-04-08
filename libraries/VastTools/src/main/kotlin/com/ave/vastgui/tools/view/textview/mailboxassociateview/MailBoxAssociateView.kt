@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.view.mailboxassociateview
+package com.ave.vastgui.tools.view.textview.mailboxassociateview
 
 import android.content.Context
 import android.util.AttributeSet
@@ -26,9 +26,7 @@ import com.ave.vastgui.tools.helper.ContextHelper
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/2
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/textview/MailBoxAssociateView/
 
 /**
  * Default mail box postfix string array.

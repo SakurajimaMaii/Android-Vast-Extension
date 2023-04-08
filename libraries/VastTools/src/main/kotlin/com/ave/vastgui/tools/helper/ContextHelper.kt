@@ -19,12 +19,10 @@ package com.ave.vastgui.tools.helper
 import android.app.Application
 import android.content.Context
 
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/6/20
-// Description: 
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ContextHelper/
 
 /**
  * Help utils to get context.

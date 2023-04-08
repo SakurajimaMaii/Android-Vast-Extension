@@ -21,7 +21,7 @@ import com.ave.vastgui.tools.R
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/30 18:59
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/StrUtils/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/string/StrUtils/
 
 /**
  * StrUnit

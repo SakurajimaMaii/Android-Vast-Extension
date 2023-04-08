@@ -16,10 +16,12 @@
 
 package com.ave.vastgui.tools.service
 
-import android.app.Service
 import android.content.Context
+import androidx.lifecycle.LifecycleService
+import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.coroutines.createMainScope
 import com.ave.vastgui.tools.network.response.getResponseBuilder
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 
 // Author: Vast Gui
@@ -27,11 +29,9 @@ import kotlinx.coroutines.cancel
 // Date: 2022/9/27
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/service/Service/
 
-abstract class VastService : Service() {
+abstract class VastService : LifecycleService() {
 
-    protected val mMainScope by lazy {
-        createMainScope(getDefaultTag())
-    }
+    protected var mMainScope:CoroutineScope by NotNUllVar()
 
     protected fun getContext(): Context {
         return this
@@ -41,9 +41,14 @@ abstract class VastService : Service() {
 
     protected fun getRequestBuilder() = mMainScope.getResponseBuilder()
 
+    override fun onCreate() {
+        mMainScope = createMainScope(getDefaultTag())
+        super.onCreate()
+    }
+
     override fun onDestroy() {
-        super.onDestroy()
         mMainScope.cancel()
+        super.onDestroy()
     }
 
 }

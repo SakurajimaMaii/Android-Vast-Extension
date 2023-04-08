@@ -18,18 +18,15 @@ package com.ave.vastgui.tools.fragment
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.ave.vastgui.core.extension.defaultLogTag
-import com.ave.vastgui.tools.coroutines.createMainScope
 import com.ave.vastgui.tools.network.response.ResponseBuilder
 import com.ave.vastgui.tools.network.response.getResponseBuilder
-import kotlinx.coroutines.CoroutineScope
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/14 17:11
-// Description: 
-// Documentation:
 
 abstract class VastFragment : Fragment() {
 
@@ -37,18 +34,9 @@ abstract class VastFragment : Fragment() {
         return defaultLogTag()
     }
 
-    /**
-     * Create mainScope.
-     */
-    protected fun createMainScope(): CoroutineScope {
-        return createMainScope(getDefaultTag())
-    }
-
-    /**
-     * Construct a network request builder.
-     */
+    /** Construct a network request builder. */
     protected fun getResponseBuilder(): ResponseBuilder {
-        return getResponseBuilder(createMainScope())
+        return requireActivity().lifecycleScope.getResponseBuilder()
     }
 
     /**

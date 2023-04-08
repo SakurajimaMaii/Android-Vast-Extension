@@ -27,7 +27,6 @@ import androidx.annotation.StringRes
 import androidx.core.content.res.ResourcesCompat
 import com.ave.vastgui.tools.helper.ContextHelper
 
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/6/19

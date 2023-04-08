@@ -30,9 +30,6 @@ import com.ave.vastgui.tools.utils.DateUtils
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/6
-// Description: 
-// Documentation:
-// Reference:
 
 /**
  * Obtain the corresponding [PermissionLauncher] from

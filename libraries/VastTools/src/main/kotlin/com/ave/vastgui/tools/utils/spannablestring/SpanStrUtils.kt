@@ -54,7 +54,7 @@ import com.ave.vastgui.tools.utils.ResUtils
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/21 16:45
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/SpanUtils/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/string/SpanUtils/
 
 object SpanStrUtils {
 

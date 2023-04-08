@@ -51,7 +51,6 @@ class MarqueeTextView @JvmOverloads constructor(
      */
     fun setMarqueeNum(marqueeNum: Int) {
         this.marqueeNum = marqueeNum
-        invalidate()
     }
 
     /**
@@ -63,10 +62,17 @@ class MarqueeTextView @JvmOverloads constructor(
         this.ellipsize = TextUtils.TruncateAt.MARQUEE
         this.marqueeRepeatLimit = marqueeNum
         this.isSingleLine = true
+        this.isFocusable = true
+        this.isFocusableInTouchMode = true
+        this.setHorizontallyScrolling(true);
+        this.isSelected = true;
     }
 
     override fun isFocused(): Boolean {
-        return true
+        if (!isSelected) {
+            return true
+        }
+        return super.isFocused()
     }
 
     init {

@@ -25,9 +25,7 @@ import androidx.fragment.app.Fragment
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/5
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/permission/Permission/
 
 const val DENIED = "DENIED"
 const val EXPLAINED = "EXPLAINED"
@@ -192,7 +190,6 @@ inline fun ComponentActivity.requestMultiplePermissions(
         }
     }
 }
-
 
 /**
  * Fragment requestPermission.

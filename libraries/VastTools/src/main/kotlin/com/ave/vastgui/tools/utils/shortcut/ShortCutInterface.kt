@@ -23,8 +23,6 @@ import android.os.Build
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/19 20:02
-// Description: 
-// Documentation:
 
 interface ShortCutInterface {
     /**

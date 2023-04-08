@@ -29,7 +29,7 @@ import com.ave.vastgui.tools.viewbinding.reflexViewBinding
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 16:11
 // Description: Please make sure that the fragment extends VastVbVmFragment when the fragment using viewBinding and viewModel.
-// Documentation: [VastVbVmFragment](https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/Fragment/)
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/Fragment/
 
 /**
  * VastVbVmFragment.

@@ -31,7 +31,7 @@ import com.ave.vastgui.tools.helper.ContextHelper
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: Toast utils.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/ToastUtils/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/toast/ToastUtils/
 
 /**
  * ToastUtils

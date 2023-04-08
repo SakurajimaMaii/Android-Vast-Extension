@@ -21,13 +21,9 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import java.io.File
 
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/11/2
-// Description: 
-// Documentation:
-// Reference:
 
 /** Using to provide information about media file. */
 interface MediaFileProvider {

@@ -32,9 +32,7 @@ import com.ave.vastgui.tools.R
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/3
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/progress/HorizontalProgressView/
 
 /**
  * HorizontalProgressView

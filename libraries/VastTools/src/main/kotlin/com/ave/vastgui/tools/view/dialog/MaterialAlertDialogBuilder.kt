@@ -27,7 +27,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/3
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/MaterialAlertDialogBuilder/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/dialog/MaterialAlertDialogBuilder/
 
 class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(context) {
 

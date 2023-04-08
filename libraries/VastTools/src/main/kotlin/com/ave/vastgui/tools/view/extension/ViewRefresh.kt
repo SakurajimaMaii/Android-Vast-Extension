@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.view
+package com.ave.vastgui.tools.view.extension
 
 import android.view.View
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/6
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/extension/RefreshView/
 
 /**
  * Refresh with [View.invalidate].

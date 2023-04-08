@@ -20,9 +20,6 @@ package com.ave.vastgui.tools.manager.mediafilemgr
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/11/2
-// Description: 
-// Documentation:
-// Reference:
 
 /**
  * Currently support file type.

@@ -33,8 +33,7 @@ import java.io.IOException
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/5/30
-// Description: 
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/FileMgr/
 
 object FileMgr : FileProperty by FilePropertyMgr() {
 

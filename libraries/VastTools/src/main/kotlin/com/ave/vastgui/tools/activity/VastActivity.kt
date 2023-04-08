@@ -18,19 +18,18 @@ package com.ave.vastgui.tools.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.activity.widget.screenConfig
-import com.ave.vastgui.tools.coroutines.createMainScope
 import com.ave.vastgui.tools.network.response.ResponseBuilder
 import com.ave.vastgui.tools.network.response.getResponseBuilder
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.CoroutineScope
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 16:20
-// Description: BaseVastActivity.
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/Activity/
 
 /**
  * The parent class for [VastVmActivity] , [VastVbActivity] ,
@@ -89,14 +88,9 @@ sealed class VastActivity : AppCompatActivity() {
         screenConfig(mEnableActionBar, mEnableFullScreen)
     }
 
-    /** Create mainScope. */
-    protected fun createMainScope(): CoroutineScope {
-        return createMainScope(getDefaultTag())
-    }
-
     /** Construct a network request builder. */
     protected fun getResponseBuilder(): ResponseBuilder {
-        return getResponseBuilder(createMainScope())
+        return lifecycleScope.getResponseBuilder()
     }
 
     /**

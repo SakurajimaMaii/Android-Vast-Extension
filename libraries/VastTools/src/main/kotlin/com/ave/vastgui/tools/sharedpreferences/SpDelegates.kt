@@ -23,9 +23,6 @@ import kotlin.reflect.KProperty
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/14
-// Description: 
-// Documentation:
-// Reference:
 
 sealed class SpDelegates {
 

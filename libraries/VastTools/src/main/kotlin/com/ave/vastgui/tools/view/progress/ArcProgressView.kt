@@ -33,7 +33,7 @@ import kotlin.math.sin
 // Email: guihy2019@gmail.com
 // Date: 2022/4/17 19:55
 // Description: DownloadCircleView is a circular download progress bar.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/DownloadCircleView/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/progress/ArcProgressView/
 
 /**
  * DownloadCircleView.

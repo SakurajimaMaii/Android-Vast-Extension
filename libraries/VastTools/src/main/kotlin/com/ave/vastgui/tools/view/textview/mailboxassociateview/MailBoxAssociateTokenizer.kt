@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.view.mailboxassociateview
+package com.ave.vastgui.tools.view.textview.mailboxassociateview
 
 import android.text.SpannableString
 import android.text.Spanned
@@ -25,9 +25,6 @@ import android.widget.MultiAutoCompleteTextView
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/2
-// Description: 
-// Documentation:
-// Reference:
 
 /**
  * MailBoxAssociateTokenizer
