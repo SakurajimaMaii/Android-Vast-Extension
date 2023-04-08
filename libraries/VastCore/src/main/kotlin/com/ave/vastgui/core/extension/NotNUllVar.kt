@@ -29,6 +29,7 @@ import kotlin.reflect.KProperty
  *
  * @param T the parameter type.
  * @param once if true, the parameter will only set by once, false otherwise.
+ * @since 0.0.1
  */
 class NotNUllVar<T> @JvmOverloads constructor(private val once:Boolean = false) : ReadWriteProperty<Any?, T> {
 

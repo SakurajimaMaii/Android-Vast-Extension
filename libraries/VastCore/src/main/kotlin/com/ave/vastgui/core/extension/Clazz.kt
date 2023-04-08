@@ -24,9 +24,10 @@ package com.ave.vastgui.core.extension
 // Documentation: https://ave.entropy2020.cn/documents/VastCore/extension/DefaultLogTag/
 
 /**
- * @receiver any
  * @return get the receiver class name as the default name for log tag.
+ * @receiver any
+ * @since 0.0.3
  */
-fun Any.defaultLogTag():String{
+fun Any.defaultLogTag(): String {
     return this.javaClass.simpleName
 }

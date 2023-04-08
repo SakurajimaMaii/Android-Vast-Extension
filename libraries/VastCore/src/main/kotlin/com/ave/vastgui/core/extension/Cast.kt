@@ -28,6 +28,7 @@ package com.ave.vastgui.core.extension
  *
  * @param obj the object will be casted.
  * @param T type casts.
+ * @since 0.0.1
  */
 @Suppress("UNCHECKED_CAST")
 @kotlin.jvm.Throws(Exception::class)

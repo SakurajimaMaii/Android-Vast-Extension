@@ -45,6 +45,7 @@ package com.ave.vastgui.core.extension
  * @param T the singleton class.
  * @param A the parameters class.
  * @property creator the constructor of the T.
+ * @since 0.0.3
  */
 open class SingletonHolder<out T, in A>(private val creator: A.() -> T) {
 
