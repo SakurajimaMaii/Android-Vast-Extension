@@ -18,7 +18,9 @@ package com.ave.vastgui.tools.service
 
 import android.app.Service
 import android.content.Context
-import com.ave.vastgui.tools.service.delegate.ServiceDelegate
+import com.ave.vastgui.tools.coroutines.createMainScope
+import com.ave.vastgui.tools.network.response.getResponseBuilder
+import kotlinx.coroutines.cancel
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -27,18 +29,21 @@ import com.ave.vastgui.tools.service.delegate.ServiceDelegate
 
 abstract class VastService : Service() {
 
-    private val mServiceDelegate by lazy {
-        ServiceDelegate(this)
+    protected val mMainScope by lazy {
+        createMainScope(getDefaultTag())
     }
 
     protected fun getContext(): Context {
-        return mServiceDelegate.getContext()
+        return this
     }
 
-    protected fun getDefaultTag(): String = mServiceDelegate.getDefaultTag()
+    protected fun getDefaultTag(): String = this::class.java.simpleName
 
-    protected fun createMainScope() = mServiceDelegate.createMainScope()
+    protected fun getRequestBuilder() = mMainScope.getResponseBuilder()
 
-    protected fun getRequestBuilder() = mServiceDelegate.getApiRequestBuilder()
+    override fun onDestroy() {
+        super.onDestroy()
+        mMainScope.cancel()
+    }
 
 }

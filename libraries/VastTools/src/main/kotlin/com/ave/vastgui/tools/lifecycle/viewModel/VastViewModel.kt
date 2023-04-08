@@ -17,9 +17,9 @@
 package com.ave.vastgui.tools.lifecycle.viewModel
 
 import androidx.lifecycle.ViewModel
-import com.ave.vastgui.tools.lifecycle.viewModel.delegate.ViewModelDelegate
+import androidx.lifecycle.viewModelScope
 import com.ave.vastgui.tools.network.response.ResponseBuilder
-import kotlinx.coroutines.CoroutineScope
+import com.ave.vastgui.tools.network.response.getResponseBuilder
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -27,23 +27,17 @@ import kotlinx.coroutines.CoroutineScope
 // Description: 
 // Documentation:
 
-/**
- * Base ViewModel
- */
-abstract class VastViewModel : ViewModel() {
+/** Base ViewModel */
+open class VastViewModel : ViewModel() {
 
-    private val viewModelDelegate by lazy {
-        ViewModelDelegate(this)
+    /** Default tag for log. */
+    protected fun getDefaultTag(): String {
+        return this::class.java.simpleName
     }
 
-    protected open fun getDefaultTag(): String = viewModelDelegate.getDefaultTag()
-
-    protected open fun getRequestBuilder(): ResponseBuilder {
-        return viewModelDelegate.getApiRequestBuilder()
-    }
-
-    protected open fun createMainScope(): CoroutineScope {
-        return viewModelDelegate.createMainScope()
+    /** Construct a network request builder. */
+    protected fun getRequestBuilder(): ResponseBuilder {
+        return viewModelScope.getResponseBuilder()
     }
 
 }

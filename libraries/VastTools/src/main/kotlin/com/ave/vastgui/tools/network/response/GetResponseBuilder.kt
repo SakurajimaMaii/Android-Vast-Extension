@@ -26,9 +26,7 @@ import kotlinx.coroutines.CoroutineScope
 // Documentation:
 // Reference:
 
-/**
- * Create a [ResponseBuilder].
- */
-fun getResponseBuilder(mainScope: CoroutineScope): ResponseBuilder {
-    return ResponseBuilder(mainScope)
+/** Create a [ResponseBuilder]. */
+fun CoroutineScope.getResponseBuilder(): ResponseBuilder {
+    return ResponseBuilder(this)
 }
