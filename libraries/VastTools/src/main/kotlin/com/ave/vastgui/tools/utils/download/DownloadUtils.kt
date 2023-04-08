@@ -16,20 +16,18 @@
 
 package com.ave.vastgui.tools.utils.download
 
+import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.coroutines.await
-import com.ave.vastgui.tools.coroutines.createMainScope
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.utils.LogUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
-
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -42,15 +40,13 @@ import java.io.FileOutputStream
  *
  * [DownloadUtils] can help you to download from network server,
  *
- * Using [DownloadUtils] to download from network server.
- *
  * ```kotlin
  * // Download url
  * private val downloadUrl = ....
  * // Download save path
  * private val saveDir = ....
  * // Download
- * DownloadUtils
+ * val downloadUtils = DownloadUtils
  *      .createConfig()
  *      .setDownloadUrl(downloadUrl)
  *      .setSaveDir(saveDir)
@@ -63,15 +59,39 @@ import java.io.FileOutputStream
  *      .setDownloadSuccess {
  *          .. //Do something
  *      }
- *      .download()
+ *      .build()
+ *
+ * // Start download
+ * lifecycleScope.launch {
+ *     downloadUtils.download()
+ * }
  * ```
+ *
+ * @since 0.2.0
  */
-object DownloadUtils {
+class DownloadUtils private constructor(config: DownloadConfig) {
 
-    private val mScope = createMainScope("DownloadUtils")
+    private val okHttpClient: OkHttpClient = OkHttpClient()
+    private var downloadUrl: String by NotNUllVar()
+    private var saveDir: String by NotNUllVar()
+    private var saveName: String? = null
+    private var onDownloadSuccessListener: ((File) -> Unit)? = null
+    private var onDownloadingListener: ((progress: DownloadResult.Progress?) -> Unit)? = null
+    private var onDownloadFailedListener: ((e: Throwable?) -> Unit)? = null
 
-    @JvmStatic
-    fun createConfig() = DownloadConfig()
+    init {
+        downloadUrl = config.downloadUrl
+        saveDir = config.saveDir
+        saveName = config.saveName
+        onDownloadingListener = config.onDownloadingListener
+        onDownloadSuccessListener = config.onDownloadSuccessListener
+        onDownloadFailedListener = config.onDownloadFailedListener
+    }
+
+    companion object {
+        @JvmStatic
+        fun createConfig() = DownloadConfig()
+    }
 
     /**
      * The config of the download.
@@ -84,14 +104,20 @@ object DownloadUtils {
      *     [https://github.com/SakurajimaMaii/BluetoothDemo/blob/master/app-debug.apk],
      *     saveName will take app-debug.apk as the value.
      */
-    class DownloadConfig : OnDownloadListener {
+    class DownloadConfig {
 
-        internal var downloadUrl: String = ""
-        internal var saveDir: String = ""
-        internal var saveName: String? = null
-        private var onDownloadSuccessListener: ((File) -> Unit)? = null
-        private var onDownloadingListener: ((progress: DownloadResult.Progress?) -> Unit)? = null
-        private var onDownloadFailedListener: ((e: Throwable?) -> Unit)? = null
+        var downloadUrl: String by NotNUllVar()
+            private set
+        var saveDir: String by NotNUllVar()
+            private set
+        var saveName: String? = null
+            private set
+        var onDownloadSuccessListener: ((File) -> Unit)? = null
+            private set
+        var onDownloadingListener: ((progress: DownloadResult.Progress?) -> Unit)? = null
+            private set
+        var onDownloadFailedListener: ((e: Throwable?) -> Unit)? = null
+            private set
 
         fun setDownloadUrl(url: String) = apply {
             downloadUrl = url
@@ -117,105 +143,66 @@ object DownloadUtils {
             onDownloadFailedListener = l
         }
 
-        fun download() {
-            download(this)
-        }
-
-        override fun onDownloadSuccess(file: File) {
-            onDownloadSuccessListener?.invoke(file)
-        }
-
-        override fun onDownloading(progress: DownloadResult.Progress?) {
-            onDownloadingListener?.invoke(progress)
-        }
-
-        override fun onDownloadFailed(e: Throwable?) {
-            onDownloadFailedListener?.invoke(e)
-        }
+        fun build() = DownloadUtils(this)
 
     }
 
-    interface OnDownloadListener {
-        /** Download successfully. */
-        fun onDownloadSuccess(file: File)
-
-        /**
-         * Downloading.
-         *
-         * @param progress Download progress information.
-         */
-        fun onDownloading(progress: DownloadResult.Progress?)
-
-        /**
-         * Download failed.
-         *
-         * @param e Download exception.
-         */
-        fun onDownloadFailed(e: Throwable?)
-    }
-
-    private val okHttpClient: OkHttpClient = OkHttpClient()
-
-    private fun download(
-        downloadConfig: DownloadConfig
-    ) {
-        mScope.launch {
-            flow {
-                try {
-                    val request: Request = Request.Builder().url(downloadConfig.downloadUrl).build()
-                    val body = okHttpClient.newCall(request).await()
-                    val contentLength = body.contentLength()
-                    LogUtils.d("ArcProgressViewActivity", contentLength.toString())
-                    val inputStream = body.byteStream()
-                    val file = if (null != downloadConfig.saveName) {
-                        File(downloadConfig.saveDir, downloadConfig.saveName!!)
-                    } else {
-                        File(downloadConfig.saveDir, getNameFromUrl(downloadConfig.downloadUrl))
-                    }
-                    val result = FileMgr.saveFile(file)
-                    if (result == FileMgr.FileResult.FLAG_FAILED)
-                        throw RuntimeException("The download file save failed.")
-                    val outputStream = FileOutputStream(file)
-                    var currentLength = 0
-                    val bufferSize = 1024 * 8
-                    val buffer = ByteArray(bufferSize)
-                    val bufferedInputStream = BufferedInputStream(inputStream, bufferSize)
-                    var readLength: Int
-                    while (bufferedInputStream.read(buffer, 0, bufferSize)
-                            .also { readLength = it } != -1
-                    ) {
-                        outputStream.write(buffer, 0, readLength)
-                        currentLength += readLength
-                        emit(
-                            DownloadResult.progress(
-                                currentLength.toLong(),
-                                contentLength,
-                                currentLength.toFloat() / contentLength.toFloat()
-                            )
-                        )
-                    }
-                    bufferedInputStream.close()
-                    outputStream.close()
-                    inputStream.close()
-                    emit(DownloadResult.success(file))
-                } catch (e: Exception) {
-                    emit(DownloadResult.failure(e))
+    suspend fun download() {
+        flow {
+            try {
+                val request: Request = Request.Builder().url(downloadUrl).build()
+                val body = okHttpClient.newCall(request).await()
+                val contentLength = body.contentLength()
+                LogUtils.d("ArcProgressViewActivity", contentLength.toString())
+                val inputStream = body.byteStream()
+                val file = if (null != saveName) {
+                    File(saveDir, saveName!!)
+                } else {
+                    File(saveDir, getNameFromUrl(downloadUrl))
                 }
-            }.flowOn(Dispatchers.IO).collect {
-                it.fold(onFailure = { e ->
-                    downloadConfig.onDownloadFailed(e)
-                }, onSuccess = { file ->
-                    downloadConfig.onDownloadSuccess(file)
-                }, onLoading = { progress ->
-                    downloadConfig.onDownloading(
-                        DownloadResult.Progress(
-                            progress.currentLength,
-                            progress.length,
-                            progress.process
+                val result = FileMgr.saveFile(file)
+                if (result == FileMgr.FileResult.FLAG_FAILED)
+                    throw RuntimeException("The download file save failed.")
+                val outputStream = FileOutputStream(file)
+                var currentLength = 0
+                val bufferSize = 1024 * 8
+                val buffer = ByteArray(bufferSize)
+                val bufferedInputStream = BufferedInputStream(inputStream, bufferSize)
+                var readLength: Int
+                while (bufferedInputStream.read(buffer, 0, bufferSize)
+                        .also { readLength = it } != -1
+                ) {
+                    outputStream.write(buffer, 0, readLength)
+                    currentLength += readLength
+                    emit(
+                        DownloadResult.progress(
+                            currentLength.toLong(),
+                            contentLength,
+                            currentLength.toFloat() / contentLength.toFloat()
                         )
                     )
-                })
+                }
+                bufferedInputStream.close()
+                outputStream.close()
+                inputStream.close()
+                emit(DownloadResult.success(file))
+            } catch (e: Exception) {
+                emit(DownloadResult.failure(e))
             }
+        }.flowOn(Dispatchers.IO).collect {
+            it.fold(onFailure = { e ->
+                onDownloadFailedListener?.invoke(e)
+            }, onSuccess = { file ->
+                onDownloadSuccessListener?.invoke(file)
+            }, onLoading = { progress ->
+                onDownloadingListener?.invoke(
+                    DownloadResult.Progress(
+                        progress.currentLength,
+                        progress.length,
+                        progress.process
+                    )
+                )
+            })
         }
     }
 
