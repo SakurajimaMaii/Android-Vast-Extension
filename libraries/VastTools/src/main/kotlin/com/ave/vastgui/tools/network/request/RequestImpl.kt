@@ -17,7 +17,7 @@
 package com.ave.vastgui.tools.network.request
 
 import com.ave.vastgui.tools.network.response.ResponseApi
-import com.ave.vastgui.tools.network.response.ResponseLiveData
+import com.ave.vastgui.tools.network.response.ResponseMutableLiveData
 import com.ave.vastgui.tools.network.response.ResponseStateListener
 import retrofit2.Call
 import retrofit2.Response
@@ -64,7 +64,7 @@ class RequestImpl<T : ResponseApi>(
         })
     }
 
-    override fun request(stateLiveData: ResponseLiveData<T>) {
+    override fun request(stateLiveData: ResponseMutableLiveData<T>) {
         call.enqueue(object : retrofit2.Callback<T> {
             override fun onFailure(call: Call<T>, t: Throwable) {
                 stateLiveData.postError(t)

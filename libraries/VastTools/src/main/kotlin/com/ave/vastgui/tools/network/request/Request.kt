@@ -17,14 +17,13 @@
 package com.ave.vastgui.tools.network.request
 
 import com.ave.vastgui.tools.network.response.ResponseApi
-import com.ave.vastgui.tools.network.response.ResponseLiveData
+import com.ave.vastgui.tools.network.response.ResponseMutableLiveData
 import com.ave.vastgui.tools.network.response.ResponseStateListener
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/9
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/Request/
-// Reference: https://juejin.cn/post/6844904047447638024
 
 interface Request<T : ResponseApi> {
 
@@ -32,7 +31,7 @@ interface Request<T : ResponseApi> {
 
     fun request(listener: ResponseStateListener<T>.() -> Unit)
 
-    fun request(stateLiveData: ResponseLiveData<T>)
+    fun request(stateLiveData: ResponseMutableLiveData<T>)
 
     fun clone(): Request<T>
 

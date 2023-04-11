@@ -19,7 +19,6 @@ package com.ave.vastgui.tools.network.response
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/25
-// Reference: https://juejin.cn/post/6993294489125126151
 
 open class ResponseWrapper<T> {
     /**

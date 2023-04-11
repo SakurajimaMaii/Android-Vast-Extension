@@ -27,7 +27,6 @@ import java.util.concurrent.TimeUnit
 // Email: guihy2019@gmail.com
 // Date: 2022/9/24
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/RequestBuilder/
-// Reference: https://juejin.cn/post/7027675216080240647#heading-6
 
 abstract class RequestBuilder {
 

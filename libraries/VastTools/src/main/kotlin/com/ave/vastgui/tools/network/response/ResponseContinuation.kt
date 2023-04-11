@@ -22,25 +22,53 @@ import kotlin.coroutines.CoroutineContext
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/27
-// Description: 
-// Documentation:
-// Reference:
 
 class ResponseContinuation<T : ResponseApi>(
     override val context: CoroutineContext,
-    val listener: ResponseStateListener<T>
+    private val listener: ResponseStateListener<T>
 ) : Continuation<ResponseWrapper<T>> {
 
     override fun resumeWith(result: Result<ResponseWrapper<T>>) {
         result.getOrNull()?.apply {
-            when(this){
+            when (this) {
                 is ResponseWrapper.SuccessResponseWrapper -> listener.onSuccess(this.data)
                 is ResponseWrapper.EmptyResponseWrapper -> listener.onEmpty()
                 is ResponseWrapper.FailedResponseWrapper -> listener.onFailed(
                     this.errorCode,
                     this.errorMsg
                 )
+
                 is ResponseWrapper.ErrorResponseWrapper -> listener.onError(this.throwable)
+            }
+        }
+    }
+
+}
+
+/**
+ * Live data continuation.
+ *
+ * @since 0.3.0
+ */
+class LiveDataContinuation<T : ResponseApi>(
+    override val context: CoroutineContext,
+    private val responseLiveData: ResponseMutableLiveData<T>
+) : Continuation<ResponseWrapper<T>> {
+
+    override fun resumeWith(result: Result<ResponseWrapper<T>>) {
+        result.getOrNull()?.apply {
+            when (this) {
+                is ResponseWrapper.SuccessResponseWrapper -> responseLiveData.postValueAndSuccess(
+                    this.data
+                )
+
+                is ResponseWrapper.EmptyResponseWrapper -> responseLiveData.postEmpty()
+                is ResponseWrapper.FailedResponseWrapper -> responseLiveData.postFailed(
+                    this.errorCode,
+                    this.errorMsg
+                )
+
+                is ResponseWrapper.ErrorResponseWrapper -> responseLiveData.postError(this.throwable)
             }
         }
     }

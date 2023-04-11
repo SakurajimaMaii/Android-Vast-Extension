@@ -26,16 +26,6 @@ import kotlin.reflect.KProperty
 
 sealed class SpDelegates {
 
-    fun int(defaultValue: Int = 0) = object : ReadWriteProperty<Any, Int> {
-        override fun getValue(thisRef: Any, property: KProperty<*>): Int {
-            return getSharedPreferences().getInt(property.name, defaultValue)
-        }
-
-        override fun setValue(thisRef: Any, property: KProperty<*>, value: Int) {
-            getSharedPreferences().edit().putInt(property.name, value).apply()
-        }
-    }
-
     fun string(defaultValue: String? = null) = object : ReadWriteProperty<Any, String?> {
         override fun getValue(thisRef: Any, property: KProperty<*>): String? {
             return getSharedPreferences().getString(property.name, defaultValue)
@@ -43,37 +33,6 @@ sealed class SpDelegates {
 
         override fun setValue(thisRef: Any, property: KProperty<*>, value: String?) {
             getSharedPreferences().edit().putString(property.name, value).apply()
-        }
-    }
-
-    fun long(defaultValue: Long = 0L) = object : ReadWriteProperty<Any, Long> {
-
-        override fun getValue(thisRef: Any, property: KProperty<*>): Long {
-            return getSharedPreferences().getLong(property.name, defaultValue)
-        }
-
-        override fun setValue(thisRef: Any, property: KProperty<*>, value: Long) {
-            getSharedPreferences().edit().putLong(property.name, value).apply()
-        }
-    }
-
-    fun boolean(defaultValue: Boolean = false) = object : ReadWriteProperty<Any, Boolean> {
-        override fun getValue(thisRef: Any, property: KProperty<*>): Boolean {
-            return getSharedPreferences().getBoolean(property.name, defaultValue)
-        }
-
-        override fun setValue(thisRef: Any, property: KProperty<*>, value: Boolean) {
-            getSharedPreferences().edit().putBoolean(property.name, value).apply()
-        }
-    }
-
-    fun float(defaultValue: Float = 0.0f) = object : ReadWriteProperty<Any, Float> {
-        override fun getValue(thisRef: Any, property: KProperty<*>): Float {
-            return getSharedPreferences().getFloat(property.name, defaultValue)
-        }
-
-        override fun setValue(thisRef: Any, property: KProperty<*>, value: Float) {
-            getSharedPreferences().edit().putFloat(property.name, value).apply()
         }
     }
 
@@ -88,10 +47,72 @@ sealed class SpDelegates {
         }
     }
 
+    fun int(defaultValue: Int = 0) = object : ReadWriteProperty<Any, Int> {
+        override fun getValue(thisRef: Any, property: KProperty<*>): Int {
+            return getSharedPreferences().getInt(property.name, defaultValue)
+        }
+
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: Int) {
+            getSharedPreferences().edit().putInt(property.name, value).apply()
+        }
+    }
+
+    fun long(defaultValue: Long = 0L) = object : ReadWriteProperty<Any, Long> {
+
+        override fun getValue(thisRef: Any, property: KProperty<*>): Long {
+            return getSharedPreferences().getLong(property.name, defaultValue)
+        }
+
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: Long) {
+            getSharedPreferences().edit().putLong(property.name, value).apply()
+        }
+    }
+
+    fun float(defaultValue: Float = 0.0f) = object : ReadWriteProperty<Any, Float> {
+        override fun getValue(thisRef: Any, property: KProperty<*>): Float {
+            return getSharedPreferences().getFloat(property.name, defaultValue)
+        }
+
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: Float) {
+            getSharedPreferences().edit().putFloat(property.name, value).apply()
+        }
+    }
+
+    fun boolean(defaultValue: Boolean = false) = object : ReadWriteProperty<Any, Boolean> {
+        override fun getValue(thisRef: Any, property: KProperty<*>): Boolean {
+            return getSharedPreferences().getBoolean(property.name, defaultValue)
+        }
+
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: Boolean) {
+            getSharedPreferences().edit().putBoolean(property.name, value).apply()
+        }
+    }
+
+    /**
+     * Save double in SharedPreferences.
+     *
+     * @param defaultValue Default value.
+     * @since 0.3.0
+     */
+    fun double(defaultValue: Double = 0.0) = object : ReadWriteProperty<Any, Double> {
+        override fun getValue(thisRef: Any, property: KProperty<*>): Double {
+            return Double.Companion.fromBits(
+                getSharedPreferences().getLong(
+                    property.name,
+                    defaultValue.toRawBits()
+                )
+            )
+        }
+
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: Double) {
+            getSharedPreferences().edit().putLong(property.name, value.toRawBits()).apply()
+        }
+    }
+
     fun clearAll() {
         getSharedPreferences().edit().clear().apply()
     }
 
-    protected abstract fun getSharedPreferences(): SharedPreferences
+    abstract fun getSharedPreferences(): SharedPreferences
 
 }

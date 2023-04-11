@@ -23,9 +23,7 @@ import kotlin.coroutines.startCoroutine
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/26
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/Request/
 
 class ResponseBuilder(private val mainScope: CoroutineScope) {
 
@@ -37,6 +35,22 @@ class ResponseBuilder(private val mainScope: CoroutineScope) {
         suspend {
             HttpHandle.requestWithSuspend(request)
         }.startCoroutine(ResponseContinuation(mainScope.coroutineContext, mListener))
+    }
+
+    /**
+     * Suspend with listener
+     *
+     * @param request The request api.
+     * @param responseLiveData The responseLiveData is used to check status.
+     * @since 0.3.0
+     */
+    fun <T : ResponseApi> suspendWithListener(
+        request: suspend () -> T,
+        responseLiveData: ResponseMutableLiveData<T>
+    ) {
+        suspend {
+            HttpHandle.requestWithSuspend(request)
+        }.startCoroutine(LiveDataContinuation(mainScope.coroutineContext, responseLiveData))
     }
 
 }

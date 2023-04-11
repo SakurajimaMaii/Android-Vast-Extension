@@ -17,6 +17,7 @@
 package com.ave.vastgui.tools.network.response
 
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
@@ -24,9 +25,15 @@ import androidx.lifecycle.Observer
 // Email: guihy2019@gmail.com
 // Date: 2022/9/28
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/ResponseLiveData/
-// Reference: https://juejin.cn/post/6844903855675670535
 
-class ResponseLiveData<T> : MutableLiveData<T>() {
+abstract class ResponseLiveData<T> : LiveData<T> {
+
+    constructor() : super()
+
+    /**
+     * @since 0.3.0
+     */
+    constructor(value: T) : super(value)
 
     sealed class State {
         object Clear : State()
@@ -108,43 +115,24 @@ class ResponseLiveData<T> : MutableLiveData<T>() {
 
     }
 
-    private val state = StateObserver()
+    protected val state = StateObserver()
 
-    init {
-        clearState()
-    }
-
+    @Deprecated(
+        message = "Please use observeState.",
+        replaceWith = ReplaceWith(expression = "observeState()"),
+        level = DeprecationLevel.WARNING
+    )
     fun getState() = state
 
-    fun clearState() {
-        state.clearState()
-    }
-
-    fun changeState(s: State) {
-        state.changeState(s)
-    }
-
-    fun postEmpty() {
-        state.changeEmpty()
-    }
-
-    @JvmOverloads
-    fun postError(t: Throwable? = null) {
-        state.changeError(t)
-    }
-
-    @JvmOverloads
-    fun postFailed(errorCode: Int? = null, errorMsg: String? = null) {
-        state.changeFailed(errorCode, errorMsg)
-    }
-
-    fun postSuccess() {
-        state.changeSuccess()
-    }
-
-    fun postValueAndSuccess(value: T) {
-        super.postValue(value)
-        state.changeSuccess()
+    /**
+     * Observe state.
+     *
+     * @param owner The LifecycleOwner which controls the observer
+     * @param listener The listener that will receive the events.
+     * @since 0.3.0
+     */
+    fun observeState(owner: LifecycleOwner, listener: StateListener.() -> Unit) {
+        state.observeState(owner, listener)
     }
 
 }
