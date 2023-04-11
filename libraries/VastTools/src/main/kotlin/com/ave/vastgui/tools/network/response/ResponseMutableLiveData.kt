@@ -39,40 +39,40 @@ class ResponseMutableLiveData<T> : ResponseLiveData<T> {
     }
 
     fun clearState() {
-        state.clearState()
+        getState().clearState()
     }
 
     fun changeState(s: State) {
-        state.changeState(s)
+        getState().changeState(s)
     }
 
     fun postEmpty() {
-        state.changeEmpty()
+        getState().changeEmpty()
     }
 
     @JvmOverloads
     fun postError(t: Throwable? = null) {
-        state.changeError(t)
+        getState().changeError(t)
     }
 
     @JvmOverloads
     fun postFailed(errorCode: Int? = null, errorMsg: String? = null) {
-        state.changeFailed(errorCode, errorMsg)
+        getState().changeFailed(errorCode, errorMsg)
     }
 
     fun postSuccess() {
-        state.changeSuccess()
+        getState().changeSuccess()
     }
 
     fun postValueAndSuccess(value: T) {
         super.postValue(value)
-        state.changeSuccess()
+        getState().changeSuccess()
     }
 
     @MainThread
     fun setValueAndSuccess(value: T){
         super.setValue(value)
-        state.changeSuccess()
+        getState().changeSuccess()
     }
 
     /**

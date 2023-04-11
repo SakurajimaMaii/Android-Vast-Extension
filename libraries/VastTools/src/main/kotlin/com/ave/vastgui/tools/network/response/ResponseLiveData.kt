@@ -115,14 +115,9 @@ abstract class ResponseLiveData<T> : LiveData<T> {
 
     }
 
-    protected val state = StateObserver()
+    private val state = StateObserver()
 
-    @Deprecated(
-        message = "Please use observeState.",
-        replaceWith = ReplaceWith(expression = "observeState()"),
-        level = DeprecationLevel.WARNING
-    )
-    fun getState() = state
+    protected fun getState() = state
 
     /**
      * Observe state.
