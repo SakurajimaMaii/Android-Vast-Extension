@@ -17,7 +17,6 @@
 package com.ave.vastgui.tools.content
 
 import android.content.Intent
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.Build
 import com.ave.vastgui.core.extension.cast
 import java.io.Serializable
@@ -31,8 +30,8 @@ import java.io.Serializable
  * Retrieve extended data from the intent.
  *
  * @param key The name of the desired item.
- * @param callback As the return value if the retrieve extended data from the intent is null.
- *
+ * @param callback As the return value if the retrieve extended data from
+ *     the intent is null.
  * @see [Intent.getSerializableExtra]
  */
 inline fun <reified T : Serializable> Intent.getSerializableExtra(key: String, callback: T): T {
@@ -47,5 +46,7 @@ inline fun <reified T : Serializable> getSerializableExtra(intent: Intent, key: 
     } else {
         intent.getSerializableExtra(key, T::class.java)
     }
-    return if(null != data){ cast(data) } else null
+    return if (null != data) {
+        cast(data)
+    } else null
 }
