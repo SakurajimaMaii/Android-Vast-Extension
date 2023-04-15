@@ -160,9 +160,9 @@ class DownloadUtils private constructor(config: DownloadConfig) {
                 } else {
                     File(saveDir, getNameFromUrl(downloadUrl))
                 }
-                val result = FileMgr.saveFile(file)
-                if (result == FileMgr.FileResult.FLAG_FAILED)
-                    throw RuntimeException("The download file save failed.")
+                FileMgr.saveFile(file).exceptionOrNull()?.let {
+                    throw it
+                }
                 val outputStream = FileOutputStream(file)
                 var currentLength = 0
                 val bufferSize = 1024 * 8

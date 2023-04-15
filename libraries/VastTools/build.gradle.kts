@@ -113,6 +113,8 @@ dependencies {
     implementation(AndroidX.recyclerview)
     implementation(AndroidX.test_monitor)
     implementation(Google.material)
+    implementation(Google.gson)
+    implementation(Jetbrains.kotlin_stdlib)
     implementation(Jetbrains.kotlin_reflect)
     implementation(Jetbrains.kotlinx_coroutines_android)
     implementation(Jetbrains.kotlinx_coroutines_core)

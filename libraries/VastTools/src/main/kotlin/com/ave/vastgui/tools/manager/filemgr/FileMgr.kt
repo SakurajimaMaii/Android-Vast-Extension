@@ -17,16 +17,11 @@
 package com.ave.vastgui.tools.manager.filemgr
 
 import android.content.Context
-import android.webkit.MimeTypeMap
 import androidx.security.crypto.EncryptedFile
 import com.ave.vastgui.tools.config.ToolsConfig
 import com.ave.vastgui.tools.helper.ContextHelper
-import com.ave.vastgui.tools.manager.filemgr.FileMgr.FileResult.FLAG_EXISTS
-import com.ave.vastgui.tools.manager.filemgr.FileMgr.FileResult.FLAG_FAILED
-import com.ave.vastgui.tools.manager.filemgr.FileMgr.FileResult.FLAG_NOT_EXISTS
-import com.ave.vastgui.tools.manager.filemgr.FileMgr.FileResult.FLAG_PARENT_NOT_EXISTS
-import com.ave.vastgui.tools.manager.filemgr.FileMgr.FileResult.FLAG_SUCCESS
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
@@ -36,26 +31,6 @@ import java.io.IOException
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/FileMgr/
 
 object FileMgr : FileProperty by FilePropertyMgr() {
-
-    private val mimeTypeMap: MimeTypeMap? = MimeTypeMap.getSingleton()
-
-    /**
-     * File operations result.
-     *
-     * @property FLAG_SUCCESS means running successful.
-     * @property FLAG_PARENT_NOT_EXISTS means the parent of the file is not
-     *     exist.
-     * @property FLAG_EXISTS means the file or directory is exist.
-     * @property FLAG_NOT_EXISTS means the file or directory is not exist.
-     * @property FLAG_FAILED means running failed.
-     */
-    enum class FileResult {
-        FLAG_SUCCESS,
-        FLAG_PARENT_NOT_EXISTS,
-        FLAG_EXISTS,
-        FLAG_NOT_EXISTS,
-        FLAG_FAILED
-    }
 
     /**
      * @return The File which from internal storage, meant for your app's use
@@ -115,13 +90,15 @@ object FileMgr : FileProperty by FilePropertyMgr() {
     fun saveFile(
         file: File,
     ): FileResult {
-        if (file.exists() && file.isFile) {
-            file.delete()
+        return try {
+            if (file.createNewFile()) {
+                FileResult.success("${file.name} saved successfully")
+            } else {
+                FileResult.failure(IllegalArgumentException("${file.name} is already exists."))
+            }
+        } catch (e: Exception) {
+            FileResult.failure(e)
         }
-        if (!file.parentFile?.exists()!!)
-            file.parentFile?.mkdirs()
-        getEncryptedFile(file).openFileOutput().close()
-        return if (file.exists()) FLAG_SUCCESS else FLAG_FAILED
     }
 
     /**
@@ -132,41 +109,88 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      */
     @JvmStatic
     fun deleteFile(file: File): FileResult {
-        return if (file.isFile) {
-            if (file.delete()) {
-                FLAG_SUCCESS
+        return try {
+            if (file.isFile) {
+                if (file.delete()) {
+                    FileResult.success("${file.name} successfully deleted.")
+                } else {
+                    FileResult.failure(RuntimeException("${file.name} delete failed."))
+                }
             } else {
-                FLAG_FAILED
+                FileResult.failure(IllegalArgumentException("${file.name} is not a normal file."))
             }
-        } else {
-            FLAG_FAILED
+        } catch (e: Exception) {
+            FileResult.failure(e)
         }
     }
 
     /**
-     * Write to the txt file.
+     * Copy the file to the specified location, this method will not delete the
+     * original file.
      *
-     * @param file the txt file you want to write.
-     * @param writeEventListener register a listener for writing.
-     * @return [FileResult]
+     * @param from File original location.
+     * @param to File copy destination.
+     * @since 0.4.0
      */
-    @JvmStatic
-    fun writeTxtFile(file: File, writeEventListener: WriteEventListener): FileResult {
-        return if (!file.exists())
-            FLAG_FAILED
-        else if ("txt" == getExtension(file)) {
-            val fileOutputStream = getEncryptedFile(file).openFileOutput()
-            writeEventListener.writeEvent(fileOutputStream)
-            fileOutputStream.apply {
-                try {
-                    flush()
-                    close()
-                } catch (e: Exception) {
-                    e.printStackTrace()
+    fun copyFile(from: File, to: File): FileResult {
+        return try {
+            if (!from.exists()) {
+                FileResult.failure(IllegalArgumentException("${from.name} does not exist."))
+            } else {
+                val result = saveFile(to)
+                if (result.isSuccess) {
+                    val input = FileInputStream(from)
+                    val out = FileOutputStream(to)
+                    val bt = ByteArray(1024)
+                    var c: Int
+                    while (input.read(bt).also { c = it } > 0) {
+                        out.write(bt, 0, c)
+                    }
+                    input.close()
+                    out.close()
+                    FileResult.success("File ${from.name} successfully copied to file ${to.name}.")
+                } else {
+                    result
                 }
             }
-            FLAG_SUCCESS
-        } else FLAG_FAILED
+        } catch (e: Exception) {
+            FileResult.failure(e)
+        }
+    }
+
+    /**
+     * Move the file to the specified location.
+     *
+     * @param file File to be moved.
+     * @param destination File move destination path. For example: appInternalFilesDir().path.
+     * @since 0.4.0
+     */
+    fun moveFile(file: File, destination: String): FileResult {
+        val path = if (!destination.endsWith(File.separator)) {
+            destination + File.separator
+        } else destination
+        return try {
+            if (!file.exists()) {
+                FileResult.failure(IllegalArgumentException("${file.name} does not exist."))
+            } else {
+                val new = File("$path${file.name}")
+                val saveResult = saveFile(new)
+                if (saveResult.isSuccess) {
+                    val input = FileInputStream(file)
+                    val out = FileOutputStream(new)
+                    val bt = ByteArray(1024)
+                    var c: Int
+                    while (input.read(bt).also { c = it } > 0) {
+                        out.write(bt, 0, c)
+                    }
+                    input.close()
+                    out.close()
+                    FileResult.success("File ${file.name} successfully move to file ${new.name}.")
+                } else saveResult
+            }
+        } catch (e: Exception) {
+            FileResult.failure(e)
+        }
     }
 
     /**
@@ -177,41 +201,132 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      */
     @JvmStatic
     fun makeDir(dir: File): FileResult {
-        if (dir.exists()) {
-            return FLAG_EXISTS
+        return try {
+            if (dir.exists()) {
+                FileResult.failure(IllegalArgumentException("${dir.name} is already exists."))
+            } else {
+                val path = if (!dir.path.endsWith(File.separator)) {
+                    dir.path + File.separator
+                } else dir.path
+                if (File(path).mkdir()) {
+                    FileResult.success("${dir.name} is created.")
+                } else {
+                    FileResult.failure(RuntimeException("${dir.name} create failed."))
+                }
+            }
+        } catch (e: Exception) {
+            FileResult.failure(e)
         }
-        val path = if (!dir.path.endsWith(File.separator)) {
-            dir.path + File.separator
-        } else dir.path
-        if (File(path).mkdir()) {
-            return FLAG_SUCCESS
-        }
-        return FLAG_FAILED
     }
 
     /**
      * Delete directory.
      *
-     * @param file The directory you want to delete.
+     * @param dir The directory you want to delete.
      * @return Operations result.
      */
     @JvmStatic
-    fun deleteDir(file: File): FileResult {
-        when{
-            !file.exists() -> FLAG_FAILED
-            null == file.listFiles() -> file.delete()
-            else -> {
-                for (f in file.listFiles()!!) {
-                    if (f.isFile) {
-                        f.delete()
-                    } else if (f.isDirectory) {
-                        deleteDir(f)
+    fun deleteDir(dir: File): FileResult {
+        return try {
+            when {
+                !dir.exists() ->
+                    FileResult.failure(IllegalArgumentException("${dir.name} is already exists."))
+
+                null == dir.listFiles() ->
+                    dir.delete()
+
+                else -> {
+                    for (f in dir.listFiles()!!) {
+                        if (f.isFile) {
+                            f.delete()
+                        } else if (f.isDirectory) {
+                            deleteDir(f)
+                        }
                     }
                 }
             }
+            dir.delete()
+            FileResult.success("${dir.name} delete successfully.")
+        } catch (e: Exception) {
+            FileResult.failure(e)
         }
-        file.delete()
-        return FLAG_SUCCESS
+    }
+
+    /**
+     * Copy the folder to the specified location, this method will not delete
+     * the original folder.
+     *
+     * @param from Folder original location.
+     * @param to Folder copy destination.
+     * @since 0.4.0
+     */
+    fun copyDir(from: File, to: File): FileResult {
+        return try {
+            if (from.exists()) {
+                val files = from.listFiles()
+                val makeResult = makeDir(to)
+                if (makeResult.isSuccess) {
+                    val path = if (!to.path.endsWith(File.separator)) {
+                        to.path + File.separator
+                    } else to.path
+                    for (file in files!!) {
+                        if (file.isDirectory) {
+                            copyDir(file, File("${path}${file.name}"))
+                        } else {
+                            copyFile(file, File("${path}${file.name}"))
+                        }
+                    }
+                    FileResult.success("${from.name} copy successful.")
+                } else {
+                    makeResult
+                }
+            } else {
+                FileResult.failure(IllegalArgumentException("${from.name} is not exists."))
+            }
+        } catch (e: Exception) {
+            FileResult.failure(e)
+        }
+    }
+
+    /**
+     * Move the folder to the specified location.
+     *
+     * @param dir Folder to be moved.
+     * @param destination Folder move destination path.
+     * @since 0.4.0
+     */
+    fun moveDir(dir: File, destination: String): FileResult {
+        val path = if (!destination.endsWith(File.separator)) {
+            destination + File.separator
+        } else destination
+        return try {
+            if (dir.exists()) {
+                val files = dir.listFiles()
+                val makeResult = makeDir(File(path))
+                if (makeResult.isSuccess) {
+                    for (file in files!!) {
+                        if (file.isDirectory) {
+                            copyDir(file, File("${path}${file.name}"))
+                        } else {
+                            val copyResult = copyFile(file, File("${path}${file.name}"))
+                            if (copyResult.isSuccess) {
+                                deleteFile(file)
+                            } else {
+                                return copyResult
+                            }
+                        }
+                        deleteDir(file)
+                    }
+                    FileResult.success("${dir.name} successful move to $destination.")
+                } else {
+                    makeResult
+                }
+            } else {
+                FileResult.failure(IllegalArgumentException("${dir.name} is not exists."))
+            }
+        } catch (e: Exception) {
+            FileResult.failure(e)
+        }
     }
 
     /**
@@ -223,21 +338,25 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      */
     @JvmStatic
     fun rename(file: File, newName: String): FileResult {
-        if (!file.exists()) {
-            return FLAG_NOT_EXISTS
-        } else if (newName == file.name) {
-            return FLAG_SUCCESS
-        } else {
-            return if (null == file.parent) {
-                FLAG_FAILED
+        return try {
+            if (!file.exists()) {
+                FileResult.failure(IllegalArgumentException("${file.name} is already exists."))
+            } else if (newName == file.name) {
+                FileResult.success("${file.name} rename successfully.")
             } else {
-                val newFile = File(file.parent!! + File.separator + newName)
-                if (!newFile.exists() && file.renameTo(newFile)) {
-                    FLAG_SUCCESS
+                return if (null == file.parent) {
+                    FileResult.failure(RuntimeException("${file.name} parent is null."))
                 } else {
-                    FLAG_FAILED
+                    val newFile = File(file.parent!! + File.separator + newName)
+                    if (!newFile.exists() && file.renameTo(newFile)) {
+                        FileResult.success("${file.name} rename successfully.")
+                    } else {
+                        FileResult.failure(RuntimeException("${file.name} rename failed."))
+                    }
                 }
             }
+        } catch (e: Exception) {
+            FileResult.failure(e)
         }
     }
 
@@ -277,16 +396,6 @@ object FileMgr : FileProperty by FilePropertyMgr() {
             e.printStackTrace()
         }
         return cacheFile.absolutePath
-    }
-
-    /** Register a listener when write to file. */
-    interface WriteEventListener {
-        /**
-         * Define write event.
-         *
-         * @param fileOutputStream File output stream.
-         */
-        fun writeEvent(fileOutputStream: FileOutputStream)
     }
 
 }
