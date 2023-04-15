@@ -69,7 +69,6 @@ class TakePhotoContract @JvmOverloads constructor(private val authority: String?
                 ImageMgr.getFileUriOnApi23(it)
             }
         }
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         return Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, uri);
     }
 

@@ -31,13 +31,13 @@ import com.ave.vastgui.tools.R
  */
 abstract class StrUnit(val unit: String)
 
-class Angle : StrUnit(ResUtils.getString(R.string.unit_angle))
-class Celsius : StrUnit(ResUtils.getString(R.string.unit_celsius))
-class Kmh : StrUnit(ResUtils.getString(R.string.unit_kmh))
-class Kilometer : StrUnit(ResUtils.getString(R.string.unit_km))
-class Meter : StrUnit(ResUtils.getString(R.string.unit_m))
-class Ms : StrUnit(ResUtils.getString(R.string.unit_ms))
-class Percent : StrUnit(ResUtils.getString(R.string.unit_percent))
+object Angle : StrUnit(ResUtils.getString(R.string.unit_angle))
+object Celsius : StrUnit(ResUtils.getString(R.string.unit_celsius))
+object Kmh : StrUnit(ResUtils.getString(R.string.unit_kmh))
+object Kilometer : StrUnit(ResUtils.getString(R.string.unit_km))
+object Meter : StrUnit(ResUtils.getString(R.string.unit_m))
+object Ms : StrUnit(ResUtils.getString(R.string.unit_ms))
+object Percent : StrUnit(ResUtils.getString(R.string.unit_percent))
 
 object StrUtils {
 
