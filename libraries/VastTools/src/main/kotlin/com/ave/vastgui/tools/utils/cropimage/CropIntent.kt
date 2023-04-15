@@ -17,15 +17,21 @@
 package com.ave.vastgui.tools.utils.cropimage
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
+import com.ave.vastgui.tools.helper.ContextHelper
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/23
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/intent/CropIntent/
 
-class CropIntent : CropProperty {
+class CropIntent : CropProperty() {
 
     private val intent = Intent("com.android.camera.action.CROP").apply {
         addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -49,7 +55,27 @@ class CropIntent : CropProperty {
         intent.putExtra("outputY", outputY)
     }
 
+    @Suppress("DEPRECATION")
     override fun setOutputUri(uri: Uri?) = apply {
+        // In order to solve the problem of file file saving failure.
+        // https://stackoverflow.com/questions/18249007/how-to-use-support-fileprovider-for-sharing-content-to-other-apps
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R &&
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+        ) {
+            val resInfoList: List<ResolveInfo> =
+                ContextHelper.getApp().packageManager.queryIntentActivities(
+                    intent,
+                    PackageManager.MATCH_DEFAULT_ONLY
+                )
+            for (resolveInfo in resInfoList) {
+                val packageName = resolveInfo.activityInfo.packageName
+                ContextHelper.getAppContext().grantUriPermission(
+                    packageName,
+                    uri,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            }
+        }
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
     }
 
@@ -66,6 +92,9 @@ class CropIntent : CropProperty {
     }
 
     /** Return crop intent. */
-    fun getIntent() = intent
+    fun getIntent(): Intent {
+        setOutputFormat(Bitmap.CompressFormat.JPEG.toString())
+        return intent
+    }
 
 }

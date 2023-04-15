@@ -16,7 +16,6 @@
 
 import com.pluginversion.vastgui.AVE
 import com.pluginversion.vastgui.AndroidX
-import com.pluginversion.vastgui.Jetbrains
 import com.pluginversion.vastgui.Version
 
 plugins {
@@ -70,12 +69,11 @@ android {
 
 dependencies {
     api(AVE.core)
+    api(AndroidX.recyclerview)
+    api(AndroidX.paging3)
     implementation(AndroidX.annotation)
     implementation(AndroidX.arch_core_runtime)
     implementation(AndroidX.core_ktx)
-    implementation(AndroidX.recyclerview)
-    implementation(AndroidX.paging3)
-    implementation(Jetbrains.kotlin_reflect)
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastAdapter"

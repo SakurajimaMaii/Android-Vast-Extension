@@ -16,8 +16,10 @@
 
 package com.ave.vastgui.tools.utils.cropimage
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import androidx.annotation.IntRange
 import com.ave.vastgui.tools.activity.result.contract.CropPhotoContract
 
@@ -25,13 +27,13 @@ import com.ave.vastgui.tools.activity.result.contract.CropPhotoContract
 // Email: guihy2019@gmail.com
 // Date: 2023/3/23
 
-interface CropProperty {
+abstract class CropProperty {
 
     /** Set the data uri. */
-    fun setData(uri: Uri): CropProperty
+    abstract fun setData(uri: Uri): CropProperty
 
     /** Set crop. */
-    fun setCorp(value: Boolean): CropProperty
+    abstract fun setCorp(value: Boolean): CropProperty
 
     /**
      * Sets the ratio of the length and width of the initial cropped preview
@@ -41,7 +43,10 @@ interface CropProperty {
      * @param aspectX The value of **aspectX**.
      * @param aspectY The value of **aspectY**.
      */
-    fun setAspect(@IntRange(from = 0) aspectX: Int, @IntRange(from = 0) aspectY: Int): CropProperty
+    abstract fun setAspect(
+        @IntRange(from = 0) aspectX: Int,
+        @IntRange(from = 0) aspectY: Int
+    ): CropProperty
 
     /**
      * Set the value of [outputX] , [outputY].
@@ -49,23 +54,31 @@ interface CropProperty {
      * @param outputX The width of output image in pixels.
      * @param outputY The height of output image in pixels.
      */
-    fun setOutput(@IntRange(from = 0) outputX: Int, @IntRange(from = 0) outputY: Int): CropProperty
+    abstract fun setOutput(
+        @IntRange(from = 0) outputX: Int,
+        @IntRange(from = 0) outputY: Int
+    ): CropProperty
 
     /**
      * Set the [uri] for the output image.
      *
-     * You should not call this method when using [CropPhotoContract].
+     * Using with [CropPhotoContract]: You don't need to call this method.
+     *
+     * Using without [CropPhotoContract]: When [Build.VERSION.SDK_INT]
+     * is smaller than [Build.VERSION_CODES.R], you need to call
+     * [Context.revokeUriPermission] to revoke the uri permission by
+     * yourself. For details, refer to the implementation of [setOutputUri].
      *
      * @see CropPhotoContract
      */
-    fun setOutputUri(uri: Uri?): CropProperty
+    abstract fun setOutputUri(uri: Uri?): CropProperty
 
     /**
      * Set the output image format.
      *
      * @param format For example: [Bitmap.CompressFormat.JPEG.toString]
      */
-    fun setOutputFormat(format: String): CropProperty
+    protected abstract fun setOutputFormat(format: String): CropProperty
 
     /**
      * Set the return-data.
@@ -73,13 +86,13 @@ interface CropProperty {
      * @param value True if you want to save the return data in the [Bitmap],
      *     false otherwise.
      */
-    fun setReturnData(value: Boolean): CropProperty
+    abstract fun setReturnData(value: Boolean): CropProperty
 
     /**
      * Set the noFaceDetection.
      *
      * @param value True if you want to remove face detection, false otherwise.
      */
-    fun setNoFaceDetection(value: Boolean): CropProperty
+    abstract fun setNoFaceDetection(value: Boolean): CropProperty
 
 }

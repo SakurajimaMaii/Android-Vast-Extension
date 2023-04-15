@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.content.FileProvider
@@ -33,8 +34,18 @@ import java.io.File
 
 /**
  * Taking photos from system camera. The file path get from
- * [ImageMgr.getDefaultRootDirPath] and the name get from
- * [ImageMgr.getDefaultFileName] with the .jpg extension.
+ * [Environment.getExternalStoragePublicDirectory].
+ *
+ * When [Build.VERSION.SDK_INT] is smaller than [Build.VERSION_CODES.R],
+ * you should add following content for [FileProvider].
+ *
+ * ```xml
+ * // File named file_paths.xml in xml folder.
+ * <resources>
+ *      <!-- add this line -->
+ *      <external-path name="name_you_define" path="Pictures" />
+ * </manifest>
+ * ```
  *
  * @param authority The authority of a [FileProvider] defined in a
  *     <provider> element in your app's manifest.If the value the
@@ -47,17 +58,18 @@ class TakePhotoContract @JvmOverloads constructor(private val authority: String?
     private var uri: Uri? = null
 
     override fun createIntent(context: Context, input: Any?): Intent {
-        uri = ImageMgr.getDefaultRootDirPath()?.let { path ->
-            File(path, ImageMgr.getDefaultFileName(".jpg")).let {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    ImageMgr.getFileUriAboveApi30(it)
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    ImageMgr.getFileUriAboveApi24(it, authority)
-                } else {
-                    ImageMgr.getFileUriOnApi23(it)
-                }
+        val path =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path
+        uri = File(path, ImageMgr.getDefaultFileName(".jpg")).let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                ImageMgr.getFileUriAboveApi30(it)
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                ImageMgr.getFileUriAboveApi24(it, authority)
+            } else {
+                ImageMgr.getFileUriOnApi23(it)
             }
         }
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         return Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, uri);
     }
 
