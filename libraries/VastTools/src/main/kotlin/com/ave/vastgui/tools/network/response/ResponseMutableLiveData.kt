@@ -75,18 +75,4 @@ class ResponseMutableLiveData<T> : ResponseLiveData<T> {
         getState().changeSuccess()
     }
 
-    /**
-     * @since 0.3.0
-     */
-    override fun postValue(value: T) {
-        throw RuntimeException("Please call postValueAndSuccess.")
-    }
-
-    /**
-     * @since 0.3.0
-     */
-    override fun setValue(value: T) {
-        throw RuntimeException("Please call setValueAndSuccess.")
-    }
-
 }
