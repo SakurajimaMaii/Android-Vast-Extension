@@ -27,8 +27,6 @@ class SampleVbVmFragment : VastVbVmFragment<FragmentSampleVbVmBinding, SampleSha
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getBinding().tv.text = "Hello"
-
         getBinding().addOne.setOnClickListener {
             getViewModel().addOne()
         }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2022 VastGui guihy2019@gmail.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.view.HorizontalProgressViewActivity">
+
+    <com.ave.vastgui.tools.view.progress.ArcProgressView
+        android:id="@+id/arcProgressView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        app:arc_progress_background_width="20dp"
+        app:progress_text_size="12sp" />
+
+    <com.ave.vastgui.tools.view.progress.WaveProgressView
+        android:id="@+id/waveProgressView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:background="@drawable/github"
+        app:progress_current_value="0" />
+
+    <com.ave.vastgui.tools.view.progress.HorizontalProgressView
+        android:id="@+id/horizontalProgressView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp" />
+
+    <com.ave.vastgui.tools.view.progress.HorizontalTextProgressView
+        android:id="@+id/horizontalTextProgressView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp" />
+
+    <com.ave.vastgui.tools.view.progress.LineTextProgressView
+        android:id="@+id/lineTextProgressView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp" />
+
+    <androidx.appcompat.widget.AppCompatSeekBar
+        android:id="@+id/bottom_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp" />
+
+</LinearLayout>

@@ -35,4 +35,6 @@ class EncryptedSp(name: String) {
     // declare variables
     var count by sp.float()
 
+    var name by sp.string("Hello")
+
 }

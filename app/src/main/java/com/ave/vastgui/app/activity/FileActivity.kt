@@ -19,13 +19,11 @@ package com.ave.vastgui.app.activity
 import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityFileBinding
 import com.ave.vastgui.tools.activity.VastVbActivity
-import com.ave.vastgui.tools.activity.result.contract.GetMediaFileContract
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.manager.filemgr.FileMgr.appExternalCacheDir
 import com.ave.vastgui.tools.manager.filemgr.FileMgr.appExternalFilesDir
 import com.ave.vastgui.tools.manager.filemgr.FileMgr.appInternalCacheDir
 import com.ave.vastgui.tools.manager.filemgr.FileMgr.appInternalFilesDir
-import com.ave.vastgui.tools.manager.filemgr.FileMgr.saveFile
+import com.ave.vastgui.tools.manager.filemgr.FileMgr.moveFile
 import com.ave.vastgui.tools.utils.LogUtils
 import java.io.File
 
@@ -38,14 +36,6 @@ import java.io.File
 
 class FileActivity : VastVbActivity<ActivityFileBinding>() {
 
-    private val openGalleryLauncher =
-        registerForActivityResult(GetMediaFileContract()) {
-            getBinding().video.apply {
-                setVideoURI(it)
-                start()
-            }
-        }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LogUtils.i(getDefaultTag(), appInternalFilesDir().path)
@@ -53,34 +43,51 @@ class FileActivity : VastVbActivity<ActivityFileBinding>() {
         LogUtils.i(getDefaultTag(), appExternalFilesDir(null)?.path)
         LogUtils.i(getDefaultTag(), appExternalCacheDir()?.path)
 
-        getBinding().openGallery.setOnClickListener {
-            openGalleryLauncher.launch("image/*")
-        }
+        // 删除文件
+        // val delete = deleteFile(File(appInternalFilesDir().path, "save.txt"))
+        // LogUtils.i(getDefaultTag(), "文件删除结果${delete.successOrNull() ?: "失败"}")
 
-        val res = FileMgr.deleteDir(File(appExternalFilesDir(null)?.path, "save.txt"))
-        val res1 = saveFile(File(appExternalFilesDir(null)?.path,"save.txt"))
+        // 保存文件
+        // val save = saveFile(File(appInternalFilesDir().path, "save.txt"))
+        // LogUtils.i(getDefaultTag(), "文件保存结果${save.successOrNull() ?: "失败"}")
 
-//        makeDir(File(appInternalFilesDir().path,"makeDir"))
-//
-//        makeDir(File(appInternalFilesDir().path,"makeDir2"))
-//
-//
-//        val res1 = writeFile(File(appInternalFilesDir().path, "picture.jpg"),
-//            object : FileMgr.WriteEventListener {
-//                override fun writeEvent(fileWriter: FileWriter) {
-//                    fileWriter.write("Hello")
-//                }
-//            })
-//
-//        LogUtils.i(getDefaultTag(), res1.toString())
-//
-//        val res2 = writeFile(File(appInternalFilesDir().path, "save.txt"),
-//            object : FileMgr.WriteEventListener {
-//                override fun writeEvent(fileWriter: FileWriter) {
-//                    fileWriter.write("Hello")
-//                }
-//            })
+        // 重命名文件
+        // val rename = rename(File(appInternalFilesDir().path, "save.txt"),"newname.txt")
+        // LogUtils.i(getDefaultTag(), "文件重命名结果${rename.successOrNull() ?: "失败"}")
 
-//        LogUtils.i(getDefaultTag(), res2.toString())
+        // 创建文件夹
+        // val saveDir = makeDir(File(appInternalFilesDir().path + File.separator + "newDir"))
+        // LogUtils.i(getDefaultTag(), "文件夹创建结果${saveDir.successOrNull() ?: "失败"}")
+
+        // 删除文件夹
+        // val deleteDir = deleteDir(File(appInternalFilesDir().path + File.separator + "newDir"))
+        // LogUtils.i(getDefaultTag(), "文件夹创建结果${deleteDir.successOrNull() ?: "失败"}")
+
+        // 复制文件
+        // val copyFile = copyFile(
+        //     File(appInternalFilesDir().path, "newname.txt"),
+        //     File(appInternalFilesDir().path, "newname_copy.txt")
+        // )
+        // LogUtils.i(getDefaultTag(), "文件复制结果${copyFile.successOrNull() ?: "失败"}")
+
+        // 复制文件夹
+        // val copyDir = copyDir(
+        //     File(appInternalFilesDir().path),
+        //     File(appInternalFilesDir().path + File.separator + "newDir2")
+        // )
+        // LogUtils.i(getDefaultTag(), "文件夹复制结果${copyDir.successOrNull() ?: "失败"}")
+
+        // 移动文件夹
+        // val moveDir = moveDir(
+        //     File(appInternalFilesDir().path),
+        //     "${appInternalFilesDir().path}${File.separator}moveDir"
+        // )
+        // LogUtils.i(getDefaultTag(), "文件夹移动结果${moveDir.successOrNull() ?: "失败"}")
+
+        val moveFile = moveFile(
+            File("${appInternalFilesDir().path}${File.separator}moveDir${File.separator}1.txt"),
+            appInternalFilesDir().path
+        )
+        LogUtils.i(getDefaultTag(), "文件移动结果${moveFile.exceptionOrNull() ?: "成功"}")
     }
 }

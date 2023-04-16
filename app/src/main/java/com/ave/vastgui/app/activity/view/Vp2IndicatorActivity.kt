@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity
+package com.ave.vastgui.app.activity.view
 
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -37,9 +37,9 @@ import com.ave.vastgui.tools.viewbinding.reflexViewBinding
 // Description:
 // Documentation:
 
-class FragmentsActivity : AppCompatActivity() {
+class Vp2IndicatorActivity : AppCompatActivity() {
 
-    private val mBinding by reflexViewBinding<ActivityFragmentsBinding>()
+    private val mBinding by reflexViewBinding(ActivityFragmentsBinding::inflate)
 
     private val mViewModel by viewModels<SampleSharedVM>()
 
@@ -47,15 +47,16 @@ class FragmentsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        screenConfig(false,true)
+        screenConfig(mEnableActionBar = false, mEnableFullScreen = true)
         mBinding.vp2.apply {
-            adapter = VastFragmentAdapter(this@FragmentsActivity,ArrayList<Fragment>().apply {
+            adapter = VastFragmentAdapter(this@Vp2IndicatorActivity, ArrayList<Fragment>().apply {
                 add(SampleVbVmFragment())
                 add(SampleVmFragment())
                 add(SampleVbFragment())
                 add(SampleFragment())
             })
         }
+        mBinding.vp2indicator.attachToViewPager2(mBinding.vp2)
     }
 
 }

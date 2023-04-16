@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <style name="VastTheme" parent="Theme.Material3.DayNight">
+    <style name="AppTheme" parent="VastTheme">
         <item name="colorPrimary">#0060A9</item>
         <item name="colorOnPrimary">#ffffff</item>
         <item name="colorPrimaryContainer">#D3E4FF</item>

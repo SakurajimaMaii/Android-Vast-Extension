@@ -31,6 +31,9 @@ import com.ave.vastgui.app.BR
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.activity.adpexample.AdapterActivity
 import com.ave.vastgui.app.activity.adpexample.BindAdapterActivity
+import com.ave.vastgui.app.activity.view.ArcProgressViewActivity
+import com.ave.vastgui.app.activity.view.RatingActivity
+import com.ave.vastgui.app.activity.view.Vp2IndicatorActivity
 import com.ave.vastgui.app.databinding.ActivityMainBinding
 import com.ave.vastgui.app.model.IntentSelect
 import com.ave.vastgui.app.model.IntentSelectWrapper
@@ -57,7 +60,6 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         mSplashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-        enableFullScreen(true)
         initData()
         getBinding().rv.apply {
             adapter = Adapter(data, context)
@@ -149,7 +151,7 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                         getContext().startActivity(
                             Intent(
                                 getContext(),
-                                FragmentsActivity::class.java
+                                Vp2IndicatorActivity::class.java
                             )
                         )
                     }
@@ -179,7 +181,7 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                         getContext().startActivity(
                             Intent(
                                 getContext(),
-                                DownloadActivity::class.java
+                                ArcProgressViewActivity::class.java
                             )
                         )
                     }
@@ -206,6 +208,19 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                             Intent(
                                 getContext(),
                                 DateActivity::class.java
+                            )
+                        )
+                    }
+                }
+            ))
+
+            add(IntentSelectWrapper(IntentSelect(ResUtils.getString(R.string.ratingView)),
+                object : AdapterClickListener {
+                    override fun onItemClick(view: View, pos: Int) {
+                        getContext().startActivity(
+                            Intent(
+                                getContext(),
+                                RatingActivity::class.java
                             )
                         )
                     }

@@ -48,6 +48,7 @@ android {
         }
     }
 
+    compileSdkPreview = "UpsideDownCake"
     compileSdk = Version.compile_sdk_version
 
     defaultConfig {
@@ -123,7 +124,7 @@ dependencies {
     implementation(Squareup.retrofit2_adapter_rxjava3)
     implementation(Squareup.retrofit2_converter_gson)
     implementation(project(":libraries:VastAdapter"))
-    implementation(AVE.netStateLayout)
+    implementation(AVE.netstatelayout)
     implementation(project(":libraries:VastTools"))
     implementation(AVE.core)
 }

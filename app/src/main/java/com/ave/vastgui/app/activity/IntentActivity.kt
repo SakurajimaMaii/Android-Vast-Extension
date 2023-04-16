@@ -50,8 +50,9 @@ class IntentActivity : BaseActivity<ActivityIntentBinding, NetVM>() {
         return NetVM()
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission", "UnspecifiedRegisterReceiverFlag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

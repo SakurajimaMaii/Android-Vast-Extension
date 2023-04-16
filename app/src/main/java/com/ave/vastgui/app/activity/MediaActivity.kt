@@ -32,7 +32,7 @@ import java.io.File
 
 class MediaActivity : AppCompatActivity() {
 
-    private val mBindings: ActivityMediaBinding by reflexViewBinding()
+    private val mBindings by reflexViewBinding(ActivityMediaBinding::bind)
 
     private val mSp by lazy { EncryptedSp(defaultLogTag()) }
 

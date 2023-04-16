@@ -55,8 +55,4 @@ skin/darkskin/build
 #VastUtils
 libraries/VastUtils
 
-## Constant
-app/src/main/kotlin/cn/govast/vastutils/Constant.kt
-appjava/src/main/java/cn/govast/vastutilsjava/Constant.java
-
 *.jar

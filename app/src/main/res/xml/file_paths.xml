@@ -16,7 +16,5 @@
   -->
 
 <resources>
-    <files-path path="/download/" name="download"/>
-    <files-path path="path" name="name" />
-    <external-cache-path name="my_images" path="/" />
+    <external-path name="my_images" path="Pictures" />
 </resources>

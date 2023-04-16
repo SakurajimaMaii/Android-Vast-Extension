@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.fragment
+package com.ave.vastgui.app.activity.view
 
 import android.os.Bundle
-import android.view.View
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import com.ave.vastgui.app.databinding.FragmentSampleBinding
-import com.ave.vastgui.app.viewmodel.SampleSharedVM
-import com.ave.vastgui.core.extension.defaultLogTag
+import androidx.appcompat.app.AppCompatActivity
+import com.ave.vastgui.app.databinding.ActivityRatingBinding
+import com.ave.vastgui.tools.view.ratingview.RatingView
 import com.ave.vastgui.tools.viewbinding.reflexViewBinding
 
-class SampleFragment : Fragment() {
+class RatingActivity : AppCompatActivity() {
 
-    private val mBinding by reflexViewBinding(FragmentSampleBinding::bind)
+    private val mBinding by reflexViewBinding(ActivityRatingBinding::inflate)
 
-    private val mViewModel by viewModels<SampleSharedVM>()
-
-    private val mLogTag = defaultLogTag()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mBinding.ratingView
+            .setStarCountNumber(5)
+            .setStarBitMapSize(40,40)
+            .setStarIntervalWidth(20)
+            .setStarSelectMethod(RatingView.SelectMethod.Sliding)
+            .setStarRating(3.6f)
     }
 
 }

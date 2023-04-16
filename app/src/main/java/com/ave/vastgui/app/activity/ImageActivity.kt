@@ -17,7 +17,6 @@
 package com.ave.vastgui.app.activity
 
 import android.database.Cursor
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -32,22 +31,18 @@ import com.ave.vastgui.tools.utils.cropimage.CropIntent
 class ImageActivity : VastVbActivity<ActivityImageBinding>() {
 
     private val getImage =
-        registerForActivityResult(PickPhotoContract()) { it ->
+        registerForActivityResult(PickPhotoContract()) {
             it?.apply { cropImage(this) }
         }
 
     private val cropPicture =
         registerForActivityResult(CropPhotoContract()) {
-            val bitmap: Uri = it
-                ?: throw RuntimeException("bitmap is null")
-            getBinding().image.setImageURI(bitmap)
+            getBinding().image.setImageURI(it)
         }
 
     private val takePhoto =
         registerForActivityResult(TakePhotoContract()) {
-            val bitmap: Uri = it
-                ?: throw RuntimeException("bitmap is null")
-            getBinding().image.setImageURI(bitmap)
+            getBinding().image.setImageURI(it)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +63,6 @@ class ImageActivity : VastVbActivity<ActivityImageBinding>() {
             .setAspect(1, 1)
             .setOutput(200, 200)
             .setReturnData(false)
-            .setOutputFormat(Bitmap.CompressFormat.JPEG.toString())
             .setNoFaceDetection(true)
         cropPicture.launch(cropIntent)
     }
