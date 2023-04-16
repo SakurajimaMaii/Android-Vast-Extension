@@ -22,6 +22,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.annotation.IntRange
 import com.ave.vastgui.tools.activity.result.contract.CropPhotoContract
+import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -72,6 +73,18 @@ abstract class CropProperty {
      * @see CropPhotoContract
      */
     abstract fun setOutputUri(uri: Uri?): CropProperty
+
+    /**
+     * Set the [name] for the output image.
+     *
+     * @param name Output image name. If null, the
+     *     ImageMgr.getDefaultFileName(".jpg") will be set as the default
+     *     value.
+     * @throws RuntimeException
+     * @see ImageMgr
+     * @since 0.4.0
+     */
+    abstract fun setOutputName(name: String?): CropProperty
 
     /**
      * Set the output image format.

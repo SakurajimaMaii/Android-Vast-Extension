@@ -33,6 +33,10 @@ import com.ave.vastgui.tools.helper.ContextHelper
 
 class CropIntent : CropProperty() {
 
+    /** @since 0.4.0 */
+    var mOutputName: String? = null
+        private set
+
     private val intent = Intent("com.android.camera.action.CROP").apply {
         addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
@@ -59,13 +63,10 @@ class CropIntent : CropProperty() {
     override fun setOutputUri(uri: Uri?) = apply {
         // In order to solve the problem of file file saving failure.
         // https://stackoverflow.com/questions/18249007/how-to-use-support-fileprovider-for-sharing-content-to-other-apps
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R &&
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-        ) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val resInfoList: List<ResolveInfo> =
                 ContextHelper.getApp().packageManager.queryIntentActivities(
-                    intent,
-                    PackageManager.MATCH_DEFAULT_ONLY
+                    intent, PackageManager.MATCH_DEFAULT_ONLY
                 )
             for (resolveInfo in resInfoList) {
                 val packageName = resolveInfo.activityInfo.packageName
@@ -77,6 +78,10 @@ class CropIntent : CropProperty() {
             }
         }
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+    }
+
+    override fun setOutputName(name: String?) = apply {
+        mOutputName = name
     }
 
     override fun setOutputFormat(format: String) = apply {

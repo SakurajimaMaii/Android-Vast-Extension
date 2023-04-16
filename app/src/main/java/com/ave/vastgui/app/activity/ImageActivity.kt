@@ -17,7 +17,6 @@
 package com.ave.vastgui.app.activity
 
 import android.database.Cursor
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -68,7 +67,7 @@ class ImageActivity : VastVbActivity<ActivityImageBinding>() {
             .setAspect(1, 1)
             .setOutput(200, 200)
             .setReturnData(false)
-            .setOutputFormat(Bitmap.CompressFormat.JPEG.toString())
+            .setOutputName(null)
             .setNoFaceDetection(true)
         cropPicture.launch(cropIntent)
     }

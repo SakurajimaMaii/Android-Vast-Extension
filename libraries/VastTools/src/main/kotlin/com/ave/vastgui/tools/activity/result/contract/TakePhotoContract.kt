@@ -33,14 +33,18 @@ import java.io.File
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/ActivityResult/
 
 /**
- * Taking photos from system camera. The file path get from
- * [Environment.getExternalStoragePublicDirectory].
+ * Taking photos from system camera.
  *
- * When [Build.VERSION.SDK_INT] is smaller than [Build.VERSION_CODES.R],
- * you should add following content for [FileProvider].
+ * When [Build.VERSION.SDK_INT] is between [Build.VERSION_CODES.R] and
+ * [Build.VERSION_CODES.N], You need to refer to the following example
+ * configuration path for [FileProvider].
  *
+ * ```kotlin
+ * // The output image path.
+ * val path = Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES).path
+ * ```
  * ```xml
- * // File named file_paths.xml in xml folder.
+ * <!-- File named file_paths.xml in xml folder. -->
  * <resources>
  *      <!-- add this line -->
  *      <external-path name="name_you_define" path="Pictures" />

@@ -35,14 +35,18 @@ import java.io.File
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/ActivityResult/
 
 /**
- * Cropping photo.The file path get from
- * [Environment.getExternalStoragePublicDirectory].
+ * Cropping photo.
  *
- * When [Build.VERSION.SDK_INT] is smaller than [Build.VERSION_CODES.R],
- * you should add following content for [FileProvider].
+ * When [Build.VERSION.SDK_INT] is between [Build.VERSION_CODES.R] and
+ * [Build.VERSION_CODES.N], You need to refer to the following example
+ * configuration path for [FileProvider].
  *
+ * ```kotlin
+ * // The output image path.
+ * val path = Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES).path
+ * ```
  * ```xml
- * // File named file_paths.xml in xml folder.
+ * <!-- File named file_paths.xml in xml folder. -->
  * <resources>
  *      <!-- add this line -->
  *      <external-path name="name_you_define" path="Pictures" />
@@ -60,7 +64,8 @@ class CropPhotoContract @JvmOverloads constructor(private val authority: String?
 
     override fun createIntent(context: Context, input: CropIntent): Intent {
         val path = Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES).path
-        val uri = File(path, ImageMgr.getDefaultFileName(".jpg")).let {
+        val name = input.mOutputName ?: ImageMgr.getDefaultFileName(".jpg")
+        val uri = File(path, name).let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 ImageMgr.getFileUriAboveApi30(it)
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
