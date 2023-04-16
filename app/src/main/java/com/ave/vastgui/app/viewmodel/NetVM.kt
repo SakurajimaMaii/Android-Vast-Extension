@@ -19,8 +19,10 @@ package com.ave.vastgui.app.viewmodel
 import com.ave.vastgui.app.network.NetworkRetrofitBuilder
 import com.ave.vastgui.app.network.service.QRCodeKey
 import com.ave.vastgui.app.network.service.QRService
-import com.ave.vastgui.tools.network.response.ResponseLiveData
+import com.ave.vastgui.app.network.service.UserService
 import com.ave.vastgui.tools.lifecycle.viewModel.VastViewModel
+import com.ave.vastgui.tools.network.response.ResponseLiveData
+import com.ave.vastgui.tools.network.response.ResponseMutableLiveData
 
 
 // Author: Vast Gui
@@ -30,18 +32,20 @@ import com.ave.vastgui.tools.lifecycle.viewModel.VastViewModel
 // Documentation:
 // Reference:
 
-class NetVM: VastViewModel() {
+class NetVM : VastViewModel() {
 
-    val qRCodeKey = ResponseLiveData<QRCodeKey>()
+    private val _qRCodeKey = ResponseMutableLiveData<QRCodeKey>()
+    val qRCodeKey: ResponseLiveData<QRCodeKey>
+        get() = _qRCodeKey
 
     /**
-     * 自动检测数据请求的状态
-     * 目前支持 Error Failed Successful Empty 四种状态
+     * 自动检测数据请求的状态 目前支持 Error Failed Successful Empty 四种状态
      *
      * @param timestamp 时间戳
      */
-    fun getQRCode_1(timestamp:String){
-        NetworkRetrofitBuilder().create(QRService::class.java).generateQRCode(timestamp).request(qRCodeKey)
+    fun getQRCode_1(timestamp: String) {
+        NetworkRetrofitBuilder().create(QRService::class.java).generateQRCode(timestamp)
+            .request(_qRCodeKey)
     }
 
     /**
@@ -49,19 +53,31 @@ class NetVM: VastViewModel() {
      *
      * @param timestamp 时间戳
      */
-    fun getQRCode_2(timestamp:String){
+    fun getQRCode_2(timestamp: String) {
         NetworkRetrofitBuilder().create(QRService::class.java).generateQRCode(timestamp)
-            .request{
+            .request {
                 onSuccess = {
-                    qRCodeKey.postValueAndSuccess(it)
+                    _qRCodeKey.postValueAndSuccess(it)
                 }
                 onFailed = { errorCode, errorMsg ->
-                    qRCodeKey.postFailed(errorCode, errorMsg)
+                    _qRCodeKey.postFailed(errorCode, errorMsg)
                 }
                 onError = {
-                    qRCodeKey.postError(it)
+                    _qRCodeKey.postError(it)
                 }
             }
+    }
+
+    /**
+     * 自动检测数据请求的状态 目前支持 Error Failed Successful Empty 四种状态
+     *
+     * @param timestamp 时间戳
+     */
+    fun getQRCode_3(timestamp: String) {
+        getRequestBuilder()
+            .suspendWithListener({
+                NetworkRetrofitBuilder().create(UserService::class.java).generateQRCode(timestamp)
+            }, _qRCodeKey)
     }
 
 }

@@ -16,7 +16,9 @@
 
 package com.ave.vastgui.app.activity
 
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import com.ave.vastgui.app.databinding.ActivityDensityBinding
+import com.ave.vastgui.tools.activity.VastVbActivity
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -25,6 +27,10 @@ import androidx.appcompat.app.AppCompatActivity
 // Documentation:
 // Reference:
 
-class ReflexActivity:AppCompatActivity() {
+class DensityActivity: VastVbActivity<ActivityDensityBinding>() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
 }

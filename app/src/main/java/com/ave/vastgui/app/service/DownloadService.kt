@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.network.service
+package com.ave.vastgui.app.service
 
-import retrofit2.http.POST
-import retrofit2.http.Query
+import android.content.Intent
+import android.os.IBinder
+import com.ave.vastgui.tools.service.VastService
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/24
+// Date: 2023/4/8
 // Description: 
 // Documentation:
+// Reference:
 
-interface UserService {
+class DownloadService : VastService() {
 
-    @POST("/login/qr/key")
-    suspend fun generateQRCode(@Query("timestamp") timestamp: String): QRCodeKey
+    override fun onBind(intent: Intent): IBinder? {
+        return super.onBind(intent)
+    }
 
 }

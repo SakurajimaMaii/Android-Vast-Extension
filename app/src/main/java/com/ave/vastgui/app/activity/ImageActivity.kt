@@ -31,22 +31,18 @@ import com.ave.vastgui.tools.utils.cropimage.CropIntent
 class ImageActivity : VastVbActivity<ActivityImageBinding>() {
 
     private val getImage =
-        registerForActivityResult(PickPhotoContract()) { it ->
+        registerForActivityResult(PickPhotoContract()) {
             it?.apply { cropImage(this) }
         }
 
     private val cropPicture =
         registerForActivityResult(CropPhotoContract()) {
-            val bitmap: Uri = it
-                ?: throw RuntimeException("bitmap is null")
-            getBinding().image.setImageURI(bitmap)
+            getBinding().image.setImageURI(it)
         }
 
     private val takePhoto =
         registerForActivityResult(TakePhotoContract()) {
-            val bitmap: Uri = it
-                ?: throw RuntimeException("bitmap is null")
-            getBinding().image.setImageURI(bitmap)
+            getBinding().image.setImageURI(it)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {

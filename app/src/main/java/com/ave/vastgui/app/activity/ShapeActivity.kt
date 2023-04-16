@@ -21,9 +21,7 @@ import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityShapeBinding
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.utils.ColorUtils
-import com.ave.vastgui.tools.utils.DensityUtils.SP
 import com.ave.vastgui.tools.utils.drawable.ShapeAndStateDrawable
-import com.ave.vastgui.tools.utils.spannablestring.ScriptMode
 import com.ave.vastgui.tools.utils.spannablestring.SpanMode
 import com.ave.vastgui.tools.utils.spannablestring.SpanStrUtils
 
@@ -53,20 +51,15 @@ class ShapeActivity : VastVbActivity<ActivityShapeBinding>() {
         val btnBK = ShapeAndStateDrawable.create()
             .setShape(RECTANGLE)
             .setRadius(50f)
-            .setGradient(45, ColorUtils.colorHex2Int("#0F2027"),ColorUtils.colorHex2Int("#78ffd6"))
-            .setBgColorStateList(states,colorList)
+            .setGradient(45, ColorUtils.colorHex2Int("#0F2027"), ColorUtils.colorHex2Int("#78ffd6"))
+            .setBgColorStateList(states, colorList)
             .build()
 
-        getBinding().btn1.background = btnBK
-
-        getBinding().tv1.text = SpanStrUtils
-            .getBuilder("Hello")
+        SpanStrUtils
+            .getBuilder(getBinding().tv1, "链接")
             .setFlag(SpanMode.SEE)
-            .setTextSize(15F.SP.toInt())
-            .append("你好")
-            .setFlag(SpanMode.SEE)
-            .setScriptMode(ScriptMode.Superscript)
-            .build()
+            .setUrl("https://www.developer.android.com")
+            .attachToTextView()
     }
 
 }

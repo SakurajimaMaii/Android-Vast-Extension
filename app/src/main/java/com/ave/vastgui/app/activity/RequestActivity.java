@@ -16,7 +16,6 @@
 
 package com.ave.vastgui.app.activity;
 
-
 import android.os.Bundle;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,6 +35,7 @@ import com.ave.vastgui.app.activity.adpexample.model.PictureWrapper;
 import com.ave.vastgui.app.databinding.ActivityRequestBinding;
 import com.ave.vastgui.app.network.NetworkRetrofitBuilder;
 import com.ave.vastgui.app.network.service.QRService;
+import com.ave.vastgui.core.extension.Clazz;
 import com.ave.vastgui.tools.activity.VastVbActivity;
 import com.ave.vastgui.tools.utils.DateUtils;
 import com.ave.vastgui.tools.utils.LogUtils;
@@ -53,6 +53,8 @@ public class RequestActivity extends VastVbActivity<ActivityRequestBinding> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
+
+        Clazz.defaultLogTag(this);
         new NetworkRetrofitBuilder().create(QRService.class).generateQRCode(DateUtils.getCurrentTime()).request(listener -> {
             listener.setOnSuccess(qrCodeKey -> {
                 LogUtils.i(getDefaultTag(), Objects.requireNonNull(qrCodeKey.getData()).getUnikey());
@@ -61,9 +63,7 @@ public class RequestActivity extends VastVbActivity<ActivityRequestBinding> {
             return null;
         });
 
-        AdapterClickListener click = (view, pos) -> {
-            ToastUtils.showShortMsg("Click event and pos is " + pos);
-        };
+        AdapterClickListener click = (view, pos) -> ToastUtils.showShortMsg("Click event and pos is " + pos);
 
         AdapterLongClickListener longClick = (view, pos) -> {
             ToastUtils.showShortMsg("Long click event and pos is " + pos);
@@ -72,24 +72,21 @@ public class RequestActivity extends VastVbActivity<ActivityRequestBinding> {
 
         for (int i = 0; i < 10; i++) {
             Picture picture = new Picture(R.drawable.ic_knots);
-            PictureWrapper pictureWrapper = new PictureWrapper(picture,click,longClick);
+            PictureWrapper pictureWrapper = new PictureWrapper(picture, click, longClick);
             datas.add(pictureWrapper);
-            Person person = new Person(String.valueOf(i),String.valueOf(i));
+            Person person = new Person(String.valueOf(i), String.valueOf(i));
             PersonWrapper personWrapper = new PersonWrapper(person);
             datas.add(personWrapper);
         }
 
         // 设置给RecyclerView
-        Adapter1 adapter1 = new Adapter1(datas, Arrays.asList(new PersonHolder.Factory(),new PictureHolder.Factory()));
+        Adapter1 adapter1 = new Adapter1(datas, Arrays.asList(new PersonHolder.Factory(), new PictureHolder.Factory()));
         BindAdapter1 adapter = new BindAdapter1(datas, this);
 
         adapter.registerClickEvent((view, pos) -> {
 
         });
-        adapter.registerLongClickEvent((view, pos) -> {
-
-            return true;
-        });
+        adapter.registerLongClickEvent((view, pos) -> true);
 
         getBinding().dataRv.setAdapter(adapter);
         getBinding().dataRv.setLayoutManager(new LinearLayoutManager(this));
