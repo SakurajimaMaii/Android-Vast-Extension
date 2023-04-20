@@ -52,11 +52,10 @@ import java.io.File
  * ```
  *
  * @param authority The authority of a [FileProvider] defined in a
- *     <provider> element in your app's manifest.If the value the
- *     [authority] is null, the package name will be used as the default
- *     authority for the [FileProvider] that is defined app's manifest.
+ *     <provider> element in your app's manifest. If your minimum SDK is
+ *     greater than 30, no setting is required.
  */
-class TakePhotoContract @JvmOverloads constructor(private val authority: String? = null) :
+class TakePhotoContract constructor(private val authority: String? = null) :
     ActivityResultContract<Any?, Uri?>() {
 
     private var uri: Uri? = null
@@ -68,7 +67,7 @@ class TakePhotoContract @JvmOverloads constructor(private val authority: String?
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 ImageMgr.getFileUriAboveApi30(it)
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                ImageMgr.getFileUriAboveApi24(it, authority)
+                ImageMgr.getFileUriAboveApi24(it, authority ?: "")
             } else {
                 ImageMgr.getFileUriOnApi23(it)
             }

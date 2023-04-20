@@ -54,22 +54,22 @@ import java.io.File
  * ```
  *
  * @param authority The authority of a [FileProvider] defined in a
- *     <provider> element in your app's manifest. If the value the
- *     [authority] is null, the app package name will be used as the
- *     default authority for the [FileProvider] that is defined app's
- *     manifest.
+ *     <provider> element in your app's manifest. If your minimum SDK is
+ *     greater than 30, no setting is required.
  */
 class CropPhotoContract @JvmOverloads constructor(private val authority: String? = null) :
     ActivityResultContract<CropIntent, Uri?>() {
 
+    private var uri: Uri? = null
+
     override fun createIntent(context: Context, input: CropIntent): Intent {
         val path = Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES).path
         val name = input.mOutputName ?: ImageMgr.getDefaultFileName(".jpg")
-        val uri = File(path, name).let {
+        uri = File(path, name).let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 ImageMgr.getFileUriAboveApi30(it)
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                ImageMgr.getFileUriAboveApi24(it, authority)
+                ImageMgr.getFileUriAboveApi24(it, authority ?: "")
             } else {
                 ImageMgr.getFileUriOnApi23(it)
             }
@@ -80,14 +80,14 @@ class CropPhotoContract @JvmOverloads constructor(private val authority: String?
     override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
         /** Revoke uri permission that is granted in [CropIntent.setOutputUri] */
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent?.data?.let {
+            uri?.let {
                 ContextHelper.getAppContext().revokeUriPermission(
                     it,
                     Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION
                 )
             }
         }
-        return intent?.data
+        return uri
     }
 
 }
