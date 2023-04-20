@@ -380,8 +380,8 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      *
      * @since 0.2.0
      */
-    fun getAssetsCacheFile(fileName: String): String {
-        val cacheFile = File(FileMgr.appExternalCacheDir(), fileName)
+    fun getAssetsCacheFile(fileName: String): File {
+        val cacheFile = File(appInternalCacheDir(), fileName)
         try {
             ContextHelper.getAppContext().assets.open(fileName).use { inputStream ->
                 FileOutputStream(cacheFile).use { outputStream ->
@@ -395,7 +395,7 @@ object FileMgr : FileProperty by FilePropertyMgr() {
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        return cacheFile.absolutePath
+        return cacheFile
     }
 
 }

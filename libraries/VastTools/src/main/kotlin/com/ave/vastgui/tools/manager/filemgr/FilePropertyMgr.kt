@@ -16,7 +16,10 @@
 
 package com.ave.vastgui.tools.manager.filemgr
 
+import android.net.Uri
 import android.webkit.MimeTypeMap
+import androidx.core.content.FileProvider
+import com.ave.vastgui.tools.helper.ContextHelper
 import java.io.File
 import java.util.Locale
 
@@ -37,6 +40,14 @@ internal class FilePropertyMgr : FileProperty {
         return MimeTypeMap.getFileExtensionFromUrl(file.toString())
             ?.run { mimeTypeMap.getMimeTypeFromExtension(lowercase(Locale.ROOT)) }
             ?: fallback
+    }
+
+    override fun getFileUriAboveApi24(file: File, authority: String): Uri {
+        return FileProvider.getUriForFile(ContextHelper.getAppContext(), authority, file)
+    }
+
+    override fun getFileUriOnApi23(file: File): Uri {
+        return Uri.fromFile(file)
     }
 
 }

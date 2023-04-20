@@ -16,6 +16,10 @@
 
 package com.ave.vastgui.tools.manager.filemgr
 
+import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.core.content.FileProvider
 import java.io.File
 
 // Author: Vast Gui
@@ -33,5 +37,35 @@ sealed interface FileProperty {
      * [How to determine MIME type of file in android?](https://stackoverflow.com/questions/8589645/how-to-determine-mime-type-of-file-in-android)
      */
     fun getMimeType(file: File, fallback: String = "image/*"): String
+
+    /**
+     * Get the uri by [file].
+     *
+     * Please register a provider in AndroidManifest.xml. For example:
+     * ```xml
+     * <provider
+     *      android:name="androidx.core.content.FileProvider"
+     *      android:authorities="${applicationId}"
+     *      android:exported="false"
+     *      android:grantUriPermissions="true">
+     *      <meta-data
+     *          android:name="android.support.FILE_PROVIDER_PATHS"
+     *          android:resource="@xml/file_paths" />
+     * </provider>
+     * ```
+     *
+     * @param authority The authority of a [FileProvider] defined in a
+     *     <provider> element in your app's manifest.
+     * @since 0.5.0
+     */
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun getFileUriAboveApi24(file: File, authority: String): Uri
+
+    /**
+     * Get the uri by [file].
+     *
+     * @since 0.5.0
+     */
+    fun getFileUriOnApi23(file: File): Uri
 
 }

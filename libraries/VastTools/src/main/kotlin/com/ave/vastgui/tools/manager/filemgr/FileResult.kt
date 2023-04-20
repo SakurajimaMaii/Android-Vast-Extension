@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:Suppress("INVISIBLE_REFERENCE", "INVISIBLE_MEMBER")
-
 package com.ave.vastgui.tools.manager.filemgr
 
 // Author: Vast Gui
@@ -28,36 +26,77 @@ package com.ave.vastgui.tools.manager.filemgr
 /**
  * File result
  *
+ * @property isSuccess True if the operation was successful, otherwise
+ *     false.
+ * @property isFailure True if the operation was failed, otherwise false.
  * @since 0.4.0
  */
 class FileResult private constructor(val value: Any) {
 
+    /**
+     * Is success.
+     *
+     * @since 0.4.0
+     */
     val isSuccess: Boolean get() = value !is Failure
 
+    /**
+     * Is failure.
+     *
+     * @since 0.4.0
+     */
     val isFailure: Boolean get() = value is Failure
 
+    /**
+     * @return Information about the success of the operation, otherwise it is
+     *     empty.
+     * @since 0.4.0
+     */
     fun successOrNull(): String? =
         when (value) {
             is Success -> value.message
             else -> null
         }
 
-    fun exceptionOrNull(): Throwable? =
+    /**
+     * @return Exception about the fail of the operation, otherwise it is
+     *     empty.
+     * @since 0.4.0
+     */
+    fun exceptionOrNull(): Exception? =
         when (value) {
             is Failure -> value.exception
             else -> null
         }
 
     companion object {
+        /**
+         * @since 0.4.0
+         */
         @JvmName("success")
         fun success(message: String?): FileResult = FileResult(Success(message))
 
+        /**
+         * @since 0.4.0
+         */
         @JvmName("failure")
         fun failure(exception: Exception): FileResult = FileResult(Failure(exception))
     }
 
+    /**
+     * Success
+     *
+     * @property message Information about the success of the operation.
+     * @since 0.4.0
+     */
     data class Success(val message: String?)
 
+    /**
+     * Failure
+     *
+     * @property exception Exception about the fail of the operation.
+     * @since 0.4.0
+     */
     data class Failure(val exception: Exception)
 
 }
