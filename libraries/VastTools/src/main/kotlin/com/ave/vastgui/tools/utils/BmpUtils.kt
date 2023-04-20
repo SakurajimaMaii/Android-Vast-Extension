@@ -20,6 +20,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Matrix
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -34,6 +35,7 @@ import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import kotlin.math.roundToInt
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -170,7 +172,7 @@ object BmpUtils {
      * Store the Bitmap object under the local cache folder.
      *
      * @param bitmap The bitmap need to store.
-     * @param filePath The path to store the bitmap.
+     * @param file The file to store the bitmap.
      * @param format The format of the compressed image.
      * @param quality Hint to the compressor, 0-100. The value is interpreted
      *     differently depending on the [Bitmap.CompressFormat].
@@ -180,19 +182,19 @@ object BmpUtils {
     @JvmOverloads
     fun saveBitmapAsFile(
         bitmap: Bitmap,
-        filePath: String,
+        file: File,
         format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
         @IntRange(from = 0, to = 100) quality: Int = 100
-    ): String? {
-        val file = File(filePath).also {
-            FileMgr.saveFile(it)
+    ): File? {
+        FileMgr.saveFile(file).let { result ->
+            if(result.isFailure) return null
         }
         var fos: FileOutputStream? = null
         try {
             fos = FileOutputStream(file)
             bitmap.compress(format, quality, fos)
             fos.flush()
-            return file.path
+            return file
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
@@ -213,11 +215,28 @@ object BmpUtils {
     }
 
     /**
+     * Scale bitmap
+     *
+     * @since 0.5.0
+     */
+    @JvmStatic
+    fun scaleBitmap(bitmap: Bitmap, reqWidth: Int, reqHeight: Int): Bitmap? {
+        val width = bitmap.width
+        val height = bitmap.height
+        val matrix = Matrix()
+        val scaleWidth = reqWidth.toFloat() / width
+        val scaleHeight = reqHeight.toFloat() / height
+        matrix.postScale(scaleWidth, scaleHeight)
+        return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false)
+    }
+
+    /**
      * Convert drawable to bitmap.
      *
      * @since 0.2.0
      */
     @JvmOverloads
+    @JvmStatic
     fun getBitmapFromDrawable(
         @DrawableRes id: Int,
         context: Context = ContextHelper.getAppContext()
@@ -245,9 +264,76 @@ object BmpUtils {
             }
 
             else -> {
-                throw IllegalArgumentException("unsupported drawable type");
+                throw IllegalArgumentException("unsupported drawable type")
             }
         }
+    }
+
+    /**
+     * Get bitmap width and height.
+     *
+     * @param path complete path name for the file to be decoded.
+     * @since 0.5.0
+     */
+    @JvmStatic
+    fun getBitmapWidthHeight(path: String): IntArray {
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeFile(path, options)
+        return intArrayOf(options.outWidth, options.outHeight)
+    }
+
+    /**
+     * Get bitmap with require size.
+     *
+     * @since 0.5.0
+     */
+    @JvmStatic
+    internal fun getBitmapWithRequireSize(path: String, reqWidth: Int, reqHeight: Int): Bitmap? {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        options.inPreferredConfig = Bitmap.Config.RGB_565
+        // bitmap is null
+        BitmapFactory.decodeFile(path, options)
+
+        // Calculate inSampleSize
+        val inSampleSize: Int = calculateRequireSize(options, reqWidth, reqHeight)
+        options.inSampleSize = inSampleSize
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false
+        return BitmapFactory.decodeFile(path, options)
+    }
+
+    /**
+     * Calculate require size
+     *
+     * @since 0.5.0
+     */
+    private fun calculateRequireSize(
+        options: BitmapFactory.Options,
+        reqWidth: Int, reqHeight: Int
+    ): Int {
+        // Raw height and width of image
+        val height = options.outHeight
+        val width = options.outWidth
+        var inSampleSize = 1
+        if (height > reqHeight || width > reqWidth) {
+
+            // Calculate ratios of height and width to requested height and
+            // width
+            val heightRatio = (height.toFloat() / reqHeight.toFloat()).roundToInt()
+            val widthRatio = (width.toFloat() / reqWidth.toFloat()).roundToInt()
+
+            // Choose the smallest ratio as inSampleSize value, this will
+            // guarantee
+            // a final image with both dimensions larger than or equal to the
+            // requested height and width.
+            val ratio = if (heightRatio < widthRatio) heightRatio else widthRatio
+            inSampleSize =
+                if (ratio < 3) ratio else if (ratio < 6.5) 4 else if (ratio < 8) 8 else ratio
+        }
+        return inSampleSize
     }
 
 }
