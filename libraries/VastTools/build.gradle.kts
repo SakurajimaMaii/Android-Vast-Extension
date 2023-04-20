@@ -83,17 +83,17 @@ android {
     }
 }
 
-project(":libraries:VastTools"){
-    sonarqube {
-        properties {
-            property("sonar.sourceEncoding", "UTF-8")
-            property("sonar.projectKey", "VastTools")
-            property("sonar.projectName", "VastTools")
-            property("sonar.sources", "src")
-            property("sonar.projectVersion", project.version)
-        }
-    }
-}
+//project(":libraries:VastTools"){
+//    sonarqube {
+//        properties {
+//            property("sonar.sourceEncoding", "UTF-8")
+//            property("sonar.projectKey", "VastTools")
+//            property("sonar.projectName", "VastTools")
+//            property("sonar.sources", "src")
+//            property("sonar.projectVersion", project.version)
+//        }
+//    }
+//}
 
 dependencies {
     api(AndroidX.security_crypto)
