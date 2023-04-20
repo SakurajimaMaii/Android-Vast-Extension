@@ -105,6 +105,7 @@ dependencies {
     implementation(AndroidX.arch_core_runtime)
     implementation(AndroidX.constraintlayout)
     implementation(AndroidX.core_ktx)
+    implementation(AndroidX.exifinterface)
     implementation(AndroidX.fragment_ktx)
     implementation(AndroidX.lifecycle_livedata_core_ktx)
     implementation(AndroidX.lifecycle_livedata_ktx)
@@ -112,10 +113,10 @@ dependencies {
     implementation(AndroidX.lifecycle_viewmodel_ktx)
     implementation(AndroidX.recyclerview)
     implementation(AndroidX.test_monitor)
-    implementation(Google.material)
     implementation(Google.gson)
-    implementation(Jetbrains.kotlin_stdlib)
+    implementation(Google.material)
     implementation(Jetbrains.kotlin_reflect)
+    implementation(Jetbrains.kotlin_stdlib)
     implementation(Jetbrains.kotlinx_coroutines_android)
     implementation(Jetbrains.kotlinx_coroutines_core)
     implementation(Squareup.okhttp3)
@@ -144,7 +145,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "VastTools"
-            version = "0.4.0"
+            version = "0.4.1"
 
             afterEvaluate {
                 from(components["release"])
