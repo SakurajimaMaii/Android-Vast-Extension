@@ -192,7 +192,7 @@ class CropView @JvmOverloads constructor(
     }
 
     /**
-     * Set crop frame size in dp.
+     * Set crop frame size.
      *
      * @param width The frame width.
      * @param height The frame height.
@@ -200,9 +200,9 @@ class CropView @JvmOverloads constructor(
      */
     override fun setCropFrameSize(width: Float, height: Float) {
         val maxWidthContainer =
-            (mCropViewWidth - 2 * mCropFrameStrokeWidth).coerceAtMost(DensityUtils.dp2px(width))
+            (mCropViewWidth - 2 * mCropFrameStrokeWidth).coerceAtMost(width)
         val maxHeightContainer =
-            (mCropViewHeight - 2 * mCropFrameStrokeWidth).coerceAtMost(DensityUtils.dp2px(height))
+            (mCropViewHeight - 2 * mCropFrameStrokeWidth).coerceAtMost(height)
         when (mCropFrameType) {
             CropFrameType.RECTANGLE -> {
                 mCropFrameWidth = maxWidthContainer

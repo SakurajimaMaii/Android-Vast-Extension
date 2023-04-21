@@ -36,7 +36,6 @@ import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RETURN_DATA
 import com.ave.vastgui.tools.databinding.ActivityCropBinding
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
-import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.LogUtils
 import com.ave.vastgui.tools.utils.permission.requestPermission
 import com.ave.vastgui.tools.view.cropview.CropFrameType
@@ -85,10 +84,9 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
         private const val DEFAULT_AUTHORITY = ""
         private const val DEFAULT_OUTPUT_X = -1F
         private const val DEFAULT_OUTPUT_Y = -1F
+        private const val DEFAULT_PREVIEW_WIDTH = 100F
+        private const val DEFAULT_PREVIEW_HEIGHT = 100F
     }
-
-    private val DEFAULT_PREVIEW_WIDTH = 100F.DP
-    private val DEFAULT_PREVIEW_HEIGHT = 100F.DP
 
     private var originalUri: Uri? = null
     private var originalImageFile: File by NotNUllVar(true)
