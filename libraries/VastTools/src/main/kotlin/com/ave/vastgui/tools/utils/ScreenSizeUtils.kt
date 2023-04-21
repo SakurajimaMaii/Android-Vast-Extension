@@ -42,7 +42,7 @@ object ScreenSizeUtils {
      * @property width width of the screen.
      * @property height height of the screen.
      */
-    private data class ScreenSize(val width: Int, val height: Int)
+    data class ScreenSize(val width: Int, val height: Int)
 
     /**
      * ScreenSize of your device.
@@ -104,7 +104,7 @@ object ScreenSizeUtils {
      *
      * @return [ScreenSize] of your device.
      */
-    private fun getMobileScreenSize(context: Context): ScreenSize {
+    internal fun getMobileScreenSize(context: Context): ScreenSize {
         return when {
             (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) -> getScreenSizeApi31(context)
             (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) -> getScreenSizeApi30(context)
