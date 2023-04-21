@@ -82,7 +82,7 @@
     </style>
 
     <style name="BaseVp2Indicator">
-        <item name="indicator_style">style_circle</item>
+        <item name="indicator_style">circle</item>
         <item name="indicator_selected_color">?attr/colorPrimary</item>
         <item name="indicator_unselected_color">?attr/colorPrimaryContainer</item>
         <item name="indicator_circle_radius">5dp</item>

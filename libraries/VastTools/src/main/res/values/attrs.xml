@@ -161,7 +161,8 @@
 
     <declare-styleable name="Vp2IndicatorView">
         <attr name="indicator_style" format="enum">
-            <enum name="style_circle" value="1" />
+            <enum name="circle" value="0" />
+            <enum name="bitmap" value="1" />
         </attr>
         <attr name="indicator_selected_color" format="color|reference" />
         <attr name="indicator_unselected_color" format="color|reference" />
