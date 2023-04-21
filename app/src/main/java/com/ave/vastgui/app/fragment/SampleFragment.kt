@@ -20,12 +20,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.FragmentSampleBinding
 import com.ave.vastgui.app.viewmodel.SampleSharedVM
 import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.viewbinding.reflexViewBinding
 
-class SampleFragment : Fragment() {
+class SampleFragment : Fragment(R.layout.fragment_sample) {
 
     private val mBinding by reflexViewBinding(FragmentSampleBinding::bind)
 

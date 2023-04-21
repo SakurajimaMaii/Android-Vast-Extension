@@ -16,15 +16,19 @@
 
 package com.ave.vastgui.app.activity
 
+import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import androidx.activity.result.contract.ActivityResultContracts
 import com.ave.vastgui.app.databinding.ActivityImageBinding
 import com.ave.vastgui.tools.activity.VastVbActivity
+import com.ave.vastgui.tools.activity.app.VastCropActivity
 import com.ave.vastgui.tools.activity.result.contract.CropPhotoContract
 import com.ave.vastgui.tools.activity.result.contract.PickPhotoContract
 import com.ave.vastgui.tools.activity.result.contract.TakePhotoContract
+import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
 import com.ave.vastgui.tools.utils.LogUtils
 import com.ave.vastgui.tools.utils.cropimage.CropIntent
 
@@ -32,16 +36,42 @@ class ImageActivity : VastVbActivity<ActivityImageBinding>() {
 
     private val getImage =
         registerForActivityResult(PickPhotoContract()) {
-            it?.apply { cropImage(this) }
+//            it?.apply { cropImage(this) }
+            val intent = Intent(this, VastCropActivity::class.java).apply {
+                data = it
+                putExtra(VastCropActivity.AUTHORITY,"com.ave.vastgui.app")
+                putExtra(VastCropActivity.FRAME_TYPE, VastCropActivity.FRAME_TYPE_GRID9)
+                putExtra(VastCropActivity.OUTPUT_X, 300f)
+                putExtra(VastCropActivity.OUTPUT_Y, 300f)
+            }
+
+            cropImage.launch(intent)
+        }
+
+    private val cropImage =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == VastCropActivity.RESULT_OK) {
+                val uri = it.data?.data
+                getBinding().image.setImageURI(uri)
+            }
         }
 
     private val cropPicture =
-        registerForActivityResult(CropPhotoContract()) {
-            getBinding().image.setImageURI(it)
+        registerForActivityResult(CropPhotoContract("com.ave.vastgui.app")) { uri ->
+            uri?.let { path ->
+                LogUtils.i(getDefaultTag(), path.toString())
+                ImageMgr.getFileByUri(path)?.let {
+                    LogUtils.d(
+                        this@ImageActivity.getDefaultTag(),
+                        "裁剪图片文件名 ${it.name} ${it.path}"
+                    )
+                }
+            }
+            getBinding().image.setImageURI(uri)
         }
 
     private val takePhoto =
-        registerForActivityResult(TakePhotoContract()) {
+        registerForActivityResult(TakePhotoContract("com.ave.vastgui.app")) {
             getBinding().image.setImageURI(it)
         }
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~ Copyright 2022 VastGui guihy2019@gmail.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +14,12 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <paths>
-        <files-path
-            name="internal_pictures"
-            path="Pictures" />
-        <external-path
-            name="external_pictures"
-            path="Pictures" />
-    </paths>
-</resources>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="128dp"
+    android:height="128dp"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+  <path
+      android:pathData="M227.8,181.9L796.2,510.1 227.8,838.3Z"
+      android:fillColor="?attr/colorPrimary"/>
+</vector>

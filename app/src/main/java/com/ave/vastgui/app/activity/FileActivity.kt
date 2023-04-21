@@ -16,16 +16,19 @@
 
 package com.ave.vastgui.app.activity
 
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import com.ave.vastgui.app.databinding.ActivityFileBinding
 import com.ave.vastgui.tools.activity.VastVbActivity
+import com.ave.vastgui.tools.activity.result.contract.CropPhotoContract
 import com.ave.vastgui.tools.manager.filemgr.FileMgr.appExternalCacheDir
 import com.ave.vastgui.tools.manager.filemgr.FileMgr.appExternalFilesDir
 import com.ave.vastgui.tools.manager.filemgr.FileMgr.appInternalCacheDir
 import com.ave.vastgui.tools.manager.filemgr.FileMgr.appInternalFilesDir
-import com.ave.vastgui.tools.manager.filemgr.FileMgr.moveFile
+import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
+import com.ave.vastgui.tools.manager.mediafilemgr.MusicMgr
 import com.ave.vastgui.tools.utils.LogUtils
-import java.io.File
 
 
 // Author: SakurajimaMai
@@ -36,12 +39,22 @@ import java.io.File
 
 class FileActivity : VastVbActivity<ActivityFileBinding>() {
 
+    private val cropPicture =
+        registerForActivityResult(CropPhotoContract("com.ave.vastgui.app")) {
+            getBinding().image.setImageURI(it)
+        }
+
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LogUtils.i(getDefaultTag(), appInternalFilesDir().path)
         LogUtils.i(getDefaultTag(), appInternalCacheDir().path)
         LogUtils.i(getDefaultTag(), appExternalFilesDir(null)?.path)
         LogUtils.i(getDefaultTag(), appExternalCacheDir()?.path)
+        LogUtils.i(getDefaultTag(), ImageMgr.getExternalFilesDir()?.path)
+        LogUtils.i(getDefaultTag(), ImageMgr.getSharedFilesDir().path)
+        LogUtils.i(getDefaultTag(), MusicMgr.getExternalFilesDir()?.path)
+        LogUtils.i(getDefaultTag(), MusicMgr.getSharedFilesDir().path)
 
         // 删除文件
         // val delete = deleteFile(File(appInternalFilesDir().path, "save.txt"))
@@ -84,10 +97,36 @@ class FileActivity : VastVbActivity<ActivityFileBinding>() {
         // )
         // LogUtils.i(getDefaultTag(), "文件夹移动结果${moveDir.successOrNull() ?: "失败"}")
 
-        val moveFile = moveFile(
-            File("${appInternalFilesDir().path}${File.separator}moveDir${File.separator}1.txt"),
-            appInternalFilesDir().path
-        )
-        LogUtils.i(getDefaultTag(), "文件移动结果${moveFile.exceptionOrNull() ?: "成功"}")
+        // val moveFile = moveFile(
+        //     File("${appInternalFilesDir().path}${File.separator}moveDir${File.separator}1.txt"),
+        //     appInternalFilesDir().path
+        // )
+        // LogUtils.i(getDefaultTag(), "文件移动结果${moveFile.exceptionOrNull() ?: "成功"}")
+
+        getBinding().openGallery.setOnClickListener {
+//            val path = File(this.filesDir, "Pictures")
+//            val file = File(path, "test.jpg")
+//            val uri = getUriForFile(this,  "com.ave.vastgui.app", file)
+//            val cropIntent = CropIntent()
+//                .setData(uri)
+//                .setCorp(true)
+//                .setAspect(1, 1)
+//                .setOutput(200, 200)
+//                .setReturnData(false)
+//                .setOutputName(null)
+//                .setNoFaceDetection(true)
+//            cropPicture.launch(cropIntent)
+//            val uri = Uri.fromFile(file)
+//            getBinding().image.setImageURI(uri)
+//            LogUtils.d(getDefaultTag(), uri.toString())
+        }
+
+
+//        contentResolver.delete(
+//            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//            MediaStore.Images.Media.DISPLAY_NAME + "=?",
+//            arrayOf("test.jpg")
+//        )
     }
+
 }

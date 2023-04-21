@@ -17,18 +17,18 @@
 package com.ave.vastgui.app.activity.view
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityFragmentsBinding
 import com.ave.vastgui.app.fragment.SampleFragment
 import com.ave.vastgui.app.fragment.SampleVbFragment
 import com.ave.vastgui.app.fragment.SampleVbVmFragment
 import com.ave.vastgui.app.fragment.SampleVmFragment
-import com.ave.vastgui.app.viewmodel.SampleSharedVM
-import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.activity.widget.screenConfig
 import com.ave.vastgui.tools.adapter.VastFragmentAdapter
+import com.ave.vastgui.tools.utils.DensityUtils.DP
+import com.ave.vastgui.tools.view.vp2indicator.Vp2IndicatorType
 import com.ave.vastgui.tools.viewbinding.reflexViewBinding
 
 // Author: Vast Gui 
@@ -41,10 +41,6 @@ class Vp2IndicatorActivity : AppCompatActivity() {
 
     private val mBinding by reflexViewBinding(ActivityFragmentsBinding::inflate)
 
-    private val mViewModel by viewModels<SampleSharedVM>()
-
-    private val mLogTag = defaultLogTag()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         screenConfig(mEnableActionBar = false, mEnableFullScreen = true)
@@ -56,7 +52,16 @@ class Vp2IndicatorActivity : AppCompatActivity() {
                 add(SampleFragment())
             })
         }
-        mBinding.vp2indicator.attachToViewPager2(mBinding.vp2)
+        mBinding.vp2indicator.apply {
+            setIndicatorStyle(Vp2IndicatorType.BITMAP)
+            setBitmapSize(20f.DP.toInt(),20f.DP.toInt())
+            setSelectedBitmap(R.drawable.ic_indicator_select)
+            setUnSelectedBitmap(R.drawable.ic_indicator_unselect)
+//            setIndicatorCircleRadius(8F.DP)
+//            setSelectedColor(R.color.tomato)
+//            setUnSelectedColor(R.color.limegreen)
+            attachToViewPager2(mBinding.vp2)
+        }
     }
 
 }

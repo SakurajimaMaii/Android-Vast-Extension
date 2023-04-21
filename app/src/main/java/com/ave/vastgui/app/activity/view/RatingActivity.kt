@@ -18,8 +18,11 @@ package com.ave.vastgui.app.activity.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityRatingBinding
-import com.ave.vastgui.tools.view.ratingview.RatingView
+import com.ave.vastgui.tools.utils.DensityUtils.DP
+import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
+import com.ave.vastgui.tools.view.ratingview.RatingSelectMethod
 import com.ave.vastgui.tools.viewbinding.reflexViewBinding
 
 class RatingActivity : AppCompatActivity() {
@@ -28,12 +31,15 @@ class RatingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding.ratingView
-            .setStarCountNumber(5)
-            .setStarBitMapSize(40,40)
-            .setStarIntervalWidth(20)
-            .setStarSelectMethod(RatingView.SelectMethod.Sliding)
-            .setStarRating(3.6f)
+        mBinding.ratingView.refreshWithInvalidate {
+            setStarSelectedBitmap(R.drawable.ic_star_normal)
+            setStarUnselectedBitmap(R.drawable.ic_star_unselected)
+            setStarCountNumber(5)
+            setStarBitMapSize(40F.DP, 40F.DP)
+            setStarIntervalWidth(10F.DP)
+            setStarSelectMethod(RatingSelectMethod.SLIDING)
+            setStarRating(3.6f)
+        }
     }
 
 }

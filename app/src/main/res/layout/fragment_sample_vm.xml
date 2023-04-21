@@ -23,15 +23,6 @@
     tools:context=".fragment.SampleVmFragment">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv"
-        android:textSize="20sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="123"/>
-
-    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

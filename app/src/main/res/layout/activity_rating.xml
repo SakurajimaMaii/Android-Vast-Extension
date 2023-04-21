@@ -26,17 +26,15 @@
     <com.ave.vastgui.tools.view.ratingview.RatingView
         android:id="@+id/ratingView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="66dp"
-        app:star_rating="2.5" />
+        android:layout_height="wrap_content" />
 
     <com.ave.vastgui.tools.view.ratingview.RatingView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="66dp"
+        app:star_count="5"
         app:star_height="40dp"
         app:star_interval_width="1dp"
-        app:star_count="5"
         app:star_orientation="star_horizontal"
         app:star_rating="2.5"
         app:star_select_method="star_click"
@@ -49,9 +47,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="61dp"
+        app:star_count="5"
         app:star_height="40dp"
         app:star_interval_width="1dp"
-        app:star_count="5"
         app:star_orientation="star_vertical"
         app:star_rating="2"
         app:star_select_method="star_sliding"

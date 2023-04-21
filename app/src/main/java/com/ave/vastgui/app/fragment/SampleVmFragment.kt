@@ -45,10 +45,7 @@ class SampleVmFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tv = view.findViewById(R.id.tv)
         count = view.findViewById(R.id.count)
-
-        tv.text = "Hello"
 
         mViewModel.count.observe(requireActivity()) {
             count.text = it.toString()
