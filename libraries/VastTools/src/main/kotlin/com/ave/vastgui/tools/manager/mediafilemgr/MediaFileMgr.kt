@@ -16,12 +16,9 @@
 
 package com.ave.vastgui.tools.manager.mediafilemgr
 
-import android.database.Cursor
 import android.net.Uri
-import android.os.Environment
-import android.provider.MediaStore
-import androidx.core.content.FileProvider
-import com.ave.vastgui.tools.helper.ContextHelper
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.utils.AppUtils
 import com.ave.vastgui.tools.utils.DateUtils
@@ -31,67 +28,26 @@ import java.io.File
 // Email: guihy2019@gmail.com
 // Date: 2022/11/2
 
-sealed class MediaFileMgr : MediaFileProvider {
-
-    protected fun getFileByUri(uri: Uri, type: MediaType): File? {
-        val name = when (type) {
-            MediaType.Images -> MediaStore.Images.Media.DATA
-            MediaType.Music -> MediaStore.Audio.Media.DATA
-        }
-        val proj = arrayOf(name)
-        val cursor: Cursor? =
-            ContextHelper.getAppContext().contentResolver.query(uri, proj, null, null, null)
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                val columnIndex: Int = cursor.getColumnIndexOrThrow(name)
-                val path: String = cursor.getString(columnIndex)
-                cursor.close()
-                return File(path)
-            }
-        }
-        return null
-    }
-
-    /**
-     * Get default file directory name.
-     *
-     * @param type [MediaType]
-     */
-    protected fun getDefaultRootDirPath(type: MediaType): String? {
-        return when (type) {
-            MediaType.Images -> {
-                FileMgr.appExternalFilesDir(Environment.DIRECTORY_PICTURES)?.path
-            }
-
-            MediaType.Music -> {
-                FileMgr.appExternalFilesDir(Environment.DIRECTORY_MUSIC)?.path
-            }
-        }
-    }
+sealed class MediaFileMgr : MediaFileProperty {
 
     /**
      * Get default file name.
      *
-     * @param extension For example, .jpg
-     * @return For example, 20230313_234940_com_ave_vastgui_app.jpg.
+     * @param extension The media file extension.
+     * @return For example, 20230313_234940_455_com_ave_vastgui_app.jpg.
      */
     final override fun getDefaultFileName(extension: String): String {
-        val timeStamp: String = DateUtils.getCurrentTime("yyyyMMdd_HHmmss")
+        val timeStamp: String = DateUtils.getCurrentTime("yyyyMMdd_HHmmss_SSS")
         return "${timeStamp}_${AppUtils.getPackageName()?.replace(".", "_")}$extension"
     }
 
-    final override fun getFileUriAboveApi24(file: File, authority: String?): Uri {
-        return authority?.let {
-            FileProvider.getUriForFile(ContextHelper.getAppContext(), it, file)
-        } ?: FileProvider.getUriForFile(
-            ContextHelper.getAppContext(),
-            AppUtils.getPackageName() ?: "",
-            file
-        )
+    @RequiresApi(Build.VERSION_CODES.N)
+    final override fun getFileUriAboveApi24(file: File, authority: String): Uri {
+        return FileMgr.getFileUriAboveApi24(file, authority)
     }
 
     final override fun getFileUriOnApi23(file: File): Uri {
-        return Uri.fromFile(file)
+        return FileMgr.getFileUriOnApi23(file)
     }
 
 }

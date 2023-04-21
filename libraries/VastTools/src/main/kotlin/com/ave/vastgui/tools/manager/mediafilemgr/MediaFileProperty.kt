@@ -19,6 +19,7 @@ package com.ave.vastgui.tools.manager.mediafilemgr
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.core.content.FileProvider
 import java.io.File
 
 // Author: Vast Gui
@@ -26,14 +27,29 @@ import java.io.File
 // Date: 2022/11/2
 
 /** Using to provide information about media file. */
-interface MediaFileProvider {
+sealed interface MediaFileProperty {
 
-    fun getDefaultRootDirPath(): String?
+    /**
+     * Get application-specific storage folder.
+     *
+     * @param subDir The name of the subfolder you wish to create.
+     * @since 0.5.0
+     */
+    fun getExternalFilesDir(subDir: String? = null): File?
+
+    /**
+     * Get shared storage folder.
+     *
+     * @since 0.5.0
+     */
+    fun getSharedFilesDir(): File
 
     fun getDefaultFileName(extension: String): String
 
     /**
-     * Get file by [uri].
+     * Get file by [uri]. [getFileByUri] will query the DATA field
+     * corresponding to [uri], and return the file if there is a corresponding
+     * path, null otherwise.
      *
      * @return file, null otherwise.
      */
@@ -61,10 +77,11 @@ interface MediaFileProvider {
      * </provider>
      * ```
      *
-     * @param authority By default, the value is the app package name.
+     * @param authority The authority of a [FileProvider] defined in a
+     *     <provider> element in your app's manifest.
      */
     @RequiresApi(Build.VERSION_CODES.N)
-    fun getFileUriAboveApi24(file: File, authority: String?): Uri
+    fun getFileUriAboveApi24(file: File, authority: String): Uri
 
     /** Get the uri by [file]. */
     fun getFileUriOnApi23(file: File): Uri

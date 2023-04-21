@@ -17,11 +17,19 @@
 package com.ave.vastgui.tools.manager.mediafilemgr
 
 import android.content.ContentValues
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
+import android.os.Environment.DIRECTORY_PICTURES
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
+import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.manager.filemgr.FileMgr
+import com.ave.vastgui.tools.utils.DateUtils
+import com.ave.vastgui.tools.utils.DateUtils.FORMAT_YYYY_MM_DD_HH_MM_SS
+import com.ave.vastgui.tools.utils.LogUtils
 import java.io.File
 
 // Author: Vast Gui
@@ -31,16 +39,36 @@ import java.io.File
 
 object ImageMgr : MediaFileMgr() {
 
-    /**
-     * @return The default image file path :
-     *     /storage/emulated/0/Android/data/packageName/files/Pictures.
-     */
-    override fun getDefaultRootDirPath(): String? {
-        return getDefaultRootDirPath(MediaType.Images)
+    override fun getSharedFilesDir(): File {
+        return Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES)
+    }
+
+    override fun getExternalFilesDir(subDir: String?): File? {
+        val file = if (subDir == null) {
+            FileMgr.appExternalFilesDir(DIRECTORY_PICTURES)
+        } else File(FileMgr.appExternalFilesDir(DIRECTORY_PICTURES), subDir)
+        file?.let { FileMgr.makeDir(it) }?.let {
+            if (it.isFailure) {
+                LogUtils.e(defaultLogTag(), it.exceptionOrNull()?.message)
+            }
+        }
+        return file
     }
 
     override fun getFileByUri(uri: Uri): File? {
-        return getFileByUri(uri, MediaType.Images)
+        val proj = arrayOf(MediaStore.Images.Media.RELATIVE_PATH)
+        val cursor: Cursor? =
+            ContextHelper.getAppContext().contentResolver.query(uri, proj, null, null, null)
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                val columnIndex: Int =
+                    cursor.getColumnIndexOrThrow(MediaStore.Images.Media.RELATIVE_PATH)
+                val path: String = cursor.getString(columnIndex)
+                cursor.close()
+                return File(path)
+            }
+        }
+        return null
     }
 
     /**
@@ -64,6 +92,9 @@ object ImageMgr : MediaFileMgr() {
      * [MediaStore.Images.Media.DISPLAY_NAME],
      * [MediaStore.Images.Media.MIME_TYPE], If you want to customize, you
      * can refer to [getFileUriAboveApi30] by using saveOptions parameter.
+     *
+     * Since version 0.5.0, [MediaStore.Images.Media.DATE_ADDED] will also be
+     * inserted as the default column.
      */
     @RequiresApi(Build.VERSION_CODES.R)
     override fun getFileUriAboveApi30(file: File): Uri? {
@@ -71,6 +102,10 @@ object ImageMgr : MediaFileMgr() {
             put(MediaStore.Images.Media.DATA, file.absolutePath)
             put(MediaStore.Images.Media.DISPLAY_NAME, file.name)
             put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(
+                MediaStore.Images.Media.DATE_ADDED,
+                DateUtils.getCurrentTime(FORMAT_YYYY_MM_DD_HH_MM_SS)
+            )
         }
         return try {
             ContextHelper.getAppContext().contentResolver.insert(
