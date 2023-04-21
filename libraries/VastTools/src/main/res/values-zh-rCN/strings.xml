@@ -20,6 +20,7 @@
     <string name="gender_woman">女性</string>
     <string name="gender_unknown">未知</string>
 
-    <!-- Permissions string. -->
-
+    <!-- Crop image. -->
+    <string name="crop_sure">确定</string>
+    <string name="crop_exit">退出</string>
 </resources>

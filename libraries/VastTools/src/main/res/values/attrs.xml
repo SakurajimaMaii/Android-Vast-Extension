@@ -15,6 +15,28 @@
   -->
 
 <resources>
+
+    <declare-styleable name="CropView">
+        <attr name="crop_mask_layer_color" format="color|reference" />
+        <attr name="crop_frame_type" format="enum">
+            <enum name="circle" value="0" />
+            <enum name="square" value="1" />
+            <enum name="grid9" value="2" />
+            <enum name="rectangle" value="3" />
+        </attr>
+        <attr name="crop_frame_width" format="dimension|reference" />
+        <attr name="crop_frame_height" format="dimension|reference" />
+        <attr name="crop_frame_stroke_color" format="dimension|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="CropViewLayout">
+        <attr name="crop_mask_layer_color" />
+        <attr name="crop_frame_type" />
+        <attr name="crop_frame_width" />
+        <attr name="crop_frame_height" />
+        <attr name="crop_frame_stroke_color" />
+    </declare-styleable>
+
     <declare-styleable name="ProgressView">
         <attr name="progress_maximum_value" format="float" />
         <attr name="progress_current_value" format="float" />
@@ -137,7 +159,7 @@
         </attr>
     </declare-styleable>
 
-    <declare-styleable name="Vp2Indicator">
+    <declare-styleable name="Vp2IndicatorView">
         <attr name="indicator_style" format="enum">
             <enum name="style_circle" value="1" />
         </attr>
@@ -149,6 +171,8 @@
     </declare-styleable>
 
     <!-- Theme default style. -->
+    <attr name="Default_CropView_Style" format="reference" />
+    <attr name="Default_CropViewLayout_Style" format="reference" />
     <attr name="Default_MarqueeTextView_Style" format="reference" />
     <attr name="Default_ArcProgressView_Style" format="reference" />
     <attr name="Default_HorizontalProgressView_Style" format="reference" />

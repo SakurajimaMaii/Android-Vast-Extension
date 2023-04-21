@@ -64,4 +64,6 @@
     <color name="md_theme_surfaceContainerLowest">#0C0E11</color>
     <color name="md_theme_surfaceDim">#121316</color>
     <color name="md_theme_surfaceBright">#38393C</color>
+
+    <color name="default_crop_frame_mask_color">#a8DADADA</color>
 </resources>

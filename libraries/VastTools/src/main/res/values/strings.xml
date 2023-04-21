@@ -29,5 +29,7 @@
     <string name="gender_woman">Woman</string>
     <string name="gender_unknown">Unknown</string>
 
-
+    <!-- Crop image. -->
+    <string name="crop_sure">Yes</string>
+    <string name="crop_exit">Exit</string>
 </resources>
