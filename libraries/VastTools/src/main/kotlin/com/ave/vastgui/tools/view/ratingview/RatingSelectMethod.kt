@@ -20,9 +20,6 @@ package com.ave.vastgui.tools.view.ratingview
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/21
-// Description: 
-// Documentation:
-// Reference:
 
 /**
  * Rating select method

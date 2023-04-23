@@ -25,9 +25,6 @@ import androidx.annotation.FloatRange
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/3
-// Description: 
-// Documentation:
-// Reference:
 
 /**
  * ProgressView

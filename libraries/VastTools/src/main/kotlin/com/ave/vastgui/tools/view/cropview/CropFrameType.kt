@@ -19,9 +19,6 @@ package com.ave.vastgui.tools.view.cropview
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/18
-// Description: 
-// Documentation:
-// Reference:
 
 enum class CropFrameType {
     CIRCLE, SQUARE, GRID9, RECTANGLE

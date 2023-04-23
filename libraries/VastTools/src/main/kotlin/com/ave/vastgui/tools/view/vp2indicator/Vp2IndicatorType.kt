@@ -19,7 +19,6 @@ package com.ave.vastgui.tools.view.vp2indicator
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/21
-// Documentation:
 
 /**
  * Vp2 indicator type

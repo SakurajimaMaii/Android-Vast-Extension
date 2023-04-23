@@ -44,6 +44,11 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2023/4/18
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/cropview/CropView/
+
 /**
  * Vast crop activity
  *

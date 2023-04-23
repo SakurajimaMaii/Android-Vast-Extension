@@ -22,9 +22,6 @@ import androidx.annotation.FloatRange
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/18
-// Description: 
-// Documentation:
-// Reference:
 
 /**
  * Crop frame

@@ -19,9 +19,7 @@ package com.ave.vastgui.tools.manager.filemgr
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/15
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/file-manager/FileResult/
 
 /**
  * File result
@@ -31,7 +29,7 @@ package com.ave.vastgui.tools.manager.filemgr
  * @property isFailure True if the operation was failed, otherwise false.
  * @since 0.4.0
  */
-class FileResult private constructor(val value: Any) {
+class  FileResult private constructor(val value: Any) {
 
     /**
      * Is success.
