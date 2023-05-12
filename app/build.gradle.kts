@@ -24,8 +24,9 @@ import com.pluginversion.vastgui.Version
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("kotlin-kapt")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
     id("com.pluginversion.vastgui")
 }
 
@@ -69,6 +70,11 @@ android {
             isShrinkResources = true
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),"proguard-rules.pro")
+            kotlin {
+                sourceSets.main {
+                    kotlin.srcDir("build/generated/ksp/release/kotlin")
+                }
+            }
         }
 
         debug {
@@ -76,6 +82,11 @@ android {
             isJniDebuggable = true
             isShrinkResources = false
             isMinifyEnabled = false
+            kotlin {
+                sourceSets.main {
+                    kotlin.srcDir("build/generated/ksp/debug/kotlin")
+                }
+            }
         }
 
     }
@@ -124,7 +135,7 @@ dependencies {
     implementation(Squareup.retrofit2_adapter_rxjava3)
     implementation(Squareup.retrofit2_converter_gson)
     implementation(project(":libraries:VastAdapter"))
-    implementation(AVE.netstatelayout)
     implementation(project(":libraries:VastTools"))
+    implementation(AVE.netstatelayout)
     implementation(AVE.core)
 }

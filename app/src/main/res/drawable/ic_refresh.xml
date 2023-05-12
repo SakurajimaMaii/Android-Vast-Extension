@@ -1,20 +1,7 @@
-<!--
-  ~ Copyright 2022 VastGui guihy2019@gmail.com
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
-<vector android:height="15dp" android:viewportHeight="1024"
-    android:viewportWidth="1024" android:width="15dp" xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="#FFFFFFFF" android:pathData="M960,416V192l-73.06,73.06a447.71,447.71 0,0 0,-373.6 -201.09C265.92,63.97 65.31,264.54 65.31,512S265.92,960.03 513.34,960.03a448.06,448.06 0,0 0,415.23 -279.49,38.37 38.37,0 1,0 -71.14,-28.9 371.36,371.36 0,0 1,-344.1 231.58C308.32,883.23 142.11,717.02 142.11,512S308.32,140.77 513.34,140.77c132.45,0 251.94,70.08 318.02,179.84L736,416h224z"/>
+<vector android:height="25dp" android:viewportHeight="1024"
+    android:viewportWidth="1024" android:width="25dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="?attr/colorPrimary" android:pathData="M844.4,567.6l-63.4,-8.7a332.4,332.4 0,0 0,2.8 -60l63.9,-2.8a396.8,396.8 0,0 1,-3.3 71.6z"/>
+    <path android:fillColor="?attr/colorPrimary" android:pathData="M456.1,905.6c-52.9,0 -104.2,-10.4 -152.6,-30.8 -46.7,-19.7 -88.6,-48 -124.6,-84s-64.2,-77.9 -84,-124.6c-20.4,-48.3 -30.8,-99.7 -30.8,-152.6 0,-52.9 10.4,-104.2 30.8,-152.6 19.7,-46.7 48,-88.6 84,-124.6s77.9,-64.2 124.6,-84c48.3,-20.4 99.7,-30.8 152.6,-30.8 101.6,0 197.9,38.7 271.3,109 73.1,70.1 115.8,164.3 120.3,265.2l-63.9,2.8C776,323.2 632.1,185.7 456.1,185.7c-180.8,0 -327.9,147.1 -327.9,327.9S275.3,841.6 456.1,841.6c69.8,0 136.4,-21.6 192.6,-62.5l37.6,51.8c-67.2,48.9 -146.9,74.7 -230.2,74.7z"/>
+    <path android:fillColor="?attr/colorPrimary" android:pathData="M803.7,627.4c-8.2,0 -16.4,-3.1 -22.6,-9.4L663.6,500.6c-12.5,-12.5 -12.5,-32.8 0,-45.3 12.5,-12.5 32.8,-12.5 45.3,0l117.5,117.5c12.5,12.5 12.5,32.8 0,45.3 -6.2,6.2 -14.4,9.4 -22.6,9.4z"/>
+    <path android:fillColor="?attr/colorPrimary" android:pathData="M810.4,629.5c-8.2,0 -16.4,-3.1 -22.6,-9.4 -12.5,-12.5 -12.5,-32.8 0,-45.3l117.5,-117.5c12.5,-12.5 32.8,-12.5 45.3,0s12.5,32.8 0,45.3L833.1,620.1c-6.2,6.2 -14.4,9.4 -22.6,9.4z"/>
 </vector>

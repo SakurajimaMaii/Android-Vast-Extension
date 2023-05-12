@@ -1,23 +1,15 @@
-<!--
-  ~ Copyright 2022 VastGui guihy2019@gmail.com
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
-<vector android:height="30dp" android:viewportHeight="1024"
-    android:viewportWidth="1024" android:width="30dp" xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="#FFFFFFFF" android:pathData="M607.9,768.04c-17.72,0 -31.99,-14.28 -31.99,-31.99L575.9,383.94c0,-17.72 14.28,-31.99 31.99,-31.99s31.99,14.28 31.99,31.99l0,351.94C639.89,753.59 625.62,768.04 607.9,768.04z"/>
-    <path android:fillColor="#FFFFFFFF" android:pathData="M415.93,768.04c-17.72,0 -31.99,-14.28 -31.99,-31.99L383.94,383.94c0,-17.72 14.28,-31.99 31.99,-31.99 17.72,0 31.99,14.28 31.99,31.99l0,351.94C447.92,753.59 433.65,768.04 415.93,768.04z"/>
-    <path android:fillColor="#FFFFFFFF" android:pathData="M928.02,223.96l-159.97,0L768.04,159.97c0,-52.98 -42.66,-95.98 -95.3,-95.98L351.94,63.99c-52.98,0 -95.98,43 -95.98,95.98l0,63.99 -159.97,0c-17.72,0 -31.99,14.28 -31.99,31.99s14.28,31.99 31.99,31.99l832.03,0c17.72,0 31.99,-14.28 31.99,-31.99S945.73,223.96 928.02,223.96zM319.95,159.97c0,-17.55 14.45,-31.99 31.99,-31.99l320.81,0c17.55,0 31.31,14.11 31.31,31.99l0,63.99L319.95,223.96 319.95,159.97 319.95,159.97z"/>
-    <path android:fillColor="#FFFFFFFF" android:pathData="M736.05,960.01 L288.12,960.01c-52.98,0 -95.98,-43 -95.98,-95.98L192.14,383.59c0,-17.72 14.28,-31.99 31.99,-31.99s31.99,14.28 31.99,31.99l0,480.44c0,17.72 14.45,31.99 31.99,31.99l448.1,0c17.72,0 31.99,-14.28 31.99,-31.99L768.22,384.8c0,-17.72 14.28,-31.99 31.99,-31.99s31.99,14.28 31.99,31.99l0,479.23C832.03,916.84 789.03,960.01 736.05,960.01z"/>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="25dp"
+    android:height="25dp"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+    <path
+        android:fillColor="?attr/colorPrimary"
+        android:pathData="M729.8,959.8H294.2c-84.8,0 -153.8,-69 -153.8,-153.8V243h52.7v563c0,55.8 45.4,101.1 101.1,101.1h435.5c55.8,0 101.1,-45.4 101.1,-101.1V243h52.7v563c0.1,84.8 -68.9,153.8 -153.7,153.8z" />
+    <path
+        android:fillColor="?attr/colorPrimary"
+        android:pathData="M60.5,195.4h903v52.7h-903zM368.8,402.3h52.7v382.4h-52.7zM602.5,402.3h52.7v382.4h-52.7z" />
+    <path
+        android:fillColor="?attr/colorPrimary"
+        android:pathData="M442.7,239.9H390v-53.8c0,-67.2 54.7,-122 122,-122s122,54.7 122,122V226h-52.7v-39.8c0,-38.2 -31.1,-69.3 -69.3,-69.3s-69.3,31.1 -69.3,69.3v53.7z" />
 </vector>
