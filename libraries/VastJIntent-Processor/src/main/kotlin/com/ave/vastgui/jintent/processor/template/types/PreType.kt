@@ -14,40 +14,20 @@
  * limitations under the License.
  */
 
-include(":app")
-include(":app-compose")
-includeBuild("../../PluginVersion")
-includeBuild("convention-plugins")
+package com.ave.vastgui.jintent.processor.template.types
 
-rootProject.name = "Android-Vast-Extension"
+import com.ave.vastgui.jintent.processor.utils.ClassType
 
-// =======
-// = Lib =
-// =======
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2023/4/30
+// Description: 
+// Documentation:
+// Reference:
 
-val libs = arrayOf(
-        "VastAdapter",
-        "VastCore",
-        "VastNetStateLayout",
-        "VastSkin",
-        "VastTools",
-        "VastJIntent",
-        "VastJIntent-Annotation",
-        "VastJIntent-Processor"
-)
-
-libs.forEach {
-        include(":libraries:$it")
-}
-
-// =======
-// = Skin =
-// =======
-
-val skin = arrayOf(
-        "darkskin"
-)
-
-skin.forEach {
-        include(":skin:$it")
-}
+val JINTENTREGISTER = ClassType("com.ave.vastgui.jintent.JIntentRegister")
+val ACTIVITY = ClassType("android.app.Activity")
+val BUNDLEUTILS = ClassType("com.ave.vastgui.jintent.utils.BundleUtils")
+val BUNDLE = ClassType("android.os.Bundle")
+val INTENT = ClassType("android.content.Intent")
+val CONTEXT = ClassType("android.content.Context")

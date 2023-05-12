@@ -19,6 +19,8 @@ plugins {
     id("org.sonarqube") version "3.4.0.2513"
     id("org.jetbrains.kotlin.android") version "1.8.10" apply false
     id("org.jetbrains.dokka") version "1.8.10"
+    id("org.jetbrains.kotlin.jvm") version "1.8.10" apply false
+    id("com.google.devtools.ksp") version "1.8.10-1.0.9" apply false
 }
 
 buildscript {
@@ -30,7 +32,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:8.1.0-beta01")
+        classpath("com.android.tools.build:gradle:8.2.0-alpha03")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
         classpath("org.jetbrains.dokka:dokka-base:1.8.10")
         classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.5.0.2730")

@@ -14,40 +14,23 @@
  * limitations under the License.
  */
 
-include(":app")
-include(":app-compose")
-includeBuild("../../PluginVersion")
-includeBuild("convention-plugins")
+package com.ave.vastgui.jintent.processor.template.builder
 
-rootProject.name = "Android-Vast-Extension"
+import com.ave.vastgui.jintent.processor.template.ActivityClass
+import com.squareup.kotlinpoet.FileSpec
 
-// =======
-// = Lib =
-// =======
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2023/5/4
+// Description: 
+// Documentation:
+// Reference:
 
-val libs = arrayOf(
-        "VastAdapter",
-        "VastCore",
-        "VastNetStateLayout",
-        "VastSkin",
-        "VastTools",
-        "VastJIntent",
-        "VastJIntent-Annotation",
-        "VastJIntent-Processor"
-)
+sealed class BaseBuilder(
+    protected val activityClass: ActivityClass,
+    protected val fileBuilder: FileSpec.Builder
+) {
 
-libs.forEach {
-        include(":libraries:$it")
-}
+    abstract fun build()
 
-// =======
-// = Skin =
-// =======
-
-val skin = arrayOf(
-        "darkskin"
-)
-
-skin.forEach {
-        include(":skin:$it")
 }

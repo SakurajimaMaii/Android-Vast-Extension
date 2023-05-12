@@ -14,40 +14,15 @@
  * limitations under the License.
  */
 
-include(":app")
-include(":app-compose")
-includeBuild("../../PluginVersion")
-includeBuild("convention-plugins")
+import com.pluginversion.vastgui.Version
 
-rootProject.name = "Android-Vast-Extension"
-
-// =======
-// = Lib =
-// =======
-
-val libs = arrayOf(
-        "VastAdapter",
-        "VastCore",
-        "VastNetStateLayout",
-        "VastSkin",
-        "VastTools",
-        "VastJIntent",
-        "VastJIntent-Annotation",
-        "VastJIntent-Processor"
-)
-
-libs.forEach {
-        include(":libraries:$it")
+plugins {
+    id("java-library")
+    id("org.jetbrains.kotlin.jvm")
+    id("com.pluginversion.vastgui")
 }
 
-// =======
-// = Skin =
-// =======
-
-val skin = arrayOf(
-        "darkskin"
-)
-
-skin.forEach {
-        include(":skin:$it")
+java {
+    sourceCompatibility = Version.java_version
+    targetCompatibility = Version.java_version
 }

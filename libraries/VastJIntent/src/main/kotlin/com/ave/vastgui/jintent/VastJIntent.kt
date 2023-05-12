@@ -14,40 +14,26 @@
  * limitations under the License.
  */
 
-include(":app")
-include(":app-compose")
-includeBuild("../../PluginVersion")
-includeBuild("convention-plugins")
+package com.ave.vastgui.jintent
 
-rootProject.name = "Android-Vast-Extension"
+import android.app.Application
 
-// =======
-// = Lib =
-// =======
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2023/5/11
+// Description: 
+// Documentation:
+// Reference:
 
-val libs = arrayOf(
-        "VastAdapter",
-        "VastCore",
-        "VastNetStateLayout",
-        "VastSkin",
-        "VastTools",
-        "VastJIntent",
-        "VastJIntent-Annotation",
-        "VastJIntent-Processor"
-)
+/**
+ * Vast JIntent.
+ *
+ * @since 0.0.1
+ */
+object VastJIntent {
 
-libs.forEach {
-        include(":libraries:$it")
-}
+    fun init(application: Application){
+        application.registerActivityLifecycleCallbacks(JIntentRegister())
+    }
 
-// =======
-// = Skin =
-// =======
-
-val skin = arrayOf(
-        "darkskin"
-)
-
-skin.forEach {
-        include(":skin:$it")
 }

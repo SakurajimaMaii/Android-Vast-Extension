@@ -14,40 +14,29 @@
  * limitations under the License.
  */
 
-include(":app")
-include(":app-compose")
-includeBuild("../../PluginVersion")
-includeBuild("convention-plugins")
+package com.ave.vastgui.jintent.utils
 
-rootProject.name = "Android-Vast-Extension"
+import android.os.Bundle
+import com.ave.vastgui.core.extension.cast
 
-// =======
-// = Lib =
-// =======
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2023/5/11
+// Description:
+// Documentation:
+// Reference:
 
-val libs = arrayOf(
-        "VastAdapter",
-        "VastCore",
-        "VastNetStateLayout",
-        "VastSkin",
-        "VastTools",
-        "VastJIntent",
-        "VastJIntent-Annotation",
-        "VastJIntent-Processor"
-)
+/**
+ * Bundle utils
+ *
+ * @since 0.0.1
+ */
+object BundleUtils {
 
-libs.forEach {
-        include(":libraries:$it")
-}
+    @Suppress("DEPRECATION")
+    fun <T> get(bundle: Bundle, key: String): T {
+        return bundle.get(key)?.let { cast<T>(it) }
+            ?: throw RuntimeException("Can't get the value from Bundle with the $key key.")
+    }
 
-// =======
-// = Skin =
-// =======
-
-val skin = arrayOf(
-        "darkskin"
-)
-
-skin.forEach {
-        include(":skin:$it")
 }
