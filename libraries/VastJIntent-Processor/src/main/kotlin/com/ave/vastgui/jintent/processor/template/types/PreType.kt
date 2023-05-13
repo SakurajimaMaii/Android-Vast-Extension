@@ -25,6 +25,11 @@ import com.ave.vastgui.jintent.processor.utils.ClassType
 // Documentation:
 // Reference:
 
+val ACTIVITYRESULTLAUNCHER =
+    ClassType(
+        "androidx.activity.result.ActivityResultLauncher",
+        ClassType("android.content.Intent")
+    )
 val JINTENTREGISTER = ClassType("com.ave.vastgui.jintent.JIntentRegister")
 val ACTIVITY = ClassType("android.app.Activity")
 val BUNDLEUTILS = ClassType("com.ave.vastgui.jintent.utils.BundleUtils")

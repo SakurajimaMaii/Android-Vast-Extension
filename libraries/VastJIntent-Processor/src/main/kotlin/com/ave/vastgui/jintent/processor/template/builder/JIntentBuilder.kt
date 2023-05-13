@@ -18,9 +18,9 @@ package com.ave.vastgui.jintent.processor.template.builder
 
 import com.ave.vastgui.jintent.annotation.Generated
 import com.ave.vastgui.jintent.processor.template.ActivityClass
-import com.ave.vastgui.jintent.processor.template.property.OptionalProperty
 import com.ave.vastgui.jintent.processor.template.property.Property
 import com.ave.vastgui.jintent.processor.template.types.ACTIVITY
+import com.ave.vastgui.jintent.processor.template.types.ACTIVITYRESULTLAUNCHER
 import com.ave.vastgui.jintent.processor.template.types.BUNDLE
 import com.ave.vastgui.jintent.processor.template.types.BUNDLEUTILS
 import com.ave.vastgui.jintent.processor.template.types.CONTEXT
@@ -47,31 +47,25 @@ class JIntentBuilder(activityClass: ActivityClass, fb: FileSpec.Builder) :
     BaseBuilder(activityClass, fb) {
 
     companion object {
-        const val CREATOR_FUNCTION_NAME = "create"
-        const val JUMPER_FUNCTION_NAME = "jump"
-        const val FILL_INTENT_FUNCTION_NAME = "fillIntent"
-        const val INJECT_FUNCTION_NAME = "inject"
+        private const val FILL_INTENT_FUNCTION_NAME = "fillIntent"
+        private const val INJECT_FUNCTION_NAME = "inject"
+        private const val CREATOR_FUNCTION_NAME = "create"
+        private const val JUMPER_FUNCTION_NAME = "jump"
+        private const val LAUNCHER_FUNCTION_NAME = "launcher"
     }
-
-    private val groupedFields
-        get() = activityClass.fields.groupBy { it is OptionalProperty }
-
-    val requiredFields = groupedFields[false] ?: emptyList()
-    val optionalFields = groupedFields[true] ?: emptyList()
 
     private lateinit var jIntent: TypeSpec.Builder
     private lateinit var companionObject: TypeSpec.Builder
 
     override fun build() {
         // Start jIntent
-        jIntent = jIntentBuilder()
+        jIntentBuilder()
         jIntentParamsBuilder()
         jIntentJumpFuncBuilder()
+        jIntentLauncherBuilder()
         jIntentFillIntentFuncBuilder()
-        companionObjectBuilder()
+        companionBuilder()
         fileBuilder.addType(jIntent.build())
-        // Start extension functions
-        jumpActivityFuncBuilder()
     }
 
     // -------------------------------------------------- jIntent --------------------------------------------------
@@ -81,8 +75,8 @@ class JIntentBuilder(activityClass: ActivityClass, fb: FileSpec.Builder) :
      *
      * @since 0.0.1
      */
-    private fun jIntentBuilder(): TypeSpec.Builder {
-        return TypeSpec
+    private fun jIntentBuilder() {
+        jIntent = TypeSpec
             .classBuilder(activityClass.jIntentName)
             .addAnnotation(AnnotationSpec.builder(Generated::class).build())
             .primaryConstructor(null)
@@ -127,6 +121,23 @@ class JIntentBuilder(activityClass: ActivityClass, fb: FileSpec.Builder) :
             }
     }
 
+    private fun jIntentLauncherBuilder(){
+        FunSpec.builder(LAUNCHER_FUNCTION_NAME)
+            .addModifiers(KModifier.PUBLIC)
+            .addParameter("context", CONTEXT.kotlin)
+            .addParameter("launcher", ACTIVITYRESULTLAUNCHER.kotlin)
+            .addStatement(
+                "val intent = %T(context,%T::class.java)",
+                INTENT.kotlin,
+                ClassType("${activityClass.packageName}.${activityClass.simpleName}").kotlin
+            )
+            .addStatement("fillIntent(%L)", "intent")
+            .addStatement("launcher.launch(intent)")
+            .build().also {
+                jIntent.addFunction(it)
+            }
+    }
+
     private fun jIntentFillIntentFuncBuilder() {
         FunSpec.builder(FILL_INTENT_FUNCTION_NAME)
             .addModifiers(KModifier.PUBLIC)
@@ -149,7 +160,7 @@ class JIntentBuilder(activityClass: ActivityClass, fb: FileSpec.Builder) :
      *
      * @since 0.0.1
      */
-    private fun companionObjectBuilder() {
+    private fun companionBuilder() {
         companionObject = TypeSpec.companionObjectBuilder()
         activityClass.fields.forEach { property: Property ->
             companionObject.addProperty(
@@ -209,30 +220,6 @@ class JIntentBuilder(activityClass: ActivityClass, fb: FileSpec.Builder) :
             .endControlFlow()
             .build().also {
                 companionObject.addFunction(it)
-            }
-    }
-
-    // -------------------------------------------------- Extension functions ---------------------------
-
-    private fun jumpActivityFuncBuilder() {
-        FunSpec.builder("$JUMPER_FUNCTION_NAME${activityClass.simpleName}")
-            .receiver(CONTEXT.kotlin)
-            .addStatement(
-                "val jIntent = %L.$CREATOR_FUNCTION_NAME(%L)",
-                activityClass.jIntentName,
-                requiredFields.joinToString { it.name }
-            )
-            .addStatement("jIntent.%L(this)", JUMPER_FUNCTION_NAME)
-            .apply {
-                for (property in requiredFields) {
-                    val param = ParameterSpec
-                        .builder(property.name, property.asKotlinTypeName())
-                        .build()
-                    this.addParameter(param)
-                }
-            }
-            .build().also {
-                fileBuilder.addFunction(it)
             }
     }
 

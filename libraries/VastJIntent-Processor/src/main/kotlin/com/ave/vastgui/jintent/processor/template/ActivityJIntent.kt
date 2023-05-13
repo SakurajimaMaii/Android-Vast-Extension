@@ -31,6 +31,7 @@
 package com.ave.vastgui.jintent.processor.template
 
 import com.ave.vastgui.jintent.processor.template.builder.JIntentBuilder
+import com.ave.vastgui.jintent.processor.template.builder.ReceiverBuilder
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.ksp.writeTo
@@ -72,6 +73,7 @@ class ActivityJIntent(private val activityClass: ActivityClass) {
         // Generating the ActivityJIntent class.
         builder?.let {
             JIntentBuilder(activityClass, it).build()
+            ReceiverBuilder(activityClass, it).build()
             it.build().writeTo(codeGenerator, false)
         } ?: return
     }

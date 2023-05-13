@@ -17,6 +17,7 @@
 package com.ave.vastgui.jintent.processor.template.builder
 
 import com.ave.vastgui.jintent.processor.template.ActivityClass
+import com.ave.vastgui.jintent.processor.template.property.OptionalProperty
 import com.squareup.kotlinpoet.FileSpec
 
 // Author: Vast Gui
@@ -30,6 +31,12 @@ sealed class BaseBuilder(
     protected val activityClass: ActivityClass,
     protected val fileBuilder: FileSpec.Builder
 ) {
+
+    private val groupedFields
+        get() = activityClass.fields.groupBy { it is OptionalProperty }
+
+    protected val requiredFields = groupedFields[false] ?: emptyList()
+    protected val optionalFields = groupedFields[true] ?: emptyList()
 
     abstract fun build()
 

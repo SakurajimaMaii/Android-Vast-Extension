@@ -45,7 +45,7 @@ object JIntentClassFinder {
         val key = activity::class.qualifiedName ?: return null
         return builderClassCache[key] ?: let {
             try{
-                val jIntentClass = Class.forName(findBuilderClassName(activity))
+                val jIntentClass = Class.forName(findJIntentClassName(activity))
                 builderClassCache[key] = jIntentClass
                 jIntentClass
             } catch (e: ClassNotFoundException){
@@ -54,7 +54,12 @@ object JIntentClassFinder {
         }
     }
 
-    private fun findBuilderClassName(activity: Activity): String {
+    /**
+     * Find the JIntent class name by [activity].
+     *
+     * @since 0.0.1
+     */
+    private fun findJIntentClassName(activity: Activity): String {
         val cls: Class<*> = activity.javaClass
         var enclosingClass = cls.enclosingClass
         val names = ArrayList<String>()

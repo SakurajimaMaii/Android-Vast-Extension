@@ -74,13 +74,13 @@ class JIntentRegister : Application.ActivityLifecycleCallbacks {
      * @since 0.0.1
      */
     private fun injectIntent(activity: Activity, savedInstanceState: Bundle?) {
+        val jIntent = JIntentClassFinder.findJIntentClass(activity) ?: return
         val bundle = if (savedInstanceState == null) {
             val intent = activity.intent ?: return
             intent.extras
         } else savedInstanceState
-        val method = JIntentClassFinder.findJIntentClass(activity)
-            ?.getDeclaredMethod("inject", Activity::class.java, Bundle::class.java)
-        method?.invoke(null, activity, bundle)
+        jIntent.getDeclaredMethod("inject", Activity::class.java, Bundle::class.java)
+            .invoke(null, activity, bundle)
     }
 
     companion object {
