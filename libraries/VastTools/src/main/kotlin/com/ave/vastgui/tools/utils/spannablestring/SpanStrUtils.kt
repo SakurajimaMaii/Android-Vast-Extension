@@ -317,7 +317,9 @@ object SpanStrUtils {
 
         /** Append style string. */
         fun append(text: CharSequence?): Builder {
-            return Builder(mBuilder, text)
+            return mTextView?.let {
+                Builder(it, mBuilder, text)
+            } ?: Builder(mBuilder, text)
         }
 
         /** Create a style string. */
@@ -330,8 +332,11 @@ object SpanStrUtils {
          *
          * @since 0.2.0
          */
+        @Throws(NullPointerException::class)
         fun attachToTextView() {
-            mTextView!!.text = mBuilder
+            mTextView?.let {
+                it.text = mBuilder
+            } ?: throw NullPointerException("Please init mTextView.")
         }
 
     }
