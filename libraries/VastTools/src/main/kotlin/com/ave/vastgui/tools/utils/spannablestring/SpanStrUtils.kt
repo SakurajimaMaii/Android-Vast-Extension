@@ -23,7 +23,6 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.text.Layout.Alignment
 import android.text.SpannableStringBuilder
-import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.AlignmentSpan
@@ -111,7 +110,7 @@ object SpanStrUtils {
             mTextView = view
         }
 
-        private var flag by NotNUllVar<Int>()
+        private val flag = SpanMode.SEE.value
         private var start by NotNUllVar<Int>()
         private var end by NotNUllVar<Int>()
         private var mBuilder by NotNUllVar<SpannableStringBuilder>()
@@ -122,18 +121,6 @@ object SpanStrUtils {
          * @since 0.2.0
          */
         private var mTextView: TextView? = null
-
-        /**
-         * Set span type.
-         *
-         * @see Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-         * @see Spanned.SPAN_INCLUSIVE_INCLUSIVE
-         * @see Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-         * @see Spanned.SPAN_EXCLUSIVE_INCLUSIVE
-         */
-        fun setFlag(flag: SpanMode) = apply {
-            this.flag = flag.value
-        }
 
         /** Set text size(in pixels). */
         fun setTextSize(textSize: Int) = apply {
@@ -215,7 +202,6 @@ object SpanStrUtils {
             mBuilder.setSpan(UnderlineSpan(), start, end, flag)
         }
 
-
         /**
          * Set scriptMode.
          *
@@ -223,15 +209,15 @@ object SpanStrUtils {
          */
         fun setScriptMode(scriptMode: ScriptMode) = apply {
             when (scriptMode) {
-                ScriptMode.Superscript -> {
+                ScriptMode.SUPERSCRIPT -> {
                     mBuilder.setSpan(SuperscriptSpan(), start, end, flag)
                 }
 
-                ScriptMode.Subscript -> {
+                ScriptMode.SUBSCRIPT -> {
                     mBuilder.setSpan(SubscriptSpan(), start, end, flag)
                 }
 
-                ScriptMode.None -> {
+                ScriptMode.NONE -> {
                     return this@Builder
                 }
             }

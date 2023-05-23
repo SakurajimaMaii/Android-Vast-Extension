@@ -24,11 +24,11 @@ package com.ave.vastgui.tools.utils.spannablestring
  * Script mode.
  */
 enum class ScriptMode {
-    None,
+    NONE,
 
     // Making the span that moves the position of the text baseline higher.
-    Superscript,
+    SUPERSCRIPT,
 
     // Making the span that moves the position of the text baseline lower.
-    Subscript
+    SUBSCRIPT
 }
