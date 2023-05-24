@@ -17,14 +17,15 @@
 package com.ave.vastgui.tools.utils.spannablestring
 
 import android.graphics.BlurMaskFilter
-import android.text.Layout
+import android.text.Layout.Alignment
 import android.text.style.BulletSpan
 import android.text.style.ClickableSpan
 import android.text.style.LeadingMarginSpan
 import android.text.style.QuoteSpan
 import android.text.style.TypefaceSpan
-import androidx.annotation.ColorRes
+import androidx.annotation.ColorInt
 import com.ave.vastgui.tools.R
+import com.ave.vastgui.tools.utils.ResUtils
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -36,38 +37,55 @@ import com.ave.vastgui.tools.R
 /**
  * The append style.
  *
+ * @property foreColor Color that defines the text color.
+ * @property backColor Color that defines the background color.
+ * @property fontStyle An enum constant describing the style for this text. Refer to [StyleMode].
+ * @property fontFamily Refer to [TypefaceSpan].
+ * @property fontSize Set the text size to [fontSize] in pixels.
+ * @property fontAlign Refer to [Alignment.ALIGN_NORMAL], [Alignment.ALIGN_OPPOSITE], [Alignment.ALIGN_CENTER].
+ * @property proportion The proportion with which the text is scaled.
+ * @property xProportion Values > 1.0 will stretch the text wider. Values < 1.0 will stretch the text narrower.
+ * @property strikeMode Add a strikethrough or underline for the text.
+ * @property scriptMode Defines the text as superscript or subscript.
+ * @property linesIndent Defines the text indentation.
+ * @property quoteSpan Defines the text quote.
+ * @property bulletSpan Defines the text bullet point.
+ * @property clickSpan Defines the text click event.
+ * @property url Defines the text as url.
+ * @property blurRadius The radius to extend the blur from the original mask. Must be > 0.
+ * @property blur The Blur to use.
  * @since 0.5.1
  */
 class AppendableStyle(
-    @ColorRes internal val foreColor: Int = R.color.black,
-    @ColorRes internal val backColor: Int = R.color.transparent,
-    internal val fontStyle: StyleMode = StyleMode.NORMAL,
-    internal val fontFamily: TypefaceSpan? = null,
-    internal val fontSize: Int? = null,
-    internal val fontAlign: Layout.Alignment? = null,
-    internal val proportion:Float = 1.0f,
-    internal val xProportion:Float = 1.0f
+    @ColorInt val foreColor: Int? = null,
+    @ColorInt val backColor: Int = ResUtils.getColor(R.color.transparent),
+    val fontStyle: StyleMode = StyleMode.NORMAL,
+    val fontFamily: TypefaceSpan? = null,
+    val fontSize: Int? = null,
+    val fontAlign: Alignment? = null,
+    val proportion: Float = 1.0f,
+    val xProportion: Float = 1.0f
 ) {
-    internal var strikeMode: StrikeMode = StrikeMode.NONE
-    internal var scriptMode: ScriptMode = ScriptMode.None
-    internal var linesIndent: LeadingMarginSpan.Standard? = null
-    internal var quoteSpan: QuoteSpan? = null
-    internal var bulletSpan: BulletSpan? = null
-    internal var clickSpan: ClickableSpan? = null
-    internal var url: String? = null
-    internal var blurRadius: Float = 0.0f
-    internal var blur: BlurMaskFilter.Blur? = null
+    var strikeMode: StrikeMode = StrikeMode.NONE
+    var scriptMode: ScriptMode = ScriptMode.NONE
+    var linesIndent: LeadingMarginSpan.Standard? = null
+    var quoteSpan: QuoteSpan? = null
+    var bulletSpan: BulletSpan? = null
+    var clickSpan: ClickableSpan? = null
+    var url: String? = null
+    var blurRadius: Float = 0.0f
+    var blur: BlurMaskFilter.Blur? = null
 
     constructor(
         linesIndent: LeadingMarginSpan.Standard,
-        @ColorRes foreColor: Int = R.color.black,
-        @ColorRes backColor: Int = R.color.transparent,
+        @ColorInt foreColor: Int? = null,
+        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
-        fontAlign: Layout.Alignment? = null,
-        proportion:Float = 1.0f,
-        xProportion:Float = 1.0f
+        fontAlign: Alignment? = null,
+        proportion: Float = 1.0f,
+        xProportion: Float = 1.0f
     ) : this(
         foreColor = foreColor,
         backColor = backColor,
@@ -77,20 +95,20 @@ class AppendableStyle(
         fontAlign = fontAlign,
         proportion = proportion,
         xProportion = xProportion
-    ){
+    ) {
         this.linesIndent = linesIndent
     }
 
     constructor(
         quoteSpan: QuoteSpan,
-        @ColorRes foreColor: Int = R.color.black,
-        @ColorRes backColor: Int = R.color.transparent,
+        @ColorInt foreColor: Int? = null,
+        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
-        fontAlign: Layout.Alignment? = null,
-        proportion:Float = 1.0f,
-        xProportion:Float = 1.0f
+        fontAlign: Alignment? = null,
+        proportion: Float = 1.0f,
+        xProportion: Float = 1.0f
     ) : this(
         foreColor = foreColor,
         backColor = backColor,
@@ -106,14 +124,14 @@ class AppendableStyle(
 
     constructor(
         bulletSpan: BulletSpan,
-        @ColorRes foreColor: Int = R.color.black,
-        @ColorRes backColor: Int = R.color.transparent,
+        @ColorInt foreColor: Int? = null,
+        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
-        fontAlign: Layout.Alignment? = null,
-        proportion:Float = 1.0f,
-        xProportion:Float = 1.0f
+        fontAlign: Alignment? = null,
+        proportion: Float = 1.0f,
+        xProportion: Float = 1.0f
     ) : this(
         foreColor = foreColor,
         backColor = backColor,
@@ -129,14 +147,14 @@ class AppendableStyle(
 
     constructor(
         strikeMode: StrikeMode = StrikeMode.NONE,
-        @ColorRes foreColor: Int = R.color.black,
-        @ColorRes backColor: Int = R.color.transparent,
+        @ColorInt foreColor: Int? = null,
+        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
-        fontAlign: Layout.Alignment? = null,
-        proportion:Float = 1.0f,
-        xProportion:Float = 1.0f
+        fontAlign: Alignment? = null,
+        proportion: Float = 1.0f,
+        xProportion: Float = 1.0f
     ) : this(
         foreColor = foreColor,
         backColor = backColor,
@@ -151,15 +169,15 @@ class AppendableStyle(
     }
 
     constructor(
-        scriptMode: ScriptMode = ScriptMode.None,
-        @ColorRes foreColor: Int = R.color.black,
-        @ColorRes backColor: Int = R.color.transparent,
+        scriptMode: ScriptMode = ScriptMode.NONE,
+        @ColorInt foreColor: Int? = null,
+        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
-        fontAlign: Layout.Alignment? = null,
-        proportion:Float = 1.0f,
-        xProportion:Float = 1.0f
+        fontAlign: Alignment? = null,
+        proportion: Float = 1.0f,
+        xProportion: Float = 1.0f
     ) : this(
         foreColor = foreColor,
         backColor = backColor,
@@ -175,14 +193,14 @@ class AppendableStyle(
 
     constructor(
         clickSpan: ClickableSpan,
-        @ColorRes foreColor: Int = R.color.black,
-        @ColorRes backColor: Int = R.color.transparent,
+        @ColorInt foreColor: Int? = null,
+        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
-        fontAlign: Layout.Alignment? = null,
-        proportion:Float = 1.0f,
-        xProportion:Float = 1.0f
+        fontAlign: Alignment? = null,
+        proportion: Float = 1.0f,
+        xProportion: Float = 1.0f
     ) : this(
         foreColor = foreColor,
         backColor = backColor,
@@ -198,14 +216,14 @@ class AppendableStyle(
 
     constructor(
         url: String,
-        @ColorRes foreColor: Int = R.color.black,
-        @ColorRes backColor: Int = R.color.transparent,
+        @ColorInt foreColor: Int? = null,
+        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
-        fontAlign: Layout.Alignment? = null,
-        proportion:Float = 1.0f,
-        xProportion:Float = 1.0f
+        fontAlign: Alignment? = null,
+        proportion: Float = 1.0f,
+        xProportion: Float = 1.0f
     ) : this(
         foreColor = foreColor,
         backColor = backColor,
@@ -222,14 +240,14 @@ class AppendableStyle(
     constructor(
         blurRadius: Float,
         blur: BlurMaskFilter.Blur,
-        @ColorRes foreColor: Int = R.color.black,
-        @ColorRes backColor: Int = R.color.transparent,
+        @ColorInt foreColor: Int? = null,
+        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
-        fontAlign: Layout.Alignment? = null,
-        proportion:Float = 1.0f,
-        xProportion:Float = 1.0f
+        fontAlign: Alignment? = null,
+        proportion: Float = 1.0f,
+        xProportion: Float = 1.0f
     ) : this(
         foreColor = foreColor,
         backColor = backColor,

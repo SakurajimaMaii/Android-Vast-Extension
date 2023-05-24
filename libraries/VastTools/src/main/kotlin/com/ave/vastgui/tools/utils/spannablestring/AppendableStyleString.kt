@@ -17,6 +17,7 @@
 package com.ave.vastgui.tools.utils.spannablestring
 
 import android.graphics.BlurMaskFilter
+import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
@@ -34,8 +35,6 @@ import android.text.style.SuperscriptSpan
 import android.text.style.URLSpan
 import android.text.style.UnderlineSpan
 import android.widget.TextView
-import com.ave.vastgui.tools.bean.Component2
-import com.ave.vastgui.tools.utils.LogUtils
 import com.ave.vastgui.tools.utils.ResUtils
 
 // Author: Vast Gui
@@ -46,125 +45,111 @@ import com.ave.vastgui.tools.utils.ResUtils
 // Reference:
 
 /**
- * Create a style string.
+ * Create a style string scope.
  *
  * @since 0.5.1
  */
-object AppendableStyleString {
+inline fun appendableStyleScope(
+    textView: TextView,
+    scope: SpannableStringBuilder.() -> Unit
+) {
+    val builder = SpannableStringBuilder()
+    builder.scope()
+    textView.movementMethod = LinkMovementMethod.getInstance()
+    textView.text = SpannableString(builder)
+}
 
-    fun getStyleScope(textView: TextView, styleScope: StyleScope.() -> Unit) {
-        StyleScope(textView).also(styleScope).finish()
-    }
+/**
+ * Create a style string scope.
+ *
+ * @since 0.5.1
+ */
+inline fun appendableStyleScope(
+    scope: SpannableStringBuilder.() -> Unit
+) = run {
+    val builder = SpannableStringBuilder()
+    builder.scope()
+    SpannableString(builder)
+}
 
-    class StyleScope internal constructor(private val mTextView: TextView) {
-        private val mBuilder: SpannableStringBuilder = SpannableStringBuilder()
-        private val flag = SpanMode.SEE.value
+/**
+ * Add style string.
+ *
+ * @since 0.5.1
+ */
+inline fun SpannableStringBuilder.withStyle(
+    style: AppendableStyle = AppendableStyle(),
+    scope: SpannableStringBuilder.() -> Unit
+) = run {
+    val start = length
+    val flag = SpanMode.SEE.value
+    scope()
+    this.apply {
+        with(style) {
+            setSpan(RelativeSizeSpan(proportion), start, length, flag)
+            setSpan(ScaleXSpan(xProportion), start, length, flag)
+            foreColor?.let {
+                setSpan(ForegroundColorSpan(ResUtils.getColor(it)), start, length, flag)
+            }
+            setSpan(BackgroundColorSpan(ResUtils.getColor(backColor)), start, length, flag)
+            setSpan(StyleSpan(fontStyle.value), start, length, flag)
+            setSpan(fontFamily, start, length, flag)
+            when (strikeMode) {
+                StrikeMode.STRIKETHROUGH ->
+                    setSpan(StrikethroughSpan(), start, length, flag)
 
-        /**
-         * Add style string.
-         *
-         * @since 0.5.1
-         */
-        fun withStyle(
-            style: AppendableStyle = AppendableStyle(),
-            strScope: SpannableStringBuilder.() -> Unit
-        ) {
-            val (start, end) = foldScope(strScope)
-            with(style) {
-                mBuilder.apply {
-                    setSpan(RelativeSizeSpan(proportion), start, end, flag)
-                    setSpan(ScaleXSpan(xProportion), start, end, flag)
-                    setSpan(ForegroundColorSpan(ResUtils.getColor(foreColor)), start, end, flag)
-                    setSpan(BackgroundColorSpan(ResUtils.getColor(backColor)), start, end, flag)
-                    setSpan(StyleSpan(fontStyle.value), start, end, flag)
-                    setSpan(fontFamily, start, end, flag)
-                    when (strikeMode) {
-                        StrikeMode.STRIKETHROUGH ->
-                            setSpan(StrikethroughSpan(), start, end, flag)
+                StrikeMode.UNDERLINE ->
+                    setSpan(UnderlineSpan(), start, length, flag)
 
-                        StrikeMode.UNDERLINE ->
-                            setSpan(UnderlineSpan(), start, end, flag)
+                StrikeMode.NONE -> {}
+            }
+            when (scriptMode) {
+                ScriptMode.SUPERSCRIPT ->
+                    setSpan(SuperscriptSpan(), start, length, flag)
 
-                        StrikeMode.NONE -> {}
-                    }
-                    when (scriptMode) {
-                        ScriptMode.Superscript ->
-                            setSpan(SuperscriptSpan(), start, end, flag)
+                ScriptMode.SUBSCRIPT ->
+                    setSpan(SubscriptSpan(), start, length, flag)
 
-                        ScriptMode.Subscript ->
-                            setSpan(SubscriptSpan(), start, end, flag)
-
-                        ScriptMode.None -> {}
-                    }
-                    fontAlign?.let {
-                        setSpan(AlignmentSpan.Standard(it), start, end, flag)
-                    }
-                    linesIndent?.let {
-                        LogUtils.i("GGGGG", "$start $end")
-                        setSpan(it, start, end, flag)
-                        return
-                    }
-                    quoteSpan?.let {
-                        setSpan(it, start, end, 0)
-                        return
-                    }
-                    bulletSpan?.let {
-                        setSpan(it, start, end, 0)
-                        return
-                    }
-                    fontSize?.let { size ->
-                        setSpan(AbsoluteSizeSpan(size), start, end, flag)
-                        return
-                    }
-                    clickSpan?.let {
-                        setSpan(it, start, end, flag)
-                        mTextView.movementMethod = LinkMovementMethod.getInstance()
-                        return
-                    }
-                    url?.let {
-                        LogUtils.i("GGGG", "Hello")
-                        setSpan(URLSpan(it), start, end, flag)
-                        mTextView.movementMethod = LinkMovementMethod.getInstance()
-                        return
-                    }
-                    blur?.let {
-                        setSpan(MaskFilterSpan(BlurMaskFilter(blurRadius, blur)), start, end, flag)
-                        return
-                    }
-                }
+                ScriptMode.NONE -> {}
+            }
+            fontAlign?.let {
+                setSpan(AlignmentSpan.Standard(it), start, length, flag)
+            }
+            linesIndent?.let {
+                setSpan(it, start, length, flag)
+            }
+            quoteSpan?.let {
+                setSpan(it, start, length, 0)
+            }
+            bulletSpan?.let {
+                setSpan(it, start, length, 0)
+            }
+            fontSize?.let { size ->
+                setSpan(AbsoluteSizeSpan(size), start, length, flag)
+            }
+            clickSpan?.let {
+                setSpan(it, start, length, flag)
+            }
+            url?.let {
+                setSpan(URLSpan(it), start, length, flag)
+            }
+            blur?.let {
+                setSpan(MaskFilterSpan(BlurMaskFilter(blurRadius, blur)), start, length, flag)
             }
         }
-
-        /**
-         * Add image into string.
-         *
-         * @since 0.5.1
-         */
-        fun withImage(image: ImageSpan) {
-            val (start, end) = foldScope {
-                append(" ")
-            }
-            mBuilder.setSpan(image, start, end, flag)
-        }
-
-        /**
-         * Attach to [mTextView].
-         */
-        internal fun finish() {
-            mTextView.text = mBuilder
-        }
-
-        /**
-         * Get the start and the end index of the string in [strScope].
-         *
-         * @since 0.5.1
-         */
-        private fun foldScope(strScope: SpannableStringBuilder.() -> Unit): Component2<Int, Int> {
-            val start = mBuilder.length
-            mBuilder.also(strScope)
-            val end = mBuilder.length
-            return Component2(start, end)
-        }
     }
+    this
+}
 
+
+/**
+ * Add image into string.
+ *
+ * @since 0.5.1
+ */
+fun SpannableStringBuilder.withImage(image: ImageSpan) = run {
+    val start = length
+    append(" ")
+    setSpan(image, start, length, SpanMode.SEE.value)
+    this
 }
