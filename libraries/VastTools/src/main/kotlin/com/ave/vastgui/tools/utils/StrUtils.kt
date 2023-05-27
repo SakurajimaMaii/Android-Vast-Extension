@@ -16,8 +16,6 @@
 
 package com.ave.vastgui.tools.utils
 
-import com.ave.vastgui.tools.R
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/30 18:59
@@ -29,15 +27,22 @@ import com.ave.vastgui.tools.R
  * @property unit The unit format string.
  * @since 0.2.0
  */
-abstract class StrUnit(val unit: String)
+abstract class StrUnit(val unit: String) {
+    /**
+     * Get [value] in unit.
+     *
+     * @since 0.5.1
+     */
+    open fun getValue(value: String): String = "$value$unit"
+}
 
-object Angle : StrUnit(ResUtils.getString(R.string.unit_angle))
-object Celsius : StrUnit(ResUtils.getString(R.string.unit_celsius))
-object Kmh : StrUnit(ResUtils.getString(R.string.unit_kmh))
-object Kilometer : StrUnit(ResUtils.getString(R.string.unit_km))
-object Meter : StrUnit(ResUtils.getString(R.string.unit_m))
-object Ms : StrUnit(ResUtils.getString(R.string.unit_ms))
-object Percent : StrUnit(ResUtils.getString(R.string.unit_percent))
+open class Angle : StrUnit("°")
+open class Celsius : StrUnit("℃")
+open class Kmh : StrUnit("km/h")
+open class Kilometer : StrUnit("km")
+open class Meter : StrUnit("m")
+open class Ms : StrUnit("ms")
+open class Percent : StrUnit("%")
 
 object StrUtils {
 
@@ -63,6 +68,11 @@ object StrUtils {
      * @return the temperature string in Celsius unit,like 39℃.
      */
     @JvmStatic
+    @Deprecated(
+        message = "Please replace getUnitStr with withUnit.",
+        level = DeprecationLevel.WARNING,
+        replaceWith = ReplaceWith("value.withUnit(strUnit)", "com.ave.vastgui.tools.utils.withUnit")
+    )
     @Throws(RuntimeException::class)
     fun getUnitStr(value: Any, strUnit: StrUnit): String {
         return getUnitFormatString(value, strUnit.unit)
@@ -85,3 +95,35 @@ object StrUtils {
     }
 
 }
+
+/**
+ * Get the string in [unit].
+ *
+ * @return the temperature string in Celsius unit,like 39℃.
+ * @since 0.5.1
+ */
+fun Int.withUnit(unit: StrUnit): String = unit.getValue(this.toString())
+
+/**
+ * Get the string in [unit].
+ *
+ * @return the temperature string in Celsius unit,like 39℃.
+ * @since 0.5.1
+ */
+fun Float.withUnit(unit: StrUnit): String = unit.getValue(this.toString())
+
+/**
+ * Get the string in [unit].
+ *
+ * @return the temperature string in Celsius unit,like 39℃.
+ * @since 0.5.1
+ */
+fun Double.withUnit(unit: StrUnit): String = unit.getValue(this.toString())
+
+/**
+ * Get the string in [unit].
+ *
+ * @return the temperature string in Celsius unit,like 39℃.
+ * @since 0.5.1
+ */
+fun String.withUnit(unit: StrUnit): String = unit.getValue(this)
