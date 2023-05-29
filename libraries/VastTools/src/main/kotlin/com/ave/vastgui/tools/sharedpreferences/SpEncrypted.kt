@@ -35,9 +35,9 @@ import com.ave.vastgui.tools.helper.ContextHelper
  * // Declare your own SharedPreferences.
  * class EncryptedSp(name: String) {
  *
- *     // Get the SharedPreferences instance by SpEncrypted.getInstance()
+ *     // Get the SharedPreferences instance by SpEncrypted.getInstance().getSharedPreferences()
  *     private val sp by lazy{
- *         SpEncrypted.getInstance(name)
+ *         SpEncrypted.getInstance(name).getSharedPreferences()
  *     }
  *
  *     // Declare variables.
@@ -57,7 +57,7 @@ import com.ave.vastgui.tools.helper.ContextHelper
  * @param name The name of the file to open; can not contain path
  *     separators.
  */
-class SpEncrypted private constructor(name: String) : SpDelegates() {
+class SpEncrypted private constructor(name: String) {
 
     private val mSharedPreferences by lazy {
         EncryptedSharedPreferences.create(
@@ -69,7 +69,7 @@ class SpEncrypted private constructor(name: String) : SpDelegates() {
         )
     }
 
-    override fun getSharedPreferences(): SharedPreferences {
+    fun getSharedPreferences(): SharedPreferences {
         return mSharedPreferences
     }
 

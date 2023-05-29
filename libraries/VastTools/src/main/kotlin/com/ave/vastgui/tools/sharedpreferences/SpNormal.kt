@@ -34,9 +34,9 @@ import com.ave.vastgui.tools.helper.ContextHelper
  * // Declare your own SharedPreferences.
  * class NormalSp(name: String) {
  *
- *     // Get the SharedPreferences instance by SpNormal.getInstance()
+ *     // Get the SharedPreferences instance by SpNormal.getInstance().getSharedPreferences()
  *     private val sp by lazy{
- *         SpNormal.getInstance(name)
+ *         SpNormal.getInstance(name).getSharedPreferences()
  *     }
  *
  *     // Declare variables.
@@ -56,13 +56,13 @@ import com.ave.vastgui.tools.helper.ContextHelper
  * @param name The name of the file to open; can not contain path
  *     separators.
  */
-class SpNormal private constructor(name: String) : SpDelegates() {
+class SpNormal private constructor(name: String) {
 
     private val mSharedPreferences by lazy {
         ContextHelper.getAppContext().getSharedPreferences(name, Context.MODE_PRIVATE)
     }
 
-    override fun getSharedPreferences(): SharedPreferences {
+    fun getSharedPreferences(): SharedPreferences {
         return mSharedPreferences
     }
 

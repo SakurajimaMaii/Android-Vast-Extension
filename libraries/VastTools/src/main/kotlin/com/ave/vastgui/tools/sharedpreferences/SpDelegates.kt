@@ -24,95 +24,140 @@ import kotlin.reflect.KProperty
 // Email: guihy2019@gmail.com
 // Date: 2023/3/14
 
-sealed class SpDelegates {
-
-    fun string(defaultValue: String? = null) = object : ReadWriteProperty<Any, String?> {
-        override fun getValue(thisRef: Any, property: KProperty<*>): String? {
-            return getSharedPreferences().getString(property.name, defaultValue)
+/**
+ * Save or set a string value into [SharedPreferences].
+ *
+ * @param defaultValue The defaultValue you get when
+ *     [SharedPreferences.getString] return null.
+ * @since 0.5.1
+ */
+fun SharedPreferences.string(defaultValue: String? = null) =
+    object : ReadWriteProperty<Any, String> {
+        override fun getValue(thisRef: Any, property: KProperty<*>): String {
+            return this@string.getString(property.name, defaultValue) ?: defaultValue
+            ?: throw NullPointerException("SharedPreferences.getString() return null and defaultValue is null.")
         }
 
-        override fun setValue(thisRef: Any, property: KProperty<*>, value: String?) {
-            getSharedPreferences().edit().putString(property.name, value).apply()
-        }
-    }
-
-    fun stringSet(defaultValue: Set<String>? = null) = object :
-        ReadWriteProperty<Any, Set<String>?> {
-        override fun getValue(thisRef: Any, property: KProperty<*>): Set<String>? {
-            return getSharedPreferences().getStringSet(property.name, defaultValue)
-        }
-
-        override fun setValue(thisRef: Any, property: KProperty<*>, value: Set<String>?) {
-            getSharedPreferences().edit().putStringSet(property.name, value).apply()
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: String) {
+            this@string.edit().putString(property.name, value).apply()
         }
     }
 
-    fun int(defaultValue: Int = 0) = object : ReadWriteProperty<Any, Int> {
-        override fun getValue(thisRef: Any, property: KProperty<*>): Int {
-            return getSharedPreferences().getInt(property.name, defaultValue)
+/**
+ * Save or set a string set value into [SharedPreferences].
+ *
+ * @param defaultValue The defaultValue you get when
+ *     [SharedPreferences.stringSet] return null.
+ * @since 0.5.1
+ */
+fun SharedPreferences.stringSet(defaultValue: Set<String>? = null) =
+    object : ReadWriteProperty<Any, Set<String>> {
+        override fun getValue(thisRef: Any, property: KProperty<*>): Set<String> {
+            return this@stringSet.getStringSet(property.name, defaultValue) ?: defaultValue
+            ?: throw NullPointerException("SharedPreferences.stringSet() return null and defaultValue is null.")
         }
 
-        override fun setValue(thisRef: Any, property: KProperty<*>, value: Int) {
-            getSharedPreferences().edit().putInt(property.name, value).apply()
-        }
-    }
-
-    fun long(defaultValue: Long = 0L) = object : ReadWriteProperty<Any, Long> {
-
-        override fun getValue(thisRef: Any, property: KProperty<*>): Long {
-            return getSharedPreferences().getLong(property.name, defaultValue)
-        }
-
-        override fun setValue(thisRef: Any, property: KProperty<*>, value: Long) {
-            getSharedPreferences().edit().putLong(property.name, value).apply()
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: Set<String>) {
+            this@stringSet.edit().putStringSet(property.name, value).apply()
         }
     }
 
-    fun float(defaultValue: Float = 0.0f) = object : ReadWriteProperty<Any, Float> {
-        override fun getValue(thisRef: Any, property: KProperty<*>): Float {
-            return getSharedPreferences().getFloat(property.name, defaultValue)
-        }
-
-        override fun setValue(thisRef: Any, property: KProperty<*>, value: Float) {
-            getSharedPreferences().edit().putFloat(property.name, value).apply()
-        }
+/**
+ * Save or set an int value into [SharedPreferences].
+ *
+ * @param defaultValue The defaultValue to return if this preference does
+ *     not exist
+ * @since 0.5.1
+ */
+fun SharedPreferences.int(defaultValue: Int = 0) = object : ReadWriteProperty<Any, Int> {
+    override fun getValue(thisRef: Any, property: KProperty<*>): Int {
+        return this@int.getInt(property.name, defaultValue)
     }
 
-    fun boolean(defaultValue: Boolean = false) = object : ReadWriteProperty<Any, Boolean> {
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: Int) {
+        this@int.edit().putInt(property.name, value).apply()
+    }
+}
+
+/**
+ * Save or set a long value into [SharedPreferences].
+ *
+ * @param defaultValue The defaultValue to return if this preference does
+ *     not exist
+ * @since 0.5.1
+ */
+fun SharedPreferences.long(defaultValue: Long = 0L) = object : ReadWriteProperty<Any, Long> {
+    override fun getValue(thisRef: Any, property: KProperty<*>): Long {
+        return this@long.getLong(property.name, defaultValue)
+    }
+
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: Long) {
+        this@long.edit().putLong(property.name, value).apply()
+    }
+}
+
+/**
+ * Save or set a float value into [SharedPreferences].
+ *
+ * @param defaultValue The defaultValue to return if this preference does
+ *     not exist
+ * @since 0.5.1
+ */
+fun SharedPreferences.float(defaultValue: Float = 0.0f) = object : ReadWriteProperty<Any, Float> {
+    override fun getValue(thisRef: Any, property: KProperty<*>): Float {
+        return this@float.getFloat(property.name, defaultValue)
+    }
+
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: Float) {
+        this@float.edit().putFloat(property.name, value).apply()
+    }
+}
+
+/**
+ * Save or set a float value into [SharedPreferences].
+ *
+ * @param defaultValue The defaultValue to return if this preference does
+ *     not exist.
+ * @since 0.5.1
+ */
+fun SharedPreferences.boolean(defaultValue: Boolean = false) =
+    object : ReadWriteProperty<Any, Boolean> {
         override fun getValue(thisRef: Any, property: KProperty<*>): Boolean {
-            return getSharedPreferences().getBoolean(property.name, defaultValue)
+            return this@boolean.getBoolean(property.name, defaultValue)
         }
 
         override fun setValue(thisRef: Any, property: KProperty<*>, value: Boolean) {
-            getSharedPreferences().edit().putBoolean(property.name, value).apply()
+            this@boolean.edit().putBoolean(property.name, value).apply()
         }
     }
 
-    /**
-     * Save double in SharedPreferences.
-     *
-     * @param defaultValue Default value.
-     * @since 0.3.0
-     */
-    fun double(defaultValue: Double = 0.0) = object : ReadWriteProperty<Any, Double> {
+/**
+ * Save or set a double value into [SharedPreferences].
+ *
+ * @param defaultValue The defaultValue to return if this preference does
+ *     not exist.
+ * @since 0.5.1
+ */
+fun SharedPreferences.double(defaultValue: Double = 0.0) =
+    object : ReadWriteProperty<Any, Double> {
         override fun getValue(thisRef: Any, property: KProperty<*>): Double {
             return Double.Companion.fromBits(
-                getSharedPreferences().getLong(
-                    property.name,
-                    defaultValue.toRawBits()
+                this@double.getLong(
+                    property.name, defaultValue.toRawBits()
                 )
             )
         }
 
         override fun setValue(thisRef: Any, property: KProperty<*>, value: Double) {
-            getSharedPreferences().edit().putLong(property.name, value.toRawBits()).apply()
+            this@double.edit().putLong(property.name, value.toRawBits()).apply()
         }
     }
 
-    fun clearAll() {
-        getSharedPreferences().edit().clear().apply()
-    }
-
-    abstract fun getSharedPreferences(): SharedPreferences
-
+/**
+ * Clear all in [SharedPreferences].
+ *
+ * @since 0.5.1
+ */
+fun SharedPreferences.clearAll() {
+    this.edit().clear().apply()
 }
