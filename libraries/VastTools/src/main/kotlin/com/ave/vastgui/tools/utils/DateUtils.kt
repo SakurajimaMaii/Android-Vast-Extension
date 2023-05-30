@@ -19,7 +19,11 @@ package com.ave.vastgui.tools.utils
 import androidx.annotation.StringDef
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.GregorianCalendar
+import java.util.Locale
+import java.util.TimeZone
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -27,9 +31,7 @@ import java.util.*
 // Description: Help you get time and other related information.
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/DateUtils/
 
-/**
- * Date utils.
- */
+/** Date utils. */
 object DateUtils {
 
     const val FORMAT_YYYYhMMhDD = "yyyy-MM-dd"
@@ -113,8 +115,8 @@ object DateUtils {
     @JvmStatic
     fun getDayBeforeOrAfterCurrentTime(
         dateFormat: String = FORMAT_YYYY_MM_DD_HH_MM_SS,
-        beforeOrAfter:Int
-    ):String{
+        beforeOrAfter: Int
+    ): String {
         val formatter = SimpleDateFormat(dateFormat, Locale.getDefault())
         val calendar = Calendar.getInstance().apply {
             add(Calendar.DATE, beforeOrAfter)
@@ -177,18 +179,21 @@ object DateUtils {
      * Get date object by parsing [timeString] in [timeStringFormat] format.
      *
      * @param timeStringFormat The pattern describing the date and time format.
-     * @return If [timeString] parsing fails, it returns 'null'
-     *     object.Otherwise, it returns date object.
-     * @since 0.0.1
+     * @return If [timeString] parsing fails, it returns [callback].Otherwise,
+     *     it returns date object.
+     * @throws ParseException
+     * @since 0.5.1
      */
     @JvmStatic
-    fun datetimeFromString(timeString: String, timeStringFormat: String): Date? {
-        return try {
-            datetimeFormat(timeStringFormat).parse(timeString)
-        } catch (e: ParseException) {
-            e.printStackTrace()
-            Date()
-        }
+    @Throws(ParseException::class)
+    fun datetimeFromString(
+        timeString: String,
+        timeStringFormat: String,
+        callback: Date? = null
+    ): Date = try {
+        datetimeFormat(timeStringFormat).parse(timeString)!!
+    } catch (exception: Exception) {
+        callback ?: throw exception
     }
 
     /**
@@ -203,7 +208,10 @@ object DateUtils {
      */
     @JvmStatic
     @JvmOverloads
-    fun datetimeToString(date: Date = Date(), dateFormat: String = FORMAT_YYYY_MM_DD_HH_MM_SS): String {
+    fun datetimeToString(
+        date: Date = Date(),
+        dateFormat: String = FORMAT_YYYY_MM_DD_HH_MM_SS
+    ): String {
         return datetimeFormat(dateFormat).format(date)
     }
 

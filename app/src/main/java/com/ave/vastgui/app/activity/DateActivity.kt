@@ -16,11 +16,8 @@
 
 package com.ave.vastgui.app.activity
 
-import android.content.Intent
 import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityDateBinding
-import com.ave.vastgui.jintent.annotation.Builder
-import com.ave.vastgui.jintent.annotation.Optional
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.utils.DateUtils
 import com.ave.vastgui.tools.utils.LogUtils
@@ -33,15 +30,10 @@ import java.util.Date
 // Description: 
 // Documentation:
 
-@Builder
 class DateActivity : VastVbActivity<ActivityDateBinding>() {
-
-    @Optional
-    private lateinit var date: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Intent()
         LogUtils.i(getDefaultTag(), DateUtils.getCurrentTime(DateUtils.FORMAT_HH_MM))
         LogUtils.i(
             getDefaultTag(),
@@ -50,8 +42,8 @@ class DateActivity : VastVbActivity<ActivityDateBinding>() {
         LogUtils.i(getDefaultTag(), DateUtils.currentTimeZone)
         LogUtils.i(getDefaultTag(), DateUtils.minDateToString())
         LogUtils.i(getDefaultTag(), DateUtils.minDateToString(DateUtils.FORMAT_HH_MM))
-        val date: Date? = DateUtils.datetimeFromString("14:18", DateUtils.FORMAT_HH_MM)
-        LogUtils.i(getDefaultTag(), DateUtils.datetimeToString(date!!, DateUtils.FORMAT_HH_MM_SS))
+        val date: Date = DateUtils.datetimeFromString("14:18", DateUtils.FORMAT_HH_MM)
+        LogUtils.i(getDefaultTag(), DateUtils.datetimeToString(date, DateUtils.FORMAT_HH_MM_SS))
         LogUtils.i(getDefaultTag(), DateUtils.dateTimeToGMT())
         LogUtils.i(
             getDefaultTag(),
