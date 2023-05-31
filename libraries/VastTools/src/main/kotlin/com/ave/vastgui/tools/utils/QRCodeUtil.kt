@@ -18,12 +18,10 @@ package com.ave.vastgui.tools.utils
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.text.TextUtils
 import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
-import com.google.zxing.WriterException
 import com.google.zxing.common.CharacterSetECI
 import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
@@ -39,8 +37,10 @@ object QRCodeUtil {
     /**
      * QR code color.
      *
-     * @property color_black It will replace the black color in the original QR code. Default value is [Color.BLACK].
-     * @property color_white It will replace the white color in the original QR code. Default value is [Color.WHITE].
+     * @property color_black It will replace the black color in the original QR
+     *     code. Default value is [Color.BLACK].
+     * @property color_white It will replace the white color in the original QR
+     *     code. Default value is [Color.WHITE].
      */
     data class QRColor @JvmOverloads constructor(
         @ColorInt val color_black: Int = Color.BLACK,
@@ -53,45 +53,34 @@ object QRCodeUtil {
      * @param content QRCode string content.
      * @param width bitmap width(in pixel).
      * @param height bitmap height(in pixel).
-     * @param character_set character set/character transcoding format
-           (supported format: [CharacterSetECI]). When value is null, the zxing
-           source code uses "ISO-8859-1" by default.
-     * @param error_correction fault tolerance level (support level:
-           [ErrorCorrectionLevel]). When value is null, the zxing source code
-           uses "L" by default.
+     * @param characterSet character set/character transcoding format
+     *     (supported format: CharacterSetECI). Using "UTF-8" by default.
+     * @param errorCorrection fault tolerance level (support level:
+     *     ErrorCorrectionLevel). Using ErrorCorrectionLevel.H by default.
      * @param margin bitmap margin (modifiable, required: integer and >=0),
-     *     when null is passed, the zxing source code uses "4" by default.
+     *     Using 2 by default.
      * @param qrColor [QRColor]
      * @return QRCode bitmap.
+     * @see CharacterSetECI
+     * @see ErrorCorrectionLevel
+     * @since 0.5.1
      */
     @JvmOverloads
     @JvmStatic
     fun createQRCodeBitmap(
-        content: String?,
+        content: String,
         @IntRange(from = 0) width: Int,
         @IntRange(from = 0) height: Int,
-        character_set: String? = "UTF-8",
-        error_correction: String? = "H",
-        margin: String? = "2",
+        characterSet: String = "UTF-8",
+        errorCorrection: ErrorCorrectionLevel = ErrorCorrectionLevel.H,
+        @IntRange(from = 0) margin: Int = 2,
         qrColor: QRColor = QRColor()
-    ): Bitmap? {
-        if (TextUtils.isEmpty(content)) {
-            return null
-        }
-        if (width < 0 || height < 0) {
-            return null
-        }
+    ): Bitmap {
         try {
-            val hints = Hashtable<EncodeHintType, String?>()
-            if (!TextUtils.isEmpty(character_set)) {
-                hints[EncodeHintType.CHARACTER_SET] = character_set
-            }
-            if (!TextUtils.isEmpty(error_correction)) {
-                hints[EncodeHintType.ERROR_CORRECTION] = error_correction
-            }
-            if (!TextUtils.isEmpty(margin)) {
-                hints[EncodeHintType.MARGIN] = margin
-            }
+            val hints = Hashtable<EncodeHintType, Any>()
+            hints[EncodeHintType.CHARACTER_SET] = characterSet
+            hints[EncodeHintType.ERROR_CORRECTION] = errorCorrection
+            hints[EncodeHintType.MARGIN] = margin
             val bitMatrix =
                 QRCodeWriter().encode(content, BarcodeFormat.QR_CODE, width, height, hints)
             val pixels = IntArray(width * height)
@@ -107,10 +96,9 @@ object QRCodeUtil {
             val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             bitmap.setPixels(pixels, 0, width, 0, 0, width, height)
             return bitmap
-        } catch (e: WriterException) {
-            e.printStackTrace()
+        } catch (exception: Exception) {
+            throw exception
         }
-        return null
     }
 
 }
