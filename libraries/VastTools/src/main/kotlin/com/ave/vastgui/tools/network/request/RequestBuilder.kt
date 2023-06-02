@@ -16,11 +16,16 @@
 
 package com.ave.vastgui.tools.network.request
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.URL
 import java.util.concurrent.TimeUnit
 
 // Author: Vast Gui
@@ -28,7 +33,7 @@ import java.util.concurrent.TimeUnit
 // Date: 2022/9/24
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/RequestBuilder/
 
-abstract class RequestBuilder {
+open class RequestBuilder {
 
     private val okHttpClient: OkHttpClient by lazy {
         val builder = OkHttpClient.Builder()
@@ -44,13 +49,31 @@ abstract class RequestBuilder {
         builder.build()
     }
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(setBaseUrl())
-        .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-        .addCallAdapterFactory(RequestAdapterFactory())
-        .client(okHttpClient)
-        .build()
+    protected var retrofit: Retrofit
+
+    /**
+     * @since 0.5.1
+     */
+    constructor(baseUrl: String){
+        retrofit = Retrofit.Builder()
+            .baseUrl(baseUrl).configuration().build()
+    }
+
+    /**
+     * @since 0.5.1
+     */
+    constructor(baseUrl: URL){
+        retrofit = Retrofit.Builder()
+            .baseUrl(baseUrl).configuration().build()
+    }
+
+    /**
+     * @since 0.5.1
+     */
+    constructor(baseUrl: HttpUrl){
+        retrofit = Retrofit.Builder()
+            .baseUrl(baseUrl).configuration().build()
+    }
 
     fun <T> create(serviceClass: Class<T>): T = retrofit.create(serviceClass)
 
@@ -58,9 +81,6 @@ abstract class RequestBuilder {
     open fun setTimeOut(): Long {
         return 8L
     }
-
-    /** Set base url */
-    abstract fun setBaseUrl(): String
 
     /** Customize the configuration of OKHttpClient. */
     open fun handleOkHttpClientBuilder(builder: OkHttpClient.Builder) {
@@ -72,4 +92,29 @@ abstract class RequestBuilder {
         return null
     }
 
+    /**
+     * The configuration of the [retrofit].
+     *
+     * @since 0.5.1
+     */
+    private fun Retrofit.Builder.configuration() = apply {
+        addConverterFactory(GsonConverterFactory.create())
+        addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+        addCallAdapterFactory(RequestAdapterFactory())
+        addCallAdapterFactory(Request2AdapterFactory())
+        client(okHttpClient)
+    }
+
 }
+
+/**
+ * Get api service and the scope.
+ *
+ * @param serviceScope The scope of the api service.
+ * @see Retrofit.create
+ * @since 0.5.1
+ */
+fun <T, R> RequestBuilder.getApi(service: Class<T>, serviceScope: suspend T.() -> Request2<R>) = flow {
+    val response = this@getApi.create(service).serviceScope()
+    emit(response)
+}.flowOn(Dispatchers.IO)
