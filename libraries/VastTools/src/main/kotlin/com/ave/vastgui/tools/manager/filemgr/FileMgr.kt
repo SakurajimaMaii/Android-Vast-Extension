@@ -17,18 +17,29 @@
 package com.ave.vastgui.tools.manager.filemgr
 
 import android.content.Context
+import android.os.Environment
 import androidx.security.crypto.EncryptedFile
 import com.ave.vastgui.tools.config.ToolsConfig
 import com.ave.vastgui.tools.helper.ContextHelper
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.io.IOException
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/5/30
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/file-manager/FileMgr/
+
+/**
+ * File path scope
+ *
+ * @since 0.5.1
+ */
+class FilePathScope internal constructor() {
+    var path = ""
+
+    infix fun String.f(path: String) = "$this${File.separator}$path"
+}
 
 object FileMgr : FileProperty by FilePropertyMgr() {
 
@@ -50,20 +61,29 @@ object FileMgr : FileProperty by FilePropertyMgr() {
 
     /**
      * @return The File which from external storage, meant for your app's use
-     *     only.
+     *     only. Throw IllegalStateException if shared storage is not currently
+     *     available.
+     * @throws IllegalStateException
      * @see [Context.getExternalFilesDir]
      */
     @JvmStatic
-    fun appExternalFilesDir(path: String?): File? =
-        ContextHelper.getAppContext().getExternalFilesDir(path)
+    @Throws(IllegalStateException::class)
+    fun appExternalFilesDir(path: String?): File = if (isExternalStorageReadable()) {
+        ContextHelper.getAppContext().getExternalFilesDir(path)!!
+    } else throw IllegalStateException("Shared storage is not currently available.")
+
 
     /**
      * @return The File which from external storage, meant for your app's use
-     *     only.
+     *     only. Throw IllegalStateException if shared storage is not currently
+     *     available.
      * @see [Context.getExternalCacheDir]
      */
     @JvmStatic
-    fun appExternalCacheDir(): File? = ContextHelper.getAppContext().externalCacheDir
+    @Throws(IllegalStateException::class)
+    fun appExternalCacheDir(): File = if (isExternalStorageReadable()) {
+        ContextHelper.getAppContext().externalCacheDir!!
+    } else throw IllegalStateException("Shared storage is not currently available.")
 
     /**
      * Get file path.
@@ -72,6 +92,10 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      *     [File.separator], false otherwise.
      * @param path file path item.
      */
+    @Deprecated(
+        message = "Please consider using getPath(scope: FilePathScope.() -> Unit)",
+        level = DeprecationLevel.WARNING
+    )
     @JvmStatic
     fun getPath(endWithSeparator: Boolean, vararg path: String): String {
         var finalPath = ""
@@ -79,6 +103,16 @@ object FileMgr : FileProperty by FilePropertyMgr() {
             finalPath += (p + File.separator)
         }
         return if (!endWithSeparator) finalPath.replaceFirst(".$".toRegex(), "") else finalPath
+    }
+
+    /**
+     * Get file path
+     *
+     * @param scope The scope that is used to build file path.
+     * @since 0.5.1
+     */
+    fun getPath(scope: FilePathScope.() -> Unit): String {
+        return FilePathScope().also(scope).path
     }
 
     /**
@@ -162,7 +196,8 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      * Move the file to the specified location.
      *
      * @param file File to be moved.
-     * @param destination File move destination path. For example: appInternalFilesDir().path.
+     * @param destination File move destination path. For example:
+     *     appInternalFilesDir().path.
      * @since 0.4.0
      */
     fun moveFile(file: File, destination: String): FileResult {
@@ -378,13 +413,15 @@ object FileMgr : FileProperty by FilePropertyMgr() {
     /**
      * Get assets cache file.
      *
-     * @since 0.2.0
+     * @param fileName The assets file name.
+     * @param dir The dir where the file saved.
+     * @since 0.5.1
      */
-    fun getAssetsCacheFile(fileName: String): File {
-        val cacheFile = File(appInternalCacheDir(), fileName)
+    fun getAssetsFile(fileName: String, dir: File = appInternalFilesDir()): File {
+        val saveFile = File(dir, fileName)
         try {
             ContextHelper.getAppContext().assets.open(fileName).use { inputStream ->
-                FileOutputStream(cacheFile).use { outputStream ->
+                FileOutputStream(saveFile).use { outputStream ->
                     val buf = ByteArray(1024)
                     var len: Int
                     while (inputStream.read(buf).also { len = it } > 0) {
@@ -392,10 +429,31 @@ object FileMgr : FileProperty by FilePropertyMgr() {
                     }
                 }
             }
-        } catch (e: IOException) {
-            e.printStackTrace()
+            return saveFile
+        } catch (exception: Exception) {
+            throw exception
         }
-        return cacheFile
+    }
+
+    /**
+     * Checks if a volume containing external storage is available for read and
+     * write.
+     *
+     * @since 0.5.1
+     */
+    fun isExternalStorageWritable(): Boolean {
+        return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+    }
+
+    /**
+     * Checks if a volume containing external storage is available to at least
+     * read.
+     *
+     * @since 0.5.1
+     */
+    fun isExternalStorageReadable(): Boolean {
+        return Environment.getExternalStorageState() in
+                setOf(Environment.MEDIA_MOUNTED, Environment.MEDIA_MOUNTED_READ_ONLY)
     }
 
 }
