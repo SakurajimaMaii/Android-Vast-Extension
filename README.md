@@ -8,11 +8,35 @@
 
 <div align="center">English | <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/README_CN.md">简体中文</a></div>
 
-## Building
+## Quick Start
 
-Select `Android Studio Gradle` -> `libraries` -> `VastAdapter` -> `Tasks` -> `build` -> `assemble` .In this way, you can find the corresponding arr package in the path of `\build\outputs\aar`.
+- **VastCore**
 
-<div align=center><img src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/mdResource/building.png?raw=true" style="width:50%"/></div>
+    Contains some basic content required by other modules. Lastest version ![version](https://img.shields.io/maven-central/v/io.github.sakurajimamaii/VastCore)
+
+    ```kotlin
+    implementation("io.github.sakurajimamaii:VastCore:$version")
+    ```
+
+- **VastNetStateLayout**
+
+    VastNetStateLayout is a network state widget, which inherits from framelayout. You can customize the following status pages: loading , error , loading error , empty data. Lastest version ![version](https://img.shields.io/maven-central/v/io.github.sakurajimamaii/VastNetStateLayout)
+
+    ```kotlin
+    implementation("io.github.sakurajimamaii:VastNetStateLayout:$version")
+    ```
+
+- **VastTools**
+
+    VastTools is a set of SDK developed for Android. Provides a series of architectural components including ViewBinding, ViewModel, DataStore, etc., as well as a series of development tools such as logs, widgets, file manager, media manager, network connection, and data storage. Lastest version ![version](https://img.shields.io/maven-central/v/io.github.sakurajimamaii/VastTools)
+
+    ```kotlin
+    implementation("io.github.sakurajimamaii:VastTools:$version")
+    ```
+
+## Document
+
+Please click [Android-Vast-Extension](https://ave.entropy2020.cn/) to get detailed documentation instructions.
 
 ## Dependencies
 

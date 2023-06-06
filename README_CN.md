@@ -8,11 +8,35 @@
 
 <p align="center">简体中文 | <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/README.md">English</a></p>
 
-## 构建
+## 快速开始
 
-选择 `Android Studio Gradle` -> `libraries` -> `VastAdapter` -> `Tasks` -> `build` -> `assemble` 这样就可以在 `\build\outputs\aar` 路径下找到对应的 aar 。
+- **VastCore**
 
-<div align=center><img src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/mdResource/building.png?raw=true" style="width:50%"/></div>
+    包含其他模块所需的一些基本内容. 最后一个版本 ![version](https://img.shields.io/maven-central/v/io.github.sakurajimamaii/VastCore)
+
+    ```kotlin
+    implementation("io.github.sakurajimamaii:VastCore:$version")
+    ```
+
+- **VastNetStateLayout**
+
+    VastNetStateLayout 是一个网络状态控件，它继承自 framelayout。您可以自定义以下状态页面： loading 、 error 、 loading error 、 empty data 。最后一个版本 ![version](https://img.shields.io/maven-central/v/io.github.sakurajimamaii/VastNetStateLayout)
+
+    ```kotlin
+    implementation("io.github.sakurajimamaii:VastNetStateLayout:$version")
+    ```
+
+- **VastTools**
+
+    VastTools是一套为Android开发的SDK。提供包括ViewBinding、ViewModel、DataStore等一系列架构组件，以及日志、widgets、文件管理器、媒体管理器、网络连接、数据存储等一系列开发工具。最后一个版本 ![version](https://img.shields.io/maven-central/v/io.github.sakurajimamaii/VastTools)
+
+    ```kotlin
+    implementation("io.github.sakurajimamaii:VastTools:$version")
+    ```
+
+## 文档
+
+请点击 [Android-Vast-Extension](https://ave.entropy2020.cn/) 获取详细文档说明。
 
 ## 依赖信息
 
