@@ -43,11 +43,12 @@ object ImageMgr : MediaFileMgr() {
         return Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES)
     }
 
-    override fun getExternalFilesDir(subDir: String?): File? {
+    @Throws(IllegalStateException::class)
+    override fun getExternalFilesDir(subDir: String?): File {
         val file = if (subDir == null) {
             FileMgr.appExternalFilesDir(DIRECTORY_PICTURES)
         } else File(FileMgr.appExternalFilesDir(DIRECTORY_PICTURES), subDir)
-        file?.let { FileMgr.makeDir(it) }?.let {
+        file.let { FileMgr.makeDir(it) }.let {
             if (it.isFailure) {
                 LogUtils.e(defaultLogTag(), it.exceptionOrNull()?.message)
             }

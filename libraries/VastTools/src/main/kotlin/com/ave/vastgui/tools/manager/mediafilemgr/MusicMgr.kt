@@ -42,11 +42,12 @@ object MusicMgr : MediaFileMgr() {
         return Environment.getExternalStoragePublicDirectory(DIRECTORY_MUSIC)
     }
 
-    override fun getExternalFilesDir(subDir: String?): File? {
+    @Throws(IllegalStateException::class)
+    override fun getExternalFilesDir(subDir: String?): File {
         val file = if (subDir == null) {
             FileMgr.appExternalFilesDir(DIRECTORY_MUSIC)
         } else File(FileMgr.appExternalFilesDir(DIRECTORY_MUSIC), subDir)
-        file?.let { FileMgr.makeDir(it) }?.let {
+        file.let { FileMgr.makeDir(it) }.let {
             if (it.isFailure) {
                 LogUtils.e(defaultLogTag(), it.exceptionOrNull()?.message)
             }

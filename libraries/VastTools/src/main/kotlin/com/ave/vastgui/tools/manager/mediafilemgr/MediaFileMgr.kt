@@ -38,7 +38,11 @@ sealed class MediaFileMgr : MediaFileProperty {
      */
     final override fun getDefaultFileName(extension: String): String {
         val timeStamp: String = DateUtils.getCurrentTime("yyyyMMdd_HHmmss_SSS")
-        return "${timeStamp}_${AppUtils.getPackageName()?.replace(".", "_")}$extension"
+        return try {
+            "${timeStamp}_${AppUtils.getPackageName().replace(".", "_")}$extension"
+        } catch (exception:Exception) {
+            "${timeStamp}_media_file_mgr$extension"
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
