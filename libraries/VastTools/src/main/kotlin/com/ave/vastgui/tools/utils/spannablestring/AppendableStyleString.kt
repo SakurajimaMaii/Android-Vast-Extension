@@ -35,14 +35,11 @@ import android.text.style.SuperscriptSpan
 import android.text.style.URLSpan
 import android.text.style.UnderlineSpan
 import android.widget.TextView
-import com.ave.vastgui.tools.utils.ResUtils
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/5/21
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/string/AppendableStyleString/
 
 /**
  * Create a style string scope.
@@ -89,9 +86,9 @@ inline fun SpannableStringBuilder.withStyle(
             setSpan(RelativeSizeSpan(proportion), start, length, flag)
             setSpan(ScaleXSpan(xProportion), start, length, flag)
             foreColor?.let {
-                setSpan(ForegroundColorSpan(ResUtils.getColor(it)), start, length, flag)
+                setSpan(ForegroundColorSpan(it), start, length, flag)
             }
-            setSpan(BackgroundColorSpan(ResUtils.getColor(backColor)), start, length, flag)
+            setSpan(BackgroundColorSpan(backColor), start, length, flag)
             setSpan(StyleSpan(fontStyle.value), start, length, flag)
             setSpan(fontFamily, start, length, flag)
             when (strikeMode) {

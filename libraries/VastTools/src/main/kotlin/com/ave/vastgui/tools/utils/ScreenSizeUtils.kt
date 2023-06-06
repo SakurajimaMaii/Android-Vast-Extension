@@ -135,7 +135,7 @@ object ScreenSizeUtils {
      * @see Configuration.ORIENTATION_PORTRAIT
      */
     @JvmStatic
-    fun getScreenOrientation() = ContextHelper.getAppContext().resources?.configuration?.orientation
+    fun getScreenOrientation() = ContextHelper.getAppContext().resources.configuration.orientation
 
     /**
      * Get screen orientation in degrees. By default, it returns 0.

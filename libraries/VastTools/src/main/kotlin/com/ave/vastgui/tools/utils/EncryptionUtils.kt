@@ -30,7 +30,7 @@ object EncryptionUtils {
     /**
      * Encrypt [text] with MD5.
      *
-     * @return encode text by MD5, "" otherwise.
+     * @return encode text by MD5.
      */
     @JvmStatic
     @Deprecated(
@@ -50,10 +50,9 @@ object EncryptionUtils {
                 sb.append(hexString)
             }
             return sb.toString()
-        } catch (e: NoSuchAlgorithmException) {
-            e.printStackTrace()
+        } catch (exception: NoSuchAlgorithmException) {
+            throw exception
         }
-        return ""
     }
 
 }

@@ -43,9 +43,6 @@ object MapUtils {
         // Position determined by WLAN or mobile network (3G/2G) (also called AGPS, Assisted GPS Positioning.
         // Mainly used for positioning indoors or in densely covered places (buildings or dense deep forest, etc.).
         val network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        if (gps && network) {
-            return true
-        }
-        return false
+        return gps && network
     }
 }

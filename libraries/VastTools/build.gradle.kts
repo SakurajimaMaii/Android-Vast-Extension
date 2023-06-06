@@ -107,6 +107,7 @@ dependencies {
     implementation(AndroidX.arch_core_runtime)
     implementation(AndroidX.constraintlayout)
     implementation(AndroidX.core_ktx)
+    implementation(AndroidX.datastore)
     implementation(AndroidX.exifinterface)
     implementation(AndroidX.fragment_ktx)
     implementation(AndroidX.lifecycle_livedata_core_ktx)
@@ -147,7 +148,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "VastTools"
-            version = "0.5.0"
+            version = "0.5.1"
 
             afterEvaluate {
                 from(components["release"])

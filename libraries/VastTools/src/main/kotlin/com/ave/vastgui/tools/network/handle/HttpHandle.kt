@@ -22,9 +22,6 @@ import com.ave.vastgui.tools.network.response.ResponseWrapper
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/2/25
-// Description: 
-// Documentation:
-// Reference:
 
 internal object HttpHandle {
 

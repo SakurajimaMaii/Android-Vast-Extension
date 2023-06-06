@@ -22,9 +22,6 @@ import kotlinx.coroutines.CoroutineScope
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/6
-// Description: 
-// Documentation:
-// Reference:
 
 /** Create a [ResponseBuilder]. */
 fun CoroutineScope.getResponseBuilder(): ResponseBuilder {

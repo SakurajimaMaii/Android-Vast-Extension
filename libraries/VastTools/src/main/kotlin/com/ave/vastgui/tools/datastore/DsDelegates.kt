@@ -36,9 +36,7 @@ import java.io.IOException
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/5/29
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/data-layer-libraries/DataStore/
 
 /**
  * Save an int value into [DataStore].

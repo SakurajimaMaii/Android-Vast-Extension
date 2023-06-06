@@ -19,9 +19,6 @@ package com.ave.vastgui.tools.utils.spannablestring
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/5/22
-// Description: 
-// Documentation:
-// Reference:
 
 /**
  * @since 0.5.1

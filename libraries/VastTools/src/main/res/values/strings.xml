@@ -15,15 +15,6 @@
   -->
 
 <resources>
-    <!-- Unit formatter string. -->
-    <string name="unit_angle" translatable="false">%s°</string>
-    <string name="unit_celsius" translatable="false">%s℃</string>
-    <string name="unit_kmh" translatable="false">%skm/h</string>
-    <string name="unit_km" translatable="false">%skm</string>
-    <string name="unit_m" translatable="false">%sm</string>
-    <string name="unit_ms" translatable="false">%sm/s</string>
-    <string name="unit_percent" translatable="false">%s%%</string>
-
     <!-- Gender string. -->
     <string name="gender_man">Man</string>
     <string name="gender_woman">Woman</string>

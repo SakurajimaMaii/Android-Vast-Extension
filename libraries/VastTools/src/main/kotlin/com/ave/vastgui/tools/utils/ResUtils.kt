@@ -45,7 +45,7 @@ object ResUtils {
      */
     @JvmStatic
     @JvmOverloads
-    @Throws(Resources.NotFoundException::class)
+    @Throws(NotFoundException::class)
     fun getString(@StringRes id: Int, callback: String? = null): String = try {
         ContextHelper.getAppContext().resources.getString(id)
     } catch (exception: Exception) {
@@ -64,7 +64,7 @@ object ResUtils {
     @SuppressLint("DiscouragedApi")
     @JvmStatic
     @JvmOverloads
-    @Throws(Resources.NotFoundException::class)
+    @Throws(NotFoundException::class)
     fun getDrawable(name: String, callback: Drawable? = null): Drawable = try {
         val context = ContextHelper.getAppContext()
         val resId = context.resources.getIdentifier(name, "drawable", context.packageName)
@@ -84,7 +84,7 @@ object ResUtils {
      */
     @JvmStatic
     @JvmOverloads
-    @Throws(Resources.NotFoundException::class)
+    @Throws(NotFoundException::class)
     fun getDrawable(
         @DrawableRes resId: Int, callback: Drawable? = null
     ): Drawable = try {
@@ -105,7 +105,7 @@ object ResUtils {
      */
     @JvmStatic
     @JvmOverloads
-    @Throws(Resources.NotFoundException::class)
+    @Throws(NotFoundException::class)
     fun getColor(@ColorRes id: Int, @ColorInt callback: Int? = null): Int = try {
         val context: Context = ContextHelper.getAppContext()
         context.getColor(id)
@@ -126,7 +126,7 @@ object ResUtils {
      */
     @JvmStatic
     @JvmOverloads
-    @Throws(Resources.NotFoundException::class)
+    @Throws(NotFoundException::class)
     fun getDimensionPixelOffset(@DimenRes id: Int, callback: Int? = null): Int = try {
         val context: Context = ContextHelper.getAppContext()
         context.resources.getDimensionPixelOffset(id)

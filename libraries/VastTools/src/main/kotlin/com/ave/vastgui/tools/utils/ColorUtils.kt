@@ -28,27 +28,17 @@ import androidx.annotation.IntRange
 
 object ColorUtils {
 
-    /**
-     * Color hex regex.Supported formats are `#RRGGBB` and `#AARRGGBB`.
-     */
-    @JvmField
-    val COLOR_HEX_REGEX = "^#([A-Fa-f\\d]{6}|[A-Fa-f\\d]{8})$"
+    /** Color hex regex.Supported formats are `#RRGGBB` and `#AARRGGBB`. */
+    const val COLOR_HEX_REGEX = "^#([A-Fa-f\\d]{6}|[A-Fa-f\\d]{8})$"
 
-    /**
-     * Color parse failed.
-     */
-    @JvmField
-    val COLOR_PARSE_ERROR = 0
+    /** Color parse failed. */
+    const val COLOR_PARSE_ERROR = 0
 
-    /**
-     * Wrong result when converting color to RGB.
-     */
+    /** Wrong result when converting color to RGB. */
     @JvmField
     val COLOR_RGB_ARRAY_ERROR = intArrayOf(-1, -1, -1)
 
-    /**
-     * Map of color transparency.
-     */
+    /** Map of color transparency. */
     @JvmField
     val ColorTransparency = mapOf(
         100 to "FF",
@@ -263,11 +253,12 @@ object ColorUtils {
         return Color.rgb(rgb[0], rgb[1], rgb[2])
     }
 
-    /**
-     * Get argb by [transparency] and [colorInt].
-     */
+    /** Get argb by [transparency] and [colorInt]. */
     @JvmStatic
-    fun getColorWithTransparency(@IntRange(from = 0, to = 100) transparency: Int, colorInt: Int):String {
+    fun getColorWithTransparency(
+        @IntRange(from = 0, to = 100) transparency: Int,
+        colorInt: Int
+    ): String {
         val colorHex = colorInt2Hex(colorInt)
         return StringBuilder(colorHex).insert(1, ColorTransparency[transparency]).toString()
     }

@@ -493,7 +493,7 @@ class WaveProgressView @JvmOverloads constructor(
      */
     override fun setBackgroundResource(resid: Int) {
         try {
-            ResUtils.getDrawable(resid, context)?.apply {
+            ResUtils.getDrawable(resid).apply {
                 background = this
             }
         } catch (e: Exception) {

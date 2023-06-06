@@ -30,9 +30,7 @@ import com.ave.vastgui.tools.utils.ResUtils
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/5/22
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/string/AppendableStyleString/
 
 /**
  * The append style.

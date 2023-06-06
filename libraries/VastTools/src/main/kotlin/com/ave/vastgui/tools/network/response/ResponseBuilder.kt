@@ -23,7 +23,6 @@ import kotlin.coroutines.startCoroutine
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/26
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/Request/
 
 class ResponseBuilder(private val mainScope: CoroutineScope) {
 
