@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2022 VastGui guihy2019@gmail.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,49 +18,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.IntentActivity"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="10dp"
+    tools:context=".activity.IntentActivity">
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/callBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="call phone" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/searchWeb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="search web" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/openWebPage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Open Web Page"/>
+        android:text="Open Web Page" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/sendMmsMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Send Mms Message" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/sendEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Send Email" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/createAlarm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Create Alarm" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/wifiSetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Wireless Setting" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/createShortcut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Create shortcut" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/getQRCode"
         android:layout_width="match_parent"

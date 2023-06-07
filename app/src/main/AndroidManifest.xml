@@ -7,9 +7,10 @@
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
+    <!--    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.alarm.permission.SET_ALARM" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
@@ -29,7 +30,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/VastTheme"
+        android:theme="@style/AppTheme"
         android:usesCleartextTraffic="false">
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -41,25 +42,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <receiver
-            android:name=".broadcastreceiver.ShortcutReceiver"
-            android:exported="true"
-            android:permission="com.android.launcher.permission.INSTALL_SHORTCUT">
-            <intent-filter>
-                <action android:name="com.gcode.vastutils.SHORTCUT_ADDED" />
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-
-        <activity android:name=".activity.view.swiperv.SwipeRvActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".activity.PermissionActivity"
             android:exported="true">
@@ -69,7 +51,7 @@
             <!--            </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.view.WaveProgressViewActivity"
+            android:name=".activity.viewexample.WaveProgressViewActivity"
             android:exported="true">
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -77,7 +59,7 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".activity.view.HorizontalProgressViewActivity"
+            android:name=".activity.viewexample.HorizontalProgressViewActivity"
             android:exported="true">
             <!--                        <intent-filter>-->
             <!--                            <action android:name="android.intent.action.MAIN" />-->
@@ -85,7 +67,7 @@
             <!--                        </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.view.AutoCompleteTextViewActivity"
+            android:name=".activity.viewexample.AutoCompleteTextViewActivity"
             android:exported="true">
 
             <!--             <intent-filter>-->
@@ -94,36 +76,21 @@
             <!--             </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.view.RatingActivity"
+            android:name=".activity.viewexample.RatingActivity"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-        </activity>
-        <activity
-            android:name=".activity.MediaActivity"
-            android:exported="true">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
-        <activity
-            android:name=".activity.RequestActivity"
-            android:exported="true">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".activity.ExampleActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name="com.ave.vastgui.tools.activity.app.VastCropActivity"
@@ -135,7 +102,7 @@
         </activity>
 
         <activity
-            android:name=".activity.ImageActivity"
+            android:name=".activity.CropImageActivity"
             android:exported="true">
             <!--            <intent-filter>-->
             <!--                <action android:name="android.intent.action.MAIN" />-->
@@ -144,7 +111,7 @@
         </activity>
 
         <activity
-            android:name=".activity.view.Vp2IndicatorActivity"
+            android:name=".activity.viewexample.Vp2IndicatorActivity"
             android:exported="true">
             <!--            <intent-filter>-->
             <!--                <action android:name="android.intent.action.MAIN" />-->
@@ -152,21 +119,12 @@
             <!--            </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.view.ArcProgressViewActivity"
+            android:name=".activity.viewexample.ArcProgressViewActivity"
             android:exported="true">
             <!--             <intent-filter>-->
             <!--             <action android:name="android.intent.action.MAIN" />-->
             <!--             <category android:name="android.intent.category.LAUNCHER" />-->
             <!--             </intent-filter>-->
-        </activity>
-        <activity
-            android:name=".activity.ThemeActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.adpexample.BindAdapterActivity"
@@ -215,14 +173,13 @@
         <activity
             android:name=".activity.IntentActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.BaseActivity"
+            android:name=".activity.reflexexample.BaseActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -241,11 +198,10 @@
         <activity
             android:name=".activity.DateActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".activity.MainActivity"
@@ -257,14 +213,6 @@
 
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
-        </activity>
-        <activity
-            android:name=".activity.DensityActivity"
-            android:exported="true">
-            <!--             <intent-filter>-->
-            <!--                 <action android:name="android.intent.action.MAIN" />-->
-            <!--                 <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--             </intent-filter>-->
         </activity>
     </application>
 

@@ -18,9 +18,7 @@ package com.ave.vastgui.app.activity.adpexample.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.widget.ImageView
 import androidx.annotation.IntRange
-import androidx.databinding.BindingAdapter
 import androidx.databinding.ViewDataBinding
 import com.ave.vastgui.adapter.VastBindAdapter
 import com.ave.vastgui.adapter.base.BaseBindHolder
@@ -38,14 +36,6 @@ class BindAdapter2(
     dataSource: MutableList<AdapterItemWrapper<*>>,
     mContext: Context
 ) : VastBindAdapter(dataSource, mContext) {
-
-    companion object {
-        @JvmStatic
-        @BindingAdapter("android:src")
-        fun setImageResource(imageView: ImageView, resource: Int) {
-            imageView.setImageResource(resource)
-        }
-    }
 
     /**
      * Returns `true` if the collection is empty (contains no elements),

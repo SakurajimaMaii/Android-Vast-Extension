@@ -22,8 +22,6 @@ import com.ave.vastgui.app.databinding.ActivityShapeBinding
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.utils.ColorUtils
 import com.ave.vastgui.tools.utils.drawable.ShapeAndStateDrawable
-import com.ave.vastgui.tools.utils.spannablestring.SpanMode
-import com.ave.vastgui.tools.utils.spannablestring.SpanStrUtils
 
 class ShapeActivity : VastVbActivity<ActivityShapeBinding>() {
 
@@ -48,18 +46,12 @@ class ShapeActivity : VastVbActivity<ActivityShapeBinding>() {
             set(5, ColorUtils.colorHex2Int("#0575E6"))
         }
 
-        val btnBK = ShapeAndStateDrawable.create()
+        ShapeAndStateDrawable.create()
             .setShape(RECTANGLE)
             .setRadius(50f)
             .setGradient(45, ColorUtils.colorHex2Int("#0F2027"), ColorUtils.colorHex2Int("#78ffd6"))
             .setBgColorStateList(states, colorList)
             .build()
-
-        SpanStrUtils
-            .getBuilder(getBinding().tv1, "链接")
-            .setFlag(SpanMode.SEE)
-            .setUrl("https://www.developer.android.com")
-            .attachToTextView()
     }
 
 }

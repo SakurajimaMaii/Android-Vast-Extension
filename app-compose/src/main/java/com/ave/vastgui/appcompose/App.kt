@@ -17,7 +17,12 @@
 package com.ave.vastgui.appcompose
 
 import android.app.Application
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import com.ave.vastgui.jintent.VastJIntent
+import com.ave.vastgui.tools.config.ToolsConfig
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -26,11 +31,14 @@ import com.ave.vastgui.jintent.VastJIntent
 // Documentation:
 // Reference:
 
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
         VastJIntent.init(this)
+        ToolsConfig.init(this)
     }
 
 }

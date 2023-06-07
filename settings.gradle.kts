@@ -29,7 +29,6 @@ val libs = arrayOf(
         "VastAdapter",
         "VastCore",
         "VastNetStateLayout",
-        "VastSkin",
         "VastTools",
         "VastJIntent",
         "VastJIntent-Annotation",
@@ -38,16 +37,4 @@ val libs = arrayOf(
 
 libs.forEach {
         include(":libraries:$it")
-}
-
-// =======
-// = Skin =
-// =======
-
-val skin = arrayOf(
-        "darkskin"
-)
-
-skin.forEach {
-        include(":skin:$it")
 }

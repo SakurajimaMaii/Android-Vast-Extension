@@ -17,62 +17,59 @@
 package com.ave.vastgui.app.activity
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
+import androidx.lifecycle.lifecycleScope
+import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityNetStateBinding
+import com.ave.vastgui.app.network.service.Request2Service
 import com.ave.vastgui.app.viewmodel.NetVM
 import com.ave.vastgui.netstatelayout.view.VastNetStateMgr
 import com.ave.vastgui.tools.activity.VastVbVmActivity
+import com.ave.vastgui.tools.network.request.Request2
+import com.ave.vastgui.tools.network.request.RequestBuilder
+import com.ave.vastgui.tools.network.request.getApi
 import com.ave.vastgui.tools.utils.DateUtils
-import com.ave.vastgui.tools.utils.LogUtils
+import kotlinx.coroutines.launch
 
 
 class NetStateActivity : VastVbVmActivity<ActivityNetStateBinding, NetVM>() {
 
-    private val mHandler: Handler = object : Handler(Looper.getMainLooper()) {
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
-            // getBinding().netStateLayout.showSuccess()
-        }
-    }
+    private var text = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getViewModel().getQRCode_3(DateUtils.getCurrentTime(DateUtils.FORMAT_HH_MM))
-        getViewModel().qRCodeKey.observe(this){ value ->
-            LogUtils.i(getDefaultTag(),value.data?.unikey)
-        }
-        getViewModel().qRCodeKey.observeState(this){
-            onSuccess = {
-                LogUtils.i(getDefaultTag(),"onSuccess")
-            }
-            onError = {
-                LogUtils.i(getDefaultTag(),"onError")
-            }
+
+        lifecycleScope.launch {
+            RequestBuilder("www.yourapi.com")
+                .getApi(Request2Service::class.java) {
+                    generateQRCode(DateUtils.getCurrentTime())
+                }.collect {
+                    with(getBinding().netStateLayout){
+                        when(it){
+                            is Request2.Success ->text =  it.data.data?.unikey.toString()
+                            is Request2.Empty -> this.showEmptyData()
+                            is Request2.Exception -> this.showLoadingError()
+                            is Request2.Failure -> this.showLoadingError()
+                        }
+                    }
+                }
         }
 
         val vastNetStateMgr = VastNetStateMgr(this)
-//            .setNetErrorListener {
-//                // Something to do when network error
-//            }
-//            .setLoadingListener {
-//                object : Handler(Looper.getMainLooper()) {
-//                    override fun handleMessage(msg: Message) {
-//                        super.handleMessage(msg)
-//                        getBinding().netStateLayout.showSuccess()
-//                    }
-//                }.sendEmptyMessageDelayed(0, 1000)
-//            }
-//            .setLoadingErrorListener {
-//                // Something to do when loading error
-//            }
-//            .setEmptyDataListener {
-//                // Something to do when empty data
-//            }
-//            .setNetErrorView(R.layout.error_page)
+            .setNetErrorListener {
+                // Something to do when network error
+            }
+            .setLoadingListener {
+                // Something to do when loading
+            }
+            .setLoadingErrorListener {
+                // Something to do when loading error
+            }
+            .setEmptyDataListener {
+                // Something to do when empty data
+            }
+            .setNetErrorView(R.layout.error_page)
 
         getBinding().netStateLayout.setVastNetStateMgr(vastNetStateMgr)
-//        getBinding().netStateLayout.showNetError()
+
     }
 }

@@ -20,10 +20,12 @@ import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityExampleBinding
 import com.ave.vastgui.app.viewmodel.SampleSharedVM
 import com.ave.vastgui.tools.activity.VastVbVmActivity
+import com.ave.vastgui.tools.activity.widget.screenConfig
 
 class ExampleActivity : VastVbVmActivity<ActivityExampleBinding, SampleSharedVM>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        screenConfig(mEnableActionBar = false,mEnableFullScreen = false)
 
         getBinding().addOne.setOnClickListener {
             getViewModel().addOne()

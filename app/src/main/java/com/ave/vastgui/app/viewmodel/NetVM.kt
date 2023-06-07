@@ -16,10 +16,10 @@
 
 package com.ave.vastgui.app.viewmodel
 
-import com.ave.vastgui.app.network.NetworkRetrofitBuilder
-import com.ave.vastgui.app.network.service.QRCodeKey
-import com.ave.vastgui.app.network.service.QRService
-import com.ave.vastgui.app.network.service.UserService
+import com.ave.vastgui.app.network.MyRequestBuilder
+import com.ave.vastgui.app.network.QRCodeKey
+import com.ave.vastgui.app.network.service.RequestService
+import com.ave.vastgui.app.network.service.SuspendService
 import com.ave.vastgui.tools.lifecycle.viewModel.VastViewModel
 import com.ave.vastgui.tools.network.response.ResponseLiveData
 import com.ave.vastgui.tools.network.response.ResponseMutableLiveData
@@ -44,7 +44,7 @@ class NetVM : VastViewModel() {
      * @param timestamp 时间戳
      */
     fun getQRCode_1(timestamp: String) {
-        NetworkRetrofitBuilder().create(QRService::class.java).generateQRCode(timestamp)
+        MyRequestBuilder().create(RequestService::class.java).generateQRCode(timestamp)
             .request(_qRCodeKey)
     }
 
@@ -54,7 +54,7 @@ class NetVM : VastViewModel() {
      * @param timestamp 时间戳
      */
     fun getQRCode_2(timestamp: String) {
-        NetworkRetrofitBuilder().create(QRService::class.java).generateQRCode(timestamp)
+        MyRequestBuilder().create(RequestService::class.java).generateQRCode(timestamp)
             .request {
                 onSuccess = {
                     _qRCodeKey.postValueAndSuccess(it)
@@ -76,7 +76,7 @@ class NetVM : VastViewModel() {
     fun getQRCode_3(timestamp: String) {
         getRequestBuilder()
             .suspendWithListener({
-                NetworkRetrofitBuilder().create(UserService::class.java).generateQRCode(timestamp)
+                MyRequestBuilder().create(SuspendService::class.java).generateQRCode(timestamp)
             }, _qRCodeKey)
     }
 

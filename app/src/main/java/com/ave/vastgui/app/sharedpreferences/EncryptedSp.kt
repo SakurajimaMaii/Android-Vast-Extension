@@ -17,6 +17,8 @@
 package com.ave.vastgui.app.sharedpreferences
 
 import com.ave.vastgui.tools.sharedpreferences.SpEncrypted
+import com.ave.vastgui.tools.sharedpreferences.float
+import com.ave.vastgui.tools.sharedpreferences.string
 
 
 // Author: Vast Gui
@@ -29,7 +31,7 @@ import com.ave.vastgui.tools.sharedpreferences.SpEncrypted
 class EncryptedSp(name: String) {
 
     private val sp by lazy{
-        SpEncrypted.getInstance(name)
+        SpEncrypted.getInstance(name).getSharedPreferences()
     }
 
     // declare variables

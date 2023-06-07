@@ -17,6 +17,7 @@
 package com.ave.vastgui.app.sharedpreferences
 
 import com.ave.vastgui.tools.sharedpreferences.SpNormal
+import com.ave.vastgui.tools.sharedpreferences.float
 
 
 // Author: Vast Gui
@@ -29,7 +30,7 @@ import com.ave.vastgui.tools.sharedpreferences.SpNormal
 class NormalSp(name: String) {
 
     private val sp by lazy{
-        SpNormal.getInstance(name)
+        SpNormal.getInstance(name).getSharedPreferences()
     }
 
     // declare variables

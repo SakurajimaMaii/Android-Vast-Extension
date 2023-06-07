@@ -31,7 +31,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:8.2.0-alpha06")
+        classpath("com.android.tools.build:gradle:8.2.0-alpha07")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
         classpath("org.jetbrains.dokka:dokka-base:1.8.10")
         classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.5.0.2730")

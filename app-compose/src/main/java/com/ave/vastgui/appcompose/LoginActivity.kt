@@ -19,8 +19,8 @@ package com.ave.vastgui.appcompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -30,18 +30,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.ave.vastgui.appcompose.ui.theme.AndroidVastExtensionTheme
 
 class LoginActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AndroidVastExtensionTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting2("Android", modifier = Modifier.clickable {
-                        jumpMainActivity(19,"你好")
-                    })
+//                    Greeting2("Android", modifier = Modifier.clickable {
+//                        jumpMainActivity(19,"你好")
+//                    })
+                    Card(
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        Text(text = "Hello")
+                    }
                 }
             }
         }
@@ -49,7 +54,10 @@ class LoginActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting2(name: String, modifier: Modifier = Modifier) {
+fun Greeting2(
+    name: String,
+    modifier: Modifier = Modifier,
+) {
     Text(
         text = "Hello $name!",
         modifier = modifier,

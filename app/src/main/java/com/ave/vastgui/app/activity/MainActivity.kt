@@ -31,9 +31,9 @@ import com.ave.vastgui.app.BR
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.activity.adpexample.AdapterActivity
 import com.ave.vastgui.app.activity.adpexample.BindAdapterActivity
-import com.ave.vastgui.app.activity.view.ArcProgressViewActivity
-import com.ave.vastgui.app.activity.view.RatingActivity
-import com.ave.vastgui.app.activity.view.Vp2IndicatorActivity
+import com.ave.vastgui.app.activity.viewexample.ArcProgressViewActivity
+import com.ave.vastgui.app.activity.viewexample.RatingActivity
+import com.ave.vastgui.app.activity.viewexample.Vp2IndicatorActivity
 import com.ave.vastgui.app.databinding.ActivityMainBinding
 import com.ave.vastgui.app.model.IntentSelect
 import com.ave.vastgui.app.model.IntentSelectWrapper
@@ -152,21 +152,6 @@ class MainActivity : VastVbActivity<ActivityMainBinding>() {
                             Intent(
                                 getContext(),
                                 Vp2IndicatorActivity::class.java
-                            )
-                        )
-                    }
-                }
-            ))
-
-            add(IntentSelectWrapper(IntentSelect(
-                ResUtils.getString(R.string.theme)
-            ),
-                object : AdapterClickListener {
-                    override fun onItemClick(view: View, pos: Int) {
-                        getContext().startActivity(
-                            Intent(
-                                getContext(),
-                                ThemeActivity::class.java
                             )
                         )
                     }

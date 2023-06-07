@@ -16,7 +16,10 @@
 
 import com.pluginversion.vastgui.AndroidX
 import com.pluginversion.vastgui.Compose
+import com.pluginversion.vastgui.Jetbrains
 import com.pluginversion.vastgui.Junit
+import com.pluginversion.vastgui.Libraries
+import com.pluginversion.vastgui.Squareup
 import com.pluginversion.vastgui.Version
 
 plugins {
@@ -87,6 +90,7 @@ android {
 
 dependencies {
     implementation(AndroidX.core_ktx)
+    implementation(AndroidX.datastore)
     implementation(AndroidX.fragment)
     implementation(AndroidX.lifecycle_runtime_ktx)
     implementation(Compose.compose_activity)
@@ -94,9 +98,17 @@ dependencies {
     implementation(Compose.compose_ui_graphics)
     implementation(Compose.compose_ui_tooling_preview)
     implementation(Compose.compose_material3)
+    implementation(Compose.compose_lifecycle_viewmodel)
+    implementation(Jetbrains.kotlinx_coroutines_core)
+    implementation(Squareup.okhttp3)
+    implementation(Squareup.retrofit2)
+    implementation(Squareup.retrofit2_adapter_rxjava3)
+    implementation(Squareup.retrofit2_converter_gson)
+    implementation(Libraries.compose_coil)
+    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation(project(":libraries:VastTools"))
     implementation(project(":libraries:VastJIntent"))
     implementation(project(":libraries:VastJIntent-Annotation"))
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     ksp(project(":libraries:VastJIntent-Processor"))
 //    implementation("com.bennyhuo.tieguanyin:runtime-androidx:2.1.0")
 //    ksp("com.bennyhuo.tieguanyin:compiler-ksp:2.1.0")

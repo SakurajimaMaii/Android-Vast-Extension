@@ -21,7 +21,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context="com.ave.vastgui.app.activity.view.RatingActivity">
+    tools:context="com.ave.vastgui.app.activity.viewexample.RatingActivity">
 
     <com.ave.vastgui.tools.view.ratingview.RatingView
         android:id="@+id/ratingView"

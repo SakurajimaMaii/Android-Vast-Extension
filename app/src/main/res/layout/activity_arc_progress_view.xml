@@ -21,7 +21,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/aliceblue"
-    tools:context="com.ave.vastgui.app.activity.view.ArcProgressViewActivity">
+    tools:context="com.ave.vastgui.app.activity.viewexample.ArcProgressViewActivity">
 
     <com.ave.vastgui.tools.view.progress.ArcProgressView
         android:id="@+id/downloadCv"

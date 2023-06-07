@@ -17,19 +17,19 @@
 package com.ave.vastgui.app.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.ave.vastgui.app.R
-import com.ave.vastgui.tools.utils.permission.CAMERA
+import com.ave.vastgui.app.databinding.ActivityPermissionBinding
+import com.ave.vastgui.tools.activity.VastVbActivity
+import com.ave.vastgui.tools.utils.LogUtils
 import com.ave.vastgui.tools.utils.permission.DATE
+import com.ave.vastgui.tools.utils.permission.SMS
 import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 import com.ave.vastgui.tools.utils.permission.requestPermission
 
-class PermissionActivity : AppCompatActivity() {
+class PermissionActivity : VastVbActivity<ActivityPermissionBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_permission)
-        requestPermission("android.permission.READ_CALENDAR") {
+        requestPermission(SMS) {
             granted = {
 
             }
@@ -40,7 +40,7 @@ class PermissionActivity : AppCompatActivity() {
 
             }
         }
-        requestMultiplePermissions(arrayOf(DATE, CAMERA)) {
+        requestMultiplePermissions(arrayOf(DATE, SMS)) {
             allGranted = {
 
             }
@@ -48,7 +48,7 @@ class PermissionActivity : AppCompatActivity() {
 
             }
             noMoreAsk = {
-
+                LogUtils.d(getDefaultTag(), it.toString())
             }
         }
     }
