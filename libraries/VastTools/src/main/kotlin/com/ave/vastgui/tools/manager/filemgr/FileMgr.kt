@@ -36,8 +36,6 @@ import java.io.FileOutputStream
  * @since 0.5.1
  */
 class FilePathScope internal constructor() {
-    var path = ""
-
     infix fun String.f(path: String) = "$this${File.separator}$path"
 }
 
@@ -111,8 +109,8 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      * @param scope The scope that is used to build file path.
      * @since 0.5.1
      */
-    fun getPath(scope: FilePathScope.() -> Unit): String {
-        return FilePathScope().also(scope).path
+    fun getPath(scope: FilePathScope.() -> String): String {
+        return FilePathScope().let(scope)
     }
 
     /**
