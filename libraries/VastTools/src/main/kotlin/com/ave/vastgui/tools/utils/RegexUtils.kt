@@ -26,11 +26,17 @@ import androidx.annotation.IntRange
 
 object RegexUtils {
 
-    enum class PasswordMode{
+    @Deprecated(
+        message = "PasswordMode's requirements for password strength are vague and overlapping.",
+        level = DeprecationLevel.WARNING
+    )
+    enum class PasswordMode {
         /** Password contains at least numbers and letters. */
         EASY,
+
         /** Password contains at least numbers and letters, and can have characters. */
         NORMAL,
+
         /** Password contains two or more types:numbers, letters, and characters. */
         HARD
     }
@@ -60,6 +66,15 @@ object RegexUtils {
      */
     @JvmStatic
     @JvmOverloads
+    @Deprecated(
+        message = "PasswordMode's requirements for password strength are vague and overlapping.",
+        level = DeprecationLevel.WARNING,
+        replaceWith = ReplaceWith(
+            "isPwd(string,PwdStrength1,minLength,maxLength)",
+            "com.ave.vastgui.tools.utils.text.PwdStrength1",
+            "com.ave.vastgui.tools.utils.text.isPwd"
+        )
+    )
     fun isPwd(
         string: String,
         case: PasswordMode = PasswordMode.EASY,
@@ -76,9 +91,11 @@ object RegexUtils {
             PasswordMode.EASY -> Regex("(?!\\d+\$)(?![a-zA-Z]+\$)[\\dA-Za-z]{$minLength,$maxLength}").matches(
                 string
             )
+
             PasswordMode.NORMAL -> Regex("(?=.*([a-zA-Z].*))(?=.*\\d.*)[a-zA-Z\\d-*/+.~!@#\$%^&()]{$minLength,$maxLength}").matches(
                 string
             )
+
             PasswordMode.HARD -> Regex("(?!\\d+\$)(?![a-z]+\$)(?![A-Z]+\$)(?!([^(\\da-zA-Z)])+\$).{$minLength,$maxLength}").matches(
                 string
             )
@@ -108,8 +125,8 @@ object RegexUtils {
     }
 
     /**
-     * String to match.By default, it is verified according to the
-     * Chinese phone number.
+     * String to match.By default, it is verified according to the Chinese
+     * phone number.
      *
      * @param string string to matches.
      * @param otherCountryPattern Other National Phone Number Formats.
