@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.utils
+package com.ave.vastgui.tools.utils.text
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -43,58 +43,6 @@ open class Kilometer : StrUnit("km")
 open class Meter : StrUnit("m")
 open class Ms : StrUnit("ms")
 open class Percent : StrUnit("%")
-
-object StrUtils {
-
-    /**
-     * Concatenate the strings in the parameters in turn.
-     *
-     * @param str string to be concatenated.
-     * @return concatenated string.
-     */
-    @JvmStatic
-    fun strConcat(vararg str: Any): String {
-        val sb = StringBuilder()
-        for (s in str) {
-            sb.append(s)
-        }
-        return sb.toString()
-    }
-
-    /**
-     * Get the string in [strUnit].
-     *
-     * @param value the value or string res id.
-     * @return the temperature string in Celsius unit,like 39℃.
-     */
-    @JvmStatic
-    @Deprecated(
-        message = "Please replace getUnitStr with withUnit.",
-        level = DeprecationLevel.WARNING,
-        replaceWith = ReplaceWith("value.withUnit(strUnit)", "com.ave.vastgui.tools.utils.withUnit")
-    )
-    @Throws(RuntimeException::class)
-    fun getUnitStr(value: Any, strUnit: StrUnit): String {
-        return getUnitFormatString(value, strUnit.unit)
-    }
-
-    /**
-     * Get format string with unit.
-     *
-     * @throws RuntimeException
-     */
-    @Throws(RuntimeException::class)
-    private fun getUnitFormatString(value: Any, unit: String): String {
-        return when (value) {
-            is Int -> String.format(unit, ResUtils.getString(value))
-            is String -> String.format(unit, value)
-            else -> {
-                throw RuntimeException("The type of value should be ${Int.Companion::class.java.simpleName} or ${String.Companion::class.java.simpleName}")
-            }
-        }
-    }
-
-}
 
 /**
  * Get the string in [unit].
