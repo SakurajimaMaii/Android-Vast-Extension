@@ -36,9 +36,8 @@ import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.utils.BmpUtils
-import com.ave.vastgui.tools.utils.DensityUtils.PX
+import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.LogUtils
-
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -86,6 +85,9 @@ class Vp2IndicatorView @JvmOverloads constructor(
     defStyleRes: Int = R.style.BaseVp2Indicator
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
+    private val DEFAULT_INDICATOR_CIRCLE_RADIUS = 5F.DP
+    private val DEFAULT_INDICATOR_ITEM_DISTANCE = 12F.DP
+
     private var mUnSelectedPaint: Paint by NotNUllVar()
     private var mSelectedPaint: Paint by NotNUllVar()
     private val mBitmapPaint = Paint()
@@ -118,6 +120,8 @@ class Vp2IndicatorView @JvmOverloads constructor(
         private set
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        LogUtils.d("MyTest", "onMeasure")
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
         when (mIndicatorStyle) {
@@ -139,11 +143,12 @@ class Vp2IndicatorView @JvmOverloads constructor(
                     heightSize.coerceAtMost(mBitmapSelectedHeight)
             }
         }
-        LogUtils.d(defaultLogTag(), "$mIndicatorItemWidth $mIndicatorItemHeight")
+        LogUtils.d("MyTest", "$mIndicatorItemWidth $mIndicatorItemHeight")
         setMeasuredDimension(mIndicatorItemWidth, mIndicatorItemHeight)
     }
 
     override fun onDraw(canvas: Canvas) {
+        LogUtils.d("MyTest", "onDraw $mIndicatorItemCount")
         mSelectedPaint.color = mColorSelected
         mUnSelectedPaint.color = mColorUnSelected
         when (mIndicatorStyle) {
@@ -250,6 +255,7 @@ class Vp2IndicatorView @JvmOverloads constructor(
             throw RuntimeException("You should not call this method when Vp2IndicatorView is attached to ViewPager2.")
         }
         mIndicatorItemCount = count
+        verifyItemCount()
     }
 
     /**
@@ -342,10 +348,16 @@ class Vp2IndicatorView @JvmOverloads constructor(
                 context.getColor(R.color.md_theme_primaryContainer)
             )
         mIndicatorCircleRadius =
-            a.getDimension(R.styleable.Vp2IndicatorView_indicator_circle_radius, 0F.PX)
+            a.getDimension(
+                R.styleable.Vp2IndicatorView_indicator_circle_radius,
+                DEFAULT_INDICATOR_CIRCLE_RADIUS
+            )
         mIndicatorItemCount = a.getInt(R.styleable.Vp2IndicatorView_indicator_item_count, 0)
         mIndicatorItemDistance =
-            a.getDimension(R.styleable.Vp2IndicatorView_indicator_item_distance, 0F.PX)
+            a.getDimension(
+                R.styleable.Vp2IndicatorView_indicator_item_distance,
+                DEFAULT_INDICATOR_ITEM_DISTANCE
+            )
         a.recycle()
         mUnSelectedPaint = Paint().apply {
             style = Paint.Style.FILL
