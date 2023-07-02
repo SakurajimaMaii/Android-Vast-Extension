@@ -22,7 +22,6 @@ import android.os.Bundle
 import android.text.TextUtils
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.FragmentActivity
 import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.config.ToolsConfig
 import com.ave.vastgui.tools.utils.DateUtils
@@ -97,7 +96,7 @@ class PermissionRegister : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
-        if (activity is FragmentActivity) {
+        if (activity is ComponentActivity) {
             val activityKey =
                 activity.defaultLogTag() + DateUtils.getCurrentTime(DateUtils.FORMAT_YYYY_MM_DD_HH_MM_SS)
             val singlePermissionLauncher =
@@ -133,7 +132,7 @@ class PermissionRegister : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityDestroyed(activity: Activity) {
-        if (activity is FragmentActivity) {
+        if (activity is ComponentActivity) {
             val activityKey = activity.intent.getStringExtra(KEY_UNIQUE_ACTIVITY)
             if (!TextUtils.isEmpty(activityKey)) {
                 singlePermissionLauncherMap[activityKey]?.unregister()
