@@ -118,18 +118,15 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      *
      * @param file The file you want to save.
      */
-    @JvmStatic
-    fun saveFile(
-        file: File,
-    ): FileResult {
+    fun saveFile(file: File): Result<String> {
         return try {
             if (file.createNewFile()) {
-                FileResult.success("${file.name} saved successfully")
+                Result.success("${file.name} saved successfully")
             } else {
-                FileResult.failure(IllegalArgumentException("${file.name} is already exists."))
+                Result.failure(IllegalArgumentException("${file.name} is already exists."))
             }
         } catch (e: Exception) {
-            FileResult.failure(e)
+            Result.failure(e)
         }
     }
 
@@ -137,22 +134,20 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      * Delete [file].
      *
      * @param file the file you want to delete.
-     * @return [FileResult]
      */
-    @JvmStatic
-    fun deleteFile(file: File): FileResult {
+    fun deleteFile(file: File): Result<String> {
         return try {
             if (file.isFile) {
                 if (file.delete()) {
-                    FileResult.success("${file.name} successfully deleted.")
+                    Result.success("${file.name} successfully deleted.")
                 } else {
-                    FileResult.failure(RuntimeException("${file.name} delete failed."))
+                    Result.failure(RuntimeException("${file.name} delete failed."))
                 }
             } else {
-                FileResult.failure(IllegalArgumentException("${file.name} is not a normal file."))
+                Result.failure(IllegalArgumentException("${file.name} is not a normal file."))
             }
         } catch (e: Exception) {
-            FileResult.failure(e)
+            Result.failure(e)
         }
     }
 
@@ -164,10 +159,10 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      * @param to File copy destination.
      * @since 0.4.0
      */
-    fun copyFile(from: File, to: File): FileResult {
+    fun copyFile(from: File, to: File): Result<String> {
         return try {
             if (!from.exists()) {
-                FileResult.failure(IllegalArgumentException("${from.name} does not exist."))
+                Result.failure(IllegalArgumentException("${from.name} does not exist."))
             } else {
                 val result = saveFile(to)
                 if (result.isSuccess) {
@@ -180,13 +175,13 @@ object FileMgr : FileProperty by FilePropertyMgr() {
                     }
                     input.close()
                     out.close()
-                    FileResult.success("File ${from.name} successfully copied to file ${to.name}.")
+                    Result.success("File ${from.name} successfully copied to file ${to.name}.")
                 } else {
                     result
                 }
             }
         } catch (e: Exception) {
-            FileResult.failure(e)
+            Result.failure(e)
         }
     }
 
@@ -198,13 +193,13 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      *     appInternalFilesDir().path.
      * @since 0.4.0
      */
-    fun moveFile(file: File, destination: String): FileResult {
+    fun moveFile(file: File, destination: String): Result<String> {
         val path = if (!destination.endsWith(File.separator)) {
             destination + File.separator
         } else destination
         return try {
             if (!file.exists()) {
-                FileResult.failure(IllegalArgumentException("${file.name} does not exist."))
+                Result.failure(IllegalArgumentException("${file.name} does not exist."))
             } else {
                 val new = File("$path${file.name}")
                 val saveResult = saveFile(new)
@@ -218,11 +213,11 @@ object FileMgr : FileProperty by FilePropertyMgr() {
                     }
                     input.close()
                     out.close()
-                    FileResult.success("File ${file.name} successfully move to file ${new.name}.")
+                    Result.success("File ${file.name} successfully move to file ${new.name}.")
                 } else saveResult
             }
         } catch (e: Exception) {
-            FileResult.failure(e)
+            Result.failure(e)
         }
     }
 
@@ -233,22 +228,22 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      * @return [FileResult]
      */
     @JvmStatic
-    fun makeDir(dir: File): FileResult {
+    fun makeDir(dir: File): Result<String> {
         return try {
             if (dir.exists()) {
-                FileResult.failure(IllegalArgumentException("${dir.name} is already exists."))
+                Result.failure(IllegalArgumentException("${dir.name} is already exists."))
             } else {
                 val path = if (!dir.path.endsWith(File.separator)) {
                     dir.path + File.separator
                 } else dir.path
                 if (File(path).mkdir()) {
-                    FileResult.success("${dir.name} is created.")
+                    Result.success("${dir.name} is created.")
                 } else {
-                    FileResult.failure(RuntimeException("${dir.name} create failed."))
+                    Result.failure(RuntimeException("${dir.name} create failed."))
                 }
             }
         } catch (e: Exception) {
-            FileResult.failure(e)
+            Result.failure(e)
         }
     }
 
@@ -259,11 +254,11 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      * @return Operations result.
      */
     @JvmStatic
-    fun deleteDir(dir: File): FileResult {
+    fun deleteDir(dir: File): Result<String> {
         return try {
             when {
                 !dir.exists() ->
-                    FileResult.failure(IllegalArgumentException("${dir.name} is already exists."))
+                    return Result.failure(IllegalArgumentException("${dir.name} is already exists."))
 
                 null == dir.listFiles() ->
                     dir.delete()
@@ -279,9 +274,9 @@ object FileMgr : FileProperty by FilePropertyMgr() {
                 }
             }
             dir.delete()
-            FileResult.success("${dir.name} delete successfully.")
+            Result.success("${dir.name} delete successfully.")
         } catch (e: Exception) {
-            FileResult.failure(e)
+            Result.failure(e)
         }
     }
 
@@ -293,7 +288,7 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      * @param to Folder copy destination.
      * @since 0.4.0
      */
-    fun copyDir(from: File, to: File): FileResult {
+    fun copyDir(from: File, to: File): Result<String> {
         return try {
             if (from.exists()) {
                 val files = from.listFiles()
@@ -309,15 +304,15 @@ object FileMgr : FileProperty by FilePropertyMgr() {
                             copyFile(file, File("${path}${file.name}"))
                         }
                     }
-                    FileResult.success("${from.name} copy successful.")
+                    Result.success("${from.name} copy successful.")
                 } else {
                     makeResult
                 }
             } else {
-                FileResult.failure(IllegalArgumentException("${from.name} is not exists."))
+                Result.failure(IllegalArgumentException("${from.name} is not exists."))
             }
         } catch (e: Exception) {
-            FileResult.failure(e)
+            Result.failure(e)
         }
     }
 
@@ -328,7 +323,7 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      * @param destination Folder move destination path.
      * @since 0.4.0
      */
-    fun moveDir(dir: File, destination: String): FileResult {
+    fun moveDir(dir: File, destination: String): Result<String> {
         val path = if (!destination.endsWith(File.separator)) {
             destination + File.separator
         } else destination
@@ -350,15 +345,15 @@ object FileMgr : FileProperty by FilePropertyMgr() {
                         }
                         deleteDir(file)
                     }
-                    FileResult.success("${dir.name} successful move to $destination.")
+                    Result.success("${dir.name} successful move to $destination.")
                 } else {
                     makeResult
                 }
             } else {
-                FileResult.failure(IllegalArgumentException("${dir.name} is not exists."))
+                Result.failure(IllegalArgumentException("${dir.name} is not exists."))
             }
         } catch (e: Exception) {
-            FileResult.failure(e)
+            Result.failure(e)
         }
     }
 
@@ -370,26 +365,26 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      * @return Operations result.
      */
     @JvmStatic
-    fun rename(file: File, newName: String): FileResult {
+    fun rename(file: File, newName: String): Result<String> {
         return try {
             if (!file.exists()) {
-                FileResult.failure(IllegalArgumentException("${file.name} is already exists."))
+                Result.failure(IllegalArgumentException("${file.name} is already exists."))
             } else if (newName == file.name) {
-                FileResult.success("${file.name} rename successfully.")
+                Result.success("${file.name} rename successfully.")
             } else {
                 return if (null == file.parent) {
-                    FileResult.failure(RuntimeException("${file.name} parent is null."))
+                    Result.failure(RuntimeException("${file.name} parent is null."))
                 } else {
                     val newFile = File(file.parent!! + File.separator + newName)
                     if (!newFile.exists() && file.renameTo(newFile)) {
-                        FileResult.success("${file.name} rename successfully.")
+                        Result.success("${file.name} rename successfully.")
                     } else {
-                        FileResult.failure(RuntimeException("${file.name} rename failed."))
+                        Result.failure(RuntimeException("${file.name} rename failed."))
                     }
                 }
             }
         } catch (e: Exception) {
-            FileResult.failure(e)
+            Result.failure(e)
         }
     }
 
