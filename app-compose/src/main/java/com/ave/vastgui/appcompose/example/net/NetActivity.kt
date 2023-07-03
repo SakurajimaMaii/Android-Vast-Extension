@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.appcompose
+package com.ave.vastgui.appcompose.example.net
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.ave.vastgui.appcompose.ui.theme.AndroidVastExtensionTheme
 
-class LoginActivity : ComponentActivity() {
+class NetActivity : ComponentActivity() {
+
+    val netVM: NetVM by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,14 +40,7 @@ class LoginActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    Greeting2("Android", modifier = Modifier.clickable {
-//                        jumpMainActivity(19,"你好")
-//                    })
-                    Card(
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
-                        Text(text = "Hello")
-                    }
+                    RequestWithVM()
                 }
             }
         }
@@ -62,12 +56,4 @@ fun Greeting2(
         text = "Hello $name!",
         modifier = modifier,
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview2() {
-    AndroidVastExtensionTheme {
-        Greeting2("Android")
-    }
 }

@@ -14,21 +14,35 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.network
+package com.ave.vastgui.appcompose.example.net
 
 import com.ave.vastgui.tools.network.request.RequestBuilder
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/25
+// Date: 2023/7/3
 // Description: 
 // Documentation:
 // Reference:
 
-class MyRequestBuilder: RequestBuilder("The base url") {
+class NetRequestBuilder : RequestBuilder("https://api.apiopen.top") {
 
     override fun setTimeOut(): Long {
         return 10L
     }
-    
+
+    override fun okHttpConfiguration(builder: OkHttpClient.Builder) {
+
+    }
+
+    override fun retrofitConfiguration(builder: Retrofit.Builder) {
+        super.retrofitConfiguration(builder)
+        builder.apply {
+            addConverterFactory(GsonConverterFactory.create())
+        }
+    }
+
 }

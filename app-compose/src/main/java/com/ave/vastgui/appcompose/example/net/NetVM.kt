@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.viewmodel
+package com.ave.vastgui.appcompose.example.net
 
-import com.ave.vastgui.app.network.MyRequestBuilder
-import com.ave.vastgui.app.network.QRCodeKey
-import com.ave.vastgui.app.network.service.RequestService
-import com.ave.vastgui.app.network.service.SuspendService
 import com.ave.vastgui.tools.lifecycle.viewModel.VastViewModel
+import com.ave.vastgui.tools.network.request.create
 import com.ave.vastgui.tools.network.response.ResponseLiveData
 import com.ave.vastgui.tools.network.response.ResponseMutableLiveData
-
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -34,18 +30,19 @@ import com.ave.vastgui.tools.network.response.ResponseMutableLiveData
 
 class NetVM : VastViewModel() {
 
-    private val _qRCodeKey = ResponseMutableLiveData<QRCodeKey>()
-    val qRCodeKey: ResponseLiveData<QRCodeKey>
-        get() = _qRCodeKey
+    private val _requestResponse = ResponseMutableLiveData<RequestResponse>()
+    val requestResponse: ResponseLiveData<RequestResponse>
+        get() = _requestResponse
 
     /**
      * 自动检测数据请求的状态 目前支持 Error Failed Successful Empty 四种状态
      *
      * @param timestamp 时间戳
      */
-    fun getQRCode_1(timestamp: String) {
-        MyRequestBuilder().create(RequestService::class.java).generateQRCode(timestamp)
-            .request(_qRCodeKey)
+    fun getRequestResponse_1(page: Int, size: Int) {
+        NetRequestBuilder().create(RequestService::class.java)
+            .getHaoKanVideo(page = page, size = size)
+            .request(_requestResponse)
     }
 
     /**
@@ -53,31 +50,20 @@ class NetVM : VastViewModel() {
      *
      * @param timestamp 时间戳
      */
-    fun getQRCode_2(timestamp: String) {
-        MyRequestBuilder().create(RequestService::class.java).generateQRCode(timestamp)
+    fun getRequestResponse_2(page: Int, size: Int) {
+        NetRequestBuilder().create(RequestService::class.java)
+            .getHaoKanVideo(page = page, size = size)
             .request {
                 onSuccess = {
-                    _qRCodeKey.postValueAndSuccess(it)
+                    _requestResponse.postValueAndSuccess(it)
                 }
                 onFailed = { errorCode, errorMsg ->
-                    _qRCodeKey.postFailed(errorCode, errorMsg)
+                    _requestResponse.postFailed(errorCode, errorMsg)
                 }
                 onError = {
-                    _qRCodeKey.postError(it)
+                    _requestResponse.postError(it)
                 }
             }
-    }
-
-    /**
-     * 自动检测数据请求的状态 目前支持 Error Failed Successful Empty 四种状态
-     *
-     * @param timestamp 时间戳
-     */
-    fun getQRCode_3(timestamp: String) {
-        getRequestBuilder()
-            .suspendWithListener({
-                MyRequestBuilder().create(SuspendService::class.java).generateQRCode(timestamp)
-            }, _qRCodeKey)
     }
 
 }

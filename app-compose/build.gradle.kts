@@ -71,7 +71,6 @@ android {
         sourceCompatibility = Version.java_version
         targetCompatibility = Version.java_version
     }
-
     kotlinOptions {
         jvmTarget = Version.java_version.toString()
     }
@@ -99,23 +98,23 @@ dependencies {
     implementation(Compose.compose_ui_tooling_preview)
     implementation(Compose.compose_material3)
     implementation(Compose.compose_lifecycle_viewmodel)
+    implementation(Compose.compose_runtime_livedata)
     implementation(Jetbrains.kotlinx_coroutines_core)
     implementation(Squareup.okhttp3)
     implementation(Squareup.retrofit2)
     implementation(Squareup.retrofit2_adapter_rxjava3)
     implementation(Squareup.retrofit2_converter_gson)
     implementation(Libraries.compose_coil)
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation(project(":libraries:VastTools"))
     implementation(project(":libraries:VastJIntent"))
     implementation(project(":libraries:VastJIntent-Annotation"))
     ksp(project(":libraries:VastJIntent-Processor"))
+    implementation("tech.thdev:extensions-compose-keyboard-state:1.5.0-beta02")
 //    implementation("com.bennyhuo.tieguanyin:runtime-androidx:2.1.0")
 //    ksp("com.bennyhuo.tieguanyin:compiler-ksp:2.1.0")
     testImplementation(Junit.junit)
     androidTestImplementation(AndroidX.junit)
     androidTestImplementation(AndroidX.espresso_core)
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation(Compose.compose_ui_test_junit4)
     debugImplementation(Compose.compose_ui_tooling)
     debugImplementation(Compose.compose_ui_test_manifest)
