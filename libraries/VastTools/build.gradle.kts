@@ -112,7 +112,6 @@ dependencies {
     implementation(Jetbrains.kotlinx_coroutines_core)
     implementation(Squareup.okhttp3)
     implementation(Squareup.retrofit2)
-    implementation(Squareup.retrofit2_adapter_rxjava3)
     implementation(Squareup.retrofit2_converter_gson)
 }
 

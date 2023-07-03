@@ -20,11 +20,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import okhttp3.HttpUrl
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import retrofit2.Call
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
@@ -42,54 +40,57 @@ open class RequestBuilder {
             .readTimeout(setTimeOut(), TimeUnit.SECONDS)
             .writeTimeout(setTimeOut(), TimeUnit.SECONDS)
             .retryOnConnectionFailure(true)
-        registerLoggingInterceptor()?.also {
-            builder.addInterceptor(it)
-        }
-        handleOkHttpClientBuilder(builder)
+        okHttpConfiguration(builder)
         builder.build()
     }
 
-    protected var retrofit: Retrofit
+    internal var retrofit: Retrofit
 
-    /**
-     * @since 0.5.1
-     */
-    constructor(baseUrl: String){
+    /** @since 0.5.1 */
+    constructor(baseUrl: String) {
         retrofit = Retrofit.Builder()
             .baseUrl(baseUrl).configuration().build()
     }
 
-    /**
-     * @since 0.5.1
-     */
-    constructor(baseUrl: URL){
+    /** @since 0.5.1 */
+    constructor(baseUrl: URL) {
         retrofit = Retrofit.Builder()
             .baseUrl(baseUrl).configuration().build()
     }
 
-    /**
-     * @since 0.5.1
-     */
-    constructor(baseUrl: HttpUrl){
+    /** @since 0.5.1 */
+    constructor(baseUrl: HttpUrl) {
         retrofit = Retrofit.Builder()
             .baseUrl(baseUrl).configuration().build()
     }
-
-    fun <T> create(serviceClass: Class<T>): T = retrofit.create(serviceClass)
 
     /** Set timeout. Default return 8L. */
     open fun setTimeOut(): Long {
         return 8L
     }
 
-    /** Customize the configuration of OKHttpClient. */
-    open fun handleOkHttpClientBuilder(builder: OkHttpClient.Builder) {
+    /**
+     * Customize the configuration of [okHttpClient].
+     *
+     * @since 0.5.2
+     */
+    open fun okHttpConfiguration(builder: OkHttpClient.Builder) {
 
     }
 
-    /** Register a log interceptor. */
-    open fun registerLoggingInterceptor(): Interceptor? {
-        return null
+    /**
+     * Customize the configuration of [retrofit]. By default,
+     * [retrofitConfiguration] add [RequestAdapterFactory] for [Request] and
+     * [Request2AdapterFactory] for [Request2] in order to support service
+     * method return types other than [Call].
+     *
+     * @since 0.5.2
+     */
+    open fun retrofitConfiguration(builder: Retrofit.Builder) {
+        builder.apply {
+            addCallAdapterFactory(RequestAdapterFactory())
+            addCallAdapterFactory(Request2AdapterFactory())
+        }
     }
 
     /**
@@ -98,14 +99,14 @@ open class RequestBuilder {
      * @since 0.5.1
      */
     private fun Retrofit.Builder.configuration() = apply {
-        addConverterFactory(GsonConverterFactory.create())
-        addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-        addCallAdapterFactory(RequestAdapterFactory())
-        addCallAdapterFactory(Request2AdapterFactory())
+        retrofitConfiguration(this)
         client(okHttpClient)
     }
 
 }
+
+/** Get api service. */
+fun <T> RequestBuilder.create(serviceClass: Class<T>): T = this.retrofit.create(serviceClass)
 
 /**
  * Get api service and the scope.
@@ -114,7 +115,8 @@ open class RequestBuilder {
  * @see Retrofit.create
  * @since 0.5.1
  */
-fun <T, R> RequestBuilder.getApi(service: Class<T>, serviceScope: suspend T.() -> Request2<R>) = flow {
-    val response = this@getApi.create(service).serviceScope()
-    emit(response)
-}.flowOn(Dispatchers.IO)
+fun <T, R> RequestBuilder.getApi(service: Class<T>, serviceScope: suspend T.() -> Request2<R>) =
+    flow {
+        val response = this@getApi.create(service).serviceScope()
+        emit(response)
+    }.flowOn(Dispatchers.IO)

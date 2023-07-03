@@ -24,7 +24,7 @@ import kotlin.coroutines.startCoroutine
 // Email: guihy2019@gmail.com
 // Date: 2022/9/26
 
-class ResponseBuilder(private val mainScope: CoroutineScope) {
+class ResponseBuilder internal constructor(private val mainScope: CoroutineScope) {
 
     fun <T : ResponseApi> suspendWithListener(
         request: suspend () -> T,

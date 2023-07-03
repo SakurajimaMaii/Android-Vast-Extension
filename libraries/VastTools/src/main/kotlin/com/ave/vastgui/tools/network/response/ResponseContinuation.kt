@@ -23,7 +23,7 @@ import kotlin.coroutines.CoroutineContext
 // Email: guihy2019@gmail.com
 // Date: 2023/3/27
 
-class ResponseContinuation<T : ResponseApi>(
+class ResponseContinuation<T : ResponseApi> internal constructor(
     override val context: CoroutineContext,
     private val listener: ResponseStateListener<T>
 ) : Continuation<ResponseWrapper<T>> {
@@ -50,7 +50,7 @@ class ResponseContinuation<T : ResponseApi>(
  *
  * @since 0.3.0
  */
-class LiveDataContinuation<T : ResponseApi>(
+class LiveDataContinuation<T : ResponseApi> internal constructor(
     override val context: CoroutineContext,
     private val responseLiveData: ResponseMutableLiveData<T>
 ) : Continuation<ResponseWrapper<T>> {
