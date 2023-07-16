@@ -19,30 +19,52 @@ package com.ave.vastgui.tools.utils.text
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/30 18:59
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/string/StrUtils/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/string/UnitString/
 
 /**
  * StrUnit
  *
  * @property unit The unit format string.
- * @since 0.2.0
+ * @since 0.5.2
  */
-abstract class StrUnit(val unit: String) {
+interface StrUnit {
+    val unit: String
+
     /**
      * Get [value] in unit.
      *
      * @since 0.5.1
      */
-    open fun getValue(value: String): String = "$value$unit"
+    fun getValue(value: String): String = "$value$unit"
 }
 
-open class Angle : StrUnit("°")
-open class Celsius : StrUnit("℃")
-open class Kmh : StrUnit("km/h")
-open class Kilometer : StrUnit("km")
-open class Meter : StrUnit("m")
-open class Ms : StrUnit("ms")
-open class Percent : StrUnit("%")
+open class Angle : StrUnit {
+    final override val unit = "°"
+}
+
+open class Celsius : StrUnit {
+    final override val unit = "℃"
+}
+
+open class Kmh : StrUnit {
+    final override val unit = "km/h"
+}
+
+open class Kilometer : StrUnit {
+    final override val unit = "km"
+}
+
+open class Meter : StrUnit {
+    final override val unit = "m"
+}
+
+open class Ms : StrUnit {
+    final override val unit = "m/s"
+}
+
+open class Percent : StrUnit {
+    override val unit = "%"
+}
 
 /**
  * Get the string in [unit].
