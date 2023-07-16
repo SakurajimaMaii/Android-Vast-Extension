@@ -23,13 +23,13 @@ import android.os.Build
 import android.os.Environment
 import android.os.Environment.DIRECTORY_PICTURES
 import android.provider.MediaStore
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.helper.ContextHelper
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.utils.DateUtils
 import com.ave.vastgui.tools.utils.DateUtils.FORMAT_YYYY_MM_DD_HH_MM_SS
-import com.ave.vastgui.tools.utils.LogUtils
 import java.io.File
 
 // Author: Vast Gui
@@ -50,7 +50,7 @@ object ImageMgr : MediaFileMgr() {
         } else File(FileMgr.appExternalFilesDir(DIRECTORY_PICTURES), subDir)
         file.let { FileMgr.makeDir(it) }.let {
             if (it.isFailure) {
-                LogUtils.e(defaultLogTag(), it.exceptionOrNull()?.message)
+                Log.e(defaultLogTag(), it.exceptionOrNull()?.message.toString())
             }
         }
         return file

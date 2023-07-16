@@ -24,6 +24,7 @@ import android.graphics.RectF
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.VectorDrawable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -37,7 +38,7 @@ import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.utils.BmpUtils
 import com.ave.vastgui.tools.utils.DensityUtils.DP
-import com.ave.vastgui.tools.utils.LogUtils
+import com.ave.vastgui.tools.log.LogUtil
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -120,7 +121,6 @@ class Vp2IndicatorView @JvmOverloads constructor(
         private set
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        LogUtils.d("MyTest", "onMeasure")
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
@@ -143,12 +143,10 @@ class Vp2IndicatorView @JvmOverloads constructor(
                     heightSize.coerceAtMost(mBitmapSelectedHeight)
             }
         }
-        LogUtils.d("MyTest", "$mIndicatorItemWidth $mIndicatorItemHeight")
         setMeasuredDimension(mIndicatorItemWidth, mIndicatorItemHeight)
     }
 
     override fun onDraw(canvas: Canvas) {
-        LogUtils.d("MyTest", "onDraw $mIndicatorItemCount")
         mSelectedPaint.color = mColorSelected
         mUnSelectedPaint.color = mColorUnSelected
         when (mIndicatorStyle) {
@@ -169,7 +167,7 @@ class Vp2IndicatorView @JvmOverloads constructor(
                     val cx = i * (mBitmapSelectedWidth + mIndicatorItemDistance)
                     (if (i == mCurrentSelectedPosition) mBitmapSelected else mBitmapUnSelected)?.let {
                         canvas.drawBitmap(it, cx, 0f, mBitmapPaint)
-                    } ?: LogUtils.e(defaultLogTag(), "Can't get the bitmap.")
+                    } ?: Log.e(defaultLogTag(), "Can't get the bitmap.")
                 }
             }
         }

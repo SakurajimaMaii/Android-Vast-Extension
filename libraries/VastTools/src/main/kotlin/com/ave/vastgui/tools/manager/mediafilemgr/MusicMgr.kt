@@ -23,13 +23,13 @@ import android.os.Build
 import android.os.Environment
 import android.os.Environment.DIRECTORY_MUSIC
 import android.provider.MediaStore
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.helper.ContextHelper
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr.getFileUriAboveApi30
 import com.ave.vastgui.tools.utils.DateUtils
-import com.ave.vastgui.tools.utils.LogUtils
 import java.io.File
 
 // Author: Vast Gui
@@ -49,7 +49,7 @@ object MusicMgr : MediaFileMgr() {
         } else File(FileMgr.appExternalFilesDir(DIRECTORY_MUSIC), subDir)
         file.let { FileMgr.makeDir(it) }.let {
             if (it.isFailure) {
-                LogUtils.e(defaultLogTag(), it.exceptionOrNull()?.message)
+                Log.e(defaultLogTag(), it.exceptionOrNull()?.message.toString())
             }
         }
         return file

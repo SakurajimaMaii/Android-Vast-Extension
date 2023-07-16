@@ -20,6 +20,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.DrawableRes
@@ -28,7 +29,6 @@ import androidx.annotation.IntRange
 import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.utils.BmpUtils
-import com.ave.vastgui.tools.utils.LogUtils
 
 // Author: Vast Gui
 // Email: sakurajimamai2020@qq.com
@@ -150,7 +150,6 @@ class RatingView @JvmOverloads constructor(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        LogUtils.d(defaultLogTag(), mStarSelectMethod.toString())
         when (mStarSelectMethod) {
             RatingSelectMethod.SLIDING -> {
                 if (mStarOrientation == RatingOrientation.HORIZONTAL) {
@@ -273,11 +272,11 @@ class RatingView @JvmOverloads constructor(
         this.mStarBitmapHeight = starHeight
         BmpUtils.scaleBitmap(mStarSelectedBitmap, starWidth.toInt(), starHeight.toInt())?.let {
             mStarSelectedBitmap = it
-        } ?: LogUtils.e(defaultLogTag(), "Set mStarSelectedBitmap failed.")
+        } ?: Log.e(defaultLogTag(), "Set mStarSelectedBitmap failed.")
         BmpUtils.scaleBitmap(mStarUnselectedBitmap, starWidth.toInt(), starHeight.toInt())
             ?.let {
                 mStarUnselectedBitmap = it
-            } ?: LogUtils.e(defaultLogTag(), "Set mStarUnselectedBitmap failed.")
+            } ?: Log.e(defaultLogTag(), "Set mStarUnselectedBitmap failed.")
     }
 
     /**
@@ -398,7 +397,7 @@ class RatingView @JvmOverloads constructor(
             mStarBitmapHeight.toInt()
         )?.let {
             mStarSelectedBitmap = it
-        } ?: LogUtils.e(defaultLogTag(), "The tempSelectedBitmap is null.")
+        } ?: Log.e(defaultLogTag(), "The tempSelectedBitmap is null.")
         val tempUnselectedBitmap = BmpUtils.getBitmapFromDrawable(
             typedArray.getResourceId(
                 R.styleable.RatingView_star_unselected,
@@ -412,7 +411,7 @@ class RatingView @JvmOverloads constructor(
             mStarBitmapHeight.toInt()
         )?.let {
             mStarUnselectedBitmap = it
-        } ?: LogUtils.e(defaultLogTag(), "The tempUnselectedBitmap is null.")
+        } ?: Log.e(defaultLogTag(), "The tempUnselectedBitmap is null.")
         mStarOrientation = when (typedArray.getInt(
             R.styleable.RatingView_star_orientation,
             RatingOrientation.HORIZONTAL.ordinal

@@ -19,6 +19,7 @@ package com.ave.vastgui.tools.viewbinding
 import android.app.Activity
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,7 +37,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.ave.vastgui.core.extension.cast
-import com.ave.vastgui.tools.utils.LogUtils
 import java.lang.reflect.ParameterizedType
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
@@ -205,7 +205,7 @@ abstract class LifecycleViewBindingProperty<in R : Any, out V : ViewBinding>(
         val lifecycle = getLifecycleOwner(thisRef).lifecycle
         val viewBinding = viewBinder(thisRef)
         if (lifecycle.currentState == Lifecycle.State.DESTROYED) {
-            LogUtils.w(
+            Log.w(
                 "LifecycleViewBindingProperty",
                 "Access to viewBinding after Lifecycle is destroyed or hasn't created yet. " +
                         "The instance of viewBinding will be not cached."

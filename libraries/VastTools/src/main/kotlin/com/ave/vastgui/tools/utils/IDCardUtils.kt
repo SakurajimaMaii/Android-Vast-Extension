@@ -16,6 +16,7 @@
 
 package com.ave.vastgui.tools.utils
 
+import android.util.Log
 import com.ave.vastgui.tools.utils.RegexUtils.isNumeric
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -23,7 +24,6 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.Hashtable
 import java.util.Locale
-
 
 // Author: lt
 // Email: lt.dygzs@qq.com
@@ -84,9 +84,9 @@ object IDCardUtils {
                 return errorInfo
             }
         } catch (e: NumberFormatException) {
-            LogUtils.e("IDCardUtils", e.message)
+            Log.e("IDCardUtils", e.message.toString())
         } catch (e: ParseException) {
-            LogUtils.e("IDCardUtils", e.message)
+            Log.e("IDCardUtils", e.message.toString())
         }
         if (strMonth.toInt() > 12 || strMonth.toInt() == 0) {
             errorInfo = "身份证月份无效。"

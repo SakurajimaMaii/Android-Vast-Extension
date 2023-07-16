@@ -48,7 +48,7 @@ private fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
 fun <VM : ViewModel> reflexViewModel(
     aClass: Class<*>,
     store: ViewModelStoreOwner,
-    createVM: ((vm: Class<out ViewModel>) -> ViewModel) = ::createViewModel
+    createVM: ((Class<out ViewModel>) -> ViewModel) = ::createViewModel
 ): VM {
     return try {
         val genericSuperclass = aClass.genericSuperclass

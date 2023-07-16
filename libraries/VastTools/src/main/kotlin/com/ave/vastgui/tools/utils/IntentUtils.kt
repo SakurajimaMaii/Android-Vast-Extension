@@ -25,6 +25,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.AlarmClock
 import android.provider.Settings
+import android.util.Log
 import androidx.annotation.IntRange
 import androidx.annotation.RequiresPermission
 
@@ -197,9 +198,9 @@ object IntentUtils {
         try {
             context.startActivity(intent)
         } catch (ex: ActivityNotFoundException) {
-            LogUtils.e(tag, "Target activity not found.", ex)
+            Log.e(tag, "Target activity not found.", ex)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                LogUtils.e(
+                Log.e(
                     tag,
                     "Maybe you don't adding a <queries> declaration in AndroidManifest.xml."
                 )

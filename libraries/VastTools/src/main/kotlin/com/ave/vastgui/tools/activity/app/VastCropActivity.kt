@@ -23,6 +23,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.ACTION
@@ -37,7 +38,6 @@ import com.ave.vastgui.tools.databinding.ActivityCropBinding
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
 import com.ave.vastgui.tools.utils.DensityUtils.DP
-import com.ave.vastgui.tools.utils.LogUtils
 import com.ave.vastgui.tools.utils.permission.requestPermission
 import com.ave.vastgui.tools.view.cropview.CropFrameType
 import java.io.BufferedInputStream
@@ -138,10 +138,10 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
                 }
                 getBinding().cropViewLayout.setImageSrc(originalImageFile)
             } else {
-                LogUtils.d(getDefaultTag(), "Did not get the input stream.")
+                Log.d(getDefaultTag(), "Did not get the input stream.")
             }
         } else {
-            LogUtils.d(getDefaultTag(), "No image obtained.")
+            Log.d(getDefaultTag(), "No image obtained.")
         }
 
         getBinding().activityCropBottomBar.cropSure.setOnClickListener {

@@ -19,7 +19,6 @@ package com.ave.vastgui.tools.utils.download
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.coroutines.await
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
-import com.ave.vastgui.tools.utils.LogUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -153,7 +152,6 @@ class DownloadUtils private constructor(config: DownloadConfig) {
                 val request: Request = Request.Builder().url(downloadUrl).build()
                 val body = okHttpClient.newCall(request).await()
                 val contentLength = body.contentLength()
-                LogUtils.d("ArcProgressViewActivity", contentLength.toString())
                 val inputStream = body.byteStream()
                 val file = if (null != saveName) {
                     File(saveDir, saveName!!)

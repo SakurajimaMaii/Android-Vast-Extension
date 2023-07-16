@@ -21,7 +21,6 @@ import android.os.Looper
 import androidx.security.crypto.MasterKey
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.helper.ContextHelper
-import com.ave.vastgui.tools.utils.LogUtils
 import com.ave.vastgui.tools.utils.permission.PermissionRegister
 
 
@@ -44,7 +43,6 @@ object ToolsConfig {
     @JvmStatic
     fun init(application: Application) {
         ContextHelper.init(application)
-        LogUtils.init()
         application.registerActivityLifecycleCallbacks(PermissionRegister())
         isInitialized = true
     }
