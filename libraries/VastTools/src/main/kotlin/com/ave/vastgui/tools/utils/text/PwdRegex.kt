@@ -21,33 +21,26 @@ import androidx.annotation.IntRange
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/6/11
-// Description:
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/string/PwdRegex/
 
 /**
  * Pwd strength
  *
  * @since 0.5.2
  */
-abstract class PwdStrength(val regex: String)
+interface PwdStrength {
+    val regex: String
+}
 
 /**
  * Password contains at least one letter and one number.
  *
  * @since 0.5.2
  */
-object PwdStrength1 :
-    PwdStrength("(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]")
-
-/**
- * Password contains at least one letter, one number and one special
- * character.
- *
- * @since 0.5.2
- */
-object RwdStrength2 :
-    PwdStrength("(?=.*[A-Za-z])(?=.*\\d)(?=.*[\$@\$!%*#?&])[A-Za-z\\d\$@\$!%*#?&]")
+object PwdStrength1 : PwdStrength {
+    override val regex: String
+        get() = "(?=.*[A-Za-z])(?=.*\\d)."
+}
 
 /**
  * Password contains at least one uppercase letter, one lowercase letter
@@ -55,22 +48,36 @@ object RwdStrength2 :
  *
  * @since 0.5.2
  */
-object RwdStrength3 :
-    PwdStrength("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]")
+object RwdStrength2 : PwdStrength {
+    override val regex: String
+        get() = "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)."
+}
 
 /**
- * Password contains at least one uppercase letter, one lowercase letter,
- * one number and one special character.
+ * Password contains at least one letter, one number and one special
+ * character. Special characters include **!@#$%^& * .**
  *
  * @since 0.5.2
  */
-object RwdStrength4 :
-    PwdStrength("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\$@\$!%*?&])[A-Za-z\\d\$@\$!%*?&]")
+object RwdStrength3 : PwdStrength {
+    override val regex: String
+        get() = "(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#\\$%\\^&\\*\\.])."
+}
+
+/**
+ * Password contains at least one uppercase letter, one lowercase letter,
+ * one number and one special character. Special characters include **!@#$%^& * .**
+ *
+ * @since 0.5.2
+ */
+object RwdStrength4 : PwdStrength {
+    override val regex: String
+        get() = "(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#\\\$%\\^&\\*\\.])."
+}
 
 /**
  * Check if string meets password requirements.
  *
- * @param string String to matches.
  * @param strength The strength of the password you want.
  * @param minLength Minimum password length.
  * @param maxLength Maximum password length.
@@ -80,21 +87,20 @@ object RwdStrength4 :
  * @throws IllegalArgumentException
  * @since 0.5.2
  */
-fun isPwd(
-    string: String,
+fun String.isPwd(
     strength: PwdStrength = PwdStrength1,
     @IntRange(from = 0) minLength: Int = 6,
     @IntRange(from = 0) maxLength: Int = 20,
-    vararg shouldNotAppear: String = emptyArray(),
+    shouldNotAppear: Array<String> = emptyArray(),
 ): Boolean {
     return if (minLength > maxLength) {
         throw IllegalArgumentException("minLength should be less than maxLength")
-    } else if ((string.length < minLength) or (string.length > maxLength)) {
+    } else if ((this.length < minLength) or (this.length > maxLength)) {
         false
     } else {
-        if (Regex("${strength.regex}{$minLength,$maxLength}").matches(string)) {
+        if (Regex("${strength.regex}{$minLength,$maxLength}").matches(this)) {
             for (content in shouldNotAppear) {
-                if (string.contains(content)) {
+                if (this.contains(content)) {
                     return false
                 }
             }
