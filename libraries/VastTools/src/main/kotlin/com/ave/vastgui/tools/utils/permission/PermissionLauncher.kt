@@ -20,6 +20,7 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultCaller
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -30,26 +31,36 @@ import androidx.activity.result.contract.ActivityResultContract
  *
  * @since 0.2.0
  */
-class PermissionLauncher<I, O>(
+class PermissionLauncher<I, O> internal constructor(
     activityResultCaller: ActivityResultCaller,
     activityResultContract: ActivityResultContract<I, O>
 ) {
 
     private var activityResultCallback: ActivityResultCallback<O>? = null
 
-
     private val launcher: ActivityResultLauncher<I> =
         activityResultCaller.registerForActivityResult(activityResultContract) {
             activityResultCallback?.onActivityResult(it)
         }
 
-
-    fun launch(input: I, activityResultCallback: ActivityResultCallback<O>?) {
+    /**
+     * Executes an [ActivityResultContracts.RequestPermission] or
+     * [ActivityResultContracts.RequestMultiplePermissions].
+     *
+     * @since 0.2.0
+     */
+    fun launch(input: I, activityResultCallback: ActivityResultCallback<O>) {
         this.activityResultCallback = activityResultCallback
         launcher.launch(input)
     }
 
+    /**
+     * Unregisters this launcher, releasing the underlying result callback, and any references captured within it.
+     *
+     * @since 0.2.0
+     */
     fun unregister() {
+        activityResultCallback = null
         launcher.unregister()
     }
 

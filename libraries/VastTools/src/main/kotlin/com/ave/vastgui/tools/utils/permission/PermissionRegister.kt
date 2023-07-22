@@ -98,13 +98,11 @@ class PermissionRegister : Application.ActivityLifecycleCallbacks {
     override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
         if (activity is ComponentActivity) {
             val activityKey =
-                activity.defaultLogTag() + DateUtils.getCurrentTime(DateUtils.FORMAT_YYYY_MM_DD_HH_MM_SS)
+                "${activity.defaultLogTag()}${DateUtils.getCurrentTime(DateUtils.FORMAT_YYYY_MM_DD_HH_MM_SS)}"
             val singlePermissionLauncher =
                 PermissionLauncher(activity, ActivityResultContracts.RequestPermission())
-            val multiPermissionLauncher = PermissionLauncher(
-                activity,
-                ActivityResultContracts.RequestMultiplePermissions()
-            )
+            val multiPermissionLauncher =
+                PermissionLauncher(activity, ActivityResultContracts.RequestMultiplePermissions())
             activity.intent.putExtra(KEY_UNIQUE_ACTIVITY, activityKey)
             singlePermissionLauncherMap[activityKey] = singlePermissionLauncher
             multiPermissionLauncherMap[activityKey] = multiPermissionLauncher
