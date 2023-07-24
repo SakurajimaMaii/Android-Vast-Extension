@@ -16,7 +16,7 @@
 
 include(":app")
 include(":app-compose")
-includeBuild("../../PluginVersion")
+includeBuild("../../../PluginVersion")
 includeBuild("convention-plugins")
 
 rootProject.name = "Android-Vast-Extension"
@@ -38,3 +38,4 @@ val libs = arrayOf(
 libs.forEach {
         include(":libraries:$it")
 }
+include(":libraries:VastTools-Compose")

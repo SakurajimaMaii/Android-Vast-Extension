@@ -82,6 +82,7 @@ android {
             isJniDebuggable = true
             isShrinkResources = false
             isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),"proguard-rules.pro")
             kotlin {
                 sourceSets.main {
                     kotlin.srcDir("build/generated/ksp/debug/kotlin")

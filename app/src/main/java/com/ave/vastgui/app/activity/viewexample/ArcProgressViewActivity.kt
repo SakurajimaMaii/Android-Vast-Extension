@@ -21,16 +21,14 @@ import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.lifecycleScope
 import com.ave.vastgui.app.databinding.ActivityArcProgressViewBinding
+import com.ave.vastgui.appcompose.example.log.mLogFactory
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.utils.ColorUtils
-import com.ave.vastgui.tools.utils.LogUtils
-import com.ave.vastgui.tools.utils.ToastUtils
-import com.ave.vastgui.tools.utils.download.DownloadUtils
+import com.ave.vastgui.tools.utils.download.DLManager
+import com.ave.vastgui.tools.utils.download.DLTask
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
-import kotlinx.coroutines.launch
 
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
@@ -40,7 +38,8 @@ import kotlinx.coroutines.launch
 
 class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>() {
 
-    private val saveDir = FileMgr.appInternalFilesDir().path
+    private val logger = mLogFactory.getLog(ArcProgressViewActivity::class.java)
+    private lateinit var downloadTask: DLTask
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,36 +86,52 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
         getBinding().download.setOnClickListener {
             downloadApk()
         }
+
+        getBinding().pause.setOnClickListener {
+            downloadTask.pause()
+        }
+
+        getBinding().resume.setOnClickListener {
+            downloadTask.resume()
+        }
+
+        getBinding().cancel.setOnClickListener {
+            downloadTask.cancel()
+        }
     }
 
     private fun downloadApk() {
-        ToastUtils.showShortMsg("开始下载")
-        val downloadUtils = DownloadUtils
-            .createConfig()
-            .setDownloadUrl("www.yourapi.com")
-            .setSaveDir(saveDir)
-            .setDownloading { progress ->
-                LogUtils.i(getDefaultTag(), "downloading ${progress?.process}")
-                getBinding().downloadCv.refreshWithInvalidate {
-                    setCurrentProgress(
-                        (progress?.process ?: 0f) * getBinding().downloadCv.mMaximumProgress
-                    )
+        downloadTask = DLManager
+            .createTaskConfig()
+            .setDownloadUrl("https://down.oray.com/sunlogin/windows/SunloginClient_13.3.1.56398_x64.exe")
+            .setSaveDir(FileMgr.appInternalFilesDir().path)
+            .setListener {
+                onDownloading = {
+                    getBinding().downloadCv.refreshWithInvalidate {
+                        setCurrentProgress(
+                            it.rate * getBinding().downloadCv.mMaximumProgress
+                        )
+                    }
                 }
-            }
-            .setDownloadFailed {
-                LogUtils.i(getDefaultTag(), "download failed:" + it?.message)
-            }
-            .setDownloadSuccess {
-                LogUtils.i(getDefaultTag(), "download success.")
-                getBinding().downloadCv.refreshWithInvalidate{
-                    setCurrentProgress(getBinding().downloadCv.mMaximumProgress)
+                onFailure = {
+                    logger.e("download failed:" + it.exception.stackTraceToString())
+                }
+                onSuccess = {
+                    logger.i("download success.")
+                    getBinding().downloadCv.refreshWithInvalidate {
+                        setCurrentProgress(getBinding().downloadCv.mMaximumProgress)
+                    }
+                }
+                onCancel = {
+                    logger.i("download cancel.")
+                    getBinding().downloadCv.refreshWithInvalidate {
+                        resetProgress()
+                    }
                 }
             }
             .build()
 
-        lifecycleScope.launch {
-            downloadUtils.download()
-        }
+        downloadTask.start()
     }
 
 }

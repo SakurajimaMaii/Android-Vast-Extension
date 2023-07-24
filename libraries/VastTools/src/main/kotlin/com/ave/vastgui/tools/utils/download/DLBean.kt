@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.network.service
+package com.ave.vastgui.tools.utils.download
 
-import com.ave.vastgui.app.network.QRCodeKey2
-import com.ave.vastgui.tools.network.request.Request2
-import retrofit2.http.POST
-import retrofit2.http.Query
+import java.io.File
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/24
-// Description: 
-// Documentation:
+// Date: 2023/7/23
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/DownloadUtils/
 
 /**
- * The service when you use [Request2] to request data.
+ * The download bean.
+ *
+ * @property url The url of the download file.
+ * @since 0.5.2
  */
-interface Request2Service {
-
-    @POST("/login/qr/key")
-    suspend fun generateQRCode(@Query("timestamp") timestamp: String): Request2<QRCodeKey2>
-
-}
+data class DLBean(
+    val url: String,
+    val file: File,
+    val md5: String? = null,
+    val startPos: Long? = null,
+    val endPos: Long? = null,
+    var completeSize: Long = startPos ?: 0L,
+    var event: DLEvent = DLEvent.INIT
+)

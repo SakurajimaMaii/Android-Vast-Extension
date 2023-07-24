@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.service
-
-import android.content.Intent
-import android.os.IBinder
-import com.ave.vastgui.tools.service.VastService
+package com.ave.vastgui.tools.utils.download
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/4/8
-// Description: 
-// Documentation:
-// Reference:
+// Date: 2023/7/23
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/DownloadUtils/
 
-class DownloadService : VastService() {
-
-    override fun onBind(intent: Intent): IBinder? {
-        return super.onBind(intent)
-    }
-
+/**
+ * The listener of the [DLEvent] for the download.
+ *
+ * @since 0.5.2
+ */
+class DLEventListener internal constructor() {
+    var onSuccess: ((DLEvent.SUCCESS) -> Unit) = {}
+    var onDownloading: ((DLEvent.DOWNLOADING) -> Unit) = {}
+    var onFailure: ((DLEvent.FAILED) -> Unit) = {}
+    var onPause: (() -> Unit) = {}
+    var onCancel: (() -> Unit) = {}
 }

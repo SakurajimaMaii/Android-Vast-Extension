@@ -14,26 +14,29 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.network.service
+package com.ave.vastgui.tools.utils.download
 
-import com.ave.vastgui.app.network.QRCodeKey
-import com.ave.vastgui.tools.network.response.ResponseBuilder
-import retrofit2.http.POST
-import retrofit2.http.Query
+import java.io.File
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/6/7
-// Description: 
-// Documentation:
-// Reference:
+// Date: 2023/7/23
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/DownloadUtils/
 
 /**
- * The service when you use [ResponseBuilder] to request data.
+ * The event of the download.
+ *
+ * @since 0.5.2
  */
-interface SuspendService {
-
-    @POST("/login/qr/key")
-    suspend fun generateQRCode(@Query("timestamp") timestamp: String): QRCodeKey
-
+sealed class DLEvent {
+    class SUCCESS(val data: File) : DLEvent()
+    class DOWNLOADING(val currentLength: Long, val length: Long) : DLEvent(){
+        val rate: Float
+            get() = currentLength.toFloat() / length.toFloat()
+    }
+    class FAILED(val exception: Throwable) : DLEvent()
+    object PAUSE : DLEvent()
+    object RESUME : DLEvent()
+    object CANCEL : DLEvent()
+    object INIT : DLEvent()
 }
