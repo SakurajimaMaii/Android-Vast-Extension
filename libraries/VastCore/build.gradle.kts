@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
+import com.pluginversion.vastgui.Jetbrains
 import com.pluginversion.vastgui.Version
 import org.jetbrains.dokka.DokkaConfiguration.Visibility
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    id("java-library")
+    id("org.jetbrains.kotlin.jvm")
     id("com.pluginversion.vastgui")
     id("convention.publication")
-    id("org.jetbrains.dokka") version "1.8.10"
+    id("org.jetbrains.dokka")
 }
 
 subprojects {
@@ -31,48 +33,23 @@ subprojects {
 }
 
 group = "io.github.sakurajimamaii"
-version = "0.0.3"
+version = "0.0.4"
 
-android {
-    
-    namespace = "com.ave.vastgui.core"
-    compileSdk = Version.compile_sdk_version
+java {
+    sourceCompatibility = Version.java_version
+    targetCompatibility = Version.java_version
+}
 
-    defaultConfig {
-        minSdk = Version.min_sdk_version
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility = Version.java_version
-        targetCompatibility = Version.java_version
-    }
-
+tasks.withType<KotlinCompile>{
     kotlinOptions {
-        jvmTarget = Version.java_version.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
+}
 
-    sourceSets {
-        getByName("main").java.srcDirs("src/main/kotlin")
-    }
+sourceSets["main"].java.srcDir("src/main/kotlin")
 
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-        }
-    }
+dependencies {
+    implementation(Jetbrains.kotlin_reflect)
 }
 
 tasks.withType<DokkaTaskPartial>().configureEach {
@@ -95,11 +72,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "VastCore"
-            version = "0.0.3"
-
-            afterEvaluate {
-                from(components["release"])
-            }
+            version = "0.0.4"
         }
     }
 }
