@@ -14,33 +14,51 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity.reflexexample
+package com.ave.vastgui.app.activity.reflectexample
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import com.ave.vastgui.tools.lifecycle.reflexViewModel
-import com.ave.vastgui.tools.viewbinding.reflexViewBinding
+import com.ave.vastgui.tools.lifecycle.reflectViewModel
+import com.ave.vastgui.tools.viewbinding.reflectViewBinding
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/6/6
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/Reflect/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/lifecycle-aware-components/Reflect/
 
-abstract class BaseActivity2<VB : ViewBinding, VM : ViewModel> : AppCompatActivity() {
+abstract class ReflectBaseActivity1<VB : ViewBinding, VM : ViewModel> : AppCompatActivity() {
 
     // ViewBinding
     protected val mBinding: VB by lazy {
-        reflexViewBinding(this)
+        reflectViewBinding(ReflectBaseActivity1::class.java)
     }
 
     // ViewModel
     protected val mViewModel: VM by lazy {
-        reflexViewModel(this.javaClass, this) {
-            return@reflexViewModel createViewModel(it)
+        reflectViewModel(this.javaClass, this)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(mBinding.root)
+    }
+
+}
+
+abstract class ReflectBaseActivity2<VB : ViewBinding, VM : ViewModel> : AppCompatActivity() {
+
+    // ViewBinding
+    protected val mBinding: VB by lazy {
+        reflectViewBinding(ReflectBaseActivity2::class.java)
+    }
+
+    // ViewModel
+    protected val mViewModel: VM by lazy {
+        reflectViewModel(this.javaClass, this) {
+            return@reflectViewModel createViewModel(it)
         }
     }
 
