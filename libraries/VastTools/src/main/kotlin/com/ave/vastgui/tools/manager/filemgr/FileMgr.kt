@@ -144,7 +144,7 @@ object FileMgr : FileProperty by FilePropertyMgr() {
                     Result.failure(RuntimeException("${file.name} delete failed."))
                 }
             } else {
-                Result.failure(IllegalArgumentException("${file.name} is not a normal file."))
+                Result.failure(IllegalArgumentException("${file.name} is not a normal file or not exists."))
             }
         } catch (e: Exception) {
             Result.failure(e)

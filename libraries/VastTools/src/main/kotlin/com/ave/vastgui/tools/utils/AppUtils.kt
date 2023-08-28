@@ -26,7 +26,6 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.ave.vastgui.core.extension.cast
-import com.ave.vastgui.tools.bean.Component3
 import com.ave.vastgui.tools.helper.ContextHelper
 
 // Author: Vast Gui
@@ -191,8 +190,8 @@ object AppUtils {
      *     turn.
      */
     @JvmStatic
-    fun getMemoryInfo(): Component3<Double, Double, Double> {
-        return Component3(
+    fun getMemoryInfo(): Triple<Double, Double, Double> {
+        return Triple(
             Runtime.getRuntime().maxMemory() * 1.0 / (1024 * 1024),
             Runtime.getRuntime().freeMemory() * 1.0 / (1024 * 1024),
             Runtime.getRuntime().totalMemory() * 1.0 / (1024 * 1024)

@@ -43,7 +43,7 @@ import kotlin.reflect.KProperty
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/4
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/Reflex/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/Reflect/
 // Reference: https://juejin.cn/post/6960914424865488932
 
 /**
