@@ -20,7 +20,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import com.ave.vastgui.core.extension.NotNUllVar
-import com.ave.vastgui.tools.lifecycle.reflexViewModel
+import com.ave.vastgui.tools.lifecycle.reflectViewModel
 import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui
@@ -53,8 +53,8 @@ abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
 
     // ViewModel
     private val mViewModel: VM by lazy {
-        reflexViewModel(this.javaClass, this) {
-            return@reflexViewModel createViewModel(it)
+        reflectViewModel(this.javaClass, this, VastVmActivity::class.java) {
+            return@reflectViewModel createViewModel(it)
         }
     }
 

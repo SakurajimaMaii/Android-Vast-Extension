@@ -21,8 +21,8 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 import com.ave.vastgui.core.extension.NotNUllVar
-import com.ave.vastgui.tools.lifecycle.reflexViewModel
-import com.ave.vastgui.tools.viewbinding.reflexViewBinding
+import com.ave.vastgui.tools.lifecycle.reflectViewModel
+import com.ave.vastgui.tools.viewbinding.reflectViewBinding
 import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui
@@ -53,13 +53,13 @@ abstract class VastVbVmActivity<VB : ViewBinding, VM : ViewModel> : VastActivity
 
     // ViewBinding
     private val mBinding: VB by lazy {
-        reflexViewBinding(this)
+        reflectViewBinding(VastVbVmActivity::class.java)
     }
 
     // ViewModel
     private val mViewModel: VM by lazy {
-        reflexViewModel(this.javaClass, this) {
-            return@reflexViewModel createViewModel(it)
+        reflectViewModel(this.javaClass, this, VastVbVmActivity::class.java) {
+            return@reflectViewModel createViewModel(it)
         }
     }
 

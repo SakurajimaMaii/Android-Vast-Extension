@@ -22,8 +22,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import com.ave.vastgui.tools.lifecycle.reflexViewModel
-import com.ave.vastgui.tools.viewbinding.reflexViewBinding
+import com.ave.vastgui.tools.lifecycle.reflectViewModel
+import com.ave.vastgui.tools.viewbinding.reflectViewBinding
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -53,15 +53,19 @@ abstract class VastVbVmFragment<VB : ViewBinding, VM : ViewModel> : VastFragment
 
     // ViewModel
     private val mViewModel: VM by lazy {
-        reflexViewModel(this.javaClass, if (!setVmBySelf()) requireActivity() else this) {
-            return@reflexViewModel createViewModel(it)
+        reflectViewModel(
+            this.javaClass,
+            if (!setVmBySelf()) requireActivity() else this,
+            VastVbVmFragment::class.java
+        ) {
+            return@reflectViewModel createViewModel(it)
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        mBinding = reflexViewBinding(this,container)
+        mBinding = reflectViewBinding(container, VastVbVmFragment::class.java)
         return getBinding().root
     }
 

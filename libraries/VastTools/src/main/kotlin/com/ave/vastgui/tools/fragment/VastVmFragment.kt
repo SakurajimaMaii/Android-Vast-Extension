@@ -21,7 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
-import com.ave.vastgui.tools.lifecycle.reflexViewModel
+import com.ave.vastgui.tools.lifecycle.reflectViewModel
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -54,8 +54,12 @@ abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
 
     // ViewModel
     private val mViewModel: VM by lazy {
-        reflexViewModel(this.javaClass, if (!setVmBySelf()) requireActivity() else this) {
-            return@reflexViewModel createViewModel(it)
+        reflectViewModel(
+            this.javaClass,
+            if (!setVmBySelf()) requireActivity() else this,
+            VastVbVmFragment::class.java
+        ) {
+            return@reflectViewModel createViewModel(it)
         }
     }
 

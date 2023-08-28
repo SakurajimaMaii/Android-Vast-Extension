@@ -23,7 +23,6 @@ import com.ave.vastgui.core.extension.cast
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/4
@@ -43,15 +42,20 @@ private fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
  * @param createVM create viewModel with parameters.
  * @param VM ViewModel type class
  * @return ViewModel.
+ * @since 0.5.2
  */
 @JvmOverloads
-fun <VM : ViewModel> reflexViewModel(
-    aClass: Class<*>,
+fun <VM : ViewModel> reflectViewModel(
+    current: Class<*>,
     store: ViewModelStoreOwner,
+    base: Class<*>? = null,
     createVM: ((Class<out ViewModel>) -> ViewModel) = ::createViewModel
 ): VM {
     return try {
-        val genericSuperclass = aClass.genericSuperclass
+        if (base?.isAssignableFrom(current) == false) {
+            throw RuntimeException("Can't get the ViewModel type.")
+        }
+        val genericSuperclass = current.genericSuperclass
         if (genericSuperclass is ParameterizedType) {
             val actualTypeArguments: Array<Type> =
                 genericSuperclass.actualTypeArguments
@@ -70,7 +74,7 @@ fun <VM : ViewModel> reflexViewModel(
                 }
             }
         }
-        reflexViewModel(aClass.superclass, store, createVM)
+        reflectViewModel(current.superclass, store, base, createVM)
     } catch (e: Exception) {
         throw RuntimeException(e.message, e)
     }

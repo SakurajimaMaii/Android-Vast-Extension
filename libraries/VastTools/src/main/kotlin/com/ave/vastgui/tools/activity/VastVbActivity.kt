@@ -19,7 +19,7 @@ package com.ave.vastgui.tools.activity
 import android.os.Bundle
 import androidx.viewbinding.ViewBinding
 import com.ave.vastgui.core.extension.NotNUllVar
-import com.ave.vastgui.tools.viewbinding.reflexViewBinding
+import com.ave.vastgui.tools.viewbinding.reflectViewBinding
 import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui
@@ -53,7 +53,7 @@ abstract class VastVbActivity<VB : ViewBinding>() : VastActivity() {
 
     // ViewBinding
     private val mBinding: VB by lazy {
-        reflexViewBinding(this)
+        reflectViewBinding(VastVbActivity::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

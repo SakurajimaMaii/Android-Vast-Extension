@@ -21,7 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
-import com.ave.vastgui.tools.viewbinding.reflexViewBinding
+import com.ave.vastgui.tools.viewbinding.reflectViewBinding
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -53,7 +53,7 @@ abstract class VastVbFragment<VB : ViewBinding> : VastFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mBinding = reflexViewBinding(this, container)
+        mBinding = reflectViewBinding(container, VastVbFragment::class.java)
         return getBinding().root
     }
 
