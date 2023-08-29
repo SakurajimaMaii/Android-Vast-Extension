@@ -14,25 +14,35 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity
+package com.ave.vastgui.app.activity.logexample
 
 import android.os.Bundle
-import com.ave.vastgui.app.databinding.ActivityExampleBinding
+import com.ave.vastgui.app.databinding.ActivityLogBinding
 import com.ave.vastgui.app.viewmodel.SampleSharedVM
 import com.ave.vastgui.tools.activity.VastVbVmActivity
 import com.ave.vastgui.tools.activity.widget.screenConfig
 
-class ExampleActivity : VastVbVmActivity<ActivityExampleBinding, SampleSharedVM>() {
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2023/7/5
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/Description/
+
+class LogActivity : VastVbVmActivity<ActivityLogBinding, SampleSharedVM>() {
+
+    private val logger = mLogFactory.getLog(this::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        screenConfig(mEnableActionBar = false,mEnableFullScreen = false)
+        screenConfig(mEnableActionBar = false, mEnableFullScreen = false)
 
         getBinding().addOne.setOnClickListener {
             getViewModel().addOne()
+            logger.i("数字增加一")
         }
 
-        getViewModel().count.observe(this){
-            getBinding().count.text = it.toString()
+        getViewModel().count.observe(this) { count ->
+            getBinding().count.text = count.toString()
         }
     }
+
 }
