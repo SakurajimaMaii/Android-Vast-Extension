@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.network.service;
+package com.ave.vastgui.tools.log.json
 
-import com.ave.vastgui.app.network.QRCodeKey;
-import com.ave.vastgui.tools.network.request.Request;
-
-import retrofit2.http.POST;
-import retrofit2.http.Query;
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2023/8/29
+// Description: 
+// Documentation:
+// Reference:
 
 /**
- * The service when you use {@link Request} to request data.
+ * Converter
+ *
+ * @since 0.5.2
  */
-public interface RequestService {
+interface Converter {
+    val isPretty:Boolean
 
-    @POST("/login/qr/key")
-    Request<QRCodeKey> generateQRCode(@Query("timestamp") String timestamp);
-
+    fun toJson(data: Any): String
 }

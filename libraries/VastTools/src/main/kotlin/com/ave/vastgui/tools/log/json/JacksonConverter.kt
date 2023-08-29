@@ -14,52 +14,30 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.network
+package com.ave.vastgui.tools.log.json
 
-import com.ave.vastgui.tools.network.response.ResponseApi
+import com.fasterxml.jackson.databind.ObjectMapper
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/24
+// Date: 2023/8/29
 // Description: 
 // Documentation:
+// Reference:
 
-data class QRCodeKey(
-    val code: Int,
-    val data: Data?
-) : ResponseApi {
+/**
+ * Jackson converter
+ *
+ * @since 0.5.2
+ */
+class JacksonConverter(override val isPretty: Boolean) : Converter {
 
-    data class Data(
-        val code: Int,
-        val unikey: String
-    )
+    private val mapper = ObjectMapper()
 
-    override fun isSuccessful(): Boolean {
-        return code == 200
+    override fun toJson(data: Any): String = if (isPretty) {
+        mapper.writerWithDefaultPrettyPrinter().writeValueAsString(data)
+    } else {
+        mapper.writeValueAsString(data)
     }
-
-    override fun isEmpty(): Boolean {
-        return data == null
-    }
-
-    override fun code(): Int? {
-        return data?.code
-    }
-
-    override fun message(): String? {
-        return data?.unikey
-    }
-
-}
-
-data class QRCodeKey2(
-    val code: Int,
-    val data: Data?
-) {
-
-    data class Data(
-        val code: Int,
-        val unikey: String
-    )
 
 }

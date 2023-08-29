@@ -18,7 +18,6 @@
 // https://cloud.tencent.com/developer/article/1839887
 // https://mp.weixin.qq.com/s/mVqShijGTExtQ_nLslchpQ
 
-import com.pluginversion.vastgui.AVE
 import com.pluginversion.vastgui.AndroidX
 import com.pluginversion.vastgui.Google
 import com.pluginversion.vastgui.Jetbrains
@@ -37,6 +36,7 @@ plugins {
     id("org.sonarqube") version "3.4.0.2513"
     id("convention.publication")
     id("org.jetbrains.dokka") version "1.8.10"
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -86,7 +86,7 @@ android {
 dependencies {
     api(AndroidX.security_crypto)
     api(Libraries.zxing)
-    api(AVE.core)
+    api(project(":libraries:VastCore"))
     implementation(AndroidX.activity)
     implementation(AndroidX.activity_ktx)
     implementation(AndroidX.annotation)
@@ -110,6 +110,10 @@ dependencies {
     implementation(Jetbrains.kotlin_stdlib)
     implementation(Jetbrains.kotlinx_coroutines_android)
     implementation(Jetbrains.kotlinx_coroutines_core)
+    implementation(Jetbrains.kotlinx_serialization_json)
+    implementation(Libraries.commons_codec)
+    implementation(Libraries.fastjson2)
+    implementation(Libraries.jackson_databind)
     implementation(Squareup.okhttp3)
     implementation(Squareup.retrofit2)
     implementation(Squareup.retrofit2_converter_gson)
