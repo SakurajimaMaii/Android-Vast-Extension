@@ -22,9 +22,7 @@ import com.ave.vastgui.tools.log.base.LogPlugin
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/5
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/Description/
 
 /**
  * Get log factory

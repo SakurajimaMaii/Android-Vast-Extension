@@ -23,9 +23,7 @@ import com.ave.vastgui.tools.log.json.Converter
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/5
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/Description/
 
 class LogFormat internal constructor(val config: LogFormat.Config) {
 
@@ -35,11 +33,11 @@ class LogFormat internal constructor(val config: LogFormat.Config) {
      * @since 0.5.2
      */
     class Config {
-        /** @see LogUtil.singleLogCharLength */
-        var singleLogCharLength = LogUtil.defaultCharLength
+        /** @see LogUtil.maxSingleLogLength */
+        var singleLogCharLength = LogUtil.defaultMaxSingleLogLength
 
         /** @see LogUtil.maxPrintTimes */
-        var maxPrintTimes = LogUtil.defaultCharLength
+        var maxPrintTimes = LogUtil.defaultMaxPrintTimes
 
         var converter: Converter? = null
     }
@@ -54,7 +52,7 @@ class LogFormat internal constructor(val config: LogFormat.Config) {
         }
 
         override fun install(plugin: LogFormat, scope: LogUtil) {
-            scope.singleLogCharLength = plugin.config.singleLogCharLength
+            scope.maxSingleLogLength = plugin.config.singleLogCharLength
             scope.maxPrintTimes = plugin.config.maxPrintTimes
             scope.converter = plugin.config.converter
         }

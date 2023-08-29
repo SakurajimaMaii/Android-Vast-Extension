@@ -20,6 +20,7 @@ import android.util.Log
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.log.base.LogDivider
 import com.ave.vastgui.tools.log.base.LogInfo
+import com.ave.vastgui.tools.log.base.LogLevel
 import com.ave.vastgui.tools.log.base.LogPrinter
 import com.ave.vastgui.tools.log.json.Converter
 import com.ave.vastgui.tools.utils.AppUtils.getAppDebug
@@ -29,12 +30,10 @@ import java.util.Arrays
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: A log utils.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/LogUtils/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/Description/
 
 /**
- * LogUtils
- *
- * For more settings, please refer to the documentation.
+ * LogUtils.
  */
 class LogUtil internal constructor() {
 
@@ -44,7 +43,7 @@ class LogUtil internal constructor() {
          *
          * Notes:Considering fault tolerance, 1000 is set here instead of 1024.
          */
-        internal const val defaultCharLength = 1000
+        internal const val defaultMaxSingleLogLength = 1000
 
         /** Default max print repeat times. */
         internal const val defaultMaxPrintTimes = 5
@@ -61,8 +60,13 @@ class LogUtil internal constructor() {
      */
     internal var tag by NotNUllVar<String>()
 
-    /** Maximum length of chars printed of a single log. */
-    internal var singleLogCharLength: Int = defaultCharLength
+    /**
+     * Maximum length of characters printed of a single log.Each character is
+     * calculated as 4Bytes.
+     *
+     * @since 0.5.2
+     */
+    internal var maxSingleLogLength: Int = defaultMaxSingleLogLength
 
     /** Max print repeat times. */
     internal var maxPrintTimes: Int = defaultMaxPrintTimes
@@ -89,7 +93,7 @@ class LogUtil internal constructor() {
      */
     fun i(content: String, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
-            logPrint(Log.INFO, tag, content, tr)
+            logPrint(LogLevel.INFO.priority, tag, content, tr)
         }
     }
 
@@ -101,7 +105,7 @@ class LogUtil internal constructor() {
      */
     fun v(content: String, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
-            logPrint(Log.VERBOSE, tag, content, tr)
+            logPrint(LogLevel.VERBOSE.priority, tag, content, tr)
         }
     }
 
@@ -113,7 +117,7 @@ class LogUtil internal constructor() {
      */
     fun w(content: String, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
-            logPrint(Log.WARN, tag, content, tr)
+            logPrint(LogLevel.WARN.priority, tag, content, tr)
         }
     }
 
@@ -125,7 +129,7 @@ class LogUtil internal constructor() {
      */
     fun d(content: String, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
-            logPrint(Log.DEBUG, tag, content, tr)
+            logPrint(LogLevel.DEBUG.priority, tag, content, tr)
         }
     }
 
@@ -137,7 +141,7 @@ class LogUtil internal constructor() {
      */
     fun e(content: String, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
-            logPrint(Log.ERROR, tag, content, tr)
+            logPrint(LogLevel.ERROR.priority, tag, content, tr)
         }
     }
 
@@ -147,9 +151,9 @@ class LogUtil internal constructor() {
      * @param priority The log priority.
      * @since 0.5.2
      */
-    fun json(priority: Int, target: Any) {
+    fun json(level: LogLevel, target: Any) {
         if (logEnabled && isDeBug) {
-            jsonPrint(priority, target)
+            jsonPrint(level.priority, target)
         }
     }
 
@@ -199,24 +203,13 @@ class LogUtil internal constructor() {
          * 2. The default character set encoding of strings is utf-8, which is a
          *    variable-length encoding. One character is represented by 1 to 4
          *    bytes.
-         */
-        val length = logInfo.dividerLength
-
-        /**
-         * Here the character length is less than [singleLogCharLength], then it
+         *
+         * Here the character length is less than [maxSingleLogLength], then it
          * will be printed directly, avoiding the subsequent process.
          */
-        if (length < singleLogCharLength) {
-            logPrinter.printLog {
-                Log.println(priority, tag, LogDivider.getInfo(it))
-            }
-            return
-        }
-
-        // Convert the content to ByteArray.
         var bytes = logInfo.contentBytes
 
-        if (singleLogCharLength * 4 >= bytes.size) {
+        if (logInfo.printLength < maxSingleLogLength || (maxSingleLogLength * 4) >= bytes.size) {
             logPrinter.printLog {
                 Log.println(priority, tag, LogDivider.getInfo(it))
             }
@@ -228,15 +221,14 @@ class LogUtil internal constructor() {
 
         var printTheRest = true
 
-        logPrinter.printLog(singleLogCharLength * 4) {
+        logPrinter.printLog(maxSingleLogLength * 4) {
             // In the range of the array, print in cycles
-            while (singleLogCharLength * 4 < bytes.size) {
+            while (maxSingleLogLength * 4 < bytes.size) {
                 val subStr = cutStr(bytes)
 
                 Log.println(priority, tag, LogDivider.getInfo(String.format("%s", subStr)))
 
-                // Truncate the unprinted bytes
-                bytes = bytes.copyOfRange(subStr!!.toByteArray().size, bytes.size)
+                bytes = bytes.copyOfRange(subStr?.toByteArray()?.size ?: 0, bytes.size)
 
                 if (count == maxPrintTimes) {
                     printTheRest = false
@@ -255,10 +247,10 @@ class LogUtil internal constructor() {
 
 
     /**
-     * Truncate the byte array as a string according to [singleLogCharLength].
+     * Truncate the byte array as a string according to [maxSingleLogLength].
      *
      * @param bytes byte array.
-     * @return The string obtained by [singleLogCharLength].
+     * @return The string obtained by [maxSingleLogLength].
      */
     private fun cutStr(bytes: ByteArray?): String? {
         // Return when the bytes is null.
@@ -267,12 +259,12 @@ class LogUtil internal constructor() {
         }
 
         // Return when the bytes length is less than the subLength.
-        if (singleLogCharLength * 4 >= bytes.size) {
+        if (maxSingleLogLength * 4 >= bytes.size) {
             return String(bytes)
         }
 
         // Copy the fixed-length byte array and convert it to a string
-        val subStr = String(Arrays.copyOf(bytes, singleLogCharLength * 4))
+        val subStr = String(Arrays.copyOf(bytes, maxSingleLogLength * 4))
 
         // Avoid the end character is split, here minus 1 to keep the string intact
         return subStr.substring(0, subStr.length - 1)

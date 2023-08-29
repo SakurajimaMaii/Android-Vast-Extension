@@ -16,31 +16,22 @@
 
 package com.ave.vastgui.tools.log.base
 
+import android.util.Log
+
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/8/28
+// Date: 2023/8/29
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/log/Description/
 
 /**
- * Log info
+ * Log level
  *
  * @since 0.5.2
  */
-data class LogInfo internal constructor(
-    val threadName: String,
-    val traceElement: StackTraceElement,
-    val content: String,
-    val tr: Throwable? = null
-) {
-    private val traceLength
-        get() = traceElement.toString().length
-
-    private val contentLength
-        get() = content.length
-
-    val printLength
-        get() = traceLength.coerceAtLeast(contentLength)
-
-    val contentBytes
-        get() = content.toByteArray()
+enum class LogLevel(val priority:Int) {
+    VERBOSE(Log.VERBOSE),
+    DEBUG(Log.DEBUG),
+    INFO(Log.INFO),
+    WARN(Log.WARN),
+    ERROR(Log.ERROR)
 }

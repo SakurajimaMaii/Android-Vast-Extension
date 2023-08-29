@@ -19,9 +19,7 @@ package com.ave.vastgui.tools.log.base
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/28
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/Description/
 
 /**
  * Log divider char.

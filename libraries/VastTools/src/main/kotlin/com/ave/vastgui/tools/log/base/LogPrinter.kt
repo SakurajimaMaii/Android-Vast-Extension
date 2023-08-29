@@ -21,9 +21,7 @@ import android.util.Log
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/28
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/Description/
 
 /**
  * Log printer
@@ -36,10 +34,7 @@ class LogPrinter internal constructor(
     val logInfo: LogInfo
 ) {
 
-    val length
-        get() = logInfo.dividerLength
-
-    inline fun printLog(len: Int = length, contentPrinter: (String) -> Unit) {
+    inline fun printLog(len: Int = logInfo.printLength, contentPrinter: (String) -> Unit) {
         println(LogDivider.getTop(len))
         println(LogDivider.getInfo("Thread: ${logInfo.threadName}"))
         println(LogDivider.getDivider(len))
