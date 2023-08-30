@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:JvmName("Clazz")
+@file:JvmName("ClazzKt")
 
 package com.ave.vastgui.core.extension
 

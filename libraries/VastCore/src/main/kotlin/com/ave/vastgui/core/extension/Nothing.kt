@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:JvmName("Nothing")
+@file:JvmName("NothingKt")
 
 package com.ave.vastgui.core.extension
 
