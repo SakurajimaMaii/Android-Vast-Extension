@@ -32,29 +32,18 @@ import kotlin.math.sin
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
 // Date: 2022/4/17 19:55
-// Description: DownloadCircleView is a circular download progress bar.
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/progress/ArcProgressView/
 
 /**
- * DownloadCircleView.
+ * ArcProgressView.
  *
- * Here is an example in xml:
- * ```xml
- * <com.ave.vastgui.tools.view.progress.ArcProgressView
- *      android:id="@+id/downloadCv"
- *      android:layout_width="200dp"
- *      android:layout_height="200dp"
- *      app:progress_background_width="20dp"
- *      app:progress_text_size="12sp"/>
- * ```
- *
- * @property mProgressRadius Radius of the download circle.
- * @property mProgressBackgroundWidth Width of the download circle progress.
+ * @property mProgressRadius Radius of the circle.
+ * @property mProgressBackgroundWidth Width of the circle progress.
  * @property mProgressStartColorInt Progress start color int.
  * @property mProgressEndColorInt Progress end color int.
  * @property mProgressShader Progress shader.
- * @property mProgressShowStartCircle Ture if you want to show the start and
- *     end circles, false otherwise.
+ * @property mProgressShowStartCircle Ture if you want to show the start
+ *     and end circles, false otherwise.
  * @property mProgressShowEndCircle Ture if you want to show the start and
  *     end circles, false otherwise.
  */
@@ -79,14 +68,13 @@ class ArcProgressView @JvmOverloads constructor(
     private var mProgressRadius = 0f
     private var mProgressBackgroundWidth = 0f
     private var mProgressShader: Shader? = null
-    private var mProgressStartColorInt: Int = context.getColor(R.color.md_theme_primary)
-    private var mProgressEndColorInt: Int = context.getColor(R.color.md_theme_primary)
+    private var mProgressStartColorInt: Int
+    private var mProgressEndColorInt: Int
     private var mProgressShowStartCircle: Boolean = true
     private var mProgressShowEndCircle: Boolean = true
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        initPaint()
         // Draw progress background.
         val circlePoint = (width / 2).toFloat()
         canvas.drawCircle(
@@ -136,7 +124,6 @@ class ArcProgressView @JvmOverloads constructor(
         )
     }
 
-    /** init paints. */
     private fun initPaint() {
         mProgressBackgroundPaint.apply {
             strokeWidth = mProgressBackgroundWidth
@@ -220,7 +207,30 @@ class ArcProgressView @JvmOverloads constructor(
         mProgressShowEndCircle = show
     }
 
-    /** Initialize the attributes for the DownloadCircleView. */
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val requiredSize = (2 * mProgressRadius + mProgressBackgroundWidth).toInt()
+
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+
+        val maxContentSize = widthSize.coerceAtMost(heightSize)
+
+        val width = when {
+            widthMode == MeasureSpec.EXACTLY -> widthSize
+            requiredSize > widthSize -> maxContentSize
+            else -> requiredSize
+        }
+        val height = when {
+            heightMode == MeasureSpec.EXACTLY -> heightSize
+            requiredSize > heightSize -> maxContentSize
+            else -> requiredSize
+        }
+        setMeasuredDimension(width, height)
+    }
+
     init {
         val typedArray = context.obtainStyledAttributes(
             attrs,
@@ -270,25 +280,7 @@ class ArcProgressView @JvmOverloads constructor(
         mProgressShowEndCircle =
             typedArray.getBoolean(R.styleable.ArcProgressView_arc_progress_show_end_circle, true)
         typedArray.recycle()
-    }
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
-        val width = if (widthMode == MeasureSpec.EXACTLY) {
-            widthSize
-        } else {
-            (2 * mProgressRadius + mProgressBackgroundWidth).toInt()
-        }
-        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
-        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
-        val height = if (heightMode == MeasureSpec.EXACTLY) {
-            heightSize
-        } else {
-            (2 * mProgressRadius + mProgressBackgroundWidth).toInt()
-        }
-        setMeasuredDimension(width, height)
+        initPaint()
     }
 
 }

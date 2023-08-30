@@ -33,6 +33,7 @@ import androidx.annotation.FloatRange
  * @property mCurrentProgress The current progress value.
  * @property mText The text that will be displayed with progress.
  * @property mTextSize Ths size of the [mText].
+ * @property mTextColor The color of the text.
  * @property mProgressBackgroundColor The background color of the progress.
  * @property mProgressColor The progress color.
  * @since 0.2.0
