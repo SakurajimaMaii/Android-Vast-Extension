@@ -32,11 +32,13 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
+import androidx.annotation.IntRange
 import androidx.annotation.RestrictTo
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.utils.BmpUtils.getBitmapFromDrawable
+import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.ResUtils
 import com.ave.vastgui.tools.view.progress.WaveProgressView.Companion.DEFAULT_SPACE_RATIO
 import com.ave.vastgui.tools.view.progress.WaveProgressView.Companion.DEFAULT_STROKE_RATIO
@@ -57,8 +59,8 @@ import com.ave.vastgui.tools.view.progress.WaveProgressView.Companion.DEFAULT_ST
  *     required (the default is a circular background).
  * @property mBackground Background for saving graph calculations with
  *     waves.
- * @property mTmpBackground Temp Background. Supporting the type:
- *     BitmapDrawable , VectorDrawable , VectorDrawableCompat.
+ * @property mUpdateInterval Interval time between every frame in
+ *     milliseconds.
  * @property mProgressColor The wave color.
  * @property mProgressBackgroundColor The wave background color.
  * @property mWaveCount The count number of waves.
@@ -99,9 +101,14 @@ class WaveProgressView @JvmOverloads constructor(
     private var mPath: Path by NotNUllVar()
     private var mTextRect: Rect by NotNUllVar()
 
-    private var mIsAutoBack = false
-    private var mBackground: Bitmap? = null
-    private var mTmpBackground: Drawable? = null
+    private val mIsAutoBack: Boolean
+        get() = !(background is BitmapDrawable || background is VectorDrawable || background is VectorDrawableCompat)
+    private val mBackground: Bitmap
+        get() = if (mIsAutoBack) {
+            autoCreateBitmap(mWidth / 2)
+        } else {
+            getBitmapFromDrawable(background)
+        }
 
     private var mWidth = 0
     private var mHeight = 0
@@ -112,6 +119,8 @@ class WaveProgressView @JvmOverloads constructor(
     private var mHalfWaveWidth = mWaveWidth / 4
     private var mWaveOffsetDistance = 0f
     private var mWaveSpeed = 0f
+
+    private var mUpdateInterval: Long = 20
 
     private var mSpaceWidth = 0f
     private var mStrokeWidth = 0f
@@ -186,18 +195,14 @@ class WaveProgressView @JvmOverloads constructor(
         }
         mTextPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         mTextRect = Rect()
-        mTmpBackground = background
         setBackgroundColor(Color.TRANSPARENT)
     }
 
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val measuredWidth = measureWidth(widthMeasureSpec)
         val measuredHeight = measureHeight(heightMeasureSpec)
         setMeasuredDimension(measuredWidth, measuredHeight)
-        if (mTmpBackground is BitmapDrawable || mTmpBackground is VectorDrawable || mTmpBackground is VectorDrawableCompat) {
-            mIsAutoBack = true
+        if (mIsAutoBack) {
             val min = measuredWidth.coerceAtMost(measuredHeight)
             mStrokeWidth = mStrokeRatio * min
             // Refer to https://github.com/SakurajimaMaii/Android-Vast-Extension/issues/51
@@ -214,14 +219,9 @@ class WaveProgressView @JvmOverloads constructor(
                 (min - (DEFAULT_STROKE_RATIO * min + DEFAULT_SPACE_RATIO * min) * 2).toInt()
             } else tempWith
             mHeight = mWidth
-            mBackground = autoCreateBitmap(mWidth / 2)
         } else {
-            mIsAutoBack = false
-            mBackground = getBitmapFromDrawable(mTmpBackground)
-            if (!mBackground!!.isRecycled) {
-                mWidth = mBackground!!.width
-                mHeight = mBackground!!.height
-            }
+            mWidth = mBackground.width
+            mHeight = mBackground.height
         }
         mWaveCount = calWaveCount(mWidth, mWaveWidth)
     }
@@ -273,7 +273,9 @@ class WaveProgressView @JvmOverloads constructor(
                 mTextPaint
             )
         }
-        postInvalidateDelayed(10)
+        if (mUpdateInterval != -1L) {
+            postInvalidateDelayed(mUpdateInterval)
+        }
     }
 
     /**
@@ -293,38 +295,32 @@ class WaveProgressView @JvmOverloads constructor(
         return bitmap
     }
 
-    /** Measure the view width, if it is wrap content, the default value is 400. */
+    /**
+     * Measure the view width, if it is wrap content, the default value is
+     * 200dp.
+     */
     private fun measureHeight(heightMeasureSpec: Int): Int {
-        var height = 0
         val mode = MeasureSpec.getMode(heightMeasureSpec)
         val size = MeasureSpec.getSize(heightMeasureSpec)
-        if (mode == MeasureSpec.EXACTLY) {
-            height = size
-        } else if (mode == MeasureSpec.AT_MOST) {
-            height = if (null != mTmpBackground) {
-                mTmpBackground!!.minimumHeight
-            } else {
-                400
-            }
+        return when {
+            mode == MeasureSpec.EXACTLY -> size
+            (mode == MeasureSpec.AT_MOST && !mIsAutoBack) -> mBackground.height
+            else -> 200F.DP.toInt()
         }
-        return height
     }
 
-    /** Measure the view width, if it is wrap content, the default value is 400. */
+    /**
+     * Measure the view width, if it is wrap content, the default value is
+     * 200dp.
+     */
     private fun measureWidth(widthMeasureSpec: Int): Int {
-        var width = 0
         val mode = MeasureSpec.getMode(widthMeasureSpec)
         val size = MeasureSpec.getSize(widthMeasureSpec)
-        if (mode == MeasureSpec.EXACTLY) {
-            width = size
-        } else if (mode == MeasureSpec.AT_MOST) {
-            width = if (null != mTmpBackground) {
-                mTmpBackground!!.minimumWidth
-            } else {
-                400
-            }
+        return when {
+            mode == MeasureSpec.EXACTLY -> size
+            (mode == MeasureSpec.AT_MOST && !mIsAutoBack) -> mBackground.width
+            else -> 200F.DP.toInt()
         }
-        return width
     }
 
     /**
@@ -361,7 +357,7 @@ class WaveProgressView @JvmOverloads constructor(
         mWaveOffsetDistance += mWaveSpeed
         mWaveOffsetDistance %= mWaveWidth
         mWavePaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_ATOP)
-        canvas.drawBitmap(mBackground!!, 0f, 0f, mWavePaint)
+        canvas.drawBitmap(mBackground, 0f, 0f, mWavePaint)
         return bitmap
     }
 
@@ -382,12 +378,23 @@ class WaveProgressView @JvmOverloads constructor(
     }
 
     /**
-     * Set the speed of the wave.
+     * Set the [mWaveSpeed] of the wave.
      *
      * @since 0.2.0
      */
     fun setSpeed(@FloatRange(from = 0.0) speed: Float) {
         mWaveSpeed = speed
+    }
+
+    /**
+     * Set update interval time between every frame in milliseconds.
+     *
+     * @param interval If the value of [interval] is -1, the wave will stop
+     *     move.
+     * @since 0.5.2
+     */
+    fun setUpdateInterval(@IntRange(from = -1) interval: Long) {
+        mUpdateInterval = interval
     }
 
     /**
@@ -422,9 +429,7 @@ class WaveProgressView @JvmOverloads constructor(
      */
     fun setWaveBackgroundColor(@ColorInt color: Int) {
         mProgressBackgroundColor = color
-        if (mIsAutoBack) {
-            mBackground = autoCreateBitmap(mWidth / 2)
-        }
+        super.setBackground(null)
     }
 
     /**
