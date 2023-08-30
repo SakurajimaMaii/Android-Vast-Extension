@@ -21,7 +21,7 @@
         <item name="crop_frame_type">circle</item>
         <item name="crop_frame_width">100dp</item>
         <item name="crop_frame_height">100dp</item>
-        <item name="crop_frame_stroke_color">?attr/colorPrimaryFixedDim</item>
+        <item name="crop_frame_stroke_color">@color/md_theme_primaryFixedDim</item>
     </style>
 
     <style name="BaseCropViewLayout" parent="BaseCropView" />
@@ -38,17 +38,17 @@
         <item name="progress_maximum_value">100.0</item>
         <item name="progress_current_value">0.0</item>
         <item name="progress_text_size">12sp</item>
-        <item name="progress_text_color">?attr/colorOnPrimary</item>
-        <item name="progress_background_color">?attr/colorPrimaryContainer</item>
-        <item name="progress_color">?attr/colorPrimary</item>
+        <item name="progress_text_color">@color/md_theme_onPrimary</item>
+        <item name="progress_background_color">@color/md_theme_primaryContainer</item>
+        <item name="progress_color">@color/md_theme_primary</item>
     </style>
 
     <style name="BaseArcProgressView" parent="BaseProgressView">
         <item name="android:layout_width">100dp</item>
         <item name="android:layout_height">100dp</item>
         <item name="arc_progress_background_width">10dp</item>
-        <item name="arc_progress_start_color">?attr/colorPrimary</item>
-        <item name="arc_progress_end_color">?attr/colorPrimary</item>
+        <item name="arc_progress_start_color">@color/md_theme_primary</item>
+        <item name="arc_progress_end_color">@color/md_theme_primary</item>
         <item name="arc_progress_show_start_circle">false</item>
         <item name="arc_progress_show_end_circle">true</item>
     </style>
@@ -67,7 +67,7 @@
     </style>
 
     <style name="BaseWaveProgressView" parent="BaseProgressView">
-        <item name="wave_progress_stroke_color">?attr/colorSecondary</item>
+        <item name="wave_progress_stroke_color">@color/md_theme_secondary</item>
     </style>
 
     <style name="BaseRatingView">
@@ -83,8 +83,8 @@
 
     <style name="BaseVp2Indicator">
         <item name="indicator_style">circle</item>
-        <item name="indicator_selected_color">?attr/colorPrimary</item>
-        <item name="indicator_unselected_color">?attr/colorPrimaryContainer</item>
+        <item name="indicator_selected_color">@color/md_theme_primary</item>
+        <item name="indicator_unselected_color">@color/md_theme_primaryContainer</item>
         <item name="indicator_circle_radius">5dp</item>
         <item name="indicator_item_distance">12dp</item>
     </style>
