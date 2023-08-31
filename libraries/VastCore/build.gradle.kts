@@ -33,11 +33,12 @@ subprojects {
 }
 
 group = "io.github.sakurajimamaii"
-version = "0.0.4"
+version = "0.0.5"
 
 java {
     sourceCompatibility = Version.java_version
     targetCompatibility = Version.java_version
+    withSourcesJar()
 }
 
 tasks.withType<KotlinCompile>{
@@ -72,7 +73,11 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "VastCore"
-            version = "0.0.4"
+            version = "0.0.5"
+
+            afterEvaluate {
+                from(components["java"])
+            }
         }
     }
 }
