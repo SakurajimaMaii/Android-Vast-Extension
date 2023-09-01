@@ -18,6 +18,7 @@
 // https://cloud.tencent.com/developer/article/1839887
 // https://mp.weixin.qq.com/s/mVqShijGTExtQ_nLslchpQ
 
+import com.pluginversion.vastgui.AVE
 import com.pluginversion.vastgui.AndroidX
 import com.pluginversion.vastgui.Google
 import com.pluginversion.vastgui.Jetbrains
@@ -86,7 +87,7 @@ android {
 dependencies {
     api(AndroidX.security_crypto)
     api(Libraries.zxing)
-    api(project(":libraries:VastCore"))
+    api(AVE.core)
     implementation(AndroidX.activity)
     implementation(AndroidX.activity_ktx)
     implementation(AndroidX.annotation)
