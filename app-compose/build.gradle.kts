@@ -17,7 +17,6 @@
 import com.pluginversion.vastgui.AndroidX
 import com.pluginversion.vastgui.Compose
 import com.pluginversion.vastgui.Jetbrains
-import com.pluginversion.vastgui.Junit
 import com.pluginversion.vastgui.Libraries
 import com.pluginversion.vastgui.Squareup
 import com.pluginversion.vastgui.Version
@@ -27,6 +26,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.pluginversion.vastgui")
     id("com.google.devtools.ksp")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -48,7 +48,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -60,6 +60,11 @@ android {
             }
         }
         debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             kotlin {
                 sourceSets.main {
                     kotlin.srcDir("build/generated/ksp/debug/kotlin")
@@ -100,22 +105,19 @@ dependencies {
     implementation(Compose.compose_lifecycle_viewmodel)
     implementation(Compose.compose_runtime_livedata)
     implementation(Jetbrains.kotlinx_coroutines_core)
+    implementation(Jetbrains.kotlinx_serialization_json)
     implementation(Squareup.okhttp3)
     implementation(Squareup.retrofit2)
     implementation(Squareup.retrofit2_adapter_rxjava3)
     implementation(Squareup.retrofit2_converter_gson)
     implementation(Libraries.compose_coil)
-    implementation(project(":libraries:VastTools"))
+    implementation(project(":libraries:VastTools-Compose"))
     implementation(project(":libraries:VastJIntent"))
     implementation(project(":libraries:VastJIntent-Annotation"))
     ksp(project(":libraries:VastJIntent-Processor"))
     implementation("tech.thdev:extensions-compose-keyboard-state:1.5.0-beta02")
 //    implementation("com.bennyhuo.tieguanyin:runtime-androidx:2.1.0")
 //    ksp("com.bennyhuo.tieguanyin:compiler-ksp:2.1.0")
-    testImplementation(Junit.junit)
-    androidTestImplementation(AndroidX.junit)
-    androidTestImplementation(AndroidX.espresso_core)
-    androidTestImplementation(Compose.compose_ui_test_junit4)
     debugImplementation(Compose.compose_ui_tooling)
     debugImplementation(Compose.compose_ui_test_manifest)
 }
