@@ -16,7 +16,6 @@
 
 package com.ave.vastgui.tools.utils
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
@@ -27,6 +26,8 @@ import android.view.Surface
 import android.view.WindowManager
 import android.view.WindowMetrics
 import androidx.annotation.RequiresApi
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.ave.vastgui.tools.helper.ContextHelper
 
 // Author: Vast Gui
@@ -36,19 +37,6 @@ import com.ave.vastgui.tools.helper.ContextHelper
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/ScreenSizeUtils/
 
 object ScreenSizeUtils {
-    /**
-     * The screen size.
-     *
-     * @property width width of the screen.
-     * @property height height of the screen.
-     */
-    data class ScreenSize(val width: Int, val height: Int)
-
-    /**
-     * ScreenSize of your device.
-     *
-     */
-    private var mScreenSize = ScreenSize(0, 0)
 
     /**
      * Get the [ScreenSize] of your device in api 31.
@@ -56,10 +44,10 @@ object ScreenSizeUtils {
      * @return [ScreenSize] of your device.
      */
     @RequiresApi(Build.VERSION_CODES.S)
-    private fun getScreenSizeApi31(context: Context): ScreenSize {
+    private fun getScreenSizeApi31(context: Context): Pair<Int, Int> {
         val vm: WindowMetrics =
             (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).currentWindowMetrics
-        return ScreenSize(vm.bounds.width(), vm.bounds.height())
+        return Pair(vm.bounds.width(), vm.bounds.height())
     }
 
     /**
@@ -69,15 +57,10 @@ object ScreenSizeUtils {
      */
     @RequiresApi(Build.VERSION_CODES.R)
     @Suppress("DEPRECATION")
-    private fun getScreenSizeApi30(context: Context): ScreenSize {
-        val orientation = context.resources?.configuration?.orientation
+    private fun getScreenSizeApi30(context: Context): Pair<Int, Int> {
         val point = Point()
         context.display?.getRealSize(point)
-        return if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            ScreenSize(point.x, point.y)
-        } else {
-            ScreenSize(point.y, point.x)
-        }
+        return Pair(point.x, point.y)
     }
 
     /**
@@ -86,17 +69,12 @@ object ScreenSizeUtils {
      * @return [ScreenSize] of your device.
      */
     @Suppress("DEPRECATION")
-    private fun getScreenSizeApi30Below(context: Context): ScreenSize {
-        val orientation = context.resources?.configuration?.orientation
+    private fun getScreenSizeApi30Below(context: Context): Pair<Int, Int> {
         val point = Point()
         val vm: WindowManager =
             context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         vm.defaultDisplay.getRealSize(point)
-        return if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            ScreenSize(point.x, point.y)
-        } else {
-            ScreenSize(point.y, point.x)
-        }
+        return Pair(point.x, point.y)
     }
 
     /**
@@ -104,7 +82,7 @@ object ScreenSizeUtils {
      *
      * @return [ScreenSize] of your device.
      */
-    internal fun getMobileScreenSize(context: Context): ScreenSize {
+    private fun getMobileScreenSize(context: Context): Pair<Int,Int> {
         return when {
             (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) -> getScreenSizeApi31(context)
             (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) -> getScreenSizeApi30(context)
@@ -113,20 +91,20 @@ object ScreenSizeUtils {
     }
 
     /**
-     * Get mobile screen height.
+     * Gets the screen height in the current screen orientation.
      *
      * @return The height of the screen(in pixels).
      */
     @JvmStatic
-    fun getMobileScreenHeight() = getMobileScreenSize(ContextHelper.getAppContext()).height
+    fun getMobileScreenHeight() = getMobileScreenSize(ContextHelper.getAppContext()).second
 
     /**
-     * Get mobile screen width.
+     * Gets the screen width in the current screen orientation.
      *
      * @return The width of the screen(in pixels).
      */
     @JvmStatic
-    fun getMobileScreenWidth() = getMobileScreenSize(ContextHelper.getAppContext()).width
+    fun getMobileScreenWidth() = getMobileScreenSize(ContextHelper.getAppContext()).first
 
     /**
      * Get screen orientation.
@@ -137,9 +115,7 @@ object ScreenSizeUtils {
     @JvmStatic
     fun getScreenOrientation() = ContextHelper.getAppContext().resources.configuration.orientation
 
-    /**
-     * Get screen orientation in degrees. By default, it returns 0.
-     */
+    /** Get screen orientation in degrees. By default, it returns 0. */
     @JvmStatic
     fun getScreenOrientationInDegree(activity: Activity): Int {
         val rotation = getDisplay(activity)?.rotation
@@ -156,22 +132,12 @@ object ScreenSizeUtils {
     /**
      * Get the StatusBar height.
      *
-     * @param activity the activity.
-     * @return the height of the status height, 0 otherwise.
+     * @since 0.5.2
      */
-    @SuppressLint("InternalInsetResource", "DiscouragedApi")
-    @JvmStatic
     fun getStatusBarHeight(activity: Activity): Int {
-        var result = 0
-        val resourceId = activity.resources.getIdentifier(
-            "status_bar_height",
-            "dimen",
-            "android"
-        )
-        if (resourceId > 0) {
-            result = activity.resources.getDimensionPixelSize(resourceId)
-        }
-        return result
+        val windowInsetsCompat =
+            ViewCompat.getRootWindowInsets(activity.findViewById(android.R.id.content)) ?: return 0
+        return windowInsetsCompat.getInsets(WindowInsetsCompat.Type.statusBars()).top
     }
 
     /**
@@ -182,11 +148,11 @@ object ScreenSizeUtils {
     @JvmStatic
     fun getDensity() = ContextHelper.getAppContext().resources.displayMetrics.density
 
-    /**
-     * Get [activity] display.
-     */
+    /** Get [activity] display. */
     @Suppress("DEPRECATION")
-    private fun getDisplay(activity: Activity) = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-        activity.display
-    } else activity.windowManager.defaultDisplay
+    private fun getDisplay(activity: Activity) =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            activity.display
+        } else activity.windowManager.defaultDisplay
+
 }
