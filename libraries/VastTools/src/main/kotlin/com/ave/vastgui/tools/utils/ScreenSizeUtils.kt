@@ -77,12 +77,7 @@ object ScreenSizeUtils {
         return Pair(point.x, point.y)
     }
 
-    /**
-     * Get the [ScreenSize] of your device.
-     *
-     * @return [ScreenSize] of your device.
-     */
-    private fun getMobileScreenSize(context: Context): Pair<Int,Int> {
+    private fun getMobileScreenSize(context: Context): Pair<Int, Int> {
         return when {
             (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) -> getScreenSizeApi31(context)
             (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) -> getScreenSizeApi30(context)
@@ -94,26 +89,35 @@ object ScreenSizeUtils {
      * Gets the screen height in the current screen orientation.
      *
      * @return The height of the screen(in pixels).
+     * @since 0.5.2
      */
     @JvmStatic
-    fun getMobileScreenHeight() = getMobileScreenSize(ContextHelper.getAppContext()).second
+    @JvmOverloads
+    fun getMobileScreenHeight(context: Context = ContextHelper.getAppContext()) =
+        getMobileScreenSize(context).second
 
     /**
      * Gets the screen width in the current screen orientation.
      *
      * @return The width of the screen(in pixels).
+     * @since 0.5.2
      */
     @JvmStatic
-    fun getMobileScreenWidth() = getMobileScreenSize(ContextHelper.getAppContext()).first
+    @JvmOverloads
+    fun getMobileScreenWidth(context: Context = ContextHelper.getAppContext()) =
+        getMobileScreenSize(context).first
 
     /**
      * Get screen orientation.
      *
      * @see Configuration.ORIENTATION_LANDSCAPE
      * @see Configuration.ORIENTATION_PORTRAIT
+     * @since 0.5.2
      */
     @JvmStatic
-    fun getScreenOrientation() = ContextHelper.getAppContext().resources.configuration.orientation
+    @JvmOverloads
+    fun getScreenOrientation(context: Context = ContextHelper.getAppContext()) =
+        context.resources.configuration.orientation
 
     /** Get screen orientation in degrees. By default, it returns 0. */
     @JvmStatic
@@ -143,10 +147,13 @@ object ScreenSizeUtils {
     /**
      * Get the logical density of the display.
      *
-     * @see [DisplayMetrics.density]
+     * @see [DisplayMetrics.density].
+     * @since 0.5.2
      */
     @JvmStatic
-    fun getDensity() = ContextHelper.getAppContext().resources.displayMetrics.density
+    @JvmOverloads
+    fun getDensity(context: Context = ContextHelper.getAppContext()) =
+        context.resources.displayMetrics.density
 
     /** Get [activity] display. */
     @Suppress("DEPRECATION")
