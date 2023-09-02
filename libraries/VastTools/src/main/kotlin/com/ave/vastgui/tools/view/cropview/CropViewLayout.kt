@@ -19,6 +19,7 @@ package com.ave.vastgui.tools.view.cropview
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.PointF
@@ -37,13 +38,14 @@ import androidx.annotation.RequiresApi
 import androidx.exifinterface.media.ExifInterface
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.R
-import com.ave.vastgui.tools.utils.BmpUtils
 import com.ave.vastgui.tools.utils.ColorUtils
 import com.ave.vastgui.tools.utils.DensityUtils
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.ScreenSizeUtils
+import com.ave.vastgui.tools.utils.image.BmpUtils
 import java.io.File
 import java.io.IOException
+import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 
@@ -391,10 +393,10 @@ class CropViewLayout @JvmOverloads constructor(
         if (TextUtils.isEmpty(path)) {
             return
         }
-        val imageWidthHeight: IntArray = BmpUtils.getBitmapWidthHeight(path)
-        val w = imageWidthHeight[0]
-        val h = imageWidthHeight[1]
-        var bitmap: Bitmap = BmpUtils.getBitmapWithRequireSize(
+        val (w, h) = BmpUtils.getBitmapWidthHeight { options ->
+            BitmapFactory.decodeFile(path, options)
+        }
+        var bitmap: Bitmap = getBitmapWithRequireSize(
             path,
             if (w > mWidthPixels) mWidthPixels else w,
             if (h > mHeightPixels) mHeightPixels else h
@@ -435,6 +437,58 @@ class CropViewLayout @JvmOverloads constructor(
         mImageView.scaleType = ImageView.ScaleType.MATRIX
         mImageView.imageMatrix = mMatrix
         mImageView.setImageBitmap(bitmap)
+    }
+
+    /**
+     * Get bitmap with require size.
+     *
+     * @since 0.5.0
+     */
+    private fun getBitmapWithRequireSize(path: String, reqWidth: Int, reqHeight: Int): Bitmap? {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        options.inPreferredConfig = Bitmap.Config.RGB_565
+        // bitmap is null
+        BitmapFactory.decodeFile(path, options)
+
+        // Calculate inSampleSize
+        val inSampleSize: Int = calculateRequireSize(options, reqWidth, reqHeight)
+        options.inSampleSize = inSampleSize
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false
+        return BitmapFactory.decodeFile(path, options)
+    }
+
+    /**
+     * Calculate require size
+     *
+     * @since 0.5.0
+     */
+    private fun calculateRequireSize(
+        options: BitmapFactory.Options,
+        reqWidth: Int, reqHeight: Int
+    ): Int {
+        // Raw height and width of image
+        val height = options.outHeight
+        val width = options.outWidth
+        var inSampleSize = 1
+        if (height > reqHeight || width > reqWidth) {
+
+            // Calculate ratios of height and width to requested height and
+            // width
+            val heightRatio = (height.toFloat() / reqHeight.toFloat()).roundToInt()
+            val widthRatio = (width.toFloat() / reqWidth.toFloat()).roundToInt()
+
+            // Choose the smallest ratio as inSampleSize value, this will
+            // guarantee
+            // a final image with both dimensions larger than or equal to the
+            // requested height and width.
+            val ratio = if (heightRatio < widthRatio) heightRatio else widthRatio
+            inSampleSize =
+                if (ratio < 3) ratio else if (ratio < 6.5) 4 else if (ratio < 8) 8 else ratio
+        }
+        return inSampleSize
     }
 
     init {
@@ -483,8 +537,8 @@ class CropViewLayout @JvmOverloads constructor(
         this.addView(mImageView, lp)
         this.addView(mCropView, lp)
 
-        mWidthPixels = ScreenSizeUtils.getMobileScreenSize(context).width
-        mHeightPixels = ScreenSizeUtils.getMobileScreenSize(context).height
+        mWidthPixels = ScreenSizeUtils.getMobileScreenWidth(context)
+        mHeightPixels = ScreenSizeUtils.getMobileScreenHeight(context)
     }
 
 }

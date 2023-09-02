@@ -36,9 +36,8 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.R
-import com.ave.vastgui.tools.utils.BmpUtils
 import com.ave.vastgui.tools.utils.DensityUtils.DP
-import com.ave.vastgui.tools.log.LogUtil
+import com.ave.vastgui.tools.utils.image.BmpUtils
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

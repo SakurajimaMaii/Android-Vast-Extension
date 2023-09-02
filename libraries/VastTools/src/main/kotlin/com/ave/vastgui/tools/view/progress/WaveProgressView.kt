@@ -34,12 +34,12 @@ import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.annotation.RestrictTo
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.R
-import com.ave.vastgui.tools.utils.BmpUtils.getBitmapFromDrawable
 import com.ave.vastgui.tools.utils.DensityUtils.DP
-import com.ave.vastgui.tools.utils.ResUtils
+import com.ave.vastgui.tools.utils.image.BmpUtils.getBitmapFromDrawable
 import com.ave.vastgui.tools.view.progress.WaveProgressView.Companion.DEFAULT_SPACE_RATIO
 import com.ave.vastgui.tools.view.progress.WaveProgressView.Companion.DEFAULT_STROKE_RATIO
 
@@ -498,9 +498,7 @@ class WaveProgressView @JvmOverloads constructor(
      */
     override fun setBackgroundResource(resid: Int) {
         try {
-            ResUtils.getDrawable(resid).apply {
-                background = this
-            }
+            background = AppCompatResources.getDrawable(context, resid)
         } catch (e: Exception) {
             e.printStackTrace()
         }

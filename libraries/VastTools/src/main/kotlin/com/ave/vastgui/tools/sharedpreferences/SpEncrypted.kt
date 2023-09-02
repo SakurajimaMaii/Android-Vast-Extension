@@ -22,7 +22,6 @@ import com.ave.vastgui.core.extension.SingletonHolder
 import com.ave.vastgui.tools.config.ToolsConfig
 import com.ave.vastgui.tools.helper.ContextHelper
 
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/14

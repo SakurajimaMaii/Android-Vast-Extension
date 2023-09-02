@@ -25,7 +25,7 @@ import android.text.style.QuoteSpan
 import android.text.style.TypefaceSpan
 import androidx.annotation.ColorInt
 import com.ave.vastgui.tools.R
-import com.ave.vastgui.tools.utils.ResUtils
+import com.ave.vastgui.tools.utils.findByContext
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -56,7 +56,7 @@ import com.ave.vastgui.tools.utils.ResUtils
  */
 class AppendableStyle(
     @ColorInt val foreColor: Int? = null,
-    @ColorInt val backColor: Int = ResUtils.getColor(R.color.transparent),
+    @ColorInt val backColor: Int = findByContext { getColor(R.color.transparent) },
     val fontStyle: StyleMode = StyleMode.NORMAL,
     val fontFamily: TypefaceSpan? = null,
     val fontSize: Int? = null,
@@ -77,7 +77,7 @@ class AppendableStyle(
     constructor(
         linesIndent: LeadingMarginSpan.Standard,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
+        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
@@ -100,7 +100,7 @@ class AppendableStyle(
     constructor(
         quoteSpan: QuoteSpan,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
+        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
@@ -123,7 +123,7 @@ class AppendableStyle(
     constructor(
         bulletSpan: BulletSpan,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
+        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
@@ -146,7 +146,7 @@ class AppendableStyle(
     constructor(
         strikeMode: StrikeMode = StrikeMode.NONE,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
+        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
@@ -169,7 +169,7 @@ class AppendableStyle(
     constructor(
         scriptMode: ScriptMode = ScriptMode.NONE,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
+        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
@@ -192,7 +192,7 @@ class AppendableStyle(
     constructor(
         clickSpan: ClickableSpan,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
+        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
@@ -215,7 +215,7 @@ class AppendableStyle(
     constructor(
         url: String,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
+        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
@@ -239,7 +239,7 @@ class AppendableStyle(
         blurRadius: Float,
         blur: BlurMaskFilter.Blur,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = ResUtils.getColor(R.color.transparent),
+        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,

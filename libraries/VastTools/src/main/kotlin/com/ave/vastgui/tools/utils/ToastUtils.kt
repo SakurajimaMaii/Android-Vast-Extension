@@ -26,7 +26,6 @@ import androidx.annotation.StringRes
 import com.ave.vastgui.tools.config.ToolsConfig
 import com.ave.vastgui.tools.helper.ContextHelper
 
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
@@ -34,12 +33,7 @@ import com.ave.vastgui.tools.helper.ContextHelper
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/toast/ToastUtils/
 
 /**
- * ToastUtils
- *
- * Here is an example:
- * ```Java
- * ToastUtils.showShortMsg(this,message);
- * ```
+ * ToastUtils.
  */
 object ToastUtils {
 
@@ -75,7 +69,7 @@ object ToastUtils {
         @StringRes id: Int,
         context: Context = ContextHelper.getAppContext()
     ) {
-        showToast(context, ResUtils.getString(id), Toast.LENGTH_SHORT)
+        showToast(context, context.getString(id), Toast.LENGTH_SHORT)
     }
 
 
@@ -102,7 +96,7 @@ object ToastUtils {
         @StringRes id: Int,
         context: Context = ContextHelper.getAppContext()
     ) {
-        showToast(context, ResUtils.getString(id), Toast.LENGTH_LONG)
+        showToast(context, context.getString(id), Toast.LENGTH_LONG)
     }
 
     private fun showToast(context: Context, msg: String, @Duration duration: Int) {
@@ -110,7 +104,7 @@ object ToastUtils {
             makeToast(context, msg, duration)
         } else {
             val handler = Handler(Looper.getMainLooper())
-            handler.post(Runnable { makeToast(context, msg, duration) })
+            handler.post { makeToast(context, msg, duration) }
         }
     }
 

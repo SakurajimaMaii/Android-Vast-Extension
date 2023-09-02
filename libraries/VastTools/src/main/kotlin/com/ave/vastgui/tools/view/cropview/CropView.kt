@@ -182,7 +182,7 @@ class CropView @JvmOverloads constructor(
     /**
      * Set crop frame shape type.
      *
-     * @see CropView.FrameType
+     * @see CropFrameType
      * @since 0.5.0
      */
     override fun setCropFrameType(type: CropFrameType) {
@@ -426,9 +426,9 @@ class CropView @JvmOverloads constructor(
             R.styleable.CropView_crop_frame_height, DEFAULT_FRAME_HEIGHT
         )
         mCropViewWidth =
-            ScreenSizeUtils.getMobileScreenSize(context).width
+            ScreenSizeUtils.getMobileScreenWidth(context)
         mCropViewHeight =
-            ScreenSizeUtils.getMobileScreenSize(context).height
+            ScreenSizeUtils.getMobileScreenHeight(context)
         initCropFramePaint()
         initCropFrameStrokePaint()
         initCropFrameGuidelinePaint()

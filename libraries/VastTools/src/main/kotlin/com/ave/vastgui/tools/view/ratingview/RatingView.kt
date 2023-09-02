@@ -28,7 +28,7 @@ import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.R
-import com.ave.vastgui.tools.utils.BmpUtils
+import com.ave.vastgui.tools.utils.image.BmpUtils
 
 // Author: Vast Gui
 // Email: sakurajimamai2020@qq.com
