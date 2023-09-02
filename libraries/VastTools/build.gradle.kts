@@ -140,7 +140,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "VastTools"
-            version = "0.5.1"
+            version = "0.5.2"
 
             afterEvaluate {
                 from(components["release"])

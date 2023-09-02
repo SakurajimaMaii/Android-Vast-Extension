@@ -20,13 +20,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
-import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.utils.image.BmpUtils
 
@@ -67,8 +65,8 @@ class RatingView @JvmOverloads constructor(
     private var rectSrc: Rect = Rect()
     private var dstF: Rect = Rect()
     private val paint: Paint = Paint()
-    private lateinit var mStarSelectedBitmap: Bitmap
-    private lateinit var mStarUnselectedBitmap: Bitmap
+    private var mStarSelectedBitmap: Bitmap
+    private var mStarUnselectedBitmap: Bitmap
 
     private var starSolidNumber = 0
 
@@ -270,13 +268,13 @@ class RatingView @JvmOverloads constructor(
     ) {
         this.mStarBitmapWidth = starWidth
         this.mStarBitmapHeight = starHeight
-        BmpUtils.scaleBitmap(mStarSelectedBitmap, starWidth.toInt(), starHeight.toInt())?.let {
+        BmpUtils.scaleBitmap(mStarSelectedBitmap, starWidth.toInt(), starHeight.toInt()).let {
             mStarSelectedBitmap = it
-        } ?: Log.e(defaultLogTag(), "Set mStarSelectedBitmap failed.")
+        }
         BmpUtils.scaleBitmap(mStarUnselectedBitmap, starWidth.toInt(), starHeight.toInt())
-            ?.let {
+            .let {
                 mStarUnselectedBitmap = it
-            } ?: Log.e(defaultLogTag(), "Set mStarUnselectedBitmap failed.")
+            }
     }
 
     /**
@@ -297,7 +295,7 @@ class RatingView @JvmOverloads constructor(
     fun setStarSelectedBitmap(bitmap: Bitmap) {
         BmpUtils.scaleBitmap(
             bitmap, mStarBitmapWidth.toInt(), mStarBitmapHeight.toInt()
-        )?.let {
+        ).let {
             mStarSelectedBitmap = it
         }
     }
@@ -312,7 +310,7 @@ class RatingView @JvmOverloads constructor(
         BmpUtils.scaleBitmap(
             BmpUtils.getBitmapFromDrawable(drawableId, context),
             mStarBitmapWidth.toInt(), mStarBitmapHeight.toInt()
-        )?.let {
+        ).let {
             mStarSelectedBitmap = it
         }
     }
@@ -325,7 +323,7 @@ class RatingView @JvmOverloads constructor(
     fun setStarUnselectedBitmap(bitmap: Bitmap) {
         BmpUtils.scaleBitmap(
             bitmap, mStarBitmapWidth.toInt(), mStarBitmapHeight.toInt()
-        )?.let {
+        ).let {
             mStarUnselectedBitmap = it
         }
     }
@@ -340,7 +338,7 @@ class RatingView @JvmOverloads constructor(
         BmpUtils.scaleBitmap(
             BmpUtils.getBitmapFromDrawable(drawableId, context),
             mStarBitmapWidth.toInt(), mStarBitmapHeight.toInt()
-        )?.let {
+        ).let {
             mStarUnselectedBitmap = it
         }
     }
@@ -395,9 +393,9 @@ class RatingView @JvmOverloads constructor(
             tempSelectedBitmap,
             mStarBitmapWidth.toInt(),
             mStarBitmapHeight.toInt()
-        )?.let {
+        ).let {
             mStarSelectedBitmap = it
-        } ?: Log.e(defaultLogTag(), "The tempSelectedBitmap is null.")
+        }
         val tempUnselectedBitmap = BmpUtils.getBitmapFromDrawable(
             typedArray.getResourceId(
                 R.styleable.RatingView_star_unselected,
@@ -409,9 +407,9 @@ class RatingView @JvmOverloads constructor(
             tempUnselectedBitmap,
             mStarBitmapWidth.toInt(),
             mStarBitmapHeight.toInt()
-        )?.let {
+        ).let {
             mStarUnselectedBitmap = it
-        } ?: Log.e(defaultLogTag(), "The tempUnselectedBitmap is null.")
+        }
         mStarOrientation = when (typedArray.getInt(
             R.styleable.RatingView_star_orientation,
             RatingOrientation.HORIZONTAL.ordinal
