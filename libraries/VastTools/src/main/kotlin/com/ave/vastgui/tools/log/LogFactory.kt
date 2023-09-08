@@ -71,7 +71,7 @@ class LogFactory internal constructor() {
      * @since 0.5.2
      */
     fun getLog(clazz: Class<*>) = LogUtil().also {
-        it.tag = clazz.simpleName
+        it.mDefaultTag = clazz.simpleName
         install(it)
     }
 
@@ -81,7 +81,7 @@ class LogFactory internal constructor() {
      * @since 0.5.2
      */
     fun getLog(tag: String) = LogUtil().also {
-        it.tag = tag
+        it.mDefaultTag = tag
         install(it)
     }
 

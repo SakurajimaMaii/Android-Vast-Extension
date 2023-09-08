@@ -26,12 +26,16 @@ import android.util.Log
 /**
  * Log level
  *
- * @since 0.5.2
+ * @since 0.5.3
  */
-enum class LogLevel(val priority:Int) {
-    VERBOSE(Log.VERBOSE),
-    DEBUG(Log.DEBUG),
-    INFO(Log.INFO),
-    WARN(Log.WARN),
-    ERROR(Log.ERROR)
+sealed class LogLevel(val priority: Int) : Comparable<LogLevel> {
+    object VERBOSE : LogLevel(Log.VERBOSE)
+    object DEBUG : LogLevel(Log.DEBUG)
+    object INFO : LogLevel(Log.INFO)
+    object WARN : LogLevel(Log.WARN)
+    object ERROR : LogLevel(Log.ERROR)
+
+    override fun compareTo(other: LogLevel): Int = this.priority - other.priority
+
+    override fun toString(): String = this::class.java.simpleName
 }

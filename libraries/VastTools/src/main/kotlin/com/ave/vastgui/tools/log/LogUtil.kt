@@ -16,15 +16,13 @@
 
 package com.ave.vastgui.tools.log
 
-import android.util.Log
 import com.ave.vastgui.core.extension.NotNUllVar
-import com.ave.vastgui.tools.log.base.LogDivider
 import com.ave.vastgui.tools.log.base.LogInfo
 import com.ave.vastgui.tools.log.base.LogLevel
-import com.ave.vastgui.tools.log.base.LogPrinter
 import com.ave.vastgui.tools.log.json.Converter
+import com.ave.vastgui.tools.log.plugin.LogPrinter
+import com.ave.vastgui.tools.log.plugin.LogStorage
 import com.ave.vastgui.tools.utils.AppUtils.getAppDebug
-import java.util.Arrays
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -34,20 +32,10 @@ import java.util.Arrays
 
 /**
  * LogUtils.
+ *
+ * @see LogPrinter
  */
 class LogUtil internal constructor() {
-
-    companion object {
-        /**
-         * Default maximum length of chars printed of a single log.
-         *
-         * Notes:Considering fault tolerance, 1000 is set here instead of 1024.
-         */
-        internal const val defaultMaxSingleLogLength = 1000
-
-        /** Default max print repeat times. */
-        internal const val defaultMaxPrintTimes = 5
-    }
 
     /** `true` if app in debug,`false` otherwise. */
     private var isDeBug: Boolean = true
@@ -56,20 +44,9 @@ class LogUtil internal constructor() {
      * Used to identify the source of a log message. It usually identifies the
      * class or activity where the log call occurs.
      *
-     * @since 0.5.2
+     * @since 0.5.3
      */
-    internal var tag by NotNUllVar<String>()
-
-    /**
-     * Maximum length of characters printed of a single log.Each character is
-     * calculated as 4Bytes.
-     *
-     * @since 0.5.2
-     */
-    internal var maxSingleLogLength: Int = defaultMaxSingleLogLength
-
-    /** Max print repeat times. */
-    internal var maxPrintTimes: Int = defaultMaxPrintTimes
+    internal var mDefaultTag by NotNUllVar<String>()
 
     /**
      * `true` if you want to print log,`false` if you don't want to print the
@@ -77,7 +54,26 @@ class LogUtil internal constructor() {
      */
     internal var logEnabled = true
 
-    internal var converter: Converter? = null
+    /**
+     * Log printer.
+     *
+     * @since 0.5.3
+     */
+    internal lateinit var mLogPrinter: LogPrinter
+
+    /**
+     * Log storage.
+     *
+     * @since 0.5.3
+     */
+    internal var mLogStorage: LogStorage? = null
+
+    /**
+     * Log json converter.
+     *
+     * @since 0.5.3
+     */
+    internal var mLogConverter: Converter? = null
 
     /** Sync is debug. */
     @Synchronized
@@ -86,216 +82,191 @@ class LogUtil internal constructor() {
     }
 
     /**
-     * Send info message.
+     * Send a [LogLevel.INFO] log message.
      *
      * @param content Message content.
      * @since 0.5.2
      */
+    @JvmOverloads
     fun i(content: String, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
-            logPrint(LogLevel.INFO.priority, tag, content, tr)
+            logPrint(LogLevel.INFO, mDefaultTag, content, tr)
         }
     }
 
     /**
-     * Send verbose message.
+     * Send a [LogLevel.INFO] log message.
+     *
+     * @param content Message content.
+     * @since 0.5.3
+     */
+    @JvmOverloads
+    fun i(tag: String, content: String, tr: Throwable? = null) {
+        if (logEnabled && isDeBug) {
+            logPrint(LogLevel.INFO, tag, content, tr)
+        }
+    }
+
+    /**
+     * Send a [LogLevel.VERBOSE] log message.
      *
      * @param content Message content.
      * @since 0.5.2
      */
+    @JvmOverloads
     fun v(content: String, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
-            logPrint(LogLevel.VERBOSE.priority, tag, content, tr)
+            logPrint(LogLevel.VERBOSE, mDefaultTag, content, tr)
         }
     }
 
     /**
-     * Send warning message.
+     * Send a [LogLevel.VERBOSE] log message.
+     *
+     * @param content Message content.
+     * @since 0.5.3
+     */
+    @JvmOverloads
+    fun v(tag: String, content: String, tr: Throwable? = null) {
+        if (logEnabled && isDeBug) {
+            logPrint(LogLevel.VERBOSE, tag, content, tr)
+        }
+    }
+
+    /**
+     * Send a [LogLevel.WARN] log message.
      *
      * @param content Message content.
      * @since 0.5.2
      */
+    @JvmOverloads
     fun w(content: String, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
-            logPrint(LogLevel.WARN.priority, tag, content, tr)
+            logPrint(LogLevel.WARN, mDefaultTag, content, tr)
         }
     }
 
     /**
-     * Send debug message.
+     * Send a [LogLevel.WARN] message.
+     *
+     * @param content Message content.
+     * @since 0.5.3
+     */
+    @JvmOverloads
+    fun w(tag: String, content: String, tr: Throwable? = null) {
+        if (logEnabled && isDeBug) {
+            logPrint(LogLevel.WARN, tag, content, tr)
+        }
+    }
+
+    /**
+     * Send a [LogLevel.DEBUG] log message.
      *
      * @param content Message content.
      * @since 0.5.2
      */
+    @JvmOverloads
     fun d(content: String, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
-            logPrint(LogLevel.DEBUG.priority, tag, content, tr)
+            logPrint(LogLevel.DEBUG, mDefaultTag, content, tr)
         }
     }
 
     /**
-     * Send error message.
+     * Send a [LogLevel.DEBUG] log message.
+     *
+     * @param content Message content.
+     * @since 0.5.3
+     */
+    @JvmOverloads
+    fun d(tag: String, content: String, tr: Throwable? = null) {
+        if (logEnabled && isDeBug) {
+            logPrint(LogLevel.DEBUG, tag, content, tr)
+        }
+    }
+
+    /**
+     * Send a [LogLevel.ERROR] log message.
      *
      * @param content Message content.
      * @since 0.5.2
      */
+    @JvmOverloads
     fun e(content: String, tr: Throwable? = null) {
         if (logEnabled && isDeBug) {
-            logPrint(LogLevel.ERROR.priority, tag, content, tr)
+            logPrint(LogLevel.ERROR, mDefaultTag, content, tr)
+        }
+    }
+
+    /**
+     * Send a [LogLevel.ERROR] log message.
+     *
+     * @param content Message content.
+     * @since 0.5.3
+     */
+    @JvmOverloads
+    fun e(tag: String, content: String, tr: Throwable? = null) {
+        if (logEnabled && isDeBug) {
+            logPrint(LogLevel.ERROR, tag, content, tr)
+        }
+    }
+
+
+    /**
+     * Print object [target] to json.
+     *
+     * @param level The log level.
+     * @since 0.5.2
+     */
+    fun json(level: LogLevel, target: Any) {
+        if (logEnabled && isDeBug) {
+            val jsonString = mLogConverter!!.toJson(target)
+            val logInfo = LogInfo(Thread.currentThread(), level, mDefaultTag, jsonString, null)
+            mLogPrinter.printJson(logInfo)
+            mLogStorage?.storageJson(logInfo)
         }
     }
 
     /**
      * Print object [target] to json.
      *
-     * @param priority The log priority.
-     * @since 0.5.2
+     * @param level The log level.
+     * @since 0.5.3
      */
-    fun json(level: LogLevel, target: Any) {
+    fun json(tag: String, level: LogLevel, target: Any) {
         if (logEnabled && isDeBug) {
-            jsonPrint(level.priority, target)
+            val jsonString = mLogConverter!!.toJson(target)
+            val logInfo = LogInfo(Thread.currentThread(), level, tag, jsonString, null)
+            mLogPrinter.printJson(logInfo)
+            mLogStorage?.storageJson(logInfo)
         }
     }
 
     /**
      * Log print.
      *
-     * @param priority log level.
+     * @param level log level.
      * @param tag log keyboard.
      * @param content log message.
-     * @since 0.5.2
+     * @since 0.5.3
      */
     private fun logPrint(
-        priority: Int,
+        level: LogLevel,
         tag: String,
         content: String,
         tr: Throwable? = null
     ) {
-        val stackTrace = Thread.currentThread().stackTrace
-
-        val methodStackTraceIndex = stackTrace.indexOfLast {
-            it.className == this.javaClass.name
-        } + 1
-        val methodStackTraceElement = stackTrace[methodStackTraceIndex]
-
-        val threadName = Thread.currentThread().name
-        val logInfo = LogInfo(threadName, methodStackTraceElement, content, tr)
-
-        print(priority, tag, logInfo)
+        val logInfo = LogInfo(Thread.currentThread(), level, tag, content, tr)
+        mLogPrinter.printLog(logInfo)
+        mLogStorage?.storage(logInfo)
     }
 
     /**
-     * Print the log(In order to solve the length limit)
+     * Enable storage
      *
-     * @param priority The priority/type of this log message
-     * @param tag Used to identify the source of a log message.It usually
-     *     identifies the class or activity where the log call occurs.
-     * @param logInfo The message you would like logged.
-     * @since 0.5.2
+     * @since 0.5.3
      */
-    private fun print(priority: Int, tag: String, logInfo: LogInfo) {
-        val logPrinter = LogPrinter(priority, tag, logInfo)
-
-        /**
-         * 1. The console can print 4062 bytes at most, and there are slight
-         *    discrepancies in different situations (note: here are bytes, not
-         *    characters!!!)
-         * 2. The default character set encoding of strings is utf-8, which is a
-         *    variable-length encoding. One character is represented by 1 to 4
-         *    bytes.
-         *
-         * Here the character length is less than [maxSingleLogLength], then it
-         * will be printed directly, avoiding the subsequent process.
-         */
-        var bytes = logInfo.contentBytes
-
-        if (logInfo.printLength < maxSingleLogLength || (maxSingleLogLength * 4) >= bytes.size) {
-            logPrinter.printLog {
-                Log.println(priority, tag, LogDivider.getInfo(it))
-            }
-            return
-        }
-
-        // Segment printing count
-        var count = 1
-
-        var printTheRest = true
-
-        logPrinter.printLog(maxSingleLogLength * 4) {
-            // In the range of the array, print in cycles
-            while (maxSingleLogLength * 4 < bytes.size) {
-                val subStr = cutStr(bytes)
-
-                Log.println(priority, tag, LogDivider.getInfo(String.format("%s", subStr)))
-
-                bytes = bytes.copyOfRange(subStr?.toByteArray()?.size ?: 0, bytes.size)
-
-                if (count == maxPrintTimes) {
-                    printTheRest = false
-                    break
-                }
-
-                count++
-            }
-
-            // Print the unprinted bytes
-            if (printTheRest) {
-                Log.println(priority, tag, LogDivider.getInfo(String.format("%s", String(bytes))))
-            }
-        }
-    }
-
-
-    /**
-     * Truncate the byte array as a string according to [maxSingleLogLength].
-     *
-     * @param bytes byte array.
-     * @return The string obtained by [maxSingleLogLength].
-     */
-    private fun cutStr(bytes: ByteArray?): String? {
-        // Return when the bytes is null.
-        if (bytes == null) {
-            return null
-        }
-
-        // Return when the bytes length is less than the subLength.
-        if (maxSingleLogLength * 4 >= bytes.size) {
-            return String(bytes)
-        }
-
-        // Copy the fixed-length byte array and convert it to a string
-        val subStr = String(Arrays.copyOf(bytes, maxSingleLogLength * 4))
-
-        // Avoid the end character is split, here minus 1 to keep the string intact
-        return subStr.substring(0, subStr.length - 1)
-    }
-
-    /**
-     * Json print
-     *
-     * @since 0.5.2
-     */
-    private fun jsonPrint(priority: Int, target: Any) {
-        if (converter == null)
-            throw RuntimeException("Please set converter in LogFormat.")
-
-        val stackTrace = Thread.currentThread().stackTrace
-        val methodStackTraceIndex = stackTrace.indexOfLast {
-            it.className == this.javaClass.name
-        } + 1
-        val methodStackTraceElement = stackTrace[methodStackTraceIndex]
-        val threadName = Thread.currentThread().name
-
-        val jsonString = converter!!.toJson(target)
-        val logInfo = LogInfo(threadName, methodStackTraceElement, jsonString)
-
-        val logPrinter = LogPrinter(priority, tag, logInfo)
-        logPrinter.printLog {
-            for (line in it.split("\n")) {
-                Log.println(priority, tag, LogDivider.getInfo(line))
-            }
-        }
-    }
+    private fun LogInfo.enableStorage() = this.mLevel >= mLevel
 
     init {
         init()
