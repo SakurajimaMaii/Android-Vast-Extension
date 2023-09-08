@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity.logexample
+package com.ave.vastgui.app.activity.log
 
 import android.os.Bundle
+import com.ave.vastgui.app.activity.adpexample.model.Person
 import com.ave.vastgui.app.databinding.ActivityLogBinding
 import com.ave.vastgui.app.viewmodel.SampleSharedVM
 import com.ave.vastgui.tools.activity.VastVbVmActivity
 import com.ave.vastgui.tools.activity.widget.screenConfig
+import com.ave.vastgui.tools.log.base.LogLevel
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -37,7 +39,8 @@ class LogActivity : VastVbVmActivity<ActivityLogBinding, SampleSharedVM>() {
 
         getBinding().addOne.setOnClickListener {
             getViewModel().addOne()
-            logger.i("数字增加一")
+            logger.d("这是一条日志")
+            logger.json(LogLevel.DEBUG, Person("张三", "哈哈"))
         }
 
         getViewModel().count.observe(this) { count ->

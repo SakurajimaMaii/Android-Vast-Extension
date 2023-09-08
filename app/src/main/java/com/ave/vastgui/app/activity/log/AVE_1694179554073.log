@@ -1,0 +1,18 @@
+DEBUG || 2023-09-08 21:25:56 || Thread: main 
+DEBUG || 2023-09-08 21:25:56 || com.ave.vastgui.app.activity.logexample.LogActivity.onCreate$lambda$0(LogActivity.kt:42) 
+DEBUG || 2023-09-08 21:25:56 || 这是一条日志 
+DEBUG || 2023-09-08 21:25:56 || Thread: main 
+DEBUG || 2023-09-08 21:25:56 || com.ave.vastgui.app.activity.logexample.LogActivity.onCreate$lambda$0(LogActivity.kt:43) 
+DEBUG || 2023-09-08 21:25:56 || { 
+DEBUG || 2023-09-08 21:25:56 ||   "firstName": "张三", 
+DEBUG || 2023-09-08 21:25:56 ||   "lastName": "哈哈" 
+DEBUG || 2023-09-08 21:25:56 || } 
+DEBUG || 2023-09-08 21:25:57 || Thread: main 
+DEBUG || 2023-09-08 21:25:57 || com.ave.vastgui.app.activity.logexample.LogActivity.onCreate$lambda$0(LogActivity.kt:42) 
+DEBUG || 2023-09-08 21:25:57 || 这是一条日志 
+DEBUG || 2023-09-08 21:25:57 || Thread: main 
+DEBUG || 2023-09-08 21:25:57 || com.ave.vastgui.app.activity.logexample.LogActivity.onCreate$lambda$0(LogActivity.kt:43) 
+DEBUG || 2023-09-08 21:25:57 || { 
+DEBUG || 2023-09-08 21:25:57 ||   "firstName": "张三", 
+DEBUG || 2023-09-08 21:25:57 ||   "lastName": "哈哈" 
+DEBUG || 2023-09-08 21:25:57 || } 

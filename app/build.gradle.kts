@@ -28,6 +28,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.devtools.ksp")
     id("com.pluginversion.vastgui")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -131,12 +132,15 @@ dependencies {
     implementation(Jetbrains.kotlinx_coroutines_android)
     implementation(Jetbrains.kotlinx_coroutines_core)
     implementation(Jetbrains.kotlinx_coroutines_rx3)
+    implementation(Jetbrains.kotlinx_serialization_json)
     implementation(Squareup.okhttp3)
     implementation(Squareup.retrofit2)
     implementation(Squareup.retrofit2_adapter_rxjava3)
     implementation(Squareup.retrofit2_converter_gson)
     implementation(project(":libraries:VastAdapter"))
     implementation(project(":libraries:VastTools"))
+    implementation(project(":libraries:VastCore"))
     implementation(AVE.netstatelayout)
-    implementation(AVE.core)
+    implementation("com.github.fengzhizi715.SAF-Kotlin-log:core:2.6.9")
+    implementation("com.github.fengzhizi715.SAF-Kotlin-log:gson:2.6.9")
 }
