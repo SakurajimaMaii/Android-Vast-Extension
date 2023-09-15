@@ -63,6 +63,8 @@
         <item name="colorSurfaceBright">@color/md_theme_surfaceBright</item>
         <item name="colorPrimaryInverse">@color/md_theme_inversePrimary</item>
 
+        <item name="Default_BadgeView_Style">@style/BaseBadgeView</item>
+        <item name="Default_BadgeLayout_Style">@style/BaseBadgeLayout</item>
         <item name="Default_CropView_Style">@style/BaseCropView</item>
         <item name="Default_CropViewLayout_Style">@style/BaseCropViewLayout</item>
         <item name="Default_MarqueeTextView_Style">@style/BaseMarqueeTextView</item>

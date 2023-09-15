@@ -14,25 +14,23 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:clipChildren="false">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/appicon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"/>
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv"
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/badge_layout_icon"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:textSize="15sp"/>
+        android:layout_gravity="top|end" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+    <com.ave.vastgui.tools.view.badgeview.BadgeView
+        android:id="@+id/badge_layout_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        app:bubble_text_max_num="99" />
+
+</FrameLayout>

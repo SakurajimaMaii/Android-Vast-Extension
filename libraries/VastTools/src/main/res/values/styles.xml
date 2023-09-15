@@ -16,6 +16,23 @@
 
 <resources>
 
+    <style name="BaseBadgeView">
+        <item name="badge_color">@color/md_theme_error</item>
+        <item name="bubble_radius">10dp</item>
+        <item name="bubble_text_color">@color/white</item>
+        <item name="bubble_text_size">8sp</item>
+        <item name="bubble_text_max_num">99</item>
+        <item name="dot_radius">5dp</item>
+    </style>
+
+    <style name="BaseBadgeLayout" parent="BaseBadgeView">
+        <item name="icon">@drawable/ic_badge_default_icon</item>
+        <item name="icon_top_margin">5dp</item>
+        <item name="icon_start_margin">5dp</item>
+        <item name="icon_end_margin">5dp</item>
+        <item name="icon_bottom_margin">5dp</item>
+    </style>
+
     <style name="BaseCropView">
         <item name="crop_mask_layer_color">@color/default_crop_frame_mask_color</item>
         <item name="crop_frame_type">circle</item>

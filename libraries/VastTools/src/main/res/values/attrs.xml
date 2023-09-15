@@ -16,6 +16,37 @@
 
 <resources>
 
+    <declare-styleable name="BadgeView">
+        <attr name="badge_mode" format="enum">
+            <enum name="dot" value="0" />
+            <enum name="text" value="1" />
+            <enum name="number" value="2" />
+        </attr>
+        <attr name="badge_color" format="color|reference" />
+        <attr name="dot_radius" format="dimension|reference" />
+        <attr name="bubble_radius" format="dimension|reference" />
+        <attr name="bubble_text" format="string|reference" />
+        <attr name="bubble_text_max_num" format="integer|reference" />
+        <attr name="bubble_text_color" format="color|reference" />
+        <attr name="bubble_text_size" format="dimension|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="BadgeLayout">
+        <attr name="badge_mode" />
+        <attr name="badge_color" />
+        <attr name="dot_radius" />
+        <attr name="bubble_radius" />
+        <attr name="bubble_text" />
+        <attr name="bubble_text_max_num" />
+        <attr name="bubble_text_color" />
+        <attr name="bubble_text_size" />
+        <attr name="icon" format="reference" />
+        <attr name="icon_top_margin" format="dimension|reference" />
+        <attr name="icon_start_margin" format="dimension|reference" />
+        <attr name="icon_end_margin" format="dimension|reference" />
+        <attr name="icon_bottom_margin" format="dimension|reference" />
+    </declare-styleable>
+
     <declare-styleable name="CropView">
         <attr name="crop_mask_layer_color" format="color|reference" />
         <attr name="crop_frame_type" format="enum">
@@ -172,6 +203,8 @@
     </declare-styleable>
 
     <!-- Theme default style. -->
+    <attr name="Default_BadgeView_Style" format="reference" />
+    <attr name="Default_BadgeLayout_Style" format="reference" />
     <attr name="Default_CropView_Style" format="reference" />
     <attr name="Default_CropViewLayout_Style" format="reference" />
     <attr name="Default_MarqueeTextView_Style" format="reference" />
