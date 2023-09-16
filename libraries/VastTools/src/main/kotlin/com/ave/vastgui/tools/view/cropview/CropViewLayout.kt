@@ -29,20 +29,18 @@ import android.os.Build
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.ImageView
-import android.widget.RelativeLayout
-import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.children
 import androidx.exifinterface.media.ExifInterface
-import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.R
-import com.ave.vastgui.tools.utils.ColorUtils
-import com.ave.vastgui.tools.utils.DensityUtils
-import com.ave.vastgui.tools.utils.DensityUtils.DP
+import com.ave.vastgui.tools.databinding.CropLayoutBinding
 import com.ave.vastgui.tools.utils.ScreenSizeUtils
 import com.ave.vastgui.tools.utils.image.BmpUtils
+import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
+import com.ave.vastgui.tools.viewbinding.viewBinding
 import java.io.File
 import java.io.IOException
 import kotlin.math.roundToInt
@@ -83,13 +81,19 @@ class CropViewLayout @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.Default_CropViewLayout_Style,
     defStyleRes: Int = R.style.BaseCropViewLayout
-) : RelativeLayout(context, attrs, defStyleAttr, defStyleRes), CropFrame {
+) : ConstraintLayout(context, attrs, defStyleAttr, defStyleRes) {
 
-    private val DEFAULT_FRAME_WIDTH = DensityUtils.dp2px(100F.DP)
-    private val DEFAULT_FRAME_HEIGHT = DensityUtils.dp2px(100F.DP)
+    private val mDefaultCropFrameWidth
+        get() = context.resources.getDimension(R.dimen.default_crop_frame_width)
+    private val mDefaultCropFrameHeight
+        get() = context.resources.getDimension(R.dimen.default_crop_frame_height)
 
-    private var mImageView: ImageView by NotNUllVar()
-    private var mCropView: CropView by NotNUllVar()
+    private val mBinding by viewBinding(CropLayoutBinding::bind, R.id.crop_layout_root)
+
+    private val mImageView
+        get() = mBinding.cropLayoutImage
+    private val mCropView
+        get() = mBinding.cropLayoutCrop
     private val mMatrix: Matrix = Matrix()
     private val mSavedMatrix: Matrix = Matrix()
     private var mode = CropViewLayoutGesture.NONE
@@ -99,8 +103,10 @@ class CropViewLayout @JvmOverloads constructor(
     private val mMatrixValues = FloatArray(9)
     private var mMinScale = 0f
     private val mMaxScale = 4f
-    private var mWidthPixels = 0
-    private var mHeightPixels = 0
+    private val mWidthPixels
+        get() = ScreenSizeUtils.getMobileScreenWidth(context)
+    private val mHeightPixels
+        get() = ScreenSizeUtils.getMobileScreenHeight(context)
 
     val mCurrentlyScale: Float
         get() {
@@ -108,11 +114,41 @@ class CropViewLayout @JvmOverloads constructor(
             return mMatrixValues[Matrix.MSCALE_X]
         }
 
-    val mCropMaskColor: Int
+    /**
+     * @see CropView.setCropMaskColor
+     * @since 0.5.0
+     */
+    var mCropMaskColor: Int
+        set(value) {
+            mCropView.refreshWithInvalidate {
+                setCropMaskColor(value)
+            }
+        }
         get() = mCropView.mCropMaskColor
 
-    val mCropFrameType: CropFrameType
+    /**
+     * @see CropView.setCropFrameType
+     * @since 0.5.0
+     */
+    var mCropFrameType: CropFrameType
+        set(value) {
+            mCropView.refreshWithInvalidate {
+                setCropFrameType(value)
+            }
+        }
         get() = mCropView.mCropFrameType
+
+    /**
+     * @see CropView.setCropFrameStrokeColor
+     * @since 0.5.0
+     */
+    var mCropFrameStrokeColor: Int
+        set(value) {
+            mCropView.refreshWithInvalidate {
+                setCropFrameStrokeColor(value)
+            }
+        }
+        get() = mCropView.mCropFrameStrokeColor
 
     val mCropFrameWidth: Float
         get() = mCropView.mCropFrameWidth
@@ -120,8 +156,19 @@ class CropViewLayout @JvmOverloads constructor(
     val mCropFrameHeight: Float
         get() = mCropView.mCropFrameHeight
 
-    val mCropFrameStrokeColor: Int
-        get() = mCropView.mCropFrameStrokeColor
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        var needWidth = 0
+        var needHeight = 0
+        for (child in children) {
+            measureChild(child, widthMeasureSpec, heightMeasureSpec)
+            needWidth = needWidth.coerceAtLeast(child.measuredWidth)
+            needHeight = needHeight.coerceAtLeast(child.measuredHeight)
+        }
+        val width = resolveSize(needWidth, widthMeasureSpec)
+        val height = resolveSize(needHeight, heightMeasureSpec)
+        setMeasuredDimension(width, height)
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -254,35 +301,11 @@ class CropViewLayout @JvmOverloads constructor(
     }
 
     /**
-     * @see CropView.setCropMaskColor
-     * @since 0.5.0
-     */
-    override fun setCropMaskColor(@ColorInt color: Int) {
-        mCropView.setCropMaskColor(color)
-    }
-
-    /**
-     * @see CropView.setCropFrameType
-     * @since 0.5.0
-     */
-    override fun setCropFrameType(type: CropFrameType) {
-        mCropView.setCropFrameType(type)
-    }
-
-    /**
      * @see CropView.setCropFrameSize
      * @since 0.5.0
      */
-    override fun setCropFrameSize(width: Float, height: Float) {
+    fun setCropFrameSize(width: Float, height: Float) {
         mCropView.setCropFrameSize(width, height)
-    }
-
-    /**
-     * @see CropView.setCropFrameStrokeColor
-     * @since 0.5.0
-     */
-    override fun setCropFrameStrokeColor(@ColorInt color: Int) {
-        mCropView.setCropFrameStrokeColor(color)
     }
 
     /**
@@ -492,18 +515,18 @@ class CropViewLayout @JvmOverloads constructor(
     }
 
     init {
+        inflate(context, R.layout.crop_layout, this)
         val typeArray = context.obtainStyledAttributes(
             attrs,
             R.styleable.CropViewLayout,
             defStyleAttr,
             defStyleRes
         )
-
-        val mCropMaskColor = typeArray.getColor(
+        mCropMaskColor = typeArray.getColor(
             R.styleable.CropViewLayout_crop_mask_layer_color,
-            ColorUtils.colorHex2Int(CropView.DEFAULT_MASK_COLOR)
+            context.getColor(R.color.default_crop_frame_mask_color)
         )
-        val mCropFrameType =
+        mCropFrameType =
             when (typeArray.getInt(R.styleable.CropViewLayout_crop_frame_type, 0)) {
                 CropFrameType.CIRCLE.ordinal -> CropFrameType.CIRCLE
                 CropFrameType.SQUARE.ordinal -> CropFrameType.SQUARE
@@ -511,34 +534,21 @@ class CropViewLayout @JvmOverloads constructor(
                 CropFrameType.RECTANGLE.ordinal -> CropFrameType.RECTANGLE
                 else -> CropFrameType.CIRCLE
             }
-        val mCropFrameStrokeColor = typeArray.getColor(
+        mCropFrameStrokeColor = typeArray.getColor(
             R.styleable.CropViewLayout_crop_frame_stroke_color,
             context.getColor(R.color.md_theme_primaryFixedDim)
         )
         val mCropFrameWidth = typeArray.getDimension(
-            R.styleable.CropView_crop_frame_width, DEFAULT_FRAME_WIDTH
+            R.styleable.CropView_crop_frame_width, mDefaultCropFrameWidth
         )
         val mCropFrameHeight = typeArray.getDimension(
-            R.styleable.CropView_crop_frame_height, DEFAULT_FRAME_HEIGHT
+            R.styleable.CropView_crop_frame_height, mDefaultCropFrameHeight
         )
-
-        typeArray.recycle()
-        mCropView = CropView(context)
-        setCropMaskColor(mCropMaskColor)
-        setCropFrameType(mCropFrameType)
         setCropFrameSize(mCropFrameWidth, mCropFrameHeight)
-        setCropFrameStrokeColor(mCropFrameStrokeColor)
-
-        mImageView = ImageView(context)
-
-        val lp: ViewGroup.LayoutParams = LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-        )
-        this.addView(mImageView, lp)
-        this.addView(mCropView, lp)
-
-        mWidthPixels = ScreenSizeUtils.getMobileScreenWidth(context)
-        mHeightPixels = ScreenSizeUtils.getMobileScreenHeight(context)
+        typeArray.recycle()
+        if(isInEditMode){
+            mImageView.setImageResource(R.drawable.bg_demo_crop_view_image)
+        }
     }
 
 }

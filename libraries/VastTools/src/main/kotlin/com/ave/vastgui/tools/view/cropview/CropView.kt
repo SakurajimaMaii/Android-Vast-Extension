@@ -25,12 +25,12 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.annotation.FloatRange
+import androidx.annotation.IntRange
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.utils.ColorUtils
-import com.ave.vastgui.tools.utils.DensityUtils
 import com.ave.vastgui.tools.utils.DensityUtils.DP
-import com.ave.vastgui.tools.utils.ScreenSizeUtils
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -56,29 +56,81 @@ import com.ave.vastgui.tools.utils.ScreenSizeUtils
  * @property mCropFrameStrokeColor The crop frame stroke width.
  * @since 0.5.0
  */
-class CropView @JvmOverloads constructor(
+class CropView @JvmOverloads internal constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.Default_CropView_Style,
     defStyleRes: Int = R.style.BaseCropView
-) : View(context, attrs, defStyleAttr, defStyleAttr), CropFrame {
+) : View(context, attrs, defStyleAttr, defStyleRes) {
 
-    private val DEFAULT_FRAME_WIDTH = DensityUtils.dp2px(100F.DP)
-    private val DEFAULT_FRAME_HEIGHT = DensityUtils.dp2px(100F.DP)
+    private val mDefaultCropFrameWidth
+        get() = context.resources.getDimension(R.dimen.default_crop_frame_width)
+    private val mDefaultCropFrameHeight
+        get() = context.resources.getDimension(R.dimen.default_crop_frame_height)
 
-    private var mCropViewHeight: Int by NotNUllVar()
-    private var mCropViewWidth: Int by NotNUllVar()
+    /**
+     * The setting value of frame height.
+     *
+     * @since 0.5.3
+     */
+    private var mFrameNeededHeight by NotNUllVar<Float>()
 
-    private val mXfermodeDstOut = PorterDuffXfermode(PorterDuff.Mode.DST_OUT)
-    private var mCropFramePaint: Paint by NotNUllVar()
-    private var mCropFrameStrokePaint: Paint by NotNUllVar()
-    private var mCropFrameGuidelinePaint: Paint by NotNUllVar()
-    private var mCropFrameStrokeCornerPaint: Paint by NotNUllVar()
+    /**
+     * The setting value of frame width.
+     *
+     * @since 0.5.3
+     */
+    private var mFrameNeededWidth by NotNUllVar<Float>()
 
-    private val mCropFrameStrokeWidth: Float = DensityUtils.dp2px(1.5f)
-    private val mCropFrameGuidelineWidth: Float = DensityUtils.dp2px(1.5f)
-    private val mCropFrameStrokeCornerWidth: Float = DensityUtils.dp2px(3.5f)
-    private val mCropFrameStrokeCornerLength: Float = DensityUtils.dp2px(25f)
+    /**
+     * The minimum height of the [CropView].
+     *
+     * @since 0.5.3
+     */
+    private val mNeededHeight
+        get() = when (mCropFrameType) {
+            CropFrameType.GRID9 -> mCropFrameHeight + mCropFrameStrokeCornerWidth
+            else -> mCropFrameHeight + mCropFrameStrokeWidth
+        }
+
+    /**
+     * The minimum width of the [CropView].
+     *
+     * @since 0.5.3
+     */
+    private val mNeededWidth
+        get() = when (mCropFrameType) {
+            CropFrameType.GRID9 -> mCropFrameWidth + mCropFrameStrokeCornerWidth
+            else -> mCropFrameWidth + mCropFrameStrokeWidth
+        }
+
+    private val mXfermodeDstOut
+        get() = PorterDuffXfermode(PorterDuff.Mode.DST_OUT)
+    private val mCropFrameStrokeWidth: Float = 2f.DP
+    private val mCropFrameGuidelineWidth: Float = 2f.DP
+    private val mCropFrameStrokeCornerWidth: Float = 4f.DP
+    private val mCropFrameStrokeCornerLength: Float
+        get() = (0.1 * mNeededWidth.coerceAtMost(mNeededHeight)).toFloat()
+    private val mCropFramePaint = Paint().apply {
+        xfermode = mXfermodeDstOut
+        isAntiAlias = true
+        style = Paint.Style.FILL
+    }
+    private val mCropFrameStrokePaint = Paint().apply {
+        strokeWidth = mCropFrameStrokeWidth
+        isAntiAlias = true
+        style = Paint.Style.STROKE
+    }
+    private val mCropFrameGuidelinePaint = Paint().apply {
+        strokeWidth = mCropFrameGuidelineWidth
+        isAntiAlias = true
+        style = Paint.Style.STROKE
+    }
+    private val mCropFrameStrokeCornerPaint = Paint().apply {
+        strokeWidth = mCropFrameStrokeCornerWidth
+        isAntiAlias = true
+        style = Paint.Style.STROKE
+    }
 
     var mCropMaskColor: Int by NotNUllVar()
         private set
@@ -86,19 +138,38 @@ class CropView @JvmOverloads constructor(
     var mCropFrameType: CropFrameType by NotNUllVar()
         private set
 
-    var mCropFrameWidth: Float by NotNUllVar()
-        private set
-
-    var mCropFrameHeight: Float by NotNUllVar()
-        private set
-
     var mCropFrameStrokeColor: Int by NotNUllVar()
         private set
 
+    val mCropFrameHeight: Float
+        get() = when (mCropFrameType) {
+            CropFrameType.RECTANGLE -> mFrameNeededHeight
+            else -> mFrameNeededWidth.coerceAtMost(mFrameNeededHeight)
+        }
+
+    val mCropFrameWidth: Float
+        get() = when (mCropFrameType) {
+            CropFrameType.RECTANGLE -> mFrameNeededWidth
+            else -> mFrameNeededWidth.coerceAtMost(mFrameNeededHeight)
+        }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val needWidth = when (mCropFrameType) {
+            CropFrameType.RECTANGLE -> mNeededWidth
+            else -> mNeededWidth.coerceAtMost(mNeededHeight)
+        }.toInt()
+        val needHeight = when (mCropFrameType) {
+            CropFrameType.RECTANGLE -> mNeededHeight
+            else -> mNeededWidth.coerceAtMost(mNeededHeight)
+        }.toInt()
+        val width = resolveSize(needWidth, widthMeasureSpec)
+        val height = resolveSize(needHeight, heightMeasureSpec)
+        setMeasuredDimension(width, height)
+    }
+
     override fun onDraw(canvas: Canvas) {
-        canvas.saveLayer(0f, 0f, mCropViewWidth.toFloat(), mCropViewHeight.toFloat(), null)
+        canvas.saveLayer(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), null)
         canvas.drawColor(mCropMaskColor)
-        mCropFramePaint.xfermode = mXfermodeDstOut
         mCropFrameStrokePaint.color = mCropFrameStrokeColor
         mCropFrameGuidelinePaint.color = mCropFrameStrokeColor
         mCropFrameStrokeCornerPaint.color = mCropFrameStrokeColor
@@ -173,10 +244,15 @@ class CropView @JvmOverloads constructor(
     /**
      * Set crop mask layer color.
      *
-     * @since 0.5.0
+     * @see ColorUtils.getColorIntWithTransparency
+     * @since 0.5.3
      */
-    override fun setCropMaskColor(@ColorInt color: Int) {
-        mCropMaskColor = color
+    fun setCropMaskColor(
+        @ColorInt color: Int,
+        @IntRange(from = 0, to = 100) transparency: Int? = null
+    ) {
+        mCropMaskColor = if (transparency == null) color
+        else ColorUtils.getColorIntWithTransparency(color, transparency)
     }
 
     /**
@@ -185,7 +261,7 @@ class CropView @JvmOverloads constructor(
      * @see CropFrameType
      * @since 0.5.0
      */
-    override fun setCropFrameType(type: CropFrameType) {
+    fun setCropFrameType(type: CropFrameType) {
         mCropFrameType = type
     }
 
@@ -196,23 +272,12 @@ class CropView @JvmOverloads constructor(
      * @param height The frame height.
      * @since 0.5.0
      */
-    override fun setCropFrameSize(width: Float, height: Float) {
-        val maxWidthContainer =
-            (mCropViewWidth - 2 * mCropFrameStrokeWidth).coerceAtMost(width)
-        val maxHeightContainer =
-            (mCropViewHeight - 2 * mCropFrameStrokeWidth).coerceAtMost(height)
-        when (mCropFrameType) {
-            CropFrameType.RECTANGLE -> {
-                mCropFrameWidth = maxWidthContainer
-                mCropFrameHeight = maxHeightContainer
-            }
-
-            else -> {
-                val minValue = maxHeightContainer.coerceAtMost(maxWidthContainer)
-                mCropFrameWidth = minValue
-                mCropFrameHeight = minValue
-            }
-        }
+    fun setCropFrameSize(
+        @FloatRange(from = 0.0) width: Float,
+        @FloatRange(from = 0.0) height: Float
+    ) {
+        mFrameNeededWidth = width
+        mFrameNeededHeight = height
     }
 
     /**
@@ -220,59 +285,8 @@ class CropView @JvmOverloads constructor(
      *
      * @since 0.5.0
      */
-    override fun setCropFrameStrokeColor(@ColorInt color: Int) {
+    fun setCropFrameStrokeColor(@ColorInt color: Int) {
         mCropFrameStrokeColor = color
-    }
-
-    /**
-     * Init [mCropFramePaint]
-     *
-     * @since 0.5.0
-     */
-    private fun initCropFramePaint() {
-        mCropFramePaint = Paint().apply {
-            isAntiAlias = true
-            style = Paint.Style.FILL
-        }
-    }
-
-    /**
-     * Init [mCropFrameStrokePaint]
-     *
-     * @since 0.5.0
-     */
-    private fun initCropFrameStrokePaint() {
-        mCropFrameStrokePaint = Paint().apply {
-            strokeWidth = mCropFrameStrokeWidth
-            isAntiAlias = true
-            style = Paint.Style.STROKE
-        }
-    }
-
-    /**
-     * Init [mCropFrameGuidelinePaint].
-     *
-     * @since 0.5.0
-     */
-    private fun initCropFrameGuidelinePaint() {
-        mCropFrameGuidelinePaint = Paint().apply {
-            strokeWidth = mCropFrameGuidelineWidth
-            isAntiAlias = true
-            style = Paint.Style.STROKE
-        }
-    }
-
-    /**
-     * Init [mCropFrameStrokeCornerPaint].
-     *
-     * @since 0.5.0
-     */
-    private fun initCropFrameStrokeCornerPaint() {
-        mCropFrameStrokeCornerPaint = Paint().apply {
-            strokeWidth = mCropFrameStrokeCornerWidth
-            isAntiAlias = true
-            style = Paint.Style.STROKE
-        }
     }
 
     /**
@@ -404,10 +418,10 @@ class CropView @JvmOverloads constructor(
         )
         mCropMaskColor = typeArray.getColor(
             R.styleable.CropView_crop_mask_layer_color,
-            ColorUtils.colorHex2Int(DEFAULT_MASK_COLOR)
+            context.getColor(R.color.default_crop_frame_mask_color)
         )
         mCropFrameType = when (
-            typeArray.getInt(R.styleable.CropView_crop_frame_type, 0)
+            typeArray.getInt(R.styleable.CropView_crop_frame_type, CropFrameType.CIRCLE.ordinal)
         ) {
             CropFrameType.CIRCLE.ordinal -> CropFrameType.CIRCLE
             CropFrameType.SQUARE.ordinal -> CropFrameType.SQUARE
@@ -419,25 +433,13 @@ class CropView @JvmOverloads constructor(
             R.styleable.CropView_crop_frame_stroke_color,
             context.getColor(R.color.md_theme_primaryFixedDim)
         )
-        mCropFrameWidth = typeArray.getDimension(
-            R.styleable.CropView_crop_frame_width, DEFAULT_FRAME_WIDTH
+        mFrameNeededWidth = typeArray.getDimension(
+            R.styleable.CropView_crop_frame_width, mDefaultCropFrameWidth
         )
-        mCropFrameHeight = typeArray.getDimension(
-            R.styleable.CropView_crop_frame_height, DEFAULT_FRAME_HEIGHT
+        mFrameNeededHeight = typeArray.getDimension(
+            R.styleable.CropView_crop_frame_height, mDefaultCropFrameHeight
         )
-        mCropViewWidth =
-            ScreenSizeUtils.getMobileScreenWidth(context)
-        mCropViewHeight =
-            ScreenSizeUtils.getMobileScreenHeight(context)
-        initCropFramePaint()
-        initCropFrameStrokePaint()
-        initCropFrameGuidelinePaint()
-        initCropFrameStrokeCornerPaint()
         typeArray.recycle()
-    }
-
-    companion object {
-        const val DEFAULT_MASK_COLOR = "#A8000000"
     }
 
 }

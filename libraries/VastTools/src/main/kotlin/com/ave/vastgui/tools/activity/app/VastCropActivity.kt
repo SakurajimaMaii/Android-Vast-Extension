@@ -25,6 +25,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import com.ave.vastgui.core.extension.NotNUllVar
+import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.ACTION
 import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.AUTHORITY
@@ -37,7 +38,7 @@ import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RETURN_DATA
 import com.ave.vastgui.tools.databinding.ActivityCropBinding
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
-import com.ave.vastgui.tools.utils.DensityUtils.DP
+import com.ave.vastgui.tools.utils.ToastUtils
 import com.ave.vastgui.tools.utils.permission.requestPermission
 import com.ave.vastgui.tools.view.cropview.CropFrameType
 import java.io.BufferedInputStream
@@ -92,8 +93,10 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
         private const val DEFAULT_OUTPUT_Y = -1F
     }
 
-    private val DEFAULT_PREVIEW_WIDTH = 100F.DP
-    private val DEFAULT_PREVIEW_HEIGHT = 100F.DP
+    private val DEFAULT_PREVIEW_WIDTH
+        get() = resources.getDimension(R.dimen.default_crop_frame_width)
+    private val DEFAULT_PREVIEW_HEIGHT
+        get() = resources.getDimension(R.dimen.default_crop_frame_width)
     private var originalUri: Uri? = null
     private var originalImageFile: File by NotNUllVar(true)
 
@@ -110,10 +113,10 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
         // Get crop type.
         intent.getStringExtra(FRAME_TYPE)?.let {
             when (it) {
-                FRAME_TYPE_CIRCLE -> getBinding().cropViewLayout.setCropFrameType(CropFrameType.CIRCLE)
-                FRAME_TYPE_SQUARE -> getBinding().cropViewLayout.setCropFrameType(CropFrameType.SQUARE)
-                FRAME_TYPE_GRID9 -> getBinding().cropViewLayout.setCropFrameType(CropFrameType.GRID9)
-                FRAME_TYPE_RECTANGLE -> getBinding().cropViewLayout.setCropFrameType(CropFrameType.RECTANGLE)
+                FRAME_TYPE_CIRCLE -> getBinding().cropViewLayout.mCropFrameType = CropFrameType.CIRCLE
+                FRAME_TYPE_SQUARE -> getBinding().cropViewLayout.mCropFrameType = CropFrameType.SQUARE
+                FRAME_TYPE_GRID9 -> getBinding().cropViewLayout.mCropFrameType = CropFrameType.GRID9
+                FRAME_TYPE_RECTANGLE -> getBinding().cropViewLayout.mCropFrameType = CropFrameType.RECTANGLE
                 else -> throw IllegalArgumentException("Please set correct type.")
             }
         } ?: throw RuntimeException("Please set type.")
@@ -149,10 +152,6 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
             val outputY = intent.getFloatExtra(OUTPUT_Y, DEFAULT_OUTPUT_Y)
             if (outputX != DEFAULT_OUTPUT_X && outputY != DEFAULT_OUTPUT_Y) {
                 val authority = intent.getStringExtra(AUTHORITY) ?: DEFAULT_AUTHORITY
-                getBinding().cropViewLayout.getCroppedImageUnderApi28(
-                    outputX.toInt(),
-                    outputY.toInt()
-                )
                 val bitmap: Bitmap? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     getBinding().cropViewLayout.getCroppedImageAboveApi28(
                         outputX.toInt(),
@@ -167,6 +166,16 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
                 requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE) {
                     granted = {
                         returnBitmapData(bitmap, authority)
+                    }
+                    denied = {
+                        ToastUtils.showShortMsg("应用访问外部存储被拒绝，在需要时还会再次请求")
+                        setResult(RESULT_FAILED, intent)
+                        finish()
+                    }
+                    noMoreAsk = {
+                        ToastUtils.showShortMsg("请手动允许应用访问外部存储")
+                        setResult(RESULT_FAILED, intent)
+                        finish()
                     }
                 }
             } else {
