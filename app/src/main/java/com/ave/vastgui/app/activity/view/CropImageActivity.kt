@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity
+package com.ave.vastgui.app.activity.view
 
 import android.content.Intent
 import android.net.Uri
@@ -30,6 +30,7 @@ import com.ave.vastgui.tools.activity.result.contract.PickPhotoContract
 import com.ave.vastgui.tools.activity.result.contract.TakePhotoContract
 import com.ave.vastgui.tools.helper.ContextHelper
 import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
+import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.cropimage.CropIntent
 import java.io.File
 
@@ -40,7 +41,7 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
     @RequiresApi(Build.VERSION_CODES.R)
     private val pickImage =
         registerForActivityResult(PickPhotoContract()) { uri ->
-            uri?.let { cropImageWithCropIntent(it) }
+            uri?.let { cropImageWithActivity(it) }
         }
 
     private val cropActivityLauncher =
@@ -119,9 +120,11 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
         val intent = Intent(this, VastCropActivity::class.java).apply {
             data = uri
             putExtra(VastCropActivity.AUTHORITY, "com.ave.vastgui.app")
-            putExtra(VastCropActivity.FRAME_TYPE, VastCropActivity.FRAME_TYPE_GRID9)
-            putExtra(VastCropActivity.OUTPUT_X, 300f)
-            putExtra(VastCropActivity.OUTPUT_Y, 300f)
+            putExtra(VastCropActivity.FRAME_TYPE, VastCropActivity.FRAME_TYPE_RECTANGLE)
+            putExtra(VastCropActivity.PREVIEW_WIDTH, 200f.DP)
+            putExtra(VastCropActivity.PREVIEW_HEIGHT, 300f.DP)
+            putExtra(VastCropActivity.OUTPUT_X, 400f)
+            putExtra(VastCropActivity.OUTPUT_Y, 400f)
         }
         cropActivityLauncher.launch(intent)
     }
