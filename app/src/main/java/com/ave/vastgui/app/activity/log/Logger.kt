@@ -20,7 +20,6 @@ import com.ave.vastgui.tools.log.getLogFactory
 import com.ave.vastgui.tools.log.json.GsonConverter
 import com.ave.vastgui.tools.log.plugin.LogJson
 import com.ave.vastgui.tools.log.plugin.LogPrinter
-import com.ave.vastgui.tools.log.plugin.LogStorage
 import com.ave.vastgui.tools.log.plugin.LogSwitch
 
 // Author: Vast Gui
@@ -36,12 +35,12 @@ val mLogFactory = getLogFactory {
         maxSingleLogLength = 100
         maxPrintTimes = 5
     }
-    install(LogStorage) {
-        fileMaxSize = 1024L * 1000
-        storageFormat = { time, level, content ->
-            "$level || $time || $content "
-        }
-    }
+//    install(LogStorage) {
+//        fileMaxSize = 1024L * 1000
+//        storageFormat = { time, level, content ->
+//            "$level || $time || $content "
+//        }
+//    }
     install(LogJson){
         converter = GsonConverter(true)
     }
