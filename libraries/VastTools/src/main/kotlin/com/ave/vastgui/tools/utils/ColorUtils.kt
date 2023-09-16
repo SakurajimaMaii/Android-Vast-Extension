@@ -147,9 +147,9 @@ object ColorUtils {
     /**
      * Parse the color string, and return the corresponding color-int.
      *
-     * @param colorHex Color string like #12c2e9.
      * @return the corresponding color-int of the color string,
      *     [COLOR_PARSE_ERROR] otherwise.
+     * @see Color.parseColor
      */
     @JvmStatic
     fun colorHex2Int(colorHex: String): Int {
@@ -159,18 +159,19 @@ object ColorUtils {
     }
 
     /**
-     * Converting color hexadecimal string to an array of RGB.
+     * Converting color hexadecimal string to an array of ARGB.
      *
      * @param colorHex Color hexadecimal string,for example:#12c2e9.
-     * @return the corresponding color rgb array like
-     *     {18,194,233},[COLOR_RGB_ARRAY_ERROR] otherwise.
+     * @return The corresponding color rgb array like {255,63,226,197},
+     *     [COLOR_RGB_ARRAY_ERROR] otherwise.
+     * @since 0.5.3
      */
     @JvmStatic
-    fun colorHex2RGB(colorHex: String): IntArray {
+    fun colorHex2ARGB(colorHex: String): IntArray {
         val colorInt = colorHex2Int(colorHex)
         return if (COLOR_PARSE_ERROR == colorInt) {
             COLOR_RGB_ARRAY_ERROR
-        } else colorInt2RGB(colorInt)
+        } else colorInt2ARGB(colorInt)
     }
 
     /**
@@ -180,25 +181,19 @@ object ColorUtils {
      * @return color hexadecimal string like #3FE2C5.
      */
     @JvmStatic
-    fun colorInt2Hex(@ColorInt colorInt: Int): String {
-        val rgb = colorInt2RGB(colorInt)
-        return colorRGB2Hex(rgb)
-    }
+    fun colorInt2Hex(@ColorInt colorInt: Int): String = colorRGB2Hex(colorInt2ARGB(colorInt))
 
     /**
-     * Converting color-int to an array of RGB.
+     * Converting color-int to an array of ARGB.
      *
      * @param colorInt color-int.
-     * @return an array of RGB,like {63,226,197}.
+     * @return An array of ARGB, like {255,63,226,197}.
+     * @since 0.5.3
      */
     @JvmStatic
-    fun colorInt2RGB(@ColorInt colorInt: Int): IntArray {
-        val result = intArrayOf(0, 0, 0)
-        result[0] = Color.red(colorInt)
-        result[1] = Color.green(colorInt)
-        result[2] = Color.blue(colorInt)
-        return result
-    }
+    fun colorInt2ARGB(@ColorInt colorInt: Int): IntArray = intArrayOf(
+        Color.alpha(colorInt), Color.red(colorInt), Color.green(colorInt), Color.blue(colorInt)
+    )
 
     /**
      * Converting an array of RGB to color hexadecimal string.
@@ -207,10 +202,10 @@ object ColorUtils {
      * @return Color hexadecimal string like #3FE2C5.
      */
     @JvmStatic
-    fun colorRGB2Hex(rgb: IntArray): String {
+    fun colorRGB2Hex(argb: IntArray): String {
         var hexCode = "#"
-        for (i in rgb.indices) {
-            var rgbItem = rgb[i]
+        for (i in argb.indices) {
+            var rgbItem = argb[i]
             if (rgbItem < 0) {
                 rgbItem = 0
             } else if (rgbItem > 255) {
@@ -243,25 +238,36 @@ object ColorUtils {
     }
 
     /**
-     * Converting an array of RGB to color-int.
+     * Get the color hex in the format of #AARRGGBB by [transparency] and
+     * [colorInt].
      *
-     * @param rgb an array of RGB like {63,226,197}.
-     * @return color-int.
+     * If the given [colorInt] itself has transparency, it will be forced to
+     * the transparency specified by [transparency].
      */
-    @JvmStatic
-    fun colorRGB2Int(rgb: IntArray): Int {
-        return Color.rgb(rgb[0], rgb[1], rgb[2])
-    }
-
-    /** Get argb by [transparency] and [colorInt]. */
     @JvmStatic
     fun getColorWithTransparency(
         @IntRange(from = 0, to = 100) transparency: Int,
         colorInt: Int
     ): String {
-        val colorHex = colorInt2Hex(colorInt)
+        val color = if (Color.alpha(colorInt) != 255) {
+            Color.rgb(Color.red(colorInt), Color.green(colorInt), Color.blue(colorInt))
+        } else colorInt
+        val colorHex = colorInt2Hex(color)
         return StringBuilder(colorHex).insert(1, ColorTransparency[transparency]).toString()
     }
+
+    /**
+     * Get the color-int by [transparency] and [colorInt].
+     *
+     * If the given [colorInt] itself has transparency, it will be forced to
+     * the transparency specified by [transparency].
+     *
+     * @since 0.5.3
+     */
+    fun getColorIntWithTransparency(
+        @IntRange(from = 0, to = 100) transparency: Int,
+        colorInt: Int
+    ) = colorHex2Int(getColorWithTransparency(transparency, colorInt))
 
     /**
      * Return true if the color hex string is right,false otherwise.

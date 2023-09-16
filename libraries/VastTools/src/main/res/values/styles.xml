@@ -36,8 +36,8 @@
     <style name="BaseCropView">
         <item name="crop_mask_layer_color">@color/default_crop_frame_mask_color</item>
         <item name="crop_frame_type">circle</item>
-        <item name="crop_frame_width">100dp</item>
-        <item name="crop_frame_height">100dp</item>
+        <item name="crop_frame_width">@dimen/default_crop_frame_width</item>
+        <item name="crop_frame_height">@dimen/default_crop_frame_height</item>
         <item name="crop_frame_stroke_color">@color/md_theme_primaryFixedDim</item>
     </style>
 
