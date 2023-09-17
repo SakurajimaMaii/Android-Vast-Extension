@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.utils.text
+package com.ave.vastgui.tools.text
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
