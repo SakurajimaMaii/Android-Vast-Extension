@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.utils
+package com.ave.vastgui.tools.text
 
 import android.util.Log
-import com.ave.vastgui.tools.utils.RegexUtils.isNumeric
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -31,16 +30,16 @@ import java.util.Locale
 // Description: Validates the Chinese ID card number.
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/IDCardUtils/
 
-object IDCardUtils {
+object IDRegex {
     /**
      * Verify the correctness of the Chinese resident ID card number.
      *
-     * @param IDStr Chinese resident ID card number string.
+     * @param str Chinese resident ID card number string.
      * @return Validation results,"" indicates that the verification is
      *     successful.
      */
     @JvmStatic
-    fun validateIDCardNumber(IDStr: String): String {
+    fun validateIDCardNumber(str: String): String {
         var errorInfo: String
         val valCodeArr = arrayOf(
             "1", "0", "x", "9", "8", "7", "6", "5", "4",
@@ -51,18 +50,18 @@ object IDCardUtils {
             "9", "10", "5", "8", "4", "2"
         )
 
-        if (IDStr.length != 15 && IDStr.length != 18) {
+        if (str.length != 15 && str.length != 18) {
             errorInfo = "身份证号码长度应该为15位或18位。"
             return errorInfo
         }
 
-        var ai: String = if (IDStr.length == 18) {
-            IDStr.substring(0, 17)
+        var ai: String = if (str.length == 18) {
+            str.substring(0, 17)
         } else {
-            IDStr.substring(0, 6) + "19" + IDStr.substring(6, 15)
+            str.substring(0, 6) + "19" + str.substring(6, 15)
         }
 
-        if (!isNumeric(ai)) {
+        if (!ai.isNumeric()) {
             errorInfo = "身份证15位号码都应为数字 ; 18位号码除最后一位外，都应为数字。"
             return errorInfo
         }
@@ -111,8 +110,8 @@ object IDCardUtils {
         val modValue = totalmulAiWi % 11
         val strVerifyCode = valCodeArr[modValue]
         ai += strVerifyCode
-        if (IDStr.length == 18) {
-            if (ai != IDStr) {
+        if (str.length == 18) {
+            if (ai != str) {
                 errorInfo = "身份证无效，不是合法的身份证号码"
                 return errorInfo
             }
