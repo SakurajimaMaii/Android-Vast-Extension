@@ -23,6 +23,7 @@ import com.ave.vastgui.tools.log.LogUtil
 import com.ave.vastgui.tools.log.base.LogInfo
 import com.ave.vastgui.tools.log.base.LogLevel
 import com.ave.vastgui.tools.log.base.LogPlugin
+import com.ave.vastgui.tools.log.base.LogSp
 import com.ave.vastgui.tools.log.base.cutStr
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.utils.AppUtils
@@ -122,6 +123,8 @@ class LogStorage private constructor(private val mConfiguration: Configuration) 
     private val mLevel
         get() = mConfiguration.level
 
+    private val mLogSp by lazy { LogSp() }
+
     private var mCurrentFile = getCurrentFile()
 
     /**
@@ -174,7 +177,7 @@ class LogStorage private constructor(private val mConfiguration: Configuration) 
         val message = mStorageFormat(time, level, content)
         val currentNeedSize = mCurrentFile.getCurrentSize() + message.toByteArray().size.toLong()
         if (currentNeedSize > mMaxBytesSize) {
-            mCurrentFile = getCurrentFile()
+            mCurrentFile = getCurrentFile(true)
         }
         mCurrentFile.storage(message)
     }
@@ -184,8 +187,14 @@ class LogStorage private constructor(private val mConfiguration: Configuration) 
      *
      * @since 0.5.3
      */
-    private fun getCurrentFile(): File {
-        val file = File(mConfiguration.fileRoot, mFileName)
+    private fun getCurrentFile(appendFile: Boolean = false): File {
+        if (mLogSp.mCurrentFileName == LogSp.DEFAULT_FILE_NAME) {
+            mLogSp.mCurrentFileName = mFileName
+        }
+        if (appendFile) {
+            mLogSp.mCurrentFileName = mFileName
+        }
+        val file = File(mConfiguration.fileRoot, mLogSp.mCurrentFileName)
         if (!file.exists()) {
             FileMgr.saveFile(file).onSuccess {
                 return file
