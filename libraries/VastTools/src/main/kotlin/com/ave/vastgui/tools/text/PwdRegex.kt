@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.utils.text
+@file:JvmName("PwdRegexKt")
+
+package com.ave.vastgui.tools.text
 
 import androidx.annotation.IntRange
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/6/11
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/string/PwdRegex/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/text/pwd-regex/
 
 /**
  * Pwd strength
@@ -87,6 +89,7 @@ object RwdStrength4 : PwdStrength {
  * @throws IllegalArgumentException
  * @since 0.5.2
  */
+@JvmOverloads
 fun String.isPwd(
     strength: PwdStrength = PwdStrength1,
     @IntRange(from = 0) minLength: Int = 6,

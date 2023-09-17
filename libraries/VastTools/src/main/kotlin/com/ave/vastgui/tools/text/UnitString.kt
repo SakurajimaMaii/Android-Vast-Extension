@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
+@file:JvmName("UnitStringKt")
+
 package com.ave.vastgui.tools.text
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/30 18:59
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/string/UnitString/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/text/unit-string/
 
 /**
  * StrUnit
@@ -27,6 +29,7 @@ package com.ave.vastgui.tools.text
  * @property unit The unit format string.
  * @since 0.5.2
  */
+@JvmDefaultWithCompatibility
 interface StrUnit {
     val unit: String
 
