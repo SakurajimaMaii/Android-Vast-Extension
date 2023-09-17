@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.utils.spannablestring
+package com.ave.vastgui.tools.text.appendablestylestring
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

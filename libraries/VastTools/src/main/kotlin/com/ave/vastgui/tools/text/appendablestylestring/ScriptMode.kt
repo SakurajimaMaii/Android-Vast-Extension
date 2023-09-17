@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.utils.spannablestring
-
-import android.graphics.Typeface
+package com.ave.vastgui.tools.text.appendablestylestring
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/22
 
 /**
- * Style of the span.
+ * Script mode.
  */
-enum class StyleMode(val value: Int) {
-    NORMAL(Typeface.NORMAL),
-    BOLD(Typeface.BOLD),
-    BOLD_ITALIC(Typeface.BOLD_ITALIC),
-    ITALIC(Typeface.ITALIC)
+enum class ScriptMode {
+    NONE,
+
+    // Making the span that moves the position of the text baseline higher.
+    SUPERSCRIPT,
+
+    // Making the span that moves the position of the text baseline lower.
+    SUBSCRIPT
 }

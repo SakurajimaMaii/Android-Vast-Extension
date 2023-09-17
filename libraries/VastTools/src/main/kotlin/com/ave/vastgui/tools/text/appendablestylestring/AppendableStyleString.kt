@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.utils.spannablestring
+package com.ave.vastgui.tools.text.appendablestylestring
 
 import android.graphics.BlurMaskFilter
 import android.text.SpannableString
@@ -39,7 +39,7 @@ import android.widget.TextView
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/5/21
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/string/AppendableStyleString/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/text/appendable-style-string/appendable-style-string/
 
 /**
  * Create a style string scope.

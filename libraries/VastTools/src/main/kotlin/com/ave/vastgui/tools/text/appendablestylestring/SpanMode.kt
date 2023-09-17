@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.utils.spannablestring
+package com.ave.vastgui.tools.text.appendablestylestring
 
 import android.text.SpannableString
 
