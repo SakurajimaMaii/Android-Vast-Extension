@@ -93,6 +93,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":libraries:VastTools"))
     implementation(AndroidX.core_ktx)
     implementation(AndroidX.datastore)
     implementation(AndroidX.fragment)
@@ -111,11 +112,10 @@ dependencies {
     implementation(Squareup.retrofit2_adapter_rxjava3)
     implementation(Squareup.retrofit2_converter_gson)
     implementation(Libraries.compose_coil)
-    implementation(project(":libraries:VastTools-Compose"))
     implementation(project(":libraries:VastJIntent"))
     implementation(project(":libraries:VastJIntent-Annotation"))
     ksp(project(":libraries:VastJIntent-Processor"))
-    implementation("tech.thdev:extensions-compose-keyboard-state:1.5.0-beta02")
+    implementation("tech.thdev:extensions-compose-keyboard-state:1.5.0")
 //    implementation("com.bennyhuo.tieguanyin:runtime-androidx:2.1.0")
 //    ksp("com.bennyhuo.tieguanyin:compiler-ksp:2.1.0")
     debugImplementation(Compose.compose_ui_tooling)
