@@ -16,6 +16,8 @@
 
 <resources>
     <!-- See RatingView -->
+    <integer name="default_rating_star_rating">0</integer>
+    <integer name="default_rating_star_count">5</integer>
     <integer name="default_rating_star_orientation">0</integer>
     <integer name="default_rating_select_method">0</integer>
 </resources>

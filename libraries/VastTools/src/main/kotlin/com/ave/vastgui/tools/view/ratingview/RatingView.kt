@@ -37,10 +37,14 @@ import com.ave.vastgui.tools.utils.image.BmpUtils
 /**
  * RatingView.
  *
- * @property mOriginalSelectedBitmap The original bitmap of the selected star.
- * @property mOriginalUnselectedBitmap The original bitmap of the unselected star.
- * @property mStarSelectedBitmap The bitmap of the selected star with required size.
- * @property mStarUnselectedBitmap The bitmap of the unselected star with required size.
+ * @property mOriginalSelectedBitmap The original bitmap of the selected
+ *     star.
+ * @property mOriginalUnselectedBitmap The original bitmap of the
+ *     unselected star.
+ * @property mStarSelectedBitmap The bitmap of the selected star with
+ *     required size.
+ * @property mStarUnselectedBitmap The bitmap of the unselected star with
+ *     required size.
  * @property mStarIntervalWidth Star interval width(in pixels).
  * @property mStarBitmapWidth Star Bitmap width(in pixels).
  * @property mStarBitmapHeight Star Bitmap height(in pixels).
@@ -67,6 +71,10 @@ class RatingView @JvmOverloads constructor(
         get() = context.resources.getInteger(R.integer.default_rating_select_method)
     private val mDefaultOrientation
         get() = context.resources.getInteger(R.integer.default_rating_star_orientation)
+    private val mDefaultStarCount
+        get() = context.resources.getInteger(R.integer.default_rating_star_count)
+    private val mDefaultRating
+        get() = context.resources.getInteger(R.integer.default_rating_star_rating).toFloat()
 
     private val mExtraSrc: Rect = Rect()
     private val mExtraDst: Rect = Rect()
@@ -161,7 +169,7 @@ class RatingView @JvmOverloads constructor(
                 measureLong(heightMeasureSpec)
             )
 
-            StarOrientation.UNSPECIFIED -> setMeasuredDimension(0,0)
+            StarOrientation.UNSPECIFIED -> setMeasuredDimension(0, 0)
         }
     }
 
@@ -423,8 +431,8 @@ class RatingView @JvmOverloads constructor(
                 R.styleable.RatingView_star_height,
                 mDefaultStarBitmapHeight
             )
-        mStarCountNumber = typedArray.getInt(R.styleable.RatingView_star_count, 5)
-        mStarRating = typedArray.getFloat(R.styleable.RatingView_star_rating, 0f)
+        mStarCountNumber = typedArray.getInt(R.styleable.RatingView_star_count, mDefaultStarCount)
+        mStarRating = typedArray.getFloat(R.styleable.RatingView_star_rating, mDefaultRating)
         mOriginalSelectedBitmap =
             BmpUtils.getBitmapFromDrawable(
                 typedArray.getResourceId(
