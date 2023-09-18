@@ -88,12 +88,12 @@
     </style>
 
     <style name="BaseRatingView">
-        <item name="star_interval_width">2dp</item>
-        <item name="star_height">40dp</item>
-        <item name="star_width">40dp</item>
-        <item name="star_select_method">star_sliding</item>
+        <item name="star_interval_width">@dimen/default_star_interval_width</item>
+        <item name="star_height">@dimen/default_star_height</item>
+        <item name="star_width">@dimen/default_star_width</item>
+        <item name="star_select_method">@integer/default_rating_select_method</item>
         <item name="star_count">5</item>
-        <item name="star_orientation">star_horizontal</item>
+        <item name="star_orientation">@integer/default_rating_star_orientation</item>
         <item name="star_selected">@drawable/ic_star_default_selected</item>
         <item name="star_unselected">@drawable/ic_star_default_unselected</item>
     </style>

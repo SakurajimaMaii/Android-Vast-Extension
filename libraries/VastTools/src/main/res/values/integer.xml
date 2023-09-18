@@ -15,12 +15,7 @@
   -->
 
 <resources>
-    <!-- See CropViewLayout CropView -->
-    <dimen name="default_crop_frame_width">200dp</dimen>
-    <!-- See CropViewLayout CropView -->
-    <dimen name="default_crop_frame_height">200dp</dimen>
     <!-- See RatingView -->
-    <dimen name="default_star_height">40dp</dimen>
-    <dimen name="default_star_width">40dp</dimen>
-    <dimen name="default_star_interval_width">2dp</dimen>
+    <integer name="default_rating_star_orientation">0</integer>
+    <integer name="default_rating_select_method">0</integer>
 </resources>

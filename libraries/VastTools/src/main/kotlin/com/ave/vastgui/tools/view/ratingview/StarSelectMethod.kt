@@ -16,15 +16,18 @@
 
 package com.ave.vastgui.tools.view.ratingview
 
+
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/21
 
 /**
- * Rating orientation
+ * Rating select method
  *
- * @since 0.5.0
+ * @since 0.5.3
  */
-enum class RatingOrientation {
-    HORIZONTAL, VERTICAL
+sealed class StarSelectMethod(val code: Int) {
+    object UNABLE : StarSelectMethod(0)
+    object CLICK : StarSelectMethod(1)
+    object SLIDING : StarSelectMethod(2)
 }

@@ -179,14 +179,15 @@
         <attr name="star_selected" format="reference" />
         <!--StarBar select method. -->
         <attr name="star_select_method" format="enum">
-            <enum name="star_unable" value="0" />
-            <enum name="star_click" value="1" />
-            <enum name="star_sliding" value="2" />
+            <enum name="unable" value="0" />
+            <enum name="click" value="1" />
+            <enum name="sliding" value="2" />
         </attr>
         <!--Star orientation. -->
         <attr name="star_orientation" format="enum">
-            <enum name="star_vertical" value="1" />
-            <enum name="star_horizontal" value="0" />
+            <enum name="unspecified" value="0" />
+            <enum name="horizontal" value="1" />
+            <enum name="vertical" value="2" />
         </attr>
     </declare-styleable>
 
