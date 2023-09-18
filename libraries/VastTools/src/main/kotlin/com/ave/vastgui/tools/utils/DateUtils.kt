@@ -21,7 +21,6 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
-import java.util.GregorianCalendar
 import java.util.Locale
 import java.util.TimeZone
 
@@ -29,7 +28,7 @@ import java.util.TimeZone
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: Help you get time and other related information.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/DateUtils/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/date-utils/
 
 /** Date utils. */
 object DateUtils {
@@ -80,29 +79,14 @@ object DateUtils {
     /**
      * Get current time.
      *
-     * @since 0.0.4
-     */
-    @Deprecated(
-        "The function is deprecated!It will remove in 0.1.0",
-        ReplaceWith("getCurrentTime(DATE_FORMAT)"),
-        DeprecationLevel.WARNING
-    )
-    @JvmStatic
-    val currentTime: String
-        get() {
-            return dateTimeToGMT()
-        }
-
-    /**
-     * Get current time.
-     *
      * @param dateFormat the pattern describing the date and time format.
      * @return current time.
      * @since 0.0.9
      */
     @JvmStatic
+    @JvmOverloads
     fun getCurrentTime(dateFormat: String = FORMAT_YYYY_MM_DD_HH_MM_SS): String {
-        return dateTimeToGMT(currentTimeZone, dateFormat)
+        return dateTimeToGMT(getCurrentTimeZone(), dateFormat)
     }
 
     /**
@@ -113,6 +97,7 @@ object DateUtils {
      * @since 0.0.9
      */
     @JvmStatic
+    @JvmOverloads
     fun getDayBeforeOrAfterCurrentTime(
         dateFormat: String = FORMAT_YYYY_MM_DD_HH_MM_SS,
         beforeOrAfter: Int
@@ -121,58 +106,20 @@ object DateUtils {
         val calendar = Calendar.getInstance().apply {
             add(Calendar.DATE, beforeOrAfter)
         }
-        formatter.timeZone = TimeZone.getTimeZone(currentTimeZone)
+        formatter.timeZone = TimeZone.getTimeZone(getCurrentTimeZone())
         return formatter.format(calendar.time)
     }
 
     /**
-     * Get current time zone.
+     * Get the default time zone for this host in string.
      *
-     * @since 0.0.4
-     */
-    @JvmStatic
-    val currentTimeZone: String
-        get() {
-            return TimeZone.getDefault().getDisplayName(true, TimeZone.SHORT, Locale.getDefault())
-        }
-
-    /**
-     * Get min time [Date].
-     *
-     * @since 0.0.2
-     */
-    @JvmStatic
-    fun minDate(): Date {
-        val result = Date()
-        result.time = GregorianCalendar().let {
-            it.set(1900, 1, 1)
-            it.timeInMillis
-        }
-        return result
-    }
-
-    /**
-     * @param dateFormat The pattern describing the date and time format.
-     * @return Get the minimum time string in the given format.
-     * @since 0.0.5
+     * @param style either [TimeZone.LONG] or [TimeZone.SHORT].
+     * @since 0.5.3
      */
     @JvmStatic
     @JvmOverloads
-    fun minDateToString(dateFormat: String = FORMAT_YYYY_MM_DD_HH_MM_SS): String {
-        return datetimeToString(minDate(), dateFormat)
-    }
-
-    /**
-     * Constructs a SimpleDateFormat using the [dateFormat] and the
-     * [Locale.getDefault].
-     *
-     * @param dateFormat The pattern describing the date and time format.
-     * @return [SimpleDateFormat] using the [dateFormat] and the
-     *     [Locale.getDefault].
-     * @since 0.0.1
-     */
-    private fun datetimeFormat(dateFormat: String): SimpleDateFormat {
-        return SimpleDateFormat(dateFormat, Locale.getDefault())
+    fun getCurrentTimeZone(style: Int = TimeZone.SHORT): String {
+        return TimeZone.getDefault().getDisplayName(true, style, Locale.getDefault())
     }
 
     /**
@@ -185,7 +132,8 @@ object DateUtils {
      * @since 0.5.1
      */
     @JvmStatic
-    @Throws(ParseException::class)
+    @JvmOverloads
+    @Throws(Exception::class)
     fun datetimeFromString(
         timeString: String,
         timeStringFormat: String,
@@ -216,8 +164,8 @@ object DateUtils {
     }
 
     /**
-     * Formats a [Date] into a date/time string by parsing [dateFormat] and
-     * [gmtFormat].
+     * Formats a [Date] of [System.currentTimeMillis] into a date/time string
+     * by parsing [dateFormat] and [gmtFormat].
      *
      * If you don't set the [gmtFormat] or [dateFormat],it will parse current
      * local time in [FORMAT_YYYY_MM_DD_HH_MM_SS] format by default.
@@ -230,12 +178,12 @@ object DateUtils {
     @JvmStatic
     @JvmOverloads
     fun dateTimeToGMT(
-        @GmtFormatString gmtFormat: String = currentTimeZone,
+        @GmtFormatString gmtFormat: String = getCurrentTimeZone(),
         dateFormat: String = FORMAT_YYYY_MM_DD_HH_MM_SS
     ): String {
-        val formatter = SimpleDateFormat(dateFormat, Locale.getDefault())
-        formatter.timeZone = TimeZone.getTimeZone(gmtFormat)
-        return formatter.format(Date())
+        return datetimeFormat(dateFormat).apply {
+            timeZone = TimeZone.getTimeZone(gmtFormat)
+        }.format(Date())
     }
 
     /**
@@ -248,19 +196,17 @@ object DateUtils {
      * @since 0.0.1
      */
     @JvmStatic
+    @Throws(Exception::class)
     fun dateTimeFromGMT(utcTime: String, dateFormat: String): String {
-        val utcFormatter = SimpleDateFormat(dateFormat, Locale.getDefault()) //UTC time format
-        utcFormatter.timeZone = TimeZone.getTimeZone("UTC")
-        var gpsUTCDate: Date? = null
-        try {
-            gpsUTCDate = utcFormatter.parse(utcTime)
-        } catch (e: ParseException) {
-            e.printStackTrace()
+        return try {
+            val utcDate =
+                datetimeFormat(dateFormat).apply { timeZone = TimeZone.getTimeZone("UTC") }
+                    .parse(utcTime)
+            datetimeFormat(dateFormat).apply { timeZone = TimeZone.getDefault() }
+                .format(utcDate!!.time)
+        } catch (exception: Exception) {
+            throw exception
         }
-        val localFormatter =
-            SimpleDateFormat(dateFormat, Locale.getDefault()) //Local time format
-        localFormatter.timeZone = TimeZone.getDefault()
-        return localFormatter.format(gpsUTCDate!!.time)
     }
 
     /**
@@ -274,14 +220,13 @@ object DateUtils {
     @JvmStatic
     @JvmOverloads
     fun weekStartTime(yearFormat: String = FORMAT_YYYY_MM_DD_HH_MM_SS): String {
-        val simpleDateFormat = SimpleDateFormat(yearFormat, Locale.getDefault())
-        val cal: Calendar = Calendar.getInstance()
-        var dayOfWeek: Int = cal.get(Calendar.DAY_OF_WEEK) - 1
+        val cal = Calendar.getInstance()
+        var dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1
         if (dayOfWeek == 0) {
             dayOfWeek = 7
         }
         cal.add(Calendar.DATE, -dayOfWeek + 1)
-        return simpleDateFormat.format(cal.time)
+        return datetimeFormat(yearFormat).format(cal.time)
     }
 
     /**
@@ -294,14 +239,13 @@ object DateUtils {
     @JvmStatic
     @JvmOverloads
     fun weekEndTime(yearFormat: String = FORMAT_YYYY_MM_DD_HH_MM_SS): String {
-        val simpleDateFormat = SimpleDateFormat(yearFormat, Locale.getDefault())
-        val cal: Calendar = Calendar.getInstance()
-        var dayOfWeek: Int = cal.get(Calendar.DAY_OF_WEEK) - 1
+        val cal = Calendar.getInstance()
+        var dayOfWeek = cal.get(Calendar.DAY_OF_WEEK) - 1
         if (dayOfWeek == 0) {
             dayOfWeek = 7
         }
         cal.add(Calendar.DATE, -dayOfWeek + 7)
-        return simpleDateFormat.format(cal.time)
+        return datetimeFormat(yearFormat).format(cal.time)
     }
 
     /**
@@ -319,9 +263,8 @@ object DateUtils {
         calendar: Calendar = Calendar.getInstance(),
         yearFormat: String = FORMAT_YYYY_MM_DD_HH_MM_SS
     ): String {
-        val simpleDateFormat = SimpleDateFormat(yearFormat, Locale.getDefault())
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
-        return simpleDateFormat.format(calendar.time)
+        return datetimeFormat(yearFormat).format(calendar.time)
     }
 
     /**
@@ -338,9 +281,21 @@ object DateUtils {
         calendar: Calendar = Calendar.getInstance(),
         yearFormat: String = FORMAT_YYYY_MM_DD_HH_MM_SS
     ): String {
-        val simpleDateFormat = SimpleDateFormat(yearFormat, Locale.getDefault())
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY)
-        return simpleDateFormat.format(calendar.time)
+        return datetimeFormat(yearFormat).format(calendar.time)
+    }
+
+    /**
+     * Constructs a SimpleDateFormat using the [dateFormat] and the
+     * [Locale.getDefault].
+     *
+     * @param dateFormat The pattern describing the date and time format.
+     * @return [SimpleDateFormat] using the [dateFormat] and the
+     *     [Locale.getDefault].
+     * @since 0.0.1
+     */
+    private fun datetimeFormat(dateFormat: String): SimpleDateFormat {
+        return SimpleDateFormat(dateFormat, Locale.getDefault())
     }
 
     /**
