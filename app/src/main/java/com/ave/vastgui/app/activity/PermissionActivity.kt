@@ -19,11 +19,14 @@ package com.ave.vastgui.app.activity
 import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityPermissionBinding
 import com.ave.vastgui.tools.activity.VastVbActivity
-import com.ave.vastgui.tools.utils.LogUtils
 import com.ave.vastgui.tools.utils.permission.DATE
 import com.ave.vastgui.tools.utils.permission.SMS
 import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 import com.ave.vastgui.tools.utils.permission.requestPermission
+
+// Author: SakurajimaMai
+// Email: guihy2019@gmail.com
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/permission/permission/
 
 class PermissionActivity : VastVbActivity<ActivityPermissionBinding>() {
 
@@ -48,7 +51,7 @@ class PermissionActivity : VastVbActivity<ActivityPermissionBinding>() {
 
             }
             noMoreAsk = {
-                LogUtils.d(getDefaultTag(), it.toString())
+
             }
         }
     }
