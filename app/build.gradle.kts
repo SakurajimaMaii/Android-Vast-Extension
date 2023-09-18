@@ -132,6 +132,7 @@ dependencies {
     implementation(Jetbrains.kotlinx_coroutines_android)
     implementation(Jetbrains.kotlinx_coroutines_core)
     implementation(Jetbrains.kotlinx_coroutines_rx3)
+    implementation(Jetbrains.kotlinx_datetime)
     implementation(Jetbrains.kotlinx_serialization_json)
     implementation(Squareup.okhttp3)
     implementation(Squareup.retrofit2)

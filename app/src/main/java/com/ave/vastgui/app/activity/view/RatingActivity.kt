@@ -14,30 +14,30 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity.viewexample
+package com.ave.vastgui.app.activity.view
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityRatingBinding
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
-import com.ave.vastgui.tools.view.ratingview.RatingSelectMethod
-import com.ave.vastgui.tools.viewbinding.reflexViewBinding
+import com.ave.vastgui.tools.view.ratingview.StarOrientation
+import com.ave.vastgui.tools.view.ratingview.StarSelectMethod
+import com.ave.vastgui.tools.viewbinding.viewBinding
 
-class RatingActivity : AppCompatActivity() {
+class RatingActivity : ComponentActivity(R.layout.activity_rating) {
 
-    private val mBinding by reflexViewBinding(ActivityRatingBinding::inflate)
+    private val mBinding by viewBinding(ActivityRatingBinding::bind)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding.ratingView.refreshWithInvalidate {
-            setStarSelectedBitmap(R.drawable.ic_star_normal)
-            setStarUnselectedBitmap(R.drawable.ic_star_unselected)
+            setStarOrientation(StarOrientation.HORIZONTAL)
             setStarCountNumber(5)
-            setStarBitMapSize(40F.DP, 40F.DP)
+            setStarBitmapSize(40F.DP, 40F.DP)
             setStarIntervalWidth(10F.DP)
-            setStarSelectMethod(RatingSelectMethod.SLIDING)
+            setStarSelectMethod(StarSelectMethod.UNABLE)
             setStarRating(3.6f)
         }
     }

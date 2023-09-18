@@ -21,7 +21,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context="com.ave.vastgui.app.activity.viewexample.RatingActivity">
+    tools:context="com.ave.vastgui.app.activity.view.RatingActivity">
 
     <com.ave.vastgui.tools.view.ratingview.RatingView
         android:id="@+id/ratingView"
@@ -35,9 +35,9 @@
         app:star_count="5"
         app:star_height="40dp"
         app:star_interval_width="1dp"
-        app:star_orientation="star_horizontal"
+        app:star_orientation="horizontal"
         app:star_rating="2.5"
-        app:star_select_method="star_click"
+        app:star_select_method="click"
         app:star_selected="@drawable/ic_star_normal"
         app:star_unselected="@drawable/ic_star_unselected"
         app:star_width="40dp" />
@@ -50,9 +50,9 @@
         app:star_count="5"
         app:star_height="40dp"
         app:star_interval_width="1dp"
-        app:star_orientation="star_vertical"
+        app:star_orientation="vertical"
         app:star_rating="2"
-        app:star_select_method="star_sliding"
+        app:star_select_method="sliding"
         app:star_selected="@drawable/ic_star_normal"
         app:star_unselected="@drawable/ic_star_unselected"
         app:star_width="40dp" />
