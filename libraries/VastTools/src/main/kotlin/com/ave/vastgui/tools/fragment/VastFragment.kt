@@ -27,6 +27,7 @@ import com.ave.vastgui.tools.network.response.getResponseBuilder
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/14 17:11
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/fragment/
 
 abstract class VastFragment : Fragment() {
 
@@ -35,6 +36,11 @@ abstract class VastFragment : Fragment() {
     }
 
     /** Construct a network request builder. */
+    @Deprecated(
+        level = DeprecationLevel.WARNING,
+        message = "Please use Request or Request2 to replace ResponseBuilder.",
+        replaceWith = ReplaceWith("")
+    )
     protected fun getResponseBuilder(): ResponseBuilder {
         return requireActivity().lifecycleScope.getResponseBuilder()
     }

@@ -17,6 +17,8 @@
 package com.ave.vastgui.tools.network.response
 
 import com.ave.vastgui.tools.network.handle.HttpHandle
+import com.ave.vastgui.tools.network.request.Request
+import com.ave.vastgui.tools.network.request.Request2
 import kotlinx.coroutines.CoroutineScope
 import kotlin.coroutines.startCoroutine
 
@@ -24,6 +26,17 @@ import kotlin.coroutines.startCoroutine
 // Email: guihy2019@gmail.com
 // Date: 2022/9/26
 
+/**
+ * Response builder
+ *
+ * @see Request
+ * @see Request2
+ */
+@Deprecated(
+    level = DeprecationLevel.WARNING,
+    message = "Please use Request or Request2 to replace ResponseBuilder.",
+    replaceWith = ReplaceWith("")
+)
 class ResponseBuilder internal constructor(private val mainScope: CoroutineScope) {
 
     fun <T : ResponseApi> suspendWithListener(

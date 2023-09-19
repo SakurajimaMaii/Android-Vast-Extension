@@ -29,7 +29,7 @@ import com.google.android.material.snackbar.Snackbar
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 16:20
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/Activity/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/activity/
 
 /**
  * The parent class for [VastVmActivity] , [VastVbActivity] ,
@@ -89,6 +89,11 @@ sealed class VastActivity : AppCompatActivity() {
     }
 
     /** Construct a network request builder. */
+    @Deprecated(
+        level = DeprecationLevel.WARNING,
+        message = "Please use Request or Request2 to replace ResponseBuilder.",
+        replaceWith = ReplaceWith("")
+    )
     protected fun getResponseBuilder(): ResponseBuilder {
         return lifecycleScope.getResponseBuilder()
     }

@@ -23,6 +23,11 @@ import kotlin.coroutines.CoroutineContext
 // Email: guihy2019@gmail.com
 // Date: 2023/3/27
 
+@Deprecated(
+    level = DeprecationLevel.WARNING,
+    message = "Please use Request or Request2 to replace ResponseBuilder.",
+    replaceWith = ReplaceWith("")
+)
 class ResponseContinuation<T : ResponseApi> internal constructor(
     override val context: CoroutineContext,
     private val listener: ResponseStateListener<T>
@@ -50,6 +55,11 @@ class ResponseContinuation<T : ResponseApi> internal constructor(
  *
  * @since 0.3.0
  */
+@Deprecated(
+    level = DeprecationLevel.WARNING,
+    message = "Please use Request or Request2 to replace ResponseBuilder.",
+    replaceWith = ReplaceWith("")
+)
 class LiveDataContinuation<T : ResponseApi> internal constructor(
     override val context: CoroutineContext,
     private val responseLiveData: ResponseMutableLiveData<T>

@@ -16,14 +16,25 @@
 
 package com.ave.vastgui.tools.network.response
 
+import com.ave.vastgui.tools.network.request.Request
+import com.ave.vastgui.tools.network.request.Request2
 import kotlinx.coroutines.CoroutineScope
-
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/6
 
-/** Create a [ResponseBuilder]. */
+/**
+ * Create a [ResponseBuilder].
+ *
+ * @see Request
+ * @see Request2
+ */
+@Deprecated(
+    level = DeprecationLevel.WARNING,
+    message = "Please use Request or Request2 to replace ResponseBuilder.",
+    replaceWith = ReplaceWith("")
+)
 fun CoroutineScope.getResponseBuilder(): ResponseBuilder {
     return ResponseBuilder(this)
 }
