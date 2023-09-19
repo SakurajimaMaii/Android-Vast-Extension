@@ -24,14 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.tooling.preview.Preview
-import com.ave.vastgui.tools.utils.QRCodeUtil
+import com.ave.vastgui.tools.graphics.QRCode
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/5/31
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/graphics/qrcode/qrcode/
 
 @Composable
 fun QRCode() {
@@ -39,7 +37,7 @@ fun QRCode() {
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        val qrCode = QRCodeUtil.createQRCodeBitmap("Hello", 800, 800)
+        val qrCode = QRCode.createQRCodeBitmap("Hello", 800, 800)
         Image(bitmap = qrCode.asImageBitmap(), contentDescription = null)
     }
 }

@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity
+package com.ave.vastgui.app.activity.graphics
 
+import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.GradientDrawable.RECTANGLE
 import android.os.Bundle
-import com.ave.vastgui.app.databinding.ActivityShapeBinding
+import com.ave.vastgui.app.databinding.ActivityGradientDrawableBinding
 import com.ave.vastgui.tools.activity.VastVbActivity
-import com.ave.vastgui.tools.utils.ColorUtils
-import com.ave.vastgui.tools.utils.drawable.ShapeAndStateDrawable
+import com.ave.vastgui.tools.graphics.setGradient
+import com.ave.vastgui.tools.utils.ColorUtils.colorHex2Int
 
-class ShapeActivity : VastVbActivity<ActivityShapeBinding>() {
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/graphics/gradient-drawable/gradient-drawable/
+
+class GradientDrawableActivity : VastVbActivity<ActivityGradientDrawableBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,20 +43,34 @@ class ShapeActivity : VastVbActivity<ActivityShapeBinding>() {
         }
 
         val colorList = IntArray(6).apply {
-            set(0, ColorUtils.colorHex2Int("#00F260"))
-            set(1, ColorUtils.colorHex2Int("#FFFFFF"))
-            set(2, ColorUtils.colorHex2Int("#0575E6"))
-            set(3, ColorUtils.colorHex2Int("#FFFFFF"))
-            set(4, ColorUtils.colorHex2Int("#EF3B36"))
-            set(5, ColorUtils.colorHex2Int("#0575E6"))
+            set(0, colorHex2Int("#00F260"))
+            set(1, colorHex2Int("#FFFFFF"))
+            set(2, colorHex2Int("#0575E6"))
+            set(3, colorHex2Int("#FFFFFF"))
+            set(4, colorHex2Int("#EF3B36"))
+            set(5, colorHex2Int("#0575E6"))
         }
 
-        ShapeAndStateDrawable.create()
-            .setShape(RECTANGLE)
-            .setRadius(50f)
-            .setGradient(45, ColorUtils.colorHex2Int("#0F2027"), ColorUtils.colorHex2Int("#78ffd6"))
-            .setBgColorStateList(states, colorList)
-            .build()
+        GradientDrawable().apply {
+            shape = RECTANGLE
+            cornerRadius = 50f
+            setGradient(
+                45,
+                colorHex2Int("#12c2e9"),
+                colorHex2Int("#c471ed"),
+                colorHex2Int("#f64f59")
+            )
+        }
+
+        getBinding().btn.background = GradientDrawable().apply {
+            shape = RECTANGLE
+            cornerRadius = 50f
+            setGradient(
+                45,
+                colorHex2Int("#0F2027"),
+                colorHex2Int("#78ffd6")
+            )
+        }
     }
 
 }
