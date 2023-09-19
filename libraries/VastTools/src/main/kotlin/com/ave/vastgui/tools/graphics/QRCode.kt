@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.utils
+package com.ave.vastgui.tools.graphics
 
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -32,7 +32,7 @@ import java.util.Hashtable
 // Date: 2022/9/24
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/images/QRCodeUtil/
 
-object QRCodeUtil {
+object QRCode {
 
     /**
      * QR code color.

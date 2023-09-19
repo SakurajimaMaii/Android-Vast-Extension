@@ -39,7 +39,7 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.utils.DensityUtils.DP
-import com.ave.vastgui.tools.utils.image.BmpUtils.getBitmapFromDrawable
+import com.ave.vastgui.tools.graphics.BmpUtils.getBitmapFromDrawable
 import com.ave.vastgui.tools.view.progress.WaveProgressView.Companion.DEFAULT_SPACE_RATIO
 import com.ave.vastgui.tools.view.progress.WaveProgressView.Companion.DEFAULT_STROKE_RATIO
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.utils.image
+package com.ave.vastgui.tools.graphics
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -28,6 +28,8 @@ import android.util.Base64
 import androidx.annotation.DrawableRes
 import androidx.annotation.IntRange
 import androidx.core.content.ContextCompat
+import com.ave.vastgui.tools.graphics.MergeScale.BIG_REDUCE
+import com.ave.vastgui.tools.graphics.MergeScale.SMALL_ENLARGE
 import com.ave.vastgui.tools.helper.ContextHelper
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import java.io.File
@@ -37,7 +39,30 @@ import java.io.IOException
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2021/11/8 15:27
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/images/BmpUtils/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/graphics/bitmap/bitmap/
+
+/**
+ * Merge position when using [BmpUtils.mergeBitmap].
+ *
+ * @since 0.5.2
+ */
+enum class MergePosition {
+    LT, LB, RT, RB, CENTER
+}
+
+/**
+ * Merge scale when using [BmpUtils.mergeBitmapLR] and
+ * [BmpUtils.mergeBitmapTB].
+ *
+ * @property SMALL_ENLARGE Meaning that the smaller image is stretched
+ *     proportionally.
+ * @property BIG_REDUCE Meaning that the larger image is compressed
+ *     proportionally.
+ * @since 0.5.2
+ */
+enum class MergeScale {
+    SMALL_ENLARGE, BIG_REDUCE
+}
 
 object BmpUtils {
     /**
@@ -335,7 +360,7 @@ object BmpUtils {
      * @since 0.5.2
      */
     @JvmStatic
-    inline fun getBitmapWidthHeight(decoder: (BitmapFactory.Options) -> Unit): Pair<Int,Int> {
+    inline fun getBitmapWidthHeight(decoder: (BitmapFactory.Options) -> Unit): Pair<Int, Int> {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
         decoder(options)

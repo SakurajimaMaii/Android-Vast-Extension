@@ -41,7 +41,7 @@ import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.DensityUtils.SP
-import com.ave.vastgui.tools.utils.image.BmpUtils
+import com.ave.vastgui.tools.graphics.BmpUtils
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.hypot

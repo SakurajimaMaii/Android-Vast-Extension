@@ -38,7 +38,7 @@ import androidx.exifinterface.media.ExifInterface
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.databinding.CropLayoutBinding
 import com.ave.vastgui.tools.utils.ScreenSizeUtils
-import com.ave.vastgui.tools.utils.image.BmpUtils
+import com.ave.vastgui.tools.graphics.BmpUtils
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
 import com.ave.vastgui.tools.viewbinding.viewBinding
 import java.io.File
