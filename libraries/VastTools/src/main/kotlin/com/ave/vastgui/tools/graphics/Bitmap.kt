@@ -143,7 +143,7 @@ object BmpUtils {
     fun mergeBitmapLR(
         leftBitmap: Bitmap,
         rightBitmap: Bitmap,
-        scale: MergeScale = MergeScale.SMALL_ENLARGE
+        scale: MergeScale = SMALL_ENLARGE
     ): Bitmap {
         if (leftBitmap.isRecycled || rightBitmap.isRecycled) {
             throw IllegalArgumentException("One of the topBitmap or bottomBitmap is recycled.")
@@ -151,10 +151,10 @@ object BmpUtils {
 
         // The height of the merged bitmap.
         val height: Int = when (scale) {
-            MergeScale.SMALL_ENLARGE ->
+            SMALL_ENLARGE ->
                 leftBitmap.height.coerceAtLeast(rightBitmap.height)
 
-            MergeScale.BIG_REDUCE ->
+            BIG_REDUCE ->
                 leftBitmap.height.coerceAtMost(rightBitmap.height)
         }
 
@@ -209,17 +209,17 @@ object BmpUtils {
     fun mergeBitmapTB(
         topBitmap: Bitmap,
         bottomBitmap: Bitmap,
-        scale: MergeScale = MergeScale.SMALL_ENLARGE
-    ): Bitmap? {
+        scale: MergeScale = SMALL_ENLARGE
+    ): Bitmap {
         if (topBitmap.isRecycled || bottomBitmap.isRecycled) {
             throw IllegalArgumentException("One of the topBitmap or bottomBitmap is recycled.")
         }
 
         val width: Int = when (scale) {
-            MergeScale.SMALL_ENLARGE ->
+            SMALL_ENLARGE ->
                 topBitmap.width.coerceAtLeast(bottomBitmap.width)
 
-            MergeScale.BIG_REDUCE ->
+            BIG_REDUCE ->
                 topBitmap.width.coerceAtMost(bottomBitmap.width)
         }
 

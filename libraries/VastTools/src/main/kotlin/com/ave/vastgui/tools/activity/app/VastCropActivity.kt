@@ -38,9 +38,9 @@ import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RETURN_DATA
 import com.ave.vastgui.tools.databinding.ActivityCropBinding
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
-import com.ave.vastgui.tools.utils.ToastUtils
 import com.ave.vastgui.tools.utils.permission.requestPermission
 import com.ave.vastgui.tools.view.cropview.CropFrameType
+import com.ave.vastgui.tools.view.toast.SimpleToast
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -49,7 +49,7 @@ import java.io.IOException
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/18
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/cropview/CropView/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/cropview/crop-view/
 
 /**
  * Vast crop activity
@@ -168,12 +168,12 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
                         returnBitmapData(bitmap, authority)
                     }
                     denied = {
-                        ToastUtils.showShortMsg("应用访问外部存储被拒绝，在需要时还会再次请求")
+                        SimpleToast.showShortMsg("应用访问外部存储被拒绝，在需要时还会再次请求")
                         setResult(RESULT_FAILED, intent)
                         finish()
                     }
                     noMoreAsk = {
-                        ToastUtils.showShortMsg("请手动允许应用访问外部存储")
+                        SimpleToast.showShortMsg("请手动允许应用访问外部存储")
                         setResult(RESULT_FAILED, intent)
                         finish()
                     }
@@ -222,7 +222,9 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
             uri?.apply {
                 contentResolver.openOutputStream(this).use { outputStream ->
                     try {
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                        if (outputStream != null) {
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                        }
                         outputStream?.flush()
                     } catch (e: Exception) {
                         e.printStackTrace()
