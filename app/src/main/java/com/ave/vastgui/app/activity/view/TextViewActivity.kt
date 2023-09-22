@@ -14,27 +14,33 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity.viewexample
+package com.ave.vastgui.app.activity.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.ave.vastgui.app.databinding.ActivityAutoCompleteTextViewBinding
+import com.ave.vastgui.app.databinding.ActivityTextViewBinding
 import com.ave.vastgui.tools.activity.widget.screenConfig
-import com.ave.vastgui.tools.viewbinding.reflexViewBinding
+import com.ave.vastgui.tools.view.textview.mailboxassociateview.MailBoxAssociateTokenizer
+import com.ave.vastgui.tools.view.textview.mailboxassociateview.defaultMailBoxAssociateViewAdapter
+import com.ave.vastgui.tools.viewbinding.viewBinding
 
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/textview/mail-box-associate-view/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/textview/marquee-text-view/
 
-class AutoCompleteTextViewActivity : AppCompatActivity() {
+class TextViewActivity : AppCompatActivity() {
 
-    private val mBinding by reflexViewBinding(ActivityAutoCompleteTextViewBinding::inflate)
+    private val mBinding by viewBinding(ActivityTextViewBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         screenConfig(mEnableActionBar = true,mEnableFullScreen = false)
 
-//        mBinding.mailBoxAssociateView.apply {
-//            setAdapter(mailBoxAssociateViewDefaultAdapter)
-//            setTokenizer(MailBoxAssociateTokenizer())
-//        }
+        mBinding.mailBoxAssociateView.apply {
+            setAdapter(defaultMailBoxAssociateViewAdapter())
+            setTokenizer(MailBoxAssociateTokenizer())
+        }
 
         mBinding.marqueeTextView.setMarqueeNum(2)
     }

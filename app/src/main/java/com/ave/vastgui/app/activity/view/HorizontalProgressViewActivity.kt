@@ -14,37 +14,47 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity.viewexample
+package com.ave.vastgui.app.activity.view
 
 import android.os.Bundle
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import com.ave.vastgui.app.databinding.ActivityHorizontalProgressViewBinding
+import com.ave.vastgui.tools.utils.ColorUtils
+import com.ave.vastgui.tools.utils.DensityUtils.SP
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
-import com.ave.vastgui.tools.viewbinding.reflexViewBinding
+import com.ave.vastgui.tools.viewbinding.viewBinding
+
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/progress/horizontal-progress-view/
 
 class HorizontalProgressViewActivity : AppCompatActivity() {
 
-    private val mBindings by reflexViewBinding(ActivityHorizontalProgressViewBinding::inflate)
+    private val mBinding by viewBinding(ActivityHorizontalProgressViewBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mBindings.bottomSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+
+        mBinding.horizontalTextProgressView.apply {
+            setTextColor(ColorUtils.colorHex2Int("#dfe6e9"))
+            setProgressColor(ColorUtils.colorHex2Int("#e17055"))
+            setProgressBackgroundColor(ColorUtils.colorHex2Int("#74b9ff"))
+            setTextSize(15f.SP)
+            setTextMargin(0f)
+        }
+
+        mBinding.bottomSeekbar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                mBindings.arcProgressView.refreshWithInvalidate {
+                mBinding.horizontalProgressView.refreshWithInvalidate {
                     setCurrentProgress(progress.toFloat())
                 }
-                mBindings.waveProgressView.refreshWithInvalidate {
+                mBinding.horizontalTextProgressView.refreshWithInvalidate {
                     setCurrentProgress(progress.toFloat())
                 }
-                mBindings.horizontalProgressView.refreshWithInvalidate {
-                    setCurrentProgress(progress.toFloat())
-                }
-                mBindings.horizontalTextProgressView.refreshWithInvalidate {
-                    setCurrentProgress(progress.toFloat())
-                }
-                mBindings.lineTextProgressView.refreshWithInvalidate {
+                mBinding.lineTextProgressView.refreshWithInvalidate {
                     setCurrentProgress(progress.toFloat())
                 }
             }

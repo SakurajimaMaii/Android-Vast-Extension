@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity.viewexample
+package com.ave.vastgui.app.activity.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ave.vastgui.app.databinding.ActivityWaveProgressViewBinding
-import com.ave.vastgui.tools.viewbinding.reflexViewBinding
+import com.ave.vastgui.tools.viewbinding.viewBinding
+
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/progress/wave-progress-view/
 
 class WaveProgressViewActivity : AppCompatActivity() {
 
-    private val mBindings by reflexViewBinding(ActivityWaveProgressViewBinding::inflate)
+    private val mBindings by viewBinding(ActivityWaveProgressViewBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

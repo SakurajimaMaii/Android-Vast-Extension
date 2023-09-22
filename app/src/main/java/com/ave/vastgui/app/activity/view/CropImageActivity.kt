@@ -34,6 +34,10 @@ import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.cropimage.CropIntent
 import java.io.File
 
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/cropview/crop-view/
+
 class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
 
     private var output: Uri? = null

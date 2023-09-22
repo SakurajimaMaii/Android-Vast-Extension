@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity.viewexample
+package com.ave.vastgui.app.activity.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.ave.vastgui.app.R
-import com.ave.vastgui.app.databinding.ActivityFragmentsBinding
+import com.ave.vastgui.app.databinding.ActivityVp2IndicatorBinding
 import com.ave.vastgui.app.fragment.SampleFragment
 import com.ave.vastgui.app.fragment.SampleVbFragment
 import com.ave.vastgui.app.fragment.SampleVbVmFragment
@@ -29,17 +29,17 @@ import com.ave.vastgui.tools.activity.widget.screenConfig
 import com.ave.vastgui.tools.adapter.VastFragmentAdapter
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.view.vp2indicator.Vp2IndicatorType
-import com.ave.vastgui.tools.viewbinding.reflexViewBinding
+import com.ave.vastgui.tools.viewbinding.viewBinding
 
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
 // Date: 2022/4/13 19:45
-// Description:
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/viewpager2/fragment-adapter/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/viewpager2/vp2-indicator-view/vp2-indicator-view/
 
 class Vp2IndicatorActivity : AppCompatActivity() {
 
-    private val mBinding by reflexViewBinding(ActivityFragmentsBinding::inflate)
+    private val mBinding by viewBinding(ActivityVp2IndicatorBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +54,7 @@ class Vp2IndicatorActivity : AppCompatActivity() {
         }
         mBinding.vp2indicator.apply {
             setIndicatorStyle(Vp2IndicatorType.BITMAP)
-            setBitmapSize(20f.DP.toInt(),20f.DP.toInt())
+            setBitmapSize(20f.DP.toInt(), 20f.DP.toInt())
             setSelectedBitmap(R.drawable.ic_indicator_select)
             setUnSelectedBitmap(R.drawable.ic_indicator_unselect)
 //            setIndicatorCircleRadius(8F.DP)

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2022 VastGui guihy2019@gmail.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,21 +20,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.viewexample.AutoCompleteTextViewActivity">
+    tools:context=".activity.view.TextViewActivity">
 
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/text_input"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="20dp"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
-<!--        <com.ave.vastgui.tools.view.textview.mailboxassociateview.MailBoxAssociateView-->
-<!--            android:id="@+id/mailBoxAssociateView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:padding="10dp"-->
-<!--            android:hint="请输入邮箱"/>-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.ave.vastgui.tools.view.textview.mailboxassociateview.MailBoxAssociateView
+            android:id="@+id/mailBoxAssociateView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="请输入邮箱"
+            android:padding="10dp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.ave.vastgui.tools.view.textview.MarqueeTextView
         android:id="@+id/marqueeTextView"
@@ -43,6 +43,5 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="你好世界，你好世界，你好世界"
-        android:textSize="30sp"/>
-
+        android:textSize="30sp" />
 </LinearLayout>

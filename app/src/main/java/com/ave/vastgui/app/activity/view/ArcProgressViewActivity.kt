@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity.viewexample
+package com.ave.vastgui.app.activity.view
 
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
+import com.ave.vastgui.app.activity.log.mLogFactory
 import com.ave.vastgui.app.databinding.ActivityArcProgressViewBinding
-import com.ave.vastgui.appcompose.example.log.mLogFactory
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.utils.ColorUtils
@@ -33,8 +33,7 @@ import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
 // Date: 2022/4/14 18:42
-// Description:
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/progress/arc-progress-view/
 
 class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>() {
 

@@ -26,6 +26,10 @@ import com.ave.vastgui.tools.view.ratingview.StarOrientation
 import com.ave.vastgui.tools.view.ratingview.StarSelectMethod
 import com.ave.vastgui.tools.viewbinding.viewBinding
 
+// Author: Vast Gui
+// Email: sakurajimamai2020@qq.com
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/rating/rating-view/
+
 class RatingActivity : ComponentActivity(R.layout.activity_rating) {
 
     private val mBinding by viewBinding(ActivityRatingBinding::bind)

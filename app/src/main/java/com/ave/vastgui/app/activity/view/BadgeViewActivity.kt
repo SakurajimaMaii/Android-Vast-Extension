@@ -24,8 +24,8 @@ import com.ave.vastgui.app.R
 import com.ave.vastgui.app.activity.log.mLogFactory
 import com.ave.vastgui.app.databinding.ActivityBadgeViewBinding
 import com.ave.vastgui.core.extension.NotNUllVar
+import com.ave.vastgui.tools.graphics.BmpUtils
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
-import com.ave.vastgui.tools.utils.image.BmpUtils
 import com.ave.vastgui.tools.viewbinding.viewBinding
 import java.io.File
 
