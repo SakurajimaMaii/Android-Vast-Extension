@@ -23,4 +23,16 @@
     <dimen name="default_star_height">40dp</dimen>
     <dimen name="default_star_width">40dp</dimen>
     <dimen name="default_star_interval_width">2dp</dimen>
+    <!-- See Vp2IndicatorView -->
+    <dimen name="default_indicator_circle_radius">5dp</dimen>
+    <dimen name="default_indicator_item_distance">12dp</dimen>
+    <!-- See ProgressView -->
+    <dimen name="default_progress_text_size">12sp</dimen>
+    <!-- See HorizontalProgressView -->
+    <dimen name="default_horizontal_progress_stroke_width">5dp</dimen>
+    <!-- See HorizontalTextProgressView -->
+    <dimen name="default_horizontal_text_progress_height">20dp</dimen>
+    <dimen name="default_horizontal_text_progress_text_margin">5dp</dimen>
+    <!-- See LineTextProgressView-->
+    <dimen name="default_linetext_progress_text_margin">5dp</dimen>
 </resources>

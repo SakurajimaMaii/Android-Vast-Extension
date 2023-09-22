@@ -15,20 +15,6 @@
   -->
 
 <resources>
-    <string-array name="gender">
-        <item>@string/gender_man</item>
-        <item>@string/gender_woman</item>
-        <item>@string/gender_unknown</item>
-    </string-array>
-
-    <string-array name="default_mail_box_postfix">
-        <item>\&#064;qq.com</item>
-        <item>\&#064;163.com</item>
-        <item>\&#064;126.com</item>
-        <item>\&#064;gmail.com</item>
-        <item>\&#064;139.com</item>
-        <item>\&#064;hotmail.com</item>
-        <item>\&#064;sina.com</item>
-        <item>\&#064;me.com</item>
-    </string-array>
+    <item name="default_current_progress" type="dimen" format="float">0f</item>
+    <item name="default_maximum_progress" type="dimen" format="float">100f</item>
 </resources>

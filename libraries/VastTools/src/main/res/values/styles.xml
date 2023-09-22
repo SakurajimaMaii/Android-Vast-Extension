@@ -54,7 +54,7 @@
     <style name="BaseProgressView">
         <item name="progress_maximum_value">100.0</item>
         <item name="progress_current_value">0.0</item>
-        <item name="progress_text_size">12sp</item>
+        <item name="progress_text_size">@dimen/default_progress_text_size</item>
         <item name="progress_text_color">@color/md_theme_onPrimary</item>
         <item name="progress_background_color">@color/md_theme_primaryContainer</item>
         <item name="progress_color">@color/md_theme_primary</item>
@@ -71,16 +71,24 @@
     </style>
 
     <style name="BaseHorizontalProgressView" parent="BaseProgressView">
-        <item name="horizontal_progress_stroke_width">5dp</item>
+        <item name="horizontal_progress_stroke_width">
+            @dimen/default_horizontal_progress_stroke_width
+        </item>
     </style>
 
     <style name="BaseHorizontalTextProgressView" parent="BaseProgressView">
-        <item name="horizontal_text_progress_height">20dp</item>
-        <item name="horizontal_text_progress_textbox_stroke_width">5dp</item>
+        <item name="horizontal_text_progress_height">
+            @dimen/default_horizontal_text_progress_height
+        </item>
+        <item name="horizontal_text_progress_text_margin">
+            @dimen/default_horizontal_text_progress_text_margin
+        </item>
     </style>
 
     <style name="BaseLineTextProgressView" parent="BaseProgressView">
-        <item name="linetext_progress_textbox_stroke_width">5dp</item>
+        <item name="linetext_progress_text_margin">
+            @dimen/default_linetext_progress_text_margin
+        </item>
     </style>
 
     <style name="BaseWaveProgressView" parent="BaseProgressView">
@@ -102,7 +110,8 @@
         <item name="indicator_style">circle</item>
         <item name="indicator_selected_color">@color/md_theme_primary</item>
         <item name="indicator_unselected_color">@color/md_theme_primaryContainer</item>
-        <item name="indicator_circle_radius">5dp</item>
-        <item name="indicator_item_distance">12dp</item>
+        <item name="indicator_circle_radius">@dimen/default_indicator_circle_radius</item>
+        <item name="indicator_item_distance">@dimen/default_indicator_item_distance</item>
+        <item name="indicator_item_count">@integer/default_indicator_item_count</item>
     </style>
 </resources>

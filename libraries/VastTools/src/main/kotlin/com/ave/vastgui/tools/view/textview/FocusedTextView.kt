@@ -22,12 +22,11 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import com.ave.vastgui.tools.R
 
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/4/9 21:59
 // Description: When you want to show the marquee effect, you can use FocusedTextView.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/FocusedTextView/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/textview/marquee-text-view/
 
 /**
  * MarqueeTextView

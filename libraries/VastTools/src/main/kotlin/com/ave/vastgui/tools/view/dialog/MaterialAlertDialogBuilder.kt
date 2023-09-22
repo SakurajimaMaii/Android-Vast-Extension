@@ -27,30 +27,24 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/3
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/dialog/MaterialAlertDialogBuilder/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/dialog/material-alert-dialog-builder/
 
 class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(context) {
 
-    private var mView:View? = null
+    private var mView: View? = null
 
-    /**
-     * Sets a custom view to be the contents of the dialog.
-     */
+    /** Sets a custom view to be the contents of the dialog. */
     override fun setView(layoutResId: Int) = apply {
         setView(layoutResId, context, null)
     }
 
-    /**
-     * Sets a custom view to be the contents of the dialog.
-     */
+    /** Sets a custom view to be the contents of the dialog. */
     override fun setView(view: View?) = apply {
         mView = view
         super.setView(view)
     }
 
-    /**
-     * Sets a custom view to be the contents of the dialog.
-     */
+    /** Sets a custom view to be the contents of the dialog. */
     fun setView(
         @LayoutRes layoutId: Int,
         context: Context,
@@ -60,9 +54,7 @@ class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(
         super.setView(mView)
     }
 
-    /**
-     * Get the layout of the Dialog.
-     */
+    /** Get the layout of the Dialog. */
     fun getView() = mView
 
     /**
@@ -71,8 +63,8 @@ class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(
      * @return the not null layout.
      * @throws IllegalStateException
      */
-    fun requireView():View{
-        if(null == mView){
+    fun requireView(): View {
+        if (null == mView) {
             throw IllegalStateException("View is null.")
         }
         return mView!!

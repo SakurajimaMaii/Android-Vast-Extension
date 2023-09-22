@@ -21,10 +21,10 @@ import android.text.Spanned
 import android.text.TextUtils
 import android.widget.MultiAutoCompleteTextView
 
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/2
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/textview/mail-box-associate-view/
 
 /**
  * MailBoxAssociateTokenizer
@@ -44,14 +44,7 @@ class MailBoxAssociateTokenizer : MultiAutoCompleteTextView.Tokenizer {
      * @since 0.2.0
      */
     override fun findTokenStart(text: CharSequence, cursor: Int): Int {
-        var index = text.toString().indexOf("@")
-        if (index < 0) {
-            index = text.length
-        }
-        if (index > findTokenEnd(text, cursor)) {
-            index = 0
-        }
-        return index
+        return text.indexOf("@")
     }
 
     /**
@@ -63,17 +56,8 @@ class MailBoxAssociateTokenizer : MultiAutoCompleteTextView.Tokenizer {
      * @since 0.2.0
      */
     override fun findTokenEnd(text: CharSequence, cursor: Int): Int {
-        var i = cursor
-        val len = text.length
-        // 向后查找'@'字符，若找到则直接返回其所在位置
-        while (i < len) {
-            if (text[i] == '@') {
-                return i
-            } else {
-                i++
-            }
-        }
-        return len
+        val index = text.indexOf('@', cursor)
+        return if (index != -1) index else text.length
     }
 
     /** It is used to return the text content with the token. */
@@ -85,18 +69,10 @@ class MailBoxAssociateTokenizer : MultiAutoCompleteTextView.Tokenizer {
         }
         // Determine whether the original matching data contains '@' after
         // removing the trailing space, and return immediately if there is.
-        return if (i > 0 && text[i - 1] == '@') {
-            text
-        } else {
-            // CharSequence类型的数据有可能是富文本SpannableString类型
-            // 故需要进行判断
-            if (text is Spanned) {
-                SpannableString(text).apply {
-                    TextUtils.copySpansFrom(text, 0, text.length, Any::class.java, this, 0)
-                }
-            } else {
-                text
+        return if (text is Spanned) {
+            SpannableString(text).apply {
+                TextUtils.copySpansFrom(text, 0, text.length, Any::class.java, this, 0)
             }
-        }
+        } else text
     }
 }

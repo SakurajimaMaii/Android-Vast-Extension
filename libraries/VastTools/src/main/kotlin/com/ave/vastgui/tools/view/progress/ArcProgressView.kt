@@ -32,7 +32,7 @@ import kotlin.math.sin
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
 // Date: 2022/4/17 19:55
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/progress/ArcProgressView/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/progress/arc-progress-view/
 
 /**
  * ArcProgressView.
@@ -226,6 +226,7 @@ class ArcProgressView @JvmOverloads constructor(
         val height = when {
             heightMode == MeasureSpec.EXACTLY -> heightSize
             requiredSize > heightSize -> maxContentSize
+            requiredSize > heightSize -> maxContentSize
             else -> requiredSize
         }
         setMeasuredDimension(width, height)
@@ -242,8 +243,6 @@ class ArcProgressView @JvmOverloads constructor(
             typedArray.getFloat(R.styleable.ArcProgressView_progress_maximum_value, 0f)
         mCurrentProgress =
             typedArray.getFloat(R.styleable.ArcProgressView_progress_current_value, 0f)
-        mText =
-            typedArray.getString(R.styleable.ArcProgressView_progress_text)
         mTextSize =
             typedArray.getDimension(R.styleable.ArcProgressView_progress_text_size, 0f)
         mTextColor =

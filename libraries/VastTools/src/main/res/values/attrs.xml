@@ -126,7 +126,7 @@
         <attr name="progress_background_color" />
         <attr name="progress_color" />
         <attr name="horizontal_text_progress_height" format="dimension|reference" />
-        <attr name="horizontal_text_progress_textbox_stroke_width" format="dimension|reference" />
+        <attr name="horizontal_text_progress_text_margin" format="dimension|reference" />
     </declare-styleable>
 
     <declare-styleable name="LineTextProgressView">
@@ -136,7 +136,7 @@
         <attr name="progress_text_color" />
         <attr name="progress_background_color" />
         <attr name="progress_color" />
-        <attr name="linetext_progress_textbox_stroke_width" format="dimension|reference" />
+        <attr name="linetext_progress_text_margin" format="dimension|reference" />
     </declare-styleable>
 
     <declare-styleable name="WaveProgressView">

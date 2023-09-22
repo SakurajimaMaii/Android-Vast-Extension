@@ -21,28 +21,27 @@ import android.util.AttributeSet
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
 import com.ave.vastgui.tools.R
-import com.ave.vastgui.tools.helper.ContextHelper
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/2
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/textview/MailBoxAssociateView/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/textview/mail-box-associate-view/
 
 /**
  * Default mail box postfix string array.
  *
- * @since 0.2.0
+ * @since 0.5.3
  */
-private val defaultMailBoxPostfix: Array<String> =
-    ContextHelper.getAppContext().resources.getStringArray(R.array.mail_box_postfix)
+private fun MailBoxAssociateView.defaultMailBoxPostfix(): Array<String> =
+    resources.getStringArray(R.array.default_mail_box_postfix)
 
 /**
  * [MailBoxAssociateView] default adapter
  *
- * @since 0.2.0
+ * @since 0.5.3
  */
-val mailBoxAssociateViewDefaultAdapter =
-    ArrayAdapter(ContextHelper.getAppContext(), android.R.layout.simple_list_item_1, defaultMailBoxPostfix)
+fun MailBoxAssociateView.defaultMailBoxAssociateViewAdapter() =
+    ArrayAdapter(this.context, android.R.layout.simple_list_item_1, defaultMailBoxPostfix())
 
 /**
  * MailBoxAssociateView.
@@ -57,7 +56,7 @@ class MailBoxAssociateView @JvmOverloads constructor(
 ) : AppCompatMultiAutoCompleteTextView(context, attrs, defStyleAttr) {
 
     override fun enoughToFilter(): Boolean {
-         return text.toString().contains("@") && text.toString().indexOf("@") > 0
+        return text.toString().contains("@") && text.toString().indexOf("@") > 0
     }
 
 }

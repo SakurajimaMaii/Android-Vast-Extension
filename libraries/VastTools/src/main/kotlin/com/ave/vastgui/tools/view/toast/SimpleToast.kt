@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.utils
+package com.ave.vastgui.tools.view.toast
 
 import android.content.Context
 import android.os.Handler
@@ -30,12 +30,14 @@ import com.ave.vastgui.tools.helper.ContextHelper
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: Toast utils.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/toast/ToastUtils/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/toast/simple-toast/
 
 /**
- * ToastUtils.
+ * Simple Toast.
+ *
+ * @since 0.5.3
  */
-object ToastUtils {
+object SimpleToast {
 
     @Retention(AnnotationRetention.SOURCE)
     @IntDef(
@@ -49,6 +51,7 @@ object ToastUtils {
     /**
      * @param msg message of the toast.
      * @param context context.
+     * @since 0.5.3
      */
     @JvmStatic
     @JvmOverloads
@@ -56,12 +59,13 @@ object ToastUtils {
         msg: String,
         context: Context = ContextHelper.getAppContext()
     ) {
-        showToast(context, msg, Toast.LENGTH_LONG)
+        showToast(context, msg, Toast.LENGTH_SHORT)
     }
 
     /**
      * @param id message string id of the toast.
      * @param context context.
+     * @since 0.5.3
      */
     @JvmStatic
     @JvmOverloads
@@ -76,6 +80,7 @@ object ToastUtils {
     /**
      * @param msg message of the toast.
      * @param context context.
+     * @since 0.5.3
      */
     @JvmStatic
     @JvmOverloads
@@ -89,6 +94,7 @@ object ToastUtils {
     /**
      * @param id message string id of the toast.
      * @param context context.
+     * @since 0.5.3
      */
     @JvmStatic
     @JvmOverloads
@@ -99,6 +105,11 @@ object ToastUtils {
         showToast(context, context.getString(id), Toast.LENGTH_LONG)
     }
 
+    /**
+     * Show toast
+     *
+     * @since 0.5.3
+     */
     private fun showToast(context: Context, msg: String, @Duration duration: Int) {
         if (ToolsConfig.isMainThread()) {
             makeToast(context, msg, duration)
@@ -108,6 +119,11 @@ object ToastUtils {
         }
     }
 
+    /**
+     * Make toast
+     *
+     * @since 0.5.3
+     */
     private fun makeToast(context: Context, msg: String, @Duration duration: Int) {
         mToast?.cancel()
         if (null == mToast) {

@@ -18,9 +18,12 @@ package com.ave.vastgui.tools.view.progress
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
+import com.ave.vastgui.core.extension.NotNUllVar
+import com.ave.vastgui.tools.R
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -45,20 +48,47 @@ sealed class ProgressView(
     defStyleRes: Int
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
+    /**
+     * Default value of [mMaximumProgress].
+     *
+     * @since 0.5.3
+     */
+    protected val mDefaultMaximumProgress
+        get() = TypedValue().apply {
+            resources.getValue(R.dimen.default_maximum_progress, this, true)
+        }.float
 
-    var mMaximumProgress: Float = 0.0f
+    /**
+     * Default value of [mCurrentProgress].
+     *
+     * @since 0.5.3
+     */
+    protected val mDefaultCurrentProgress
+        get() = TypedValue().apply {
+            resources.getValue(R.dimen.default_current_progress, this, true)
+        }.float
+
+    /**
+     * Default value of [mTextSize].
+     *
+     * @since 0.5.3
+     */
+    protected val mDefaultTexSize
+        get() = resources.getDimension(R.dimen.default_progress_text_size)
+
+    var mMaximumProgress = mDefaultMaximumProgress
         protected set
 
-    var mCurrentProgress: Float = 0.0f
+    var mCurrentProgress: Float = mDefaultCurrentProgress
         protected set
 
-    var mText: String? = null
+    var mText by NotNUllVar<String>()
         protected set
 
-    var mTextSize: Float = 0.0f
+    var mTextSize by NotNUllVar<Float>()
         protected set
 
-    var mTextColor: Int = 0
+    var mTextColor by NotNUllVar<Int>()
         protected set
 
     var mProgressBackgroundColor: Int = 0
@@ -83,9 +113,7 @@ sealed class ProgressView(
      * @since 0.2.0
      */
     open fun setCurrentProgress(@FloatRange(from = 0.0) currentProgress: Float) {
-        if (currentProgress > mMaximumProgress && mMaximumProgress != 0.0f)
-            throw IllegalStateException("The currentProgress should be smaller than $mMaximumProgress")
-        mCurrentProgress = currentProgress
+        mCurrentProgress = currentProgress.coerceIn(0f, mMaximumProgress)
     }
 
     /**
@@ -100,24 +128,18 @@ sealed class ProgressView(
     /**
      * Set the text.
      *
-     * @throws RuntimeException
      * @since 0.2.0
      */
     open fun setText(text: String) {
-        if (this is HorizontalProgressView)
-            throw RuntimeException("You shouldn't call this method.")
         mText = text
     }
 
     /**
      * Set text size.
      *
-     * @throws RuntimeException
      * @since 0.2.0
      */
     open fun setTextSize(@FloatRange(from = 0.0) size: Float) {
-        if (this is HorizontalProgressView)
-            throw RuntimeException("You shouldn't call this method.")
         mTextSize = size
     }
 

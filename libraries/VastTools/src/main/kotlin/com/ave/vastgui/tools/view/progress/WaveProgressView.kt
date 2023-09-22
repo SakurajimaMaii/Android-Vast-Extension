@@ -36,17 +36,16 @@ import androidx.annotation.IntRange
 import androidx.annotation.RestrictTo
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
-import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.R
-import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.graphics.BmpUtils.getBitmapFromDrawable
+import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.view.progress.WaveProgressView.Companion.DEFAULT_SPACE_RATIO
 import com.ave.vastgui.tools.view.progress.WaveProgressView.Companion.DEFAULT_STROKE_RATIO
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/31
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/progress/WaveProgressView/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/progress/wave-progress-view/
 
 /**
  * WaveProgressView
@@ -95,11 +94,15 @@ class WaveProgressView @JvmOverloads constructor(
         private const val DEFAULT_SPACE_RATIO = 1f / 20
     }
 
-    private var mWavePaint: Paint by NotNUllVar()
-    private var mStrokePaint: Paint by NotNUllVar()
-    private var mTextPaint: Paint by NotNUllVar()
-    private var mPath: Path by NotNUllVar()
-    private var mTextRect: Rect by NotNUllVar()
+    private var mWavePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+    }
+    private var mStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+    }
+    private var mTextPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val mPath = Path()
+    private val mTextRect = Rect()
 
     private val mIsAutoBack: Boolean
         get() = !(background is BitmapDrawable || background is VectorDrawable || background is VectorDrawableCompat)
@@ -134,69 +137,6 @@ class WaveProgressView @JvmOverloads constructor(
 
     private var mStrokeRatio = DEFAULT_STROKE_RATIO
     private var mSpaceRatio = DEFAULT_SPACE_RATIO
-
-    init {
-        val typedArray: TypedArray = context.obtainStyledAttributes(
-            attrs, R.styleable.WaveProgressView, defStyleAttr, defStyleRes
-        )
-        mMaximumProgress =
-            typedArray.getFloat(R.styleable.WaveProgressView_progress_maximum_value, 0f)
-        mCurrentProgress =
-            typedArray.getFloat(R.styleable.WaveProgressView_progress_current_value, 0f)
-        mText = typedArray.getString(R.styleable.WaveProgressView_progress_text)
-        mTextSize = typedArray.getDimension(R.styleable.WaveProgressView_progress_text_size, 0f)
-        mTextColor = typedArray.getColor(
-            R.styleable.WaveProgressView_progress_text_color,
-            context.getColor(R.color.md_theme_onPrimary)
-        )
-        mProgressBackgroundColor = typedArray.getColor(
-            R.styleable.WaveProgressView_progress_background_color,
-            context.getColor(R.color.md_theme_primaryContainer)
-        )
-        mProgressColor = typedArray.getColor(
-            R.styleable.WaveProgressView_progress_color, context.getColor(R.color.md_theme_primary)
-        )
-        mWaveWidth =
-            typedArray.getFloat(R.styleable.WaveProgressView_wave_progress_wave_width, 200f)
-        mHalfWaveWidth = mWaveWidth / 4
-        mWaveHeight =
-            typedArray.getFloat(R.styleable.WaveProgressView_wave_progress_wave_height, 20f)
-        mWaveSpeed = typedArray.getFloat(
-            R.styleable.WaveProgressView_wave_progress_wave_speed, mWaveWidth / 70
-        )
-        mStrokeColor = typedArray.getColor(
-            R.styleable.WaveProgressView_wave_progress_stroke_color,
-            context.getColor(R.color.md_theme_primary)
-        )
-        mHint = typedArray.getString(R.styleable.WaveProgressView_wave_progress_hint_text)
-        mHintColor = typedArray.getColor(
-            R.styleable.WaveProgressView_wave_progress_hint_color,
-            context.getColor(R.color.md_theme_onPrimary)
-        )
-        mHintSize = typedArray.getDimension(
-            R.styleable.WaveProgressView_wave_progress_hint_size, 0f
-        )
-        mTextSpace =
-            typedArray.getDimension(R.styleable.WaveProgressView_wave_progress_text_space, 10f)
-        mStrokeRatio = typedArray.getFloat(
-            R.styleable.WaveProgressView_wave_progress_stroke_ratio, DEFAULT_STROKE_RATIO
-        )
-        mSpaceRatio = typedArray.getFloat(
-            R.styleable.WaveProgressView_wave_progress_space_ratio, DEFAULT_SPACE_RATIO
-        )
-        typedArray.recycle()
-        mPath = Path()
-        mWavePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.FILL
-            color = mProgressColor
-        }
-        mStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.STROKE
-        }
-        mTextPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mTextRect = Rect()
-        setBackgroundColor(Color.TRANSPARENT)
-    }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val measuredWidth = measureWidth(widthMeasureSpec)
@@ -243,18 +183,18 @@ class WaveProgressView @JvmOverloads constructor(
         } else {
             canvas.drawBitmap(bitmap, 0f, 0f, null)
         }
-        if (!TextUtils.isEmpty(mText)) {
+        if (mText.isNotEmpty()) {
             mTextPaint.apply {
                 color = mTextColor
                 textSize = mTextSize
-                getTextBounds(mText, 0, mText!!.length - 1, mTextRect)
+                getTextBounds(mText, 0, mText.length - 1, mTextRect)
             }
             val textLength = mTextPaint.measureText(mText)
             val metrics = mTextPaint.fontMetrics
             val baseLine =
                 mTextRect.height() / 2 + (metrics.descent - metrics.ascent) / 2 - metrics.descent
             canvas.drawText(
-                mText!!,
+                mText,
                 measuredWidth / 2 - textLength / 2,
                 measuredHeight / 2 + baseLine,
                 mTextPaint
@@ -276,6 +216,143 @@ class WaveProgressView @JvmOverloads constructor(
         if (mUpdateInterval != -1L) {
             postInvalidateDelayed(mUpdateInterval)
         }
+    }
+
+    /**
+     * Set the background. Current support type is [BitmapDrawable] ,
+     * [VectorDrawable] and [VectorDrawableCompat].
+     *
+     * @since 0.2.0
+     */
+    override fun setBackground(background: Drawable) {
+        if (background is BitmapDrawable || background is VectorDrawable || background is VectorDrawableCompat) {
+            super.setBackground(background)
+        }
+    }
+
+    /**
+     * Set the background. Current support type is [BitmapDrawable] ,
+     * [VectorDrawable] and [VectorDrawableCompat].
+     *
+     * @since 0.2.0
+     */
+    override fun setBackgroundResource(resid: Int) {
+        try {
+            background = AppCompatResources.getDrawable(context, resid)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * Set color-int for [mProgressColor] and [mWavePaint].
+     *
+     * @since 0.5.3
+     */
+    override fun setProgressColor(@ColorInt color: Int) {
+        super.setProgressColor(color)
+        mWavePaint.color = mProgressColor
+    }
+
+    /**
+     * Set the [mWaveSpeed] of the wave.
+     *
+     * @since 0.2.0
+     */
+    fun setSpeed(@FloatRange(from = 0.0) speed: Float) {
+        mWaveSpeed = speed
+    }
+
+    /**
+     * Set update interval time between every frame in milliseconds.
+     *
+     * @param interval If the value of [interval] is -1, the wave will stop
+     *     move.
+     * @since 0.5.2
+     */
+    fun setUpdateInterval(@IntRange(from = -1) interval: Long) {
+        mUpdateInterval = interval
+    }
+
+    /**
+     * Set the width and height of the wave.
+     *
+     * @since 0.2.0
+     */
+    fun setWave(
+        @FloatRange(from = 0.0) waveWidth: Float,
+        @FloatRange(from = 0.0) waveHeight: Float
+    ) {
+        mWaveWidth = waveWidth
+        mWaveHeight = waveHeight
+        mHalfWaveWidth = waveWidth / 4
+        mWaveCount = calWaveCount(mWidth, mWaveWidth)
+    }
+
+    /**
+     * Set wave color.
+     *
+     * @since 0.2.0
+     */
+    fun setWaveColor(@ColorInt color: Int) {
+        mProgressColor = color
+        mWavePaint.color = mProgressColor
+    }
+
+    /**
+     * Set wave background color.
+     *
+     * @since 0.2.0
+     */
+    fun setWaveBackgroundColor(@ColorInt color: Int) {
+        mProgressBackgroundColor = color
+        super.setBackground(null)
+    }
+
+    /**
+     * Set the stroke color. It must be effective without background.
+     *
+     * @since 0.2.0
+     */
+    fun setStrokeColor(@ColorInt strokeColor: Int) {
+        mStrokeColor = strokeColor
+        mStrokePaint.color = mStrokeColor
+    }
+
+    /**
+     * Set hint text.
+     *
+     * @since 0.2.0
+     */
+    fun setHint(hint: String) {
+        mHint = hint
+    }
+
+    /**
+     * Set hint text size.
+     *
+     * @since 0.2.0
+     */
+    fun setHintSize(@FloatRange(from = 0.0) hintSize: Float) {
+        mHintSize = hintSize
+    }
+
+    /**
+     * Set hint text color.
+     *
+     * @since 0.2.0
+     */
+    fun setHintColor(@ColorInt color: Int) {
+        mHintColor = color
+    }
+
+    /**
+     * Set hints and text spacing.
+     *
+     * @since 0.2.0
+     */
+    fun setTextSpace(@FloatRange(from = 0.0) textSpace: Float) {
+        mTextSpace = textSpace
     }
 
     /**
@@ -378,133 +455,6 @@ class WaveProgressView @JvmOverloads constructor(
     }
 
     /**
-     * Set the [mWaveSpeed] of the wave.
-     *
-     * @since 0.2.0
-     */
-    fun setSpeed(@FloatRange(from = 0.0) speed: Float) {
-        mWaveSpeed = speed
-    }
-
-    /**
-     * Set update interval time between every frame in milliseconds.
-     *
-     * @param interval If the value of [interval] is -1, the wave will stop
-     *     move.
-     * @since 0.5.2
-     */
-    fun setUpdateInterval(@IntRange(from = -1) interval: Long) {
-        mUpdateInterval = interval
-    }
-
-    /**
-     * Set the width and height of the wave.
-     *
-     * @since 0.2.0
-     */
-    fun setWave(
-        @FloatRange(from = 0.0) waveWidth: Float,
-        @FloatRange(from = 0.0) waveHeight: Float
-    ) {
-        mWaveWidth = waveWidth
-        mWaveHeight = waveHeight
-        mHalfWaveWidth = waveWidth / 4
-        mWaveCount = calWaveCount(mWidth, mWaveWidth)
-    }
-
-    /**
-     * Set wave color.
-     *
-     * @since 0.2.0
-     */
-    fun setWaveColor(@ColorInt color: Int) {
-        mProgressColor = color
-        mWavePaint.color = mProgressColor
-    }
-
-    /**
-     * Set wave background color.
-     *
-     * @since 0.2.0
-     */
-    fun setWaveBackgroundColor(@ColorInt color: Int) {
-        mProgressBackgroundColor = color
-        super.setBackground(null)
-    }
-
-    /**
-     * Set the stroke color. It must be effective without background.
-     *
-     * @since 0.2.0
-     */
-    fun setStrokeColor(strokeColor: Int) {
-        mStrokeColor = strokeColor
-        mStrokePaint.color = mStrokeColor
-    }
-
-    /**
-     * Set hint text.
-     *
-     * @since 0.2.0
-     */
-    fun setHint(hint: String) {
-        mHint = hint
-    }
-
-    /**
-     * Set hint text size.
-     *
-     * @since 0.2.0
-     */
-    fun setHintSize(hintSize: Float) {
-        mHintSize = hintSize
-    }
-
-    /**
-     * Set hint text color.
-     *
-     * @since 0.2.0
-     */
-    fun setHintColor(@ColorInt color: Int) {
-        mHintColor = color
-    }
-
-    /**
-     * Set hints and text spacing.
-     *
-     * @since 0.2.0
-     */
-    fun setTextSpace(textSpace: Float) {
-        mTextSpace = textSpace
-    }
-
-    /**
-     * Set the background. Current support type is [BitmapDrawable] ,
-     * [VectorDrawable] and [VectorDrawableCompat].
-     *
-     * @since 0.2.0
-     */
-    override fun setBackground(background: Drawable) {
-        if (background is BitmapDrawable || background is VectorDrawable || background is VectorDrawableCompat) {
-            super.setBackground(background)
-        }
-    }
-
-    /**
-     * Set the background. Current support type is [BitmapDrawable] ,
-     * [VectorDrawable] and [VectorDrawableCompat].
-     *
-     * @since 0.2.0
-     */
-    override fun setBackgroundResource(resid: Int) {
-        try {
-            background = AppCompatResources.getDrawable(context, resid)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    /**
      * Set [mStrokeRatio].
      *
      * @see DEFAULT_STROKE_RATIO
@@ -532,6 +482,67 @@ class WaveProgressView @JvmOverloads constructor(
         } else ratio
         requestLayout()
         invalidate()
+    }
+
+    init {
+        val typedArray: TypedArray = context.obtainStyledAttributes(
+            attrs, R.styleable.WaveProgressView, defStyleAttr, defStyleRes
+        )
+        mMaximumProgress =
+            typedArray.getFloat(
+                R.styleable.WaveProgressView_progress_maximum_value,
+                mDefaultMaximumProgress
+            )
+        mCurrentProgress =
+            typedArray.getFloat(
+                R.styleable.WaveProgressView_progress_current_value,
+                mDefaultCurrentProgress
+            )
+        mText = typedArray.getString(R.styleable.WaveProgressView_progress_text) ?: ""
+        mTextSize = typedArray.getDimension(R.styleable.WaveProgressView_progress_text_size, 0f)
+        mTextColor = typedArray.getColor(
+            R.styleable.WaveProgressView_progress_text_color,
+            context.getColor(R.color.md_theme_onPrimary)
+        )
+        mProgressBackgroundColor = typedArray.getColor(
+            R.styleable.WaveProgressView_progress_background_color,
+            context.getColor(R.color.md_theme_primaryContainer)
+        )
+        val progressColor = typedArray.getColor(
+            R.styleable.WaveProgressView_progress_color, context.getColor(R.color.md_theme_primary)
+        )
+        setProgressColor(progressColor)
+        mWaveWidth =
+            typedArray.getFloat(R.styleable.WaveProgressView_wave_progress_wave_width, 200f)
+        mHalfWaveWidth = mWaveWidth / 4
+        mWaveHeight =
+            typedArray.getFloat(R.styleable.WaveProgressView_wave_progress_wave_height, 20f)
+        mWaveSpeed = typedArray.getFloat(
+            R.styleable.WaveProgressView_wave_progress_wave_speed, mWaveWidth / 70
+        )
+        val strokeColor = typedArray.getColor(
+            R.styleable.WaveProgressView_wave_progress_stroke_color,
+            context.getColor(R.color.md_theme_primary)
+        )
+        setStrokeColor(strokeColor)
+        mHint = typedArray.getString(R.styleable.WaveProgressView_wave_progress_hint_text)
+        mHintColor = typedArray.getColor(
+            R.styleable.WaveProgressView_wave_progress_hint_color,
+            context.getColor(R.color.md_theme_onPrimary)
+        )
+        mHintSize = typedArray.getDimension(
+            R.styleable.WaveProgressView_wave_progress_hint_size, 0f
+        )
+        mTextSpace =
+            typedArray.getDimension(R.styleable.WaveProgressView_wave_progress_text_space, 10f)
+        mStrokeRatio = typedArray.getFloat(
+            R.styleable.WaveProgressView_wave_progress_stroke_ratio, DEFAULT_STROKE_RATIO
+        )
+        mSpaceRatio = typedArray.getFloat(
+            R.styleable.WaveProgressView_wave_progress_space_ratio, DEFAULT_SPACE_RATIO
+        )
+        typedArray.recycle()
+        setBackgroundColor(Color.TRANSPARENT)
     }
 
 }

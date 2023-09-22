@@ -35,7 +35,7 @@ import com.ave.vastgui.tools.utils.DensityUtils.DP
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/18
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/cropview/CropView/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/cropview/crop-view/
 
 /**
  * Crop view

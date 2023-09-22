@@ -28,6 +28,7 @@ import android.provider.Settings
 import android.util.Log
 import androidx.annotation.IntRange
 import androidx.annotation.RequiresPermission
+import com.ave.vastgui.tools.view.toast.SimpleToast
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -206,7 +207,7 @@ object IntentUtils {
                 )
             }
         } catch (ex: SecurityException) {
-            ToastUtils.showShortMsg(ex.message.toString())
+            SimpleToast.showShortMsg(ex.message.toString())
             ex.printStackTrace()
         }
     }
