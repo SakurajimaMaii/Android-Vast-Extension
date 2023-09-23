@@ -16,79 +16,98 @@
 
 package com.ave.vastgui.tools.utils
 
-import android.annotation.SuppressLint
+import android.Manifest.permission.ACCESS_NETWORK_STATE
+import android.Manifest.permission.ACCESS_WIFI_STATE
 import android.content.Context
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
+import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkInfo
+import android.net.NetworkRequest
+import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/4/2 9:03
 // Description: With NetStateUtils, you can easily check some network status about your device
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/NetStateUtils/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/net-state-utils/
 
 object NetStateUtils {
+
     /**
-     * Get [NetworkInfo]
+     * Wifi DBM
      *
-     * @param context context.
-     * @return [NetworkInfo] object.
+     * @since 0.5.3
      */
-    @SuppressLint("MissingPermission")
-    @JvmStatic
-    @Throws(RuntimeException::class)
-    internal fun getNetWorkInfo(context: Context): NetworkInfo? {
-        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            cm.activeNetworkInfo
-        } else {
-            throw RuntimeException("NetworkInfo was deprecated in API level 29.")
-        }
+    sealed class WIFIDBM(val strength: Int) {
+        object NOWIFICONNECT : WIFIDBM(-1)
+        class CURRENTDBM(strength: Int) : WIFIDBM(strength)
+        object UNSPECIFIED : WIFIDBM(-1)
+
+        override fun toString(): String = "${this::class.java.simpleName} strength:$strength"
     }
 
     /**
-     * Get [NetworkCapabilities]
+     * Get [NetworkInfo].
      *
-     * @param context context.
-     * @return [NetworkCapabilities] object.
+     * @throws SecurityException Throw exception if there is no permission for
+     *     ACCESS_NETWORK_STATE.
+     * @see ConnectivityManager.getActiveNetworkInfo
      */
-    @SuppressLint("MissingPermission")
+    @JvmStatic
+    @Suppress("deprecation")
+    @kotlin.jvm.Throws(SecurityException::class)
+    internal fun getNetWorkInfo(context: Context): NetworkInfo? {
+        if (ContextCompat.checkSelfPermission(context, ACCESS_NETWORK_STATE) != PERMISSION_GRANTED) {
+            throw SecurityException("Please apply the permission ACCESS_NETWORK_STATE.")
+        }
+        return context.getConnectivityManager().activeNetworkInfo
+    }
+
+    /**
+     * Get [NetworkCapabilities].
+     *
+     * @throws SecurityException Throw exception if there is no permission for
+     *     ACCESS_NETWORK_STATE.
+     * @see [ConnectivityManager.getNetworkCapabilities]
+     */
     @JvmStatic
     @RequiresApi(Build.VERSION_CODES.Q)
-    @Throws(RuntimeException::class)
+    @kotlin.jvm.Throws(SecurityException::class)
     internal fun getNetworkCapabilities(context: Context): NetworkCapabilities? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val nw = cm.activeNetwork
-            cm.getNetworkCapabilities(nw)
-        } else {
-            throw RuntimeException("App api version should be greater than 29.")
+        if (ContextCompat.checkSelfPermission(context, ACCESS_NETWORK_STATE) != PERMISSION_GRANTED)
+            throw SecurityException("Please apply the permission ACCESS_NETWORK_STATE.")
+        return context.getConnectivityManager().let {
+            it.getNetworkCapabilities(it.activeNetwork)
         }
     }
+
 
     /**
      * Is network available
      *
-     * @param context context.
-     * @return true if network is available,false otherwise.
+     * @return True if network is available,false otherwise.
+     * @see getNetWorkInfo
+     * @see getNetworkCapabilities
      */
     @JvmStatic
+    @kotlin.jvm.Throws(RuntimeException::class, SecurityException::class)
     fun isNetworkAvailable(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            val networkInfo = getNetWorkInfo(context)
-            if ((null != networkInfo) and (networkInfo!!.isConnected)) {
-                networkInfo.isAvailable
-            } else false
+            val networkInfo = getNetWorkInfo(context) ?: return false
+            @Suppress("deprecation")
+            networkInfo.isConnected and networkInfo.isAvailable
         } else {
             val networkCapabilities = getNetworkCapabilities(context)
             if (null != networkCapabilities) {
                 when {
                     networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN) -> true
                     networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
                     //for other device how are able to connect with Ethernet
                     networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
@@ -103,19 +122,20 @@ object NetStateUtils {
     /**
      * Is WIFI
      *
-     * @param context context.
      * @return true if network is wifi mode,false otherwise.
+     * @see getNetWorkInfo
+     * @see getNetworkCapabilities
      */
     @JvmStatic
+    @kotlin.jvm.Throws(RuntimeException::class, SecurityException::class)
     fun isWIFI(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            val networkInfo = getNetWorkInfo(context)
-            if (null != networkInfo) {
-                networkInfo.type == ConnectivityManager.TYPE_WIFI
-            } else false
+            val networkInfo = getNetWorkInfo(context) ?: return false
+            @Suppress("deprecation")
+            networkInfo.type == ConnectivityManager.TYPE_WIFI
         } else {
-            val networkCapabilities = getNetworkCapabilities(context)
-            networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ?: false
+            val networkCapabilities = getNetworkCapabilities(context) ?: return false
+            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
         }
     }
 
@@ -128,42 +148,110 @@ object NetStateUtils {
     @JvmStatic
     fun isMobile(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            val networkInfo = getNetWorkInfo(context)
-            if (null != networkInfo) {
-                networkInfo.type == ConnectivityManager.TYPE_MOBILE
-            } else false
+            val networkInfo = getNetWorkInfo(context) ?: return false
+            @Suppress("deprecation")
+            networkInfo.type == ConnectivityManager.TYPE_MOBILE
         } else {
-            val networkCapabilities = getNetworkCapabilities(context)
-            networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ?: false
+            val networkCapabilities = getNetworkCapabilities(context) ?: return false
+            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
         }
     }
 
     /**
      * Get wifi signal strength.
      *
-     * @param context context.
-     *  -1 when wifi is disconnected or unable,when wifi is connected,
-     *     the signal strength is represented by 0-4.
+     * Return [WIFIDBM.NOWIFICONNECT] when wifi is disconnected or unable or
+     * return [WIFIDBM.UNSPECIFIED] when can't get the strength of wifi.
+     *
+     * When the [Build.VERSION.SDK_INT] is under [Build.VERSION_CODES.S],the
+     * signal strength of [WIFIDBM.CURRENTDBM] is represented by
+     * 0-4, otherwise the signal strength of [WIFIDBM.CURRENTDBM]
+     * is represented by 0-[WifiManager.getMaxSignalLevel].
+     *
+     * @throws SecurityException Throw this exception if there is no
+     *     ACCESS_WIFI_STATE permission.
+     * @since 0.5.3
      */
     @JvmStatic
-    fun getWifiDBM(context: Context): Int {
-        if (!isWIFI(context)) return -1
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
-            val wifiManager =
-                context.applicationContext.getSystemService(AppCompatActivity.WIFI_SERVICE) as WifiManager
-            val info = wifiManager.connectionInfo
-            if (info.bssid != null) {
-                // Signal strength, 5 means the acquired signal strength value is within 5
-                return WifiManager.calculateSignalLevel(info.rssi, 5)
+    @kotlin.jvm.Throws(RuntimeException::class, SecurityException::class)
+    fun getWifiDBM(context: Context): WIFIDBM {
+        if (!isWIFI(context)) return WIFIDBM.NOWIFICONNECT
+        // See https://developer.android.com/reference/android/net/wifi/WifiManager#getConnectionInfo()
+        // for the deprecate information.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            if (ContextCompat.checkSelfPermission(context, ACCESS_WIFI_STATE) != PERMISSION_GRANTED) {
+                throw SecurityException("Please apply the permission ACCESS_WIFI_STATE.")
             }
+            val wifiManager = context.getWifiManager()
+            @Suppress("deprecation")
+            val rssi = wifiManager.connectionInfo.rssi
+            // Signal strength, 5 means the acquired signal strength value is within 5
+            return WIFIDBM.CURRENTDBM(wifiManager.calculateSignalLevelImpl(rssi, 5))
         } else {
-            val info = getNetworkCapabilities(context)
-            val wm =
-                context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-            if (null != info) {
-                return wm.calculateSignalLevel(info.signalStrength)
+            val wifiManager = context.getWifiManager()
+            val networkCapabilities = getNetworkCapabilities(context) ?: return WIFIDBM.UNSPECIFIED
+            // Get wifi dbm when using vpn.
+            // Must first check whether it is a VPN connection, otherwise an exception will
+            // occur android.net.VpnTransportInfo cannot be cast to android.net.wifi.WifiInfo.
+            if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)) {
+                var rssi = 0
+                val request = NetworkRequest.Builder()
+                    .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+                    .build()
+                val cm = context.getConnectivityManager()
+                val networkCallback = object : ConnectivityManager.NetworkCallback() {
+                    override fun onCapabilitiesChanged(
+                        network: Network,
+                        networkCapabilities: NetworkCapabilities
+                    ) {
+                        rssi = (networkCapabilities.transportInfo as WifiInfo).rssi
+                        cm.unregisterNetworkCallback(this)
+                    }
+                }
+                cm.registerNetworkCallback(request, networkCallback)
+                return WIFIDBM.CURRENTDBM(wifiManager.calculateSignalLevelImpl(rssi, 5))
             }
+            // Get wifi dbm when using wifi.
+            else if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                val wifiInfo = networkCapabilities.transportInfo as WifiInfo
+                return WIFIDBM.CURRENTDBM(wifiManager.calculateSignalLevelImpl(wifiInfo.rssi, 5))
+            } else return WIFIDBM.UNSPECIFIED
         }
-        return -1
     }
+
+    /**
+     * Calculate signal level implementation. Click
+     * [calculateSignalLevel](https://developer.android.com/reference/android/net/wifi/WifiManager#calculateSignalLevel(int,%20int))
+     * to get the deprecate information
+     *
+     * @param rssi The power of the signal measured in RSSI.
+     * @param numLevels Only useful when the [Build.VERSION.SDK_INT] is smaller
+     *     than 30.
+     * @since 0.5.3
+     */
+    private fun WifiManager.calculateSignalLevelImpl(rssi: Int, numLevels: Int) = when {
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.R ->
+            @Suppress("deprecation")
+            WifiManager.calculateSignalLevel(rssi, numLevels)
+
+        else ->
+            calculateSignalLevel(rssi)
+    }
+
+    /**
+     * Get [WifiManager].
+     *
+     * @since 0.5.3
+     */
+    private fun Context.getWifiManager(): WifiManager =
+        applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+
+    /**
+     * Get [ConnectivityManager].
+     *
+     * @since 0.5.3
+     */
+    private fun Context.getConnectivityManager(): ConnectivityManager =
+        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
 }
