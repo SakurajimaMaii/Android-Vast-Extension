@@ -17,12 +17,13 @@
 package com.ave.vastgui.tools.utils
 
 import android.content.res.Resources
+import android.os.Build
+import android.util.DisplayMetrics
 import android.util.TypedValue
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
-// Description: DensityUtils provide you with some methods to convert different dimensions.
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/density-utils/
 
 object DensityUtils {
@@ -53,26 +54,47 @@ object DensityUtils {
     /**
      * Converting px to sp.
      *
+     * The [DisplayMetrics.scaledDensity] is deprecate from
+     * [Build.VERSION_CODES.UPSIDE_DOWN_CAKE], click
+     * [scaledDensity](https://developer.android.com/reference/android/util/DisplayMetrics#scaledDensity)
+     * to get more information.
+     *
      * @param pxValue a px value.
      * @return a sp value.
      */
     @JvmStatic
-    fun px2sp(pxValue: Float): Float {
-        val fontScale = Resources.getSystem().displayMetrics.scaledDensity
-        return pxValue / fontScale
-    }
+    fun px2sp(pxValue: Float): Float =
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            @Suppress("DEPRECATION")
+            val fontScale = Resources.getSystem().displayMetrics.scaledDensity
+            pxValue / fontScale
+        } else TypedValue.deriveDimension(
+            TypedValue.COMPLEX_UNIT_SP,
+            pxValue,
+            Resources.getSystem().displayMetrics
+        )
+
 
     /**
      * Converting sp to px.
+     *
+     * The [DisplayMetrics.scaledDensity] is deprecate from
+     * [Build.VERSION_CODES.UPSIDE_DOWN_CAKE], click
+     * [scaledDensity](https://developer.android.com/reference/android/util/DisplayMetrics#scaledDensity)
+     * to get more information.
      *
      * @param spValue a sp value.
      * @return a px value.
      */
     @JvmStatic
-    fun sp2px(spValue: Float): Float {
-        val fontScale = Resources.getSystem().displayMetrics.scaledDensity
-        return spValue * fontScale
-    }
+    fun sp2px(spValue: Float): Float =
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            @Suppress("DEPRECATION")
+            val fontScale = Resources.getSystem().displayMetrics.scaledDensity
+            spValue * fontScale
+        } else {
+            spValue.SP
+        }
 
     /**
      * Converting dp to sp.
@@ -89,18 +111,29 @@ object DensityUtils {
     /**
      * Converting sp to dp.
      *
+     * The [DisplayMetrics.scaledDensity] is deprecate from
+     * [Build.VERSION_CODES.UPSIDE_DOWN_CAKE], click
+     * [scaledDensity](https://developer.android.com/reference/android/util/DisplayMetrics#scaledDensity)
+     * to get more information.
+     *
      * @param spValue a sp value.
      * @return a dp value.
      */
     @JvmStatic
-    fun sp2dp(spValue: Float): Float {
-        val fontScale = Resources.getSystem().displayMetrics.scaledDensity
-        return px2dp(spValue * fontScale)
-    }
+    fun sp2dp(spValue: Float): Float =
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            @Suppress("DEPRECATION")
+            val fontScale = Resources.getSystem().displayMetrics.scaledDensity
+            px2dp(spValue * fontScale)
+        } else TypedValue.deriveDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            spValue.SP,
+            Resources.getSystem().displayMetrics
+        )
 
     /**
-     * @return The complex floating point value multiplied by the
-     *     appropriate metrics(in density-independent pixels).
+     * @return The complex floating point value multiplied by the appropriate
+     *     metrics(in density-independent pixels).
      */
     @JvmStatic
     val Float.DP
@@ -111,8 +144,8 @@ object DensityUtils {
         )
 
     /**
-     * @return The complex floating point value multiplied by the
-     *     appropriate metrics(in scale-independent pixels).
+     * @return The complex floating point value multiplied by the appropriate
+     *     metrics(in scale-independent pixels).
      */
     @JvmStatic
     val Float.SP
@@ -123,8 +156,8 @@ object DensityUtils {
         )
 
     /**
-     * @return The complex floating point value multiplied by the
-     *     appropriate metrics(in pixels).
+     * @return The complex floating point value multiplied by the appropriate
+     *     metrics(in pixels).
      */
     @JvmStatic
     val Float.PX
@@ -135,8 +168,8 @@ object DensityUtils {
         )
 
     /**
-     * @return The complex floating point value multiplied by the
-     *     appropriate metrics(in points).
+     * @return The complex floating point value multiplied by the appropriate
+     *     metrics(in points).
      */
     @JvmStatic
     val Float.PT
@@ -147,8 +180,8 @@ object DensityUtils {
         )
 
     /**
-     * @return The complex floating point value multiplied by the
-     *     appropriate metrics(in inches).
+     * @return The complex floating point value multiplied by the appropriate
+     *     metrics(in inches).
      */
     @JvmStatic
     val Float.INCHES
@@ -159,8 +192,8 @@ object DensityUtils {
         )
 
     /**
-     * @return The complex floating point value multiplied by the
-     *     appropriate metrics(in millimeters).
+     * @return The complex floating point value multiplied by the appropriate
+     *     metrics(in millimeters).
      */
     @JvmStatic
     val Float.MM
@@ -169,4 +202,5 @@ object DensityUtils {
             this,
             Resources.getSystem().displayMetrics
         )
+
 }
