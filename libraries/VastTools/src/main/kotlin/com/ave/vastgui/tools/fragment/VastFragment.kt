@@ -23,6 +23,7 @@ import androidx.viewbinding.ViewBinding
 import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.network.response.ResponseBuilder
 import com.ave.vastgui.tools.network.response.getResponseBuilder
+import com.ave.vastgui.tools.lifecycle.createViewModel as viewModelInstance
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -99,7 +100,7 @@ abstract class VastFragment : Fragment() {
      * @return the [ViewModel] of the Activity or Fragment.
      */
     protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        return modelClass.newInstance()
+        return viewModelInstance(modelClass)
     }
 
 }

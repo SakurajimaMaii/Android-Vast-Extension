@@ -16,6 +16,7 @@
 
 package com.ave.vastgui.tools.lifecycle
 
+import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -28,9 +29,17 @@ import java.lang.reflect.Type
 // Date: 2023/3/4
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/lifecycle-aware-components/vm-reflection/
 
-/** Create a [ViewModel] object by [modelClass]. */
-private fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-    return modelClass.newInstance()
+/**
+ * Create a [ViewModel] object by [modelClass].
+ *
+ * Update default constructor instance method since 0.5.3 to adapt to
+ * SDK 34.
+ */
+internal fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
+    return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        @Suppress("DEPRECATION")
+        modelClass.newInstance()
+    } else modelClass.getDeclaredConstructor().newInstance()
 }
 
 /**
