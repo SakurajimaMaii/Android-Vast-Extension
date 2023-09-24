@@ -33,7 +33,7 @@ subprojects {
 }
 
 group = "io.github.sakurajimamaii"
-version = "0.0.5"
+version = "0.0.6"
 
 java {
     sourceCompatibility = Version.java_version
@@ -73,7 +73,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "VastCore"
-            version = "0.0.5"
+            version = "0.0.6"
 
             afterEvaluate {
                 from(components["java"])
