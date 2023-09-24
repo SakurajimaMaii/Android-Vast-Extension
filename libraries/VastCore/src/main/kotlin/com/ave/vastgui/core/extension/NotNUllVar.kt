@@ -22,7 +22,7 @@ import kotlin.reflect.KProperty
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/7/15
-// Documentation: https://ave.entropy2020.cn/documents/VastCore/extension/NotNUllVar/
+// Documentation: https://ave.entropy2020.cn/documents/VastCore/extension/not-null-variable/
 
 /**
  * Getting a non-null variable.

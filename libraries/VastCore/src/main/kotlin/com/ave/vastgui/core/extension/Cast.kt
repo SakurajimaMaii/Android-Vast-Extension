@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-@file:JvmName("Cast")
+@file:JvmName("CastKt")
 
 package com.ave.vastgui.core.extension
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/28 12:06
-// Documentation: https://ave.entropy2020.cn/documents/VastCore/extension/Cast/
+// Documentation: https://ave.entropy2020.cn/documents/VastCore/extension/cast/
 
 /**
  * Class cast.

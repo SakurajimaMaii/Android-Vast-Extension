@@ -21,7 +21,7 @@ package com.ave.vastgui.core.utils
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/28
-// Documentation: https://ave.entropy2020.cn/documents/VastCore/utils/Tuples/
+// Documentation: https://ave.entropy2020.cn/documents/VastCore/utils/tuples/
 
 /**
  * Represents a quadruple of values.

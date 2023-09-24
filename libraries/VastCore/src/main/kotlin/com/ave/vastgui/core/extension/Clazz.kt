@@ -21,7 +21,7 @@ package com.ave.vastgui.core.extension
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/6
-// Documentation: https://ave.entropy2020.cn/documents/VastCore/extension/DefaultLogTag/
+// Documentation: https://ave.entropy2020.cn/documents/VastCore/extension/defaultLogTag/
 
 /**
  * @return get the receiver class name as the default name for log tag.
