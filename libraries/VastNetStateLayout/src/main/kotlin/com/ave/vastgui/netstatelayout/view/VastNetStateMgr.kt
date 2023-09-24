@@ -27,7 +27,7 @@ import com.ave.vastgui.netstatelayout.interfaces.BaseNetStateListener
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2021/11/16
-// Documentation: https://ave.entropy2020.cn/documents/VastNetStateLayout/VastNetStateLayout/
+// Documentation: https://ave.entropy2020.cn/documents/VastNetStateLayout/usage/
 
 // show customized network error view
 const val CONTENT_STATE_SHOW_LOADING = 0X01
