@@ -14,34 +14,15 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity.adpexample.adapter;
+package com.ave.vastgui.app.activity.reflection
+
+import androidx.lifecycle.ViewModel
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/2/27
-// Description: 
-// Documentation:
-// Reference:
+// Date: 2023/2/24
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/lifecycle-aware-components/vm-reflection/
 
-import android.content.Context;
+class ReflectViewModel1 : ViewModel()
 
-import androidx.annotation.NonNull;
-
-import com.ave.vastgui.adapter.VastBindAdapter;
-import com.ave.vastgui.adapter.widget.AdapterItemWrapper;
-import com.ave.vastgui.app.BR;
-
-import java.util.List;
-
-public class BindAdapter1 extends VastBindAdapter {
-
-    public BindAdapter1(@NonNull List<AdapterItemWrapper<?>> mDataSource, @NonNull Context mContext) {
-        super(mDataSource, mContext);
-    }
-
-    @Override
-    public int setVariableId() {
-        return BR.item;
-    }
-
-}
+class ReflectViewModel2(val parameter: String) : ViewModel()

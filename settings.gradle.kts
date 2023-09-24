@@ -32,10 +32,9 @@ val libs = arrayOf(
         "VastTools",
         "VastJIntent",
         "VastJIntent-Annotation",
-        "VastJIntent-Processor"
+        "VastJIntent-Processor",
 )
 
 libs.forEach {
         include(":libraries:$it")
 }
-include(":libraries:VastTools-Compose")

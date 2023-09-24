@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity.adpexample.adapter
+package com.ave.vastgui.app.sharedpreferences
 
-import android.content.Context
-import com.ave.vastgui.adapter.VastBindListAdapter
-import com.ave.vastgui.app.BR
-import com.ave.vastgui.app.activity.adpexample.model.Person
-import com.ave.vastgui.app.activity.adpexample.model.PersonWrapper
-import com.ave.vastgui.app.activity.adpexample.widget.PersonDiffUtil
+import com.ave.vastgui.tools.sharedpreferences.SpEncrypted
+import com.ave.vastgui.tools.sharedpreferences.float
+import com.ave.vastgui.tools.sharedpreferences.string
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/1/21
-// Description: 
-// Documentation:
-// Reference:
+// Date: 2023/3/14
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/save-key-value-data/sp-encrypted/
 
-class BindListAdapterEx(context: Context) :
-    VastBindListAdapter<Person, PersonWrapper>(context, PersonDiffUtil()) {
+class SpEncryptedExample(name: String) {
 
-    override fun setVariableId(): Int {
-        return BR.item
+    private val sp by lazy{
+        SpEncrypted.getInstance(name).getSharedPreferences()
     }
+
+    // declare variables
+    var count by sp.float()
+
+    var name by sp.string("Hello")
 
 }

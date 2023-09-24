@@ -21,12 +21,10 @@ import com.ave.vastgui.core.extension.SingletonHolder
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/14
-// Description:
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastCore/extension/singleton-holder/
 
 class Singleton private constructor(name: String) {
 
-    companion object:SingletonHolder<Singleton,String>(::Singleton)
+    companion object : SingletonHolder<Singleton, String>(::Singleton)
 
 }

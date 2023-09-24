@@ -21,6 +21,7 @@ plugins {
     id("org.jetbrains.dokka") version "1.8.10"
     id("org.jetbrains.kotlin.jvm") version "1.8.10" apply false
     id("com.google.devtools.ksp") version "1.8.10-1.0.9" apply false
+    kotlin("plugin.serialization") version "1.8.10" apply false
 }
 
 buildscript {
@@ -31,7 +32,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:8.1.0-rc01")
+        classpath("com.android.tools.build:gradle:8.1.1")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
         classpath("org.jetbrains.dokka:dokka-base:1.8.10")
         classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.5.0.2730")

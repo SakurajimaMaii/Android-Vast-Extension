@@ -18,22 +18,20 @@ package com.ave.vastgui.app.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.ave.vastgui.tools.lifecycle.viewModel.VastViewModel
+import androidx.lifecycle.ViewModel
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/2/19
-// Description:
-// Documentation:
 
-class SampleSharedVM: VastViewModel() {
+class SampleSharedVM : ViewModel() {
 
-    private val _count:MutableLiveData<Int> = MutableLiveData(0)
+    private val _count: MutableLiveData<Int> = MutableLiveData(0)
 
-    val count:LiveData<Int>
+    val count: LiveData<Int>
         get() = _count
 
-    fun addOne(){
+    fun addOne() {
         _count.postValue(_count.value?.plus(1) ?: 0)
     }
 

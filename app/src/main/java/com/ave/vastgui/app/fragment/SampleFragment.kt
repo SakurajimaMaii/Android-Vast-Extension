@@ -24,11 +24,15 @@ import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.FragmentSampleBinding
 import com.ave.vastgui.app.viewmodel.SampleSharedVM
 import com.ave.vastgui.core.extension.defaultLogTag
-import com.ave.vastgui.tools.viewbinding.reflexViewBinding
+import com.ave.vastgui.tools.viewbinding.viewBinding
+
+// Author: SakurajimaMai
+// Email: guihy2019@gmail.com
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/fragment/
 
 class SampleFragment : Fragment(R.layout.fragment_sample) {
 
-    private val mBinding by reflexViewBinding(FragmentSampleBinding::bind)
+    private val mBinding by viewBinding(FragmentSampleBinding::bind)
 
     private val mViewModel by viewModels<SampleSharedVM>()
 

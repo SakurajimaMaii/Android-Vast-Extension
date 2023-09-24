@@ -1,4 +1,4 @@
-package com.ave.vastgui.app.activity.vbexample
+package com.ave.vastgui.app.activity.vbdelegate
 
 import android.os.Bundle
 import android.view.View
@@ -11,7 +11,7 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/11
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/Description/#fragment
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/vb-delegate/#fragment
 
 class VbFragment1 : Fragment(R.layout.fragment_sample) {
 

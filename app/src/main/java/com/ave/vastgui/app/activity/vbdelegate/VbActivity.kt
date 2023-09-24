@@ -1,21 +1,21 @@
-package com.ave.vastgui.app.activity.vbexample
+package com.ave.vastgui.app.activity.vbdelegate
 
 import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ave.vastgui.app.R
-import com.ave.vastgui.app.databinding.ActivityMyBinding
+import com.ave.vastgui.app.databinding.ActivityVbBinding
 import com.ave.vastgui.tools.viewbinding.viewBinding
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/11
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/Description/#activity
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/vb-delegate/#activity
 
 class VbActivity1 : ComponentActivity() {
 
-    private val mBinding by viewBinding(ActivityMyBinding::inflate)
+    private val mBinding by viewBinding(ActivityVbBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +32,7 @@ class VbActivity1 : ComponentActivity() {
 class VbActivity2 : Activity() {
 
     private val viewBindingProperty by lazy {
-        viewBinding(ActivityMyBinding::inflate)
+        viewBinding(ActivityVbBinding::inflate)
     }
     private val mBinding by viewBindingProperty
 
@@ -49,9 +49,9 @@ class VbActivity2 : Activity() {
 
 }
 
-class VbActivity3 : ComponentActivity(R.layout.activity_my) {
+class VbActivity3 : ComponentActivity(R.layout.activity_vb) {
 
-    private val mBinding by viewBinding(ActivityMyBinding::bind)
+    private val mBinding by viewBinding(ActivityVbBinding::bind)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,9 +65,9 @@ class VbActivity3 : ComponentActivity(R.layout.activity_my) {
 
 }
 
-class VbActivity4 : ComponentActivity(R.layout.activity_my) {
+class VbActivity4 : ComponentActivity(R.layout.activity_vb) {
 
-    private val mBinding by viewBinding(ActivityMyBinding::bind, R.id.activity_my_root)
+    private val mBinding by viewBinding(ActivityVbBinding::bind, R.id.activity_my_root)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

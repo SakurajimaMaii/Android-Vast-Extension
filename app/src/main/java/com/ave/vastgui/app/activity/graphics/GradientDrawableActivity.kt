@@ -33,23 +33,23 @@ class GradientDrawableActivity : VastVbActivity<ActivityGradientDrawableBinding>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val states = arrayOfNulls<IntArray>(6).apply {
-            set(0, intArrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled))
-            set(1, intArrayOf(android.R.attr.state_focused, android.R.attr.state_enabled))
-            set(2, intArrayOf(-android.R.attr.state_focused, android.R.attr.state_enabled))
-            set(3, intArrayOf(android.R.attr.state_focused))
-            set(4, intArrayOf(android.R.attr.state_window_focused))
-            set(5, intArrayOf())
-        }
+//        val states = arrayOfNulls<IntArray>(6).apply {
+//            set(0, intArrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled))
+//            set(1, intArrayOf(android.R.attr.state_focused, android.R.attr.state_enabled))
+//            set(2, intArrayOf(-android.R.attr.state_focused, android.R.attr.state_enabled))
+//            set(3, intArrayOf(android.R.attr.state_focused))
+//            set(4, intArrayOf(android.R.attr.state_window_focused))
+//            set(5, intArrayOf())
+//        }
 
-        val colorList = IntArray(6).apply {
-            set(0, colorHex2Int("#00F260"))
-            set(1, colorHex2Int("#FFFFFF"))
-            set(2, colorHex2Int("#0575E6"))
-            set(3, colorHex2Int("#FFFFFF"))
-            set(4, colorHex2Int("#EF3B36"))
-            set(5, colorHex2Int("#0575E6"))
-        }
+//        val colorList = IntArray(6).apply {
+//            set(0, colorHex2Int("#00F260"))
+//            set(1, colorHex2Int("#FFFFFF"))
+//            set(2, colorHex2Int("#0575E6"))
+//            set(3, colorHex2Int("#FFFFFF"))
+//            set(4, colorHex2Int("#EF3B36"))
+//            set(5, colorHex2Int("#0575E6"))
+//        }
 
         GradientDrawable().apply {
             shape = RECTANGLE

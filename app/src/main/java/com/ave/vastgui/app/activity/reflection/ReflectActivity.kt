@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity.reflectexample
+package com.ave.vastgui.app.activity.reflection
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ave.vastgui.app.activity.vbexample.VbAdapter2
-import com.ave.vastgui.app.activity.vbexample.persons
-import com.ave.vastgui.app.databinding.ActivityMyBinding
+import com.ave.vastgui.app.activity.vbdelegate.VbAdapter2
+import com.ave.vastgui.app.activity.vbdelegate.persons
+import com.ave.vastgui.app.databinding.ActivityReflectBinding
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/6/6
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/Reflect/
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/lifecycle-aware-components/Reflect/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/vb-reflection/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/lifecycle-aware-components/vm-reflection/
 
-class ReflectActivity1 : ReflectBaseActivity1<ActivityMyBinding, ReflectViewModel1>() {
+class ReflectActivity1 : ReflectBaseActivity1<ActivityReflectBinding, ReflectViewModel1>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +39,7 @@ class ReflectActivity1 : ReflectBaseActivity1<ActivityMyBinding, ReflectViewMode
 
 }
 
-class ReflectActivity2 : ReflectBaseActivity2<ActivityMyBinding, ReflectViewModel2>() {
+class ReflectActivity2 : ReflectBaseActivity2<ActivityReflectBinding, ReflectViewModel2>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

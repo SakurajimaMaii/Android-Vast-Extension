@@ -26,53 +26,53 @@
         android:id="@+id/callBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="call phone" />
+        android:text="@string/call_phone" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/searchWeb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="search web" />
+        android:text="@string/search_web" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/openWebPage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Open Web Page" />
+        android:text="@string/open_web_page" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/sendMmsMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Send Mms Message" />
+        android:text="@string/send_mms_message" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/sendEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Send Email" />
+        android:text="@string/send_email" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/createAlarm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create Alarm" />
+        android:text="@string/create_alarm" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/wifiSetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Wireless Setting" />
+        android:text="@string/wireless_setting" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/createShortcut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create shortcut" />
+        android:text="@string/create_shortcut" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/getQRCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Get QRCode" />
+        android:text="@string/get_qrcode" />
 </LinearLayout>

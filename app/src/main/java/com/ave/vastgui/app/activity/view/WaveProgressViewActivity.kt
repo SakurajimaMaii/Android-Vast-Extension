@@ -34,10 +34,10 @@ class WaveProgressViewActivity : AppCompatActivity() {
         mBindings.bottomSeekbar.addOnChangeListener{ _, value, _ ->
             mBindings.waveProgressView.setCurrentProgress(value)
         }
-        mBindings.setStrokeRatio.addOnChangeListener{ _, value, _ ->
+        mBindings.setStrokeRatio.addOnChangeListener{ _, _, _ ->
 //            mBindings.waveProgressView.setStrokeRatio(value)
         }
-        mBindings.setSpaceRatio.addOnChangeListener{ _, value, _ ->
+        mBindings.setSpaceRatio.addOnChangeListener{ _, _, _ ->
 //            mBindings.waveProgressView.setSpaceRatio(value)
         }
     }

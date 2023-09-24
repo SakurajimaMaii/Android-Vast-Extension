@@ -28,7 +28,7 @@ import com.ave.vastgui.tools.activity.app.VastCropActivity
 import com.ave.vastgui.tools.activity.result.contract.CropPhotoContract
 import com.ave.vastgui.tools.activity.result.contract.PickPhotoContract
 import com.ave.vastgui.tools.activity.result.contract.TakePhotoContract
-import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.content.ContextHelper
 import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.cropimage.CropIntent
@@ -37,6 +37,7 @@ import java.io.File
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/cropview/crop-view/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/intent/crop-intent/
 
 class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
 
@@ -58,10 +59,8 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
 
     private val cropIntentLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
-            val uri = res.data?.data
-            uri?.let {
-                getBinding().image.setImageURI(it)
-            }
+            val uri = res.data?.data ?: return@registerForActivityResult
+            getBinding().image.setImageURI(uri)
         }
 
     private val cropContractLauncher =
@@ -138,7 +137,10 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             output?.let {
                 ContextHelper.getAppContext()
-                    .revokeUriPermission(it, Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    .revokeUriPermission(
+                        it,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
             }
         }
     }

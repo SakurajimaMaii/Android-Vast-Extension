@@ -22,6 +22,10 @@ import com.ave.vastgui.app.databinding.FragmentSampleVbVmBinding
 import com.ave.vastgui.app.viewmodel.SampleSharedVM
 import com.ave.vastgui.tools.fragment.VastVbVmFragment
 
+// Author: SakurajimaMai
+// Email: guihy2019@gmail.com
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/fragment/
+
 class SampleVbVmFragment : VastVbVmFragment<FragmentSampleVbVmBinding, SampleSharedVM>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

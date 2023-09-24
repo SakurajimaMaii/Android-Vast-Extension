@@ -17,17 +17,15 @@
 package com.ave.vastgui.app.activity.log
 
 import android.os.Bundle
-import com.ave.vastgui.app.activity.adpexample.model.Person
 import com.ave.vastgui.app.databinding.ActivityLogBinding
 import com.ave.vastgui.app.viewmodel.SampleSharedVM
 import com.ave.vastgui.tools.activity.VastVbVmActivity
 import com.ave.vastgui.tools.activity.widget.screenConfig
-import com.ave.vastgui.tools.log.base.LogLevel
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/5
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/Description/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
 
 class LogActivity : VastVbVmActivity<ActivityLogBinding, SampleSharedVM>() {
 
@@ -39,8 +37,6 @@ class LogActivity : VastVbVmActivity<ActivityLogBinding, SampleSharedVM>() {
 
         getBinding().addOne.setOnClickListener {
             getViewModel().addOne()
-            logger.d("这是一条日志")
-            logger.json(LogLevel.DEBUG, Person("张三", "哈哈"))
         }
 
         getViewModel().count.observe(this) { count ->

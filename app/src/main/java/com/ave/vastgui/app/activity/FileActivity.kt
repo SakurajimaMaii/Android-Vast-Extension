@@ -45,44 +45,44 @@ class FileActivity : VastVbActivity<ActivityFileBinding>() {
 
         // 删除文件
         val delete = FileMgr.deleteFile(File(appExternalFilesDir(null).path, "save.txt"))
-        logger.i(getDefaultTag(), "文件删除结果${delete.isSuccess ?: "失败"}")
+        logger.i(getDefaultTag(), "文件删除结果${delete.getOrNull() ?: "失败"}")
 
         // 保存文件
         val save = FileMgr.saveFile(File(appExternalFilesDir(null).path, "save.txt"))
-        logger.i(getDefaultTag(), "文件保存结果${save.isSuccess ?: "失败"}")
+        logger.i(getDefaultTag(), "文件保存结果${save.getOrNull() ?: "失败"}")
 
         // 重命名文件
         val rename = FileMgr.rename(File(appInternalFilesDir().path, "save.txt"), "newname.txt")
-        logger.i(getDefaultTag(), "文件重命名结果${rename.isSuccess ?: "失败"}")
+        logger.i(getDefaultTag(), "文件重命名结果${rename.getOrNull() ?: "失败"}")
 
         // 创建文件夹
         val saveDir = makeDir(File(appInternalFilesDir().path + File.separator + "newDir"))
-        logger.i(getDefaultTag(), "文件夹创建结果${saveDir.isSuccess ?: "失败"}")
+        logger.i(getDefaultTag(), "文件夹创建结果${saveDir.getOrNull() ?: "失败"}")
 
         // 删除文件夹
         val deleteDir = deleteDir(File(appInternalFilesDir().path + File.separator + "newDir"))
-        logger.i(getDefaultTag(), "文件夹创建结果${deleteDir.isSuccess ?: "失败"}")
+        logger.i(getDefaultTag(), "文件夹创建结果${deleteDir.getOrNull() ?: "失败"}")
 
         // 复制文件
         val copyFile = copyFile(
             File(appInternalFilesDir().path, "newname.txt"),
             File(appInternalFilesDir().path, "newname_copy.txt")
         )
-        logger.i(getDefaultTag(), "文件复制结果${copyFile.isSuccess ?: "失败"}")
+        logger.i(getDefaultTag(), "文件复制结果${copyFile.getOrNull() ?: "失败"}")
 
         // 复制文件夹
         val copyDir = copyDir(
             File(appInternalFilesDir().path),
             File(appInternalFilesDir().path + File.separator + "newDir2")
         )
-        logger.i(getDefaultTag(), "文件夹复制结果${copyDir.isSuccess ?: "失败"}")
+        logger.i(getDefaultTag(), "文件夹复制结果${copyDir.getOrNull() ?: "失败"}")
 
         // 移动文件夹
         val moveDir = moveDir(
             File(appInternalFilesDir().path),
             "${appInternalFilesDir().path}${File.separator}moveDir"
         )
-        logger.i(getDefaultTag(), "文件夹移动结果${moveDir.isSuccess ?: "失败"}")
+        logger.i(getDefaultTag(), "文件夹移动结果${moveDir.getOrNull() ?: "失败"}")
 
         val moveFile = moveFile(
             File("${appInternalFilesDir().path}${File.separator}moveDir${File.separator}1.txt"),

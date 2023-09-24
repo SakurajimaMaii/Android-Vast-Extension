@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2022 VastGui guihy2019@gmail.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +14,16 @@
   ~ limitations under the License.
   -->
 
-<TextView android:id="@+id/tv_value"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_my_root"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:background="#dfe4ea"
-    android:layout_gravity="center"
-    android:textSize="20sp"
-    android:gravity="center"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    android:layout_height="match_parent"
+    tools:context="com.ave.vastgui.app.activity.reflection.ReflectActivity1">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/personRv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

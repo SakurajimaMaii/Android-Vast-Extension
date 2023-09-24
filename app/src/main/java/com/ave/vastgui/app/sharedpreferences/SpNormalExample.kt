@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity.adpexample.model;
+package com.ave.vastgui.app.sharedpreferences
+
+import com.ave.vastgui.tools.sharedpreferences.SpNormal
+import com.ave.vastgui.tools.sharedpreferences.float
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/2/27
-// Description: 
-// Documentation:
-// Reference:
+// Date: 2023/3/14
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/save-key-value-data/sp-normal/
 
-import com.ave.vastgui.adapter.widget.AdapterItemWrapper;
-import com.ave.vastgui.app.R;
+class SpNormalExample(name: String) {
 
-public class PersonWrapper extends AdapterItemWrapper<Person> {
-
-    public PersonWrapper(Person mData) {
-        super(mData, "Person", R.layout.item_bind_textview);
+    private val sp by lazy{
+        SpNormal.getInstance(name).getSharedPreferences()
     }
+
+    // declare variables
+    var count by sp.float()
 
 }

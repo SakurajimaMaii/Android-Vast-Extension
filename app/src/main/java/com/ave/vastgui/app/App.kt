@@ -22,8 +22,6 @@ import com.ave.vastgui.tools.config.ToolsConfig
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/6/20
-// Description: 
-// Documentation:
 
 class App: Application() {
 

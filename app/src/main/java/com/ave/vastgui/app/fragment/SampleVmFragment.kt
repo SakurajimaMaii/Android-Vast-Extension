@@ -27,6 +27,10 @@ import com.ave.vastgui.app.R
 import com.ave.vastgui.app.viewmodel.SampleSharedVM
 import com.google.android.material.textview.MaterialTextView
 
+// Author: SakurajimaMai
+// Email: guihy2019@gmail.com
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/fragment/
+
 class SampleVmFragment : Fragment() {
 
     private val mViewModel by viewModels<SampleSharedVM>({ requireActivity() })

@@ -33,7 +33,7 @@
             android:id="@+id/mailBoxAssociateView"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="请输入邮箱"
+            android:hint="@string/please_enter_email"
             android:padding="10dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -42,6 +42,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="你好世界，你好世界，你好世界"
+        android:text="@string/helloworld"
         android:textSize="30sp" />
 </LinearLayout>
