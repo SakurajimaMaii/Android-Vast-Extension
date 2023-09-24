@@ -14,27 +14,19 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.appcompose
+package com.ave.vastgui.appcompose.example.text
 
-import android.app.Application
-import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import com.ave.vastgui.tools.config.ToolsConfig
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import com.ave.vastgui.tools.text.Kmh
+import com.ave.vastgui.tools.text.withUnit
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/5/11
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/init/tools-config/
+// Date: 2023/7/15
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/text/unit-string/
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-
-class App : Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-        ToolsConfig.init(this)
-    }
-
+@Composable
+fun UnitString(){
+    Text(text = "12".withUnit(Kmh()))
 }

@@ -24,9 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/3
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/request-builder/
 
 class NetRequestBuilder : RequestBuilder("https://api.apiopen.top") {
 

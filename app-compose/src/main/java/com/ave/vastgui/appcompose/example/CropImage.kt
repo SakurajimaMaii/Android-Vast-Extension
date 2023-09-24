@@ -40,9 +40,7 @@ import com.ave.vastgui.tools.utils.cropimage.CropIntent
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/6/5
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/intent/crop-intent/
 
 @Composable
 fun CropImage(modifier: Modifier = Modifier) {

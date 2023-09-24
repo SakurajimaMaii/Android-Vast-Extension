@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.appcompose.example
+package com.ave.vastgui.appcompose.example.informationget
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -33,9 +33,7 @@ import com.ave.vastgui.tools.utils.AppUtils
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/5/31
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/app-utils/
 
 @Composable
 fun AppInfo() {

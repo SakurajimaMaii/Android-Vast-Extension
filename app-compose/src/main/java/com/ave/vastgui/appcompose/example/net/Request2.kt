@@ -35,9 +35,7 @@ import retrofit2.http.Query
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/6/2
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/request2/
 
 private data class Request2Response(
     val code: Int,

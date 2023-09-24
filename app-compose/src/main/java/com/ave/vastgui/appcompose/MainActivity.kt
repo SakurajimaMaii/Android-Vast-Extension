@@ -22,22 +22,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.ave.vastgui.appcompose.example.CropImage
 import com.ave.vastgui.appcompose.ui.theme.AndroidVastExtensionTheme
+import com.ave.vastgui.tools.utils.ScreenSizeUtils
 
 class MainActivity : ComponentActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -49,13 +48,18 @@ class MainActivity : ComponentActivity() {
                     val checkState = remember { mutableStateOf(false) }
                     val coroutineScope = rememberCoroutineScope()
 
+                    val a = ScreenSizeUtils.getMobileScreenWidth()
+                    val b = ScreenSizeUtils.getMobileScreenHeight()
+
+                    Text(text = "$a $b ${ScreenSizeUtils.getDensity()}")
+
 //                    Switch(checked = checkState.value, onCheckedChange = {
 //                        checkState.value = it
 //                        coroutineScope.launch {
 //                            dataStore.saveBoolean("isdark", it)
 //                        }
 //                    })
-                    CropImage(modifier = Modifier.fillMaxSize())
+//                    CropImage(modifier = Modifier.fillMaxSize())
                 }
             }
         }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.appcompose.example.image
+package com.ave.vastgui.appcompose.example.graphics.bitmap
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -34,16 +34,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ave.vastgui.appcompose.R
+import com.ave.vastgui.tools.graphics.BmpUtils
+import com.ave.vastgui.tools.graphics.MergeScale
 import com.ave.vastgui.tools.utils.DensityUtils.DP
-import com.ave.vastgui.tools.utils.image.BmpUtils
-import com.ave.vastgui.tools.utils.image.MergeScale
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/31
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/graphics/bitmap/bitmap/
 
 @Composable
 fun MergeBitmap() {

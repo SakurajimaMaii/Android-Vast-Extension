@@ -14,29 +14,24 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.appcompose.broadcastreceiver
+package com.ave.vastgui.appcompose.example.text
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import com.ave.vastgui.tools.utils.ToastUtils
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import com.ave.vastgui.tools.text.RwdStrength3
+import com.ave.vastgui.tools.text.isPwd
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/9/19 17:10
-// Description: 
-// Documentation:
+// Date: 2023/7/15
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/text/pwd-regex/
 
-class ShortcutReceiver: BroadcastReceiver() {
-
-    companion object{
-        const val CREATE_SHORT_CUT = "com.gcode.vastutils.SHORTCUT_ADDED"
+@Composable
+fun PwdRegex(){
+    val password = "852admin."
+    Column {
+        Text(text = "密码 $password 是否符合要求？")
+        Text(text = "${password.isPwd(RwdStrength3, shouldNotAppear = arrayOf("123","admin"))}")
     }
-
-    override fun onReceive(context: Context?, intent: Intent?) {
-        if(intent?.action == CREATE_SHORT_CUT){
-            ToastUtils.showShortMsg("快捷方式创建成功")
-        }
-    }
-
 }

@@ -16,7 +16,7 @@
 
 package com.ave.vastgui.appcompose.example.net
 
-import com.ave.vastgui.tools.lifecycle.viewModel.VastViewModel
+import androidx.lifecycle.ViewModel
 import com.ave.vastgui.tools.network.request.create
 import com.ave.vastgui.tools.network.response.ResponseLiveData
 import com.ave.vastgui.tools.network.response.ResponseMutableLiveData
@@ -24,11 +24,9 @@ import com.ave.vastgui.tools.network.response.ResponseMutableLiveData
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/2/22
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/response-livedata/
 
-class NetVM : VastViewModel() {
+class NetVM : ViewModel() {
 
     private val _requestResponse = ResponseMutableLiveData<RequestResponse>()
     val requestResponse: ResponseLiveData<RequestResponse>
@@ -39,7 +37,7 @@ class NetVM : VastViewModel() {
      *
      * @param timestamp 时间戳
      */
-    fun getRequestResponse_1(page: Int, size: Int) {
+    fun autoRequest(page: Int, size: Int) {
         NetRequestBuilder().create(RequestService::class.java)
             .getHaoKanVideo(page = page, size = size)
             .request(_requestResponse)
@@ -50,7 +48,7 @@ class NetVM : VastViewModel() {
      *
      * @param timestamp 时间戳
      */
-    fun getRequestResponse_2(page: Int, size: Int) {
+    fun manualRequest(page: Int, size: Int) {
         NetRequestBuilder().create(RequestService::class.java)
             .getHaoKanVideo(page = page, size = size)
             .request {

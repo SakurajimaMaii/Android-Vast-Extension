@@ -38,9 +38,8 @@ import retrofit2.http.Query
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/3
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/request/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/response-api/
 
 data class RequestResponse(
     val code: Int,
@@ -112,7 +111,7 @@ fun RequestWithVM(netVM: NetVM = viewModel()) {
 
     Button(
         onClick = {
-            netVM.getRequestResponse_1(page = 0, size = 2)
+            netVM.autoRequest(page = 0, size = 2)
         },
         modifier = Modifier.wrapContentHeight()
     ) {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.appcompose.example
+package com.ave.vastgui.appcompose.example.graphics
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

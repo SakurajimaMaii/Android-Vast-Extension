@@ -16,27 +16,22 @@
 
 package com.ave.vastgui.appcompose.example
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.ave.vastgui.tools.utils.ScreenSizeUtils
+import com.ave.vastgui.core.utils.Quadruple
+import com.ave.vastgui.core.utils.Quintuple
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/6/2
-// Description: 
-// Documentation:
-// Reference:
+// Date: 2023/7/24
+// Documentation: https://ave.entropy2020.cn/documents/VastCore/utils/tuples/
 
-@Composable
-fun ScreenInfo(modifier: Modifier = Modifier){
-    val height = ScreenSizeUtils.getMobileScreenHeight()
-    val width = ScreenSizeUtils.getMobileScreenWidth()
-    val orientation = ScreenSizeUtils.getScreenOrientation()
-    Column(modifier) {
-        Text(text = "屏幕高度 $height")
-        Text(text = "屏幕宽度 $width")
-        Text(text = "屏幕方向 $orientation")
-    }
+enum class Gender {
+    MAN,
+    WOMAN
+}
+
+private fun tuples() {
+    val student1 =
+        Quadruple("张", "三", 18, Gender.MAN)
+    val student2 =
+        Quintuple("张", "三", 18, Gender.WOMAN, "大学")
 }

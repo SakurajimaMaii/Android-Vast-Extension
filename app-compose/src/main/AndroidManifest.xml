@@ -14,38 +14,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidVastExtension">
-        <receiver
-            android:name=".broadcastreceiver.ShortcutReceiver"
-            android:exported="true"
-            android:permission="com.android.launcher.permission.INSTALL_SHORTCUT">
-            <intent-filter>
-                <action android:name="com.gcode.vastutils.SHORTCUT_ADDED" />
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
 
         <activity
             android:name=".example.net.NetActivity"
             android:exported="true"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.AndroidVastExtension">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.AndroidVastExtension">
             <!--            <intent-filter>-->
             <!--                <action android:name="android.intent.action.MAIN" />-->
 
             <!--                <category android:name="android.intent.category.LAUNCHER" />-->
             <!--            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AndroidVastExtension">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <!--            <meta-data android:name="android.app.shortcuts"-->
             <!--                android:resource="@xml/shortcuts" />-->
         </activity>
