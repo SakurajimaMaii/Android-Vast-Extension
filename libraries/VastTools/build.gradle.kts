@@ -18,6 +18,7 @@
 // https://cloud.tencent.com/developer/article/1839887
 // https://mp.weixin.qq.com/s/mVqShijGTExtQ_nLslchpQ
 
+import com.pluginversion.vastgui.AVE
 import com.pluginversion.vastgui.AndroidX
 import com.pluginversion.vastgui.Google
 import com.pluginversion.vastgui.Jetbrains
@@ -33,7 +34,6 @@ plugins {
     id("kotlin-kapt")
     id("org.jetbrains.kotlin.android")
     id("com.pluginversion.vastgui")
-    id("org.sonarqube") version "3.4.0.2513"
     id("convention.publication")
     id("org.jetbrains.dokka") version "1.8.10"
     kotlin("plugin.serialization")
@@ -86,7 +86,7 @@ android {
 dependencies {
     api(AndroidX.security_crypto)
     api(Libraries.zxing)
-    api(project(":libraries:VastCore"))
+    api(AVE.core)
     implementation(AndroidX.activity)
     implementation(AndroidX.activity_ktx)
     implementation(AndroidX.annotation)
@@ -139,7 +139,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "VastTools"
-            version = "0.5.2"
+            version = "0.5.3"
 
             afterEvaluate {
                 from(components["release"])
