@@ -37,15 +37,14 @@ import androidx.core.view.children
 import androidx.exifinterface.media.ExifInterface
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.databinding.CropLayoutBinding
-import com.ave.vastgui.tools.utils.ScreenSizeUtils
 import com.ave.vastgui.tools.graphics.BmpUtils
+import com.ave.vastgui.tools.utils.ScreenSizeUtils
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
 import com.ave.vastgui.tools.viewbinding.viewBinding
 import java.io.File
 import java.io.IOException
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
-
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -238,7 +237,7 @@ class CropViewLayout @JvmOverloads constructor(
         observer.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 initSrcPic(file)
-                mImageView.viewTreeObserver.removeGlobalOnLayoutListener(this)
+                mImageView.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
     }
@@ -546,7 +545,7 @@ class CropViewLayout @JvmOverloads constructor(
         )
         setCropFrameSize(mCropFrameWidth, mCropFrameHeight)
         typeArray.recycle()
-        if(isInEditMode){
+        if (isInEditMode) {
             mImageView.setImageResource(R.drawable.bg_demo_crop_view_image)
         }
     }
