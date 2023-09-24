@@ -23,13 +23,12 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import com.ave.vastgui.tools.helper.ContextHelper
-
+import com.ave.vastgui.tools.content.ContextHelper
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/23
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/intent/CropIntent/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/intent/crop-intent/
 
 class CropIntent : CropProperty() {
 
@@ -59,7 +58,6 @@ class CropIntent : CropProperty() {
         intent.putExtra("outputY", outputY)
     }
 
-    @Suppress("DEPRECATION")
     override fun setOutputUri(uri: Uri?) = apply {
         // In order to solve the problem of file file saving failure.
         // https://stackoverflow.com/questions/18249007/how-to-use-support-fileprovider-for-sharing-content-to-other-apps

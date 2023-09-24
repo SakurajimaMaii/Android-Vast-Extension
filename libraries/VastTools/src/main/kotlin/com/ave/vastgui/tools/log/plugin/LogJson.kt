@@ -24,9 +24,7 @@ import com.ave.vastgui.tools.log.json.Converter
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/8
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
 
 class LogJson private constructor(private val mConfiguration: Configuration) {
 

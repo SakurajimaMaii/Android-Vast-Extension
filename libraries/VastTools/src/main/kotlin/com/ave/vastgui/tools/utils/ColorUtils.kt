@@ -23,8 +23,7 @@ import androidx.annotation.IntRange
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
-// Description: ColorUtils Provides methods for converting between different formats of Color.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/ColorUtils/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/color-utils/
 
 object ColorUtils {
 
@@ -35,8 +34,7 @@ object ColorUtils {
     const val COLOR_PARSE_ERROR = 0
 
     /** Wrong result when converting color to RGB. */
-    @JvmField
-    val COLOR_RGB_ARRAY_ERROR = intArrayOf(-1, -1, -1)
+    val COLOR_RGB_ARRAY_ERROR = intArrayOf(-1, -1, -1, -1)
 
     /** Map of color transparency. */
     @JvmField

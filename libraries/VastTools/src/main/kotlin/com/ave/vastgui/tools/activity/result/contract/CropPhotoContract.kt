@@ -24,7 +24,7 @@ import android.os.Environment
 import android.os.Environment.DIRECTORY_PICTURES
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.content.FileProvider
-import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.content.ContextHelper
 import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
 import com.ave.vastgui.tools.utils.cropimage.CropIntent
 import java.io.File
@@ -32,7 +32,7 @@ import java.io.File
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/23
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/ActivityResult/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/activity-result/
 
 /**
  * Cropping photo.

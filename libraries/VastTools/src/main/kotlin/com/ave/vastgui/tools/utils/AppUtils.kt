@@ -26,13 +26,13 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.ave.vastgui.core.extension.cast
-import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.content.ContextHelper
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: Help you to get app information.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/AppUtils/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/app-utils/
 
 object AppUtils {
 

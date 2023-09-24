@@ -24,7 +24,7 @@ import android.widget.Toast.makeText
 import androidx.annotation.IntDef
 import androidx.annotation.StringRes
 import com.ave.vastgui.tools.config.ToolsConfig
-import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.content.ContextHelper
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

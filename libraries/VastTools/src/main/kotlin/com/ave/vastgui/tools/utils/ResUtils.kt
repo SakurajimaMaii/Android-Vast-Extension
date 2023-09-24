@@ -20,12 +20,12 @@ package com.ave.vastgui.tools.utils
 
 import android.content.Context
 import android.content.res.Resources
-import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.content.ContextHelper
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/6/19
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/ResUtils/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/resource-utils/
 
 /**
  * Using the context provided by [ContextHelper.getAppContext] and [method]

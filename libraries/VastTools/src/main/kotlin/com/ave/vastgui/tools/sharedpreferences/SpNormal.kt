@@ -19,20 +19,20 @@ package com.ave.vastgui.tools.sharedpreferences
 import android.content.Context
 import android.content.SharedPreferences
 import com.ave.vastgui.core.extension.SingletonHolder
-import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.content.ContextHelper
 
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/14
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/save-key-value-data/SpNormal/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/save-key-value-data/sp-normal/
 
 /**
  * Opens an instance of SharedPreferences.
  *
  * ```kotlin
  * // Declare your own SharedPreferences.
- * class NormalSp(name: String) {
+ * class SpNormalExample(name: String) {
  *
  *     // Get the SharedPreferences instance by SpNormal.getInstance().getSharedPreferences()
  *     private val sp by lazy{
@@ -45,7 +45,7 @@ import com.ave.vastgui.tools.helper.ContextHelper
  * }
  *
  * // Use it.
- * private val mSp by lazy { NormalSp(defaultLogTag()) }
+ * private val mSp by lazy { SpNormalExample(defaultLogTag()) }
  *
  * // Set values.
  * mSp.count = 1f

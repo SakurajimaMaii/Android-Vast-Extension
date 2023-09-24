@@ -21,12 +21,12 @@ package com.ave.vastgui.tools.utils
 import android.content.Context
 import android.location.LocationManager
 import com.ave.vastgui.core.extension.cast
-import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.content.ContextHelper
 
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
 // Date: 2022/4/13 17:41
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/hardware/GPSUtils/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/hardware/gps-utils/
 
 /**
  * Determine if GPS is turned on.

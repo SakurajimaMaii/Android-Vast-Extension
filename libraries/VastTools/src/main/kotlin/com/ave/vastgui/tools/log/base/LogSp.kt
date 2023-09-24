@@ -23,9 +23,7 @@ import com.ave.vastgui.tools.sharedpreferences.string
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/9
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
 
 /**
  * Log SharedPreferences.

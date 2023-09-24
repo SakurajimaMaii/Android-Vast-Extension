@@ -28,13 +28,13 @@ import android.view.WindowMetrics
 import androidx.annotation.RequiresApi
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.content.ContextHelper
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: Help you to get the width and height of screen.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/ScreenSizeUtils/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/screen-size-utils/
 
 object ScreenSizeUtils {
 

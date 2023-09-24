@@ -23,7 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/25
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/ActivityResult/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/activity-result/
 
 class GetMediaFileContract : ActivityResultContracts.GetContent() {
 

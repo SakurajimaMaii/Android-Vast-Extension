@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.helper
+package com.ave.vastgui.tools.content
 
 import android.app.Application
 import android.content.Context
@@ -22,7 +22,7 @@ import android.content.Context
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/6/20
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ContextHelper/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/context-helper/
 
 /**
  * Help utils to get context.
@@ -38,8 +38,8 @@ object ContextHelper{
      */
     @JvmStatic
     internal fun init(application: Application){
-        if(!::application.isInitialized){
-            this.application = application
+        if(!ContextHelper::application.isInitialized){
+            ContextHelper.application = application
         }
     }
 
@@ -50,7 +50,7 @@ object ContextHelper{
      */
     @JvmStatic
     fun getApp():Application =
-        if (!::application.isInitialized){
+        if (!ContextHelper::application.isInitialized){
             throw UninitializedPropertyAccessException("application is not init, please call ToolsConfig.init()")
         } else application
 
@@ -61,7 +61,7 @@ object ContextHelper{
      */
     @JvmStatic
     fun getAppContext(): Context =
-        if (!::application.isInitialized){
+        if (!ContextHelper::application.isInitialized){
             throw UninitializedPropertyAccessException("application is not init, please call ToolsConfig.init()")
         } else application.applicationContext
 

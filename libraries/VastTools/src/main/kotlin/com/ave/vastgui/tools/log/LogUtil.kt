@@ -27,8 +27,7 @@ import com.ave.vastgui.tools.utils.AppUtils.getAppDebug
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
-// Description: A log utils.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/Description/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
 
 /**
  * LogUtils.

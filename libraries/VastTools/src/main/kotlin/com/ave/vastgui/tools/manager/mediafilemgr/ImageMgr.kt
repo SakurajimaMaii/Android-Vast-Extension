@@ -26,7 +26,7 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.ave.vastgui.core.extension.defaultLogTag
-import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.content.ContextHelper
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.utils.DateUtils
 import com.ave.vastgui.tools.utils.DateUtils.FORMAT_YYYY_MM_DD_HH_MM_SS
@@ -35,7 +35,7 @@ import java.io.File
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/21
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/file-manager/MediaFileMgr/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/file-manager/media-file-mgr/
 
 object ImageMgr : MediaFileMgr() {
 

@@ -23,7 +23,7 @@ import android.util.TypedValue
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: DensityUtils provide you with some methods to convert different dimensions.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/DensityUtils/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/density-utils/
 
 object DensityUtils {
     /**

@@ -19,7 +19,7 @@ package com.ave.vastgui.tools.manager.filemgr
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
-import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.content.ContextHelper
 import java.io.File
 import java.util.Locale
 

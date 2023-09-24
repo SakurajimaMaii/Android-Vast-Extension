@@ -26,8 +26,7 @@ import com.ave.vastgui.tools.lifecycle.reflectViewModel
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 16:18
-// Description: Please make sure that the fragment extends VastVmFragment when the fragment using viewModel.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/Fragment/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/fragment/
 
 /**
  * VastVmActivity.

@@ -30,7 +30,7 @@ import androidx.annotation.IntRange
 import androidx.core.content.ContextCompat
 import com.ave.vastgui.tools.graphics.MergeScale.BIG_REDUCE
 import com.ave.vastgui.tools.graphics.MergeScale.SMALL_ENLARGE
-import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.content.ContextHelper
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import java.io.File
 import java.io.FileOutputStream

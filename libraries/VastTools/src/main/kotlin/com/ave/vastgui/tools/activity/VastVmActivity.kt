@@ -26,8 +26,7 @@ import com.google.android.material.snackbar.Snackbar
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 16:14
-// Description: Please make sure that the activity extends VastVmActivity when the activity using viewModel.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/Activity/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/activity/
 
 /**
  * VastVmActivity.

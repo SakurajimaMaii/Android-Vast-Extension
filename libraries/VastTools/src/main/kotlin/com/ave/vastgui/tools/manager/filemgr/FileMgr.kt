@@ -20,7 +20,7 @@ import android.content.Context
 import android.os.Environment
 import androidx.security.crypto.EncryptedFile
 import com.ave.vastgui.tools.config.ToolsConfig
-import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.content.ContextHelper
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream

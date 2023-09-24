@@ -20,19 +20,19 @@ import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import com.ave.vastgui.core.extension.SingletonHolder
 import com.ave.vastgui.tools.config.ToolsConfig
-import com.ave.vastgui.tools.helper.ContextHelper
+import com.ave.vastgui.tools.content.ContextHelper
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/14
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/save-key-value-data/SpEncrypted/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/save-key-value-data/sp-encrypted/
 
 /**
  * Opens an instance of encrypted SharedPreferences.
  *
  * ```kotlin
  * // Declare your own SharedPreferences.
- * class EncryptedSp(name: String) {
+ * class SpEncryptedExample(name: String) {
  *
  *     // Get the SharedPreferences instance by SpEncrypted.getInstance().getSharedPreferences()
  *     private val sp by lazy{
@@ -45,7 +45,7 @@ import com.ave.vastgui.tools.helper.ContextHelper
  * }
  *
  * // Use it.
- * private val mSp by lazy { EncryptedSp(defaultLogTag()) }
+ * private val mSp by lazy { SpEncryptedExample(defaultLogTag()) }
  *
  * // Set values.
  * mSp.count = 1f
