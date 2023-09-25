@@ -16,6 +16,26 @@
 
 <resources>
 
+    <declare-styleable name="Avatar">
+        <attr name="avatar_size" format="dimension|reference" />
+        <attr name="avatar_src" format="reference" />
+        <attr name="avatar_mode" format="enum">
+            <enum name="circle" value="0" />
+            <enum name="round" value="1" />
+        </attr>
+        <!-- The background color for avatar image display is not set. -->
+        <attr name="avatar_background" format="color|reference" />
+        <!-- The text for avatar image display is not set. -->
+        <attr name="avatar_text" format="string|reference" />
+        <attr name="avatar_text_size" format="dimension|reference" />
+        <attr name="avatar_text_color" format="color|reference" />
+        <!-- The stroke for avatar image. -->
+        <attr name="avatar_stroke_width" format="dimension|reference" />
+        <attr name="avatar_stroke_color" format="color|reference" />
+        <!-- The corner radius. -->
+        <attr name="avatar_corner_radius" format="color|reference" />
+    </declare-styleable>
+
     <declare-styleable name="BadgeView">
         <attr name="badge_mode" format="enum">
             <enum name="dot" value="0" />
@@ -204,6 +224,7 @@
     </declare-styleable>
 
     <!-- Theme default style. -->
+    <attr name="Default_Avatar_Style" format="reference" />
     <attr name="Default_BadgeView_Style" format="reference" />
     <attr name="Default_BadgeLayout_Style" format="reference" />
     <attr name="Default_CropView_Style" format="reference" />

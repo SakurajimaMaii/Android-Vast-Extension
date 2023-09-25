@@ -15,6 +15,8 @@
   -->
 
 <resources>
+    <!-- See Avatar -->
+    <integer name="default_avatar_mode">0</integer>
     <!-- See RatingView -->
     <integer name="default_rating_star_rating">0</integer>
     <integer name="default_rating_star_count">5</integer>

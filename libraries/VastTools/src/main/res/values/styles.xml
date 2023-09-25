@@ -16,6 +16,17 @@
 
 <resources>
 
+    <style name="BaseAvatar">
+        <item name="avatar_size">@dimen/default_avatar_size</item>
+        <item name="avatar_mode">@integer/default_avatar_mode</item>
+        <item name="avatar_background">@color/md_theme_primary</item>
+        <item name="avatar_text_size">@dimen/default_avatar_text_size</item>
+        <item name="avatar_text_color">@color/md_theme_onPrimary</item>
+        <item name="avatar_stroke_width">@dimen/default_avatar_stroke_width</item>
+        <item name="avatar_stroke_color">@color/md_theme_primaryContainer</item>
+        <item name="avatar_corner_radius">@dimen/default_avatar_corner_radius</item>
+    </style>
+
     <style name="BaseBadgeView">
         <item name="badge_color">@color/md_theme_error</item>
         <item name="bubble_radius">10dp</item>
