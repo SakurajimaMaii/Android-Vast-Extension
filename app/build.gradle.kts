@@ -112,11 +112,11 @@ android {
 
 }
 
-project(":app") {
-    sonarqube {
-        this.isSkipProject = true
-    }
-}
+//project(":app") {
+//    sonarqube {
+//        this.isSkipProject = true
+//    }
+//}
 
 dependencies {
     implementation(AndroidX.activity_ktx)

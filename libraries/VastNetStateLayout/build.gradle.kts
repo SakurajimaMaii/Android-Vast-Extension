@@ -25,7 +25,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.pluginversion.vastgui")
     id("convention.publication")
-    id("org.jetbrains.dokka") version "1.8.10"
+    id("org.jetbrains.dokka")
 }
 
 android {

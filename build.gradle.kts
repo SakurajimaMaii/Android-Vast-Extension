@@ -16,12 +16,12 @@
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id("org.sonarqube") version "3.4.0.2513"
-    id("org.jetbrains.kotlin.android") version "1.8.10" apply false
-    id("org.jetbrains.dokka") version "1.8.10"
-    id("org.jetbrains.kotlin.jvm") version "1.8.10" apply false
-    id("com.google.devtools.ksp") version "1.8.10-1.0.9" apply false
-    kotlin("plugin.serialization") version "1.8.10" apply false
+//    id("org.sonarqube") version "3.4.0.2513"
+    id("org.jetbrains.kotlin.android") version "1.9.0" apply false
+    id("org.jetbrains.dokka") version "1.9.0"
+    id("org.jetbrains.kotlin.jvm") version "1.9.0" apply false
+    id("com.google.devtools.ksp") version "1.9.0-1.0.13" apply false
+    kotlin("plugin.serialization") version "1.9.0" apply false
 }
 
 buildscript {
@@ -33,9 +33,9 @@ buildscript {
 
     dependencies {
         classpath("com.android.tools.build:gradle:8.1.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
-        classpath("org.jetbrains.dokka:dokka-base:1.8.10")
-        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.5.0.2730")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0")
+        classpath("org.jetbrains.dokka:dokka-base:1.9.0")
+//        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.5.0.2730")
     }
 }
 
@@ -48,15 +48,15 @@ allprojects {
     }
 }
 
-sonarqube {
-    properties {
-        property("sonar.sourceEncoding", "UTF-8")
-        property("sonar.projectKey", "VastUtils")
-        property("sonar.projectName", project.name)
-        property("sonar.sources", "src")
-        property("sonar.projectVersion", project.version)
-    }
-}
+//sonarqube {
+//    properties {
+//        property("sonar.sourceEncoding", "UTF-8")
+//        property("sonar.projectKey", "VastUtils")
+//        property("sonar.projectName", project.name)
+//        property("sonar.sources", "src")
+//        property("sonar.projectVersion", project.version)
+//    }
+//}
 
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
