@@ -16,18 +16,12 @@
 
 package com.ave.vastgui.app.activity.view
 
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.view.View
 import androidx.activity.ComponentActivity
 import com.ave.vastgui.app.R
-import com.ave.vastgui.app.activity.log.mLogFactory
 import com.ave.vastgui.app.databinding.ActivityBadgeViewBinding
 import com.ave.vastgui.core.extension.NotNUllVar
-import com.ave.vastgui.tools.graphics.BmpUtils
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.viewbinding.viewBinding
-import java.io.File
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -35,8 +29,6 @@ import java.io.File
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/badge/description/
 
 class BadgeViewActivity : ComponentActivity(R.layout.activity_badge_view) {
-
-    private val logger = mLogFactory.getLog(BadgeViewActivity::class.java)
 
     private val mBinding by viewBinding(ActivityBadgeViewBinding::bind)
 
@@ -56,28 +48,11 @@ class BadgeViewActivity : ComponentActivity(R.layout.activity_badge_view) {
 
         mBinding.showDot.setOnClickListener {
             mBinding.dotbadge.showDot()
-            BmpUtils.saveBitmapAsFile(
-                bitmap = viewSnapshot(mBinding.dotbadge),
-                File(FileMgr.appInternalFilesDir(),"Dot_Badge_Show.png")
-            )
         }
 
         mBinding.hideDot.setOnClickListener {
             mBinding.dotbadge.hideDot()
         }
     }
-
-    private fun viewSnapshot(view: View): Bitmap {
-        //使控件可以进行缓存
-        view.isDrawingCacheEnabled = true
-        //获取缓存的 Bitmap
-        var drawingCache = view.drawingCache
-        //复制获取的 Bitmap
-        drawingCache = Bitmap.createBitmap(drawingCache!!)
-        //关闭视图的缓存
-        view.isDrawingCacheEnabled = false
-        return drawingCache
-    }
-
 
 }
