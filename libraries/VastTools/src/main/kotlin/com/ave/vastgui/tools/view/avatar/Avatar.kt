@@ -22,6 +22,9 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
@@ -29,21 +32,35 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.IntDef
 import androidx.annotation.StyleRes
 import androidx.core.content.res.getResourceIdOrThrow
-import androidx.core.graphics.withSave
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.graphics.BmpUtils
-import com.ave.vastgui.tools.utils.DensityUtils.DP
 import java.io.File
 import java.io.FileInputStream
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/25
-// Description: 
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/avatar/avatar/
 // Reference: https://github.com/jhbxyz/ArticleRecord/blob/master/articles/%E8%87%AA%E5%AE%9A%E4%B9%89View/2%E5%9C%86%E5%BD%A2%E5%A4%B4%E5%83%8F.md
 
+/**
+ * Avatar.
+ *
+ * @property mShape The Shape of avatar. Current support circle and round
+ *     rectangle.
+ * @property mAvatarSize The avatar size of avatar.
+ * @property mAvatar The bitmap of the avatar image.
+ * @property mBackground The color shown when the [mAvatar] is null.
+ * @property mText The text shown when the [mAvatar] is null.
+ * @property mTextSize The text size shown when the [mAvatar] is null.
+ * @property mTextColor The text color shown when the [mAvatar] is null.
+ * @property mStrokeWidth The stroke width of avatar.
+ * @property mStrokeColor The stroke color of avatar.
+ * @property mCornerRadius The corner radius of avatar when the shape is
+ *     SHAPE_ROUND_CORNER.
+ * @since 0.5.4
+ */
 class Avatar @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -52,18 +69,13 @@ class Avatar @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
     companion object {
-        const val MODE_CIRCLE = 0
-        const val MODE_ROUND_CORNER = 1
+        const val SHAPE_CIRCLE = 0
+        const val SHAPE_ROUND_CORNER = 1
     }
 
-    @IntDef(
-        flag = true, value = [
-            MODE_CIRCLE,
-            MODE_ROUND_CORNER
-        ]
-    )
+    @IntDef(flag = true, value = [SHAPE_CIRCLE, SHAPE_ROUND_CORNER])
     @Retention(AnnotationRetention.SOURCE)
-    annotation class Mode
+    annotation class SHAPE
 
     private val mDefaultText = "A"
     private val mDefaultAvatarSize =
@@ -75,8 +87,11 @@ class Avatar @JvmOverloads constructor(
     private val mDefaultCornerRadius =
         resources.getDimension(R.dimen.default_avatar_corner_radius)
 
+    private val mXfermodeSrcIn =
+        PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
     private val mAvatarPath = Path()
-    private val mAvatarRectF = RectF()
+    private val mAvatarSrcRect = Rect()
+    private val mAvatarDstRectF = RectF()
     private val mAvatarPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
@@ -86,12 +101,11 @@ class Avatar @JvmOverloads constructor(
         style = Paint.Style.STROKE
     }
 
-    @get:Mode
-    var mMode: Int = MODE_CIRCLE
+    @get:SHAPE
+    var mShape: Int = SHAPE_CIRCLE
         private set
 
-    var mAvatarSize: Float = 60f.DP
-        private set
+    var mAvatarSize: Float = mDefaultAvatarSize
 
     var mAvatar: Bitmap? = null
         private set
@@ -103,7 +117,6 @@ class Avatar @JvmOverloads constructor(
         get() = mBackgroundPaint.color
 
     var mText by NotNUllVar<String>()
-        private set
 
     var mTextSize: Float
         set(value) {
@@ -132,75 +145,89 @@ class Avatar @JvmOverloads constructor(
     var mCornerRadius: Float = mDefaultCornerRadius
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val neededWidth = if (mMode == MODE_ROUND_CORNER) mAvatarSize + mStrokeWidth else mAvatarSize
-        val neededHeight = if (mMode == MODE_ROUND_CORNER) mAvatarSize + mStrokeWidth else mAvatarSize
+        val neededWidth = mAvatarSize + mStrokeWidth
+        val neededHeight = mAvatarSize + mStrokeWidth
         val width = resolveSize(neededWidth.toInt(), widthMeasureSpec)
         val height = resolveSize(neededHeight.toInt(), heightMeasureSpec)
         val textSize = mTextPaint.textSize
         mTextPaint.textSize = textSize.coerceAtMost(width * 0.7f)
-        when (mMode) {
-            MODE_CIRCLE -> mAvatarPath.addCircle(
+        mCornerRadius = mCornerRadius.coerceAtMost(width * 0.5f)
+        setMeasuredDimension(width, height)
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        mAvatarDstRectF.set(
+            (measuredWidth - mAvatarSize) / 2f,
+            (measuredHeight - mAvatarSize) / 2f,
+            (measuredWidth + mAvatarSize) / 2f,
+            (measuredHeight + mAvatarSize) / 2f
+        )
+        mAvatarSrcRect.set(0, 0, mAvatarSize.toInt(), mAvatarSize.toInt())
+        when (mShape) {
+            SHAPE_CIRCLE -> mAvatarPath.addCircle(
                 width / 2f,
                 height / 2f,
                 mAvatarSize / 2f,
                 Path.Direction.CW
             )
 
-            MODE_ROUND_CORNER -> {
-                mAvatarRectF.set(
-                    (width - mAvatarSize) / 2f,
-                    (height - mAvatarSize) / 2f,
-                    (width + mAvatarSize) / 2f,
-                    (height + mAvatarSize) / 2f
+            SHAPE_ROUND_CORNER -> {
+                mAvatarPath.addRoundRect(
+                    mAvatarDstRectF,
+                    mCornerRadius,
+                    mCornerRadius,
+                    Path.Direction.CW
                 )
-                mAvatarPath.addRoundRect(mAvatarRectF, mCornerRadius, mCornerRadius, Path.Direction.CW)
             }
         }
-        setMeasuredDimension(width, height)
-    }
-
-    override fun onDraw(canvas: Canvas) {
+        canvas.drawPath(mAvatarPath, mStrokePaint)
         if (null != mAvatar) {
-            canvas.drawPath(mAvatarPath, mStrokePaint)
-            canvas.withSave {
-                clipPath(mAvatarPath)
-                drawBitmap(
-                    mAvatar!!,
-                    (measuredWidth - mAvatarSize) / 2f,
-                    (measuredHeight - mAvatarSize) / 2f,
-                    mAvatarPaint
-                )
+            canvas.apply {
+                val count = saveLayer(mAvatarDstRectF, null)
+                drawPath(mAvatarPath, mAvatarPaint)
+                mAvatarPaint.xfermode = mXfermodeSrcIn
+                // Use public void drawBitmap(@NonNull Bitmap bitmap, @Nullable Rect src,
+                // @NonNull RectF dst, @Nullable Paint paint)
+                // Because this function ignores the density associated with the bitmap.
+                // This is because the source and destination rectangle coordinate spaces
+                // are in their respective densities, so must already have the appropriate
+                // scaling factor applied.
+                drawBitmap(mAvatar!!, mAvatarSrcRect, mAvatarDstRectF, mAvatarPaint)
+                mAvatarPaint.xfermode = null
+                restoreToCount(count)
             }
         } else {
-            when (mMode) {
-                MODE_CIRCLE -> canvas.drawCircle(
+            when (mShape) {
+                SHAPE_CIRCLE -> canvas.drawCircle(
                     measuredWidth / 2f,
                     measuredHeight / 2f,
                     mAvatarSize / 2f,
                     mBackgroundPaint
                 )
 
-                MODE_ROUND_CORNER -> canvas.drawRoundRect(
-                    mAvatarRectF, mCornerRadius, mCornerRadius, mBackgroundPaint
+                SHAPE_ROUND_CORNER -> canvas.drawRoundRect(
+                    mAvatarDstRectF, mCornerRadius, mCornerRadius, mBackgroundPaint
                 )
             }
 
             canvas.drawText(
-                mDefaultText,
+                mText,
                 measuredWidth / 2f,
                 measuredHeight / 2f + getBaseLine(),
                 mTextPaint
             )
         }
+        mAvatarPath.reset()
     }
 
+
     /**
-     * Set mode.
+     * Set shape of avatar.
      *
      * @since 0.5.4
      */
-    fun setMode(@Mode mode: Int) {
-        mMode = mode
+    fun setShape(@SHAPE shape: Int) {
+        mShape = shape
     }
 
     /**
@@ -271,8 +298,8 @@ class Avatar @JvmOverloads constructor(
         } catch (exception: Exception) {
             null
         }
-        mMode =
-            typeArray.getInteger(R.styleable.Avatar_avatar_mode, MODE_CIRCLE)
+        mShape =
+            typeArray.getInt(R.styleable.Avatar_avatar_shape, SHAPE_CIRCLE)
         mBackground =
             typeArray.getColor(
                 R.styleable.Avatar_avatar_background,

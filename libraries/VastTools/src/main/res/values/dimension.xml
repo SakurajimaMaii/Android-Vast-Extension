@@ -20,6 +20,8 @@
     <dimen name="default_avatar_text_size">15sp</dimen>
     <dimen name="default_avatar_stroke_width">4dp</dimen>
     <dimen name="default_avatar_corner_radius">5dp</dimen>
+    <!-- See AvatarGroup -->
+    <dimen name="default_avatar_overlap_distance">10dp</dimen>
     <!-- See CropViewLayout CropView -->
     <dimen name="default_crop_frame_width">200dp</dimen>
     <!-- See CropViewLayout CropView -->

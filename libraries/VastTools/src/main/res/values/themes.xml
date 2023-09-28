@@ -64,6 +64,7 @@
         <item name="colorPrimaryInverse">@color/md_theme_inversePrimary</item>
 
         <item name="Default_Avatar_Style">@style/BaseAvatar</item>
+        <item name="Default_AvatarGroup_Style">@style/BaseAvatarGroup</item>
         <item name="Default_BadgeView_Style">@style/BaseBadgeView</item>
         <item name="Default_BadgeLayout_Style">@style/BaseBadgeLayout</item>
         <item name="Default_CropView_Style">@style/BaseCropView</item>

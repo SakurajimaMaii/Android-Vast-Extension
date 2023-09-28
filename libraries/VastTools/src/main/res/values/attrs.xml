@@ -19,7 +19,7 @@
     <declare-styleable name="Avatar">
         <attr name="avatar_size" format="dimension|reference" />
         <attr name="avatar_src" format="reference" />
-        <attr name="avatar_mode" format="enum">
+        <attr name="avatar_shape" format="enum">
             <enum name="circle" value="0" />
             <enum name="round" value="1" />
         </attr>
@@ -33,7 +33,20 @@
         <attr name="avatar_stroke_width" format="dimension|reference" />
         <attr name="avatar_stroke_color" format="color|reference" />
         <!-- The corner radius. -->
-        <attr name="avatar_corner_radius" format="color|reference" />
+        <attr name="avatar_corner_radius" format="dimension|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="AvatarGroup">
+        <attr name="avatar_size" />
+        <attr name="avatar_shape" />
+        <attr name="avatar_text_size" />
+        <attr name="avatar_stroke_width" />
+        <attr name="avatar_corner_radius" />
+        <attr name="avatar_overlap_from" format="enum">
+            <enum name="start" value="0" />
+            <enum name="end" value="1" />
+        </attr>
+        <attr name="avatar_overlap_distance" format="dimension|reference" />
     </declare-styleable>
 
     <declare-styleable name="BadgeView">
@@ -225,6 +238,7 @@
 
     <!-- Theme default style. -->
     <attr name="Default_Avatar_Style" format="reference" />
+    <attr name="Default_AvatarGroup_Style" format="reference" />
     <attr name="Default_BadgeView_Style" format="reference" />
     <attr name="Default_BadgeLayout_Style" format="reference" />
     <attr name="Default_CropView_Style" format="reference" />
