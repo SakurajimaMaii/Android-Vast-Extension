@@ -14,21 +14,15 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/item_textview_root"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="200dp"
+    android:background="@color/cornflowerblue">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/firstName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/lastName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center" />
-</LinearLayout>
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textSize="20sp" />
+</FrameLayout>
