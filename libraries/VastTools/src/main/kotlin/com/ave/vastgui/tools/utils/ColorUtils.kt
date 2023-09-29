@@ -247,11 +247,9 @@ object ColorUtils {
         @IntRange(from = 0, to = 100) transparency: Int,
         colorInt: Int
     ): String {
-        val color = if (Color.alpha(colorInt) != 255) {
-            Color.rgb(Color.red(colorInt), Color.green(colorInt), Color.blue(colorInt))
-        } else colorInt
+        val color = Color.rgb(Color.red(colorInt), Color.green(colorInt), Color.blue(colorInt))
         val colorHex = colorInt2Hex(color)
-        return StringBuilder(colorHex).insert(1, ColorTransparency[transparency]).toString()
+        return StringBuilder(colorHex).replace(1, 3, ColorTransparency[transparency]!!).toString()
     }
 
     /**
