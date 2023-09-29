@@ -69,6 +69,7 @@
     <color name="transparent">#00000000</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="amour">#ee5253</color>
 
     <color name="default_crop_frame_mask_color">#A8636E72</color>
 </resources>

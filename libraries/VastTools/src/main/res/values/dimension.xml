@@ -15,6 +15,9 @@
   -->
 
 <resources>
+    <!-- See AlphabetSideBar -->
+    <dimen name="default_alphabet_sidebar_text_size">12sp</dimen>
+    <dimen name="default_alphabet_sidebar_bubble_text_size">25sp</dimen>
     <!-- See Avatar -->
     <dimen name="default_avatar_size">40dp</dimen>
     <dimen name="default_avatar_text_size">15sp</dimen>

@@ -63,6 +63,7 @@
         <item name="colorSurfaceBright">@color/md_theme_surfaceBright</item>
         <item name="colorPrimaryInverse">@color/md_theme_inversePrimary</item>
 
+        <item name="Default_AlphabetSideBar_Style">@style/BaseAlphabetSideBar</item>
         <item name="Default_Avatar_Style">@style/BaseAvatar</item>
         <item name="Default_AvatarGroup_Style">@style/BaseAvatarGroup</item>
         <item name="Default_BadgeView_Style">@style/BaseBadgeView</item>

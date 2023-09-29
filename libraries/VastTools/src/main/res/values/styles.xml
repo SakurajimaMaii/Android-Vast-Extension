@@ -16,6 +16,18 @@
 
 <resources>
 
+    <style name="BaseAlphabetSideBar">
+        <item name="alphabetsidebar_location">@integer/default_alphabetsidebar_location</item>
+        <item name="alphabetsidebar_background">@color/md_theme_primaryContainer</item>
+        <item name="alphabetsidebar_text_size">@dimen/default_alphabet_sidebar_text_size</item>
+        <item name="alphabetsidebar_text_color">@color/md_theme_onSurfaceVariant</item>
+        <item name="alphabetsidebar_indicator_text_color">@color/amour</item>
+        <item name="alphabetsidebar_bubble_text_size">
+            @dimen/default_alphabet_sidebar_bubble_text_size
+        </item>
+        <item name="alphabetsidebar_bubble_text_color">@color/amour</item>
+    </style>
+
     <style name="BaseAvatar">
         <item name="android:background">@color/transparent</item>
         <item name="avatar_size">@dimen/default_avatar_size</item>
