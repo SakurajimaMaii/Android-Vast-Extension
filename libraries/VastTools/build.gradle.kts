@@ -53,7 +53,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),"proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -122,10 +125,10 @@ dependencies {
 tasks.withType<DokkaTaskPartial>().configureEach {
     dokkaSourceSets.configureEach {
         jdkVersion.set(17)
-        languageVersion.set("1.8.10")
+        languageVersion.set("1.9.0")
         suppressInheritedMembers.set(true)
         documentedVisibilities.set(
-            setOf(Visibility.PUBLIC, Visibility.PROTECTED)
+            setOf(Visibility.PUBLIC, Visibility.PROTECTED, Visibility.PRIVATE, Visibility.INTERNAL)
         )
     }
 }
