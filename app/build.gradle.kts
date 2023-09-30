@@ -142,6 +142,4 @@ dependencies {
     implementation(project(":libraries:VastTools"))
     implementation(project(":libraries:VastCore"))
     implementation(AVE.netstatelayout)
-    implementation("com.github.fengzhizi715.SAF-Kotlin-log:core:2.6.9")
-    implementation("com.github.fengzhizi715.SAF-Kotlin-log:gson:2.6.9")
 }
