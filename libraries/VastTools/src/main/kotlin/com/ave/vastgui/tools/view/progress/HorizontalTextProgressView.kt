@@ -19,11 +19,12 @@ package com.ave.vastgui.tools.view.progress
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.Rect
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.TypedValue
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
+import androidx.core.graphics.withSave
 import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.R
 import java.text.DecimalFormat
@@ -36,9 +37,12 @@ import java.text.DecimalFormat
 /**
  * HorizontalTextProgressView
  *
+ * @property mMinimumProportion The minimum proportion of progress height
+ *     with the maximum height.
  * @property mProgressHeight The height of the progress. The height should
- *     not be less than 40% of the maximum height.The maximum height is the
- *     maximum height of the widget minus twice the mTextBoxStrokeWidth.
+ *     not be less than mProgressProportion of the maximum height.The
+ *     maximum height is the maximum height of the widget minus twice the
+ *     mTextMargin.
  * @property mTextMargin The stroke width of the text.
  * @since 0.2.0
  */
@@ -49,25 +53,27 @@ class HorizontalTextProgressView @JvmOverloads constructor(
     defStyleRes: Int = R.style.BaseHorizontalTextProgressView
 ) : ProgressView(context, attrs, defStyleAttr, defStyleRes) {
 
-    private val mDefaultProgressHeight
-        get() = resources.getDimension(R.dimen.default_horizontal_text_progress_height)
-    private val mDefaultTextMargin
-        get() = resources.getDimension(R.dimen.default_horizontal_text_progress_text_margin)
-
-    private var mWidth = 0
-    private var mHeight = 0
+    private val mDefaultProgressHeight =
+        resources.getDimension(R.dimen.default_horizontal_text_progress_height)
+    private val mDefaultTextMargin =
+        resources.getDimension(R.dimen.default_horizontal_text_progress_text_margin)
+    private val mDefaultMinimumProportion =
+        TypedValue().apply {
+            resources.getValue(R.dimen.default_height_minimum_proportion, this, true)
+        }.float
 
     private var mTextPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var mProgressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeCap = Paint.Cap.ROUND
-    }
-    private var mBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeCap = Paint.Cap.ROUND
-    }
+    private var mProgressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var mBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var mBoxPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-
+    private val mProgressRectF = RectF()
     private val mBoxRectF = RectF()
 
+    var mMinimumProportion: Float = mDefaultMinimumProportion
+        set(value) {
+            if (value < 0f || value > 1f) return
+            field = value
+        }
     var mProgressHeight = mDefaultProgressHeight
         private set
     var mTextMargin = mDefaultTextMargin
@@ -75,42 +81,32 @@ class HorizontalTextProgressView @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY) {
-            mWidth = MeasureSpec.getSize(widthMeasureSpec)
+        val maxHeight = measuredHeight - 2 * mTextMargin
+        if (mProgressHeight >= maxHeight || mProgressHeight <= mMinimumProportion * maxHeight) {
+            mProgressHeight = maxHeight * mMinimumProportion
         }
-        if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.EXACTLY) {
-            mHeight = MeasureSpec.getSize(heightMeasureSpec)
-        }
-        // Ensure the display of the progress bar.
-        val maxHeight = mHeight - 2 * mTextMargin
-        if (mProgressHeight >= maxHeight || mProgressHeight <= 0.4 * maxHeight) {
-            mProgressHeight = (maxHeight * 0.4).toFloat()
-        }
-        setMeasuredDimension(mWidth, mHeight)
     }
 
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-
-        val progressWidth = (mCurrentProgress / mMaximumProgress * mWidth)
-
-        val progressTop = ((mHeight - mProgressHeight) / 2).toInt()
-        val backgroundTop = ((mHeight - mProgressHeight) / 2).toInt()
-        drawProgress(
-            canvas,
+        val progressTop = (measuredHeight - mProgressHeight) / 2f
+        val backgroundTop = (measuredHeight - mProgressHeight) / 2f
+        val radius = (bottom - top).coerceAtMost(right - left) / 2f
+        canvas.drawRoundRect(
+            0f,
             backgroundTop,
-            mWidth,
-            mHeight - backgroundTop,
+            measuredWidth.toFloat(),
+            measuredHeight - backgroundTop,
+            radius, radius,
             mBackgroundPaint
         )
         drawProgress(
             canvas,
+            0f,
             progressTop,
-            progressWidth.toInt(),
-            mHeight - progressTop,
+            measuredWidth.toFloat(),
+            measuredHeight - progressTop,
             mProgressPaint
         )
-
         drawBox(canvas)
     }
 
@@ -198,20 +194,20 @@ class HorizontalTextProgressView @JvmOverloads constructor(
      * @since 0.5.3
      */
     private fun drawBox(canvas: Canvas) {
-        val progressWidth = (mCurrentProgress / mMaximumProgress * mWidth)
+        val progressWidth = (mCurrentProgress / mMaximumProgress * measuredWidth)
         // The width of text box.
         val boxWidth = (mTextMargin * 2 + mTextPaint.measureText("100.00%")).toInt()
         // The maximum value in order to ensure that the right side of
         // the TextBox will not cross the border.
         // The minimum value in order to ensure that the left side of
         // the TextBox will not cross the border.
-        val boxStart = progressWidth.coerceIn(boxWidth / 2f, mWidth - boxWidth / 2f).toInt()
+        val boxStart = progressWidth.coerceIn(boxWidth / 2f, measuredWidth - boxWidth / 2f).toInt()
         val boxHeight = (mProgressHeight + 2 * mTextMargin).toInt()
         mBoxRectF.set(
             (boxStart - boxWidth / 2).toFloat(),
-            ((mHeight - boxHeight) / 2).toFloat(),
+            ((measuredHeight - boxHeight) / 2).toFloat(),
             (boxStart + boxWidth / 2).toFloat(),
-            ((mHeight + boxHeight) / 2).toFloat()
+            ((measuredHeight + boxHeight) / 2).toFloat()
         )
         canvas.drawRoundRect(
             mBoxRectF,
@@ -223,7 +219,7 @@ class HorizontalTextProgressView @JvmOverloads constructor(
         canvas.drawText(
             mText,
             (boxStart - mTextPaint.measureText(mText) / 2),
-            mHeight / 2f + getTextBaseline(),
+            measuredHeight / 2f + getTextBaseline(),
             mTextPaint
         )
     }
@@ -231,46 +227,39 @@ class HorizontalTextProgressView @JvmOverloads constructor(
     /**
      * Draw progress.
      *
+     * @param left The left position of the progress.
      * @param top The top position of the progress.
      * @param right The right position of the progress.
-     * @param bottom The left position of the progress.
+     * @param bottom The bottom position of the progress.
      * @since 0.2.0
      */
     private fun drawProgress(
         canvas: Canvas,
-        top: Int,
-        right: Int,
-        bottom: Int,
+        left: Float,
+        top: Float,
+        right: Float,
+        bottom: Float,
         paint: Paint
     ) {
-        // Calculate circle.
-        val circleRadius = (bottom - top) / 2f
-        val circleLeftX = (bottom - top) / 2f
-        val circleRightX = mWidth - circleRadius
-        val circleY = top + circleRadius
-
-        canvas.drawCircle(circleLeftX, circleY, circleRadius, paint)
-
-        if (right >= circleLeftX) {
-            canvas.save()
-            var currentRight = right
-            if (right > circleRightX) {
-                currentRight = circleRightX.toInt()
-            }
-            canvas.drawRect(
-                Rect(circleLeftX.toInt(), top, currentRight, bottom),
-                paint
-            )
-            canvas.restore()
+        val width = (mCurrentProgress / mMaximumProgress) * measuredWidth
+        val radius = (bottom - top).coerceAtMost(right - left) / 2f
+        mProgressRectF.set(left, top, width, bottom)
+        canvas.withSave {
+            clipRect(mProgressRectF)
+            drawRoundRect(left, top, right, bottom, radius, radius, paint)
         }
 
-        if (right >= circleRightX) {
-            canvas.save()
-            canvas.clipRect(
-                Rect(circleRightX.toInt(), top, right, bottom)
-            )
-            canvas.drawCircle(circleRightX, circleY, circleRadius, paint)
-            canvas.restore()
+        if (width >= left + radius) {
+            mProgressRectF.set(left + radius, top, width.coerceAtMost(right - radius), bottom)
+            canvas.drawRect(mProgressRectF, paint)
+        }
+
+        if (width >= right - radius) {
+            mProgressRectF.set(right - radius, top, left + width, bottom)
+            canvas.withSave {
+                clipRect(mProgressRectF)
+                drawRoundRect(left, top, right, bottom, radius, radius, paint)
+            }
         }
     }
 
@@ -292,6 +281,11 @@ class HorizontalTextProgressView @JvmOverloads constructor(
             defStyleAttr,
             defStyleRes
         )
+        mMinimumProportion =
+            typedArray.getFloat(
+                R.styleable.HorizontalTextProgressView_horizontal_text_progress_height_minimum_proportion,
+                mDefaultMinimumProportion
+            )
         mMaximumProgress =
             typedArray.getFloat(
                 R.styleable.HorizontalTextProgressView_progress_maximum_value,

@@ -150,11 +150,8 @@
         <attr name="progress_current_value" />
         <attr name="progress_background_color" />
         <attr name="progress_color" />
-        <!-- Progress background drawable. -->
         <attr name="horizontal_progress_background_drawable" format="reference" />
-        <!-- Progress drawable. -->
         <attr name="horizontal_progress_drawable" format="reference" />
-        <!-- Progress stroke width. -->
         <attr name="horizontal_progress_stroke_width" format="dimension|reference" />
     </declare-styleable>
 
@@ -165,6 +162,7 @@
         <attr name="progress_text_color" />
         <attr name="progress_background_color" />
         <attr name="progress_color" />
+        <attr name="horizontal_text_progress_height_minimum_proportion" format="float|reference" />
         <attr name="horizontal_text_progress_height" format="dimension|reference" />
         <attr name="horizontal_text_progress_text_margin" format="dimension|reference" />
     </declare-styleable>
