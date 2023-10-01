@@ -84,20 +84,22 @@ class HorizontalProgressView @JvmOverloads constructor(
 
     var mStrokeWidth: Float = mDefaultStrokeWidth
         set(value) {
-            if(value < 0f) return
+            if (value < 0f) return
             field = value
         }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        mStrokeWidth = mStrokeWidth.coerceAtMost((measuredWidth / 2f))
+        val min = measuredWidth.coerceAtMost(measuredHeight)
+        mStrokeWidth = mStrokeWidth.coerceAtMost(min / 2f)
     }
 
     override fun onDraw(canvas: Canvas) {
+        val radius = measuredWidth.coerceAtMost(measuredHeight) / 2f
         if (mProgressBackgroundColor != 0 && mBackgroundDrawable == null) {
             mRectF.set(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat())
             canvas.drawRoundRect(
-                mRectF, (measuredHeight / 2f), (measuredHeight / 2f), mBackgroundPaint
+                mRectF, radius, radius, mBackgroundPaint
             )
         }
         if (mBackgroundDrawable != null) {
@@ -107,7 +109,7 @@ class HorizontalProgressView @JvmOverloads constructor(
             }
             mBackgroundPath.apply {
                 reset()
-                addRoundRect(mRectF, measuredHeight / 2f, measuredHeight / 2f, Path.Direction.CW)
+                addRoundRect(mRectF, radius, radius, Path.Direction.CW)
                 close()
             }
             canvas.withSave {
@@ -118,7 +120,7 @@ class HorizontalProgressView @JvmOverloads constructor(
             }
         }
         val width = ((measuredWidth - 2 * mStrokeWidth) * (mCurrentProgress / mMaximumProgress))
-        if (mProgressColor != 0 && mProgressDrawable == null) {
+        if (mProgressColor != 0 && mProgressDrawable == null && mCurrentProgress != 0f) {
             drawProgress(
                 canvas,
                 mStrokeWidth,
@@ -129,7 +131,7 @@ class HorizontalProgressView @JvmOverloads constructor(
                 mProgressPaint
             )
         }
-        if (mProgressDrawable != null) {
+        if (mProgressDrawable != null && mCurrentProgress != 0f) {
             drawProgressDrawable(
                 canvas,
                 mStrokeWidth,
@@ -243,12 +245,11 @@ class HorizontalProgressView @JvmOverloads constructor(
         width: Float,
         paint: Paint
     ) {
-        val height = bottom - top
-        val radius = height / 2f
+        val radius = (bottom - top).coerceAtMost(right - left) / 2f
         mRectF.set(left, top, width, bottom)
         canvas.withSave {
             clipRect(mRectF)
-            drawCircle(left + radius, top + radius, radius, paint)
+            drawRoundRect(left, top, right, bottom, radius, radius, paint)
         }
 
         if (width - left >= left + radius) {
@@ -261,7 +262,7 @@ class HorizontalProgressView @JvmOverloads constructor(
             mRectF.set(right - radius, top, left + width, bottom)
             canvas.withSave {
                 clipRect(mRectF)
-                drawCircle(right - radius, top + radius, radius, paint)
+                drawRoundRect(left, top, right, bottom, radius, radius, paint)
             }
         }
     }
@@ -293,11 +294,11 @@ class HorizontalProgressView @JvmOverloads constructor(
         mProgressBitmap = BmpUtils.getBitmapFromDrawable(mProgressDrawable!!).let {
             BmpUtils.scaleBitmap(it, (right - left).toInt(), (bottom - top).toInt())
         }
-        val radius = (bottom - top) / 2f
+        val radius = (bottom - top).coerceAtMost(right - left) / 2f
         mRectF.set(0f, 0f, width, bottom - top)
         bitmapCanvas.withSave {
             clipRect(mRectF)
-            drawCircle(radius, radius, radius, paint)
+            drawRoundRect(0f, 0f, right - left, bottom - top, radius, radius, paint)
         }
         if (width >= radius) {
             bitmapCanvas.drawRect(
@@ -308,7 +309,7 @@ class HorizontalProgressView @JvmOverloads constructor(
             mRectF.set(right - left - radius, 0f, width, bottom - top)
             bitmapCanvas.withSave {
                 clipRect(mRectF)
-                drawCircle(right - left - radius, radius, radius, paint)
+                drawRoundRect(0f, 0f, right - left, bottom - top, radius, radius, paint)
             }
         }
         mProgressDrawableRectF.set(0f, 0f, right - left, bottom - top)
