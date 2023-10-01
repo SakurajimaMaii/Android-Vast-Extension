@@ -15,7 +15,6 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
@@ -25,39 +24,38 @@
     tools:context="com.ave.vastgui.app.activity.view.ArcProgressViewActivity">
 
     <com.ave.vastgui.tools.view.progress.ArcProgressView
-        android:id="@+id/downloadCv"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:id="@+id/arcProgressView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:arc_progress_background_width="20dp"
-        app:progress_text_size="12sp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/pause"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/pause"
-        android:layout_gravity="center" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/resume"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/resume"
-        android:layout_gravity="center" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cancel"
-        android:layout_gravity="center" />
+        android:layout_margin="10dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/download"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/download"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:text="@string/download" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/pause" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/resume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/resume" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/cancel" />
 
 </LinearLayout>
