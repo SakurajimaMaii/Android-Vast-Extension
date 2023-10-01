@@ -131,24 +131,18 @@
     <declare-styleable name="ArcProgressView">
         <attr name="progress_maximum_value" />
         <attr name="progress_current_value" />
-        <attr name="progress_text" />
         <attr name="progress_text_size" />
         <attr name="progress_text_color" />
         <attr name="progress_background_color" />
         <attr name="progress_color" />
-        <!-- Radius of the download circle.
-        If you set specific values for layout_width and layout_height,
-        you don't need to set this value. -->
+        <!-- Radius of the progress. -->
         <attr name="arc_progress_radius" format="dimension|reference" />
-        <!-- Width of the download circle progress background. -->
-        <attr name="arc_progress_background_width" format="dimension|reference" />
-        <!-- Color of the download progress start. -->
-        <attr name="arc_progress_start_color" format="color|reference" />
-        <!-- Color of the download progress end. -->
-        <attr name="arc_progress_end_color" format="color|reference" />
-        <!-- Ture if you want to show the start and end circles, false otherwise.-->
-        <attr name="arc_progress_show_start_circle" format="boolean" />
-        <attr name="arc_progress_show_end_circle" format="boolean" />
+        <!-- Width of the progress. -->
+        <attr name="arc_progress_width" format="dimension|reference" />
+        <!-- Color of the progress start. -->
+        <attr name="arc_progress_startpoint_circle_color" format="color|reference" />
+        <!-- Color of the progress end. -->
+        <attr name="arc_progress_endpoint_circle_color" format="color|reference" />
     </declare-styleable>
 
     <declare-styleable name="HorizontalProgressView">

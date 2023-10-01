@@ -90,13 +90,10 @@
     </style>
 
     <style name="BaseArcProgressView" parent="BaseProgressView">
-        <item name="android:layout_width">100dp</item>
-        <item name="android:layout_height">100dp</item>
-        <item name="arc_progress_background_width">10dp</item>
-        <item name="arc_progress_start_color">@color/md_theme_primary</item>
-        <item name="arc_progress_end_color">@color/md_theme_primary</item>
-        <item name="arc_progress_show_start_circle">false</item>
-        <item name="arc_progress_show_end_circle">true</item>
+        <item name="arc_progress_radius">@dimen/default_arc_progress_radius</item>
+        <item name="arc_progress_width">@dimen/default_arc_progress_width</item>
+        <item name="arc_progress_startpoint_circle_color">@color/md_theme_primary</item>
+        <item name="arc_progress_endpoint_circle_color">@color/md_theme_primary</item>
     </style>
 
     <style name="BaseHorizontalProgressView" parent="BaseProgressView">
