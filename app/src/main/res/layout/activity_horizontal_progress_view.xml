@@ -30,13 +30,13 @@
     <com.ave.vastgui.tools.view.progress.HorizontalTextProgressView
         android:id="@+id/horizontalTextProgressView"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp" />
 
     <com.ave.vastgui.tools.view.progress.LineTextProgressView
         android:id="@+id/lineTextProgressView"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp" />
 
     <androidx.appcompat.widget.AppCompatSeekBar

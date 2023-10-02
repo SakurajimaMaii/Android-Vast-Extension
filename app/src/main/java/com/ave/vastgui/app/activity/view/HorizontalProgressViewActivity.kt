@@ -18,35 +18,58 @@ package com.ave.vastgui.app.activity.view
 
 import android.os.Bundle
 import android.widget.SeekBar
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import com.ave.vastgui.app.databinding.ActivityHorizontalProgressViewBinding
-import com.ave.vastgui.tools.utils.ColorUtils
-import com.ave.vastgui.tools.utils.DensityUtils.SP
+import com.ave.vastgui.tools.graphics.BmpUtils
+import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
+import com.ave.vastgui.tools.view.extension.viewSnapshot
+import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.ave.vastgui.tools.viewbinding.viewBinding
+import java.io.File
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/progress/horizontal-progress-view/
 
-class HorizontalProgressViewActivity : AppCompatActivity() {
+class HorizontalProgressViewActivity : ComponentActivity() {
 
     private val mBinding by viewBinding(ActivityHorizontalProgressViewBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-        mBinding.horizontalTextProgressView.apply {
-            setTextColor(ColorUtils.colorHex2Int("#dfe6e9"))
-            setProgressColor(ColorUtils.colorHex2Int("#e17055"))
-            setProgressBackgroundColor(ColorUtils.colorHex2Int("#74b9ff"))
-            setTextSize(15f.SP)
-            setTextMargin(0f)
+        mBinding.horizontalProgressView.setOnClickListener {
+            val bitmap = viewSnapshot(it)
+            BmpUtils.saveBitmapAsFile(
+                bitmap = bitmap,
+                File(FileMgr.appInternalFilesDir(), "horizontal_stroke_width_5dp.jpg")
+            )?.apply {
+                SimpleToast.showShortMsg("截图${name}已保存")
+            }
         }
 
-        mBinding.bottomSeekbar.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
+        mBinding.horizontalTextProgressView.setOnClickListener {
+            val bitmap = viewSnapshot(it)
+            BmpUtils.saveBitmapAsFile(
+                bitmap = bitmap,
+                File(FileMgr.appInternalFilesDir(), "horizontal_text_margin_10dp.jpg")
+            )?.apply {
+                SimpleToast.showShortMsg("截图${name}已保存")
+            }
+        }
+
+        mBinding.lineTextProgressView.setOnClickListener {
+            val bitmap = viewSnapshot(it)
+            BmpUtils.saveBitmapAsFile(
+                bitmap = bitmap,
+                File(FileMgr.appInternalFilesDir(), "line_text_height_15dp.jpg")
+            )?.apply {
+                SimpleToast.showShortMsg("截图${name}已保存")
+            }
+        }
+
+        mBinding.bottomSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 mBinding.horizontalProgressView.refreshWithInvalidate {
                     setCurrentProgress(progress.toFloat())
@@ -68,6 +91,5 @@ class HorizontalProgressViewActivity : AppCompatActivity() {
             }
         })
     }
-
 
 }
