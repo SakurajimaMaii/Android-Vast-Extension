@@ -25,6 +25,7 @@ import com.ave.vastgui.tools.log.base.LogInfo
 import com.ave.vastgui.tools.log.base.LogPlugin
 import com.ave.vastgui.tools.log.base.cutStr
 import com.ave.vastgui.tools.log.base.needCut
+import com.ave.vastgui.tools.log.plugin.LogPrinter.Configuration
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -32,16 +33,24 @@ import com.ave.vastgui.tools.log.base.needCut
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
 
 /**
- * Log printer
+ * LogPrinter.
  *
- * @property mConfiguration The configuration of the [LogPrinter].
- * @since 0.5.2
+ * @property mConfiguration The configuration of [LogPrinter].
+ * @property mMaxSingleLogLength Refer to [Configuration.maxSingleLogLength].
+ * @property maxPrintTimes Refer to [Configuration.maxSingleLogLength]
+ * @since 0.5.3
  */
 class LogPrinter private constructor(private val mConfiguration: Configuration) {
 
     /**
      * [LogPrinter] configuration.
      *
+     * @property maxSingleLogLength The max length of single line of log. every
+     *     char in line is calculated as 4 bytes.
+     * @property maxPrintTimes The total repeat number of prints. For example,
+     *     the log content is divided into ten lines depending on
+     *     maxSingleLogLength. If you set maxPrintTimes to 5, only the first
+     *     five lines will be printed.
      * @since 0.5.3
      */
     class Configuration internal constructor() {

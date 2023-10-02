@@ -26,8 +26,20 @@ import com.ave.vastgui.tools.log.json.Converter
 // Date: 2023/9/8
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
 
+/**
+ * LogJson.
+ *
+ * @property mConfiguration The configuration of [LogJson].
+ * @since 0.5.3
+ */
 class LogJson private constructor(private val mConfiguration: Configuration) {
 
+    /**
+     * Configuration of [LogJson].
+     *
+     * @property converter The json converter.
+     * @since 0.5.3
+     */
     class Configuration internal constructor() {
         var converter by NotNUllVar<Converter>()
     }

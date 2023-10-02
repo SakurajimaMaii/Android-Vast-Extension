@@ -42,13 +42,19 @@ import java.util.Locale
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
 
 /**
- * Log storage.
+ * LogStorage.
  *
  * @property mConfiguration The configuration of the [LogStorage].
+ * @property mFileNameDateSuffix The date suffix string of the log file
+ *     name.
+ * @property mFileName The name of the log file.
  * @property mMaxBytesSize The max bytes size of the log file.
+ * @property mStorageFormat The content format in log file.
+ * @property mLevel The level corresponding to the log currently being
+ *     saved to the log file.
+ * @property mLogSp LogSp is used to save the log file name of the last
+ *     operation.
  * @property mCurrentFile Current file which will save log.
- * @property mStorageFormat The log content format in storage. You can
- *     configure it in LogStorage.
  * @since 0.5.3
  */
 class LogStorage private constructor(private val mConfiguration: Configuration) {
@@ -102,6 +108,11 @@ class LogStorage private constructor(private val mConfiguration: Configuration) 
         NotNullOrDefault { time, logLevel, s -> "$time || $logLevel || $s" }
     }
 
+    /**
+     * Time of the log.
+     *
+     * @since 0.5.3
+     */
     data class Time internal constructor(private val mills: Long, private val format: String) {
         override fun toString(): String =
             SimpleDateFormat(format, Locale.getDefault()).format(mills)
@@ -204,6 +215,11 @@ class LogStorage private constructor(private val mConfiguration: Configuration) 
         return file
     }
 
+    /**
+     * Get current save time for the log.
+     *
+     * @since 0.5.3
+     */
     private fun LogInfo.getCurrentTime() = Time(mTimeMillis, mConfiguration.currentDateFormat)
 
     /**

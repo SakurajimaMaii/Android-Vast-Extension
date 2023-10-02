@@ -18,27 +18,41 @@ package com.ave.vastgui.tools.log.plugin
 
 import com.ave.vastgui.tools.log.LogUtil
 import com.ave.vastgui.tools.log.base.LogPlugin
+import com.ave.vastgui.tools.log.plugin.LogSwitch.Configuration
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/5
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
 
+/**
+ * LogSwitch.
+ *
+ * @property open Refer to [Configuration.open].
+ * @since 0.5.2
+ */
 class LogSwitch internal constructor(
     val open: Boolean
 ) {
 
-    class Config {
+    /**
+     * Configuration of [LogSwitch].
+     *
+     * @property open [LogUtil] will print log when the [open] is true and the
+     *     app is in debug mode.
+     * @since 0.5.4
+     */
+    class Configuration {
         var open: Boolean = false
     }
 
-    companion object : LogPlugin<Config, LogSwitch> {
+    companion object : LogPlugin<Configuration, LogSwitch> {
 
         override val key: String
             get() = LogSwitch::class.java.simpleName
 
-        override fun configuration(config: Config.() -> Unit): LogSwitch {
-            val configuration = Config().also(config)
+        override fun configuration(config: Configuration.() -> Unit): LogSwitch {
+            val configuration = Configuration().also(config)
             return LogSwitch(configuration.open)
         }
 
