@@ -16,16 +16,15 @@
 
 package com.ave.vastgui.tools.view.progress
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.Rect
 import android.graphics.RectF
 import android.util.AttributeSet
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
+import androidx.core.graphics.withSave
 import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.utils.DensityUtils.DP
@@ -43,7 +42,8 @@ import java.text.DecimalFormat
  *     bottom of the text box.
  * @property mTriangleHeight The height of the triangle at the bottom of
  *     the text box.
- * @property mTextBoxStrokeWidth The stroke width of the text box.
+ * @property mProgressHeight The height of progress.
+ * @property mTextMargin The stroke width of the text box.
  * @since 0.2.0
  */
 class LineTextProgressView @JvmOverloads constructor(
@@ -53,73 +53,66 @@ class LineTextProgressView @JvmOverloads constructor(
     defStyleRes: Int = R.style.BaseLineTextProgressView
 ) : ProgressView(context, attrs, defStyleAttr, defStyleRes) {
 
+    private val mDefaultProgressHeight =
+        resources.getDimension(R.dimen.default_horizontal_text_progress_height)
     private val mDefaultTextMargin
         get() = resources.getDimension(R.dimen.default_linetext_progress_text_margin)
-
-    private var mWidth = 0
-    private var mHeight = 0
     private val mTriangleBaseLength = 12f.DP
     private val mTriangleHeight = 8f.DP
 
     private var mTextPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var mProgressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeCap = Paint.Cap.ROUND
-    }
-    private var mBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeCap = Paint.Cap.ROUND
-    }
+    private var mProgressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var mBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var mBoxPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val mBoxRectF = RectF()
+    private val mProgressRectF = RectF()
 
-    var mTextBoxStrokeWidth = mDefaultTextMargin
+    var mProgressHeight = mDefaultProgressHeight
+        private set
+    var mTextMargin = mDefaultTextMargin
         private set
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY) {
-            mWidth = MeasureSpec.getSize(widthMeasureSpec)
-        }
-        if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.EXACTLY) {
-            mHeight = MeasureSpec.getSize(heightMeasureSpec)
-        }
-        setMeasuredDimension(mWidth, mHeight)
+        val neededHeight = resolveSize(
+            (mProgressHeight + 2 * mTextMargin + mTriangleHeight + getTextHeight()).toInt(),
+            heightMeasureSpec
+        )
+        setMeasuredDimension(measuredWidth, neededHeight)
     }
 
-    @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-
         val fontMetrics = mTextPaint.fontMetrics
         val textHeight = fontMetrics.bottom - fontMetrics.top
         val baseWidth = mTextPaint.measureText("100.00%")
 
-        val boxWidth = baseWidth + (mTextBoxStrokeWidth * 2)
-        val boxHeight = textHeight + (mTextBoxStrokeWidth * 2).toInt()
-        val boxLeft = (mCurrentProgress / mMaximumProgress * (mWidth - boxWidth)).toInt()
-        drawBox(canvas, boxLeft, boxWidth.toInt(), boxHeight.toInt())
+        val boxWidth: Float = baseWidth + (mTextMargin * 2f)
+        val boxHeight: Float = textHeight + (mTextMargin * 2f)
+        val boxLeft: Float = mCurrentProgress / mMaximumProgress * (measuredWidth - boxWidth)
+        drawBox(canvas, boxLeft, boxWidth, boxHeight)
 
-        val textWidth = mTextPaint.measureText(mText)
+        val textWidth: Float = mTextPaint.measureText(mText)
         // The distance between the baseline and text central axis
-        val textCenter2Bottom = textHeight / 2 - fontMetrics.bottom
-        val textX = boxLeft + (boxWidth / 2 - textWidth / 2)
-        val textY = boxHeight / 2 + textCenter2Bottom
+        val textCenter2Bottom: Float = textHeight / 2 - fontMetrics.bottom
+        val textX: Float = boxLeft + (boxWidth / 2 - textWidth / 2)
+        val textY: Float = boxHeight / 2 + textCenter2Bottom
 
         canvas.drawText(mText, textX, textY, mTextPaint)
 
-        // You should not change its draw order.
+        val progressLeft: Float = boxWidth / 2f
+        val progressTop: Float = boxHeight + mTriangleHeight
+        val progressRight: Float = measuredWidth - (boxWidth / 2f)
+        val progressBottom: Float = measuredHeight.toFloat()
+        val radius = (progressRight - progressLeft)
+            .coerceAtMost(progressBottom - progressTop) / 2f
+        mProgressRectF.set(progressLeft, progressTop, progressRight, progressBottom)
+        canvas.drawRoundRect(mProgressRectF, radius, radius, mBackgroundPaint)
         drawProgress(
             canvas,
-            (boxWidth / 2).toInt(),
-            (boxHeight + mTriangleHeight).toInt(),
-            mWidth,
-            mHeight,
-            mBackgroundPaint
-        )
-        drawProgress(
-            canvas,
-            (boxWidth / 2).toInt(),
-            (boxHeight + mTriangleHeight).toInt(),
-            (boxWidth / 2 + boxLeft).toInt(),
-            mHeight,
+            progressLeft,
+            progressTop,
+            progressRight,
+            progressBottom,
             mProgressPaint
         )
     }
@@ -180,78 +173,83 @@ class LineTextProgressView @JvmOverloads constructor(
     }
 
     /**
-     * Set [mTextBoxStrokeWidth].
+     * Set progress height.
      *
-     * @since 0.2.0
+     * @since 0.5.4
      */
-    fun setTextBoxStrokeWidth(width: Float) {
-        mTextBoxStrokeWidth = width
+    fun setProgressHeight(@FloatRange(from = 0.0) height: Float) {
+        mProgressHeight = height
     }
 
-    /** @since 0.2.0 */
-    private fun drawBox(canvas: Canvas, left: Int, width: Int, height: Int) {
-        val rectF =
-            RectF(left.toFloat(), 0f, (width + left).toFloat(), height.toFloat())
+    /**
+     * Set [mTextMargin].
+     *
+     * @since 0.5.4
+     */
+    fun setTextMargin(width: Float) {
+        mTextMargin = width
+    }
+
+    /** @since 0.5.4 */
+    private fun drawBox(canvas: Canvas, left: Float, width: Float, height: Float) {
+        mBoxRectF.set(left, 0f, (width + left), height)
         canvas.drawRoundRect(
-            rectF,
-            (height / 4).toFloat(),
-            (height / 4).toFloat(),
+            mBoxRectF,
+            (height / 4),
+            (height / 4),
             mBoxPaint
         )
         val path = Path()
-        path.moveTo(left + width / 2f - mTriangleBaseLength / 2f, height.toFloat())
-        path.lineTo(left + width / 2f + mTriangleBaseLength / 2f, height.toFloat())
-        path.lineTo((left + width / 2).toFloat(), height + mTriangleHeight - 1f.DP)
+        path.moveTo(left + width / 2f - mTriangleBaseLength / 2f, height)
+        path.lineTo(left + width / 2f + mTriangleBaseLength / 2f, height)
+        path.lineTo((left + width / 2), height + mTriangleHeight - 1f.DP)
         canvas.drawPath(path, mBoxPaint)
     }
 
     /**
      * Draw progress.
      *
-     * @since 0.2.0
+     * @since 0.5.4
      */
     private fun drawProgress(
         canvas: Canvas,
-        left: Int,
-        top: Int,
-        right: Int,
-        bottom: Int,
+        left: Float,
+        top: Float,
+        right: Float,
+        bottom: Float,
         paint: Paint
     ) {
-        val circleRadius = (bottom - top) / 2f
-        val circleLeftX = left + circleRadius
-        val circleRightX = mWidth - left - circleRadius
-        val circleY = top + circleRadius
-
-        canvas.save()
-        canvas.clipRect(Rect(left, top, right, bottom))
-        canvas.drawCircle(circleLeftX, circleY, circleRadius, paint)
-        canvas.restore()
-
-        // Draw a rectangle from circleLeftX to circleRightX
-        if (right >= circleLeftX) {
-            canvas.save()
-            val currentRight = right.coerceAtMost(circleRightX.toInt())
-            canvas.drawRect(
-                Rect(circleLeftX.toInt(), top, currentRight, bottom),
-                paint
-            )
-            canvas.restore()
+        val width = (mCurrentProgress / mMaximumProgress) * (right - left) + left
+        mProgressRectF.set(left, top, width, bottom)
+        val radius = (right - left)
+            .coerceAtMost(bottom - top) / 2f
+        canvas.withSave {
+            clipRect(mProgressRectF)
+            drawRoundRect(left, top, right, bottom, radius, radius, paint)
         }
 
-        if (right >= circleRightX) {
-            canvas.save()
-            canvas.clipRect(
-                Rect(
-                    circleRightX.toInt(),
-                    top,
-                    right,
-                    bottom
-                )
-            )
-            canvas.drawCircle(circleRightX, circleY, circleRadius, paint)
-            canvas.restore()
+        if (width >= left + radius) {
+            mProgressRectF.set(left + radius, top, width.coerceAtMost(right - radius), bottom)
+            canvas.drawRect(mProgressRectF, paint)
         }
+
+        if (width >= right - radius) {
+            mProgressRectF.set(right - radius, top, width, bottom)
+            canvas.withSave {
+                clipRect(mProgressRectF)
+                drawRoundRect(left, top, right, bottom, radius, radius, paint)
+            }
+        }
+    }
+
+    /**
+     * Get text height.
+     *
+     * @since 0.5.4
+     */
+    private fun getTextHeight(): Float {
+        val fontMetrics = mTextPaint.fontMetrics
+        return fontMetrics.bottom - fontMetrics.top
     }
 
     init {
@@ -292,7 +290,11 @@ class LineTextProgressView @JvmOverloads constructor(
             context.getColor(R.color.md_theme_primaryContainer)
         )
         setProgressBackgroundColor(progressBackgroundColor)
-        mTextBoxStrokeWidth = typedArray.getDimension(
+        mProgressHeight = typedArray.getDimension(
+            R.styleable.LineTextProgressView_linetext_progress_height,
+            mDefaultProgressHeight
+        )
+        mTextMargin = typedArray.getDimension(
             R.styleable.LineTextProgressView_linetext_progress_text_margin,
             mDefaultTextMargin
         )

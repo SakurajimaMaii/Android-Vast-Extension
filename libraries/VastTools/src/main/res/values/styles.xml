@@ -112,6 +112,9 @@
     </style>
 
     <style name="BaseLineTextProgressView" parent="BaseProgressView">
+        <item name="linetext_progress_height">
+            @dimen/default_linetext_progress_height
+        </item>
         <item name="linetext_progress_text_margin">
             @dimen/default_linetext_progress_text_margin
         </item>

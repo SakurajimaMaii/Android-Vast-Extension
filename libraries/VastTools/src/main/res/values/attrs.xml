@@ -173,6 +173,7 @@
         <attr name="progress_text_color" />
         <attr name="progress_background_color" />
         <attr name="progress_color" />
+        <attr name="linetext_progress_height" format="dimension|reference" />
         <attr name="linetext_progress_text_margin" format="dimension|reference" />
     </declare-styleable>
 

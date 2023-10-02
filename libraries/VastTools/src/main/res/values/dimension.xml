@@ -47,5 +47,6 @@
     <dimen name="default_horizontal_text_progress_height">20dp</dimen>
     <dimen name="default_horizontal_text_progress_text_margin">5dp</dimen>
     <!-- See LineTextProgressView-->
+    <dimen name="default_linetext_progress_height">20dp</dimen>
     <dimen name="default_linetext_progress_text_margin">5dp</dimen>
 </resources>
