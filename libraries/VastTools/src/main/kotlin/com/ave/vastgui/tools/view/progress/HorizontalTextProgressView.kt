@@ -21,7 +21,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.util.TypedValue
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.core.graphics.withSave
@@ -37,12 +36,7 @@ import java.text.DecimalFormat
 /**
  * HorizontalTextProgressView
  *
- * @property mMinimumProportion The minimum proportion of progress height
- *     with the maximum height.
- * @property mProgressHeight The height of the progress. The height should
- *     not be less than mProgressProportion of the maximum height.The
- *     maximum height is the maximum height of the widget minus twice the
- *     mTextMargin.
+ * @property mProgressHeight The height of the progress.
  * @property mTextMargin The stroke width of the text.
  * @since 0.2.0
  */
@@ -57,10 +51,6 @@ class HorizontalTextProgressView @JvmOverloads constructor(
         resources.getDimension(R.dimen.default_horizontal_text_progress_height)
     private val mDefaultTextMargin =
         resources.getDimension(R.dimen.default_horizontal_text_progress_text_margin)
-    private val mDefaultMinimumProportion =
-        TypedValue().apply {
-            resources.getValue(R.dimen.default_height_minimum_proportion, this, true)
-        }.float
 
     private var mTextPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var mProgressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -69,11 +59,6 @@ class HorizontalTextProgressView @JvmOverloads constructor(
     private val mProgressRectF = RectF()
     private val mBoxRectF = RectF()
 
-    var mMinimumProportion: Float = mDefaultMinimumProportion
-        set(value) {
-            if (value < 0f || value > 1f) return
-            field = value
-        }
     var mProgressHeight = mDefaultProgressHeight
         private set
     var mTextMargin = mDefaultTextMargin
@@ -81,14 +66,12 @@ class HorizontalTextProgressView @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val maxHeight = measuredHeight - 2 * mTextMargin
-        if (mProgressHeight >= maxHeight || mProgressHeight <= mMinimumProportion * maxHeight) {
-            mProgressHeight = maxHeight * mMinimumProportion
-        }
+        val maxHeight = getTextHeight().coerceAtLeast(mProgressHeight)
+        val neededHeight = resolveSize((maxHeight + 2 * mTextMargin).toInt(), heightMeasureSpec)
+        setMeasuredDimension(measuredWidth, neededHeight)
     }
 
     override fun onDraw(canvas: Canvas) {
-        val progressTop = (measuredHeight - mProgressHeight) / 2f
         val backgroundTop = (measuredHeight - mProgressHeight) / 2f
         val radius = (bottom - top).coerceAtMost(right - left) / 2f
         canvas.drawRoundRect(
@@ -101,10 +84,6 @@ class HorizontalTextProgressView @JvmOverloads constructor(
         )
         drawProgress(
             canvas,
-            0f,
-            progressTop,
-            measuredWidth.toFloat(),
-            measuredHeight - progressTop,
             mProgressPaint
         )
         drawBox(canvas)
@@ -227,20 +206,13 @@ class HorizontalTextProgressView @JvmOverloads constructor(
     /**
      * Draw progress.
      *
-     * @param left The left position of the progress.
-     * @param top The top position of the progress.
-     * @param right The right position of the progress.
-     * @param bottom The bottom position of the progress.
      * @since 0.2.0
      */
-    private fun drawProgress(
-        canvas: Canvas,
-        left: Float,
-        top: Float,
-        right: Float,
-        bottom: Float,
-        paint: Paint
-    ) {
+    private fun drawProgress(canvas: Canvas, paint: Paint) {
+        val left = 0f
+        val top = (measuredHeight - mProgressHeight) / 2f
+        val right = measuredWidth.toFloat()
+        val bottom = measuredHeight - top
         val width = (mCurrentProgress / mMaximumProgress) * measuredWidth
         val radius = (bottom - top).coerceAtMost(right - left) / 2f
         mProgressRectF.set(left, top, width, bottom)
@@ -264,6 +236,16 @@ class HorizontalTextProgressView @JvmOverloads constructor(
     }
 
     /**
+     * Get text height.
+     *
+     * @since 0.5.4
+     */
+    private fun getTextHeight(): Float {
+        val fontMetrics = mTextPaint.fontMetrics
+        return fontMetrics.bottom - fontMetrics.top
+    }
+
+    /**
      * Get text baseline.
      *
      * @since 0.5.3
@@ -281,11 +263,6 @@ class HorizontalTextProgressView @JvmOverloads constructor(
             defStyleAttr,
             defStyleRes
         )
-        mMinimumProportion =
-            typedArray.getFloat(
-                R.styleable.HorizontalTextProgressView_horizontal_text_progress_height_minimum_proportion,
-                mDefaultMinimumProportion
-            )
         mMaximumProgress =
             typedArray.getFloat(
                 R.styleable.HorizontalTextProgressView_progress_maximum_value,

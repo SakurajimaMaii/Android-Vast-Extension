@@ -17,5 +17,4 @@
 <resources>
     <item name="default_current_progress" format="float" type="dimen">0f</item>
     <item name="default_maximum_progress" format="float" type="dimen">100f</item>
-    <item name="default_height_minimum_proportion" format="float" type="dimen">0.4f</item>
 </resources>
