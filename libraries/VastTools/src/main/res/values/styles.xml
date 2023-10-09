@@ -92,7 +92,7 @@
     <style name="BaseArcProgressView" parent="BaseProgressView">
         <item name="arc_progress_radius">@dimen/default_arc_progress_radius</item>
         <item name="arc_progress_width">@dimen/default_arc_progress_width</item>
-        <item name="arc_progress_startpoint_circle_color">@color/md_theme_primary</item>
+        <item name="arc_progress_startpoint_circle_color">@color/transparent</item>
         <item name="arc_progress_endpoint_circle_color">@color/md_theme_primary</item>
     </style>
 

@@ -135,14 +135,11 @@
         <attr name="progress_text_color" />
         <attr name="progress_background_color" />
         <attr name="progress_color" />
-        <!-- Radius of the progress. -->
         <attr name="arc_progress_radius" format="dimension|reference" />
-        <!-- Width of the progress. -->
         <attr name="arc_progress_width" format="dimension|reference" />
-        <!-- Color of the progress start. -->
         <attr name="arc_progress_startpoint_circle_color" format="color|reference" />
-        <!-- Color of the progress end. -->
         <attr name="arc_progress_endpoint_circle_color" format="color|reference" />
+        <attr name="arc_progress_endpoint_circle_radius" format="dimension|reference" />
     </declare-styleable>
 
     <declare-styleable name="HorizontalProgressView">
