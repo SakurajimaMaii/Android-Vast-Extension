@@ -22,13 +22,10 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
-import androidx.annotation.ColorInt
-import androidx.annotation.FloatRange
 import androidx.core.graphics.withSave
-import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.R
+import com.ave.vastgui.tools.graphics.getTextHeight
 import com.ave.vastgui.tools.utils.DensityUtils.DP
-import java.text.DecimalFormat
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -43,6 +40,7 @@ import java.text.DecimalFormat
  * @property mTriangleHeight The height of the triangle at the bottom of
  *     the text box.
  * @property mProgressHeight The height of progress.
+ * @property mTextBoxColor Color-int of the text box.
  * @property mTextMargin The stroke width of the text box.
  * @since 0.2.0
  */
@@ -66,16 +64,55 @@ class LineTextProgressView @JvmOverloads constructor(
     private var mBoxPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mBoxRectF = RectF()
     private val mProgressRectF = RectF()
+    private val mTextWidth: Float
+        get() = mTextPaint.measureText(textOrDefault())
+
+    override var mTextSize: Float
+        set(value) {
+            mTextPaint.textSize = value
+        }
+        get() = mTextPaint.textSize
+
+    override var mTextColor: Int
+        set(value) {
+            mTextPaint.color = value
+        }
+        get() = mTextPaint.color
+
+    override var mProgressColor: Int =
+        context.getColor(R.color.md_theme_primary)
+        set(value) {
+            field = value
+            mProgressPaint.color = value
+            mBoxPaint.color = value
+        }
+
+    override var mProgressBackgroundColor: Int
+        set(value) {
+            mBackgroundPaint.color = value
+        }
+        get() = mBackgroundPaint.color
+
+    var mTextBoxColor: Int
+        set(value) {
+            mBoxPaint.color = value
+        }
+        get() = mBoxPaint.color
 
     var mProgressHeight = mDefaultProgressHeight
-        private set
+        set(value) {
+            field = value.coerceAtLeast(mTextPaint.getTextHeight())
+        }
+
     var mTextMargin = mDefaultTextMargin
-        private set
+        set(value) {
+            field = value.coerceAtLeast(0f)
+        }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val neededHeight = resolveSize(
-            (mProgressHeight + 2 * mTextMargin + mTriangleHeight + getTextHeight()).toInt(),
+            (mProgressHeight + 2 * mTextMargin + mTriangleHeight + mTextPaint.getTextHeight()).toInt(),
             heightMeasureSpec
         )
         setMeasuredDimension(measuredWidth, neededHeight)
@@ -84,20 +121,19 @@ class LineTextProgressView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         val fontMetrics = mTextPaint.fontMetrics
         val textHeight = fontMetrics.bottom - fontMetrics.top
-        val baseWidth = mTextPaint.measureText("100.00%")
+        val baseWidth = mTextWidth
 
         val boxWidth: Float = baseWidth + (mTextMargin * 2f)
         val boxHeight: Float = textHeight + (mTextMargin * 2f)
         val boxLeft: Float = mCurrentProgress / mMaximumProgress * (measuredWidth - boxWidth)
         drawBox(canvas, boxLeft, boxWidth, boxHeight)
 
-        val textWidth: Float = mTextPaint.measureText(mText)
         // The distance between the baseline and text central axis
-        val textCenter2Bottom: Float = textHeight / 2 - fontMetrics.bottom
-        val textX: Float = boxLeft + (boxWidth / 2 - textWidth / 2)
-        val textY: Float = boxHeight / 2 + textCenter2Bottom
+        val textCenter2Bottom: Float = textHeight / 2f - fontMetrics.bottom
+        val textX: Float = boxLeft + (boxWidth / 2f - mTextWidth / 2f)
+        val textY: Float = boxHeight / 2f + textCenter2Bottom
 
-        canvas.drawText(mText, textX, textY, mTextPaint)
+        canvas.drawText(textOrDefault(), textX, textY, mTextPaint)
 
         val progressLeft: Float = boxWidth / 2f
         val progressTop: Float = boxHeight + mTriangleHeight
@@ -115,79 +151,6 @@ class LineTextProgressView @JvmOverloads constructor(
             progressBottom,
             mProgressPaint
         )
-    }
-
-    override fun setCurrentProgress(currentProgress: Float) {
-        super.setCurrentProgress(currentProgress)
-        mText = DecimalFormat("0.00%").format(mCurrentProgress / mMaximumProgress)
-    }
-
-    /**
-     * You should call [setCurrentProgress] in order to set [mText].
-     *
-     * @since 0.2.0
-     */
-    override fun setText(text: String) {
-        nothing_to_do()
-    }
-
-    /**
-     * Set text size for [mTextSize] and [mTextPaint].
-     *
-     * @since 0.5.3
-     */
-    override fun setTextSize(@FloatRange(from = 0.0) size: Float) {
-        super.setTextSize(size)
-        mTextPaint.textSize = mTextSize
-    }
-
-    /**
-     * Set text size for [mTextColor] and [mTextPaint].
-     *
-     * @since 0.5.3
-     */
-    override fun setTextColor(@ColorInt color: Int) {
-        super.setTextColor(color)
-        mTextPaint.color = mTextColor
-    }
-
-    /**
-     * Set color-int for [mProgressBackgroundColor] and [mBackgroundPaint].
-     *
-     * @since 0.5.3
-     */
-    override fun setProgressBackgroundColor(@ColorInt color: Int) {
-        super.setProgressBackgroundColor(color)
-        mBackgroundPaint.color = mProgressBackgroundColor
-    }
-
-    /**
-     * Set color-int for [mProgressColor] and [mBoxPaint].
-     *
-     * @since 0.5.3
-     */
-    override fun setProgressColor(@ColorInt color: Int) {
-        super.setProgressColor(color)
-        mProgressPaint.color = mProgressColor
-        mBoxPaint.color = mProgressColor
-    }
-
-    /**
-     * Set progress height.
-     *
-     * @since 0.5.4
-     */
-    fun setProgressHeight(@FloatRange(from = 0.0) height: Float) {
-        mProgressHeight = height
-    }
-
-    /**
-     * Set [mTextMargin].
-     *
-     * @since 0.5.4
-     */
-    fun setTextMargin(width: Float) {
-        mTextMargin = width
     }
 
     /** @since 0.5.4 */
@@ -242,16 +205,6 @@ class LineTextProgressView @JvmOverloads constructor(
         }
     }
 
-    /**
-     * Get text height.
-     *
-     * @since 0.5.4
-     */
-    private fun getTextHeight(): Float {
-        val fontMetrics = mTextPaint.fontMetrics
-        return fontMetrics.bottom - fontMetrics.top
-    }
-
     init {
         val typedArray = context.obtainStyledAttributes(
             attrs,
@@ -269,35 +222,43 @@ class LineTextProgressView @JvmOverloads constructor(
                 R.styleable.LineTextProgressView_progress_current_value,
                 mDefaultCurrentProgress
             )
-        mText = DecimalFormat("0.00%").format(mCurrentProgress / mMaximumProgress)
-        val textColor = typedArray.getColor(
-            R.styleable.LineTextProgressView_progress_text_color,
-            context.getColor(R.color.md_theme_onPrimary)
-        )
-        setTextColor(textColor)
-        val textSize = typedArray.getDimension(
-            R.styleable.LineTextProgressView_progress_text_size,
-            mDefaultTexSize
-        )
-        setTextSize(textSize)
-        val progressColor = typedArray.getColor(
-            R.styleable.LineTextProgressView_progress_color,
-            context.getColor(R.color.md_theme_primary)
-        )
-        setProgressColor(progressColor)
-        val progressBackgroundColor = typedArray.getColor(
-            R.styleable.LineTextProgressView_progress_background_color,
-            context.getColor(R.color.md_theme_primaryContainer)
-        )
-        setProgressBackgroundColor(progressBackgroundColor)
-        mProgressHeight = typedArray.getDimension(
-            R.styleable.LineTextProgressView_linetext_progress_height,
-            mDefaultProgressHeight
-        )
-        mTextMargin = typedArray.getDimension(
-            R.styleable.LineTextProgressView_linetext_progress_text_margin,
-            mDefaultTextMargin
-        )
+        mText =
+            typedArray.getString(R.styleable.LineTextProgressView_progress_text) ?: ""
+        mTextColor =
+            typedArray.getColor(
+                R.styleable.LineTextProgressView_progress_text_color,
+                context.getColor(R.color.md_theme_onPrimary)
+            )
+        mTextSize =
+            typedArray.getDimension(
+                R.styleable.LineTextProgressView_progress_text_size,
+                mDefaultTexSize
+            )
+        mProgressColor =
+            typedArray.getColor(
+                R.styleable.LineTextProgressView_progress_color,
+                context.getColor(R.color.md_theme_primary)
+            )
+        mProgressBackgroundColor =
+            typedArray.getColor(
+                R.styleable.LineTextProgressView_progress_background_color,
+                context.getColor(R.color.md_theme_primaryContainer)
+            )
+        mProgressHeight =
+            typedArray.getDimension(
+                R.styleable.LineTextProgressView_linetext_progress_height,
+                mDefaultProgressHeight
+            )
+        mTextBoxColor =
+            typedArray.getColor(
+                R.styleable.LineTextProgressView_linetext_progress_box_color,
+                context.getColor(R.color.md_theme_primary)
+            )
+        mTextMargin =
+            typedArray.getDimension(
+                R.styleable.LineTextProgressView_linetext_progress_text_margin,
+                mDefaultTextMargin
+            )
         typedArray.recycle()
     }
 

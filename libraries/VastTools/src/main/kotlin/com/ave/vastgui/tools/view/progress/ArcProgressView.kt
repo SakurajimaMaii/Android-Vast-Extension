@@ -22,11 +22,10 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Shader
 import android.util.AttributeSet
-import androidx.annotation.ColorInt
-import androidx.annotation.FloatRange
+import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.graphics.getBaseLine
-import java.math.RoundingMode
+import com.ave.vastgui.tools.graphics.getTextHeight
 import java.text.DecimalFormat
 import kotlin.math.cos
 import kotlin.math.sin
@@ -44,6 +43,7 @@ import kotlin.math.sin
  * @property mProgressWidth Width of the circle progress.
  * @property mStartpointCircleColor Progress startpoint circle color-int.
  * @property mEndpointCircleColor Progress endpoint circle color-int.
+ * @property mShowText True if you want to show the text, false otherwise.
  * @property mProgressShader Progress shader.
  * @property mShowStartpointCircle Ture if you want to show the startpoint
  *     circle, false otherwise.
@@ -60,7 +60,6 @@ class ArcProgressView @JvmOverloads constructor(
 ) : ProgressView(context, attrs, defStyleAttr, defStyleRes) {
 
     private val mDefaultRadius: Float = resources.getDimension(R.dimen.default_arc_progress_radius)
-    private val mDefaultWidth: Float = resources.getDimension(R.dimen.default_arc_progress_width)
 
     private var mProgressBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
@@ -79,14 +78,40 @@ class ArcProgressView @JvmOverloads constructor(
         style = Paint.Style.FILL
         textAlign = Paint.Align.CENTER
     }
-    private val mDecimalFormat = DecimalFormat("0.##").also {
-        it.roundingMode = RoundingMode.FLOOR
-    }
     private val mArcRectF = RectF()
     private val mShowStartpointCircle: Boolean =
         mStartpointCircleColor != context.getColor(R.color.transparent)
     private val mShowEndpointCircle: Boolean =
         mEndpointCircleColor != context.getColor(R.color.transparent)
+
+    override val mDefaultText: String
+        get() = DecimalFormat("##0%").format(mCurrentProgress / mMaximumProgress)
+
+    override var mProgressColor: Int
+        set(value) {
+            mProgressPaint.color = value
+        }
+        get() = mProgressPaint.color
+
+    override var mProgressBackgroundColor: Int
+        set(value) {
+            mProgressBackgroundPaint.color = value
+        }
+        get() = mProgressBackgroundPaint.color
+
+    override var mTextColor: Int
+        set(value) {
+            mTextPaint.color = value
+        }
+        get() = mTextPaint.color
+
+    override var mTextSize: Float
+        set(value) {
+            mTextPaint.textSize = value
+        }
+        get() = mTextPaint.textSize
+
+    var mShowText: Boolean by NotNUllVar()
 
     var mProgressShader: Shader? = null
         set(value) {
@@ -95,18 +120,14 @@ class ArcProgressView @JvmOverloads constructor(
 
     var mProgressRadius = mDefaultRadius
         set(value) {
-            if (value < 0f) return
-            field = value
+            field = value.coerceAtLeast(0f)
         }
 
-    var mProgressWidth = mDefaultWidth
+    var mProgressWidth = recommendedWidth()
         set(value) {
-            if (value < 0f) return
             field = value
             mProgressBackgroundPaint.strokeWidth = value
             mProgressPaint.strokeWidth = value
-            mEndpointCircleRadius = mEndpointCircleRadius
-                .coerceAtLeast(value / 2f)
         }
 
     var mStartpointCircleColor: Int
@@ -121,11 +142,9 @@ class ArcProgressView @JvmOverloads constructor(
         }
         get() = mEndpointCirclePaint.color
 
-    var mEndpointCircleRadius: Float = mProgressWidth / 2f
+    var mEndpointCircleRadius: Float = recommendedRadius()
         set(value) {
-            if (value < 0.0f) return
-            field = value
-                .coerceAtLeast(mProgressWidth / 2f)
+            field = value.coerceAtLeast(0f)
         }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -137,12 +156,10 @@ class ArcProgressView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
-        // Draw progress background.
         val circlePoint: Float = measuredWidth / 2f
         canvas.drawCircle(
             measuredWidth / 2f, measuredHeight / 2f, mProgressRadius, mProgressBackgroundPaint
         )
-        // Draw progress.
         mArcRectF.left = measuredWidth / 2f - mProgressRadius
         mArcRectF.top = measuredWidth / 2f - mProgressRadius
         mArcRectF.right = measuredWidth / 2f + mProgressRadius
@@ -150,7 +167,6 @@ class ArcProgressView @JvmOverloads constructor(
         val range: Float = 360f * (mCurrentProgress / mMaximumProgress)
         canvas.drawArc(mArcRectF, -90f, range, false, mProgressPaint)
         if (mShowStartpointCircle) {
-            // Draw progress start.
             canvas.drawCircle(
                 measuredWidth / 2f,
                 measuredHeight / 2f - mProgressRadius,
@@ -159,106 +175,96 @@ class ArcProgressView @JvmOverloads constructor(
             )
         }
         if (mShowEndpointCircle) {
-            // Draw progress end.
             val x1 = circlePoint - mProgressRadius * cos((range + 90) * 3.14f / 180f)
             val y1 = circlePoint - mProgressRadius * sin((range + 90) * 3.14f / 180f)
             canvas.drawCircle(
                 x1, y1, mEndpointCircleRadius, mEndpointCirclePaint
             )
         }
-        val x1 = circlePoint - mProgressRadius * cos((range + 90) * 3.14f / 180f)
-        val y1 = circlePoint - mProgressRadius * sin((range + 90) * 3.14f / 180f)
-        canvas.drawText(
-            mText, x1, y1 + mTextPaint.getBaseLine(), mTextPaint
-        )
+        if (mShowText) {
+            val x1 = circlePoint - mProgressRadius * cos((range + 90) * 3.14f / 180f)
+            val y1 = circlePoint - mProgressRadius * sin((range + 90) * 3.14f / 180f)
+            canvas.drawText(
+                textOrDefault(), x1, y1 + mTextPaint.getBaseLine(), mTextPaint
+            )
+        }
     }
 
     /**
-     * @see ProgressView.setProgressColor
-     * @since 0.5.4
+     * Recommended value of [mEndpointCircleRadius].
+     *
+     * @since 0.5.5
      */
-    override fun setProgressColor(@ColorInt color: Int) {
-        super.setProgressColor(color)
-        mProgressPaint.color = mProgressColor
-    }
+    fun recommendedRadius(): Float =
+        mTextPaint.measureText(mText.ifEmpty { "000%" }).coerceAtLeast(mTextPaint.getTextHeight()) / 2f
 
     /**
-     * @see ProgressView.setProgressBackgroundColor
-     * @since 0.5.4
+     * Recommended value of [mProgressWidth].
+     *
+     * @since 0.5.5
      */
-    override fun setProgressBackgroundColor(@ColorInt color: Int) {
-        super.setProgressBackgroundColor(color)
-        mProgressBackgroundPaint.color = color
-    }
-
-    /**
-     * @see ProgressView.setTextColor
-     * @since 0.5.4
-     */
-    override fun setTextColor(@ColorInt color: Int) {
-        super.setTextColor(color)
-        mTextPaint.color = color
-    }
-
-    /**
-     * @see ProgressView.setTextSize
-     * @since 0.5.4
-     */
-    override fun setTextSize(@FloatRange(from = 0.0) size: Float) {
-        super.setTextSize(size)
-        mTextPaint.textSize = size
-    }
+    fun recommendedWidth(): Float =
+        recommendedRadius() * 2f
 
     init {
-        val typedArray = context.obtainStyledAttributes(
-            attrs, R.styleable.ArcProgressView, defStyleAttr, defStyleRes
-        )
-        mMaximumProgress = typedArray.getFloat(
-            R.styleable.ArcProgressView_progress_maximum_value, mDefaultMaximumProgress
-        )
-        mCurrentProgress = typedArray.getFloat(
-            R.styleable.ArcProgressView_progress_current_value, mDefaultCurrentProgress
-        )
-        mText = "${mDecimalFormat.format((mCurrentProgress / mMaximumProgress) * 100)}%"
-        setTextSize(
+        val typedArray =
+            context.obtainStyledAttributes(
+                attrs, R.styleable.ArcProgressView, defStyleAttr, defStyleRes
+            )
+        mMaximumProgress =
+            typedArray.getFloat(
+                R.styleable.ArcProgressView_progress_maximum_value, mDefaultMaximumProgress
+            )
+        mCurrentProgress =
+            typedArray.getFloat(
+                R.styleable.ArcProgressView_progress_current_value, mDefaultCurrentProgress
+            )
+        mText =
+            typedArray.getString(R.styleable.ArcProgressView_progress_text) ?: ""
+        mTextSize =
             typedArray.getDimension(
                 R.styleable.ArcProgressView_progress_text_size,
                 mDefaultTexSize
             )
-        )
-        setTextColor(
+        mTextColor =
             typedArray.getColor(
                 R.styleable.ArcProgressView_progress_text_color,
                 context.getColor(R.color.md_theme_onPrimary)
             )
-        )
-        setProgressColor(
+        mProgressColor =
             typedArray.getColor(
                 R.styleable.ArcProgressView_progress_color,
                 context.getColor(R.color.md_theme_primary)
             )
-        )
-        mProgressBackgroundColor = typedArray.getColor(
-            R.styleable.ArcProgressView_progress_background_color,
-            context.getColor(R.color.md_theme_primaryContainer)
-        )
-        mProgressBackgroundPaint.color = mProgressBackgroundColor
+        mProgressBackgroundColor =
+            typedArray.getColor(
+                R.styleable.ArcProgressView_progress_background_color,
+                context.getColor(R.color.md_theme_primaryContainer)
+            )
+        mShowText =
+            typedArray.getBoolean(R.styleable.ArcProgressView_arc_progress_show_text, true)
         mProgressRadius =
             typedArray.getDimension(R.styleable.ArcProgressView_arc_progress_radius, mDefaultRadius)
         mProgressWidth =
-            typedArray.getDimension(R.styleable.ArcProgressView_arc_progress_width, mDefaultWidth)
-        mStartpointCircleColor = typedArray.getColor(
-            R.styleable.ArcProgressView_arc_progress_startpoint_circle_color,
-            context.getColor(R.color.transparent)
-        )
-        mEndpointCircleColor = typedArray.getColor(
-            R.styleable.ArcProgressView_arc_progress_endpoint_circle_color,
-            context.getColor(R.color.md_theme_primary)
-        )
-        mEndpointCircleRadius = typedArray.getDimension(
-            R.styleable.ArcProgressView_arc_progress_endpoint_circle_radius,
-            mProgressWidth / 2f
-        )
+            typedArray.getDimension(
+                R.styleable.ArcProgressView_arc_progress_width,
+                recommendedWidth()
+            )
+        mStartpointCircleColor =
+            typedArray.getColor(
+                R.styleable.ArcProgressView_arc_progress_startpoint_circle_color,
+                context.getColor(R.color.transparent)
+            )
+        mEndpointCircleColor =
+            typedArray.getColor(
+                R.styleable.ArcProgressView_arc_progress_endpoint_circle_color,
+                context.getColor(R.color.md_theme_primary)
+            )
+        mEndpointCircleRadius =
+            typedArray.getDimension(
+                R.styleable.ArcProgressView_arc_progress_endpoint_circle_radius,
+                recommendedRadius()
+            )
         typedArray.recycle()
     }
 

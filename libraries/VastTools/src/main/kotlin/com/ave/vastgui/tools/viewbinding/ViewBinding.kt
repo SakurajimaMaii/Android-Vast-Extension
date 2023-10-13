@@ -43,8 +43,8 @@ import kotlin.reflect.KProperty
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/4
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/vb-delegate/
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/vb-reflection/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/vb-delegate/
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/vb-reflection/
 // Reference: https://juejin.cn/post/6960914424865488932
 
 /**

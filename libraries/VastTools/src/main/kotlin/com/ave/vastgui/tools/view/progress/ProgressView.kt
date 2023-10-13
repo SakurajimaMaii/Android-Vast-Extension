@@ -20,10 +20,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
-import androidx.annotation.ColorInt
-import androidx.annotation.FloatRange
-import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.R
+import java.text.DecimalFormat
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -76,98 +74,44 @@ sealed class ProgressView(
     protected val mDefaultTexSize
         get() = resources.getDimension(R.dimen.default_progress_text_size)
 
+    /**
+     * Default text.
+     *
+     * @since 0.5.5
+     */
+    protected open val mDefaultText
+        get() = DecimalFormat("0.00%").format(mCurrentProgress / mMaximumProgress)
+
     var mMaximumProgress = mDefaultMaximumProgress
-        protected set
+        set(value) {
+            field = value.coerceAtLeast(0f)
+        }
 
     var mCurrentProgress: Float = mDefaultCurrentProgress
-        protected set
+        set(value) {
+            field = value.coerceIn(0f, mMaximumProgress)
+        }
 
-    var mText by NotNUllVar<String>()
-        protected set
+    open var mText: String = ""
 
-    var mTextSize by NotNUllVar<Float>()
-        protected set
+    open var mTextSize: Float = mDefaultTexSize
 
-    var mTextColor by NotNUllVar<Int>()
-        protected set
+    open var mTextColor: Int = 0
 
-    var mProgressBackgroundColor: Int = 0
-        protected set
+    open var mProgressBackgroundColor: Int = 0
 
-    var mProgressColor: Int = 0
-        protected set
+    open var mProgressColor: Int = 0
 
-    /**
-     * Set the maximum progress value.
-     *
-     * @since 0.2.0
-     */
-    open fun setMaximumProgress(@FloatRange(from = 0.0) maximumProgress: Float) {
-        mMaximumProgress = maximumProgress
-    }
-
-    /**
-     * Set the current progress value.
-     *
-     * @throws IllegalStateException
-     * @since 0.2.0
-     */
-    open fun setCurrentProgress(@FloatRange(from = 0.0) currentProgress: Float) {
-        mCurrentProgress = currentProgress.coerceIn(0f, mMaximumProgress)
-    }
+    /** @since 0.5.5 */
+    protected fun textOrDefault(): String = mText.ifEmpty { mDefaultText }
 
     /**
      * Reset progress.
      *
      * @since 0.2.0
      */
-    open fun resetProgress() {
+    fun resetProgress() {
         mCurrentProgress = 0f
-    }
-
-    /**
-     * Set the text.
-     *
-     * @since 0.2.0
-     */
-    open fun setText(text: String) {
-        mText = text
-    }
-
-    /**
-     * Set text size.
-     *
-     * @since 0.2.0
-     */
-    open fun setTextSize(@FloatRange(from = 0.0) size: Float) {
-        mTextSize = size
-    }
-
-    /**
-     * Set text color.
-     *
-     * @since 0.2.0
-     */
-    open fun setTextColor(@ColorInt color: Int) {
-        mTextColor = color
-    }
-
-    /**
-     * Set the background color of the progress.
-     *
-     * @since 0.2.0
-     */
-    open fun setProgressBackgroundColor(@ColorInt color: Int) {
-        mProgressBackgroundColor = color
-    }
-
-    /**
-     * Set the color of the progress.
-     *
-     * @since 0.2.0
-     */
-    open fun setProgressColor(@ColorInt color: Int) {
-        mProgressColor = color
     }
 
 }

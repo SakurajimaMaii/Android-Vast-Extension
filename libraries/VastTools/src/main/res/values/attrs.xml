@@ -131,10 +131,12 @@
     <declare-styleable name="ArcProgressView">
         <attr name="progress_maximum_value" />
         <attr name="progress_current_value" />
+        <attr name="progress_text" />
         <attr name="progress_text_size" />
         <attr name="progress_text_color" />
         <attr name="progress_background_color" />
         <attr name="progress_color" />
+        <attr name="arc_progress_show_text" format="boolean" />
         <attr name="arc_progress_radius" format="dimension|reference" />
         <attr name="arc_progress_width" format="dimension|reference" />
         <attr name="arc_progress_startpoint_circle_color" format="color|reference" />
@@ -155,10 +157,12 @@
     <declare-styleable name="HorizontalTextProgressView">
         <attr name="progress_maximum_value" />
         <attr name="progress_current_value" />
+        <attr name="progress_text" />
         <attr name="progress_text_size" />
         <attr name="progress_text_color" />
         <attr name="progress_background_color" />
         <attr name="progress_color" />
+        <attr name="horizontal_text_progress_box_color" format="color|reference" />
         <attr name="horizontal_text_progress_height" format="dimension|reference" />
         <attr name="horizontal_text_progress_text_margin" format="dimension|reference" />
     </declare-styleable>
@@ -166,10 +170,12 @@
     <declare-styleable name="LineTextProgressView">
         <attr name="progress_maximum_value" />
         <attr name="progress_current_value" />
+        <attr name="progress_text" />
         <attr name="progress_text_size" />
         <attr name="progress_text_color" />
         <attr name="progress_background_color" />
         <attr name="progress_color" />
+        <attr name="linetext_progress_box_color" format="color|reference" />
         <attr name="linetext_progress_height" format="dimension|reference" />
         <attr name="linetext_progress_text_margin" format="dimension|reference" />
     </declare-styleable>
@@ -182,19 +188,15 @@
         <attr name="progress_text_color" />
         <attr name="progress_background_color" />
         <attr name="progress_color" />
+        <attr name="wave_progress_image" format="reference" />
+        <attr name="wave_progress_radius" format="dimension|reference" />
         <attr name="wave_progress_wave_speed" format="float" />
         <attr name="wave_progress_wave_width" format="float" />
         <attr name="wave_progress_wave_height" format="float" />
+        <attr name="wave_progress_show_text" format="boolean" />
         <attr name="wave_progress_stroke_color" format="color|reference" />
-        <attr name="wave_progress_hint_text" format="string|reference" />
-        <attr name="wave_progress_hint_color" format="color|reference" />
-        <attr name="wave_progress_hint_size" format="dimension|reference" />
-        <attr name="wave_progress_text_space" format="dimension|reference" />
-        <!-- The sum of wave_progress_stroke_ratio and wave_progress_space_ratio must be less than 1.0.
-        If the value is 0.0, the wave_progress_stroke_color will be set to the transparent. -->
-        <attr name="wave_progress_stroke_ratio" format="float" />
-        <!-- The sum of wave_progress_stroke_ratio and wave_progress_space_ratio must be less than 1.0. -->
-        <attr name="wave_progress_space_ratio" format="float" />
+        <attr name="wave_progress_stroke_width" format="dimension|reference" />
+        <attr name="wave_progress_space_width" format="dimension|reference" />
     </declare-styleable>
 
     <declare-styleable name="RatingView">

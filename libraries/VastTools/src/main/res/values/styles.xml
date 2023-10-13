@@ -91,7 +91,6 @@
 
     <style name="BaseArcProgressView" parent="BaseProgressView">
         <item name="arc_progress_radius">@dimen/default_arc_progress_radius</item>
-        <item name="arc_progress_width">@dimen/default_arc_progress_width</item>
         <item name="arc_progress_startpoint_circle_color">@color/transparent</item>
         <item name="arc_progress_endpoint_circle_color">@color/md_theme_primary</item>
     </style>
@@ -103,6 +102,9 @@
     </style>
 
     <style name="BaseHorizontalTextProgressView" parent="BaseProgressView">
+        <item name="horizontal_text_progress_box_color">
+            @color/md_theme_primary
+        </item>
         <item name="horizontal_text_progress_height">
             @dimen/default_horizontal_text_progress_height
         </item>
@@ -112,6 +114,9 @@
     </style>
 
     <style name="BaseLineTextProgressView" parent="BaseProgressView">
+        <item name="linetext_progress_box_color">
+            @color/md_theme_primary
+        </item>
         <item name="linetext_progress_height">
             @dimen/default_linetext_progress_height
         </item>
@@ -122,6 +127,9 @@
 
     <style name="BaseWaveProgressView" parent="BaseProgressView">
         <item name="wave_progress_stroke_color">@color/md_theme_secondary</item>
+        <item name="wave_progress_stroke_width">2dp</item>
+        <item name="wave_progress_space_width">10dp</item>
+        <item name="wave_progress_radius">100dp</item>
     </style>
 
     <style name="BaseRatingView">

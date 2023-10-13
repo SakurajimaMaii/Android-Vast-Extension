@@ -26,12 +26,10 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.toRect
 import androidx.core.graphics.withSave
-import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.graphics.BmpUtils
 
@@ -63,8 +61,7 @@ class HorizontalProgressView @JvmOverloads constructor(
     private val mDefaultStrokeWidth
         get() = resources.getDimension(R.dimen.default_horizontal_progress_stroke_width)
 
-    private val mXfermode
-        get() = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+    private val mXfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
     private var mBackgroundDrawable: Drawable? = null
     private var mBackgroundBitmap: Bitmap? = null
     private val mBackgroundPath = Path()
@@ -72,20 +69,39 @@ class HorizontalProgressView @JvmOverloads constructor(
     private var mProgressBitmap: Bitmap? = null
     private val mRectF = RectF()
     private val mProgressDrawableRectF = RectF()
+
     private val mBackgroundDrawablePaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mDrawablePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val mBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val mProgressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-    private val mBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeCap = Paint.Cap.ROUND
-    }
-    private val mProgressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeCap = Paint.Cap.ROUND
-    }
+    override var mText: String
+        get() = throw RuntimeException("You can't get ${this::mText.name}.")
+        set(_) = throw RuntimeException("You can't set ${this::mText.name}.")
+
+    override var mTextColor: Int
+        get() = throw RuntimeException("You can't get ${this::mTextColor.name}.")
+        set(_) = throw RuntimeException("You can't set ${this::mTextColor.name}.")
+
+    override var mTextSize: Float
+        get() = throw RuntimeException("You can't get ${this::mTextSize.name}.")
+        set(_) = throw RuntimeException("You can't set ${this::mTextSize.name}.")
+
+    override var mProgressColor: Int
+        set(value) {
+            mProgressPaint.color = value
+        }
+        get() = mProgressPaint.color
+
+    override var mProgressBackgroundColor: Int
+        set(value) {
+            mBackgroundPaint.color = value
+        }
+        get() = mBackgroundPaint.color
 
     var mStrokeWidth: Float = mDefaultStrokeWidth
         set(value) {
-            if (value < 0f) return
-            field = value
+            field = value.coerceAtLeast(0f)
         }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -142,52 +158,6 @@ class HorizontalProgressView @JvmOverloads constructor(
                 mDrawablePaint
             )
         }
-    }
-
-    /**
-     * @see nothing_to_do
-     * @since 0.5.3
-     */
-    override fun setText(text: String) {
-        nothing_to_do()
-    }
-
-    /**
-     * @see nothing_to_do
-     * @since 0.5.3
-     */
-    override fun setTextColor(color: Int) {
-        nothing_to_do()
-    }
-
-    /**
-     * @see nothing_to_do
-     * @since 0.5.3
-     */
-    override fun setTextSize(size: Float) {
-        nothing_to_do()
-    }
-
-    /**
-     * Set color-int for [mProgressColor] and [mProgressPaint].
-     *
-     * @see ProgressView.setProgressColor
-     * @since 0.5.3
-     */
-    override fun setProgressColor(@ColorInt color: Int) {
-        super.setProgressColor(color)
-        mProgressPaint.color = color
-    }
-
-    /**
-     * Set color-int for [mProgressBackgroundColor] and [mBackgroundPaint].
-     *
-     * @see ProgressView.setProgressBackgroundColor
-     * @since 0.5.3
-     */
-    override fun setProgressBackgroundColor(@ColorInt color: Int) {
-        super.setProgressBackgroundColor(color)
-        mBackgroundPaint.color = color
     }
 
     /**
@@ -286,7 +256,6 @@ class HorizontalProgressView @JvmOverloads constructor(
         width: Float,
         paint: Paint
     ) {
-        setLayerType(LAYER_TYPE_SOFTWARE, null)
         val bitmap = Bitmap.createBitmap(
             (right - left).toInt(), (bottom - top).toInt(), Bitmap.Config.ARGB_8888
         )
@@ -333,16 +302,14 @@ class HorizontalProgressView @JvmOverloads constructor(
         mCurrentProgress = typedArray.getFloat(
             R.styleable.HorizontalProgressView_progress_current_value, mDefaultCurrentProgress
         )
-        val progressColor = typedArray.getColor(
+        mProgressColor = typedArray.getColor(
             R.styleable.HorizontalProgressView_progress_color,
             context.getColor(R.color.md_theme_primary)
         )
-        setProgressColor(progressColor)
-        val progressBackgroundColor = typedArray.getColor(
+        mProgressBackgroundColor = typedArray.getColor(
             R.styleable.HorizontalProgressView_progress_background_color,
             context.getColor(R.color.md_theme_primaryContainer)
         )
-        setProgressBackgroundColor(progressBackgroundColor)
         mStrokeWidth = typedArray.getDimension(
             R.styleable.HorizontalProgressView_horizontal_progress_stroke_width, mDefaultStrokeWidth
         )

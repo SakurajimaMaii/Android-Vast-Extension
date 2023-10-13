@@ -16,7 +16,9 @@
 
 package com.ave.vastgui.tools.lifecycle
 
+import android.app.Activity
 import android.os.Build
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -37,18 +39,21 @@ import java.lang.reflect.Type
  */
 internal fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
     return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-        @Suppress("DEPRECATION")
-        modelClass.newInstance()
+        @Suppress("DEPRECATION") modelClass.newInstance()
     } else modelClass.getDeclaredConstructor().newInstance()
 }
 
 /**
  * Creates an instance of the view model class to use.
  *
- * @param store ViewModelStoreOwner where ViewModels will be stored.
- * @param createVM create viewModel with parameters.
- * @param VM ViewModel type class
- * @return ViewModel.
+ * @param current The current class, maybe [Activity] or [Fragment].
+ * @param store A ViewModelStoreOwner whose ViewModelStore will be used to
+ *     retain ViewModels
+ * @param base If you provide this parameter, you can effectively reduce
+ *     the number of recursions.
+ * @param createVM You need to provide this parameter when you need to
+ *     create ViewModel instance which have parameters in constructor
+ * @param VM The class type of the ViewModel.
  * @since 0.5.2
  */
 @JvmOverloads
@@ -64,8 +69,7 @@ fun <VM : ViewModel> reflectViewModel(
         }
         val genericSuperclass = current.genericSuperclass
         if (genericSuperclass is ParameterizedType) {
-            val actualTypeArguments: Array<Type> =
-                genericSuperclass.actualTypeArguments
+            val actualTypeArguments: Array<Type> = genericSuperclass.actualTypeArguments
             for (actualTypeArgument in actualTypeArguments) {
                 val aClass1: Class<*> = try {
                     cast(actualTypeArgument)
