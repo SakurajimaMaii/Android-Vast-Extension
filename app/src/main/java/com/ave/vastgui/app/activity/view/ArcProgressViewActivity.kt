@@ -60,21 +60,21 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
         )
 
         getBinding().arcProgressView.apply {
-            setProgressShader(
-                LinearGradient(
-                    -700f, 0f, 700f, 0f,
-                    colors, pos,
-                    Shader.TileMode.CLAMP
-                )
+            mProgressShader = LinearGradient(
+                -700f, 0f, 700f, 0f,
+                colors, pos,
+                Shader.TileMode.CLAMP
             )
-            mProgressWidth = 10f.DP
+            mEndpointCircleRadius = 15f.DP.coerceAtLeast(recommendedRadius())
+            mProgressWidth = 15f.DP
+            mEndpointCircleColor = ColorUtils.colorHex2Int("#eb4d4b")
         }
 
         getBinding().arcProgressView.setOnClickListener {
             val bitmap = viewSnapshot(it)
             BmpUtils.saveBitmapAsFile(
                 bitmap = bitmap,
-                File(FileMgr.appInternalFilesDir(), "width_10.jpg")
+                File(FileMgr.appInternalFilesDir(), "arc_progress_endpoint_radius.jpg")
             )?.apply {
                 SimpleToast.showShortMsg("截图${name}已保存")
             }
@@ -105,9 +105,8 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
             .setListener {
                 onDownloading = {
                     getBinding().arcProgressView.refreshWithInvalidate {
-                        setCurrentProgress(
+                        mCurrentProgress =
                             it.rate * getBinding().arcProgressView.mMaximumProgress
-                        )
                     }
                 }
                 onFailure = {
@@ -116,7 +115,7 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
                 onSuccess = {
                     logger.i("download success.")
                     getBinding().arcProgressView.refreshWithInvalidate {
-                        setCurrentProgress(getBinding().arcProgressView.mMaximumProgress)
+                        mCurrentProgress = getBinding().arcProgressView.mMaximumProgress
                     }
                 }
                 onCancel = {

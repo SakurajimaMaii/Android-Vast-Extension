@@ -24,16 +24,22 @@
 
     <com.ave.vastgui.tools.view.progress.WaveProgressView
         android:id="@+id/waveProgressView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
-        app:progress_current_value="0"
-        app:wave_progress_space_ratio="0.0"
-        app:wave_progress_stroke_ratio="0.0"
-        tools:ignore="MissingConstraints" />
+        app:progress_current_value="50" />
 
-    <com.ave.vastgui.tools.view.textview.MarqueeTextView
+    <com.ave.vastgui.tools.view.progress.WaveProgressView
+        android:id="@+id/imageProgressView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        app:progress_current_value="50"
+        app:wave_progress_image="@drawable/github" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -41,41 +47,44 @@
         android:text="@string/set_progress" />
 
     <com.google.android.material.slider.Slider
-        android:id="@+id/bottom_seekbar"
+        android:id="@+id/progressSlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:contentDescription="@string/set_progress"
         android:valueFrom="0.0"
         android:valueTo="100.0" />
 
-    <com.ave.vastgui.tools.view.textview.MarqueeTextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:gravity="start"
-        android:text="@string/set_stroke_ratio" />
+        android:text="@string/set_space" />
 
     <com.google.android.material.slider.Slider
-        android:id="@+id/setStrokeRatio"
+        android:id="@+id/spaceSlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:contentDescription="@string/set_space"
         android:valueFrom="0.0"
-        android:valueTo="0.5" />
+        android:valueTo="100.0" />
 
-    <com.ave.vastgui.tools.view.textview.MarqueeTextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:gravity="start"
-        android:text="@string/set_space_ratio" />
+        android:text="@string/set_stroke" />
 
     <com.google.android.material.slider.Slider
-        android:id="@+id/setSpaceRatio"
+        android:id="@+id/strokeSlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:contentDescription="@string/set_stroke"
         android:valueFrom="0.0"
-        android:valueTo="0.5" />
+        android:valueTo="100.0" />
 
 </LinearLayout>

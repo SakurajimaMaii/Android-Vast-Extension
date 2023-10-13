@@ -20,13 +20,8 @@ import android.os.Bundle
 import android.widget.SeekBar
 import androidx.activity.ComponentActivity
 import com.ave.vastgui.app.databinding.ActivityHorizontalProgressViewBinding
-import com.ave.vastgui.tools.graphics.BmpUtils
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
-import com.ave.vastgui.tools.view.extension.viewSnapshot
-import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.ave.vastgui.tools.viewbinding.viewBinding
-import java.io.File
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -39,46 +34,26 @@ class HorizontalProgressViewActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mBinding.horizontalProgressView.setOnClickListener {
-            val bitmap = viewSnapshot(it)
-            BmpUtils.saveBitmapAsFile(
-                bitmap = bitmap,
-                File(FileMgr.appInternalFilesDir(), "horizontal_stroke_width_5dp.jpg")
-            )?.apply {
-                SimpleToast.showShortMsg("截图${name}已保存")
-            }
-        }
-
-        mBinding.horizontalTextProgressView.setOnClickListener {
-            val bitmap = viewSnapshot(it)
-            BmpUtils.saveBitmapAsFile(
-                bitmap = bitmap,
-                File(FileMgr.appInternalFilesDir(), "horizontal_text_margin_10dp.jpg")
-            )?.apply {
-                SimpleToast.showShortMsg("截图${name}已保存")
-            }
-        }
-
-        mBinding.lineTextProgressView.setOnClickListener {
-            val bitmap = viewSnapshot(it)
-            BmpUtils.saveBitmapAsFile(
-                bitmap = bitmap,
-                File(FileMgr.appInternalFilesDir(), "line_text_height_15dp.jpg")
-            )?.apply {
-                SimpleToast.showShortMsg("截图${name}已保存")
-            }
-        }
+//        mBinding.lineTextProgressView.setOnClickListener {
+//            val bitmap = viewSnapshot(it)
+//            BmpUtils.saveBitmapAsFile(
+//                bitmap = bitmap,
+//                File(FileMgr.appInternalFilesDir(), "line_text_box_color.jpg")
+//            )?.apply {
+//                SimpleToast.showShortMsg("截图${name}已保存")
+//            }
+//        }
 
         mBinding.bottomSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 mBinding.horizontalProgressView.refreshWithInvalidate {
-                    setCurrentProgress(progress.toFloat())
+                    mCurrentProgress = progress.toFloat()
                 }
                 mBinding.horizontalTextProgressView.refreshWithInvalidate {
-                    setCurrentProgress(progress.toFloat())
+                    mCurrentProgress = progress.toFloat()
                 }
                 mBinding.lineTextProgressView.refreshWithInvalidate {
-                    setCurrentProgress(progress.toFloat())
+                    mCurrentProgress = progress.toFloat()
                 }
             }
 

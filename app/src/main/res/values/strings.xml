@@ -58,8 +58,8 @@
     <string name="send_email">发送电子邮件</string>
     <string name="send_mms_message">发送短信</string>
     <string name="set_progress">设置进度</string>
-    <string name="set_space_ratio">设置Space ratio</string>
-    <string name="set_stroke_ratio">设置Stroke ratio</string>
+    <string name="set_space">设置Space</string>
+    <string name="set_stroke">设置Stroke</string>
     <string name="shape">Shape工具类</string>
     <string name="show_dialog">展示对话框</string>
     <string name="snapshot_example">截图示例</string>
