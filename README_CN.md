@@ -38,10 +38,6 @@
 
 请点击 [Android-Vast-Extension](https://ave.entropy2020.cn/) 获取详细文档说明。
 
-## 依赖信息
-
-由于项目使用**Composingbuilds module**进行项目管理，你可以在[PluginVersion](https://github.com/SakurajimaMaii/PluginVersion)获取项目依赖信息。
-
 ## Star
 
 [![Star History Chart](https://api.star-history.com/svg?repos=SakurajimaMaii/Android-Vast-Extension&type=Date)](https://star-history.com/#SakurajimaMaii/Android-Vast-Extension&Date)

@@ -35,7 +35,6 @@ buildscript {
         classpath("com.android.tools.build:gradle:8.1.2")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0")
         classpath("org.jetbrains.dokka:dokka-base:1.9.0")
-//        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.5.0.2730")
     }
 }
 
@@ -48,16 +47,6 @@ allprojects {
     }
 }
 
-//sonarqube {
-//    properties {
-//        property("sonar.sourceEncoding", "UTF-8")
-//        property("sonar.projectKey", "VastUtils")
-//        property("sonar.projectName", project.name)
-//        property("sonar.sources", "src")
-//        property("sonar.projectVersion", project.version)
-//    }
-//}
-
 tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
+    delete(layout.buildDirectory)
 }

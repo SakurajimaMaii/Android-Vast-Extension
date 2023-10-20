@@ -116,8 +116,6 @@ dependencies {
     implementation(project(":libraries:VastJIntent-Annotation"))
     ksp(project(":libraries:VastJIntent-Processor"))
     implementation("tech.thdev:extensions-compose-keyboard-state:1.5.0")
-//    implementation("com.bennyhuo.tieguanyin:runtime-androidx:2.1.0")
-//    ksp("com.bennyhuo.tieguanyin:compiler-ksp:2.1.0")
     debugImplementation(Compose.compose_ui_tooling)
     debugImplementation(Compose.compose_ui_test_manifest)
 }

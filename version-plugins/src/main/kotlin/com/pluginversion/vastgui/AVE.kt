@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 
-include(":app")
-include(":app-compose")
-includeBuild("version-plugins")
-includeBuild("convention-plugins")
+package com.pluginversion.vastgui
 
-rootProject.name = "Android-Vast-Extension"
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2023/3/21
+// Description: 
+// Documentation:
+// Reference:
 
-// =======
-// = Lib =
-// =======
-
-val libs = arrayOf(
-        "VastAdapter",
-        "VastCore",
-        "VastNetStateLayout",
-        "VastTools",
-        "VastJIntent",
-        "VastJIntent-Annotation",
-        "VastJIntent-Processor",
-)
-
-libs.forEach {
-        include(":libraries:$it")
+object AVE {
+    const val adapter = "io.github.sakurajimamaii:VastAdapter:0.1.0"
+    const val core = "io.github.sakurajimamaii:VastCore:0.0.6"
+    const val netstatelayout = "io.github.sakurajimamaii:VastNetStateLayout:0.0.4"
+    const val tools = "io.github.sakurajimamaii:VastTools:0.5.3"
 }

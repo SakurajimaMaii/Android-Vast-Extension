@@ -14,27 +14,19 @@
  * limitations under the License.
  */
 
-include(":app")
-include(":app-compose")
-includeBuild("version-plugins")
-includeBuild("convention-plugins")
+package com.pluginversion.vastgui
 
-rootProject.name = "Android-Vast-Extension"
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 
-// =======
-// = Lib =
-// =======
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2022/8/30 23:50
+// Description: 
+// Documentation:
 
-val libs = arrayOf(
-        "VastAdapter",
-        "VastCore",
-        "VastNetStateLayout",
-        "VastTools",
-        "VastJIntent",
-        "VastJIntent-Annotation",
-        "VastJIntent-Processor",
-)
+class VersionPlugin : Plugin<Project> {
+    override fun apply(target: Project) {
 
-libs.forEach {
-        include(":libraries:$it")
+    }
 }

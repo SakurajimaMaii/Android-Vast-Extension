@@ -38,10 +38,6 @@
 
 Please click [Android-Vast-Extension](https://ave.entropy2020.cn/) to get detailed documentation instructions.
 
-## Dependencies
-
-Since the project uses **Composingbuilds module** for project management, you can get project dependency information at [PluginVersion](https://github.com/SakurajimaMaii/PluginVersion) .
-
 ## Star
 
 [![Star History Chart](https://api.star-history.com/svg?repos=SakurajimaMaii/Android-Vast-Extension&type=Date)](https://star-history.com/#SakurajimaMaii/Android-Vast-Extension&Date)

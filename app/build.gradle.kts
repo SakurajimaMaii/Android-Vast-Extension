@@ -32,24 +32,6 @@ plugins {
 }
 
 android {
-
-    signingConfigs {
-
-        getByName("debug") {
-            storeFile = File("D:\\AndroidKey\\VastUtils.jks")
-            storePassword = project.property("myStorePassword") as String?
-            keyPassword = project.property("myKeyPassword") as String?
-            keyAlias = project.property("myKeyAlias") as String?
-        }
-
-        create("release") {
-            storeFile = File("D:\\AndroidKey\\VastUtils.jks")
-            storePassword = project.property("myStorePassword") as String?
-            keyPassword = project.property("myKeyPassword") as String?
-            keyAlias = project.property("myKeyAlias") as String?
-        }
-    }
-
     compileSdkPreview = "UpsideDownCake"
     compileSdk = Version.compile_sdk_version
 
