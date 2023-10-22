@@ -1,4 +1,3 @@
-
 <!--
   ~ Copyright 2022 VastGui guihy2019@gmail.com
   ~
@@ -74,7 +73,9 @@
         <item name="Default_ArcProgressView_Style">@style/BaseArcProgressView</item>
         <item name="Default_LineTextProgressView_Style">@style/BaseLineTextProgressView</item>
         <item name="Default_HorizontalProgressView_Style">@style/BaseHorizontalProgressView</item>
-        <item name="Default_HorizontalTextProgressView_Style">@style/BaseHorizontalTextProgressView</item>
+        <item name="Default_HorizontalTextProgressView_Style">
+            @style/BaseHorizontalTextProgressView
+        </item>
         <item name="Default_WaveProgressView_Style">@style/BaseWaveProgressView</item>
         <item name="Default_RatingView_Style">@style/BaseRatingView</item>
         <item name="Default_Vp2IndicatorView_Style">@style/BaseVp2Indicator</item>
