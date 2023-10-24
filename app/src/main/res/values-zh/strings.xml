@@ -69,4 +69,5 @@
     <string name="test_text">测试文本</string>
     <string name="theme">换肤框架示例</string>
     <string name="wireless_setting">无线设置\n</string>
+    <string name="change_dark">切换暗夜模式</string>
 </resources>

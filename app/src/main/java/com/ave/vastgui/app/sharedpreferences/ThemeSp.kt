@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app
+package com.ave.vastgui.app.sharedpreferences
 
-import android.app.Application
-import com.ave.vastgui.tools.config.ToolsConfig
+import com.ave.vastgui.tools.sharedpreferences.SpEncrypted
+import com.ave.vastgui.tools.sharedpreferences.boolean
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/6/20
+// Date: 2023/3/14
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/save-key-value-data/sp-encrypted/
 
-class App : Application() {
+object ThemeSp {
 
-    override fun onCreate() {
-        super.onCreate()
-        ToolsConfig.init(this)
+    private val mSp by lazy{
+        SpEncrypted.getInstance(this::class.java.simpleName).getSharedPreferences()
     }
+
+    // declare variables
+    var isDark by mSp.boolean(false)
 
 }

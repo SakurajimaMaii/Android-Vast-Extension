@@ -22,10 +22,10 @@ import com.pluginversion.vastgui.Squareup
 import com.pluginversion.vastgui.Version
 
 plugins {
+    id("kotlin-kapt")
     id("com.android.application")
     id("kotlin-android")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
     id("com.google.devtools.ksp")
     id("com.pluginversion.vastgui")
     kotlin("plugin.serialization")
@@ -85,6 +85,7 @@ android {
     }
 
     buildFeatures {
+        viewBinding = true
         dataBinding = true
     }
 
@@ -93,12 +94,6 @@ android {
     sourceSets["main"].java.srcDirs("src/main/kotlin","src/main/java","src/main/compose")
 
 }
-
-//project(":app") {
-//    sonarqube {
-//        this.isSkipProject = true
-//    }
-//}
 
 dependencies {
     implementation(AndroidX.activity_ktx)

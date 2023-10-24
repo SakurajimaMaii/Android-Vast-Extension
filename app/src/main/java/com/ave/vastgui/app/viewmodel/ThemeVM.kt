@@ -14,27 +14,28 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.sharedpreferences
+package com.ave.vastgui.app.viewmodel
 
-import com.ave.vastgui.tools.sharedpreferences.SpEncrypted
-import com.ave.vastgui.tools.sharedpreferences.float
-import com.ave.vastgui.tools.sharedpreferences.string
-
+import androidx.lifecycle.ViewModel
+import com.ave.vastgui.app.sharedpreferences.ThemeSp
+import com.ave.vastgui.tools.theme.AppTheme
+import com.ave.vastgui.tools.theme.darkColorScheme
+import com.ave.vastgui.tools.theme.lightColorScheme
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/3/14
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/save-key-value-data/sp-encrypted/
+// Date: 2023/10/22
+// Description: 
+// Documentation:
+// Reference:
 
-class SpEncryptedExample(name: String) {
-
-    private val sp by lazy{
-        SpEncrypted.getInstance(name).getSharedPreferences()
+class ThemeVM : ViewModel() {
+    fun changeTheme() {
+        ThemeSp.isDark = !ThemeSp.isDark
+        if (ThemeSp.isDark) {
+            AppTheme.update(darkColorScheme)
+        } else {
+            AppTheme.update(lightColorScheme)
+        }
     }
-
-    // declare variables
-    var count by sp.float()
-
-    var name by sp.string("Hello")
-
 }

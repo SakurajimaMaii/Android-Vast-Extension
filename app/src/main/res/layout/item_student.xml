@@ -18,6 +18,8 @@
 
     <data>
 
+        <import type="com.ave.vastgui.tools.theme.AppTheme" />
+
         <variable
             name="item"
             type="com.ave.vastgui.app.adapter.entity.Student" />
@@ -31,15 +33,19 @@
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@{AppTheme.INSTANCE.surface}"
             android:gravity="center"
             android:text="@{item.name}"
+            android:textColor="@{AppTheme.INSTANCE.onSurface}"
             android:textSize="15sp" />
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@{AppTheme.INSTANCE.surface}"
             android:gravity="center"
             android:text="@{item.age}"
+            android:textColor="@{AppTheme.INSTANCE.onSurface}"
             android:textSize="15sp" />
     </LinearLayout>
 </layout>

@@ -17,7 +17,7 @@
 package com.ave.vastgui.app.activity.view
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityRatingBinding
 import com.ave.vastgui.tools.utils.DensityUtils.DP
@@ -30,7 +30,7 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 // Email: sakurajimamai2020@qq.com
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/rating/rating-view/
 
-class RatingActivity : ComponentActivity(R.layout.activity_rating) {
+class RatingActivity : AppCompatActivity(R.layout.activity_rating) {
 
     private val mBinding by viewBinding(ActivityRatingBinding::bind)
 
