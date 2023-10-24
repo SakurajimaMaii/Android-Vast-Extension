@@ -19,9 +19,6 @@ package com.pluginversion.vastgui
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/21
-// Description: 
-// Documentation:
-// Reference:
 
 object AVE {
     const val adapter = "io.github.sakurajimamaii:VastAdapter:0.1.0"

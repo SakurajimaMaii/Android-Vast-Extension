@@ -16,12 +16,9 @@
 
 package com.pluginversion.vastgui
 
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/3 12:20
-// Description: 
-// Documentation:
 
 object Squareup {
     const val okhttp3 = "com.squareup.okhttp3:okhttp:4.10.0"

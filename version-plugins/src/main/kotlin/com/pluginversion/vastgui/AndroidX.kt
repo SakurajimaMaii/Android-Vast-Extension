@@ -19,8 +19,6 @@ package com.pluginversion.vastgui
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/29 17:04
-// Description:
-// Documentation:
 
 object AndroidX{
     private const val activity_version = "1.7.0-beta02" // https://developer.android.com/jetpack/androidx/releases/activity

@@ -19,8 +19,6 @@ package com.pluginversion.vastgui
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/31 15:40
-// Description: 
-// Documentation:
 
 object Google {
     private const val hilt_version = "2.46.1" // https://dagger.dev/hilt/gradle-setup
@@ -33,6 +31,6 @@ object Google {
     const val gson = "com.google.code.gson:gson:2.10.1"
     const val hilt_android = "com.google.dagger:hilt-android:$hilt_version"
     const val hilt_compiler = "com.google.dagger:hilt-compiler:$hilt_version"
-    const val material = "com.google.android.material:material:1.11.0-alpha02"
+    const val material = "com.google.android.material:material:1.11.0-beta01"
     const val symbol_processing_api = "com.google.devtools.ksp:symbol-processing-api:1.8.10-1.0.9"
 }

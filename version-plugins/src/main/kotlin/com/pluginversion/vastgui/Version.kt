@@ -21,8 +21,6 @@ import org.gradle.api.JavaVersion
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/29 17:04
-// Description: 
-// Documentation:
 
 object Version {
     const val compile_sdk_version = 34

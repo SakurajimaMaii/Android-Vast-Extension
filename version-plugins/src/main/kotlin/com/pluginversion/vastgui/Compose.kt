@@ -20,8 +20,6 @@ package com.pluginversion.vastgui
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/31 15:00
-// Description: 
-// Documentation:
 
 object Compose {
     private const val version_compose = "1.3.3"
@@ -33,7 +31,7 @@ object Compose {
     private const val version_compose_lifecycle_viewmodel = "2.5.1"
     private const val version_compose_material = "1.2.1"
     private const val version_compose_runtime = "1.2.1"
-    private const val version_material3_version = "1.1.0-alpha06"
+    private const val version_material3_version = "1.2.0-alpha10"
     private const val version_nav_version = "2.5.3" // https://developer.android.com/jetpack/compose/navigation
 
     const val compose_activity = "androidx.activity:activity-compose:$version_compose_activity"

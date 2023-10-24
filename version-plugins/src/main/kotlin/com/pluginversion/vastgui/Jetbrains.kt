@@ -20,8 +20,6 @@ package com.pluginversion.vastgui
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/3 12:18
-// Description: 
-// Documentation:
 
 object Jetbrains {
 
