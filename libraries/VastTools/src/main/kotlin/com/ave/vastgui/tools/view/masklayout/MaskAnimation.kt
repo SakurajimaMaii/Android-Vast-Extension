@@ -19,9 +19,6 @@ package com.ave.vastgui.tools.view.masklayout
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/10/21
-// Description: 
-// Documentation:
-// Reference:
 
 /**
  * Mask Animation.

@@ -19,28 +19,54 @@ package com.ave.vastgui.tools.view.masklayout
 import android.animation.TimeInterpolator
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
+import android.view.ViewTreeObserver
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatDelegate
 import com.ave.vastgui.core.extension.NotNUllVar
+import com.ave.vastgui.tools.annotation.ExperimentalView
 import com.ave.vastgui.tools.view.extension.viewSnapshot
 import kotlin.math.hypot
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/10/20
-// Description: 
-// Documentation:
-// Reference:
 
 /**
  * Mask Layout.
  *
  * @since 0.5.6
  */
+@ExperimentalView
 class MaskLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
 ) : FrameLayout(context, attrs) {
+
+    interface MaskAnimationListener {
+        /**
+         * Callback when [MaskView] is already prepared. At this time,
+         * you should switch the display of page elements, such as adjusting
+         * the text color from black in day mode to white in dark night mode.
+         *
+         * **Warning: You cannot call method like [AppCompatDelegate.setDefaultNightMode] in
+         * this callback to modify the mode ofthe activity, because modifying the activity
+         * mode will cause activity recreate, leading to serious consequences such as
+         * animation abnormalities.**
+         *
+         * @since 0.5.6
+         */
+        fun onMaskComplete()
+
+        /**
+         * Callback when the mask animation has finished. At this time you can modify the app
+         * to dark night mode.
+         *
+         * @since 0.5.6
+         */
+        fun onMaskFinished()
+    }
 
     private var mAnimationRunning: Boolean = false
     private var mTargetMaskRadius: Float = 0f
@@ -66,9 +92,11 @@ class MaskLayout @JvmOverloads constructor(
     /**
      * Active mask animation.
      *
+     * @see MaskAnimationListener.onMaskComplete
+     * @see MaskAnimationListener.onMaskFinished
      * @since 0.5.6
      */
-    fun activeMask(animation: MaskAnimation, onMaskComplete: () -> Unit) {
+    fun activeMask(animation: MaskAnimation, listener: MaskAnimationListener) {
         if (mAnimationRunning) {
             return
         } else {
@@ -82,12 +110,29 @@ class MaskLayout @JvmOverloads constructor(
                 mMaskCenterY = this@MaskLayout.mMaskCenterY
             }
             addView(maskView)
-            onMaskComplete()
+            listener.onMaskComplete()
             maskView.activeMask(animation) {
                 removeView(maskView)
                 mAnimationRunning = false
+                listener.onMaskFinished()
             }
         }
+    }
+
+    /**
+     * Update Coordinate of the mask circle center by [view].
+     *
+     * @since 0.5.6
+     */
+    fun updateCoordinate(view: View) {
+        view.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                mMaskCenterX = view.left + view.width / 2f
+                mMaskCenterY = view.top + view.height / 2f
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this)
+            }
+        })
     }
 
     init {

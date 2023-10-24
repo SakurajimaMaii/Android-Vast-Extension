@@ -32,9 +32,6 @@ import com.ave.vastgui.core.extension.NotNUllVar
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/10/21
-// Description: 
-// Documentation:
-// Reference:
 
 /**
  * Mask View.
@@ -77,6 +74,11 @@ class MaskView internal constructor(context: Context) : View(context) {
         restoreToCount(layer)
     }
 
+    /**
+     * Active Mask.
+     *
+     * @since 0.5.6
+     */
     fun activeMask(animation: MaskAnimation, animFinish: () -> Unit) {
         mMaskAnimation = animation
         val radiusRange = when (animation) {
