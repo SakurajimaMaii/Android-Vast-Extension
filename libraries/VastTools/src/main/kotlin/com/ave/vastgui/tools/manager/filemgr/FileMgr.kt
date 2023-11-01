@@ -17,13 +17,21 @@
 package com.ave.vastgui.tools.manager.filemgr
 
 import android.content.Context
+import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.webkit.MimeTypeMap
+import androidx.annotation.RequiresApi
+import androidx.core.content.FileProvider
 import androidx.security.crypto.EncryptedFile
+import com.ave.vastgui.core.ResultCompat
 import com.ave.vastgui.tools.config.ToolsConfig
 import com.ave.vastgui.tools.content.ContextHelper
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.IOException
+import java.util.Locale
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -39,7 +47,9 @@ class FilePathScope internal constructor() {
     infix fun String.f(path: String) = "$this${File.separator}$path"
 }
 
-object FileMgr : FileProperty by FilePropertyMgr() {
+object FileMgr {
+
+    private val mimeTypeMap = MimeTypeMap.getSingleton()
 
     /**
      * @return The File which from internal storage, meant for your app's use
@@ -84,50 +94,30 @@ object FileMgr : FileProperty by FilePropertyMgr() {
     } else throw IllegalStateException("Shared storage is not currently available.")
 
     /**
-     * Get file path.
-     *
-     * @param endWithSeparator If true, the path will end with
-     *     [File.separator], false otherwise.
-     * @param path file path item.
-     */
-    @Deprecated(
-        message = "Please consider using getPath(scope: FilePathScope.() -> Unit)",
-        level = DeprecationLevel.WARNING
-    )
-    @JvmStatic
-    fun getPath(endWithSeparator: Boolean, vararg path: String): String {
-        var finalPath = ""
-        for (p in path) {
-            finalPath += (p + File.separator)
-        }
-        return if (!endWithSeparator) finalPath.replaceFirst(".$".toRegex(), "") else finalPath
-    }
-
-    /**
      * Get file path
      *
      * @param scope The scope that is used to build file path.
      * @since 0.5.1
      */
+    @JvmStatic
     fun getPath(scope: FilePathScope.() -> String): String {
         return FilePathScope().let(scope)
     }
 
     /**
-     * Save file.
+     * Save [file].
      *
      * @param file The file you want to save.
      */
-    fun saveFile(file: File): Result<String> {
-        return try {
-            if (file.createNewFile()) {
-                Result.success("${file.name} saved successfully")
-            } else {
-                Result.failure(IllegalArgumentException("${file.name} is already exists."))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
+    @JvmStatic
+    fun saveFile(file: File): ResultCompat<String> = try {
+        if (file.createNewFile()) {
+            ResultCompat.success("${file.name} saved successfully")
+        } else {
+            ResultCompat.failure(IllegalArgumentException("${file.name} is already exists."))
         }
+    } catch (e: IOException) {
+        ResultCompat.failure(e)
     }
 
     /**
@@ -135,20 +125,15 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      *
      * @param file the file you want to delete.
      */
-    fun deleteFile(file: File): Result<String> {
-        return try {
-            if (file.isFile) {
-                if (file.delete()) {
-                    Result.success("${file.name} successfully deleted.")
-                } else {
-                    Result.failure(RuntimeException("${file.name} delete failed."))
-                }
-            } else {
-                Result.failure(IllegalArgumentException("${file.name} is not a normal file or not exists."))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
+    @JvmStatic
+    fun deleteFile(file: File): ResultCompat<String> = if (file.isFile) {
+        if (file.delete()) {
+            ResultCompat.success("${file.name} successfully deleted.")
+        } else {
+            ResultCompat.failure(RuntimeException("${file.name} delete failed."))
         }
+    } else {
+        ResultCompat.failure(IllegalArgumentException("${file.name} is not a normal file or not exists."))
     }
 
     /**
@@ -159,29 +144,30 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      * @param to File copy destination.
      * @since 0.4.0
      */
-    fun copyFile(from: File, to: File): Result<String> {
-        return try {
-            if (!from.exists()) {
-                Result.failure(IllegalArgumentException("${from.name} does not exist."))
+    @JvmStatic
+    fun copyFile(from: File, to: File): ResultCompat<String> = when {
+        !from.exists() ->
+            ResultCompat.failure(IllegalArgumentException("${from.name} is not exists."))
+
+        getExtension(from) != getExtension(to) ->
+            ResultCompat.failure(IllegalArgumentException("The file extensions are inconsistent."))
+
+        else -> {
+            val result = saveFile(to)
+            if (result.isFailure) {
+                result
             } else {
-                val result = saveFile(to)
-                if (result.isSuccess) {
-                    val input = FileInputStream(from)
-                    val out = FileOutputStream(to)
-                    val bt = ByteArray(1024)
-                    var c: Int
-                    while (input.read(bt).also { c = it } > 0) {
-                        out.write(bt, 0, c)
-                    }
-                    input.close()
-                    out.close()
-                    Result.success("File ${from.name} successfully copied to file ${to.name}.")
-                } else {
-                    result
+                val input = FileInputStream(from)
+                val out = FileOutputStream(to)
+                val bt = ByteArray(1024)
+                var length: Int
+                while (input.read(bt).also { length = it } > 0) {
+                    out.write(bt, 0, length)
                 }
+                input.close()
+                out.close()
+                ResultCompat.success("File ${from.name} successfully copied to file ${to.name}.")
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 
@@ -193,58 +179,44 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      *     appInternalFilesDir().path.
      * @since 0.4.0
      */
-    fun moveFile(file: File, destination: String): Result<String> {
-        val path = if (!destination.endsWith(File.separator)) {
-            destination + File.separator
-        } else destination
-        return try {
-            if (!file.exists()) {
-                Result.failure(IllegalArgumentException("${file.name} does not exist."))
-            } else {
-                val new = File("$path${file.name}")
-                val saveResult = saveFile(new)
-                if (saveResult.isSuccess) {
-                    val input = FileInputStream(file)
-                    val out = FileOutputStream(new)
-                    val bt = ByteArray(1024)
-                    var c: Int
-                    while (input.read(bt).also { c = it } > 0) {
-                        out.write(bt, 0, c)
-                    }
-                    input.close()
-                    out.close()
-                    Result.success("File ${file.name} successfully move to file ${new.name}.")
-                } else saveResult
+    @JvmStatic
+    fun moveFile(file: File, destination: String): ResultCompat<String> = if (!file.exists()) {
+        ResultCompat.failure(IllegalArgumentException("${file.name} is not exists."))
+    } else {
+        val new = File(destination, file.name)
+        val saveResult = saveFile(new)
+        if (saveResult.isSuccess) {
+            val input = FileInputStream(file)
+            val out = FileOutputStream(new)
+            val byteArray = ByteArray(1024)
+            var length: Int
+            while (input.read(byteArray).also { length = it } > 0) {
+                out.write(byteArray, 0, length)
             }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+            input.close()
+            out.close()
+            val deleteResult = deleteFile(file)
+            if (deleteResult.isSuccess) {
+                ResultCompat.success("File ${file.name} successfully move to file ${new.path}.")
+            } else deleteResult
+        } else saveResult
     }
 
     /**
      * Make directory.
      *
      * @param dir The file of the directory.
-     * @return [FileResult]
      */
     @JvmStatic
-    fun makeDir(dir: File): Result<String> {
-        return try {
-            if (dir.exists()) {
-                Result.failure(IllegalArgumentException("${dir.name} is already exists."))
-            } else {
-                val path = if (!dir.path.endsWith(File.separator)) {
-                    dir.path + File.separator
-                } else dir.path
-                if (File(path).mkdir()) {
-                    Result.success("${dir.name} is created.")
-                } else {
-                    Result.failure(RuntimeException("${dir.name} create failed."))
-                }
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+    fun makeDir(dir: File): ResultCompat<String> = when {
+        dir.exists() ->
+            ResultCompat.failure(IllegalArgumentException("${dir.name} is already exists."))
+
+        dir.mkdir() ->
+            ResultCompat.success("${dir.name} is created.")
+
+        else ->
+            ResultCompat.failure(RuntimeException("${dir.name} create failed."))
     }
 
     /**
@@ -254,30 +226,26 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      * @return Operations result.
      */
     @JvmStatic
-    fun deleteDir(dir: File): Result<String> {
-        return try {
-            when {
-                !dir.exists() ->
-                    return Result.failure(IllegalArgumentException("${dir.name} is already exists."))
+    fun deleteDir(dir: File): ResultCompat<String> {
+        when {
+            !dir.exists() ->
+                return ResultCompat.failure(IllegalArgumentException("${dir.name} is not exists."))
 
-                null == dir.listFiles() ->
-                    dir.delete()
+            null == dir.listFiles() ->
+                dir.delete()
 
-                else -> {
-                    for (f in dir.listFiles()!!) {
-                        if (f.isFile) {
-                            f.delete()
-                        } else if (f.isDirectory) {
-                            deleteDir(f)
-                        }
+            else -> {
+                for (f in dir.listFiles()!!) {
+                    if (f.isFile) {
+                        f.delete()
+                    } else if (f.isDirectory) {
+                        deleteDir(f)
                     }
                 }
             }
-            dir.delete()
-            Result.success("${dir.name} delete successfully.")
-        } catch (e: Exception) {
-            Result.failure(e)
         }
+        dir.delete()
+        return ResultCompat.success("${dir.name} delete successfully.")
     }
 
     /**
@@ -288,32 +256,24 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      * @param to Folder copy destination.
      * @since 0.4.0
      */
-    fun copyDir(from: File, to: File): Result<String> {
-        return try {
-            if (from.exists()) {
-                val files = from.listFiles()
-                val makeResult = makeDir(to)
-                if (makeResult.isSuccess) {
-                    val path = if (!to.path.endsWith(File.separator)) {
-                        to.path + File.separator
-                    } else to.path
-                    for (file in files!!) {
-                        if (file.isDirectory) {
-                            copyDir(file, File("${path}${file.name}"))
-                        } else {
-                            copyFile(file, File("${path}${file.name}"))
-                        }
-                    }
-                    Result.success("${from.name} copy successful.")
+    @JvmStatic
+    fun copyDir(from: File, to: File): ResultCompat<String> = if (from.exists()) {
+        val files = from.listFiles()
+        val makeResult = makeDir(to)
+        if (makeResult.isSuccess) {
+            files?.forEach { file ->
+                if (file.isDirectory) {
+                    copyDir(file, File(to.path, file.name))
                 } else {
-                    makeResult
+                    copyFile(file, File(to.path, file.name))
                 }
-            } else {
-                Result.failure(IllegalArgumentException("${from.name} is not exists."))
             }
-        } catch (e: Exception) {
-            Result.failure(e)
+            ResultCompat.success("${from.name} copy successful.")
+        } else {
+            makeResult
         }
+    } else {
+        ResultCompat.failure(IllegalArgumentException("${from.name} is not exists."))
     }
 
     /**
@@ -323,38 +283,30 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      * @param destination Folder move destination path.
      * @since 0.4.0
      */
-    fun moveDir(dir: File, destination: String): Result<String> {
-        val path = if (!destination.endsWith(File.separator)) {
-            destination + File.separator
-        } else destination
-        return try {
-            if (dir.exists()) {
-                val files = dir.listFiles()
-                val makeResult = makeDir(File(path))
-                if (makeResult.isSuccess) {
-                    for (file in files!!) {
-                        if (file.isDirectory) {
-                            copyDir(file, File("${path}${file.name}"))
-                        } else {
-                            val copyResult = copyFile(file, File("${path}${file.name}"))
-                            if (copyResult.isSuccess) {
-                                deleteFile(file)
-                            } else {
-                                return copyResult
-                            }
-                        }
-                        deleteDir(file)
-                    }
-                    Result.success("${dir.name} successful move to $destination.")
+    @JvmStatic
+    fun moveDir(dir: File, destination: String): ResultCompat<String> = if (dir.exists()) {
+        val files = dir.listFiles()
+        val makeResult = makeDir(File(destination))
+        if (makeResult.isSuccess) {
+            files?.forEach { file ->
+                if (file.isDirectory) {
+                    copyDir(file, File(destination, file.name))
                 } else {
-                    makeResult
+                    val copyResult = copyFile(file, File(destination, file.name))
+                    if (copyResult.isSuccess) {
+                        deleteFile(file)
+                    } else {
+                        return copyResult
+                    }
                 }
-            } else {
-                Result.failure(IllegalArgumentException("${dir.name} is not exists."))
+                deleteDir(file)
             }
-        } catch (e: Exception) {
-            Result.failure(e)
+            ResultCompat.success("${dir.name} successful move to $destination.")
+        } else {
+            makeResult
         }
+    } else {
+        ResultCompat.failure(IllegalArgumentException("${dir.name} is not exists."))
     }
 
     /**
@@ -365,26 +317,23 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      * @return Operations result.
      */
     @JvmStatic
-    fun rename(file: File, newName: String): Result<String> {
-        return try {
-            if (!file.exists()) {
-                Result.failure(IllegalArgumentException("${file.name} is already exists."))
-            } else if (newName == file.name) {
-                Result.success("${file.name} rename successfully.")
+    fun rename(file: File, newName: String): ResultCompat<String> = when {
+        !file.exists() ->
+            ResultCompat.failure(IllegalArgumentException("${file.name} is not exists."))
+
+        newName == file.name ->
+            ResultCompat.success("${file.name} rename successfully.")
+
+        null == file.parent ->
+            ResultCompat.failure(RuntimeException("${file.name} parent is null."))
+
+        else -> {
+            val newFile = File(file.parent, newName)
+            if (!newFile.exists() && file.renameTo(newFile)) {
+                ResultCompat.success("${file.name} rename successfully.")
             } else {
-                return if (null == file.parent) {
-                    Result.failure(RuntimeException("${file.name} parent is null."))
-                } else {
-                    val newFile = File(file.parent!! + File.separator + newName)
-                    if (!newFile.exists() && file.renameTo(newFile)) {
-                        Result.success("${file.name} rename successfully.")
-                    } else {
-                        Result.failure(RuntimeException("${file.name} rename failed."))
-                    }
-                }
+                ResultCompat.failure(RuntimeException("${file.name} rename failed."))
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 
@@ -410,6 +359,7 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      * @param dir The dir where the file saved.
      * @since 0.5.1
      */
+    @JvmStatic
     fun getAssetsFile(fileName: String, dir: File = appInternalFilesDir()): File {
         val saveFile = File(dir, fileName)
         try {
@@ -434,6 +384,7 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      *
      * @since 0.5.1
      */
+    @JvmStatic
     fun isExternalStorageWritable(): Boolean {
         return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
     }
@@ -444,9 +395,64 @@ object FileMgr : FileProperty by FilePropertyMgr() {
      *
      * @since 0.5.1
      */
+    @JvmStatic
     fun isExternalStorageReadable(): Boolean {
         return Environment.getExternalStorageState() in
                 setOf(Environment.MEDIA_MOUNTED, Environment.MEDIA_MOUNTED_READ_ONLY)
+    }
+
+    /** Get the extension name of the file. */
+    @JvmStatic
+    fun getExtension(file: File): String {
+        return MimeTypeMap.getFileExtensionFromUrl(file.toString())
+    }
+
+    /**
+     * Get the mimetype of the [file], [fallback] otherwise. For more
+     * information, please refer to
+     * [How to determine MIME type of file in android?](https://stackoverflow.com/questions/8589645/how-to-determine-mime-type-of-file-in-android)
+     */
+    @JvmStatic
+    fun getMimeType(file: File, fallback: String): String {
+        return MimeTypeMap.getFileExtensionFromUrl(file.toString())
+            ?.run { mimeTypeMap.getMimeTypeFromExtension(lowercase(Locale.ROOT)) }
+            ?: fallback
+    }
+
+    /**
+     * Get the uri by [file].
+     *
+     * Please register a provider in AndroidManifest.xml. For example:
+     * ```xml
+     * <provider
+     *      android:name="androidx.core.content.FileProvider"
+     *      android:authorities="${applicationId}"
+     *      android:exported="false"
+     *      android:grantUriPermissions="true">
+     *      <meta-data
+     *          android:name="android.support.FILE_PROVIDER_PATHS"
+     *          android:resource="@xml/file_paths" />
+     * </provider>
+     * ```
+     *
+     * @param authority The authority of a [FileProvider] defined in a
+     *     <provider> element in your app's manifest.
+     * @since 0.5.0
+     */
+    @JvmStatic
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun getFileUriAboveApi24(file: File, authority: String): Uri {
+        return FileProvider.getUriForFile(ContextHelper.getAppContext(), authority, file)
+    }
+
+    /**
+     * Get the uri by [file].
+     *
+     * @since 0.5.0
+     */
+    @JvmStatic
+    fun getFileUriOnApi23(file: File): Uri {
+        return Uri.fromFile(file)
     }
 
 }
