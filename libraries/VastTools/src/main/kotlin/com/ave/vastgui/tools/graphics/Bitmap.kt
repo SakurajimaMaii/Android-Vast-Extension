@@ -18,19 +18,20 @@ package com.ave.vastgui.tools.graphics
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Bitmap.Config
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Rect
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Base64
 import androidx.annotation.DrawableRes
 import androidx.annotation.IntRange
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
+import com.ave.vastgui.tools.content.ContextHelper
 import com.ave.vastgui.tools.graphics.MergeScale.BIG_REDUCE
 import com.ave.vastgui.tools.graphics.MergeScale.SMALL_ENLARGE
-import com.ave.vastgui.tools.content.ContextHelper
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import java.io.File
 import java.io.FileOutputStream
@@ -265,25 +266,18 @@ object BmpUtils {
         format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
         @IntRange(from = 0, to = 100) quality: Int = 100
     ): File? {
-        FileMgr.saveFile(file).let { result ->
-            if (result.isFailure) return null
+        val saveResult = FileMgr.saveFile(file)
+        if (saveResult.isFailure) return null
+        val fos = FileOutputStream(file)
+        return try {
+            if (bitmap.compress(format, quality, fos)) {
+                fos.flush()
+                fos.close()
+                file
+            } else null
+        } catch (e: IOException) {
+            null
         }
-        var fos: FileOutputStream? = null
-        try {
-            fos = FileOutputStream(file)
-            bitmap.compress(format, quality, fos)
-            fos.flush()
-            return file
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            try {
-                fos?.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
-        return null
     }
 
     /** Get bitmap from base64. */
@@ -318,6 +312,9 @@ object BmpUtils {
     /**
      * Convert drawable to bitmap.
      *
+     * @param context In some cases, you may need to set context. For example,
+     * VectorDrawable's fillColor uses `?attr/colorPrimaryContainer` as the
+     * attribute value. Otherwise, the fillColor will not be obtained correctly.
      * @throws RuntimeException
      * @since 0.2.0
      */
@@ -333,25 +330,15 @@ object BmpUtils {
         return getBitmapFromDrawable(drawable)
     }
 
-    /** Convert drawable to bitmap. */
+    /**
+     * Convert drawable to bitmap.
+     *
+     * @see Drawable.toBitmap
+     * @since 0.5.6
+     */
     @JvmStatic
-    fun getBitmapFromDrawable(drawable: Drawable): Bitmap {
-        return when (drawable) {
-            is BitmapDrawable -> {
-                drawable.bitmap
-            }
-
-            else -> {
-                val w: Int = drawable.intrinsicWidth
-                val h: Int = drawable.intrinsicHeight
-                val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-                val canvas = Canvas(bitmap)
-                drawable.setBounds(0, 0, w, h)
-                drawable.draw(canvas)
-                bitmap
-            }
-        }
-    }
+    fun getBitmapFromDrawable(drawable: Drawable, config: Config? = null): Bitmap =
+        drawable.toBitmap(config = config)
 
     /**
      * Get bitmap width and height.
