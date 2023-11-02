@@ -17,7 +17,6 @@
 package com.ave.vastgui.tools.log.plugin
 
 import android.os.Build
-import android.util.Log
 import com.ave.vastgui.core.extension.NotNullOrDefault
 import com.ave.vastgui.tools.log.LogUtil
 import com.ave.vastgui.tools.log.base.LogInfo
@@ -205,12 +204,8 @@ class LogStorage private constructor(private val mConfiguration: Configuration) 
         }
         val file = File(mConfiguration.fileRoot, mLogSp.mCurrentFileName)
         if (!file.exists()) {
-            FileMgr.saveFile(file).onSuccess {
-                return file
-            }.onFailure {
-                Log.d("LogFile", "$mFileName create failed.", it)
-                throw it
-            }
+            FileMgr.saveFile(file).result
+                .onSuccess { return file }.onFailure { throw it }
         }
         return file
     }
