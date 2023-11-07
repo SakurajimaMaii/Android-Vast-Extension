@@ -89,7 +89,7 @@ object BmpUtils {
             throw IllegalArgumentException("One of the topBitmap or bottomBitmap is recycled.")
         if (topBitmap.width > bottomBitmap.width || topBitmap.height > bottomBitmap.height)
             throw IllegalArgumentException("The size of the topBitmap is bigger than bottomBitmap.")
-        val bitmap = bottomBitmap.copy(Bitmap.Config.ARGB_8888, true)
+        val bitmap = bottomBitmap.copy(Config.ARGB_8888, true)
         val canvas = Canvas(bitmap)
         when (position) {
             MergePosition.LT ->
@@ -179,7 +179,7 @@ object BmpUtils {
         val width = tempBitmapL.width + tempBitmapR.width
 
         // Define the output bitmap.
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888)
         val canvas = Canvas(bitmap)
 
         // Parameters that need to be drawn for the two bitmaps after scaling.
@@ -238,7 +238,7 @@ object BmpUtils {
         } else bottomBitmap
 
         val height = tempBitmapT.height + tempBitmapB.height
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val topRect = Rect(0, 0, tempBitmapT.width, tempBitmapT.height)
         val bottomRect = Rect(0, 0, tempBitmapB.width, tempBitmapB.height)
@@ -337,6 +337,7 @@ object BmpUtils {
      * @since 0.5.6
      */
     @JvmStatic
+    @JvmOverloads
     fun getBitmapFromDrawable(drawable: Drawable, config: Config? = null): Bitmap =
         drawable.toBitmap(config = config)
 

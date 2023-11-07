@@ -14,17 +14,6 @@
  * limitations under the License.
  */
 
-// Groovy --> KTS
-// https://cloud.tencent.com/developer/article/1839887
-// https://mp.weixin.qq.com/s/mVqShijGTExtQ_nLslchpQ
-
-import com.pluginversion.vastgui.AVE
-import com.pluginversion.vastgui.AndroidX
-import com.pluginversion.vastgui.Google
-import com.pluginversion.vastgui.Jetbrains
-import com.pluginversion.vastgui.Libraries
-import com.pluginversion.vastgui.Squareup
-import com.pluginversion.vastgui.Version
 import org.jetbrains.dokka.DokkaConfiguration.Visibility
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
@@ -33,7 +22,6 @@ plugins {
     id("kotlin-android")
     id("kotlin-kapt")
     id("org.jetbrains.kotlin.android")
-    id("com.pluginversion.vastgui")
     id("convention.publication")
     id("org.jetbrains.dokka")
     kotlin("plugin.serialization")
@@ -41,10 +29,10 @@ plugins {
 
 android {
     namespace = "com.ave.vastgui.tools"
-    compileSdk = Version.compile_sdk_version
+    compileSdk = 34
 
     defaultConfig {
-        minSdk = Version.min_sdk_version
+        minSdk = 23
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -61,12 +49,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = Version.java_version
-        targetCompatibility = Version.java_version
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = Version.java_version.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
         // https://stackoverflow.com/questions/53964192/jvmdefault-and-how-add-compiler-option
         freeCompilerArgs = listOf("-Xjvm-default=all")
     }
@@ -87,45 +75,44 @@ android {
 }
 
 dependencies {
-    api(AndroidX.security_crypto)
-    api(Libraries.zxing)
-    api(AVE.core)
-    implementation(AndroidX.activity)
-    implementation(AndroidX.activity_ktx)
-    implementation(AndroidX.annotation)
-    implementation(AndroidX.appcompat)
-    implementation(AndroidX.appcompat_resources)
-    implementation(AndroidX.arch_core_runtime)
-    implementation(AndroidX.constraintlayout)
-    implementation(AndroidX.core_ktx)
-    implementation(AndroidX.datastore)
-    implementation(AndroidX.exifinterface)
-    implementation(AndroidX.fragment_ktx)
-    implementation(AndroidX.lifecycle_livedata_core_ktx)
-    implementation(AndroidX.lifecycle_livedata_ktx)
-    implementation(AndroidX.lifecycle_runtime_ktx)
-    implementation(AndroidX.lifecycle_viewmodel_ktx)
-    implementation(AndroidX.recyclerview)
-    implementation(AndroidX.test_monitor)
-    implementation(Google.gson)
-    implementation(Google.material)
-    implementation(Jetbrains.kotlin_reflect)
-    implementation(Jetbrains.kotlin_stdlib)
-    implementation(Jetbrains.kotlinx_coroutines_android)
-    implementation(Jetbrains.kotlinx_coroutines_core)
-    implementation(Jetbrains.kotlinx_serialization_json)
-    implementation(Libraries.commons_codec)
-    implementation(Libraries.fastjson2)
-    implementation(Libraries.jackson_databind)
-    implementation(Squareup.okhttp3)
-    implementation(Squareup.retrofit2)
-    implementation(Squareup.retrofit2_converter_gson)
+    api(libs.security.crypto)
+    api(libs.core)
+    api(libs.vastcore)
+    implementation(libs.activity.ktx)
+    implementation(libs.annotation)
+    implementation(libs.appcompat)
+    implementation(libs.appcompat.resources)
+    implementation(libs.core.runtime)
+    implementation(libs.constraintlayout)
+    implementation(libs.core.ktx)
+    implementation(libs.datastore.preferences)
+    implementation(libs.exifinterface)
+    implementation(libs.fragment.ktx)
+    implementation(libs.lifecycle.livedata.core.ktx)
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.recyclerview)
+    implementation(libs.monitor)
+    implementation(libs.gson)
+    implementation(libs.material)
+    implementation(libs.kotlin.reflect)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.commons.codec)
+    implementation(libs.fastjson2)
+    implementation(libs.jackson.databind)
+    implementation(libs.okhttp)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 }
 
 tasks.withType<DokkaTaskPartial>().configureEach {
     dokkaSourceSets.configureEach {
         jdkVersion.set(17)
-        languageVersion.set("1.9.0")
+        languageVersion.set("1.9.10")
         suppressInheritedMembers.set(true)
         documentedVisibilities.set(
             setOf(Visibility.PUBLIC, Visibility.PROTECTED, Visibility.PRIVATE, Visibility.INTERNAL)
