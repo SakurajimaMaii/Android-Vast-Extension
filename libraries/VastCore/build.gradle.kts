@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import com.pluginversion.vastgui.Jetbrains
 import com.pluginversion.vastgui.Version
 import org.jetbrains.dokka.DokkaConfiguration.Visibility
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
@@ -33,7 +32,7 @@ subprojects {
 }
 
 group = "io.github.sakurajimamaii"
-version = "0.0.6"
+version = "0.0.7"
 
 java {
     sourceCompatibility = Version.java_version
@@ -50,7 +49,7 @@ tasks.withType<KotlinCompile>{
 sourceSets["main"].java.srcDir("src/main/kotlin")
 
 dependencies {
-    implementation(Jetbrains.kotlin_reflect)
+    implementation(libs.kotlin.reflect)
 }
 
 tasks.withType<DokkaTaskPartial>().configureEach {
@@ -73,7 +72,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "VastCore"
-            version = "0.0.6"
+            version = "0.0.7"
 
             afterEvaluate {
                 from(components["java"])

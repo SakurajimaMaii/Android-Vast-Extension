@@ -1,0 +1,5 @@
+[versions]
+kotlin-reflect = "1.9.10"
+
+[libraries]
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin-reflect" }
