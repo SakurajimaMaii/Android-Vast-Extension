@@ -16,6 +16,7 @@
 
 package com.ave.vastgui.tools.annotation
 
+import android.content.SharedPreferences
 import androidx.annotation.RequiresOptIn
 
 // Author: Vast Gui
@@ -30,3 +31,13 @@ import androidx.annotation.RequiresOptIn
 @RequiresOptIn(level = RequiresOptIn.Level.WARNING)
 @Retention(AnnotationRetention.BINARY)
 annotation class ExperimentalView
+
+/**
+ * This annotation is used to indicate that the extension method of 
+ * [SharedPreferences] is still in experimental.
+ *
+ * @since 0.5.6
+ */
+@RequiresOptIn(level = RequiresOptIn.Level.WARNING)
+@Retention(AnnotationRetention.BINARY)
+annotation class ExperimentalSp
