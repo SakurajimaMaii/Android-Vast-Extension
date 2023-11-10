@@ -16,6 +16,8 @@
 
 package com.ave.vastgui.tools.view.alphabetsidebar
 
+import android.content.SharedPreferences
+import com.ave.vastgui.tools.sharedpreferences.ISharedPreferencesOwner
 import com.ave.vastgui.tools.sharedpreferences.SpEncrypted
 import com.ave.vastgui.tools.sharedpreferences.int
 import com.ave.vastgui.tools.utils.AppUtils
@@ -32,41 +34,41 @@ import com.ave.vastgui.tools.utils.AppUtils
  *
  * @since 0.5.4
  */
-internal object AlphabetSp {
+internal object AlphabetSp : ISharedPreferencesOwner {
 
-    private val mSp by lazy {
-        SpEncrypted
-            .getInstance("${AppUtils.getPackageName("")}.${AlphabetSp::class.java.simpleName}")
-            .getSharedPreferences()
+    override val name: String =
+        "${AppUtils.getPackageName("")}.${AlphabetSp::class.java.simpleName}"
+    override val kv: SharedPreferences by lazy {
+        SpEncrypted.getInstance(name).getSharedPreferences()
     }
 
-    var Favorite by mSp.int(0)
-    var A by mSp.int(0)
-    var B by mSp.int(0)
-    var C by mSp.int(0)
-    var D by mSp.int(0)
-    var E by mSp.int(0)
-    var F by mSp.int(0)
-    var G by mSp.int(0)
-    var H by mSp.int(0)
-    var I by mSp.int(0)
-    var J by mSp.int(0)
-    var K by mSp.int(0)
-    var L by mSp.int(0)
-    var M by mSp.int(0)
-    var N by mSp.int(0)
-    var O by mSp.int(0)
-    var P by mSp.int(0)
-    var Q by mSp.int(0)
-    var R by mSp.int(0)
-    var S by mSp.int(0)
-    var T by mSp.int(0)
-    var U by mSp.int(0)
-    var V by mSp.int(0)
-    var W by mSp.int(0)
-    var X by mSp.int(0)
-    var Y by mSp.int(0)
-    var Z by mSp.int(0)
-    var Other by mSp.int(0)
+    var Favorite by int(0)
+    var A by int(0)
+    var B by int(0)
+    var C by int(0)
+    var D by int(0)
+    var E by int(0)
+    var F by int(0)
+    var G by int(0)
+    var H by int(0)
+    var I by int(0)
+    var J by int(0)
+    var K by int(0)
+    var L by int(0)
+    var M by int(0)
+    var N by int(0)
+    var O by int(0)
+    var P by int(0)
+    var Q by int(0)
+    var R by int(0)
+    var S by int(0)
+    var T by int(0)
+    var U by int(0)
+    var V by int(0)
+    var W by int(0)
+    var X by int(0)
+    var Y by int(0)
+    var Z by int(0)
+    var Other by int(0)
 
 }

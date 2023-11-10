@@ -431,14 +431,14 @@ class AlphabetSideBar @JvmOverloads constructor(
     }
 
     /**
-     * Set target index of the [indicatorLetter] by [targetIndex].
+     * Set target index of the [alphabet] by [targetIndex].
      * If [mLetterListener] is not null, it will also call
      * [LetterListener.onIndicatorLetterTargetUpdate].
      *
-     * @since 0.5.4
+     * @since 0.5.6
      */
-    fun setIndicatorLetterTargetIndex(@Size(value = 1) indicatorLetter: String, targetIndex: Int) {
-        val index = mAlphabet.indexOfFirst { it.first == indicatorLetter }
+    fun setIndicatorLetterTargetIndex(@Size(value = 1) alphabet: Alphabet, targetIndex: Int) {
+        val index = mAlphabet.indexOfFirst { it.first == alphabet.letter }
         if (index == -1) return
         mAlphabet[index].second.set(targetIndex)
         mLetterListener?.onIndicatorLetterTargetUpdate(mAlphabet[index].first, targetIndex)
