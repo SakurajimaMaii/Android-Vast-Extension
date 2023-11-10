@@ -34,9 +34,6 @@ import com.ave.vastgui.core.extension.cast
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/11/11
-// Description: 
-// Documentation:
-// Reference:
 
 /**
  * Paging Adapter for RecyclerView with ViewBinding.

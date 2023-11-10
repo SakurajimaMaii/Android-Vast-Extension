@@ -14,26 +14,22 @@
  * limitations under the License.
  */
 
-import com.pluginversion.vastgui.AndroidX
-import com.pluginversion.vastgui.Google
-import com.pluginversion.vastgui.Version
 import org.jetbrains.dokka.DokkaConfiguration.Visibility
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("com.pluginversion.vastgui")
     id("convention.publication")
     id("org.jetbrains.dokka")
 }
 
 android {
-    compileSdk = Version.compile_sdk_version
+    compileSdk = 34
     namespace = "com.ave.vastgui.netstatelayout"
 
     defaultConfig {
-        minSdk = Version.min_sdk_version
+        minSdk = 23
 
         testInstrumentationRunner ="androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -47,12 +43,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = Version.java_version
-        targetCompatibility = Version.java_version
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = Version.java_version.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     sourceSets["main"].java.srcDir("src/main/kotlin")
@@ -65,10 +61,9 @@ android {
 }
 
 dependencies {
-    implementation(AndroidX.annotation)
-    implementation(AndroidX.constraintlayout)
-    implementation(AndroidX.core_ktx)
-    implementation(Google.material)
+    implementation(libs.annotation)
+    implementation(libs.constraintlayout)
+    implementation(libs.core.ktx)
 }
 
 tasks.withType<DokkaTaskPartial>().configureEach {
