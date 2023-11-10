@@ -14,29 +14,21 @@
  * limitations under the License.
  */
 
-import com.pluginversion.vastgui.AndroidX
-import com.pluginversion.vastgui.Compose
-import com.pluginversion.vastgui.Jetbrains
-import com.pluginversion.vastgui.Libraries
-import com.pluginversion.vastgui.Squareup
-import com.pluginversion.vastgui.Version
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.pluginversion.vastgui")
     id("com.google.devtools.ksp")
     kotlin("plugin.serialization")
 }
 
 android {
     namespace = "com.ave.vastgui.appcompose"
-    compileSdk = Version.compile_sdk_version
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.ave.vastgui.appcompose"
-        minSdk = Version.min_sdk_version
-        targetSdk = Version.target_sdk_version
+        minSdk = 23
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -72,19 +64,28 @@ android {
             }
         }
     }
+
     compileOptions {
-        sourceCompatibility = Version.java_version
-        targetCompatibility = Version.java_version
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = Version.java_version.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
+
     buildFeatures {
         compose = true
     }
+
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.2"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
+
+    sourceSets {
+        getByName("main").java.srcDirs("src/main/kotlin")
+    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -93,29 +94,24 @@ android {
 }
 
 dependencies {
+    debugImplementation(libs.ui.test.manifest)
+    implementation(libs.activity.compose)
+    implementation(libs.adapter.rxjava3)
+    implementation(libs.converter.gson)
+    implementation(libs.coil.compose)
+    implementation(libs.core.ktx)
+    implementation(libs.datastore.preferences)
+    implementation(libs.fragment.ktx)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.material3)
+    implementation(libs.okhttp)
+    implementation(libs.retrofit)
+    implementation(libs.runtime.livedata)
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
     implementation(project(":libraries:VastTools"))
-    implementation(AndroidX.core_ktx)
-    implementation(AndroidX.datastore)
-    implementation(AndroidX.fragment)
-    implementation(AndroidX.lifecycle_runtime_ktx)
-    implementation(Compose.compose_activity)
-    implementation(Compose.compose_ui)
-    implementation(Compose.compose_ui_graphics)
-    implementation(Compose.compose_ui_tooling_preview)
-    implementation(Compose.compose_material3)
-    implementation(Compose.compose_lifecycle_viewmodel)
-    implementation(Compose.compose_runtime_livedata)
-    implementation(Jetbrains.kotlinx_coroutines_core)
-    implementation(Jetbrains.kotlinx_serialization_json)
-    implementation(Squareup.okhttp3)
-    implementation(Squareup.retrofit2)
-    implementation(Squareup.retrofit2_adapter_rxjava3)
-    implementation(Squareup.retrofit2_converter_gson)
-    implementation(Libraries.compose_coil)
-    implementation(project(":libraries:VastJIntent"))
-    implementation(project(":libraries:VastJIntent-Annotation"))
-    ksp(project(":libraries:VastJIntent-Processor"))
-    implementation("tech.thdev:extensions-compose-keyboard-state:1.5.0")
-    debugImplementation(Compose.compose_ui_tooling)
-    debugImplementation(Compose.compose_ui_test_manifest)
 }
