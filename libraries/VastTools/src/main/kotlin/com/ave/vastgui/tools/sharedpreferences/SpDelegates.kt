@@ -45,7 +45,8 @@ interface ISharedPreferencesOwner {
  *
  * @since 0.5.6
  */
-interface SharedPreferencesProperty<V> : ReadWriteProperty<ISharedPreferencesOwner, V>
+abstract class SharedPreferencesProperty<V> internal constructor() :
+    ReadWriteProperty<ISharedPreferencesOwner, V>
 
 /**
  * Save or set a string value into [SharedPreferences].
@@ -55,10 +56,9 @@ interface SharedPreferencesProperty<V> : ReadWriteProperty<ISharedPreferencesOwn
  * @since 0.5.6
  */
 fun ISharedPreferencesOwner.string(defaultValue: String = "") =
-    object : SharedPreferencesProperty<String> {
-        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): String {
-            return kv.getString(property.name, defaultValue) ?: defaultValue
-        }
+    object : SharedPreferencesProperty<String>() {
+        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): String =
+            kv.getString(property.name, defaultValue) ?: defaultValue
 
         override fun setValue(
             thisRef: ISharedPreferencesOwner,
@@ -75,10 +75,9 @@ fun ISharedPreferencesOwner.string(defaultValue: String = "") =
  * @since 0.5.6
  */
 fun ISharedPreferencesOwner.string() =
-    object : SharedPreferencesProperty<String?> {
-        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): String? {
-            return kv.getString(property.name, null)
-        }
+    object : SharedPreferencesProperty<String?>() {
+        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): String? =
+            kv.getString(property.name, null)
 
         override fun setValue(
             thisRef: ISharedPreferencesOwner,
@@ -97,10 +96,9 @@ fun ISharedPreferencesOwner.string() =
  * @since 0.5.6
  */
 fun ISharedPreferencesOwner.stringSet(defaultValue: Set<*> = setOf<String>()) =
-    object : SharedPreferencesProperty<Set<*>> {
-        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Set<*> {
-            return kv.getStringSet(property.name, mutableSetOf()) ?: defaultValue
-        }
+    object : SharedPreferencesProperty<Set<*>>() {
+        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Set<*> =
+            kv.getStringSet(property.name, mutableSetOf()) ?: defaultValue
 
         override fun setValue(
             thisRef: ISharedPreferencesOwner,
@@ -117,10 +115,9 @@ fun ISharedPreferencesOwner.stringSet(defaultValue: Set<*> = setOf<String>()) =
  * @since 0.5.6
  */
 fun ISharedPreferencesOwner.stringSet() =
-    object : SharedPreferencesProperty<Set<*>?> {
-        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Set<*>? {
-            return kv.getStringSet(property.name, null)
-        }
+    object : SharedPreferencesProperty<Set<*>?>() {
+        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Set<*>? =
+            kv.getStringSet(property.name, null)
 
         override fun setValue(
             thisRef: ISharedPreferencesOwner,
@@ -139,10 +136,9 @@ fun ISharedPreferencesOwner.stringSet() =
  * @since 0.5.6
  */
 fun ISharedPreferencesOwner.int(defaultValue: Int = 0) =
-    object : SharedPreferencesProperty<Int> {
-        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Int {
-            return kv.getInt(property.name, defaultValue)
-        }
+    object : SharedPreferencesProperty<Int>() {
+        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Int =
+            kv.getInt(property.name, defaultValue)
 
         override fun setValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>, value: Int) {
             kv.edit { putInt(property.name, value) }
@@ -157,10 +153,9 @@ fun ISharedPreferencesOwner.int(defaultValue: Int = 0) =
  * @since 0.5.6
  */
 fun ISharedPreferencesOwner.long(defaultValue: Long = 0L) =
-    object : SharedPreferencesProperty<Long> {
-        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Long {
-            return kv.getLong(property.name, defaultValue)
-        }
+    object : SharedPreferencesProperty<Long>() {
+        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Long =
+            kv.getLong(property.name, defaultValue)
 
         override fun setValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>, value: Long) {
             kv.edit { putLong(property.name, value) }
@@ -175,10 +170,9 @@ fun ISharedPreferencesOwner.long(defaultValue: Long = 0L) =
  * @since 0.5.6
  */
 fun ISharedPreferencesOwner.float(defaultValue: Float = 0.0f) =
-    object : SharedPreferencesProperty<Float> {
-        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Float {
-            return kv.getFloat(property.name, defaultValue)
-        }
+    object : SharedPreferencesProperty<Float>() {
+        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Float =
+            kv.getFloat(property.name, defaultValue)
 
         override fun setValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>, value: Float) {
             kv.edit { putFloat(property.name, value) }
@@ -193,10 +187,9 @@ fun ISharedPreferencesOwner.float(defaultValue: Float = 0.0f) =
  * @since 0.5.6
  */
 fun ISharedPreferencesOwner.boolean(defaultValue: Boolean = false) =
-    object : SharedPreferencesProperty<Boolean> {
-        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Boolean {
-            return kv.getBoolean(property.name, defaultValue)
-        }
+    object : SharedPreferencesProperty<Boolean>() {
+        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Boolean =
+            kv.getBoolean(property.name, defaultValue)
 
         override fun setValue(
             thisRef: ISharedPreferencesOwner,
@@ -215,12 +208,11 @@ fun ISharedPreferencesOwner.boolean(defaultValue: Boolean = false) =
  * @since 0.5.6
  */
 fun ISharedPreferencesOwner.double(defaultValue: Double = 0.0) =
-    object : SharedPreferencesProperty<Double> {
-        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Double {
-            return Double.Companion.fromBits(
+    object : SharedPreferencesProperty<Double>() {
+        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Double =
+            Double.Companion.fromBits(
                 kv.getLong(property.name, defaultValue.toRawBits())
             )
-        }
 
         override fun setValue(
             thisRef: ISharedPreferencesOwner,
@@ -304,7 +296,7 @@ fun <V> SharedPreferencesProperty<V>.asStateFlow() =
  * @property put Callback when the data in SharedPreferences needs to be updated.
  * @since 0.5.6
  */
-class SharedPreferencesStateFlow<V>(
+class SharedPreferencesStateFlow<V> internal constructor(
     private val flow: MutableStateFlow<V>,
     private val put: (V) -> Unit
 ) : MutableStateFlow<V> by flow {
