@@ -21,17 +21,16 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import java.io.IOException
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -39,186 +38,193 @@ import java.io.IOException
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/data-layer-libraries/datastore/
 
 /**
- * Save an int value into [DataStore].
+ * [IPreferenceProperty].
  *
- * @since 0.5.1
+ * @since 0.5.6
  */
-suspend fun DataStore<Preferences>.saveInt(key: String, value: Int) {
-    this.edit { mutablePreferences ->
-        mutablePreferences[intPreferencesKey(key)] = value
+sealed interface IPreferenceProperty<V> {
+    /**
+     * Return key for an preference with [key].
+     *
+     * @since 0.5.6
+     */
+    fun key(key: String): Preferences.Key<V>
+
+    /**
+     * Default value of preference property.
+     *
+     * @since 0.5.6
+     */
+    fun default(): V?
+}
+
+/**
+ * [IDataStorePreference].
+ *
+ * @since 0.5.6
+ */
+sealed interface IDataStorePreference<V> {
+    /**
+     * [DataStore].
+     *
+     * @since 0.5.6
+     */
+    fun dataStore(): DataStore<Preferences>
+
+    /**
+     * Return key for an preference.
+     *
+     * @since 0.5.6
+     */
+    fun key(): Preferences.Key<V>
+
+    /**
+     * Default value of preference property.
+     *
+     * @since 0.5.6
+     */
+    fun default(): V?
+}
+
+/**
+ * [IDataStoreOwner]. It holds [DataStore] and provides some expansion methods.
+ *
+ * ```kotlin
+ * // Here is a example
+ * object ThemeDs: IDataStoreOwner {
+ *     override val dataStore: DataStore<Preferences> =
+ *         ContextHelper.getAppContext().dataStore
+ *
+ *     val theme by boolean(false)
+ * }
+ * ```
+ *
+ * @since 0.5.6
+ */
+interface IDataStoreOwner {
+    /**
+     * @since 0.5.6
+     */
+    val dataStore: DataStore<Preferences>
+
+    /**
+     * @since 0.5.6
+     */
+    fun int(defaultValue: Int?) = object : PreferenceProperty<Int>() {
+        override fun key(key: String) = intPreferencesKey(key)
+        override fun default() = defaultValue
+    }
+
+    /**
+     * @since 0.5.6
+     */
+    fun double(defaultValue: Double?) = object : PreferenceProperty<Double>() {
+        override fun key(key: String) = doublePreferencesKey(key)
+        override fun default() = defaultValue
+    }
+
+    /**
+     * @since 0.5.6
+     */
+    fun string(defaultValue: String?) = object : PreferenceProperty<String>() {
+        override fun key(key: String) = stringPreferencesKey(key)
+        override fun default() = defaultValue
+    }
+
+    /**
+     * @since 0.5.6
+     */
+    fun boolean(defaultValue: Boolean?) = object : PreferenceProperty<Boolean>() {
+        override fun key(key: String) = booleanPreferencesKey(key)
+        override fun default() = defaultValue
+    }
+
+    /**
+     * @since 0.5.6
+     */
+    fun float(defaultValue: Float?) = object : PreferenceProperty<Float>() {
+        override fun key(key: String) = floatPreferencesKey(key)
+        override fun default() = defaultValue
+    }
+
+    /**
+     * @since 0.5.6
+     */
+    fun long(defaultValue: Long?) = object : PreferenceProperty<Long>() {
+        override fun key(key: String) = longPreferencesKey(key)
+        override fun default() = defaultValue
+    }
+
+    /**
+     * @since 0.5.6
+     */
+    fun stringSet(defaultValue: Set<*>?) = object : PreferenceProperty<Set<String>>() {
+        override fun key(key: String) = stringSetPreferencesKey(key)
+        override fun default() = defaultValue?.map { it.toString() }?.toSet()
     }
 }
 
 /**
- * Save a double value into [DataStore].
+ * [PreferenceProperty].
  *
- * @since 0.5.1
+ * @since 0.5.6
  */
-suspend fun DataStore<Preferences>.saveDouble(key: String, value: Double) {
-    this.edit { mutablePreferences ->
-        mutablePreferences[doublePreferencesKey(key)] = value
-    }
+abstract class PreferenceProperty<V> internal constructor():
+    ReadOnlyProperty<IDataStoreOwner, DataStorePreference<V>>, IPreferenceProperty<V> {
+    private var cache: DataStorePreference<V>? = null
+
+    override fun getValue(thisRef: IDataStoreOwner, property: KProperty<*>): DataStorePreference<V> =
+        cache ?: object : DataStorePreference<V>() {
+            override fun dataStore() = thisRef.dataStore
+            override fun key() = this@PreferenceProperty.key(property.name)
+            override fun default() = this@PreferenceProperty.default()
+        }.also { cache = it }
 }
 
 /**
- * Save a string value into [DataStore].
+ * [DataStorePreference].
  *
- * @since 0.5.1
+ * @since 0.5.6
  */
-suspend fun DataStore<Preferences>.saveString(key: String, value: String) {
-    this.edit { mutablePreferences ->
-        mutablePreferences[stringPreferencesKey(key)] = value
-    }
-}
+abstract class DataStorePreference<V> internal constructor(): IDataStorePreference<V> {
+    /**
+     * Save value into [dataStore], or remove the preferences from
+     * [dataStore] if the [value] is null.
+     *
+     * @since 0.5.6
+     */
+    suspend fun set(value: V?): Preferences =
+        dataStore().edit { preferences ->
+            if (value == null) {
+                preferences.remove(key())
+            } else {
+                preferences[key()] = value
+            }
+        }
 
-/**
- * Save a boolean value into [DataStore].
- *
- * @since 0.5.1
- */
-suspend fun DataStore<Preferences>.saveBoolean(key: String, value: Boolean) {
-    this.edit { mutablePreferences ->
-        mutablePreferences[booleanPreferencesKey(key)] = value
-    }
-}
+    /**
+     * Returns the first element emitted by the [asFlow] and then
+     * cancels flow's collection
+     *
+     * @since 0.5.6
+     */
+    suspend fun get(): V? = asFlow().first()
 
-/**
- * Save a boolean value into [DataStore].
- *
- * @since 0.5.1
- */
-suspend fun DataStore<Preferences>.saveFloat(key: String, value: Float) {
-    this.edit { mutablePreferences ->
-        mutablePreferences[floatPreferencesKey(key)] = value
-    }
-}
+    /**
+     * @see [DataStore.data]
+     * @since 0.5.6
+     */
+    fun asNotNullFlow(): Flow<V> =
+        dataStore().data.map {
+            it[key()] ?:
+            default() ?:
+            throw RuntimeException("The value of ${key().name} is null.")
+        }
 
-/**
- * Save a long value into [DataStore].
- *
- * @since 0.5.1
- */
-suspend fun DataStore<Preferences>.saveLong(key: String, value: Long) {
-    this.edit { mutablePreferences ->
-        mutablePreferences[longPreferencesKey(key)] = value
-    }
-}
-
-/**
- * Save a string set value into [DataStore].
- *
- * @since 0.5.1
- */
-suspend fun DataStore<Preferences>.saveStringSet(key: String, value: Set<String>) {
-    this.edit { mutablePreferences ->
-        mutablePreferences[stringSetPreferencesKey(key)] = value
-    }
-}
-
-/**
- * Read an int value from [DataStore].
- *
- * @since 0.5.1
- */
-fun DataStore<Preferences>.readIntFlow(key: String, callback: Int? = null): Flow<Int> =
-    this.data.catch {
-        checkCollectorAction(it, this)
-    }.map {
-        it[intPreferencesKey(key)] ?: callback
-        ?: throw NullPointerException("Can get the value by the key of $key and the callback is null.")
-    }
-
-/**
- * Read a double value from [DataStore].
- *
- * @since 0.5.1
- */
-fun DataStore<Preferences>.readDoubleFlow(key: String, callback: Double? = null): Flow<Double> =
-    this.data.catch {
-        checkCollectorAction(it, this)
-    }.map {
-        it[doublePreferencesKey(key)] ?: callback
-        ?: throw NullPointerException("Can get the value by the key of $key and the callback is null.")
-    }
-
-/**
- * Read a string value from [DataStore].
- *
- * @since 0.5.1
- */
-fun DataStore<Preferences>.readStringFlow(key: String, callback: String? = null): Flow<String> =
-    this.data.catch {
-        checkCollectorAction(it, this)
-    }.map {
-        it[stringPreferencesKey(key)] ?: callback
-        ?: throw NullPointerException("Can get the value by the key of $key and the callback is null.")
-    }
-
-/**
- * Read a boolean value from [DataStore].
- *
- * @since 0.5.1
- */
-fun DataStore<Preferences>.readBooleanFlow(key: String, callback: Boolean? = null): Flow<Boolean> =
-    this.data.catch {
-        checkCollectorAction(it, this)
-    }.map {
-        it[booleanPreferencesKey(key)] ?: callback
-        ?: throw NullPointerException("Can get the value by the key of $key and the callback is null.")
-    }
-
-/**
- * Read a float value from [DataStore].
- *
- * @since 0.5.1
- */
-fun DataStore<Preferences>.readFloatFlow(key: String, callback: Float? = null): Flow<Float> =
-    this.data.catch {
-        checkCollectorAction(it, this)
-    }.map {
-        it[floatPreferencesKey(key)] ?: callback
-        ?: throw NullPointerException("Can get the value by the key of $key and the callback is null.")
-    }
-
-/**
- * Read a long value from [DataStore].
- *
- * @since 0.5.1
- */
-fun DataStore<Preferences>.readLongFlow(key: String, callback: Long? = null): Flow<Long> =
-    this.data.catch {
-        checkCollectorAction(it, this)
-    }.map {
-        it[longPreferencesKey(key)] ?: callback
-        ?: throw NullPointerException("Can get the value by the key of $key and the callback is null.")
-    }
-
-/**
- * Read a long value from [DataStore].
- *
- * @since 0.5.1
- */
-fun DataStore<Preferences>.readStringSet(key: String, callback: Set<String>? = null): Flow<Set<String>> =
-    this.data.catch {
-        checkCollectorAction(it, this)
-    }.map {
-        it[stringSetPreferencesKey(key)] ?: callback
-        ?: throw NullPointerException("Can get the value by the key of $key and the callback is null.")
-    }
-
-/**
- * Check collector action
- *
- * @since 0.5.1
- */
-private suspend fun checkCollectorAction(
-    exception: Throwable,
-    collector: FlowCollector<Preferences>
-) {
-    if (exception is IOException) {
-        exception.printStackTrace()
-        collector.emit(emptyPreferences())
-    } else {
-        throw exception
-    }
+    /**
+     * @see [DataStore.data]
+     * @since 0.5.6
+     */
+    fun asFlow(): Flow<V?> =
+        dataStore().data.map { it[key()] ?: default() }
 }
