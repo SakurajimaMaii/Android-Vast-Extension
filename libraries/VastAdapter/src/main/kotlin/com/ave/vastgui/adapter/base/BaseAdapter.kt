@@ -16,6 +16,7 @@
 
 package com.ave.vastgui.adapter.base
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.ave.vastgui.adapter.widget.AdapterClickListener
@@ -25,11 +26,8 @@ import com.ave.vastgui.adapter.widget.AdapterLongClickListener
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/10
-// Description: 
-// Documentation:
-// Reference:
 
-abstract class BaseAdapter<T : ViewHolder>() :
+abstract class BaseAdapter<T : ViewHolder> :
     RecyclerView.Adapter<T>(),
     AdapterClickRegister {
 

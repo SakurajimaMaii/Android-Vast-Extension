@@ -29,9 +29,6 @@ import com.ave.vastgui.core.extension.cast
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/10
-// Description: 
-// Documentation:
-// Reference:
 
 abstract class VastListAdapter<T, R : AdapterItemWrapper<T>>(
     protected val mFactories: MutableList<BaseHolder.HolderFactory>,

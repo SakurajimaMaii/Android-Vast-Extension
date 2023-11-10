@@ -21,9 +21,6 @@ import android.view.View
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/10
-// Description: 
-// Documentation:
-// Reference:
 
 interface AdapterClickListener {
 

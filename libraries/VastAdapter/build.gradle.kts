@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-import com.pluginversion.vastgui.AVE
-import com.pluginversion.vastgui.AndroidX
-import com.pluginversion.vastgui.Version
-
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
-    id("com.pluginversion.vastgui")
     id("convention.publication")
 }
 
 android {
     namespace = "com.ave.vastgui.adapter"
-    compileSdk = Version.compile_sdk_version
+    compileSdk = 34
 
     defaultConfig {
-        minSdk = Version.min_sdk_version
+        minSdk = 23
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -45,12 +40,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = Version.java_version
-        targetCompatibility = Version.java_version
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = Version.java_version.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
         freeCompilerArgs = listOf("-Xjvm-default=all-compatibility")
     }
 
@@ -68,12 +63,12 @@ android {
 }
 
 dependencies {
-    api(AVE.core)
-    api(AndroidX.recyclerview)
-    api(AndroidX.paging3)
-    implementation(AndroidX.annotation)
-    implementation(AndroidX.arch_core_runtime)
-    implementation(AndroidX.core_ktx)
+    api(libs.paging.runtime)
+    api(libs.recyclerview)
+    api(libs.vastcore)
+    implementation(libs.annotation)
+    implementation(libs.core.ktx)
+    implementation(libs.core.runtime)
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastAdapter"

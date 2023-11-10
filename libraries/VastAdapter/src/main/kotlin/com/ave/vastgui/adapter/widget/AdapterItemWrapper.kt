@@ -30,7 +30,7 @@ package com.ave.vastgui.adapter.widget
  * @property c Click listener.
  * @property lc Long click listener.
  */
-abstract class AdapterItemWrapper<out T> @JvmOverloads constructor(
+open class AdapterItemWrapper<out T> @JvmOverloads constructor(
     protected val mData: T,
     protected val mHolderType: String? = null,
     protected val mLayoutId: Int? = null,

@@ -21,9 +21,6 @@ import com.ave.vastgui.adapter.base.BaseHolder
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/10
-// Description: 
-// Documentation:
-// Reference:
 
 sealed interface AdapterItem : AdapterClickRegister {
 

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import com.pluginversion.vastgui.Version
 import org.jetbrains.dokka.DokkaConfiguration.Visibility
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -22,7 +21,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("java-library")
     id("org.jetbrains.kotlin.jvm")
-    id("com.pluginversion.vastgui")
     id("convention.publication")
     id("org.jetbrains.dokka")
 }
@@ -35,8 +33,8 @@ group = "io.github.sakurajimamaii"
 version = "0.0.7"
 
 java {
-    sourceCompatibility = Version.java_version
-    targetCompatibility = Version.java_version
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
     withSourcesJar()
 }
 

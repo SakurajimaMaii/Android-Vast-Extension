@@ -20,38 +20,33 @@ package com.ave.vastgui.adapter.widget
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/10
-// Description: 
-// Documentation:
-// Reference:
 
 interface AdapterClickRegister {
 
     /**
      * Register a click listener for adapter.
      *
-     * @param l a click listener.
+     * @param l A click listener. It will remove the
+     * click listener if the [l] is null.
      */
     fun registerClickEvent(l: AdapterClickListener?) {
         return
     }
 
     /** @return a click listener for adapter. */
-    fun getClickEvent(): AdapterClickListener? {
-        return null
-    }
+    fun getClickEvent(): AdapterClickListener? = null
 
     /**
      * Register a long click listener for adapter.
      *
-     * @param l a long click listener.
+     * @param l a long click listener. It will remove the long
+     * click listener if the [l] in null.
      */
     fun registerLongClickEvent(l: AdapterLongClickListener?) {
         return
     }
 
     /** @return a long click listener for adapter. */
-    fun getLongClickEvent(): (AdapterLongClickListener)? {
-        return null
-    }
+    fun getLongClickEvent(): AdapterLongClickListener? = null
 
 }
