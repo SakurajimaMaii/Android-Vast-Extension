@@ -37,7 +37,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
         app:progress_current_value="50"
-        app:wave_progress_image="@drawable/github" />
+        app:wave_progress_image="@drawable/ic_github" />
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"

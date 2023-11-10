@@ -82,7 +82,7 @@
             android:layout_height="100dp"
             android:layout_weight="1"
             app:avatar_size="60dp"
-            app:avatar_src="@drawable/img_avatar" />
+            app:avatar_src="@drawable/img_avatar_sample_1" />
 
         <com.ave.vastgui.tools.view.avatar.Avatar
             android:layout_width="0dp"
@@ -90,7 +90,7 @@
             android:layout_weight="1"
             app:avatar_shape="round"
             app:avatar_size="60dp"
-            app:avatar_src="@drawable/img_avatar" />
+            app:avatar_src="@drawable/img_avatar_sample_1" />
     </LinearLayout>
 
     <LinearLayout
@@ -112,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:avatar_size="60dp"
-                app:avatar_src="@drawable/img_avatar" />
+                app:avatar_src="@drawable/img_avatar_sample_1" />
 
             <com.ave.vastgui.tools.view.avatar.Avatar
                 android:layout_width="wrap_content"
@@ -140,7 +140,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:avatar_size="60dp"
-                app:avatar_src="@drawable/img_avatar" />
+                app:avatar_src="@drawable/img_avatar_sample_1" />
 
             <com.ave.vastgui.tools.view.avatar.Avatar
                 android:layout_width="wrap_content"

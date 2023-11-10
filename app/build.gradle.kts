@@ -14,33 +14,25 @@
  * limitations under the License.
  */
 
-import com.pluginversion.vastgui.AVE
-import com.pluginversion.vastgui.AndroidX
-import com.pluginversion.vastgui.Google
-import com.pluginversion.vastgui.Jetbrains
-import com.pluginversion.vastgui.Squareup
-import com.pluginversion.vastgui.Version
-
 plugins {
     id("kotlin-kapt")
     id("com.android.application")
     id("kotlin-android")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
-    id("com.pluginversion.vastgui")
     kotlin("plugin.serialization")
 }
 
 android {
     compileSdkPreview = "UpsideDownCake"
-    compileSdk = Version.compile_sdk_version
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.ave.vastgui.app"
-        minSdk = Version.min_sdk_version
-        targetSdk = Version.target_sdk_version
-        versionCode = Version.version_code
-        versionName = Version.version_name
+        minSdk = 23
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -76,12 +68,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = Version.java_version
-        targetCompatibility = Version.java_version
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = Version.java_version.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     buildFeatures {
@@ -96,27 +88,27 @@ android {
 }
 
 dependencies {
-    implementation(AndroidX.activity_ktx)
-    implementation(AndroidX.constraintlayout)
-    implementation(AndroidX.core_splashscreen)
-    implementation(AndroidX.security_crypto)
-    implementation(AndroidX.fragment_ktx)
-    implementation(AndroidX.lifecycle_runtime_ktx)
-    implementation(AndroidX.lifecycle_viewmodel_ktx)
-    implementation(AndroidX.lifecycle_livedata_ktx)
-    implementation(Google.material)
-    implementation(Jetbrains.kotlin_reflect)
-    implementation(Jetbrains.kotlinx_coroutines_android)
-    implementation(Jetbrains.kotlinx_coroutines_core)
-    implementation(Jetbrains.kotlinx_coroutines_rx3)
-    implementation(Jetbrains.kotlinx_datetime)
-    implementation(Jetbrains.kotlinx_serialization_json)
-    implementation(Squareup.okhttp3)
-    implementation(Squareup.retrofit2)
-    implementation(Squareup.retrofit2_adapter_rxjava3)
-    implementation(Squareup.retrofit2_converter_gson)
+    implementation(libs.activity.ktx)
+    implementation(libs.adapter.rxjava3)
+    implementation(libs.constraintlayout)
+    implementation(libs.converter.gson)
+    implementation(libs.core.splashscreen)
+    implementation(libs.fragment.ktx)
+    implementation(libs.kotlin.reflect)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.rx3)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.material)
+    implementation(libs.okhttp)
+    implementation(libs.retrofit)
+    implementation(libs.security.crypto)
+    implementation(libs.vastnetstatelayout)
     implementation(project(":libraries:VastAdapter"))
-    implementation(project(":libraries:VastTools"))
     implementation(project(":libraries:VastCore"))
-    implementation(AVE.netstatelayout)
+    implementation(project(":libraries:VastTools"))
 }
