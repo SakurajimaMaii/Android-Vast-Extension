@@ -16,15 +16,16 @@
 
 package com.ave.vastgui.tools.activity.app
 
-import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore.Images.Media
 import android.util.Log
-import com.ave.vastgui.core.extension.NotNUllVar
+import android.webkit.MimeTypeMap
+import androidx.core.content.ContextCompat
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.ACTION
@@ -34,13 +35,20 @@ import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.OUTPUT_X
 import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.OUTPUT_Y
 import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.PREVIEW_HEIGHT
 import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.PREVIEW_WIDTH
+import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_DESTINATION_IMAGE_ERROR
+import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_FRAME_TYPE_ERROR
+import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_GET_CROP_IMAGE_ERROR
+import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_NULL_DATA_ERROR
+import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_PARAMETER_ERROR
+import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_PERMISSION_ERROR
+import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_SOURCE_IMAGE_ERROR
 import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RETURN_DATA
 import com.ave.vastgui.tools.databinding.ActivityCropBinding
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
-import com.ave.vastgui.tools.utils.permission.requestPermission
+import com.ave.vastgui.tools.utils.DateUtils
+import com.ave.vastgui.tools.utils.permission.Permission
 import com.ave.vastgui.tools.view.cropview.CropFrameType
-import com.ave.vastgui.tools.view.toast.SimpleToast
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -52,7 +60,7 @@ import java.io.IOException
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/cropview/crop-view/
 
 /**
- * Vast crop activity
+ * [VastCropActivity].
  *
  * @property ACTION The action of [VastCropActivity].
  * @property PREVIEW_WIDTH The width of the crop preview frame.
@@ -60,14 +68,24 @@ import java.io.IOException
  * @property OUTPUT_X The width of output image in pixels.
  * @property OUTPUT_Y The height of output image in pixels.
  * @property AUTHORITY When the [Build.VERSION.SDK_INT] is smaller than
- *     [Build.VERSION_CODES.R], You should set it for FileProvider.
+ * [Build.VERSION_CODES.R], You should set it for FileProvider.
  * @property RETURN_DATA True if return the crop image by a bitmap object,
- *     false otherwise.
+ * false otherwise.
  * @property FRAME_TYPE See [CropFrameType].
- * @property originalUri Set by [Intent.setData].
- * @property originalImageFile The temporary file of the original image, it
- *     is saved in the app internal cache file directory and it will be
- *     deleted when the VastCropActivity is destroy.
+ * @property originalImage The temporary file of the original image,
+ * it is saved in the app internal cache file directory and it will be
+ * deleted when the [VastCropActivity] is destroy.
+ * @property RESULT_NULL_DATA_ERROR Returne when the [Intent.getData] is empty.
+ * @property RESULT_FRAME_TYPE_ERROR Return when the value of [FRAME_TYPE] is
+ * error.
+ * @property RESULT_SOURCE_IMAGE_ERROR Return when getting the file through
+ * [Intent.getData].
+ * @property RESULT_GET_CROP_IMAGE_ERROR Return when getting the crop image.
+ * @property RESULT_PERMISSION_ERROR Return when there is no
+ * [Permission.READ_MEDIA_IMAGES] permission.
+ * @property RESULT_PARAMETER_ERROR Return when the parameter is error.
+ * @property RESULT_DESTINATION_IMAGE_ERROR Return when get the destination
+ * image.
  * @since 0.5.0
  */
 open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
@@ -85,173 +103,197 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
         const val FRAME_TYPE_SQUARE = "square"
         const val FRAME_TYPE_GRID9 = "grid9"
         const val FRAME_TYPE_RECTANGLE = "rectangle"
-        const val RESULT_OK = 1
-        const val RESULT_FAILED = 0
-        const val RESULT_CANCELED = -1
+        const val RESULT_NULL_DATA_ERROR = 0x01
+        const val RESULT_FRAME_TYPE_ERROR = 0x02
+        const val RESULT_SOURCE_IMAGE_ERROR = 0x03
+        const val RESULT_GET_CROP_IMAGE_ERROR = 0x04
+        const val RESULT_PERMISSION_ERROR = 0x05
+        const val RESULT_PARAMETER_ERROR = 0x06
+        const val RESULT_DESTINATION_IMAGE_ERROR = 0x07
+        const val RESULT_OK = 0x08
+        const val RESULT_CANCELED = 0x09
         private const val DEFAULT_AUTHORITY = ""
         private const val DEFAULT_OUTPUT_X = -1F
         private const val DEFAULT_OUTPUT_Y = -1F
+        private const val DEFAULT_IMAGE_EXTENSION = "jpg"
     }
 
-    private val DEFAULT_PREVIEW_WIDTH
+    private val defaultPreviewWidth
         get() = resources.getDimension(R.dimen.default_crop_frame_width)
-    private val DEFAULT_PREVIEW_HEIGHT
+    private val defaultPreviewHeight
         get() = resources.getDimension(R.dimen.default_crop_frame_width)
-    private var originalUri: Uri? = null
-    private var originalImageFile: File by NotNUllVar(true)
+    private var originalImage: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (null == intent.data) {
+            finish(RESULT_NULL_DATA_ERROR)
+        }
+
         // Set size.
-        val previewWidth = intent.getFloatExtra(PREVIEW_WIDTH, DEFAULT_PREVIEW_WIDTH)
-        val previewHeight = intent.getFloatExtra(PREVIEW_HEIGHT, DEFAULT_PREVIEW_HEIGHT)
+        val previewWidth = intent.getFloatExtra(PREVIEW_WIDTH, defaultPreviewWidth)
+        val previewHeight = intent.getFloatExtra(PREVIEW_HEIGHT, defaultPreviewHeight)
         getBinding().cropViewLayout.apply {
             setCropFrameSize(previewWidth, previewHeight)
         }
 
         // Get crop type.
-        intent.getStringExtra(FRAME_TYPE)?.let {
-            when (it) {
-                FRAME_TYPE_CIRCLE -> getBinding().cropViewLayout.mCropFrameType = CropFrameType.CIRCLE
-                FRAME_TYPE_SQUARE -> getBinding().cropViewLayout.mCropFrameType = CropFrameType.SQUARE
-                FRAME_TYPE_GRID9 -> getBinding().cropViewLayout.mCropFrameType = CropFrameType.GRID9
-                FRAME_TYPE_RECTANGLE -> getBinding().cropViewLayout.mCropFrameType = CropFrameType.RECTANGLE
-                else -> throw IllegalArgumentException("Please set correct type.")
-            }
-        } ?: throw RuntimeException("Please set type.")
+        val frameType = intent.getStringExtra(FRAME_TYPE)
+        if (null == frameType) finish(RESULT_FRAME_TYPE_ERROR)
+        when (frameType) {
+            FRAME_TYPE_CIRCLE -> getBinding().cropViewLayout.mCropFrameType = CropFrameType.CIRCLE
+            FRAME_TYPE_SQUARE -> getBinding().cropViewLayout.mCropFrameType = CropFrameType.SQUARE
+            FRAME_TYPE_GRID9 -> getBinding().cropViewLayout.mCropFrameType = CropFrameType.GRID9
+            FRAME_TYPE_RECTANGLE -> getBinding().cropViewLayout.mCropFrameType =
+                CropFrameType.RECTANGLE
+        }
 
         // Get data
-        originalUri = intent.data
-        if (null != originalUri) {
-            val inputStream = this@VastCropActivity.contentResolver.openInputStream(originalUri!!)
-            if (null != inputStream) {
-                val name = "temp_cache_${ImageMgr.getDefaultFileName(".jpg")}"
-                originalImageFile = File(FileMgr.appInternalCacheDir(), name)
-                FileMgr.saveFile(originalImageFile)
-                val outputStream = FileOutputStream(originalImageFile)
-                val bufferSize = 1024 * 8
-                val buffer = ByteArray(bufferSize)
-                val bufferedInputStream = BufferedInputStream(inputStream, bufferSize)
-                var readLength: Int
-                while (bufferedInputStream.read(buffer, 0, bufferSize)
-                        .also { readLength = it } != -1
-                ) {
-                    outputStream.write(buffer, 0, readLength)
-                }
-                getBinding().cropViewLayout.setImageSrc(originalImageFile)
-            } else {
-                Log.d(getDefaultTag(), "Did not get the input stream.")
-            }
+        val uri = intent.data!!
+        val extension = MimeTypeMap
+            .getSingleton()
+            .getExtensionFromMimeType(contentResolver.getType(uri)) ?: DEFAULT_IMAGE_EXTENSION
+        // Source image file to be cropped
+        val source = File(
+            cacheDir,
+            "temp_cache_${ImageMgr.getDefaultFileName(".$extension")}"
+        )
+        // Destination image file
+        val destination = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path,
+            "crop_${ImageMgr.getDefaultFileName(".$extension")}"
+        )
+
+        if (FileMgr.saveFile(source).isFailure) {
+            finish(RESULT_SOURCE_IMAGE_ERROR)
         } else {
-            Log.d(getDefaultTag(), "No image obtained.")
+            originalImage = source
         }
+
+        contentResolver.openInputStream(uri)?.let { inputStream ->
+            val outputStream = FileOutputStream(originalImage)
+            val bufferSize = 1024 * 8
+            val buffer = ByteArray(bufferSize)
+            val bufferedInputStream = BufferedInputStream(inputStream, bufferSize)
+            var readLength: Int
+            while (bufferedInputStream.read(buffer, 0, bufferSize)
+                    .also { readLength = it } != -1
+            ) {
+                outputStream.write(buffer, 0, readLength)
+            }
+            getBinding().cropViewLayout.setImageSrc(originalImage!!)
+        } ?: finish(RESULT_SOURCE_IMAGE_ERROR)
 
         getBinding().activityCropBottomBar.cropSure.setOnClickListener {
             val outputX = intent.getFloatExtra(OUTPUT_X, DEFAULT_OUTPUT_X)
             val outputY = intent.getFloatExtra(OUTPUT_Y, DEFAULT_OUTPUT_Y)
-            if (outputX != DEFAULT_OUTPUT_X && outputY != DEFAULT_OUTPUT_Y) {
-                val authority = intent.getStringExtra(AUTHORITY) ?: DEFAULT_AUTHORITY
-                val bitmap: Bitmap? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    getBinding().cropViewLayout.getCroppedImageAboveApi28(
-                        outputX.toInt(),
-                        outputY.toInt()
-                    )
-                } else {
-                    getBinding().cropViewLayout.getCroppedImageUnderApi28(
-                        outputX.toInt(),
-                        outputY.toInt()
-                    )
-                }
-                requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE) {
-                    granted = {
-                        returnBitmapData(bitmap, authority)
-                    }
-                    denied = {
-                        SimpleToast.showShortMsg("应用访问外部存储被拒绝，在需要时还会再次请求")
-                        setResult(RESULT_FAILED, intent)
-                        finish()
-                    }
-                    noMoreAsk = {
-                        SimpleToast.showShortMsg("请手动允许应用访问外部存储")
-                        setResult(RESULT_FAILED, intent)
-                        finish()
-                    }
-                }
+            if (outputX == DEFAULT_OUTPUT_X || outputY == DEFAULT_OUTPUT_Y) {
+                finish(RESULT_PARAMETER_ERROR)
+            }
+            val authority = intent.getStringExtra(AUTHORITY) ?: DEFAULT_AUTHORITY
+            val bitmap: Bitmap? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                getBinding()
+                    .cropViewLayout
+                    .getCroppedImageAboveApi28(outputX.toInt(), outputY.toInt())
             } else {
-                setResult(RESULT_FAILED, intent)
-                finish()
+                getBinding()
+                    .cropViewLayout
+                    .getCroppedImageUnderApi28(outputX.toInt(), outputY.toInt())
+            }
+
+            if (null == bitmap) {
+                finish(RESULT_GET_CROP_IMAGE_ERROR)
+            }
+
+            if (ContextCompat.checkSelfPermission(this, Permission.READ_MEDIA_IMAGES) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                returnBitmapData(bitmap!!, destination, authority)
+            } else {
+                finish(RESULT_PERMISSION_ERROR)
             }
         }
 
         getBinding().activityCropBottomBar.cropExit.setOnClickListener {
-            setResult(RESULT_CANCELED, intent)
-            finish()
+            finish(RESULT_CANCELED)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        setResult(RESULT_CANCELED, intent)
-        FileMgr.deleteFile(originalImageFile)
+        finish(RESULT_CANCELED)
     }
 
-    private fun returnBitmapData(bitmap: Bitmap?, authority: String) {
-        bitmap?.let { bmp ->
-            val name = "crop_${ImageMgr.getDefaultFileName(".jpg")}"
-            val path =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path
-            val bmpFile = File(path, name)
-            // The Uri must be obtained before accessing, otherwise the file reading will fail.
-            // The reason is as follows. Take file 1.jpg as an example. If you save file 1.jpg
-            // first, read the bitmap data into it, and then call contentResolver.insert(),
-            // the insert() method will insert a new record in order to avoid duplicate names
-            // with the file name is 1(1).jpg, and the Uri corresponding to 1(1).jpg is returned.
-            // So you cannot find the corresponding data through the returned Uri.
+    /**
+     * Return bitmap data.
+     *
+     * @since 0.5.6
+     */
+    private fun returnBitmapData(bitmap: Bitmap, destination: File, authority: String) {
+        // The Uri must be obtained before accessing, otherwise the file reading will fail.
+        // The reason is as follows. Take file 1.jpg as an example. If you save file 1.jpg
+        // first, read the bitmap data into it, and then call contentResolver.insert(),
+        // the insert() method will insert a new record in order to avoid duplicate names
+        // with the file name is 1(1).jpg, and the Uri corresponding to 1(1).jpg is returned.
+        // So you cannot find the corresponding data through the returned Uri.
 
-            // Get the uri
-            val uri =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    ImageMgr.getFileUriAboveApi30(bmpFile)
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    ImageMgr.getFileUriAboveApi24(bmpFile, authority)
-                } else {
-                    ImageMgr.getFileUriOnApi23(bmpFile)
-                }
-            // Save bitmap
-            uri?.apply {
-                contentResolver.openOutputStream(this).use { outputStream ->
-                    try {
-                        if (outputStream != null) {
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-                        }
-                        outputStream?.flush()
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    } finally {
-                        try {
-                            outputStream?.close()
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                        }
-                    }
-                }
-                intent.data = uri
-                val returnData = intent.getBooleanExtra(RETURN_DATA, false)
-                if (returnData) {
-                    intent.putExtra(RETURN_DATA, bmp)
-                }
-                setResult(RESULT_OK, intent)
-            } ?: setResult(RESULT_FAILED, intent)
-            FileMgr.deleteFile(originalImageFile)
-            finish()
-        } ?: let {
-            if (null != originalUri) {
-                FileMgr.deleteFile(originalImageFile)
-                setResult(RESULT_FAILED, intent)
-                finish()
+        // Get the uri
+        val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            ImageMgr.getFileUriAboveApi30 {
+                put(Media.DATA, destination.absolutePath)
+                put(Media.DISPLAY_NAME, destination.name)
+                put(Media.MIME_TYPE, FileMgr.getMimeType(destination, "image/jpeg"))
+                put(Media.DATE_ADDED, DateUtils.getCurrentTime(DateUtils.FORMAT_YYYY_MM_DD_HH_MM_SS))
             }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            ImageMgr.getFileUriAboveApi24(destination, authority)
+        } else {
+            ImageMgr.getFileUriOnApi23(destination)
         }
+        Log.d("VastCropActivity","$uri")
+
+        if (null == uri) {
+            finish(RESULT_DESTINATION_IMAGE_ERROR)
+        }
+
+        @Suppress("DEPRECATION") val format = when (FileMgr.getExtension(destination)) {
+            "jpg" -> Bitmap.CompressFormat.JPEG to 100
+            "png" -> Bitmap.CompressFormat.PNG to 0
+            "webp" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                Bitmap.CompressFormat.WEBP_LOSSLESS to 0
+            } else Bitmap.CompressFormat.WEBP to 100
+
+            else -> Bitmap.CompressFormat.JPEG to 100
+        }
+
+        // Save bitmap
+        contentResolver.openOutputStream(uri!!)?.let { outputStream ->
+            try {
+                bitmap.compress(format.first, format.second, outputStream)
+                outputStream.flush()
+                outputStream.close()
+            } catch (exception: IOException) {
+                finish(RESULT_DESTINATION_IMAGE_ERROR)
+            }
+        } ?: finish(RESULT_DESTINATION_IMAGE_ERROR)
+
+        intent.data = uri
+        if (intent.getBooleanExtra(RETURN_DATA, false)) {
+            intent.putExtra(RETURN_DATA, bitmap)
+        }
+        finish(RESULT_OK)
+    }
+
+    /**
+     * Called when an error occurs.
+     *
+     * @since 0.5.6
+     */
+    private fun finish(resultCode: Int) {
+        originalImage?.apply { FileMgr.deleteFile(this) }
+        setResult(resultCode, intent)
+        finish()
     }
 
 }
