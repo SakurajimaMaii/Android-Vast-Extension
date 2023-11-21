@@ -126,11 +126,7 @@ object SimpleToast {
      */
     private fun makeToast(context: Context, msg: String, @Duration duration: Int) {
         mToast?.cancel()
-        if (null == mToast) {
-            mToast = makeText(context, msg, duration)
-        } else {
-            mToast!!.setText(msg)
-        }
-        mToast!!.show()
+        mToast = makeText(context, msg, duration)
+        mToast?.show()
     }
 }
