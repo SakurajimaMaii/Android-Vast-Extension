@@ -78,7 +78,7 @@ sealed interface MediaFileProperty {
      * ```
      *
      * @param authority The authority of a [FileProvider] defined in a
-     *     <provider> element in your app's manifest.
+     * <provider> element in your app's manifest.
      */
     @RequiresApi(Build.VERSION_CODES.N)
     fun getFileUriAboveApi24(file: File, authority: String): Uri

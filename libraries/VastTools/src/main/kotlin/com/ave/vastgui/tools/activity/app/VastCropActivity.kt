@@ -23,7 +23,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore.Images.Media
-import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.content.ContextCompat
 import com.ave.vastgui.tools.R
@@ -157,7 +156,7 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
         // Source image file to be cropped
         val source = File(
             cacheDir,
-            "temp_cache_${ImageMgr.getDefaultFileName(".$extension")}"
+            "crop_cache_${ImageMgr.getDefaultFileName(".$extension")}"
         )
         // Destination image file
         val destination = File(
@@ -251,7 +250,6 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
         } else {
             ImageMgr.getFileUriOnApi23(destination)
         }
-        Log.d("VastCropActivity","$uri")
 
         if (null == uri) {
             finish(RESULT_DESTINATION_IMAGE_ERROR)
