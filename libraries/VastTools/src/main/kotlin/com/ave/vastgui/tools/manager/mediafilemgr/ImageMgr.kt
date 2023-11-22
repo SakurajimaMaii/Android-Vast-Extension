@@ -22,10 +22,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.Environment.DIRECTORY_PICTURES
-import android.provider.MediaStore
-import android.util.Log
+import android.provider.MediaStore.Images.Media
 import androidx.annotation.RequiresApi
-import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.content.ContextHelper
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.utils.DateUtils
@@ -37,33 +35,34 @@ import java.io.File
 // Date: 2022/10/21
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/file-manager/media-file-mgr/
 
-object ImageMgr : MediaFileMgr() {
+data object ImageMgr : MediaFileMgr() {
 
     override fun getSharedFilesDir(): File {
         return Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES)
     }
 
-    @Throws(IllegalStateException::class)
+    @Throws(IllegalStateException::class, RuntimeException::class)
     override fun getExternalFilesDir(subDir: String?): File {
         val file = if (subDir == null) {
             FileMgr.appExternalFilesDir(DIRECTORY_PICTURES)
-        } else File(FileMgr.appExternalFilesDir(DIRECTORY_PICTURES), subDir)
-        file.let { FileMgr.makeDir(it) }.let {
-            if (it.isFailure) {
-                Log.e(defaultLogTag(), it.exceptionOrNull()?.message.toString())
-            }
         }
+        else {
+            File(FileMgr.appExternalFilesDir(DIRECTORY_PICTURES), subDir)
+        }
+        if (file.exists()) return file
+        val result = FileMgr.makeDir(file)
+        if (result.isFailure) throw result.exceptionOrNull()!!
         return file
     }
 
     override fun getFileByUri(uri: Uri): File? {
-        val proj = arrayOf(MediaStore.Images.Media.RELATIVE_PATH)
+        val proj = arrayOf(Media.RELATIVE_PATH)
         val cursor: Cursor? =
             ContextHelper.getAppContext().contentResolver.query(uri, proj, null, null, null)
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 val columnIndex: Int =
-                    cursor.getColumnIndexOrThrow(MediaStore.Images.Media.RELATIVE_PATH)
+                    cursor.getColumnIndexOrThrow(Media.RELATIVE_PATH)
                 val path: String = cursor.getString(columnIndex)
                 cursor.close()
                 return File(path)
@@ -75,11 +74,11 @@ object ImageMgr : MediaFileMgr() {
     /**
      * Get the uri by [file].
      *
-     * [getFileUriAboveApi30] will insert a new row into a table at
-     * the given URL [MediaStore.Images.Media.EXTERNAL_CONTENT_URI].
-     * So when you want to delete the image file, please also run
-     * [android.content.ContentResolver.delete] to make sure that the
-     * file-related information is completely deleted. For example:
+     * [getFileUriAboveApi30] will insert a new row into a table at the given
+     * URL [Media.EXTERNAL_CONTENT_URI]. So when you want to delete the image
+     * file, please also run [android.content.ContentResolver.delete] to make
+     * sure that the file-related information is completely deleted. For
+     * example:
      * ```kotlin
      * contentResolver.delete(
      *      MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -88,45 +87,33 @@ object ImageMgr : MediaFileMgr() {
      * )
      * ```
      *
-     * By default, [getFileUriAboveApi30] will only insert
-     * the following columns: [MediaStore.Images.Media.DATA],
-     * [MediaStore.Images.Media.DISPLAY_NAME],
-     * [MediaStore.Images.Media.MIME_TYPE], If you want to customize, you
-     * can refer to [getFileUriAboveApi30] by using saveOptions parameter.
+     * By default, [getFileUriAboveApi30] will only insertthe following
+     * columns: [Media.DATA],[Media.DISPLAY_NAME],[Media.MIME_TYPE], If you
+     * want to customize, youcan refer to [getFileUriAboveApi30] by using
+     * saveOptions parameter.
      *
-     * Since version 0.5.0, [MediaStore.Images.Media.DATE_ADDED] will also be
-     * inserted as the default column.
+     * Since version 0.5.0, [Media.DATE_ADDED] will also be inserted as the
+     * default column.
      */
     @RequiresApi(Build.VERSION_CODES.R)
     override fun getFileUriAboveApi30(file: File): Uri? {
         val values = ContentValues().apply {
-            put(MediaStore.Images.Media.DATA, file.absolutePath)
-            put(MediaStore.Images.Media.DISPLAY_NAME, file.name)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-            put(
-                MediaStore.Images.Media.DATE_ADDED,
-                DateUtils.getCurrentTime(FORMAT_YYYY_MM_DD_HH_MM_SS)
-            )
+            put(Media.DATA, file.absolutePath)
+            put(Media.DISPLAY_NAME, file.name)
+            put(Media.MIME_TYPE, "image/jpeg")
+            put(Media.DATE_ADDED, DateUtils.getCurrentTime(FORMAT_YYYY_MM_DD_HH_MM_SS))
         }
-        return try {
-            ContextHelper.getAppContext().contentResolver.insert(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                values
-            )
-        } catch (e: IllegalArgumentException) {
-            e.printStackTrace()
-            null
-        }
+        return ContextHelper.getAppContext().contentResolver.insert(Media.EXTERNAL_CONTENT_URI, values)
     }
 
     /**
      * Get the uri by [saveOptions].
      *
-     * [getFileUriAboveApi30] will insert a new row into a table at
-     * the given URL [MediaStore.Images.Media.EXTERNAL_CONTENT_URI].
-     * So when you want to delete the image file, please also run
-     * [android.content.ContentResolver.delete] to make sure that the
-     * file-related information is completely deleted. For example:
+     * [getFileUriAboveApi30] will insert a new row into a table at the given
+     * URL [Media.EXTERNAL_CONTENT_URI]. So when you want to delete the image
+     * file, please also run [android.content.ContentResolver.delete] to make
+     * sure that the file-related information is completely deleted. For
+     * example:
      * ```kotlin
      * contentResolver.delete(
      *      MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -144,15 +131,7 @@ object ImageMgr : MediaFileMgr() {
                 put(key, value)
             }
         }
-        return try {
-            ContextHelper.getAppContext().contentResolver.insert(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                values
-            )
-        } catch (e: IllegalArgumentException) {
-            e.printStackTrace()
-            null
-        }
+        return ContextHelper.getAppContext().contentResolver.insert(Media.EXTERNAL_CONTENT_URI, values)
     }
 
 }
