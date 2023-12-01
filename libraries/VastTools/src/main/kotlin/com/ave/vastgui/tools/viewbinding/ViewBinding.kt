@@ -51,9 +51,9 @@ import kotlin.reflect.KProperty
  * Creates an instance of the binding class for the [Activity] to use.
  *
  * You can click
- * [VbActivity.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/java/com/ave/vastgui/app/activity/vbexample/VbActivity.kt)
+ * [VbActivity.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt)
  * and
- * [activity_my.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/activity_my.xml)
+ * [activity_vb.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/activity_vb.xml)
  * to see the sample code.
  *
  * @since 0.5.2
@@ -61,7 +61,7 @@ import kotlin.reflect.KProperty
 @JvmName("viewBindingActivity")
 inline fun <V : ViewBinding> Activity.viewBinding(
     crossinline viewBinder: (LayoutInflater) -> V
-) = LazyViewBindingProperty<Activity, V> { activity: Activity ->
+) = LazyViewBindingProperty { activity: Activity ->
     viewBinder(activity.layoutInflater).apply {
         setContentView(root)
     }
@@ -75,9 +75,9 @@ inline fun <V : ViewBinding> Activity.viewBinding(
  * memory leaks.
  *
  * You can click
- * [VbActivity.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/java/com/ave/vastgui/app/activity/vbexample/VbActivity.kt)
+ * [VbActivity.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt)
  * and
- * [activity_my.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/activity_my.xml)
+ * [activity_vb.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/activity_vb.xml)
  * to see the sample code.
  *
  * @since 0.5.2
@@ -96,9 +96,9 @@ inline fun <V : ViewBinding> ComponentActivity.viewBinding(
  * use.
  *
  * You can click
- * [VbActivity.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/java/com/ave/vastgui/app/activity/vbexample/VbActivity.kt)
+ * [VbActivity.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt)
  * and
- * [activity_my.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/activity_my.xml)
+ * [activity_vb.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/activity_vb.xml)
  * to see the sample code.
  *
  * @since 0.5.2
@@ -116,9 +116,9 @@ inline fun <V : ViewBinding> ComponentActivity.viewBinding(
  * use.
  *
  * You can click
- * [VbActivity.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/java/com/ave/vastgui/app/activity/vbexample/VbActivity.kt)
+ * [VbActivity.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt)
  * and
- * [activity_my.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/activity_my.xml)
+ * [activity_vb.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/activity_vb.xml)
  * to see the sample code.
  *
  * @since 0.5.2
@@ -135,7 +135,7 @@ inline fun <V : ViewBinding> ComponentActivity.viewBinding(
  * Creates an instance of the binding class for the [Fragment] to use.
  *
  * You can click
- * [VbFragment.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/java/com/ave/vastgui/app/activity/vbexample/VbFragment.kt)
+ * [VbFragment.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbFragment.kt)
  * and
  * [fragment_sample.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/fragment_sample.xml)
  * to see the sample code.
@@ -160,7 +160,7 @@ inline fun <F : Fragment, V : ViewBinding> Fragment.viewBinding(
  * Creates an instance of the binding class for the [Fragment] to use.
  *
  * You can click
- * [VbFragment.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/java/com/ave/vastgui/app/activity/vbexample/VbFragment.kt)
+ * [VbFragment.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbFragment.kt)
  * and
  * [fragment_sample.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/fragment_sample.xml)
  * to see the sample code.
@@ -185,9 +185,9 @@ inline fun <F : Fragment, V : ViewBinding> Fragment.viewBinding(
  * Creates an instance of the binding class for the [ViewGroup] to use.
  *
  * You can click
- * [VbViewGroup.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/java/com/ave/vastgui/app/activity/vbexample/VbViewGroup.kt)
+ * [VbViewGroup.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbViewGroup.kt)
  * and
- * [item_textview.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/item_textview.xml)
+ * [viewgroup_vb.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/viewgroup_vb.xml)
  * to see the sample code.
  *
  * @since 0.5.2
@@ -204,9 +204,9 @@ inline fun <V : ViewBinding> ViewGroup.viewBinding(
  * Creates an instance of the binding class for the [ViewGroup] to use.
  *
  * You can click
- * [VbViewGroup.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/java/com/ave/vastgui/app/activity/vbexample/VbViewGroup.kt)
+ * [VbViewGroup.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbViewGroup.kt)
  * and
- * [item_textview.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/item_textview.xml)
+ * [viewgroup_vb.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/viewgroup_vb.xml)
  * to see the sample code.
  *
  * @since 0.5.2
@@ -224,9 +224,9 @@ inline fun <V : ViewBinding> ViewGroup.viewBinding(
  * [RecyclerView.ViewHolder] to use.
  *
  * You can click
- * [VbAdapter.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/java/com/ave/vastgui/app/activity/vbexample/VbAdapter.kt)
+ * [VbAdapter.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbAdapter.kt)
  * and
- * [item_textview.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/item_textview.xml)
+ * [item_person.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/item_person.xml)
  * to see the sample code.
  *
  * @since 0.5.2
@@ -244,9 +244,9 @@ inline fun <V : ViewBinding> RecyclerView.ViewHolder.viewBinding(
  * [RecyclerView.ViewHolder] to use.
  *
  * You can click
- * [VbAdapter.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/java/com/ave/vastgui/app/activity/vbexample/VbAdapter.kt)
+ * [VbAdapter.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbAdapter.kt)
  * and
- * [item_textview.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/item_textview.xml)
+ * [item_person.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/item_person.xml)
  * to see the sample code.
  *
  * @since 0.5.2
