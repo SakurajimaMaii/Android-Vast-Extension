@@ -28,6 +28,7 @@ import androidx.annotation.IntRange
 import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.graphics.BmpUtils
+import kotlin.math.round
 
 // Author: Vast Gui
 // Email: sakurajimamai2020@qq.com
@@ -37,14 +38,10 @@ import com.ave.vastgui.tools.graphics.BmpUtils
 /**
  * RatingView.
  *
- * @property mOriginalSelectedBitmap The original bitmap of the selected
- *     star.
- * @property mOriginalUnselectedBitmap The original bitmap of the
- *     unselected star.
- * @property mStarSelectedBitmap The bitmap of the selected star with
- *     required size.
- * @property mStarUnselectedBitmap The bitmap of the unselected star with
- *     required size.
+ * @property mOriginalSelectedBitmap The original bitmap of the selected star.
+ * @property mOriginalUnselectedBitmap The original bitmap of the unselected star.
+ * @property mStarSelectedBitmap The bitmap of the selected star with required size.
+ * @property mStarUnselectedBitmap The bitmap of the unselected star with required size.
  * @property mStarIntervalWidth Star interval width(in pixels).
  * @property mStarBitmapWidth Star Bitmap width(in pixels).
  * @property mStarBitmapHeight Star Bitmap height(in pixels).
@@ -112,62 +109,83 @@ class RatingView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         // Draw selected star.
-        var solidStartPoint = 0f
-        when (mStarOrientation) {
-            StarOrientation.HORIZONTAL -> for (i in 1..mStarSolidNumber) {
-                canvas.drawBitmap(mStarSelectedBitmap, solidStartPoint, 0f, mPaint)
-                solidStartPoint += mStarIntervalWidth.toInt() + mStarSelectedBitmap.width
-            }
-
-            StarOrientation.VERTICAL -> for (i in 1..mStarSolidNumber) {
-                canvas.drawBitmap(mStarSelectedBitmap, 0f, solidStartPoint, mPaint)
-                solidStartPoint += mStarIntervalWidth.toInt() + mStarSelectedBitmap.height
-            }
-
-            StarOrientation.UNSPECIFIED -> nothing_to_do()
-        }
+        var solidStartPoint = paddingStart.toFloat()
         // Unselected Star Bitmap start point.
-        var hollowStartPoint = solidStartPoint
+        var hollowStartPoint: Float
         // Unselected Star number.
         val hollowStarNum = mStarCountNumber - mStarSolidNumber
         when (mStarOrientation) {
-            StarOrientation.HORIZONTAL -> for (j in 1..hollowStarNum) {
-                canvas.drawBitmap(mStarUnselectedBitmap, hollowStartPoint, 0f, mPaint)
-                hollowStartPoint += mStarIntervalWidth.toInt() + mStarUnselectedBitmap.width
-            }
+            StarOrientation.UNSPECIFIED -> return
 
-            StarOrientation.VERTICAL -> for (j in 1..hollowStarNum) {
-                canvas.drawBitmap(mStarUnselectedBitmap, 0f, hollowStartPoint, mPaint)
-                hollowStartPoint += mStarIntervalWidth.toInt() + mStarUnselectedBitmap.width
-            }
-
-            StarOrientation.UNSPECIFIED -> nothing_to_do()
-        }
-        // Extra selected star bitmap Length.
-        when (mStarOrientation) {
             StarOrientation.HORIZONTAL -> {
+                for (i in 1..mStarSolidNumber) {
+                    canvas.drawBitmap(
+                        mStarSelectedBitmap,
+                        solidStartPoint,
+                        paddingTop.toFloat(),
+                        mPaint
+                    )
+                    solidStartPoint += mStarIntervalWidth + mStarBitmapWidth
+                }
+                hollowStartPoint = solidStartPoint
+                for (j in 1..hollowStarNum) {
+                    canvas.drawBitmap(
+                        mStarUnselectedBitmap,
+                        hollowStartPoint,
+                        paddingTop.toFloat(),
+                        mPaint
+                    )
+                    hollowStartPoint += mStarIntervalWidth + mStarBitmapWidth
+                }
                 canvas.drawBitmap(mStarSelectedBitmap, mExtraSrc, mExtraDst, mPaint)
             }
 
             StarOrientation.VERTICAL -> {
+                for (i in 1..mStarSolidNumber) {
+                    canvas.drawBitmap(
+                        mStarSelectedBitmap,
+                        paddingStart.toFloat(),
+                        solidStartPoint,
+                        mPaint
+                    )
+                    solidStartPoint += mStarIntervalWidth + mStarBitmapHeight
+                }
+                hollowStartPoint = solidStartPoint
+                for (j in 1..hollowStarNum) {
+                    canvas.drawBitmap(
+                        mStarUnselectedBitmap,
+                        paddingStart.toFloat(),
+                        hollowStartPoint,
+                        mPaint
+                    )
+                    hollowStartPoint += mStarIntervalWidth + mStarBitmapHeight
+                }
                 canvas.drawBitmap(mStarSelectedBitmap, mExtraSrc, mExtraDst, mPaint)
             }
-
-            StarOrientation.UNSPECIFIED -> nothing_to_do()
         }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         when (mStarOrientation) {
-            StarOrientation.HORIZONTAL -> setMeasuredDimension(
-                measureLong(widthMeasureSpec),
-                measureShort(heightMeasureSpec)
-            )
+            StarOrientation.HORIZONTAL -> {
+                val requiredWidth = mStarCountNumber * mStarBitmapWidth +
+                        (mStarCountNumber - 1) * mStarIntervalWidth +
+                        paddingStart + paddingEnd
+                val width = resolveSize(requiredWidth.toInt(), widthMeasureSpec)
+                val requiredHeight = mStarBitmapHeight + paddingTop + paddingBottom
+                val height = resolveSize(requiredHeight.toInt(), heightMeasureSpec)
+                setMeasuredDimension(width, height)
+            }
 
-            StarOrientation.VERTICAL -> setMeasuredDimension(
-                measureShort(widthMeasureSpec),
-                measureLong(heightMeasureSpec)
-            )
+            StarOrientation.VERTICAL -> {
+                val requiredWidth = mStarBitmapWidth + paddingStart + paddingEnd
+                val width = resolveSize(requiredWidth.toInt(), widthMeasureSpec)
+                val requiredHeight = mStarCountNumber * mStarBitmapHeight +
+                        (mStarCountNumber - 1) * mStarIntervalWidth +
+                        paddingTop + paddingBottom
+                val height = resolveSize(requiredHeight.toInt(), heightMeasureSpec)
+                setMeasuredDimension(width, height)
+            }
 
             StarOrientation.UNSPECIFIED -> setMeasuredDimension(0, 0)
         }
@@ -178,19 +196,13 @@ class RatingView @JvmOverloads constructor(
         when (mStarSelectMethod) {
             StarSelectMethod.SLIDING -> {
                 if (mStarOrientation == StarOrientation.HORIZONTAL) {
-                    val totalWidth =
-                        (mStarCountNumber * (mStarBitmapWidth + mStarIntervalWidth))
-                    if (event.x <= totalWidth) {
-                        val newStarRating = event.x / (mStarBitmapWidth + mStarIntervalWidth)
-                        setStarRating(newStarRating)
-                    }
-                } else {
-                    val totalHeight =
-                        (mStarCountNumber * (mStarBitmapHeight + mStarIntervalWidth))
-                    if (event.y <= totalHeight) {
-                        val newStarRating = event.y / (mStarBitmapHeight + mStarIntervalWidth)
-                        setStarRating(newStarRating)
-                    }
+                    val newStarRating = event.x.coerceIn(0f, measuredWidth.toFloat()) /
+                            (mStarBitmapWidth + mStarIntervalWidth)
+                    setStarRating(newStarRating)
+                } else if (mStarOrientation == StarOrientation.VERTICAL) {
+                    val newStarRating = event.y.coerceIn(0f, measuredHeight.toFloat()) /
+                            (mStarBitmapHeight + mStarIntervalWidth)
+                    setStarRating(newStarRating)
                 }
                 performClick()
                 return true
@@ -199,18 +211,16 @@ class RatingView @JvmOverloads constructor(
             StarSelectMethod.CLICK -> {
                 if (event.action == MotionEvent.ACTION_DOWN) {
                     if (mStarOrientation == StarOrientation.HORIZONTAL) {
-                        val totalWidth =
-                            (mStarCountNumber * mStarBitmapWidth) + (mStarCountNumber - 1) * mStarIntervalWidth
-                        val newStarRating = if (event.x <= totalWidth) {
-                            event.x.toInt() / (mStarBitmapWidth + mStarIntervalWidth)
-                        } else mStarCountNumber.toFloat()
+                        val newStarRating = round(
+                            event.x.coerceIn(0f, measuredWidth.toFloat()) /
+                                    (mStarBitmapWidth + mStarIntervalWidth)
+                        )
                         setStarRating(newStarRating)
-                    } else {
-                        val totalHeight =
-                            (mStarCountNumber * mStarBitmapHeight) + (mStarCountNumber - 1) * mStarIntervalWidth
-                        val newStarRating = if (event.y <= totalHeight) {
-                            event.y.toInt() / (mStarBitmapHeight + mStarIntervalWidth)
-                        } else mStarCountNumber.toFloat()
+                    } else if (mStarOrientation == StarOrientation.VERTICAL) {
+                        val newStarRating = round(
+                            event.y.coerceIn(0f, measuredHeight.toFloat()) /
+                                    (mStarBitmapHeight + mStarIntervalWidth)
+                        )
                         setStarRating(newStarRating)
                     }
                 }
@@ -233,32 +243,30 @@ class RatingView @JvmOverloads constructor(
         mStarRating = starRating.coerceAtMost(mStarCountNumber.toFloat())
         mStarSolidNumber = starRating.toInt()
         val extraSolidLength =
-            ((starRating - mStarSolidNumber) * mStarUnselectedBitmap.width).toInt()
+            ((starRating - mStarSolidNumber) * mStarBitmapWidth).toInt()
         var extraSolidStarPoint = 0
         when (mStarOrientation) {
             StarOrientation.HORIZONTAL -> {
-                for (i in 1..mStarSolidNumber) {
-                    extraSolidStarPoint += mStarIntervalWidth.toInt() + mStarSelectedBitmap.width
-                }
-                mExtraSrc.set(0, 0, extraSolidLength, mStarUnselectedBitmap.height)
+                extraSolidStarPoint +=
+                    (mStarSolidNumber * (mStarIntervalWidth + mStarBitmapWidth)).toInt()
+                mExtraSrc.set(0, 0, extraSolidLength, mStarBitmapHeight.toInt())
                 mExtraDst.set(
-                    extraSolidStarPoint,
-                    0,
-                    extraSolidStarPoint + extraSolidLength,
-                    mStarUnselectedBitmap.height
+                    paddingStart + extraSolidStarPoint,
+                    paddingTop,
+                    paddingStart + extraSolidStarPoint + extraSolidLength,
+                    paddingTop + mStarBitmapHeight.toInt()
                 )
             }
 
             StarOrientation.VERTICAL -> {
-                for (i in 1..mStarSolidNumber) {
-                    extraSolidStarPoint += mStarIntervalWidth.toInt() + mStarSelectedBitmap.height
-                }
+                extraSolidStarPoint +=
+                    (mStarSolidNumber * (mStarIntervalWidth + mStarBitmapHeight)).toInt()
                 mExtraSrc.set(0, 0, mStarUnselectedBitmap.width, extraSolidLength)
                 mExtraDst.set(
-                    0,
-                    extraSolidStarPoint,
-                    mStarUnselectedBitmap.width,
-                    extraSolidStarPoint + extraSolidLength
+                    paddingStart,
+                    paddingTop + extraSolidStarPoint,
+                    paddingStart + mStarBitmapWidth.toInt(),
+                    paddingTop + extraSolidStarPoint + extraSolidLength
                 )
             }
 
@@ -375,37 +383,6 @@ class RatingView @JvmOverloads constructor(
         if (mStarOrientation == StarOrientation.UNSPECIFIED) {
             mStarOrientation = starOrientation
         }
-    }
-
-    private fun measureLong(measureSpec: Int): Int {
-        var result: Int
-        val specMode = MeasureSpec.getMode(measureSpec)
-        val specSize = MeasureSpec.getSize(measureSpec)
-        if (specMode == MeasureSpec.EXACTLY) {
-            result = specSize
-        } else {
-            result =
-                (paddingLeft + paddingRight + (mStarIntervalWidth + mStarBitmapWidth) * mStarCountNumber).toInt()
-            if (specMode == MeasureSpec.AT_MOST) {
-                result = result.coerceAtMost(specSize)
-            }
-        }
-        return result
-    }
-
-    private fun measureShort(measureSpec: Int): Int {
-        var result: Int
-        val specMode = MeasureSpec.getMode(measureSpec)
-        val specSize = MeasureSpec.getSize(measureSpec)
-        if (specMode == MeasureSpec.EXACTLY) {
-            result = specSize
-        } else {
-            result = (mStarBitmapHeight + paddingTop + paddingBottom).toInt()
-            if (specMode == MeasureSpec.AT_MOST) {
-                result = result.coerceAtMost(specSize)
-            }
-        }
-        return result
     }
 
     init {
