@@ -26,7 +26,7 @@ package com.ave.vastgui.tools.view.ratingview
  * @since 0.5.3
  */
 sealed class StarOrientation(val code:Int) {
-    internal object UNSPECIFIED : StarOrientation(0)
-    object HORIZONTAL : StarOrientation(1)
-    object VERTICAL : StarOrientation(2)
+    internal data object UNSPECIFIED : StarOrientation(0)
+    data object HORIZONTAL : StarOrientation(1)
+    data object VERTICAL : StarOrientation(2)
 }
