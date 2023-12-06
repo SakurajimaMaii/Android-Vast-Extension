@@ -16,15 +16,17 @@
 
 package com.ave.vastgui.tools.view.ratingview
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
+import androidx.core.graphics.withClip
 import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.graphics.BmpUtils
@@ -47,7 +49,6 @@ import kotlin.math.round
  * @property mStarBitmapHeight Star Bitmap height(in pixels).
  * @property mStarCountNumber Max number of stars.
  * @property mStarRating The progress of the currently selected stars.
- * @property mStarSolidNumber The number of currently selected stars.
  * @property mStarSelectMethod The star selection method.
  * @property mStarOrientation The star orientation.
  */
@@ -57,6 +58,22 @@ class RatingView @JvmOverloads constructor(
     defStyleAttr: Int = R.attr.Default_RatingView_Style,
     defStyleRes: Int = R.style.BaseRatingView
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
+
+    /**
+     * Listener that the rating has changed.
+     *
+     * @since 0.5.6
+     */
+    interface OnStarRatingChangeListener {
+
+        /**
+         * Callback when rating changed
+         *
+         * @param rating Current rating.
+         * @since 0.5.6
+         */
+        fun onRatingChanged(rating: Float)
+    }
 
     private val mDefaultStarIntervalWidth
         get() = context.resources.getDimension(R.dimen.default_star_interval_width)
@@ -73,12 +90,11 @@ class RatingView @JvmOverloads constructor(
     private val mDefaultRating
         get() = context.resources.getInteger(R.integer.default_rating_star_rating).toFloat()
 
-    private val mExtraSrc: Rect = Rect()
-    private val mExtraDst: Rect = Rect()
     private val mPaint: Paint = Paint()
     private var mStarSelectedBitmap: Bitmap
     private var mStarUnselectedBitmap: Bitmap
-    private var mStarSolidNumber = 0
+    private var mStarRating: Float
+    private var listener: OnStarRatingChangeListener? = null
 
     var mOriginalSelectedBitmap: Bitmap
         private set
@@ -98,9 +114,6 @@ class RatingView @JvmOverloads constructor(
     var mStarCountNumber: Int
         private set
 
-    var mStarRating: Float
-        private set
-
     var mStarSelectMethod: StarSelectMethod
         private set
 
@@ -108,59 +121,63 @@ class RatingView @JvmOverloads constructor(
         private set
 
     override fun onDraw(canvas: Canvas) {
-        // Draw selected star.
-        var solidStartPoint = paddingStart.toFloat()
-        // Unselected Star Bitmap start point.
-        var hollowStartPoint: Float
-        // Unselected Star number.
-        val hollowStarNum = mStarCountNumber - mStarSolidNumber
         when (mStarOrientation) {
             StarOrientation.UNSPECIFIED -> return
 
             StarOrientation.HORIZONTAL -> {
-                for (i in 1..mStarSolidNumber) {
-                    canvas.drawBitmap(
-                        mStarSelectedBitmap,
-                        solidStartPoint,
-                        paddingTop.toFloat(),
-                        mPaint
-                    )
-                    solidStartPoint += mStarIntervalWidth + mStarBitmapWidth
-                }
-                hollowStartPoint = solidStartPoint
-                for (j in 1..hollowStarNum) {
+                (1..mStarCountNumber).forEach { index ->
+                    val offset = (index - 1) * (mStarIntervalWidth + mStarBitmapWidth)
                     canvas.drawBitmap(
                         mStarUnselectedBitmap,
-                        hollowStartPoint,
+                        paddingStart + offset,
                         paddingTop.toFloat(),
                         mPaint
                     )
-                    hollowStartPoint += mStarIntervalWidth + mStarBitmapWidth
                 }
-                canvas.drawBitmap(mStarSelectedBitmap, mExtraSrc, mExtraDst, mPaint)
+                canvas.withClip(
+                    paddingStart.toFloat(),
+                    0f,
+                    paddingStart + mStarRating * mStarCountNumber * (mStarIntervalWidth + mStarBitmapWidth),
+                    measuredHeight.toFloat()
+                ) {
+                    (1..mStarCountNumber).forEach { index ->
+                        val offset = (index - 1) * (mStarIntervalWidth + mStarBitmapWidth)
+                        canvas.drawBitmap(
+                            mStarSelectedBitmap,
+                            paddingStart + offset,
+                            paddingTop.toFloat(),
+                            mPaint
+                        )
+                    }
+                }
             }
 
             StarOrientation.VERTICAL -> {
-                for (i in 1..mStarSolidNumber) {
-                    canvas.drawBitmap(
-                        mStarSelectedBitmap,
-                        paddingStart.toFloat(),
-                        solidStartPoint,
-                        mPaint
-                    )
-                    solidStartPoint += mStarIntervalWidth + mStarBitmapHeight
-                }
-                hollowStartPoint = solidStartPoint
-                for (j in 1..hollowStarNum) {
+                (1..mStarCountNumber).forEach { index ->
+                    val offset = (index - 1) * (mStarIntervalWidth + mStarBitmapHeight)
                     canvas.drawBitmap(
                         mStarUnselectedBitmap,
                         paddingStart.toFloat(),
-                        hollowStartPoint,
+                        paddingTop + offset,
                         mPaint
                     )
-                    hollowStartPoint += mStarIntervalWidth + mStarBitmapHeight
                 }
-                canvas.drawBitmap(mStarSelectedBitmap, mExtraSrc, mExtraDst, mPaint)
+                canvas.withClip(
+                    0f,
+                    paddingTop.toFloat(),
+                    measuredWidth.toFloat(),
+                    paddingTop + mStarRating * mStarCountNumber * (mStarIntervalWidth + mStarBitmapHeight)
+                ) {
+                    (1..mStarCountNumber).forEach { index ->
+                        val offset = (index - 1) * (mStarIntervalWidth + mStarBitmapHeight)
+                        canvas.drawBitmap(
+                            mStarSelectedBitmap,
+                            paddingStart.toFloat(),
+                            paddingTop + offset,
+                            mPaint
+                        )
+                    }
+                }
             }
         }
     }
@@ -191,88 +208,68 @@ class RatingView @JvmOverloads constructor(
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (mStarSelectMethod) {
             StarSelectMethod.SLIDING -> {
                 if (mStarOrientation == StarOrientation.HORIZONTAL) {
-                    val newStarRating = event.x.coerceIn(0f, measuredWidth.toFloat()) /
-                            (mStarBitmapWidth + mStarIntervalWidth)
+                    val newStarRating = event.x.coerceIn(0f, measuredWidth.toFloat()) / measuredWidth
                     setStarRating(newStarRating)
                 } else if (mStarOrientation == StarOrientation.VERTICAL) {
-                    val newStarRating = event.y.coerceIn(0f, measuredHeight.toFloat()) /
-                            (mStarBitmapHeight + mStarIntervalWidth)
+                    val newStarRating = event.y.coerceIn(0f, measuredHeight.toFloat()) / measuredHeight
                     setStarRating(newStarRating)
                 }
-                performClick()
                 return true
             }
 
             StarSelectMethod.CLICK -> {
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    if (mStarOrientation == StarOrientation.HORIZONTAL) {
-                        val newStarRating = round(
-                            event.x.coerceIn(0f, measuredWidth.toFloat()) /
-                                    (mStarBitmapWidth + mStarIntervalWidth)
-                        )
-                        setStarRating(newStarRating)
-                    } else if (mStarOrientation == StarOrientation.VERTICAL) {
-                        val newStarRating = round(
-                            event.y.coerceIn(0f, measuredHeight.toFloat()) /
-                                    (mStarBitmapHeight + mStarIntervalWidth)
-                        )
-                        setStarRating(newStarRating)
-                    }
+                if (mStarOrientation == StarOrientation.HORIZONTAL) {
+                    val newStarRating =
+                        round(
+                            (event.x.coerceIn(
+                                0f,
+                                measuredWidth.toFloat()
+                            ) / measuredWidth) * mStarCountNumber
+                        ) / mStarCountNumber
+                    setStarRating(newStarRating)
+                } else if (mStarOrientation == StarOrientation.VERTICAL) {
+                    val newStarRating =
+                        round(
+                            (event.x.coerceIn(
+                                0f,
+                                measuredHeight.toFloat()
+                            ) / measuredHeight) * mStarCountNumber
+                        ) / mStarCountNumber
+                    setStarRating(newStarRating)
                 }
-                performClick()
                 return true
             }
 
             StarSelectMethod.UNABLE -> {
-                performClick()
+                if (event.action == MotionEvent.ACTION_UP) {
+                    performClick()
+                }
                 return super.onTouchEvent(event)
             }
         }
+    }
+
+    override fun performClick(): Boolean {
+        if (super.performClick()) return true
+        nothing_to_do()
+        return true
     }
 
     /**
      * Set star rating by [starRating]. If [mStarRating] is greater than
      * [mStarCountNumber], it will be set to [mStarCountNumber].
      */
-    fun setStarRating(@FloatRange(from = 0.0) starRating: Float) {
-        mStarRating = starRating.coerceAtMost(mStarCountNumber.toFloat())
-        mStarSolidNumber = starRating.toInt()
-        val extraSolidLength =
-            ((starRating - mStarSolidNumber) * mStarBitmapWidth).toInt()
-        var extraSolidStarPoint = 0
-        when (mStarOrientation) {
-            StarOrientation.HORIZONTAL -> {
-                extraSolidStarPoint +=
-                    (mStarSolidNumber * (mStarIntervalWidth + mStarBitmapWidth)).toInt()
-                mExtraSrc.set(0, 0, extraSolidLength, mStarBitmapHeight.toInt())
-                mExtraDst.set(
-                    paddingStart + extraSolidStarPoint,
-                    paddingTop,
-                    paddingStart + extraSolidStarPoint + extraSolidLength,
-                    paddingTop + mStarBitmapHeight.toInt()
-                )
-            }
-
-            StarOrientation.VERTICAL -> {
-                extraSolidStarPoint +=
-                    (mStarSolidNumber * (mStarIntervalWidth + mStarBitmapHeight)).toInt()
-                mExtraSrc.set(0, 0, mStarUnselectedBitmap.width, extraSolidLength)
-                mExtraDst.set(
-                    paddingStart,
-                    paddingTop + extraSolidStarPoint,
-                    paddingStart + mStarBitmapWidth.toInt(),
-                    paddingTop + extraSolidStarPoint + extraSolidLength
-                )
-            }
-
-            StarOrientation.UNSPECIFIED -> nothing_to_do()
+    fun setStarRating(@FloatRange(from = 0.0, to = 1.0) starRating: Float) {
+        val rating = starRating.coerceIn(0f, 1f)
+        if(mStarRating != rating){
+            mStarRating = rating
+            listener?.onRatingChanged(mStarRating)
+            invalidate()
         }
-        invalidate()
     }
 
     /**
@@ -293,8 +290,8 @@ class RatingView @JvmOverloads constructor(
         @FloatRange(from = 0.0) starWidth: Float,
         @FloatRange(from = 0.0) starHeight: Float
     ) {
-        this.mStarBitmapWidth = starWidth
-        this.mStarBitmapHeight = starHeight
+        this.mStarBitmapWidth = starWidth.coerceAtLeast(0f)
+        this.mStarBitmapHeight = starHeight.coerceAtLeast(0f)
         mStarSelectedBitmap =
             BmpUtils.scaleBitmap(
                 mOriginalSelectedBitmap,
@@ -315,12 +312,12 @@ class RatingView @JvmOverloads constructor(
      * @param starSpaceWidth Int
      */
     fun setStarIntervalWidth(@FloatRange(from = 0.0) starSpaceWidth: Float) {
-        this.mStarIntervalWidth = starSpaceWidth
+        this.mStarIntervalWidth = starSpaceWidth.coerceAtLeast(0f)
     }
 
     /** Set the number of star. */
     fun setStarCountNumber(@IntRange(from = 0) starCountNumber: Int) {
-        this.mStarCountNumber = starCountNumber
+        this.mStarCountNumber = starCountNumber.coerceAtLeast(0)
     }
 
     /** Set the bitmap of the be selected star. */
@@ -385,6 +382,15 @@ class RatingView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Sets the listener to be called when the rating changes.
+     *
+     * @since 0.5.6
+     */
+    fun setOnStarRatingChangeListener(listener: OnStarRatingChangeListener?) {
+        this.listener = listener
+    }
+
     init {
         val typedArray =
             context.obtainStyledAttributes(
@@ -409,7 +415,20 @@ class RatingView @JvmOverloads constructor(
                 mDefaultStarBitmapHeight
             )
         mStarCountNumber = typedArray.getInt(R.styleable.RatingView_star_count, mDefaultStarCount)
-        mStarRating = typedArray.getFloat(R.styleable.RatingView_star_rating, mDefaultRating)
+        val method = typedArray.getInt(R.styleable.RatingView_star_select_method, mDefaultSelectMethod)
+        mStarSelectMethod = when (method) {
+            StarSelectMethod.UNABLE.code -> StarSelectMethod.UNABLE
+            StarSelectMethod.CLICK.code -> StarSelectMethod.CLICK
+            StarSelectMethod.SLIDING.code -> StarSelectMethod.SLIDING
+            else -> StarSelectMethod.UNABLE
+        }
+        val rating =
+            typedArray.getFloat(R.styleable.RatingView_star_rating, mDefaultRating).coerceIn(0f, 1f)
+        mStarRating = if (mStarSelectMethod == StarSelectMethod.CLICK) {
+            round(mStarCountNumber * rating) / mStarCountNumber
+        } else {
+            rating
+        }
         mOriginalSelectedBitmap =
             BmpUtils.getBitmapFromDrawable(
                 typedArray.getResourceId(
@@ -441,14 +460,6 @@ class RatingView @JvmOverloads constructor(
             StarOrientation.HORIZONTAL.code -> StarOrientation.HORIZONTAL
             StarOrientation.VERTICAL.code -> StarOrientation.VERTICAL
             else -> StarOrientation.UNSPECIFIED
-        }
-        mStarSelectMethod = when (typedArray.getInt(
-            R.styleable.RatingView_star_select_method, mDefaultSelectMethod
-        )) {
-            StarSelectMethod.UNABLE.code -> StarSelectMethod.UNABLE
-            StarSelectMethod.CLICK.code -> StarSelectMethod.CLICK
-            StarSelectMethod.SLIDING.code -> StarSelectMethod.SLIDING
-            else -> StarSelectMethod.UNABLE
         }
         typedArray.recycle()
     }
