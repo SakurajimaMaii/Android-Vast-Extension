@@ -17,10 +17,12 @@
 package com.ave.vastgui.tools.utils.permission
 
 import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.ave.vastgui.tools.utils.AppUtils
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -46,37 +48,6 @@ const val CAMERA = Manifest.permission.CAMERA
 
 /** Allows an application to read the user's contacts data. */
 const val PEOPLE = Manifest.permission.READ_CONTACTS
-
-/**
- * Allows an app to access precise location.
- *
- * @see COARSE_LOCATION
- * @since 0.2.0
- */
-const val LOCATION =
-    Manifest.permission.ACCESS_FINE_LOCATION
-
-/**
- * Allows an app to access precise location.
- *
- * @see [LOCATION]
- * @since 0.2.0
- */
-const val COARSE_LOCATION =
-    Manifest.permission.ACCESS_COARSE_LOCATION
-
-/**
- * Allows an app to access location in the background. If you're requesting
- * this permission, you must also request either [COARSE_LOCATION] or
- * [LOCATION]. Requesting this permission by itself doesn't give you
- * location access.
- *
- * @see COARSE_LOCATION
- * @see LOCATION
- * @since 0.2.0
- */
-const val BACKGROUND_LOCATION =
-    Manifest.permission.ACCESS_BACKGROUND_LOCATION
 
 /**
  * Allows an application to record audio.
@@ -153,6 +124,7 @@ inline fun ComponentActivity.requestPermission(
     permission: String,
     builder: PermissionBuilder.() -> Unit
 ) {
+    if (permission.isEmpty()) return
     val mBuilder = PermissionBuilder().also(builder)
     singlePermissionLauncher()?.launch(permission) { result ->
         when {
@@ -175,6 +147,15 @@ inline fun ComponentActivity.requestMultiplePermissions(
     builder: MultiPermissionBuilder.() -> Unit
 ) {
     val mBuilder = MultiPermissionBuilder().also(builder)
+    val declaredPermissions = packageManager
+        .getPackageInfo(AppUtils.getPackageName(), PackageManager.GET_PERMISSIONS)
+        .requestedPermissions
+        .toSet()
+    val requestPermissions = permissions.filter { !declaredPermissions.contains(it) }
+    if(requestPermissions.isNotEmpty()) {
+        mBuilder.noDeclare(requestPermissions)
+        return
+    }
     multiPermissionLauncher()?.launch(permissions) { result: Map<String, Boolean> ->
         val deniedList = result.filter { !it.value }.map { it.key }
         when {
@@ -202,6 +183,7 @@ inline fun Fragment.requestPermission(
     permission: String,
     builder: PermissionBuilder.() -> Unit
 ) {
+    if (permission.isEmpty()) return
     val mBuilder = PermissionBuilder().also(builder)
     requireActivity().singlePermissionLauncher()?.launch(permission) { result ->
         when {
@@ -224,6 +206,15 @@ inline fun Fragment.requestMultiplePermissions(
     builder: MultiPermissionBuilder.() -> Unit
 ) {
     val mBuilder = MultiPermissionBuilder().also(builder)
+    val declaredPermissions = requireActivity().packageManager
+        .getPackageInfo(AppUtils.getPackageName(), PackageManager.GET_PERMISSIONS)
+        .requestedPermissions
+        .toSet()
+    val requestPermissions = permissions.filter { !declaredPermissions.contains(it) }
+    if(requestPermissions.isNotEmpty()) {
+        mBuilder.noDeclare(requestPermissions)
+        return
+    }
     requireActivity().multiPermissionLauncher()
         ?.launch(permissions) { result: Map<String, Boolean> ->
             val deniedList = result.filter { !it.value }.map { it.key }
@@ -258,13 +249,34 @@ class PermissionBuilder {
 /**
  * MultiPermissionBuilder.
  *
- * @property allGranted All permissions is granted.
- * @property denied Denied but can request again.
- * @property noMoreAsk Denied and can't request again.
  * @since 0.2.0
  */
 class MultiPermissionBuilder {
+    /**
+     * All permissions is granted.
+     *
+     * @since 0.2.0
+     */
     var allGranted: () -> Unit = {}
+
+    /**
+     * Denied but can request again.
+     *
+     * @since 0.2.0
+     */
     var denied: (List<String>) -> Unit = {}
+
+    /**
+     * Denied and can't request again.
+     *
+     * @since 0.2.0
+     */
     var noMoreAsk: (List<String>) -> Unit = {}
+
+    /**
+     * The permission are not declared in AndroidManifest.xml.
+     *
+     * @since 0.5.6
+     */
+    var noDeclare: (List<String>) -> Unit = {}
 }

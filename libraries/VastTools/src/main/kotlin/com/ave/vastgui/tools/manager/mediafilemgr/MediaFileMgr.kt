@@ -40,7 +40,7 @@ sealed class MediaFileMgr : MediaFileProperty {
         val timeStamp: String = DateUtils.getCurrentTime("yyyyMMdd_HHmmss_SSS")
         return try {
             "${timeStamp}_${AppUtils.getPackageName().replace(".", "_")}$extension"
-        } catch (exception:Exception) {
+        } catch (exception: Exception) {
             "${timeStamp}_media_file_mgr$extension"
         }
     }

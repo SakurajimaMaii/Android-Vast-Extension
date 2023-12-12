@@ -47,7 +47,7 @@ data object MusicMgr : MediaFileMgr() {
         } else {
             File(FileMgr.appExternalFilesDir(DIRECTORY_MUSIC), subDir)
         }
-        if(file.exists()) return file
+        if (file.exists()) return file
         val result = FileMgr.makeDir(file)
         if (result.isFailure) throw result.exceptionOrNull()!!
         return file
