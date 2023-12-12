@@ -21,12 +21,10 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.ave.vastgui.core.extension.cast
 import com.ave.vastgui.tools.content.ContextHelper
+import com.ave.vastgui.tools.graphics.BmpUtils
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -55,7 +53,6 @@ object AppUtils {
         callback ?: throw exception
     }
 
-
     /**
      * Get version name.
      *
@@ -72,7 +69,6 @@ object AppUtils {
     } catch (exception: Exception) {
         callback ?: throw exception
     }
-
 
     /**
      * Get version code.
@@ -91,7 +87,6 @@ object AppUtils {
         } else {
             getVersionCodeApi28Down(callback)
         }
-
 
     /**
      * Get VersionCode (in Api 28 Above)
@@ -120,7 +115,6 @@ object AppUtils {
         callback ?: throw exception
     }
 
-
     /**
      * Get package name.
      *
@@ -138,13 +132,11 @@ object AppUtils {
         callback ?: throw exception
     }
 
-
     /**
      * Get app icon bitmap.
      *
      * @return The icon of the application or [callback] if [callback] is not
      *     null,throw exception otherwise.
-     * @throws PackageManager.NameNotFoundException
      * @since 0.5.1
      */
     @JvmStatic
@@ -153,21 +145,10 @@ object AppUtils {
         val packageManager = ContextHelper.getAppContext().applicationContext.packageManager
         val applicationInfo = getApplicationInfo()
         val drawable = packageManager.getApplicationIcon(applicationInfo)
-        // Fix AdaptiveIconDrawable cannot be cast to BitmapDrawable.
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val bitmap =
-                Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
-            drawable.setBounds(0, 0, canvas.width, canvas.height)
-            drawable.draw(canvas)
-            BitmapDrawable(ContextHelper.getAppContext().resources, bitmap).bitmap
-        } else {
-            cast<BitmapDrawable>(drawable).bitmap
-        }
+        BmpUtils.getBitmapFromDrawable(drawable)
     } catch (exception: Exception) {
         callback ?: throw exception
     }
-
 
     /**
      * Get app debug mode.
@@ -201,28 +182,22 @@ object AppUtils {
     @Throws(PackageManager.NameNotFoundException::class)
     private fun getPackageInfo(): PackageInfo {
         val packageManager: PackageManager = ContextHelper.getAppContext().packageManager
+        val packageName = ContextHelper.getAppContext().packageName
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            packageManager.getPackageInfo(
-                ContextHelper.getAppContext().packageName, PackageManager.PackageInfoFlags.of(0)
-            )
+            packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
         } else {
-            @Suppress("DEPRECATION") packageManager.getPackageInfo(
-                ContextHelper.getAppContext().packageName, 0
-            )
+            packageManager.getPackageInfo(packageName, 0)
         }
     }
 
     @Throws(PackageManager.NameNotFoundException::class)
     private fun getApplicationInfo(): ApplicationInfo {
         val packageManager: PackageManager = ContextHelper.getAppContext().packageManager
+        val packageName = ContextHelper.getAppContext().packageName
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            packageManager.getApplicationInfo(
-                ContextHelper.getAppContext().packageName, PackageManager.ApplicationInfoFlags.of(0)
-            )
+            packageManager.getApplicationInfo(packageName, PackageManager.ApplicationInfoFlags.of(0))
         } else {
-            @Suppress("DEPRECATION") packageManager.getApplicationInfo(
-                ContextHelper.getAppContext().packageName, 0
-            )
+            packageManager.getApplicationInfo(packageName, 0)
         }
     }
 }

@@ -32,7 +32,7 @@ import com.ave.vastgui.tools.sharedpreferences.string
  *
  * @since 0.5.3
  */
-class LogSp internal constructor():ISharedPreferencesOwner {
+class LogSp internal constructor() : ISharedPreferencesOwner {
 
     override val name: String = LogUtil::class.java.name
     override val kv: SharedPreferences by lazy {

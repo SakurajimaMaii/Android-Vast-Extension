@@ -45,8 +45,7 @@ data object ImageMgr : MediaFileMgr() {
     override fun getExternalFilesDir(subDir: String?): File {
         val file = if (subDir == null) {
             FileMgr.appExternalFilesDir(DIRECTORY_PICTURES)
-        }
-        else {
+        } else {
             File(FileMgr.appExternalFilesDir(DIRECTORY_PICTURES), subDir)
         }
         if (file.exists()) return file
