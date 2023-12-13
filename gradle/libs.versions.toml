@@ -2,7 +2,7 @@
 activity-ktx = "1.8.1"
 agp = "8.3.0-alpha17"
 androidx-core-ktx = "1.10.0"
-annotation = "1.7.0"
+annotation = "1.7.1"
 appcompat = "1.6.1"
 appcompat-resources = "1.6.1"
 coil-compose = "2.5.0"
