@@ -44,7 +44,10 @@ android {
             isJniDebuggable = false
             isShrinkResources = true
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),"proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             kotlin {
                 sourceSets.main {
                     kotlin.srcDir("build/generated/ksp/release/kotlin")
@@ -57,7 +60,10 @@ android {
             isJniDebuggable = true
             isShrinkResources = false
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),"proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             kotlin {
                 sourceSets.main {
                     kotlin.srcDir("build/generated/ksp/debug/kotlin")
@@ -83,7 +89,7 @@ android {
 
     namespace = "com.ave.vastgui.app"
 
-    sourceSets["main"].java.srcDirs("src/main/kotlin","src/main/java","src/main/compose")
+    sourceSets["main"].java.srcDirs("src/main/kotlin", "src/main/java", "src/main/compose")
 
 }
 
@@ -108,7 +114,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.security.crypto)
     implementation(libs.vastnetstatelayout)
-    implementation(project(":libraries:VastAdapter"))
-    implementation(project(":libraries:VastCore"))
-    implementation(project(":libraries:VastTools"))
+    implementation(projects.libraries.vastAdapter)
+    implementation(projects.libraries.vastCore)
+    implementation(projects.libraries.vastTools)
 }
