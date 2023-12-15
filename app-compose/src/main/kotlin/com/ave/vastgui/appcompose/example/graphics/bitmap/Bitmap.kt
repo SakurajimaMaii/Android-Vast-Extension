@@ -22,7 +22,7 @@ import androidx.annotation.ColorInt
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -80,7 +80,7 @@ fun ScaleBitmap() {
             bitmap = getColorBitmap(Color(0xFF6ab04c).toArgb(), size, size).asImageBitmap(),
             contentDescription = "测试图片"
         )
-        Divider(modifier = Modifier.width(20.dp), color = Color.Transparent)
+        HorizontalDivider(modifier = Modifier.width(20.dp), color = Color.Transparent)
         Image(bitmap = bitmap.asImageBitmap(), contentDescription = "测试图片")
     }
 }

@@ -16,6 +16,9 @@
 
 package com.ave.vastgui.appcompose.example
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import com.ave.vastgui.core.utils.Quadruple
 import com.ave.vastgui.core.utils.Quintuple
 
@@ -29,9 +32,14 @@ enum class Gender {
     WOMAN
 }
 
+@Composable
 private fun tuples() {
     val student1 =
         Quadruple("张", "三", 18, Gender.MAN)
     val student2 =
         Quintuple("张", "三", 18, Gender.WOMAN, "大学")
+    Column {
+        Text(text = "$student1")
+        Text(text = "$student2")
+    }
 }
