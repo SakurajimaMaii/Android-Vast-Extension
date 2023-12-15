@@ -41,8 +41,6 @@
     <string name="helloworld">你好世界，你好世界，你好世界</string>
     <string name="icon">图标</string>
     <string name="loading_page">加载页面</string>
-    <string name="open_camera">打开相机</string>
-    <string name="open_gallery">打开相册</string>
     <string name="open_snackbar">打开SnackBar</string>
     <string name="open_web_page">打开网页</string>
     <string name="pause">暂停</string>

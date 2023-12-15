@@ -16,13 +16,13 @@
 
 package com.ave.vastgui.app.activity
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityPermissionBinding
 import com.ave.vastgui.tools.activity.VastVbActivity
-import com.ave.vastgui.tools.utils.permission.DATE
-import com.ave.vastgui.tools.utils.permission.SMS
+import com.ave.vastgui.tools.utils.AppUtils
+import com.ave.vastgui.tools.utils.permission.Permission
 import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
-import com.ave.vastgui.tools.utils.permission.requestPermission
 
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com
@@ -32,26 +32,38 @@ class PermissionActivity : VastVbActivity<ActivityPermissionBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestPermission(SMS) {
-            granted = {
-
-            }
-            denied = {
-
-            }
-            noMoreAsk = {
-
-            }
-        }
-        requestMultiplePermissions(arrayOf(DATE, SMS)) {
+//        requestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) {
+//            granted = {
+//                SimpleToast
+//                    .showShortMsg("${Manifest.permission.ACCESS_FINE_LOCATION} 权限已经被授予")
+//            }
+//            denied = {
+//                SimpleToast
+//                    .showShortMsg("${Manifest.permission.ACCESS_FINE_LOCATION} 权限已经被拒绝")
+//            }
+//            noMoreAsk = {
+//                SimpleToast
+//                    .showShortMsg("${Manifest.permission.ACCESS_FINE_LOCATION} 权限已经被拒绝且不会再询问")
+//            }
+//        }
+        val builder = StringBuilder()
+        packageManager
+            .getPackageInfo(AppUtils.getPackageName(), PackageManager.GET_PERMISSIONS)
+            .requestedPermissions
+            .forEach { builder.append("$it\n") }
+        getBinding().reqPermission.text = builder
+        requestMultiplePermissions(Permission.ACCESS_BACKGROUND_LOCATION) {
             allGranted = {
-
+                getBinding().permissionInfo.text = "权限已经被授予"
             }
             denied = {
-
+                getBinding().permissionInfo.text = "$it 权限已经被拒绝"
             }
             noMoreAsk = {
-
+                getBinding().permissionInfo.text = "$it 权限已经被拒绝且不会再询问"
+            }
+            noDeclare = {
+                getBinding().permissionInfo.text = "$it \n权限没有在应用清单声明"
             }
         }
     }

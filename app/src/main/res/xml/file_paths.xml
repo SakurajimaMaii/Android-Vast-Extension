@@ -17,6 +17,9 @@
 <resources>
     <paths>
         <files-path
+            name="files"
+            path="." />
+        <files-path
             name="internal_pictures"
             path="Pictures" />
         <external-path

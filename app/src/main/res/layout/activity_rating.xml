@@ -19,27 +19,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
     android:orientation="vertical"
     android:padding="10dp"
-    android:background="?attr/colorSurface"
     tools:context="com.ave.vastgui.app.activity.view.RatingActivity">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="fitXY" />
 
     <com.ave.vastgui.tools.view.ratingview.RatingView
         android:id="@+id/ratingView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <com.ave.vastgui.tools.view.ratingview.RatingView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="66dp"
+        android:padding="10dp"
         app:star_count="5"
         app:star_height="40dp"
         app:star_interval_width="1dp"
         app:star_orientation="horizontal"
-        app:star_rating="2.5"
-        app:star_select_method="click"
-        app:star_selected="@drawable/ic_star_normal"
+        app:star_select_method="unable"
+        app:star_selected="@drawable/ic_star_selected"
         app:star_unselected="@drawable/ic_star_unselected"
         app:star_width="40dp" />
 
@@ -47,14 +48,14 @@
         android:id="@+id/starBarView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="61dp"
+        android:padding="10dp"
         app:star_count="5"
         app:star_height="40dp"
-        app:star_interval_width="1dp"
+        app:star_interval_width="15dp"
         app:star_orientation="vertical"
         app:star_rating="2"
         app:star_select_method="sliding"
-        app:star_selected="@drawable/ic_star_normal"
+        app:star_selected="@drawable/ic_star_selected"
         app:star_unselected="@drawable/ic_star_unselected"
         app:star_width="40dp" />
 </LinearLayout>
