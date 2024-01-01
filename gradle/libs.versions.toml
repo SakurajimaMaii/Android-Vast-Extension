@@ -1,6 +1,6 @@
 [versions]
 activity-ktx = "1.8.2"
-agp = "8.3.0-beta01"
+agp = "8.4.0-alpha01"
 androidx-core-ktx = "1.10.0"
 annotation = "1.7.1"
 appcompat = "1.6.1"
