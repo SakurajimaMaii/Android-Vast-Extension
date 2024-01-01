@@ -157,7 +157,6 @@ fun GradientDrawable.setGradient(
  * @param topRight radius of top right corner.
  * @param bottomLeft radius of bottom left corner.
  * @param bottomRight radius of bottom right corner.
- * @return [ShapeAndStateDrawable] object.
  * @since 0.5.3
  */
 fun GradientDrawable.setCornerRadii(

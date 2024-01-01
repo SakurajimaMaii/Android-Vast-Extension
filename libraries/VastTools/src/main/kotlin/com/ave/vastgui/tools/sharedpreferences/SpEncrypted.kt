@@ -28,33 +28,13 @@ import com.ave.vastgui.tools.content.ContextHelper
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/save-key-value-data/sp-encrypted/
 
 /**
- * Opens an instance of encrypted SharedPreferences.
+ * Creating an instance of encrypted SharedPreferences.
  *
  * ```kotlin
- * // Declare your own SharedPreferences.
- * class SpEncryptedExample(name: String) {
- *
- *     // Get the SharedPreferences instance by SpEncrypted.getInstance().getSharedPreferences()
- *     private val sp by lazy{
- *         SpEncrypted.getInstance(name).getSharedPreferences()
- *     }
- *
- *     // Declare variables.
- *     var count by sp.float()
- *
- * }
- *
- * // Use it.
- * private val mSp by lazy { SpEncryptedExample(defaultLogTag()) }
- *
- * // Set values.
- * mSp.count = 1f
- * // Get values.
- * val count = mSp.count
+ * val sp = SpEncrypted.getInstance(name).getSharedPreferences()
  * ```
  *
- * @param name The name of the file to open; can not contain path
- *     separators.
+ * @param name The name of the file to open; can not contain path separators.
  */
 class SpEncrypted private constructor(name: String) {
 
