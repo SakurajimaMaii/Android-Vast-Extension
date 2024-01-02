@@ -20,7 +20,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.RectF
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.VectorDrawable
 import android.util.AttributeSet
@@ -98,7 +97,6 @@ class Vp2IndicatorView @JvmOverloads constructor(
         isAntiAlias = true
     }
     private val mBitmapPaint = Paint()
-    private val mIndicatorItemRectF = RectF()
     private var mIndicatorItemWidth = 0
     private var mIndicatorItemHeight = 0
     private var mViewPager2: ViewPager2? = null
