@@ -39,7 +39,7 @@ import com.ave.vastgui.tools.view.toast.SimpleToast
 object IntentUtils {
 
     /** The log tag. */
-    private const val tag = "IntentUtils"
+    private const val TAG = "IntentUtils"
 
     /**
      * Dial phone number.
@@ -89,15 +89,12 @@ object IntentUtils {
     }
 
     /**
-     * Send message only by SMS app (not other email or social apps)
+     * Send message only by SMS app (not other email or social apps).
      *
      * @param context context.
      * @param message What you want to send.
      * @param phoneNumber Who you want to send.Default value is `null`.
-     * @param attachment Point to the Uri of the image or video to be attached.
-     *     If you are using the ACTION_SEND_MULTIPLE operation, this extra
-     *     should be an ArrayList pointing to the image/video Uri to be
-     *     attached.And default value is `null`.
+     * @since 0.5.7
      */
     @JvmStatic
     @JvmOverloads
@@ -105,18 +102,13 @@ object IntentUtils {
         context: Context,
         message: String = "",
         phoneNumber: String? = null,
-        attachment: Uri? = null
     ) {
         val intent = Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("smsto:${phoneNumber}")  // This ensures only SMS apps respond
             putExtra("sms_body", message)
-            if (attachment != null) {
-                putExtra(Intent.EXTRA_STREAM, attachment)
-            }
         }
         startIntent(context, intent)
     }
-
 
     /**
      * Open email only by email apps (not other SMS or social apps)
@@ -199,11 +191,15 @@ object IntentUtils {
         try {
             context.startActivity(intent)
         } catch (ex: ActivityNotFoundException) {
-            Log.e(tag, "Target activity not found.", ex)
+            Log.e(TAG, "Target activity not found.", ex)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 Log.e(
-                    tag,
-                    "Maybe you don't adding a <queries> declaration in AndroidManifest.xml."
+                    TAG,
+                    """
+                        Maybe you don't adding a <queries> declaration in AndroidManifest.xml. Click
+                        https://developer.android.com/about/versions/11/privacy/package-visibility
+                        to get more information.
+                    """.trimIndent()
                 )
             }
         } catch (ex: SecurityException) {
