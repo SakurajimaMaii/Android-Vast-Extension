@@ -56,7 +56,7 @@ abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
         reflectViewModel(
             this.javaClass,
             if (!setVmBySelf()) requireActivity() else this,
-            VastVbVmFragment::class.java
+            VastVmFragment::class.java
         ) {
             return@reflectViewModel createViewModel(it)
         }
