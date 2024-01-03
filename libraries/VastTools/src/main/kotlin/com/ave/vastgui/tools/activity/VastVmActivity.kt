@@ -65,7 +65,12 @@ abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
         } else {
             throw RuntimeException("Please set correct layout id for the layoutId .")
         }
-        mSnackbar = Snackbar.make(findViewById(layoutId), getDefaultTag(), Snackbar.LENGTH_SHORT)
+        mSnackbar = Snackbar.make(
+            this,
+            findViewById(android.R.id.content),
+            getDefaultTag(),
+            Snackbar.LENGTH_SHORT
+        )
     }
 
     override fun getViewModel(): VM {
