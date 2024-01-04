@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,29 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.adapter
+package com.ave.vastgui.netstatelayout.listener
 
-import android.content.Context
-import com.ave.vastgui.adapter.VastBindAdapter
-import com.ave.vastgui.adapter.widget.AdapterItemWrapper
-import com.ave.vastgui.app.BR
+import android.view.View
+import com.ave.vastgui.netstatelayout.NetState
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/9/25
+// Date: 2024/1/3 23:31
 
-class StudentAdapter(
-    datas: MutableList<AdapterItemWrapper<*>>,
-    context: Context
-) : VastBindAdapter(datas, context) {
+/**
+ * @since 1.1.1
+ */
+@JvmDefaultWithCompatibility
+interface OnLoadingListener {
+    /**
+     * Net state listener for the [NetState.LOADING] state.
+     *
+     * @since 1.1.1
+     */
+    fun onLoadingInflate(view: View) {}
 
-    override fun setVariableId(): Int = BR.item
-
+    /**
+     * @since 1.1.1
+     */
+    fun onLoadingClick() {}
 }

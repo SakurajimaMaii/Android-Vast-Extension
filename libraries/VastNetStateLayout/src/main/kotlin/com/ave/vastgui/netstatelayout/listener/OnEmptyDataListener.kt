@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,29 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.fragment
+package com.ave.vastgui.netstatelayout.listener
 
-import android.os.Bundle
 import android.view.View
-import com.ave.vastgui.app.databinding.FragmentSampleVbBinding
-import com.ave.vastgui.tools.fragment.VastVbFragment
+import com.ave.vastgui.netstatelayout.NetState
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/3/13 17:23
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/fragment/
+// Date: 2024/1/3 23:30
 
-class SampleVbFragment : VastVbFragment<FragmentSampleVbBinding>() {
+/**
+ * @since 1.1.1
+ */
+@JvmDefaultWithCompatibility
+interface OnEmptyDataListener {
+    /**
+     * Net state listener for the [NetState.EMPTY_DATA] state.
+     *
+     * @since 1.1.1
+     */
+    fun onEmptyDataInflate(view: View) {}
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    }
-
+    /**
+     * @since 1.1.1
+     */
+    fun onEmptyDataClick() {}
 }

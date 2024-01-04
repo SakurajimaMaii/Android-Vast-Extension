@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,7 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
+        freeCompilerArgs = listOf("-Xjvm-default=all")
     }
 
     sourceSets["main"].java.srcDir("src/main/kotlin")
@@ -64,6 +65,7 @@ dependencies {
     implementation(libs.annotation)
     implementation(libs.constraintlayout)
     implementation(libs.core.ktx)
+    implementation(libs.material)
 }
 
 tasks.withType<DokkaTaskPartial>().configureEach {
@@ -78,7 +80,7 @@ tasks.withType<DokkaTaskPartial>().configureEach {
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastNetStateLayout"
-extra["PUBLISH_DESCRIPTION"] = "A layout to set customized network state ui."
+extra["PUBLISH_DESCRIPTION"] = "A layout to set customized network state page."
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/VastUtils/tree/master/libraries/VastNetStateLayout"
 
 publishing {
@@ -86,7 +88,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "VastNetStateLayout"
-            version = "0.0.4"
+            version = "1.1.1"
 
             afterEvaluate {
                 from(components["release"])
