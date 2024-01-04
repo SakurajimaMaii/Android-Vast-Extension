@@ -29,7 +29,7 @@ import com.google.android.material.snackbar.Snackbar
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/activity/
 
 /**
- * VastVmActivity.
+ * [VastVmActivity].
  *
  * ```kotlin
  * class MainActivity : VastVmActivity<MainViewModel>() {
@@ -57,7 +57,6 @@ abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
         }
     }
 
-    @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (0 != layoutId) {
@@ -75,6 +74,15 @@ abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
 
     override fun getViewModel(): VM {
         return mViewModel
+    }
+
+    /**
+     * Get default [Snackbar] for activity.
+     *
+     * @since 0.5.7
+     */
+    override fun getSnackbar(): Snackbar {
+        return mSnackbar
     }
 
 }
