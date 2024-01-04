@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.viewmodel
-
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+package com.ave.vastgui.netstatelayout
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/2/19
+// Date: 2024/1/4
 
-class SampleSharedVM : ViewModel() {
-
-    private val _count: MutableLiveData<Int> = MutableLiveData(0)
-
-    val count: LiveData<Int>
-        get() = _count
-
-    fun addOne() {
-        _count.postValue(_count.value?.plus(1) ?: 0)
-    }
-
+/**
+ * @since 1.1.1
+ */
+enum class NetState {
+    // show customized network error view
+    LOADING,
+    // show customized network loading view
+    NET_ERROR,
+    // show customized network loading error view
+    LOADING_ERROR,
+    // show customized network empty view
+    EMPTY_DATA,
+    // show customized success view
+    SHOW_SUCCESS
 }
