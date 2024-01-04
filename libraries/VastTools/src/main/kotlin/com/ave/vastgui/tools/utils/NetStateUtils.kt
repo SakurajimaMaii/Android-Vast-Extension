@@ -107,7 +107,6 @@ object NetStateUtils {
             if (null != networkCapabilities) {
                 when {
                     networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN) -> true
                     networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
                     //for other device how are able to connect with Ethernet
                     networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
