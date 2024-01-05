@@ -46,7 +46,7 @@ security-crypto = "1.1.0-alpha06"
 androidx-startup = "1.1.1"
 ui = "1.5.4"
 vastcore = "0.0.7"
-vastnetstatelayout = "0.0.4"
+vastnetstatelayout = "1.1.1"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-ktx" }
