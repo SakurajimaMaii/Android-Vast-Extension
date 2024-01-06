@@ -16,97 +16,110 @@
 
 package com.ave.vastgui.adapter
 
+import android.content.Context
+import android.content.res.Resources
+import android.util.SparseArray
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.util.forEach
 import androidx.paging.PagingDataAdapter
-import com.ave.vastgui.adapter.base.BaseHolder
-import com.ave.vastgui.adapter.widget.AdapterClickListener
-import com.ave.vastgui.adapter.widget.AdapterClickRegister
-import com.ave.vastgui.adapter.widget.AdapterDiffUtil
-import com.ave.vastgui.adapter.widget.AdapterItemWrapper
-import com.ave.vastgui.adapter.widget.AdapterLongClickListener
-import com.ave.vastgui.core.extension.cast
+import com.ave.vastgui.adapter.base.ItemHolder
+import com.ave.vastgui.adapter.listener.OnItemClickListener
+import com.ave.vastgui.adapter.base.ItemClickListener
+import com.ave.vastgui.adapter.base.ItemDiffUtil
+import com.ave.vastgui.adapter.base.ItemWrapper
+import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/11/17
 
 /**
- * Paging Adapter for RecyclerView.
- *
- * @param T
- * @property mFactories
- * @property mLayoutId The layout id of the item.
- * @property mDiffCallback
+ * [VastPagingAdapter] for RecyclerView.
  */
-abstract class VastPagingAdapter<T, R : AdapterItemWrapper<T>>(
-    protected val mFactories: MutableList<BaseHolder.HolderFactory>,
-    protected val mLayoutId: Int,
-    protected val mDiffCallback: AdapterDiffUtil<T, R>
-) : PagingDataAdapter<R, BaseHolder>(mDiffCallback), AdapterClickRegister {
+open class VastPagingAdapter<T>(
+    protected var mContext: Context,
+    factories: MutableList<ItemHolder.HolderFactory<T>>,
+    diffCallback: ItemDiffUtil<T>
+) : PagingDataAdapter<ItemWrapper<T>, ItemHolder<T>>(diffCallback), ItemClickListener<T> {
 
-    private val type2ItemType: MutableMap<String, Int> = HashMap()
-    protected var onItemClickListener: AdapterClickListener? = null
-    protected var onItemLongClickListener: AdapterLongClickListener? = null
+    private val mType2Factory = SparseArray<ItemHolder.HolderFactory<T>>()
+    private var mOnItemClickListener: OnItemClickListener<T>? = null
+    private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
+
+    final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
+        val itemData = getItem(position) ?: return
+        holder.onBindData(itemData.getData())
+        holder.itemView.setOnClickListener {
+            if (null != itemData.getOnItemClickListener()) {
+                itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData)
+            } else {
+                mOnItemClickListener?.onItemClick(holder.itemView, position, itemData)
+            }
+        }
+        holder.itemView.setOnLongClickListener {
+            val res = if (null != itemData.getOnItemLongClickListener()) {
+                itemData.getOnItemLongClickListener()
+                    ?.onItemLongClick(holder.itemView, position, itemData)
+            } else {
+                mOnItemLongClickListener?.onItemLongClick(holder.itemView, position, itemData)
+            }
+            return@setOnLongClickListener res ?: false
+        }
+        itemData.mOnItemChildClickArray?.forEach { key, value ->
+            holder.itemView.findViewById<View>(key)?.let { childView ->
+                childView.setOnClickListener {
+                    value.onItemClick(childView, position, itemData)
+                }
+            }
+        }
+        itemData.mOnItemChildLongClickArray?.forEach { key, value ->
+            holder.itemView.findViewById<View>(key)?.let { childView ->
+                childView.setOnClickListener {
+                    value.onItemLongClick(childView, position, itemData)
+                }
+            }
+        }
+    }
+
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder<T> {
+        mType2Factory.forEach { key, factory ->
+            if (key == viewType) {
+                return factory.onCreateHolder(parent, viewType)
+            }
+        }
+        throw RuntimeException("Not found the factory according to the $viewType.")
+    }
 
     final override fun getItemViewType(position: Int): Int {
-        return mLayoutId
-    }
-
-    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder {
-        val targetFactory: BaseHolder.HolderFactory = mFactories[viewType]
-        return targetFactory.onCreateHolder(parent, viewType)
-    }
-
-    final override fun onBindViewHolder(holder: BaseHolder, position: Int) {
-        val itemData = getItem(position)
-        itemData?.apply {
-            holder.onBindData(cast<T>(this.getData()))
-            holder.itemView.setOnClickListener {
-                if (null != itemData.getClickEvent()) {
-                    itemData.getClickEvent()?.onItemClick(holder.itemView, position)
-                } else {
-                    onItemClickListener?.onItemClick(holder.itemView, position)
-                }
-            }
-            holder.itemView.setOnLongClickListener {
-                val res = if (null != itemData.getLongClickEvent()) {
-                    itemData.getLongClickEvent()?.onItemLongClick(holder.itemView, position)
-                } else {
-                    onItemLongClickListener?.onItemLongClick(holder.itemView, position)
-                }
-                return@setOnLongClickListener res ?: false
-            }
+        val item = getItem(position) ?: throw NullPointerException("Can't get the item by $position")
+        try {
+            // 识别是否存在该资源id的资源文件。
+            mContext.resources.getLayout(item.layoutId)
+        } catch (e: Resources.NotFoundException) {
+            throw IllegalArgumentException("Please check if the return layoutId is correct.")
         }
+        return item.layoutId
     }
+
+    final override fun setOnItemClickListener(listener: OnItemClickListener<T>?) {
+        mOnItemClickListener = listener
+    }
+
+    final override fun setOnItemLongClickListener(listener: OnItemLongClickListener<T>?) {
+        mOnItemLongClickListener = listener
+    }
+
+    final override fun getOnItemClickListener(): OnItemClickListener<T>? =
+        mOnItemClickListener
+
+    final override fun getOnItemLongClickListener(): OnItemLongClickListener<T>? =
+        mOnItemLongClickListener
 
     init {
-        for (i in mFactories.indices) {
-            val factory: BaseHolder.HolderFactory = mFactories[i]
-            val type: String = factory.getHolderType()
-            val itemType = type2ItemType[type]
-            if (itemType != null) {
-                val currentFactory: String = factory.javaClass.name
-                val sameFactory: String = mFactories[itemType].javaClass.name
-                throw RuntimeException("Same type found: $currentFactory and $sameFactory")
-            }
-            type2ItemType[type] = i
+        factories.forEach { factory ->
+            mType2Factory.put(factory.layoutId, factory)
         }
-    }
-
-    final override fun registerClickEvent(l: AdapterClickListener?) {
-        onItemClickListener = l
-    }
-
-    final override fun registerLongClickEvent(l: AdapterLongClickListener?) {
-        onItemLongClickListener = l
-    }
-
-    final override fun getClickEvent(): AdapterClickListener? {
-        throw RuntimeException("You shouldn't call this method.")
-    }
-
-    final override fun getLongClickEvent(): AdapterLongClickListener? {
-        throw RuntimeException("You shouldn't call this method.")
     }
 
 }

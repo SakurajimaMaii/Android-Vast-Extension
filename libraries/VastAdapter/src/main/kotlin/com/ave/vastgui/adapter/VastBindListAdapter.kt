@@ -19,52 +19,86 @@ package com.ave.vastgui.adapter
 import android.content.Context
 import android.content.res.Resources
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.util.forEach
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
-import com.ave.vastgui.adapter.base.BaseBindHolder
-import com.ave.vastgui.adapter.widget.AdapterClickListener
-import com.ave.vastgui.adapter.widget.AdapterClickRegister
-import com.ave.vastgui.adapter.widget.AdapterDiffUtil
-import com.ave.vastgui.adapter.widget.AdapterItemWrapper
-import com.ave.vastgui.adapter.widget.AdapterLongClickListener
-import com.ave.vastgui.core.extension.cast
+import com.ave.vastgui.adapter.base.ItemBindHolder
+import com.ave.vastgui.adapter.listener.OnItemClickListener
+import com.ave.vastgui.adapter.base.ItemClickListener
+import com.ave.vastgui.adapter.base.ItemDiffUtil
+import com.ave.vastgui.adapter.base.ItemWrapper
+import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/10
 
-abstract class VastBindListAdapter<T, R : AdapterItemWrapper<T>> constructor(
-    protected var mContext: Context, protected var mDiffCallback: AdapterDiffUtil<T, R>
-) : ListAdapter<R, BaseBindHolder>(mDiffCallback), AdapterClickRegister {
+/**
+ * [VastBindListAdapter] for RecyclerView with [ViewDataBinding].
+ *
+ * @since 1.1.1
+ */
+open class VastBindListAdapter<T>(
+    protected var mContext: Context,
+    /**
+     * 设置变量的id，如果在布局文件中内容以下所示：
+     * ```xml
+     * <data>
+     *     <variable
+     *          name="person"
+     *          type="com.example.gutilssampledemo.Person" />
+     * </data>
+     * ```
+     * 则 [mVariableId] 的值为 person
+     */
+    private val mVariableId: Int,
+    diffCallback: ItemDiffUtil<T>
+) : ListAdapter<ItemWrapper<T>, ItemBindHolder>(diffCallback), ItemClickListener<T> {
 
-    protected var onItemClickListener: AdapterClickListener? = null
-    protected var onItemLongClickListener: AdapterLongClickListener? = null
+    private var mOnItemClickListener: OnItemClickListener<T>? = null
+    private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
 
-    final override fun onBindViewHolder(holder: BaseBindHolder, position: Int) {
-        val item = getItem(position)
-        holder.onBindData(setVariableId(), cast<T>(item.getData()))
+    final override fun onBindViewHolder(holder: ItemBindHolder, position: Int) {
+        val itemData = getItem(position)
+        holder.onBindData(mVariableId, itemData.getData())
         holder.itemView.setOnClickListener {
-            if (null != item.getClickEvent()) {
-                item.getClickEvent()?.onItemClick(holder.itemView, position)
+            if (null != itemData.getOnItemClickListener()) {
+                itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData)
             } else {
-                onItemClickListener?.onItemClick(holder.itemView, position)
+                mOnItemClickListener?.onItemClick(holder.itemView, position, itemData)
             }
         }
         holder.itemView.setOnLongClickListener {
-            val res = if (null != item.getLongClickEvent()) {
-                item.getLongClickEvent()?.onItemLongClick(holder.itemView, position)
+            val res = if (null != itemData.getOnItemLongClickListener()) {
+                itemData.getOnItemLongClickListener()
+                    ?.onItemLongClick(holder.itemView, position, itemData)
             } else {
-                onItemLongClickListener?.onItemLongClick(holder.itemView, position)
+                mOnItemLongClickListener?.onItemLongClick(holder.itemView, position, itemData)
             }
             return@setOnLongClickListener res ?: false
+        }
+        itemData.mOnItemChildClickArray?.forEach { key, value ->
+            holder.itemView.findViewById<View>(key)?.let { childView ->
+                childView.setOnClickListener {
+                    value.onItemClick(childView, position, itemData)
+                }
+            }
+        }
+        itemData.mOnItemChildLongClickArray?.forEach { key, value ->
+            holder.itemView.findViewById<View>(key)?.let { childView ->
+                childView.setOnClickListener {
+                    value.onItemLongClick(childView, position, itemData)
+                }
+            }
         }
     }
 
     final override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
-    ): BaseBindHolder {
+    ): ItemBindHolder {
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
             LayoutInflater.from(parent.context), viewType, parent, false
         )
@@ -72,63 +106,33 @@ abstract class VastBindListAdapter<T, R : AdapterItemWrapper<T>> constructor(
     }
 
     final override fun getItemViewType(position: Int): Int {
-        val viewType = getItem(position).getLayoutId()
+        val item = getItem(position)
         try {
-            // Identify whether there is a resource file for the resource id.
-            mContext.resources.getLayout(viewType)
+            // 识别是否存在该资源id的资源文件。
+            mContext.resources.getLayout(item.layoutId)
         } catch (e: Resources.NotFoundException) {
-            throw RuntimeException(
-                "Please check if the return value of the getVBAdpItemType method in ${
-                    getItem(
-                        position
-                    ).javaClass.simpleName
-                } is correct."
-            )
+            throw IllegalArgumentException("Please check if the return layoutId is correct.")
         }
-        return viewType
+        return item.layoutId
     }
 
-    /**
-     * Set VariableId value.For example, in the layout file
-     *
-     * ```xml
-     * <data>
-     *     <variable
-     *     name="item"
-     *     type="com.example.gutilssampledemo.Person" />
-     * </data>
-     * ```
-     *
-     * Then the [setVariableId] should be like this:
-     * ```kt
-     * override fun setVariableId(): Int {
-     *      return BR.item
-     * }
-     * ```
-     *
-     * @return Int
-     */
-    protected abstract fun setVariableId(): Int
+    final override fun setOnItemClickListener(listener: OnItemClickListener<T>?) {
+        mOnItemClickListener = listener
+    }
+
+    final override fun setOnItemLongClickListener(listener: OnItemLongClickListener<T>?) {
+        mOnItemLongClickListener = listener
+    }
+
+    final override fun getOnItemClickListener(): OnItemClickListener<T>? =
+        mOnItemClickListener
+
+    final override fun getOnItemLongClickListener(): OnItemLongClickListener<T>? =
+        mOnItemLongClickListener
 
     /** @return The ViewHolder you want to set. */
-    protected open fun setViewHolder(binding: ViewDataBinding): BaseBindHolder {
-        return BaseBindHolder(binding)
-    }
-
-    final override fun registerClickEvent(l: AdapterClickListener?) {
-        onItemClickListener = l
-    }
-
-    final override fun registerLongClickEvent(l: AdapterLongClickListener?) {
-        onItemLongClickListener = l
-    }
-
-    final override fun getClickEvent(): AdapterClickListener? {
-        throw RuntimeException("You shouldn't call this method.")
-    }
-
-    final override fun getLongClickEvent(): AdapterLongClickListener? {
-        throw RuntimeException("You shouldn't call this method.")
+    protected open fun setViewHolder(binding: ViewDataBinding): ItemBindHolder {
+        return ItemBindHolder(binding)
     }
 
 }

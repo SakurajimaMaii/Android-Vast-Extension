@@ -14,34 +14,21 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.adapter.widget
+package com.ave.vastgui.adapter.listener
 
-import com.ave.vastgui.adapter.base.BaseHolder
+import android.view.View
+import com.ave.vastgui.adapter.base.ItemWrapper
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/10
 
-sealed interface AdapterItem : AdapterClickRegister {
-
-    /**
-     * Return The item layout resource id.
-     *
-     * @throws RuntimeException
-     */
-    fun getLayoutId(): Int {
-        throw RuntimeException("Layout id is null.")
-    }
-
-    /**
-     * Return a string which is same as the value you set in
-     * [BaseHolder.HolderFactory.getHolderType]. In this way, the
-     * data item can be matched to the corresponding ViewHolder.
-     *
-     * @throws RuntimeException
-     */
-    fun getHolderType(): String {
-        throw RuntimeException("HolderType is null.")
-    }
-
+/**
+ * 用于监听列表项的点击事件。
+ *
+ * @since 1.1.1
+ */
+fun interface OnItemClickListener<T> {
+    /** 当列表项被点击时会触发该回调。 */
+    fun onItemClick(view: View, pos: Int, data: ItemWrapper<T>)
 }

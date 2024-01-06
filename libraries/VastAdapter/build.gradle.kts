@@ -46,7 +46,6 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
-        freeCompilerArgs = listOf("-Xjvm-default=all-compatibility")
     }
 
     buildFeatures {
@@ -63,9 +62,9 @@ android {
 }
 
 dependencies {
-    api(libs.paging.runtime)
-    api(libs.recyclerview)
-    api(libs.vastcore)
+    implementation("io.github.cymchad:BaseRecyclerViewAdapterHelper4:4.1.2")
+    implementation(libs.paging.runtime)
+    implementation(libs.recyclerview)
     implementation(libs.annotation)
     implementation(libs.core.ktx)
     implementation(libs.core.runtime)
@@ -80,7 +79,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "VastAdapter"
-            version = "0.1.0"
+            version = "1.1.1"
 
             afterEvaluate {
                 from(components["release"])
