@@ -16,53 +16,53 @@
 
 package com.ave.vastgui.app.activity.graphics
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.GradientDrawable.RECTANGLE
 import android.os.Bundle
+import android.util.Log
+import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityGradientDrawableBinding
 import com.ave.vastgui.tools.activity.VastVbActivity
+import com.ave.vastgui.tools.graphics.leftBottomRadius
+import com.ave.vastgui.tools.graphics.leftTopRadius
+import com.ave.vastgui.tools.graphics.rightBottomRadius
+import com.ave.vastgui.tools.graphics.rightTopRadius
+import com.ave.vastgui.tools.graphics.setCornerRadii
 import com.ave.vastgui.tools.graphics.setGradient
+import com.ave.vastgui.tools.graphics.setSingle
 import com.ave.vastgui.tools.utils.ColorUtils.colorHex2Int
+import com.ave.vastgui.tools.utils.DensityUtils.DP
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/graphics/gradient-drawable/gradient-drawable/
+
+private val states = arrayOfNulls<IntArray>(6).apply {
+    set(0, intArrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled))
+    set(1, intArrayOf(android.R.attr.state_focused, android.R.attr.state_enabled))
+    set(2, intArrayOf(-android.R.attr.state_focused, android.R.attr.state_enabled))
+    set(3, intArrayOf(android.R.attr.state_focused))
+    set(4, intArrayOf(android.R.attr.state_window_focused))
+    set(5, intArrayOf())
+}
+
+private val colorList = IntArray(6).apply {
+    set(0, colorHex2Int("#00F260"))
+    set(1, colorHex2Int("#FFFFFF"))
+    set(2, colorHex2Int("#0575E6"))
+    set(3, colorHex2Int("#FFFFFF"))
+    set(4, colorHex2Int("#EF3B36"))
+    set(5, colorHex2Int("#0575E6"))
+}
 
 class GradientDrawableActivity : VastVbActivity<ActivityGradientDrawableBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        val states = arrayOfNulls<IntArray>(6).apply {
-//            set(0, intArrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled))
-//            set(1, intArrayOf(android.R.attr.state_focused, android.R.attr.state_enabled))
-//            set(2, intArrayOf(-android.R.attr.state_focused, android.R.attr.state_enabled))
-//            set(3, intArrayOf(android.R.attr.state_focused))
-//            set(4, intArrayOf(android.R.attr.state_window_focused))
-//            set(5, intArrayOf())
-//        }
-
-//        val colorList = IntArray(6).apply {
-//            set(0, colorHex2Int("#00F260"))
-//            set(1, colorHex2Int("#FFFFFF"))
-//            set(2, colorHex2Int("#0575E6"))
-//            set(3, colorHex2Int("#FFFFFF"))
-//            set(4, colorHex2Int("#EF3B36"))
-//            set(5, colorHex2Int("#0575E6"))
-//        }
-
-        GradientDrawable().apply {
-            shape = RECTANGLE
-            cornerRadius = 50f
-            setGradient(
-                45,
-                colorHex2Int("#12c2e9"),
-                colorHex2Int("#c471ed"),
-                colorHex2Int("#f64f59")
-            )
-        }
-
-        getBinding().btn.background = GradientDrawable().apply {
+        getBinding().image.setImageDrawable(GradientDrawable().apply {
             shape = RECTANGLE
             cornerRadius = 50f
             setGradient(
@@ -70,6 +70,14 @@ class GradientDrawableActivity : VastVbActivity<ActivityGradientDrawableBinding>
                 colorHex2Int("#0F2027"),
                 colorHex2Int("#78ffd6")
             )
+        })
+
+        getBinding().btn.background = GradientDrawable()
+        (getBinding().btn.background.mutate() as GradientDrawable).apply {
+            shape = RECTANGLE
+            cornerRadius = 30f
+            color = ColorStateList(states, colorList)
+            setSize(50, 50)
         }
     }
 

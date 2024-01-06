@@ -14,21 +14,29 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/item_textview_root"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/firstName"
+<layout>
+    <data>
+        <variable name="person" type="com.ave.vastgui.app.adapter.entity.Person" />
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/item_textview_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/lastName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center" />
-</LinearLayout>
+        android:orientation="vertical"
+        android:padding="5dp">
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="@{person.name}"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/sentence"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="@{person.sentence}" />
+    </LinearLayout>
+</layout>

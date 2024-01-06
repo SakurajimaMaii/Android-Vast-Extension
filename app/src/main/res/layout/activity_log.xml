@@ -22,13 +22,13 @@
     tools:context=".activity.log.LogActivity">
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/addOne"
+        android:id="@+id/getSentence"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add_one"/>
+        android:text="@string/activity_get_sentence" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/count"
+        android:id="@+id/showSentence"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

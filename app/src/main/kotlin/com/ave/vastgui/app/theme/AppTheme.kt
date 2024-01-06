@@ -8,9 +8,6 @@ import com.ave.vastgui.tools.theme.lightColorScheme
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/10/21
-// Description: 
-// Documentation:
-// Reference:
 
 object AppTheme {
     val primary: LiveData<Int>

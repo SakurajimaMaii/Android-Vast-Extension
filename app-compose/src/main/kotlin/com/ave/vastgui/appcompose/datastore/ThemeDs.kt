@@ -16,22 +16,22 @@
 
 package com.ave.vastgui.appcompose.datastore
 
+import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.ave.vastgui.appcompose.dataStore
+import androidx.datastore.preferences.preferencesDataStore
 import com.ave.vastgui.tools.content.ContextHelper
 import com.ave.vastgui.tools.datastore.IDataStoreOwner
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/11/9
-// Description: 
-// Documentation:
-// Reference:
 
-object ThemeDs: IDataStoreOwner {
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
+object ThemeDs : IDataStoreOwner {
     override val dataStore: DataStore<Preferences> =
         ContextHelper.getAppContext().dataStore
 
-    val theme by boolean(false)
+    val isDark by boolean(false)
 }

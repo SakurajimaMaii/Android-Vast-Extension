@@ -47,7 +47,6 @@ import java.io.File
 class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
 
     private var output: Uri? = null
-    private val mLogger = mLogFactory.getLog(CropImageActivity::class.java)
 
     // 从相册选择图片之后调用自定义裁剪
     private val pickWithCropActivity =
@@ -92,14 +91,16 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestPermission(Permission.READ_MEDIA_IMAGES) {
-//            granted = { SimpleToast.showShortMsg("${Permission.READ_MEDIA_IMAGES}权限已授予") }
+            granted = {
+                getSnackbar().setText("$it 权限已授予").show()
+            }
+            denied = {
+                getSnackbar().setText("$it 权限已被拒绝").show()
+            }
         }
 
-        SimpleToast.showLongMsg("这是一条长消息")
-
         getBinding().openWithCropActivity.setOnClickListener {
-            SimpleToast.showShortMsg("这是一条短消息")
-//            pickWithCropActivity.launch(null)
+            pickWithCropActivity.launch(null)
         }
 
         getBinding().openWithCropPhotocontract.setOnClickListener {
@@ -115,7 +116,7 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
         }
     }
 
-    /** Use [CropIntent] with [VastCropActivity]. */
+    /** 使用 [VastCropActivity] 来调用裁剪。 */
     private fun cropImageWithActivity(uri: Uri) {
         val intent = Intent(this, VastCropActivity::class.java).apply {
             data = uri
@@ -129,7 +130,7 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
         openWithCropActivity.launch(intent)
     }
 
-    /** Use [CropIntent] with [CropPhotoContract]. */
+    /** 使用 [CropIntent] 和 [CropPhotoContract] 来调用系统裁剪。 */
     private fun cropImageWithCropContract(uri: Uri) {
         val cropIntent = CropIntent()
             .setData(uri)
@@ -142,7 +143,7 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
         openWithCropPhotoContract.launch(cropIntent)
     }
 
-    /** Use [CropIntent]. */
+    /** 使用 [CropIntent] 来调用系统裁剪。 */
     private fun cropImageWithCropIntent(uri: Uri) {
         val dir = ImageMgr.getExternalFilesDir(null)
         val name = ImageMgr.getDefaultFileName(".${getExtension(uri)}")
@@ -169,8 +170,10 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
     private fun removePermission() {
         /** Revoke uri permission that is granted in [CropIntent.setOutputUri] */
         if (Build.VERSION.SDK_INT in (Build.VERSION_CODES.N until Build.VERSION_CODES.R) && null != output) {
-            revokeUriPermission(output, Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            revokeUriPermission(
+                output, Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
         }
     }
 

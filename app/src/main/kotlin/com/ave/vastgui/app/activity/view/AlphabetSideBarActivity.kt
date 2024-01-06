@@ -16,23 +16,25 @@
 
 package com.ave.vastgui.app.activity.view
 
+import android.Manifest
 import android.content.Context
+import android.database.Cursor
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.util.DisplayMetrics
-import android.view.View
 import androidx.activity.ComponentActivity
+import androidx.core.database.getStringOrNull
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import com.ave.vastgui.adapter.widget.AdapterClickListener
-import com.ave.vastgui.adapter.widget.AdapterItemWrapper
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.activity.log.mLogFactory
-import com.ave.vastgui.app.adapter.StudentAdapter
-import com.ave.vastgui.app.adapter.entity.StudentWrapper
+import com.ave.vastgui.app.adapter.ContactAdapter
+import com.ave.vastgui.app.adapter.entity.Contact
 import com.ave.vastgui.app.databinding.ActivityAlphabetSidebarBinding
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.utils.ColorUtils
+import com.ave.vastgui.tools.utils.permission.requestPermission
 import com.ave.vastgui.tools.view.alphabetsidebar.Alphabet
 import com.ave.vastgui.tools.view.alphabetsidebar.AlphabetSideBar
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
@@ -61,7 +63,7 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
                 object : LinearSmoothScroller(recyclerView.context) {
                     // 返回：滑过1px时经历的时间(ms)。
                     override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-                        return 0.2f
+                        return 0.08f
                     }
 
                     // https://blog.csdn.net/qq_16251833/article/details/81220518
@@ -74,33 +76,22 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
         }
     }
 
-    private val mBinding by viewBinding(ActivityAlphabetSidebarBinding::bind)
-
-    private var mAdapter by NotNUllVar<StudentAdapter>()
-    private val mData: MutableList<AdapterItemWrapper<*>> = ArrayList<AdapterItemWrapper<*>>().apply {
-        repeat(280) {
-            add(StudentWrapper("学生编号$it", it))
-        }
-    }
+    private val mBinding: ActivityAlphabetSidebarBinding
+            by viewBinding(ActivityAlphabetSidebarBinding::bind)
+    private val mAdapter by lazy { ContactAdapter(this) }
     private var mSmoothScrollLayoutManager by NotNUllVar<SmoothScrollLayoutManager>()
-
     private val mLogger = mLogFactory.getLog(AlphabetSideBarActivity::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enumValues<Alphabet>().forEach {
-            mBinding.alphabetsidebar.setIndicatorLetterTargetIndex(it, it.ordinal * 10)
+        requestPermission(Manifest.permission.READ_CONTACTS) {
+            granted = {
+                mLogger.i("已获取读取通讯录权限")
+            }
         }
-        mAdapter = StudentAdapter(mData, this).apply {
-            registerClickEvent(object : AdapterClickListener {
-                override fun onItemClick(view: View, pos: Int) {
-                    SimpleToast.showShortMsg("这是一个点击事件 $pos")
-                }
-            })
-        }
-        mSmoothScrollLayoutManager = SmoothScrollLayoutManager(this@AlphabetSideBarActivity)
 
+        mSmoothScrollLayoutManager = SmoothScrollLayoutManager(this)
         mBinding.recyclerView.apply {
             adapter = mAdapter
             layoutManager = mSmoothScrollLayoutManager
@@ -110,16 +101,78 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
             mBackgroundColor =
                 ColorUtils.getColorIntWithTransparency(15, ColorUtils.colorHex2Int("#b2bec3"))
         }
-
         mBinding.alphabetsidebar.setLetterListener(object : AlphabetSideBar.LetterListener {
             override fun onIndicatorLetterUpdate(letter: String, index: Int, target: Int) {
-                mBinding.recyclerView.smoothScrollToPosition(target)
+                if (-1 != target) {
+                    mBinding.recyclerView.smoothScrollToPosition(target)
+                }
             }
 
             override fun onIndicatorLetterTargetUpdate(letter: String, target: Int) {
                 mLogger.d("$letter 目标索引更新为 $target")
             }
         })
+
+        readContacts()
+        updateIndex()
+    }
+
+    /**
+     * 检查数据库是否包含 **phonebook_label** 字段，
+     * 如果没有则用 [Phone.SORT_KEY_PRIMARY] 替代。
+     */
+    private fun checkPhonebookLabel(): String {
+        var cursor: Cursor? = null
+        var key = "phonebook_label"
+        try {
+            cursor = contentResolver
+                .query(Phone.CONTENT_URI, arrayOf("phonebook_label"), null, null, null)
+        } catch (exception: IllegalArgumentException) {
+            exception.printStackTrace()
+            key = Phone.SORT_KEY_PRIMARY
+        } finally {
+            cursor?.close()
+        }
+        return key
+    }
+
+    /**
+     * 按照名字首字母读取通讯录。
+     */
+    private fun readContacts() {
+        val bookLabel = checkPhonebookLabel()
+        val projection = arrayOf(Phone.DISPLAY_NAME, Phone.NUMBER, bookLabel)
+        val cursor: Cursor? = contentResolver
+            .query(Phone.CONTENT_URI, projection, null, null, bookLabel)
+        while (cursor?.moveToNext() == true) {
+            val name: String =
+                cursor.getStringOrNull(cursor.getColumnIndex(Phone.DISPLAY_NAME)).toString()
+            val number: String =
+                cursor.getStringOrNull(cursor.getColumnIndex(Phone.NUMBER)).toString()
+            val label: String =
+                cursor.getStringOrNull(cursor.getColumnIndex(bookLabel)).toString()
+            mAdapter.addContact(name, number, label) {
+                addOnItemChildClickListener(R.id.name) { _, _, _ ->
+                    SimpleToast.showShortMsg("名字是 $name")
+                }
+                addOnItemChildClickListener(R.id.number) { _, _, _ ->
+                    SimpleToast.showShortMsg("电话号码是 $number")
+                }
+            }
+        }
+        cursor?.close()
+    }
+
+    /**
+     * 根据获取到的通讯录列表更新索引值。
+     */
+    private fun updateIndex() {
+        enumValues<Alphabet>().forEach { alphabet ->
+            val index = mAdapter.getDataSource().indexOfFirst {
+                it.getData().label == alphabet.letter
+            }
+            mBinding.alphabetsidebar.setIndicatorLetterTargetIndex(alphabet, index)
+        }
     }
 
 }

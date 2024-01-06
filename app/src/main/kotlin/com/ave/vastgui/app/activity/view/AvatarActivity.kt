@@ -24,6 +24,7 @@ import com.ave.vastgui.app.databinding.ActivityAvatarBinding
 import com.ave.vastgui.tools.graphics.BmpUtils
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.view.avatar.Avatar
+import com.ave.vastgui.tools.view.avatar.AvatarGroup
 import com.ave.vastgui.tools.view.extension.viewSnapshot
 import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.ave.vastgui.tools.viewbinding.viewBinding
@@ -41,7 +42,6 @@ class AvatarActivity : ComponentActivity(R.layout.activity_avatar) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val mAvatar = Avatar(this).apply {
             setAvatar(R.drawable.img_avatar_sample_2)
         }
@@ -50,36 +50,7 @@ class AvatarActivity : ComponentActivity(R.layout.activity_avatar) {
             mAvatar, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         )
 
-        mBinding.example.setOnClickListener {
-            val bitmap = viewSnapshot(it)
-            BmpUtils.saveBitmapAsFile(
-                bitmap = bitmap,
-                File(FileMgr.appInternalFilesDir(), "avatar_text_size.jpg")
-            )?.apply {
-                SimpleToast.showShortMsg("截图${name}已保存")
-            }
-            mBinding.viewSnapshot.setImageBitmap(bitmap)
-        }
-        mBinding.avatarGroupStart.setOnClickListener {
-            val bitmap = viewSnapshot(it)
-            BmpUtils.saveBitmapAsFile(
-                bitmap = bitmap,
-                File(FileMgr.appInternalFilesDir(), "avatar_group_start.jpg")
-            )?.apply {
-                SimpleToast.showShortMsg("截图${name}已保存")
-            }
-            mBinding.viewSnapshot.setImageBitmap(bitmap)
-        }
-        mBinding.avatarGroupEnd.setOnClickListener {
-            val bitmap = viewSnapshot(it)
-            BmpUtils.saveBitmapAsFile(
-                bitmap = bitmap,
-                File(FileMgr.appInternalFilesDir(), "avatar_group_end.jpg")
-            )?.apply {
-                SimpleToast.showShortMsg("截图${name}已保存")
-            }
-            mBinding.viewSnapshot.setImageBitmap(bitmap)
-        }
+        mBinding.avatarGroupEnd.setOverlapFrom(AvatarGroup.END)
     }
 
 }

@@ -29,21 +29,19 @@ import com.ave.vastgui.tools.graphics.BmpUtils
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/12/5
-// Description: 
-// Documentation:
-// Reference:
 
 class TestView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val mRect = Rect()
 
     override fun onDraw(canvas: Canvas) {
         val bitmap = BmpUtils.getBitmapFromDrawable(R.drawable.ic_star_unselected)
-        val rect = Rect(0, 0, bitmap.width, bitmap.height)
-        canvas.drawBitmap(bitmap, null, rect, paint)
+        mRect.set(0, 0, bitmap.width, bitmap.height)
+        canvas.drawBitmap(bitmap, null, mRect, mPaint)
         val mask = BmpUtils.getBitmapFromDrawable(R.drawable.ic_star_selected)
         canvas.withClip(0, 0, (bitmap.width * 0.1f).toInt(), bitmap.height) {
-            drawBitmap(mask, null, rect, paint)
+            drawBitmap(mask, null, mRect, mPaint)
         }
     }
 

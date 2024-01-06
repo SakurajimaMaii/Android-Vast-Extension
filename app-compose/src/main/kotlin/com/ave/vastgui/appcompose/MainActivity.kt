@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.ave.vastgui.appcompose.datastore.ThemeDs
+import com.ave.vastgui.appcompose.sharedpreferences.ThemeSp
 import com.ave.vastgui.appcompose.ui.theme.AndroidVastExtensionTheme
 import kotlinx.coroutines.launch
 
@@ -41,21 +42,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            // val darkTheme by ThemeSp.theme.collectAsState()
-            val darkTheme by ThemeDs.theme.asNotNullFlow().collectAsState(false)
+            val darkTheme by ThemeDs.isDark.asNotNullFlow().collectAsState(false)
             AndroidVastExtensionTheme(darkTheme) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    var checkState by remember { mutableStateOf(darkTheme) }
                     val coroutineScope = rememberCoroutineScope()
 
-                    Switch(checked = checkState, onCheckedChange = { value ->
-                        checkState = value
+                    Switch(checked = darkTheme, onCheckedChange = { value ->
                         coroutineScope.launch {
-                            // ThemeSp.theme.update { value }
-                            ThemeDs.theme.set(value)
+                            ThemeDs.isDark.set(value)
                         }
                     })
                 }

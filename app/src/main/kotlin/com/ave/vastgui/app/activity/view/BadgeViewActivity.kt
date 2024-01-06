@@ -39,7 +39,7 @@ class BadgeViewActivity : ComponentActivity(R.layout.activity_badge_view) {
         mCount = 0
         mBinding.numbadge.mBubbleTextNum = mCount
         mBinding.add.setOnClickListener {
-            mBinding.numbadge.mBubbleTextNum = ++mCount
+            mBinding.numbadge.mBubbleText = "新消息"
         }
 
         mBinding.reset.setOnClickListener {
