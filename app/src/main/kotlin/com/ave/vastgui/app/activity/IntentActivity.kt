@@ -16,34 +16,48 @@
 
 package com.ave.vastgui.app.activity
 
+import android.Manifest
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import com.ave.vastgui.app.databinding.ActivityIntentBinding
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.utils.IntentUtils
 import com.ave.vastgui.tools.utils.IntentUtils.createAlarm
 import com.ave.vastgui.tools.utils.IntentUtils.dialPhoneNumber
+import com.ave.vastgui.tools.utils.IntentUtils.openApplicationDetailsSettings
 import com.ave.vastgui.tools.utils.IntentUtils.openEmail
 import com.ave.vastgui.tools.utils.IntentUtils.openWebPage
 import com.ave.vastgui.tools.utils.IntentUtils.openWirelessSettings
 import com.ave.vastgui.tools.utils.IntentUtils.searchWeb
 import com.ave.vastgui.tools.utils.IntentUtils.sendMmsMessage
+import com.ave.vastgui.tools.utils.permission.requestPermission
 
 class IntentActivity : VastVbActivity<ActivityIntentBinding>() {
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("MissingPermission", "UnspecifiedRegisterReceiverFlag")
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
         getBinding().callBtn.setOnClickListener {
-            dialPhoneNumber(this, "12345678910")
+            requestPermission(Manifest.permission.CALL_PHONE){
+                granted = {
+                    dialPhoneNumber(getContext(), "12345678910")
+                }
+                denied = {
+                    getSnackbar().setText("权限 $it 被拒绝，下次需要时会再次请求。")
+                }
+            }
         }
 
         getBinding().searchWeb.setOnClickListener {
-            searchWeb(this, "12345678910")
+            requestPermission(Manifest.permission.INTERNET){
+                granted = {
+                    searchWeb(getContext(), "12345678910")
+                }
+                denied = {
+                    getSnackbar().setText("权限 $it 被拒绝，下次需要时会再次请求。")
+                }
+            }
         }
 
         getBinding().openWebPage.setOnClickListener {
@@ -59,15 +73,26 @@ class IntentActivity : VastVbActivity<ActivityIntentBinding>() {
         }
 
         getBinding().createAlarm.setOnClickListener {
-            val alarmConfig = IntentUtils.AlarmConfig()
-                .setMsg("你好")
-                .setHour(12)
-                .setMinutes(30)
-            createAlarm(this, alarmConfig)
+            requestPermission(Manifest.permission.SET_ALARM){
+                granted = {
+                    val alarmConfig = IntentUtils.AlarmConfig()
+                        .setMsg("你好")
+                        .setHour(12)
+                        .setMinutes(30)
+                    createAlarm(getContext(), alarmConfig)
+                }
+                denied = {
+                    getSnackbar().setText("权限 $it 被拒绝，下次需要时会再次请求。")
+                }
+            }
         }
 
         getBinding().wifiSetting.setOnClickListener {
             openWirelessSettings(this)
+        }
+
+        getBinding().appDetailSetting.setOnClickListener {
+            openApplicationDetailsSettings(this)
         }
     }
 }

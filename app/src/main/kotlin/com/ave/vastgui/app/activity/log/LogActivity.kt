@@ -18,7 +18,7 @@ package com.ave.vastgui.app.activity.log
 
 import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityLogBinding
-import com.ave.vastgui.app.viewmodel.SampleSharedVM
+import com.ave.vastgui.app.viewmodel.SharedVM
 import com.ave.vastgui.tools.activity.VastVbVmActivity
 import com.ave.vastgui.tools.activity.widget.screenConfig
 
@@ -27,7 +27,7 @@ import com.ave.vastgui.tools.activity.widget.screenConfig
 // Date: 2023/7/5
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
 
-class LogActivity : VastVbVmActivity<ActivityLogBinding, SampleSharedVM>() {
+class LogActivity : VastVbVmActivity<ActivityLogBinding, SharedVM>() {
 
     private val logger = mLogFactory.getLog(LogActivity::class.java)
 
@@ -35,13 +35,13 @@ class LogActivity : VastVbVmActivity<ActivityLogBinding, SampleSharedVM>() {
         super.onCreate(savedInstanceState)
         screenConfig(mEnableActionBar = false, mEnableFullScreen = false)
 
-        getBinding().addOne.setOnClickListener {
-            getViewModel().addOne()
+        getBinding().getSentence.setOnClickListener {
+            getViewModel().getSentenceWithHandle()
         }
 
-        getViewModel().count.observe(this) { count ->
-            getBinding().count.text = count.toString()
-            logger.d("这是一条日志 $count")
+        getViewModel().sentence.observe(this) { sentence ->
+            getBinding().showSentence.text = sentence.result.name
+            logger.d("获取到的名言是 ${sentence.result.name} ，来自于 ${sentence.result.from}")
         }
     }
 

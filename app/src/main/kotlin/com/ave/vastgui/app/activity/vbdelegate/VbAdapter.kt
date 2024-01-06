@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ave.vastgui.app.R
+import com.ave.vastgui.app.adapter.entity.Person
 import com.ave.vastgui.app.databinding.ItemPersonBinding
 import com.ave.vastgui.tools.viewbinding.viewBinding
 
@@ -13,22 +14,19 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 // Date: 2023/8/26
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/vb-delegate/#viewholder
 
-
-class Person(val firstName: String, val lastName: String)
-
 val persons = listOf(Person("张", "三"), Person("李", "四"), Person("王", "五"))
 
 class VbAdapter(private val data: List<Person>) : RecyclerView.Adapter<VbAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding by viewBinding(ItemPersonBinding::bind)
-        val firstName = binding.firstName
-        val lastName = binding.lastName
+        val name = binding.name
+        val sentence = binding.sentence
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_person, parent, false)
+            .inflate(R.layout.item_image_default, parent, false)
 
         return MyViewHolder(view)
     }
@@ -37,8 +35,8 @@ class VbAdapter(private val data: List<Person>) : RecyclerView.Adapter<VbAdapter
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val person = data[position]
-        holder.firstName.text = person.firstName
-        holder.lastName.text = person.lastName
+        holder.name.text = person.name
+        holder.sentence.text = person.sentence
     }
 
 }
@@ -47,13 +45,13 @@ class VbAdapter2(private val data: List<Person>) : RecyclerView.Adapter<VbAdapte
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding by viewBinding(ItemPersonBinding::bind, R.id.item_textview_root)
-        val firstName = binding.firstName
-        val lastName = binding.lastName
+        val name = binding.name
+        val sentence = binding.sentence
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_person, parent, false)
+            .inflate(R.layout.item_image_default, parent, false)
 
         return MyViewHolder(view)
     }
@@ -62,8 +60,8 @@ class VbAdapter2(private val data: List<Person>) : RecyclerView.Adapter<VbAdapte
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val person = data[position]
-        holder.firstName.text = person.firstName
-        holder.lastName.text = person.lastName
+        holder.name.text = person.name
+        holder.sentence.text = person.sentence
     }
 
 }

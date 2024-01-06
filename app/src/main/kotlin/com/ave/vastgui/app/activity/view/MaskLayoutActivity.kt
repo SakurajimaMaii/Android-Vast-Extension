@@ -16,135 +16,136 @@
 
 package com.ave.vastgui.app.activity.view
 
-import android.app.UiModeManager
-import android.content.res.Configuration
-import android.os.Build
+import android.Manifest
+import android.annotation.SuppressLint
+import android.database.Cursor
 import android.os.Bundle
-import android.view.View
-import androidx.activity.viewModels
+import android.provider.ContactsContract.CommonDataKinds.Phone
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
-import androidx.appcompat.app.AppCompatDelegate.getDefaultNightMode
-import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
+import androidx.core.database.getStringOrNull
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ave.vastgui.adapter.widget.AdapterClickListener
-import com.ave.vastgui.adapter.widget.AdapterItemWrapper
-import com.ave.vastgui.adapter.widget.AdapterLongClickListener
 import com.ave.vastgui.app.R
-import com.ave.vastgui.app.adapter.ImageAdapter
-import com.ave.vastgui.app.adapter.entity.ImageWrapper
-import com.ave.vastgui.app.adapter.entity.StudentWrapper
+import com.ave.vastgui.app.adapter.ContactAdapter
+import com.ave.vastgui.app.adapter.entity.Contact
 import com.ave.vastgui.app.databinding.ActivityMaskLayoutBinding
-import com.ave.vastgui.app.sharedpreferences.SpEncryptedExample
-import com.ave.vastgui.app.theme.AppTheme
-import com.ave.vastgui.app.viewmodel.ThemeVM
-import com.ave.vastgui.core.extension.NotNUllVar
+import com.ave.vastgui.app.sharedpreferences.ThemeSp
+import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.annotation.ExperimentalView
-import com.ave.vastgui.tools.theme.darkColorScheme
-import com.ave.vastgui.tools.theme.lightColorScheme
+import com.ave.vastgui.tools.manager.filemgr.FileMgr
+import com.ave.vastgui.tools.utils.IntentUtils
+import com.ave.vastgui.tools.utils.permission.requestPermission
 import com.ave.vastgui.tools.view.masklayout.MaskAnimation
 import com.ave.vastgui.tools.view.masklayout.MaskLayout
+import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.ave.vastgui.tools.viewbinding.viewBinding
+import org.alee.component.skin.service.ThemeSkinService
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/25
 
 /**
- * Mask Layout Activity.
- *
- * The following settings are required:
- * ```xml
- * <activity
- *     ...
- *     android:configChanges="uiMode">
- * ...
- * ```
- * This is to ensure that the Activity will not be restarted when [UiModeManager.setApplicationNightMode]
- * or [AppCompatDelegate.setDefaultNightMode] takes effect.
+ * [MaskLayoutActivity].
  */
-class MaskLayoutActivity : AppCompatActivity(R.layout.activity_mask_layout) {
+@androidx.annotation.OptIn(ExperimentalView::class)
+class MaskLayoutActivity : AppCompatActivity(R.layout.activity_mask_layout),
+    MaskLayout.MaskAnimationListener {
 
-    private val uiManager: UiModeManager by lazy {
-        getSystemService(UI_MODE_SERVICE) as UiModeManager
-    }
-    private val mViewModel: ThemeVM by viewModels<ThemeVM>()
     private val mBinding: ActivityMaskLayoutBinding by viewBinding(ActivityMaskLayoutBinding::bind)
-    private var mAdapter by NotNUllVar<ImageAdapter>()
-    private val mData: MutableList<AdapterItemWrapper<*>> = ArrayList<AdapterItemWrapper<*>>().apply {
-        repeat(10) {
-            add(ImageWrapper(R.drawable.img_astronaut))
-            add(StudentWrapper("学生$it", 10 + it))
-        }
+    private val mAdapter: ContactAdapter by lazy {
+        ContactAdapter(this)
     }
+    private val mMaskLayout by lazy { mBinding.maskLayout }
+    private val mDarKBtn by lazy { mBinding.changeDark }
+    private val mContentRv by lazy { mBinding.recyclerView }
 
-    private val mClick = object : AdapterClickListener {
-        override fun onItemClick(view: View, pos: Int) {
-        }
-    }
-
-    private val mLongClick = object : AdapterLongClickListener {
-        override fun onItemLongClick(view: View, pos: Int): Boolean {
-            return true
-        }
-    }
-
-    @androidx.annotation.OptIn(ExperimentalView::class)
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 从 assets 中读取皮肤包
+        FileMgr.getAssetsFile("app-skin.skin")
 
-        mBinding.lifecycleOwner = this
-
-        SpEncryptedExample.isDark = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-            currentNightMode == Configuration.UI_MODE_NIGHT_YES
-        } else {
-            getDefaultNightMode() == MODE_NIGHT_YES
-        }
-        if (SpEncryptedExample.isDark){
-            AppTheme.update(darkColorScheme)
-        } else {
-            AppTheme.update(lightColorScheme)
+        // 申请读取通讯录权限
+        requestPermission(Manifest.permission.READ_CONTACTS) {
+            granted = {
+                SimpleToast.showShortMsg("已获取通讯录权限")
+            }
         }
 
-        mBinding.maskLayout.updateCoordinate(mBinding.changeDark)
-
-        mAdapter = ImageAdapter(mData, this).apply {
-            registerClickEvent(mClick)
-            registerLongClickEvent(mLongClick)
-        }
-        mBinding.recyclerView.apply {
-            adapter = mAdapter
-            layoutManager = LinearLayoutManager(this@MaskLayoutActivity)
-        }
-
-        mBinding.changeDark.setOnClickListener {
-            mBinding.maskLayout.activeMask(MaskAnimation.EXPANDED,
-                object : MaskLayout.MaskAnimationListener {
-                    override fun onMaskComplete() {
-                        mViewModel.changeTheme()
-                    }
-
-                    override fun onMaskFinished() {
-                        if (SpEncryptedExample.isDark) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                uiManager.setApplicationNightMode(UiModeManager.MODE_NIGHT_YES)
-                            } else {
-                                setDefaultNightMode(MODE_NIGHT_YES)
-                            }
-                        } else {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                uiManager.setApplicationNightMode(UiModeManager.MODE_NIGHT_NO)
-                            } else {
-                                setDefaultNightMode(MODE_NIGHT_NO)
-                            }
-                        }
-                    }
+        // 初始化 UI
+        mMaskLayout.updateCoordinate(mBinding.changeDark)
+        mAdapter.setOnItemClickListener { _, _, item ->
+            val contact = item.getData()
+            requestPermission(Manifest.permission.CALL_PHONE) {
+                granted = {
+                    IntentUtils.dialPhoneNumber(this@MaskLayoutActivity, contact.number)
                 }
-            )
+            }
         }
+        mContentRv.apply {
+            adapter = mAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
+        mDarKBtn.setOnClickListener {
+            mBinding.maskLayout.activeMask(MaskAnimation.COLLAPSED, this)
+        }
+
+        // 读取通讯录
+        readContacts()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onMaskComplete() {
+        if (ThemeSp.isDark) {
+            ThemeSkinService.getInstance().switchThemeSkin(0)
+        } else {
+            ThemeSkinService.getInstance().switchThemeSkin(1)
+        }
+        ThemeSp.isDark = !ThemeSp.isDark
+        mAdapter.notifyDataSetChanged()
+    }
+
+    override fun onMaskFinished() {
+        nothing_to_do()
+    }
+
+    // 读取通讯录
+    private fun readContacts() {
+        val cursor: Cursor? = contentResolver
+            .query(
+                Phone.CONTENT_URI,
+                arrayOf(Phone.DISPLAY_NAME, Phone.NUMBER),
+                null,
+                null,
+                checkPhonebooLabel()
+            )
+        while (cursor?.moveToNext() == true) {
+            val name: String =
+                cursor.getStringOrNull(cursor.getColumnIndex(Phone.DISPLAY_NAME)).toString()
+            val number: String =
+                cursor.getStringOrNull(cursor.getColumnIndex(Phone.NUMBER)).toString()
+            mAdapter.addContact(name.first().toString(), "${number.first()}**********")
+        }
+        cursor?.close()
+    }
+
+    /**
+     * 检查数据库是否包含 **phonebook_label** 字段，
+     * 如果没有则用 [Phone.SORT_KEY_PRIMARY] 替代。
+     */
+    private fun checkPhonebooLabel(): String {
+        var cursor: Cursor? = null
+        var key = "phonebook_label"
+        try {
+            cursor = contentResolver
+                .query(Phone.CONTENT_URI, arrayOf("phonebook_label"), null, null, null)
+        } catch (exception: IllegalArgumentException) {
+            exception.printStackTrace()
+            key = Phone.SORT_KEY_PRIMARY
+        } finally {
+            cursor?.close()
+        }
+        return key
     }
 
 }

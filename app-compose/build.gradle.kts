@@ -72,6 +72,10 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
+        freeCompilerArgs += listOf(
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
+        )
     }
 
     buildFeatures {
@@ -79,7 +83,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.6"
+        kotlinCompilerExtensionVersion = "1.5.7"
     }
 
     sourceSets {
@@ -97,8 +101,8 @@ dependencies {
     debugImplementation(libs.ui.test.manifest)
     implementation(libs.activity.compose)
     implementation(libs.adapter.rxjava3)
-    implementation(libs.converter.gson)
     implementation(libs.coil.compose)
+    implementation(libs.converter.gson)
     implementation(libs.core.ktx)
     implementation(libs.datastore.preferences)
     implementation(libs.fragment.ktx)
@@ -106,6 +110,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.paging.compose)
+    implementation(libs.material.compose)
     implementation(libs.material3)
     implementation(libs.okhttp)
     implementation(libs.retrofit)

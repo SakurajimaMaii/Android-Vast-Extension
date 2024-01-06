@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,39 +17,28 @@
 package com.ave.vastgui.app.adapter
 
 import android.content.Context
-import android.widget.ImageView
-import androidx.databinding.BindingAdapter
-import androidx.databinding.ViewDataBinding
+import com.ave.vastgui.adapter.BR
+import com.ave.vastgui.adapter.VastAdapter
 import com.ave.vastgui.adapter.VastBindAdapter
-import com.ave.vastgui.adapter.base.BaseBindHolder
-import com.ave.vastgui.adapter.widget.AdapterItemWrapper
-import com.ave.vastgui.app.BR
-import com.ave.vastgui.app.adapter.viewHolder.LifecycleViewHolder
+import com.ave.vastgui.adapter.base.ItemWrapper
+import com.ave.vastgui.app.R
+import com.ave.vastgui.app.adapter.entity.Images
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/9/25
+// Date: 2024/1/6 20:45
 
-class ImageAdapter(
-    datas: MutableList<AdapterItemWrapper<*>>,
-    context: Context
-) : VastBindAdapter(datas, context) {
-
-    companion object{
-        @JvmStatic @BindingAdapter("android:src")
-        fun setImageUri(view: ImageView, resId: Int?) {
-            if (resId != null) {
-                view.setImageResource(resId)
-            } else {
-                view.setImageDrawable(null)
-            }
-        }
+class ImageAdapter(context: Context) :
+    VastBindAdapter<Images.Image>(context, BR.image) {
+    fun addImage(image: Images.Image) {
+        val index = itemCount
+        mDataSource.add(index, ItemWrapper(image, layoutId = R.layout.item_image_default))
+        notifyItemChanged(index)
     }
 
-    override fun setViewHolder(binding: ViewDataBinding): BaseBindHolder {
-        return LifecycleViewHolder(binding)
+    fun clearAll() {
+        val count = itemCount
+        mDataSource.clear()
+        notifyItemRangeChanged(0, count)
     }
-
-    override fun setVariableId(): Int = BR.item
-
 }

@@ -19,12 +19,14 @@ package com.ave.vastgui.app.activity.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityVp2IndicatorBinding
-import com.ave.vastgui.app.fragment.SampleFragment
-import com.ave.vastgui.app.fragment.SampleVbFragment
-import com.ave.vastgui.app.fragment.SampleVbVmFragment
-import com.ave.vastgui.app.fragment.SampleVmFragment
+import com.ave.vastgui.app.fragment.SenderFragment
+import com.ave.vastgui.app.fragment.ImagesFragment
+import com.ave.vastgui.app.fragment.VideosFragment
+import com.ave.vastgui.app.fragment.ReceiverFragment
+import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.activity.widget.screenConfig
 import com.ave.vastgui.tools.adapter.VastFragmentAdapter
 import com.ave.vastgui.tools.utils.DensityUtils.DP
@@ -40,23 +42,30 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 class Vp2IndicatorActivity : AppCompatActivity() {
 
     private val mBinding by viewBinding(ActivityVp2IndicatorBinding::inflate)
+    private val fragments = ArrayList<Fragment>().apply {
+        add(VideosFragment())
+        add(ImagesFragment())
+        add(ReceiverFragment())
+        add(SenderFragment())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        screenConfig(mEnableActionBar = false, mEnableFullScreen = true)
+        screenConfig(mEnableActionBar = true, mEnableFullScreen = false)
+        setSupportActionBar(mBinding.toolbar)
         mBinding.vp2.apply {
-            adapter = VastFragmentAdapter(this@Vp2IndicatorActivity, ArrayList<Fragment>().apply {
-                add(SampleVbVmFragment())
-                add(SampleVmFragment())
-                add(SampleVbFragment())
-                add(SampleFragment())
+            adapter = VastFragmentAdapter(this@Vp2IndicatorActivity, fragments)
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    mBinding.toolbar.title = fragments[position].defaultLogTag()
+                }
             })
         }
         mBinding.vp2indicator.apply {
-            setIndicatorStyle(Vp2IndicatorType.BITMAP)
+//            setIndicatorStyle(Vp2IndicatorType.BITMAP)
             setBitmapSize(20f.DP.toInt(), 20f.DP.toInt())
-            setSelectedBitmap(R.drawable.ic_indicator_select)
-            setUnSelectedBitmap(R.drawable.ic_indicator_unselect)
+//            setSelectedBitmap(R.drawable.ic_indicator_select)
+//            setUnSelectedBitmap(R.drawable.ic_indicator_unselect)
 //            setIndicatorCircleRadius(8F.DP)
 //            setSelectedColor(R.color.tomato)
 //            setUnSelectedColor(R.color.limegreen)

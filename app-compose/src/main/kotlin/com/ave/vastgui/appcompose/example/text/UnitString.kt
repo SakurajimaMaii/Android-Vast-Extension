@@ -16,9 +16,11 @@
 
 package com.ave.vastgui.appcompose.example.text
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.ave.vastgui.tools.text.Kmh
+import com.ave.vastgui.tools.text.StrUnit
 import com.ave.vastgui.tools.text.withUnit
 
 // Author: Vast Gui
@@ -26,7 +28,14 @@ import com.ave.vastgui.tools.text.withUnit
 // Date: 2023/7/15
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/text/unit-string/
 
+class Lux : StrUnit {
+    override val unit: String = "lx"
+}
+
 @Composable
-fun UnitString(){
-    Text(text = "12".withUnit(Kmh()))
+fun UnitString() {
+    Column {
+        Text(text = "12".withUnit(Kmh()))
+        Text(text = "3000".withUnit(Lux()))
+    }
 }

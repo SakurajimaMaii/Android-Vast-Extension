@@ -68,7 +68,7 @@ abstract class ReflectBaseActivity2<VB : ViewBinding, VM : ViewModel> : AppCompa
     }
 
     protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
-        return modelClass.newInstance()
+        return modelClass.getDeclaredConstructor().newInstance()
     }
 
 }

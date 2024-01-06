@@ -15,6 +15,7 @@
  */
 
 include(":app")
+include(":app-skin")
 include(":app-compose")
 includeBuild("convention-plugins")
 

@@ -31,7 +31,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/colorSurface">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -42,13 +43,13 @@
                 android:id="@+id/changeDark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="100dp"
-                android:backgroundTint="@{AppTheme.INSTANCE.primaryContainer}"
+                android:layout_margin="50dp"
                 android:contentDescription="@string/change_dark"
-                android:src="@drawable/ic_dark"
-                android:tint="@{AppTheme.INSTANCE.onPrimaryContainer}"
+                app:backgroundTint="@color/colorPrimaryContainer"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_dark"
+                app:tint="@color/colorOnPrimaryContainer" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.ave.vastgui.tools.view.masklayout.MaskLayout>
 </layout>

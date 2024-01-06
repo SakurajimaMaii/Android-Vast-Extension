@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -28,42 +28,49 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="Add" />
+        android:text="@string/badge_view_add"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/reset"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="Reset" />
+        android:text="@string/badge_view_reset"
+        app:layout_constraintTop_toBottomOf="@id/add" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/showDot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="Show dot" />
+        android:text="@string/badge_view_show_dot"
+        app:layout_constraintTop_toBottomOf="@id/reset" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/hideDot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="Hide dot" />
+        android:text="@string/badge_view_hide_dot"
+        app:layout_constraintTop_toBottomOf="@id/showDot" />
 
     <com.ave.vastgui.tools.view.badgeview.BadgeLayout
         android:id="@+id/numbadge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@color/white"
-        app:badge_mode="number">
+        app:badge_mode="number"
+        app:icon="@drawable/ic_chat_36px"
+        app:layout_constraintEnd_toStartOf="@id/dotbadge"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hideDot">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/numlabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Number Bubble"
+            android:text="@string/badge_view_bubble"
             android:textColor="@color/black"
             android:textStyle="bold" />
 
@@ -73,18 +80,42 @@
         android:id="@+id/dotbadge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:visibility="gone"
-        app:badge_mode="dot">
+        android:layout_margin="10dp"
+        app:badge_mode="dot"
+        app:icon="@drawable/ic_duo_36px"
+        app:layout_constraintEnd_toStartOf="@id/textbadge"
+        app:layout_constraintStart_toEndOf="@id/numbadge"
+        app:layout_constraintTop_toBottomOf="@id/hideDot">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/dotlabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dot"
+            android:text="@string/badge_view_dot"
             android:textColor="@color/black"
             android:textStyle="bold" />
 
     </com.ave.vastgui.tools.view.badgeview.BadgeLayout>
 
-</LinearLayout>
+    <com.ave.vastgui.tools.view.badgeview.BadgeLayout
+        android:id="@+id/textbadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:badge_mode="text"
+        app:bubble_text="新消息"
+        app:icon="@drawable/ic_mail_36px"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/dotbadge"
+        app:layout_constraintTop_toBottomOf="@id/hideDot">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/badge_view_bubble"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+    </com.ave.vastgui.tools.view.badgeview.BadgeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
