@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.adapter.widget
+package com.ave.vastgui.adapter.base
 
 import androidx.recyclerview.widget.DiffUtil
 
@@ -24,20 +24,20 @@ import androidx.recyclerview.widget.DiffUtil
 // Documentation: [AdapterDiffUtil](https://ave.entropy2020.cn/documents/VastAdapter/Widget/)
 
 /**
- * Because of the use of [AdapterItemWrapper], the original [DiffUtil] will
- * be inconvenient to use, so [AdapterDiffUtil] is designed to replace it.
+ * 因为使用了 [ItemWrapper] ，原来的 [DiffUtil] 会
+ * 使用起来不方便，所以设计了 [ItemDiffUtil] 来替代它。
  *
- * @param T The class of the list item.
+ * @since 1.1.1
  */
-abstract class AdapterDiffUtil<T, R : AdapterItemWrapper<T>> : DiffUtil.ItemCallback<R>() {
+abstract class ItemDiffUtil<T> : DiffUtil.ItemCallback<ItemWrapper<T>>() {
 
     /** @see newAreContentsTheSame */
-    final override fun areContentsTheSame(oldItem: R, newItem: R): Boolean {
+    final override fun areContentsTheSame(oldItem: ItemWrapper<T>, newItem: ItemWrapper<T>): Boolean {
         return newAreContentsTheSame(oldItem.getData(), newItem.getData())
     }
 
     /** @see newAreItemsTheSame */
-    final override fun areItemsTheSame(oldItem: R, newItem: R): Boolean {
+    final override fun areItemsTheSame(oldItem: ItemWrapper<T>, newItem: ItemWrapper<T>): Boolean {
         return newAreItemsTheSame(oldItem.getData(), newItem.getData())
     }
 

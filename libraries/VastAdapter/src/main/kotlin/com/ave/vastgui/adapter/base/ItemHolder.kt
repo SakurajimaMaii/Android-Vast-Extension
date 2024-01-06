@@ -16,6 +16,7 @@
 
 package com.ave.vastgui.adapter.base
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -26,19 +27,22 @@ import androidx.recyclerview.widget.RecyclerView
 // Description: VastAdapterVH help you to create a recyclerView adapter viewHolder.
 // Documentation: [VastAdapter](https://sakurajimamaii.github.io/VastDocs/document/en/VastAdapter.html)
 
-abstract class BaseHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+/**
+ * @since 1.1.1
+ */
+abstract class ItemHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    abstract fun onBindData(item: Any?)
+    /**
+     * @since 1.1.1
+     */
+    abstract fun onBindData(item: T)
 
-    interface HolderFactory {
-        /** Create the current ViewHolder instance. */
-        fun onCreateHolder(parent: ViewGroup, viewType: Int): BaseHolder
-
+    interface HolderFactory<T> : ItemType {
         /**
-         * Return a string which is same as the value you set in
-         * [AdapterItem.getHolderType]. In this way, the data
-         * item can be matched to the corresponding ViewHolder.
+         * 创建当前的 ViewHolder 实例。
+         *
+         * @since 1.1.1
          */
-        fun getHolderType(): String
+        fun onCreateHolder(parent: ViewGroup, viewType: Int): ItemHolder<T>
     }
 }

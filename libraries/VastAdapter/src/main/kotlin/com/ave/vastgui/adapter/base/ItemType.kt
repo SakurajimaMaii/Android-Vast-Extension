@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,28 +16,21 @@
 
 package com.ave.vastgui.adapter.base
 
-import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.RecyclerView
+import androidx.annotation.LayoutRes
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/10/10
-// Description: 
-// Documentation:
-// Reference:
+// Date: 2024/1/5
 
 /**
- * The ViewHolder of the BindAdapter.If you want to set your own
- * ViewHolder for Adapter,you should making your ViewHolder extends
- * the [BaseBindHolder] and make **setViewHolder** return it.
- *
- * @property binding
+ * @since 1.1.1
  */
-open class BaseBindHolder(protected var binding: ViewDataBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-
-    open fun onBindData(variableId: Int, item: Any?) {
-        binding.setVariable(variableId, item)
-    }
-
+sealed interface ItemType {
+    /**
+     * 返回项目布局资源 ID。
+     *
+     * @since 1.1.1
+     */
+    @get:LayoutRes
+    val layoutId: Int
 }

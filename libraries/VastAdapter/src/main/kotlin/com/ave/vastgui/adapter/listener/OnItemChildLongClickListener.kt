@@ -14,17 +14,26 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.adapter.widget
+package com.ave.vastgui.adapter.listener
 
 import android.view.View
+import com.ave.vastgui.adapter.base.ItemWrapper
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/10/10
+// Date: 2023/12/27
 
-interface AdapterClickListener {
-
-    /** A click listener for adapter. */
-    fun onItemClick(view: View, pos: Int): Unit
-
+/**
+ * 用于监听列表项内部的控件的长按事件。
+ *
+ * @since 1.1.1
+ */
+interface OnItemChildLongClickListener<T> {
+    /**
+     * 当列表项内部的控件被长按时会触发该回调。
+     *
+     * @param view 当前被长按的控件。
+     * @since 1.1.1
+     */
+    fun onItemLongClick(view: View, pos: Int, data: ItemWrapper<T>): Boolean
 }
