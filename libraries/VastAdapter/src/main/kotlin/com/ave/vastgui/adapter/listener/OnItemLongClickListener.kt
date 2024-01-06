@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.adapter.entity
+package com.ave.vastgui.adapter.listener
 
-import com.ave.vastgui.adapter.widget.AdapterItemWrapper
-import com.ave.vastgui.app.R
+import android.view.View
+import com.ave.vastgui.adapter.base.ItemWrapper
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/9/25
+// Date: 2022/10/10
 
-class Student(val name: String, private val age: Int) {
-    fun getAge(): String = age.toString()
-}
-
-class StudentWrapper private constructor(data: Student) :
-    AdapterItemWrapper<Student>(data, mLayoutId = R.layout.item_student) {
-    constructor(name: String, age: Int) : this(Student(name, age))
+/**
+ * 用于监听列表项的长点击事件。
+ *
+ * @since 1.1.1
+ */
+fun interface OnItemLongClickListener<T> {
+    /** 当列表项被长按时触发该回调 */
+    fun onItemLongClick(view: View, pos: Int,data: ItemWrapper<T>): Boolean
 }
