@@ -98,7 +98,7 @@ android {
 }
 
 dependencies {
-    debugImplementation(libs.ui.test.manifest)
+    debugImplementation(libs.ui.test.manifest.compose)
     implementation(libs.activity.compose)
     implementation(libs.adapter.rxjava3)
     implementation(libs.coil.compose)
@@ -110,14 +110,14 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.viewmodel.compose)
-    implementation(libs.paging.compose)
     implementation(libs.material.compose)
-    implementation(libs.material3)
+    implementation(libs.material3.compose)
     implementation(libs.okhttp)
+    implementation(libs.paging.compose)
     implementation(libs.retrofit)
-    implementation(libs.runtime.livedata)
-    implementation(libs.ui)
-    implementation(libs.ui.graphics)
-    implementation(libs.ui.tooling.preview)
+    implementation(libs.runtime.livedata.compose)
+    implementation(libs.ui.compose)
+    implementation(libs.ui.graphics.compose)
+    implementation(libs.ui.tooling.preview.compose)
     implementation(projects.libraries.vastTools)
 }

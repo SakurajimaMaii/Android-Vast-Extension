@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/fragment/
+// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 class VideosFragment : VastVbVmFragment<FragmentVideosBinding, SharedVM>() {
 
