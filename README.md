@@ -34,6 +34,14 @@
     implementation("io.github.sakurajimamaii:VastTools:$version")
     ```
 
+- **VastAdapter**
+
+  VastAdapter for quickly building RecyclerView adapters. Lastest version ![version](https://img.shields.io/maven-central/v/io.github.sakurajimamaii/VastAdapter)
+
+    ```kotlin
+    implementation("io.github.sakurajimamaii:VastAdapter:$version")
+    ```
+
 ## Document
 
 Please click [Android-Vast-Extension](https://ave.entropy2020.cn/) to get detailed documentation instructions.

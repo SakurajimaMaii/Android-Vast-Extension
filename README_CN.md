@@ -34,6 +34,14 @@
     implementation("io.github.sakurajimamaii:VastTools:$version")
     ```
 
+- **VastAdapter**
+
+  用于快速构建适配器。最后一个版本 ![version](https://img.shields.io/maven-central/v/io.github.sakurajimamaii/VastAdapter)
+
+    ```kotlin
+    implementation("io.github.sakurajimamaii:VastTools:$version")
+    ```
+
 ## 文档
 
 请点击 [Android-Vast-Extension](https://ave.entropy2020.cn/) 获取详细文档说明。
