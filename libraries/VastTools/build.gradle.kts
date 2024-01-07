@@ -42,8 +42,8 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }
@@ -108,17 +108,6 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.androidx.startup)
-}
-
-tasks.withType<DokkaTaskPartial>().configureEach {
-    dokkaSourceSets.configureEach {
-        jdkVersion.set(17)
-        languageVersion.set("1.9.10")
-        suppressInheritedMembers.set(true)
-        documentedVisibilities.set(
-                setOf(Visibility.PUBLIC, Visibility.PROTECTED, Visibility.PRIVATE, Visibility.INTERNAL)
-        )
-    }
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastTools"

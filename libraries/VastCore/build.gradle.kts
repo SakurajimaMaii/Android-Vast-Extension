@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import org.jetbrains.dokka.DokkaConfiguration.Visibility
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -23,10 +21,6 @@ plugins {
     id("org.jetbrains.kotlin.jvm")
     id("convention.publication")
     id("org.jetbrains.dokka")
-}
-
-subprojects {
-    apply(plugin = "org.jetbrains.dokka")
 }
 
 group = "io.github.sakurajimamaii"
@@ -48,17 +42,6 @@ sourceSets["main"].java.srcDir("src/main/kotlin")
 
 dependencies {
     implementation(libs.kotlin.reflect)
-}
-
-tasks.withType<DokkaTaskPartial>().configureEach {
-    dokkaSourceSets.configureEach {
-        jdkVersion.set(17)
-        languageVersion.set("1.9.0")
-        suppressInheritedMembers.set(true)
-        documentedVisibilities.set(
-            setOf(Visibility.PUBLIC, Visibility.PROTECTED, Visibility.PRIVATE, Visibility.INTERNAL)
-        )
-    }
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastCore"
