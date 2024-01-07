@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,11 +32,10 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2021/4/2
-// Description: VastAdapter help you to create a recyclerView adapter.
-// Documentation: [VastAdapter](https://ave.entropy2020.cn/documents/VastAdapter/VastAdapter/)
+// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * [VastAdapter] for RecyclerView.
+ * [VastAdapter] 。
  *
  * @since 1.1.1
  */

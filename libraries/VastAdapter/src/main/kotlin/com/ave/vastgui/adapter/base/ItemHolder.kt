@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/1/17
-// Description: VastAdapterVH help you to create a recyclerView adapter viewHolder.
-// Documentation: [VastAdapter](https://sakurajimamaii.github.io/VastDocs/document/en/VastAdapter.html)
+// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
  * @since 1.1.1

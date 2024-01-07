@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,6 @@ android {
 }
 
 dependencies {
-    implementation("io.github.cymchad:BaseRecyclerViewAdapterHelper4:4.1.2")
     implementation(libs.paging.runtime)
     implementation(libs.recyclerview)
     implementation(libs.annotation)
@@ -71,7 +70,7 @@ dependencies {
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastAdapter"
-extra["PUBLISH_DESCRIPTION"] = "Help you quickly build an Adapter suitable for RecyclerView."
+extra["PUBLISH_DESCRIPTION"] = "Quickly Adapter for RecyclerView."
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/VastAdapter"
 
 publishing {

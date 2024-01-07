@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,9 +33,10 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/11/17
+// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * [VastPagingAdapter] for RecyclerView.
+ * [VastPagingAdapter] 。
  */
 open class VastPagingAdapter<T>(
     protected var mContext: Context,

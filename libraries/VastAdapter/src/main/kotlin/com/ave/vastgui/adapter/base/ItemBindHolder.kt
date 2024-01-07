@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import com.ave.vastgui.adapter.VastBindPagingAdapter
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/10
+// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
  * 适用于 [VastBindAdapter] ， [VastBindListAdapter] 和
@@ -34,13 +35,13 @@ import com.ave.vastgui.adapter.VastBindPagingAdapter
  *
  * @since 1.1.1
  */
-open class ItemBindHolder(protected var binding: ViewDataBinding) :
+open class ItemBindHolder<T>(protected var binding: ViewDataBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     /**
      * @since 1.1.1
      */
-    open fun onBindData(variableId: Int, item: Any?) {
+    open fun onBindData(variableId: Int, item: T) {
         binding.setVariable(variableId, item)
     }
 

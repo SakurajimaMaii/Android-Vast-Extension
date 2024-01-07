@@ -22,6 +22,7 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/10
+// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
  * @since 1.1.1

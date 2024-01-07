@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,11 +34,10 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2021/4/2
-// Description: VastBindAdapter help you to create a recyclerView adapter.
-// Documentation: [VastBindAdapter](https://ave.entropy2020.cn/documents/VastAdapter/VastBindAdapter/)
+// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * [VastBindAdapter] for RecyclerView with [ViewDataBinding].
+ * [VastBindAdapter] 。
  *
  * @since 1.1.1
  */
@@ -57,14 +56,14 @@ open class VastBindAdapter<T> @JvmOverloads constructor(
      */
     private val mVariableId: Int,
     protected var mDataSource: MutableList<ItemWrapper<T>> = mutableListOf()
-) : RecyclerView.Adapter<ItemBindHolder>(), ItemClickListener<T> {
+) : RecyclerView.Adapter<ItemBindHolder<T>>(), ItemClickListener<T> {
 
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
 
     final override fun getItemCount() = mDataSource.size
 
-    final override fun onBindViewHolder(holder: ItemBindHolder, position: Int) {
+    final override fun onBindViewHolder(holder: ItemBindHolder<T>, position: Int) {
         val itemData = mDataSource[position]
         holder.onBindData(mVariableId, itemData.getData())
         holder.itemView.setOnClickListener {
@@ -99,7 +98,7 @@ open class VastBindAdapter<T> @JvmOverloads constructor(
         }
     }
 
-    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemBindHolder {
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemBindHolder<T> {
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
             LayoutInflater.from(parent.context),
             viewType,
@@ -133,7 +132,10 @@ open class VastBindAdapter<T> @JvmOverloads constructor(
     final override fun getOnItemLongClickListener(): OnItemLongClickListener<T>? =
         mOnItemLongClickListener
 
-    protected open fun setViewHolder(binding: ViewDataBinding): ItemBindHolder {
+    /**
+     * @return 您要设置的 ViewHolder 。
+     */
+    protected open fun setViewHolder(binding: ViewDataBinding): ItemBindHolder<T> {
         return ItemBindHolder(binding)
     }
 }

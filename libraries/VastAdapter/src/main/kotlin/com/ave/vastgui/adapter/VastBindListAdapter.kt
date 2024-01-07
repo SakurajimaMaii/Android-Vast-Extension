@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,9 +35,10 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/10
+// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * [VastBindListAdapter] for RecyclerView with [ViewDataBinding].
+ * [VastBindListAdapter] 。
  *
  * @since 1.1.1
  */
@@ -56,12 +57,12 @@ open class VastBindListAdapter<T>(
      */
     private val mVariableId: Int,
     diffCallback: ItemDiffUtil<T>
-) : ListAdapter<ItemWrapper<T>, ItemBindHolder>(diffCallback), ItemClickListener<T> {
+) : ListAdapter<ItemWrapper<T>, ItemBindHolder<T>>(diffCallback), ItemClickListener<T> {
 
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
 
-    final override fun onBindViewHolder(holder: ItemBindHolder, position: Int) {
+    final override fun onBindViewHolder(holder: ItemBindHolder<T>, position: Int) {
         val itemData = getItem(position)
         holder.onBindData(mVariableId, itemData.getData())
         holder.itemView.setOnClickListener {
@@ -98,7 +99,7 @@ open class VastBindListAdapter<T>(
 
     final override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
-    ): ItemBindHolder {
+    ): ItemBindHolder<T> {
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
             LayoutInflater.from(parent.context), viewType, parent, false
         )
@@ -130,9 +131,11 @@ open class VastBindListAdapter<T>(
     final override fun getOnItemLongClickListener(): OnItemLongClickListener<T>? =
         mOnItemLongClickListener
 
-    /** @return The ViewHolder you want to set. */
-    protected open fun setViewHolder(binding: ViewDataBinding): ItemBindHolder {
-        return ItemBindHolder(binding)
+    /**
+     * @return 您要设置的 ViewHolder 。
+     */
+    protected open fun setViewHolder(binding: ViewDataBinding): ItemBindHolder<T> {
+        return ItemBindHolder<T>(binding)
     }
 
 }

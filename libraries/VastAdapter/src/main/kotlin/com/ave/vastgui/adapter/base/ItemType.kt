@@ -21,6 +21,7 @@ import androidx.annotation.LayoutRes
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/1/5
+// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
  * @since 1.1.1
