@@ -27,7 +27,7 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/12/23
-// Documentation: [AdapterItemWrapper](https://ave.entropy2020.cn/documents/VastAdapter/Widget/)
+// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
  * 列表项数据包装器，用于为适配器提供布局 id ，点击事件等相关信息。
@@ -69,7 +69,7 @@ class ItemWrapper <T> @JvmOverloads constructor(
      * 用于为列表项内部的控件添加监听事件
      *
      * @param id 对应控件的 id 。
-     * @since 1.1.0
+     * @since 1.1.1
      */
     fun addOnItemChildClickListener(@IdRes id: Int, listener: OnItemChildClickListener<T>) = apply {
         mOnItemChildClickArray =
@@ -81,7 +81,7 @@ class ItemWrapper <T> @JvmOverloads constructor(
     /**
      * 用于移除 [id] 对应控件的监听事件。
      *
-     * @since 1.1.0
+     * @since 1.1.1
      */
     fun removeOnItemChildClickListener(@IdRes id: Int) = apply {
         mOnItemChildClickArray?.remove(id)
@@ -91,7 +91,7 @@ class ItemWrapper <T> @JvmOverloads constructor(
      * 用于为列表项内部的控件添加监听事件
      *
      * @param id 对应控件的 id 。
-     * @since 1.1.0
+     * @since 1.1.1
      */
     fun addOnItemChildLongClickListener(@IdRes id: Int, listener: OnItemChildLongClickListener<T>) =
         apply {
@@ -104,7 +104,7 @@ class ItemWrapper <T> @JvmOverloads constructor(
     /**
      * 用于移除 [id] 对应控件的监听事件。
      *
-     * @since 1.1.0
+     * @since 1.1.1
      */
     fun removeOnItemChildLongClickListener(@IdRes id: Int) = apply {
         mOnItemChildLongClickArray?.remove(id)

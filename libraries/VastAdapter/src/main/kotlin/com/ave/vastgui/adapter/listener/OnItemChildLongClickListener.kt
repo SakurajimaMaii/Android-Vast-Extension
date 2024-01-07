@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.ave.vastgui.adapter.base.ItemWrapper
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/12/27
+// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
  * 用于监听列表项内部的控件的长按事件。
