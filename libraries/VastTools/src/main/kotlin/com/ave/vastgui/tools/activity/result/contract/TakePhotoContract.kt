@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ import java.io.File
  *     <provider> element in your app's manifest. If your minimum SDK is
  *     greater than 30, no setting is required.
  */
-class TakePhotoContract constructor(private val authority: String? = null) :
+class TakePhotoContract @JvmOverloads constructor(private val authority: String? = null) :
     ActivityResultContract<Any?, Uri?>() {
 
     private var uri: Uri? = null
@@ -72,7 +72,7 @@ class TakePhotoContract constructor(private val authority: String? = null) :
                 ImageMgr.getFileUriOnApi23(it)
             }
         }
-        return Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        return Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, uri)
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): Uri? {

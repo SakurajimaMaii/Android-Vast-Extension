@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -196,7 +196,7 @@ object ColorUtils {
     /**
      * Converting an array of RGB to color hexadecimal string.
      *
-     * @param rgb an array of RGB like {63,226,197}.
+     * @param argb an array of RGB like {63,226,197}.
      * @return Color hexadecimal string like #3FE2C5.
      */
     @JvmStatic
