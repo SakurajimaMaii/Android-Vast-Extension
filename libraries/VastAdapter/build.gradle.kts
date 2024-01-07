@@ -1,3 +1,6 @@
+import org.jetbrains.dokka.DokkaConfiguration
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
+
 /*
  * Copyright 2024 VastGui guihy2019@gmail.com
  *
@@ -18,6 +21,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("org.jetbrains.dokka")
     id("convention.publication")
 }
 

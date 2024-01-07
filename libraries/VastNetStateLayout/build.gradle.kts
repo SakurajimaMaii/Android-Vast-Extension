@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-import org.jetbrains.dokka.DokkaConfiguration.Visibility
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
-
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -66,17 +63,6 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.core.ktx)
     implementation(libs.material)
-}
-
-tasks.withType<DokkaTaskPartial>().configureEach {
-    dokkaSourceSets.configureEach {
-        jdkVersion.set(17)
-        languageVersion.set("1.9.0")
-        suppressInheritedMembers.set(true)
-        documentedVisibilities.set(
-            setOf(Visibility.PUBLIC, Visibility.PROTECTED, Visibility.PRIVATE, Visibility.INTERNAL)
-        )
-    }
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastNetStateLayout"

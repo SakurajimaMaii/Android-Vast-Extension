@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui guihy2019@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,30 +14,30 @@
  * limitations under the License.
  */
 
+import org.jetbrains.dokka.DokkaConfiguration
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
+
 plugins {
     kotlin("jvm")
     id("org.jetbrains.dokka")
 }
 
-//subprojects {
-//    apply(plugin = "org.jetbrains.dokka")
-//
-//    tasks.withType<DokkaTaskPartial>().configureEach {
-//        dokkaSourceSets.configureEach {
-//            jdkVersion.set(17)
-//            languageVersion.set("1.8.10")
-//            suppressInheritedMembers.set(true)
-//            documentedVisibilities.set(
-//                setOf(Visibility.PUBLIC, Visibility.PROTECTED)
-//            )
-//        }
-//    }
-//}
+subprojects {
+    apply(plugin = "org.jetbrains.dokka")
 
-tasks.dokkaHtmlMultiModule {
-    moduleName.set("Android-Vast-Extension")
+    tasks.withType<DokkaTaskPartial>().configureEach {
+        dokkaSourceSets.configureEach {
+            notCompatibleWithConfigurationCache("https://github.com/Kotlin/dokka/issues/1217")
+            jdkVersion.set(17)
+            languageVersion.set("1.9.10")
+            suppressInheritedMembers.set(true)
+            documentedVisibilities.set(
+                setOf(DokkaConfiguration.Visibility.PUBLIC, DokkaConfiguration.Visibility.PROTECTED, DokkaConfiguration.Visibility.PRIVATE, DokkaConfiguration.Visibility.INTERNAL)
+            )
+        }
+    }
 }
 
-tasks.dokkaGfmMultiModule{
+tasks.dokkaHtmlMultiModule {
     moduleName.set("Android-Vast-Extension")
 }
