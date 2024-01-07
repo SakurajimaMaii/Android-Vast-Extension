@@ -18,22 +18,32 @@ package com.ave.vastgui.app.activity.view.rvadapter
 
 import android.content.Context
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ave.vastgui.adapter.VastAdapter
 import com.ave.vastgui.adapter.VastListAdapter
 import com.ave.vastgui.adapter.VastPagingAdapter
 import com.ave.vastgui.adapter.base.ItemWrapper
 import com.ave.vastgui.adapter.listener.OnItemClickListener
-import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.adapter.entity.ImageDiffUtil
 import com.ave.vastgui.app.adapter.entity.Images
 import com.ave.vastgui.app.adapter.holder.ComicImageHolder
 import com.ave.vastgui.app.adapter.holder.DefaultImageHolder
 import com.ave.vastgui.app.databinding.ActivityPersonBinding
+import com.ave.vastgui.app.net.OpenApi
+import com.ave.vastgui.app.net.OpenApiService
 import com.ave.vastgui.app.viewmodel.NetVM
 import com.ave.vastgui.tools.activity.VastVbVmActivity
+import com.ave.vastgui.tools.network.request.create
+import com.ave.vastgui.tools.view.dialog.MaterialAlertDialogBuilder
 import com.ave.vastgui.tools.view.toast.SimpleToast.showShortMsg
+import kotlinx.coroutines.launch
+
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2024/1/4
+// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 private class ImageAdapter(context: Context) : VastAdapter<Images.Image>(
     context,
@@ -77,20 +87,24 @@ class ImageActivity : VastVbVmActivity<ActivityPersonBinding, NetVM>() {
         ImagePagingAdapter(this)
     }
 
-    private val click = OnItemClickListener<Images.Image> { _, pos, _ ->
-        showShortMsg("Click event and pos is $pos.")
+    private val sampleClick1 = OnItemClickListener<Images.Image> { view, _, _ ->
+        MaterialAlertDialogBuilder(view.context).setMessage("这是一个点击事件").show()
     }
-    private val longClick = OnItemLongClickListener<Images.Image> { _, pos, _ ->
-        showShortMsg("Long click event and pos is $pos.")
-        true
+    private val sampleClick2 = OnItemClickListener<Images.Image> { _, _, _ ->
+        getSnackbar().setText("列表项被点击").show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mImageAdapter.apply {
-            setOnItemClickListener(click)
-            setOnItemLongClickListener(longClick)
+            setOnItemClickListener { _, pos, _ ->
+                showShortMsg("Click event and pos is $pos.")
+            }
+            setOnItemLongClickListener { _, pos, _ ->
+                showShortMsg("Long click event and pos is $pos.")
+                true
+            }
         }
 
         getBinding().personRv.layoutManager = LinearLayoutManager(this)
@@ -104,15 +118,21 @@ class ImageActivity : VastVbVmActivity<ActivityPersonBinding, NetVM>() {
 //                }
 //        }
 
-//        getBinding().personRv.adapter = mImageListAdapter
-//        lifecycleScope.launch {
-//            OpenApi().create(OpenApiService::class.java)
-//                .getImages(0, 10)
-//                .result.list.map { ItemWrapper(it, it.getLayoutId()) }
-//                .apply {
-//                    mImageListAdapter.submitList(this)
-//                }
-//        }
+        getBinding().personRv.adapter = mImageListAdapter
+        lifecycleScope.launch {
+            OpenApi().create(OpenApiService::class.java)
+                .getImages(0, 10)
+                .result.list.mapIndexed { index, image ->
+                    if (0 == index % 2) {
+                        ItemWrapper(image, image.getLayoutId(), sampleClick1)
+                    } else {
+                        ItemWrapper(image, image.getLayoutId(), sampleClick2)
+                    }
+                }
+                .apply {
+                    mImageListAdapter.submitList(this)
+                }
+        }
 
 //        getBinding().personRv.adapter = mImagePagingAdapter
 //        lifecycleScope.launch {

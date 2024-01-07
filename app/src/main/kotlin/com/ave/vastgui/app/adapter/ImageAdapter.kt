@@ -18,7 +18,6 @@ package com.ave.vastgui.app.adapter
 
 import android.content.Context
 import com.ave.vastgui.adapter.BR
-import com.ave.vastgui.adapter.VastAdapter
 import com.ave.vastgui.adapter.VastBindAdapter
 import com.ave.vastgui.adapter.base.ItemWrapper
 import com.ave.vastgui.app.R

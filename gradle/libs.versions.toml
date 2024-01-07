@@ -3,7 +3,6 @@ activity-ktx = "1.8.2"
 agp = "8.4.0-alpha03"
 androidx-core-ktx = "1.10.0"
 androidx-junit = "1.1.5"
-androidx-material = "1.6.0-beta03"
 androidx-startup = "1.1.1"
 annotation = "1.7.1"
 appcompat = "1.6.1"
@@ -41,7 +40,8 @@ lifecycle-livedata-ktx = "2.6.2"
 lifecycle-runtime-ktx = "2.6.2"
 lifecycle-viewmodel-ktx = "2.6.2"
 material = "1.12.0-alpha02"
-material3 = "1.2.0-beta01"
+material-compose = "1.6.0-beta03"
+material3-compose = "1.2.0-beta01"
 monitor = "1.6.1"
 okhttp = "4.12.0"
 paging-compose = "3.3.0-alpha02"
@@ -50,10 +50,10 @@ paintedskin = "3.5.2.1"
 recyclerview = "1.3.2"
 reflex = "1.2.0"
 retrofit = "2.9.0"
-runtime-livedata = "1.5.4"
+runtime-livedata-compose = "1.6.0-beta03"
 security-crypto = "1.1.0-alpha06"
 swiperefreshlayout = "1.2.0-alpha01"
-ui = "1.5.4"
+ui-compose = "1.6.0-beta03"
 vastcore = "0.0.7"
 vastnetstatelayout = "1.1.1"
 
@@ -87,7 +87,6 @@ gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson-databind" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin" }
-kotlin-gradle-plugin-v1810 = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "jetbrains-kotlin-gradle-plugin" }
 kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin-reflect" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin-reflect" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-android" }
@@ -101,8 +100,8 @@ lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", v
 lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle-livedata-core-ktx" }
 lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel-ktx" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
-material-compose = { module = "androidx.compose.material:material", version.ref = "androidx-material" }
-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+material-compose = { module = "androidx.compose.material:material", version.ref = "material-compose" }
+material3-compose = { module = "androidx.compose.material3:material3", version.ref = "material3-compose" }
 monitor = { module = "androidx.test:monitor", version.ref = "monitor" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging-compose" }
@@ -113,12 +112,12 @@ paintedskin-standard-plugin = { module = "com.github.CoderAlee.PaintedSkin:stand
 recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 reflex = { module = "com.github.CoderAlee:Reflex", version.ref = "reflex" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtime-livedata" }
+runtime-livedata-compose = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtime-livedata-compose" }
 security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
-ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
-ui-graphics = { module = "androidx.compose.ui:ui-graphics", version.ref = "ui" }
-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui" }
-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "ui" }
+ui-compose = { module = "androidx.compose.ui:ui", version.ref = "ui-compose" }
+ui-graphics-compose = { module = "androidx.compose.ui:ui-graphics", version.ref = "ui-compose" }
+ui-test-manifest-compose = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-compose" }
+ui-tooling-preview-compose = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "ui-compose" }
 vastcore = { module = "io.github.sakurajimamaii:VastCore", version.ref = "vastcore" }
 vastnetstatelayout = { module = "io.github.sakurajimamaii:VastNetStateLayout", version.ref = "vastnetstatelayout" }
 

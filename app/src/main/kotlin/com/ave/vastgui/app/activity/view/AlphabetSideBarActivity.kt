@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.activity.log.mLogFactory
 import com.ave.vastgui.app.adapter.ContactAdapter
-import com.ave.vastgui.app.adapter.entity.Contact
 import com.ave.vastgui.app.databinding.ActivityAlphabetSidebarBinding
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.utils.ColorUtils
@@ -45,6 +44,7 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 // Email: guihy2019@gmail.com
 // Date: 2023/9/28
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/alphabetsidebar/alphabetsidebar/
+// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sidebar) {
 

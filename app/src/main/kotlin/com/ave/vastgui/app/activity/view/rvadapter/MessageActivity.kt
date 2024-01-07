@@ -41,6 +41,7 @@ import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/1/4
+// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
     OnItemClickListener<Message> {
