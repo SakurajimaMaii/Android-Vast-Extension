@@ -28,8 +28,17 @@ import android.net.NetworkRequest
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import com.ave.vastgui.tools.os.fromApi23
+import com.ave.vastgui.tools.os.fromApi29
+import com.ave.vastgui.tools.os.fromApi31
+import java.net.Inet4Address
+import java.net.InetAddress
+import java.net.NetworkInterface
+import java.util.Enumeration
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -157,6 +166,25 @@ object NetStateUtils {
     }
 
     /**
+     * Is ether net
+     *
+     * @param context context.
+     * @return true if network is ether net,false otherwise.
+     * @since 1.2.1
+     */
+    @JvmStatic
+    fun isEtherNet(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            val networkInfo = getNetWorkInfo(context) ?: return false
+            @Suppress("deprecation")
+            networkInfo.type == ConnectivityManager.TYPE_MOBILE
+        } else {
+            val networkCapabilities = getNetworkCapabilities(context) ?: return false
+            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+        }
+    }
+
+    /**
      * Get wifi signal strength.
      *
      * Return [WIFIDBM.NOWIFICONNECT] when wifi is disconnected or unable or
@@ -182,6 +210,7 @@ object NetStateUtils {
                 throw SecurityException("Please apply the permission ACCESS_WIFI_STATE.")
             }
             val wifiManager = context.getWifiManager()
+
             @Suppress("deprecation")
             val rssi = wifiManager.connectionInfo.rssi
             // Signal strength, 5 means the acquired signal strength value is within 5
@@ -219,6 +248,67 @@ object NetStateUtils {
     }
 
     /**
+     * Get device ip address.
+     *
+     * @since 1.2.1
+     */
+    fun getIpAddress(context: Context): String? {
+        if (isMobile(context)) return getHostIp()
+        else if (isWIFI(context)) {
+            fromApi31 {
+                val linkProperties = context.getConnectivityManager().let {
+                    it.getLinkProperties(it.activeNetwork)
+                } ?: return null
+                linkProperties.linkAddresses.forEach {
+                    if (!it.address.isLoopbackAddress && it.address is Inet4Address) {
+                        return it.address.hostAddress
+                    }
+                }
+                return null
+            }
+            @Suppress("deprecation")
+            return intIP2StringIP(context.getWifiManager().connectionInfo.ipAddress)
+        }
+        else if(isEtherNet(context)) return getHostIp()
+        else return null
+    }
+
+    /**
+     * Convert ipv4 to int, for example, 255.255.255.255
+     * will be converted to -1
+     *
+     * @see intIP2StringIP
+     * @since 1.2.1
+     */
+    @JvmStatic
+    @kotlin.jvm.Throws(IllegalArgumentException::class)
+    fun stringIP2IntIP(ipv4: String): Int {
+        val patterns = ipv4.split(".").map { it.toInt() }
+        if (!patterns.all { it in 0..255 }) {
+            throw IllegalArgumentException("Illegal ipv4 address.")
+        }
+        var result = 0
+        patterns.forEachIndexed { index, i ->
+            result = result or (i shl 8 * index)
+        }
+        return result
+    }
+
+    /**
+     * Convert int to ipv4, for example, -1 will be converted to 255.255.255.255
+     *
+     * @see stringIP2IntIP
+     * @since 1.2.1
+     */
+    @JvmStatic
+    fun intIP2StringIP(ipv4: Int): String {
+        return (((ipv4 and 0xFF).toString() + "." +
+                ((ipv4 shr 8) and 0xFF)).toString() + "." +
+                ((ipv4 shr 16) and 0xFF)).toString() + "." +
+                (ipv4 shr 24 and 0xFF)
+    }
+
+    /**
      * Calculate signal level implementation. Click
      * [calculateSignalLevel](https://developer.android.com/reference/android/net/wifi/WifiManager#calculateSignalLevel(int,%20int))
      * to get the deprecate information
@@ -252,5 +342,25 @@ object NetStateUtils {
      */
     private fun Context.getConnectivityManager(): ConnectivityManager =
         getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    /**
+     * Get the host ip.
+     *
+     * @since 1.2.1
+     */
+    private fun getHostIp(): String? = runCatching {
+        val en: Enumeration<NetworkInterface> = NetworkInterface.getNetworkInterfaces()
+        while (en.hasMoreElements()) {
+            val networkInterface: NetworkInterface = en.nextElement()
+            val enumIpAddr: Enumeration<InetAddress> = networkInterface.inetAddresses
+            while (enumIpAddr.hasMoreElements()) {
+                val inetAddress = enumIpAddr.nextElement()
+                if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) {
+                    return@runCatching inetAddress.getHostAddress()
+                }
+            }
+        }
+        null
+    }.getOrNull()
 
 }
