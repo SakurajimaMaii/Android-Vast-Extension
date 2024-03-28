@@ -28,17 +28,15 @@ import android.net.NetworkRequest
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import com.ave.vastgui.tools.os.fromApi23
-import com.ave.vastgui.tools.os.fromApi29
+import com.ave.vastgui.tools.os.fromApi25
+import com.ave.vastgui.tools.os.fromApi28
 import com.ave.vastgui.tools.os.fromApi31
 import java.net.Inet4Address
 import java.net.InetAddress
 import java.net.NetworkInterface
 import java.util.Enumeration
-
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
