@@ -16,6 +16,7 @@
 
 package com.ave.vastgui.app.activity
 
+import androidx.core.view.isGone
 import android.os.Bundle
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.activity.log.mLogFactory
