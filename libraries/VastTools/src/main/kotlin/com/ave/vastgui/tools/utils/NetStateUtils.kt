@@ -30,8 +30,6 @@ import android.net.wifi.WifiManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import com.ave.vastgui.tools.os.fromApi25
-import com.ave.vastgui.tools.os.fromApi28
 import com.ave.vastgui.tools.os.fromApi31
 import java.net.Inet4Address
 import java.net.InetAddress
