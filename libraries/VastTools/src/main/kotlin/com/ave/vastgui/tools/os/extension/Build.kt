@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.os
+@file:JvmName("BuildExt")
+
+package com.ave.vastgui.tools.os.extension
 
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
@@ -22,9 +24,7 @@ import androidx.annotation.ChecksSdkIntAtLeast
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/3/27 23:59
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/os/extension/build/
 
 /**
  * @since 1.2.1
