@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-import org.jetbrains.dokka.DokkaConfiguration.Visibility
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
-
 plugins {
     id("com.android.library")
     id("kotlin-android")
@@ -119,7 +116,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "VastTools"
-            version = "1.1.1"
+            version = "1.2.1"
 
             afterEvaluate {
                 from(components["release"])
