@@ -16,6 +16,7 @@
 
 package com.ave.vastgui.tools.utils
 
+import android.util.Log
 import androidx.annotation.StringDef
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -32,6 +33,8 @@ import java.util.TimeZone
 
 /** Date utils. */
 object DateUtils {
+
+    const val TAG = "DateUtils"
 
     const val FORMAT_YYYYhMMhDD = "yyyy-MM-dd"
     const val FORMAT_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss"
@@ -161,6 +164,23 @@ object DateUtils {
         dateFormat: String = FORMAT_YYYY_MM_DD_HH_MM_SS
     ): String {
         return datetimeFormat(dateFormat).format(date)
+    }
+
+    /**
+     * Convert the [time] in the format of [timeFormat]
+     * to milliseconds. Returns null if time parsing
+     * exception occurs
+     *
+     * @since 1.3.1
+     */
+    fun datetimeToTimeMillis(
+        time: String,
+        timeFormat: String = FORMAT_YYYY_MM_DD_HH_MM_SS
+    ): Long? = runCatching {
+        datetimeFormat(timeFormat).parse(time)?.time
+    }.getOrElse {
+        Log.d(TAG, "dateTimeToTimeMillis|exception:${it.stackTraceToString()}")
+        null
     }
 
     /**
