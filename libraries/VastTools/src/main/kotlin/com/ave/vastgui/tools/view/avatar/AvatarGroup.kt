@@ -51,7 +51,7 @@ class AvatarGroup @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.Default_AvatarGroup_Style,
     @StyleRes defStyleRes: Int = R.style.BaseAvatarGroup
-) : ViewGroup(context, attrs) {
+) : ViewGroup(context, attrs, defStyleAttr, defStyleRes) {
 
     companion object {
         const val START = 0
