@@ -26,9 +26,6 @@ import kotlinx.coroutines.SupervisorJob
 
 // Email: guihy2019@gmail.com
 // Date: 2023/3/6
-// Description: 
-// Documentation:
-// Reference:
 
 /**
  * Create Main Scope

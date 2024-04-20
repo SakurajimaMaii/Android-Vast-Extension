@@ -8,7 +8,7 @@ import androidx.core.view.isVisible
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/3/30
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/extension/view/
 
 // ---------- visibility ----------
 fun View.gone() {
