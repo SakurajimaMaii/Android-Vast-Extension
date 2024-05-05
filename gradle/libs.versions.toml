@@ -53,6 +53,9 @@ swiperefreshlayout = "1.2.0-alpha01"
 ui-compose = "1.7.0-alpha07"
 vastcore = "0.0.7"
 vastnetstatelayout = "1.1.1"
+compileSdk = "34"
+targetSdk = "34"
+minSdk = "21"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-ktx" }
