@@ -19,6 +19,8 @@ package com.ave.vastgui.tools.log.base
 import android.util.Log
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.log.LogUtil
+import com.ave.vastgui.tools.log.base.LogInfo.Companion.JSON_TYPE
+import com.ave.vastgui.tools.log.base.LogInfo.Companion.TEXT_TYPE
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -33,6 +35,7 @@ import com.ave.vastgui.tools.log.LogUtil
  * @property mTag Used to identify the source of a log message. It usually
  *     identifies the class or activity where the log call occurs.
  * @property mContent The message you would like logged.
+ * @property mType Please refer to [TEXT_TYPE] or [JSON_TYPE].
  * @property mTimeMillis The current time in milliseconds, only initialized
  *     when the object is created.
  * @property mThreadName The name of the current thread.
@@ -44,51 +47,61 @@ data class LogInfo internal constructor(
     val mLevel: LogLevel,
     val mTag: String,
     val mContent: String,
+    val mType: Int,
     val throwable: Throwable? = null
 ) {
-    internal val mTraceLength
-        get() = mMethodStackTrace.toString().length
+    internal val mMethodStackTrace: StackTraceElement? = mCurrentThread.stackTrace.let {
+        val stackTrace = mCurrentThread.stackTrace
+        val methodStackTraceIndex = stackTrace.indexOfLast {
+            it.className == LogUtil::class.java.name
+        } + 1
+        stackTrace[methodStackTraceIndex]
+    }
 
-    internal val mContentLength
-        get() = mContent.length
+    internal val mTraceLength = mMethodStackTrace.toString().length
+
+    internal val mContentLength = mContent.length
 
     internal var mTimeMillis: Long by NotNUllVar(once = true)
 
-    internal val mPrintLength
-        get() = mTraceLength.coerceAtLeast(mContentLength)
+    internal val mPrintLength = mTraceLength.coerceAtLeast(mContentLength)
 
-    internal val mPrintBytesLength
-        get() = if (mTraceLength >= mContentLength) mMethodStackTrace.toString()
-            .toByteArray().size else mContent.toByteArray().size
+    internal val mPrintBytesLength = if (mTraceLength >= mContentLength) mMethodStackTrace.toString()
+        .toByteArray().size else mContent.toByteArray().size
 
-    internal val mThreadName: String
-        get() = mCurrentThread.name
+    internal val mThreadName: String = mCurrentThread.name
 
-    internal val mMethodStackTrace: StackTraceElement?
-        get() {
-            val stackTrace = mCurrentThread.stackTrace
-            val methodStackTraceIndex = stackTrace.indexOfLast {
-                it.className == LogUtil::class.java.name
-            } + 1
-            return stackTrace[methodStackTraceIndex]
-        }
-
-    internal val mLevelPriority: Int
-        get() = mLevel.priority
+    internal val mLevelPriority: Int = mLevel.priority
 
     /** @since 0.5.3 */
     override fun toString(): String {
         return """
-            (level:$mLevel 
-            tag:$mTag 
-            threadName:$mThreadName
-            methodStackTrace:$mMethodStackTrace
-            content:$mContent
+            (Level:$mLevel 
+            Tag:$mTag 
+            ThreadName:$mThreadName
+            MethodStackTrace:$mMethodStackTrace
+            Content:$mContent
             Exception:${Log.getStackTraceString(throwable)})
             """.trimIndent()
     }
 
     init {
         mTimeMillis = System.currentTimeMillis()
+    }
+
+    companion object {
+        /**
+         * The content representing [mContent] is text.
+         *
+         * @since 1.3.1
+         */
+        internal const val TEXT_TYPE = 0x01
+
+        /**
+         * The content representing [mContent] is json.
+         *
+         * @since 1.3.1
+         */
+        internal const val JSON_TYPE = 0x02
     }
 }
