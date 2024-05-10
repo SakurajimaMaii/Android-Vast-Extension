@@ -270,4 +270,11 @@ class LogUtil internal constructor() {
     init {
         init()
     }
+
+    companion object{
+        /**
+         * @since 1.3.1
+         */
+        internal const val TAG = "VastTools"
+    }
 }
