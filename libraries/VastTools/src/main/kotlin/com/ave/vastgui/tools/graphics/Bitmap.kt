@@ -33,6 +33,7 @@ import com.ave.vastgui.tools.content.ContextHelper
 import com.ave.vastgui.tools.graphics.MergeScale.BIG_REDUCE
 import com.ave.vastgui.tools.graphics.MergeScale.SMALL_ENLARGE
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -285,6 +286,24 @@ object BmpUtils {
     fun getBitmapFromBase64(base64: String): Bitmap {
         val decode: ByteArray = Base64.decode(base64.split(",")[1], Base64.DEFAULT)
         return BitmapFactory.decodeByteArray(decode, 0, decode.size)
+    }
+
+    /**
+     * Get base64 from bitmap. You can click [link](https://tool.jisuapi.com/base642pic.html)
+     * to verify the conversion result.
+     *
+     * @since 1.3.1
+     */
+    @JvmStatic
+    fun getBase64FromBitmap(bitmap: Bitmap): String? {
+        var base64: String?
+        ByteArrayOutputStream().use {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
+            it.flush()
+            it.close()
+            base64 = Base64.encodeToString(it.toByteArray(), Base64.DEFAULT)
+        }
+        return base64
     }
 
     /**
