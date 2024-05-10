@@ -18,6 +18,8 @@ package com.ave.vastgui.tools.log
 
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.log.base.LogInfo
+import com.ave.vastgui.tools.log.base.LogInfo.Companion.JSON_TYPE
+import com.ave.vastgui.tools.log.base.LogInfo.Companion.TEXT_TYPE
 import com.ave.vastgui.tools.log.base.LogLevel
 import com.ave.vastgui.tools.log.json.Converter
 import com.ave.vastgui.tools.log.plugin.LogPrinter
@@ -220,8 +222,9 @@ class LogUtil internal constructor() {
     fun json(level: LogLevel, target: Any) {
         if (logEnabled && isDeBug) {
             val jsonString = mLogConverter!!.toJson(target)
-            val logInfo = LogInfo(Thread.currentThread(), level, mDefaultTag, jsonString, null)
-            mLogPrinter.printJson(logInfo)
+            val logInfo =
+                LogInfo(Thread.currentThread(), level, mDefaultTag, jsonString, JSON_TYPE, null)
+            mLogPrinter.printLog(logInfo)
             mLogStorage?.storageJson(logInfo)
         }
     }
@@ -235,8 +238,8 @@ class LogUtil internal constructor() {
     fun json(tag: String, level: LogLevel, target: Any) {
         if (logEnabled && isDeBug) {
             val jsonString = mLogConverter!!.toJson(target)
-            val logInfo = LogInfo(Thread.currentThread(), level, tag, jsonString, null)
-            mLogPrinter.printJson(logInfo)
+            val logInfo = LogInfo(Thread.currentThread(), level, tag, jsonString, JSON_TYPE, null)
+            mLogPrinter.printLog(logInfo)
             mLogStorage?.storageJson(logInfo)
         }
     }
@@ -255,7 +258,7 @@ class LogUtil internal constructor() {
         content: String,
         tr: Throwable? = null
     ) {
-        val logInfo = LogInfo(Thread.currentThread(), level, tag, content, tr)
+        val logInfo = LogInfo(Thread.currentThread(), level, tag, content, TEXT_TYPE, tr)
         mLogPrinter.printLog(logInfo)
         mLogStorage?.storage(logInfo)
     }
@@ -271,7 +274,7 @@ class LogUtil internal constructor() {
         init()
     }
 
-    companion object{
+    companion object {
         /**
          * @since 1.3.1
          */

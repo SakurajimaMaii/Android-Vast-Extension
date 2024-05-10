@@ -16,16 +16,30 @@
 
 package com.ave.vastgui.tools.log.plugin
 
+import android.content.ComponentCallbacks2
 import android.util.Log
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.core.extension.NotNullOrDefault
+import com.ave.vastgui.tools.content.ContextHelper
 import com.ave.vastgui.tools.log.LogUtil
 import com.ave.vastgui.tools.log.base.LogDivider
 import com.ave.vastgui.tools.log.base.LogInfo
+import com.ave.vastgui.tools.log.base.LogInfo.Companion.JSON_TYPE
+import com.ave.vastgui.tools.log.base.LogInfo.Companion.TEXT_TYPE
+import com.ave.vastgui.tools.log.base.LogLevel
 import com.ave.vastgui.tools.log.base.LogPlugin
 import com.ave.vastgui.tools.log.base.cutStr
 import com.ave.vastgui.tools.log.base.needCut
 import com.ave.vastgui.tools.log.plugin.LogPrinter.Configuration
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -67,38 +81,83 @@ class LogPrinter private constructor(private val mConfiguration: Configuration) 
     private var mLogInfo by NotNUllVar<LogInfo>()
 
     /**
+     * @since 1.3.1
+     */
+    private val mHandler = CoroutineExceptionHandler { _, exception ->
+        val logInfo = LogInfo(
+            Thread.currentThread(),
+            LogLevel.ERROR,
+            LogUtil.TAG,
+            exception.stackTraceToString(),
+            TEXT_TYPE,
+            null
+        )
+        printLog(logInfo)
+    }
+
+    /**
+     * @since 1.3.1
+     */
+    private val mLogScope: CoroutineScope =
+        CoroutineScope(SupervisorJob() + Dispatchers.IO + CoroutineName("LogScope") + mHandler)
+
+    /**
+     * A channel of [LogInfo].
+     *
+     * @since 1.3.1
+     */
+    private val mLogChannel: Channel<LogInfo> = Channel()
+
+    /**
+     * Print log.
+     *
+     * @since 1.3.1
+     */
+    internal fun printLog(logInfo: LogInfo) {
+        mLogScope.launch { mLogChannel.send(logInfo) }
+    }
+
+    /**
      * Print [logInfo].
      *
      * @since 0.5.3
      */
-    internal fun printLog(logInfo: LogInfo) {
+    private fun printTextLog(logInfo: LogInfo) {
         mLogInfo = logInfo
+        // The length of the log content is less than mMaxSingleLogLength
         if (!mLogInfo.needCut(mMaxSingleLogLength)) {
-            printLog {
-                printLog(LogDivider.getInfo(it))
+            printLog { content ->
+                printLog(LogDivider.getInfo(content))
             }
-        } else {
+        }
+        // The length of the log content is greater than mMaxSingleLogLength
+        else {
             // Segment printing count
-            var count = 1
+            var count = 0
             var printTheRest = true
-            printLog(mMaxSingleLogLength * 4) {
-                var bytes = it.toByteArray()
-                while (mMaxSingleLogLength * 4 < bytes.size) {
-                    val subStr = bytes.cutStr(mMaxSingleLogLength)
-                    printLog(LogDivider.getInfo(String.format("%s", subStr)))
-
-                    bytes = bytes.copyOfRange(subStr.toByteArray().size, bytes.size)
-
-                    if (count == maxPrintTimes) {
-                        printTheRest = false
-                        break
+            printLog(mMaxSingleLogLength * 4) { content ->
+                // FIX: DEAL LINESEPARATOR THAT EXIST WITHIN THE LOG CONTENT
+                val patterns = content.split(System.lineSeparator())
+                patterns.forEachIndexed { index, pattern ->
+                    var bytes = pattern.toByteArray()
+                    if (mMaxSingleLogLength * 4 < bytes.size) {
+                        do {
+                            val subStr = bytes.cutStr(mMaxSingleLogLength)
+                            printLog(LogDivider.getInfo(String.format("%s", subStr)))
+                            bytes = bytes.copyOfRange(subStr.toByteArray().size, bytes.size)
+                            count++
+                            if (count == maxPrintTimes) {
+                                printTheRest = false
+                                break
+                            }
+                        } while (mMaxSingleLogLength * 4 < bytes.size)
+                    } else {
+                        count++
                     }
 
-                    count++
-                }
-
-                if (printTheRest) {
-                    printLog(LogDivider.getInfo(String.format("%s", String(bytes))))
+                    if (printTheRest && count <= maxPrintTimes) {
+                        printLog(LogDivider.getInfo(String.format("%s", String(bytes))))
+                    }
                 }
             }
         }
@@ -110,7 +169,7 @@ class LogPrinter private constructor(private val mConfiguration: Configuration) 
      * @since 0.5.3
      */
     @Throws(RuntimeException::class)
-    internal fun printJson(logInfo: LogInfo) {
+    private fun printJsonLog(logInfo: LogInfo) {
         mLogInfo = logInfo
         printLog {
             for (line in it.split("\n")) {
@@ -147,6 +206,32 @@ class LogPrinter private constructor(private val mConfiguration: Configuration) 
         Log.println(mLogInfo.mLevelPriority, mLogInfo.mTag, content)
     }
 
+    init {
+        ContextHelper.getApp().registerComponentCallbacks(object : ComponentCallbacks2 {
+            override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
+
+            }
+
+            override fun onLowMemory() {
+                mLogScope.cancel("Cancel mLogScope onLowMemory.")
+            }
+
+            override fun onTrimMemory(level: Int) {
+
+            }
+        })
+        mLogScope.launch {
+            while (isActive) {
+                val info = mLogChannel.receive()
+                if (TEXT_TYPE == info.mType) {
+                    printTextLog(info)
+                } else if (JSON_TYPE == info.mType) {
+                    printJsonLog(info)
+                }
+            }
+        }
+    }
+
     companion object : LogPlugin<Configuration, LogPrinter> {
         override val key: String
             get() = LogPrinter::class.java.simpleName
@@ -168,6 +253,6 @@ class LogPrinter private constructor(private val mConfiguration: Configuration) 
         private const val defaultMaxSingleLogLength = 1000
 
         /** Default max print repeat times. */
-        private const val defaultMaxPrintTimes = 5
+        private const val defaultMaxPrintTimes = Int.MAX_VALUE
     }
 }
