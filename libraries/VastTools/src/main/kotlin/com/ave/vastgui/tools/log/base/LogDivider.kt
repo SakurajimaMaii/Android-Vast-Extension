@@ -41,7 +41,7 @@ enum class LogDivider(val char: Char) {
          * @since 0.5.2
          */
         fun getTop(len: Int) =
-            "${LogDivider.TOP_LEFT.char}${String(CharArray(len) { LogDivider.BOLD_DIVIDER.char })}"
+            "${TOP_LEFT.char}${String(CharArray(len) { BOLD_DIVIDER.char })}"
 
         /**
          * Get normal divider with the length of [len].
@@ -49,7 +49,7 @@ enum class LogDivider(val char: Char) {
          * @since 0.5.2
          */
         fun getDivider(len: Int) =
-            "${LogDivider.NORMAL_START.char}${String(CharArray(len) { LogDivider.NORMAL_DIVIDER.char })}"
+            "${NORMAL_START.char}${String(CharArray(len) { NORMAL_DIVIDER.char })}"
 
         /**
          * Get bottom bold divider with the length of [len].
@@ -57,7 +57,7 @@ enum class LogDivider(val char: Char) {
          * @since 0.5.2
          */
         fun getBottom(len: Int) =
-            "${LogDivider.BOTTOM_LEFT.char}${String(CharArray(len) { LogDivider.BOLD_DIVIDER.char })}"
+            "${BOTTOM_LEFT.char}${String(CharArray(len) { BOLD_DIVIDER.char })}"
 
         /**
          * Get info with [LogDivider.BOLD_START].
@@ -65,6 +65,6 @@ enum class LogDivider(val char: Char) {
          * @since 0.5.2
          */
         fun getInfo(content: String) =
-            "${LogDivider.BOLD_START.char} $content"
+            "${BOLD_START.char} $content"
     }
 }

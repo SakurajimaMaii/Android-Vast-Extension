@@ -24,7 +24,7 @@ import android.util.Log
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
 
 /**
- * Log level
+ * Log level.
  *
  * @since 0.5.3
  */
@@ -34,6 +34,7 @@ sealed class LogLevel(val priority: Int) : Comparable<LogLevel> {
     object INFO : LogLevel(Log.INFO)
     object WARN : LogLevel(Log.WARN)
     object ERROR : LogLevel(Log.ERROR)
+    object ASSERT : LogLevel(Log.ASSERT)
 
     override fun compareTo(other: LogLevel): Int = this.priority - other.priority
 
