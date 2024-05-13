@@ -156,7 +156,7 @@ class LogStorage private constructor(private val mConfiguration: Configuration) 
             }
             storage(time, logInfo.mLevel, String.format("%s", String(bytes)))
         }
-        logInfo.throwable?.apply {
+        logInfo.mThrowable?.apply {
             storage(time, logInfo.mLevel, "$this")
             for (item in this.stackTrace) {
                 storage(time, logInfo.mLevel, "  at $item")

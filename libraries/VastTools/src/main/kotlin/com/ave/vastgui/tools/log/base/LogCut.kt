@@ -33,7 +33,6 @@ internal fun LogInfo.needCut(maxSingleLogLength: Int) =
 /**
  * Cutting the byte array as a string according to [maxSingleLogLength].
  *
- * @param bytes byte array.
  * @return The string obtained by [maxSingleLogLength].
  * @since 0.5.3
  */

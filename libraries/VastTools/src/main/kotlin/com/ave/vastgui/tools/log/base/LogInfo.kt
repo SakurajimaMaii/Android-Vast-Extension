@@ -28,7 +28,7 @@ import com.ave.vastgui.tools.log.base.LogInfo.Companion.TEXT_TYPE
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
 
 /**
- * Log info.
+ * Log information.
  *
  * @property mCurrentThread The current thread.
  * @property mLevel The level of the log.
@@ -48,7 +48,7 @@ data class LogInfo internal constructor(
     val mTag: String,
     val mContent: String,
     val mType: Int,
-    val throwable: Throwable? = null
+    val mThrowable: Throwable? = null
 ) {
     internal val mMethodStackTrace: StackTraceElement? = mCurrentThread.stackTrace.let {
         val stackTrace = mCurrentThread.stackTrace
@@ -81,7 +81,7 @@ data class LogInfo internal constructor(
             ThreadName:$mThreadName
             MethodStackTrace:$mMethodStackTrace
             Content:$mContent
-            Exception:${Log.getStackTraceString(throwable)})
+            Exception:${Log.getStackTraceString(mThrowable)})
             """.trimIndent()
     }
 
