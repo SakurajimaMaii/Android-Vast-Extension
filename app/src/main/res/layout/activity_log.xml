@@ -19,7 +19,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.log.LogActivity">
+    tools:context=".log.LogActivity">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/getSentence"

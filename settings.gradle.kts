@@ -25,13 +25,16 @@ rootProject.name = "Android-Vast-Extension"
 // = Lib =
 // =======
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 val libs = arrayOf(
-        "VastAdapter",
-        "VastCore",
-        "VastNetStateLayout",
-        "VastTools"
+    "adapter",
+    "core",
+    "netstatelayout",
+    "tools",
+    "log:desktop",
+    "log:core"
 )
 
 libs.forEach {
-        include(":libraries:$it")
+    include(":libraries:$it")
 }

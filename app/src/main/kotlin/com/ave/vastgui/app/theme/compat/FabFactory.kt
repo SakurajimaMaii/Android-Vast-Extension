@@ -35,9 +35,7 @@ import org.alee.component.skin.parser.IThemeSkinExecutorBuilder
 // Email: guihy2019@gmail.com
 // Date: 2023/12/29
 
-/**
- * 用于兼容 [FloatingActionButton] 。
- */
+/** 用于兼容 [FloatingActionButton] 。 */
 class FabFactory : IExpandedFactory2 {
     override fun onCreateView(
         origin: View?,
@@ -81,9 +79,7 @@ private class SivSkinExecutor(fullElement: SkinElement) :
     }
 }
 
-/**
- * 用于兼容 [FloatingActionButton] 。
- */
+/** 用于兼容 [FloatingActionButton] 。 */
 class FabExecutorBuilder : IThemeSkinExecutorBuilder {
 
     companion object {

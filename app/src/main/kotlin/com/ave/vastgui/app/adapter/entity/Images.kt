@@ -20,9 +20,7 @@ import com.ave.vastgui.adapter.base.ItemDiffUtil
 import com.ave.vastgui.app.R
 import com.ave.vastgui.tools.network.response.ResponseApi
 
-/**
- * 通过 api 请求的图片数据
- */
+/** 通过 api 请求的图片数据 */
 data class Images(
     val code: Int,
     val message: String,

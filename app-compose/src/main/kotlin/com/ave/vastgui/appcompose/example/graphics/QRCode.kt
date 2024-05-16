@@ -24,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.tooling.preview.Preview
-import com.ave.vastgui.tools.graphics.QRCode
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -44,6 +43,6 @@ fun QRCode() {
 
 @Preview(showBackground = true)
 @Composable
-fun QRCodePreview(){
+fun QRCodePreview() {
     QRCode()
 }

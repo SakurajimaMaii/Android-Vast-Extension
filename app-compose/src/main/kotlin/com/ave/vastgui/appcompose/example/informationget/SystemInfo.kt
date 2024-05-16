@@ -33,9 +33,11 @@ import com.ave.vastgui.tools.utils.SystemUtils
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/system-utils/
 
 @Composable
-fun SystemInfo(){
+fun SystemInfo() {
     Column(
-        modifier = Modifier.fillMaxSize().padding(10.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp)
     ) {
         Text(text = "系统语言 ${SystemUtils.systemLanguage}")
         Text(text = "系统安卓版本 ${SystemUtils.systemAndroidVersion}")
@@ -46,7 +48,7 @@ fun SystemInfo(){
 
 @Preview(showBackground = true)
 @Composable
-fun SystemInfoPreview(){
+fun SystemInfoPreview() {
     AndroidVastExtensionTheme {
         SystemInfo()
     }

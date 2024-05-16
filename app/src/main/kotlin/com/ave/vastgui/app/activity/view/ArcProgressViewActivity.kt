@@ -16,11 +16,14 @@
 
 package com.ave.vastgui.app.activity.view
 
+import android.Manifest
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.os.Bundle
-import com.ave.vastgui.app.activity.log.mLogFactory
+import android.util.Log
+import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.app.databinding.ActivityArcProgressViewBinding
+import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.graphics.BmpUtils
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
@@ -40,11 +43,14 @@ import java.io.File
 
 class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>() {
 
-    private val logger = mLogFactory.getLog(ArcProgressViewActivity::class.java)
+    private val mLogger = mLogFactory.getLog(ArcProgressViewActivity::class.java)
     private lateinit var downloadTask: DLTask
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("TAG", "onCreate")
+
+        requestPermissions(arrayOf(Manifest.permission.ACCESS_NETWORK_STATE), 1)
 
         val colors = intArrayOf(
             ColorUtils.colorHex2Int("#F60C0C"),
@@ -55,9 +61,7 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
             ColorUtils.colorHex2Int("#0829FB"),
             ColorUtils.colorHex2Int("#B709F4")
         )
-        val pos = floatArrayOf(
-            1f / 7, 2f / 7, 3f / 7, 4f / 7, 5f / 7, 6f / 7, 1f
-        )
+        val pos = floatArrayOf(1f / 7, 2f / 7, 3f / 7, 4f / 7, 5f / 7, 6f / 7, 1f)
 
         getBinding().arcProgressView.apply {
             mProgressShader = LinearGradient(
@@ -81,6 +85,7 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
         }
 
         getBinding().download.setOnClickListener {
+            mLogger.i("开始下载")
             downloadApk()
         }
 
@@ -97,10 +102,25 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.d("TAG", "onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("TAG", "onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("TAG", "onPause")
+    }
+
     private fun downloadApk() {
         downloadTask = DLManager
             .createTaskConfig()
-            .setDownloadUrl("https://down.oray.com/sunlogin/windows/SunloginClient_13.3.1.56398_x64.exe")
+            .setDownloadUrl("https://d1.music.126.net/dmusic/NeteaseCloudMusic_Music_official_3.0.0.Beta.03.12.202664.64.exe")
             .setSaveDir(FileMgr.appInternalFilesDir().path)
             .setListener {
                 onDownloading = {
@@ -110,16 +130,16 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
                     }
                 }
                 onFailure = {
-                    logger.e("download failed:" + it.exception.stackTraceToString())
+                    mLogger.e("download failed:" + it.exception.stackTraceToString())
                 }
                 onSuccess = {
-                    logger.i("download success.")
+                    mLogger.i("download success.")
                     getBinding().arcProgressView.refreshWithInvalidate {
                         mCurrentProgress = getBinding().arcProgressView.mMaximumProgress
                     }
                 }
                 onCancel = {
-                    logger.i("download cancel.")
+                    mLogger.i("download cancel.")
                     getBinding().arcProgressView.refreshWithInvalidate {
                         resetProgress()
                     }
@@ -128,6 +148,51 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
             .build()
 
         downloadTask.start()
+
+//        val url = "https://d1.music.126.net/dmusic/NeteaseCloudMusic_Music_official_3.0.0.Beta.03.12.202664.64.exe"
+//        val request = OkGo.get<File>(url)
+//        OkDownload.request(url, request)
+//            .folder(FileMgr.appInternalFilesDir().path)
+//            .save()
+//            .register(object : DownloadListener("DOWNLOAD") {
+//                override fun onStart(progress: Progress?) {
+//
+//                }
+//
+//                override fun onProgress(progress: Progress?) {
+//                    getBinding().arcProgressView.refreshWithInvalidate {
+//                        mCurrentProgress =
+//                            progress!!.fraction * getBinding().arcProgressView.mMaximumProgress
+//                    }
+//                }
+//
+//                override fun onError(progress: Progress?) {
+//
+//                }
+//
+//                override fun onFinish(t: File?, progress: Progress?) {
+//                    mLogger.i("download success.")
+//                    getBinding().arcProgressView.refreshWithInvalidate {
+//                        mCurrentProgress = getBinding().arcProgressView.mMaximumProgress
+//                    }
+//                }
+//
+//                override fun onRemove(progress: Progress?) {
+//
+//                }
+//            })
+//            .start()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (1 == requestCode) {
+            nothing_to_do()
+        }
     }
 
 }

@@ -19,7 +19,7 @@
     android:height="128dp"
     android:viewportWidth="1024"
     android:viewportHeight="1024">
-  <path
-      android:pathData="M227.8,181.9L796.2,510.1 227.8,838.3Z"
-      android:fillColor="?attr/colorPrimaryContainer"/>
+    <path
+        android:pathData="M227.8,181.9L796.2,510.1 227.8,838.3Z"
+        android:fillColor="?attr/colorPrimaryContainer" />
 </vector>

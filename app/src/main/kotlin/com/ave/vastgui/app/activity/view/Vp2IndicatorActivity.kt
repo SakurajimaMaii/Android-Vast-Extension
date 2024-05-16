@@ -20,17 +20,15 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityVp2IndicatorBinding
-import com.ave.vastgui.app.fragment.SenderFragment
 import com.ave.vastgui.app.fragment.ImagesFragment
-import com.ave.vastgui.app.fragment.VideosFragment
 import com.ave.vastgui.app.fragment.ReceiverFragment
+import com.ave.vastgui.app.fragment.SenderFragment
+import com.ave.vastgui.app.fragment.VideosFragment
 import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.activity.widget.screenConfig
 import com.ave.vastgui.tools.adapter.VastFragmentAdapter
 import com.ave.vastgui.tools.utils.DensityUtils.DP
-import com.ave.vastgui.tools.view.vp2indicator.Vp2IndicatorType
 import com.ave.vastgui.tools.viewbinding.viewBinding
 
 // Author: Vast Gui 

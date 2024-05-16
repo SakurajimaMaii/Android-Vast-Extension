@@ -16,9 +16,6 @@
 
 package com.ave.vastgui.app.adapter.entity
 
-import com.ave.vastgui.adapter.base.ItemDiffUtil
-import com.ave.vastgui.adapter.base.ItemWrapper
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/1/5

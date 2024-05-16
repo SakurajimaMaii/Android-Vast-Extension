@@ -46,9 +46,7 @@ interface OpenApiService {
     @GET("/api/getHaoKanVideo")
     fun getHaoKanVideo(@Query("page") page: Int, @Query("size") size: Int): Request<Videos>
 
-    /**
-     * 获取一句名言。
-     */
+    /** 获取一句名言。 */
     @GET("/api/sentences")
     fun sentences(): Request<Sentences>
 }

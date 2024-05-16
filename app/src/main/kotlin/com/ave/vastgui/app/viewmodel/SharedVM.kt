@@ -35,18 +35,15 @@ import com.ave.vastgui.tools.network.response.ResponseMutableLiveData
 
 class SharedVM : ViewModel() {
 
-    /**
-     * 获取到的视频数据流。
-     */
-    val videoFlow = Pager(PagingConfig(pageSize = 20)) { VideoRepository() }.flow.cachedIn(viewModelScope)
+    /** 获取到的视频数据流。 */
+    val videoFlow =
+        Pager(PagingConfig(pageSize = 20)) { VideoRepository() }.flow.cachedIn(viewModelScope)
 
     private val _sentence = ResponseMutableLiveData<Sentences>()
     val sentence: ResponseLiveData<Sentences>
         get() = _sentence
 
-    /**
-     * 手动设置状态。
-     */
+    /** 手动设置状态。 */
     fun getSentenceWithHandle() {
         OpenApi().create(OpenApiService::class.java)
             .sentences()
@@ -57,9 +54,7 @@ class SharedVM : ViewModel() {
             }
     }
 
-    /**
-     * 自动设置状态。
-     */
+    /** 自动设置状态。 */
     fun getSentenceAutoHandle() {
         OpenApi().create(OpenApiService::class.java)
             .sentences()

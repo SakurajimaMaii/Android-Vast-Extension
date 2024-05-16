@@ -25,7 +25,6 @@ import com.ave.vastgui.app.adapter.entity.Videos
 import com.ave.vastgui.app.net.OpenApi
 import com.ave.vastgui.app.net.OpenApiService
 import com.ave.vastgui.app.repository.ImageRepository
-import com.ave.vastgui.app.repository.VideoRepository
 import com.ave.vastgui.tools.network.request.create
 import com.ave.vastgui.tools.network.response.ResponseLiveData
 import com.ave.vastgui.tools.network.response.ResponseMutableLiveData
@@ -44,9 +43,7 @@ class NetVM : ViewModel() {
     val videos: ResponseLiveData<Videos>
         get() = _videos
 
-    /**
-     * 获取到的视频数据流。
-     */
+    /** 获取到的视频数据流。 */
     val imageFlow =
         Pager(PagingConfig(pageSize = 20)) { ImageRepository() }.flow.cachedIn(viewModelScope)
 

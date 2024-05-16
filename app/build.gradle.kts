@@ -89,10 +89,14 @@ android {
 
     namespace = "com.ave.vastgui.app"
 
-    sourceSets["main"].java.srcDirs("src/main/kotlin")
+    sourceSets["main"].java.srcDirs("src/main/kotlin", "src/main/java")
 }
 
 dependencies {
+    implementation(projects.libraries.netstatelayout)
+    implementation(projects.libraries.adapter)
+    implementation(projects.libraries.core)
+    implementation(projects.libraries.tools)
     implementation(libs.activity.ktx)
     implementation(libs.adapter.rxjava3)
     implementation(libs.androidx.swiperefreshlayout)
@@ -119,8 +123,4 @@ dependencies {
     implementation(libs.reflex)
     implementation(libs.retrofit)
     implementation(libs.security.crypto)
-    implementation(projects.libraries.vastNetStateLayout)
-    implementation(projects.libraries.vastAdapter)
-    implementation(projects.libraries.vastCore)
-    implementation(projects.libraries.vastTools)
 }

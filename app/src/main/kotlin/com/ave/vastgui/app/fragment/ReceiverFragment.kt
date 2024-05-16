@@ -17,18 +17,14 @@
 package com.ave.vastgui.app.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.ave.vastgui.app.R
-import com.ave.vastgui.app.activity.log.mLogFactory
+import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.app.databinding.FragmentReceiverBinding
 import com.ave.vastgui.app.viewmodel.SharedVM
-import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.viewbinding.viewBinding
-import com.google.android.material.textview.MaterialTextView
 
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com

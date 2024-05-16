@@ -33,9 +33,7 @@ import kotlin.coroutines.suspendCoroutine
 // Email: guihy2019@gmail.com
 // Date: 2024/1/6 16:44
 
-/**
- * 将 [Request] 回调改为协程。
- */
+/** 将 [Request] 回调改为协程。 */
 private suspend fun Request<Videos>.await(): List<Videos.Data> = suspendCoroutine { coroutine ->
     request {
         onSuccess = { coroutine.resume(it.result.list) }

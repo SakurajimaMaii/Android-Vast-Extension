@@ -20,14 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.ave.vastgui.app.R
-import com.ave.vastgui.app.activity.log.mLogFactory
 import com.ave.vastgui.app.adapter.entity.Message
 import com.ave.vastgui.app.databinding.FragmentMessageBottomsheetBinding
-import com.ave.vastgui.tools.log.base.LogLevel
 import com.ave.vastgui.tools.viewbinding.viewBinding
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 // Author: Vast Gui

@@ -20,22 +20,16 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.children
 import com.ave.vastgui.app.R
-import com.ave.vastgui.app.activity.log.mLogFactory
 import com.ave.vastgui.app.databinding.ActivityNetStateLayoutBinding
 import com.ave.vastgui.app.viewmodel.NetVM
+import com.ave.vastgui.netstatelayout.NetStateMgr
 import com.ave.vastgui.netstatelayout.listener.OnLoadingErrorListener
 import com.ave.vastgui.netstatelayout.listener.OnNetErrorListener
-import com.ave.vastgui.netstatelayout.NetStateMgr
-import com.ave.vastgui.netstatelayout.listener.OnEmptyDataListener
 import com.ave.vastgui.tools.activity.VastVmActivity
 import com.ave.vastgui.tools.utils.NetStateUtils
 import com.ave.vastgui.tools.viewbinding.viewBinding
-import com.google.android.material.textview.MaterialTextView
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

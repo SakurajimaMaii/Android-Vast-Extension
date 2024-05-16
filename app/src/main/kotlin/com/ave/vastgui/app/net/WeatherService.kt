@@ -18,7 +18,6 @@ package com.ave.vastgui.app.net
 
 import com.ave.vastgui.app.App
 import com.ave.vastgui.app.adapter.entity.AirNow
-import com.ave.vastgui.tools.network.request.Request2
 import retrofit2.http.GET
 
 // Author: Vast Gui
@@ -26,9 +25,7 @@ import retrofit2.http.GET
 // Date: 2024/1/6 1:36
 
 interface WeatherService {
-    /**
-     * [实时空气质量](https://dev.qweather.com/docs/api/air/air-now/)
-     */
+    /** [实时空气质量](https://dev.qweather.com/docs/api/air/air-now/) */
     @GET("/v7/air/now?location=101010100&key=${App.KEY}")
     suspend fun getAirNow(): AirNow
 }

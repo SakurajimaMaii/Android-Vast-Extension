@@ -41,14 +41,14 @@ class App : Application() {
         ConstraintLayoutCompat.init()
     }
 
-    init{
+    init {
         Config.getInstance().skinMode = Config.SkinMode.REPLACE_ALL
         Config.getInstance().isEnableDebugMode = true
         Config.getInstance().isEnableStrictMode = true
         Config.getInstance().performanceMode = Config.PerformanceMode.EXPERIENCE_FIRST
     }
 
-    companion object{
+    companion object {
         const val KEY = "530e4e6c66ec464385f5a794b44cf89a"
     }
 
