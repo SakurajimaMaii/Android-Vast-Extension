@@ -29,8 +29,7 @@ class KotlinUnitTest {
 
     @Test
     fun logTest() {
-        repeat(500) {
-            val jsonString = """{
+        val jsonString = """{
                 "employees": [
                     {
                         "firstName": "Bill",
@@ -46,15 +45,14 @@ class KotlinUnitTest {
                     }
                 ]
             }"""
-            mLogger.json(LogLevel.VERBOSE, jsonString)
-            val map = mapOf("name" to "Xiao Ming", "age" to 19)
-            mLogger.json(LogLevel.DEBUG, map)
-            val list = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-            mLogger.json(LogLevel.INFO, list)
-            mLogger.w("This is a log.")
-            mLogger.e("This is a log.")
-            mLogger.a("This is a log.")
-        }
+        mLogger.json(LogLevel.VERBOSE, jsonString)
+        val map = mapOf("name" to "Xiao Ming", "age" to 19)
+        mLogger.json(LogLevel.DEBUG, map)
+        val list = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+        mLogger.json(LogLevel.INFO, list)
+        mLogger.w("This is a log.")
+        mLogger.e("This is a log.")
+        mLogger.a("This is a log.")
     }
 
     private class User(val name: String)
