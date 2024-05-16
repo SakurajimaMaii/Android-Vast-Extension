@@ -28,7 +28,8 @@ import com.log.vastgui.desktop.base.Red
 import com.log.vastgui.desktop.base.Reset
 import com.log.vastgui.desktop.base.White
 import com.log.vastgui.desktop.base.Yellow
-import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 // Author: Vast Gui
@@ -38,8 +39,11 @@ import java.text.DateFormat
 // Documentation:
 // Reference:
 
+private val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
+
 /**
  * Desktop logger.
+ *
  * ```kotlin
  * val mLogFactory: LogFactory = getLogFactory {
  *     ...
@@ -54,16 +58,19 @@ import java.text.DateFormat
 fun Logger.Companion.desktop(): DesktopLogger = DesktopLogger()
 
 /**
- * Desktop logger Implementation.
+ * Desktop logger Implementation.You can view the following image to
+ * preview the printing effect.
  *
+ * @see <img
+ *     src="file:///D:/WorkSpace/GitSpaceAndroid/Android-Vast-Extension/Android-Vast-Extension/libraries/log/desktop/image/log.png"/>
  * @since 1.3.1
  */
 class DesktopLogger internal constructor() : Logger {
 
     override fun log(info: LogInfo) {
-        val time = DateFormat.getDateTimeInstance().format(info.mTime)
+        val time = sdf.format(info.mTime)
         val logStrInfo =
-            "$Cyan$time$Reset ${info.headColor()}[${info.mLevel}|${info.mTag}|${info.mThreadName}]$Reset $Blue${info.mMethodStackTrace}$Reset ${info.mContent}"
+            "$Cyan$time$Reset ${info.headColor()}[${info.mLevel}|${info.mTag}|${info.mThreadName}]$Reset $Blue(${info.mMethodStackTrace?.fileName}:${info.mMethodStackTrace?.lineNumber})$Reset ${info.mContent}"
         println(logStrInfo)
     }
 
