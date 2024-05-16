@@ -119,5 +119,5 @@ dependencies {
     implementation(libs.ui.compose)
     implementation(libs.ui.graphics.compose)
     implementation(libs.ui.tooling.preview.compose)
-    implementation(projects.libraries.vastTools)
+    // implementation(projects.libraries.vastTools)
 }

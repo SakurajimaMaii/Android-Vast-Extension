@@ -27,8 +27,8 @@ import android.view.View
 import androidx.core.database.getStringOrNull
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ave.vastgui.adapter.VastBindListAdapter
-import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.adapter.base.ItemWrapper
+import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.app.BR
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.adapter.entity.Message

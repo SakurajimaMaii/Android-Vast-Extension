@@ -37,9 +37,9 @@ class IntentActivity : VastVbActivity<ActivityIntentBinding>() {
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         getBinding().callBtn.setOnClickListener {
-            requestPermission(Manifest.permission.CALL_PHONE){
+            requestPermission(Manifest.permission.CALL_PHONE) {
                 granted = {
                     dialPhoneNumber(getContext(), "12345678910")
                 }
@@ -50,7 +50,7 @@ class IntentActivity : VastVbActivity<ActivityIntentBinding>() {
         }
 
         getBinding().searchWeb.setOnClickListener {
-            requestPermission(Manifest.permission.INTERNET){
+            requestPermission(Manifest.permission.INTERNET) {
                 granted = {
                     searchWeb(getContext(), "12345678910")
                 }
@@ -73,7 +73,7 @@ class IntentActivity : VastVbActivity<ActivityIntentBinding>() {
         }
 
         getBinding().createAlarm.setOnClickListener {
-            requestPermission(Manifest.permission.SET_ALARM){
+            requestPermission(Manifest.permission.SET_ALARM) {
                 granted = {
                     val alarmConfig = IntentUtils.AlarmConfig()
                         .setMsg("你好")

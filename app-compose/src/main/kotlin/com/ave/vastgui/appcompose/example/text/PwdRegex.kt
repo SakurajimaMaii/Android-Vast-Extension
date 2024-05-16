@@ -28,10 +28,10 @@ import com.ave.vastgui.tools.text.isPwd
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/text/pwd-regex/
 
 @Composable
-fun PwdRegex(){
+fun PwdRegex() {
     val password = "852admin."
     Column {
         Text(text = "密码 $password 是否符合要求？")
-        Text(text = "${password.isPwd(RwdStrength3, shouldNotAppear = arrayOf("123","admin"))}")
+        Text(text = "${password.isPwd(RwdStrength3, shouldNotAppear = arrayOf("123", "admin"))}")
     }
 }

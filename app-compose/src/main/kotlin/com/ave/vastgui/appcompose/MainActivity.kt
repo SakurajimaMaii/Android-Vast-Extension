@@ -26,14 +26,11 @@ import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.ave.vastgui.appcompose.datastore.ThemeDs
-import com.ave.vastgui.appcompose.sharedpreferences.ThemeSp
 import com.ave.vastgui.appcompose.ui.theme.AndroidVastExtensionTheme
 import kotlinx.coroutines.launch
 

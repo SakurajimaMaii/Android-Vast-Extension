@@ -17,10 +17,8 @@
 package com.ave.vastgui.app.adapter
 
 import androidx.annotation.DrawableRes
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BindingAdapter
 import coil.load
-import coil.transform.CircleCropTransformation
 import com.ave.vastgui.app.R
 import com.ave.vastgui.tools.utils.DateUtils
 import com.ave.vastgui.tools.view.avatar.Avatar
@@ -35,9 +33,7 @@ import java.util.Locale
 // Email: guihy2019@gmail.com
 // Date: 2023/12/27
 
-/**
- * 绑定适配器
- */
+/** 绑定适配器 */
 object BindingAdapter {
     @JvmStatic
     @BindingAdapter("avatar_text")

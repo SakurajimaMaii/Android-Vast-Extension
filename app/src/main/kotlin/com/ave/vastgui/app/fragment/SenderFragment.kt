@@ -18,12 +18,9 @@ package com.ave.vastgui.app.fragment
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.ViewModel
 import com.ave.vastgui.app.R
-import com.ave.vastgui.app.activity.log.mLogFactory
 import com.ave.vastgui.app.databinding.FragmentSenderBinding
 import com.ave.vastgui.app.viewmodel.SharedVM
-import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.fragment.VastVmFragment
 import com.ave.vastgui.tools.viewbinding.viewBinding
 

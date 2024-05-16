@@ -21,14 +21,9 @@ import android.view.ViewGroup.LayoutParams
 import androidx.activity.ComponentActivity
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityAvatarBinding
-import com.ave.vastgui.tools.graphics.BmpUtils
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.view.avatar.Avatar
 import com.ave.vastgui.tools.view.avatar.AvatarGroup
-import com.ave.vastgui.tools.view.extension.viewSnapshot
-import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.ave.vastgui.tools.viewbinding.viewBinding
-import java.io.File
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

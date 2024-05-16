@@ -28,7 +28,7 @@ import com.ave.vastgui.tools.sharedpreferences.boolean
 // Date: 2023/3/14
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/save-key-value-data/sp-encrypted/
 
-object ThemeSp: ISharedPreferencesOwner {
+object ThemeSp : ISharedPreferencesOwner {
 
     override val name: String = "ThemeSp"
     override val kv: SharedPreferences by lazy(LazyThreadSafetyMode.NONE) {

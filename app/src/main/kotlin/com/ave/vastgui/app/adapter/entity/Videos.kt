@@ -17,8 +17,6 @@
 package com.ave.vastgui.app.adapter.entity
 
 import com.ave.vastgui.adapter.base.ItemDiffUtil
-import com.ave.vastgui.adapter.base.ItemWrapper
-import com.ave.vastgui.app.R
 import com.ave.vastgui.tools.network.response.ResponseApi
 
 // Author: Vast Gui

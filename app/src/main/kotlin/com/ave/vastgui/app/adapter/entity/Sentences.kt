@@ -22,9 +22,7 @@ import com.ave.vastgui.tools.network.response.ResponseApi
 // Email: guihy2019@gmail.com
 // Date: 2024/1/2
 
-/**
- * 通过 Api 请求到的随机一言名句。
- */
+/** 通过 Api 请求到的随机一言名句。 */
 data class Sentences(
     val code: Int,
     val message: String,

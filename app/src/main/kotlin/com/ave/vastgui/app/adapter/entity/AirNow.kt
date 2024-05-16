@@ -20,15 +20,15 @@ package com.ave.vastgui.app.adapter.entity
 // Email: guihy2019@gmail.com
 // Date: 2024/1/6 1:24
 
-data class AirNow (
+data class AirNow(
     val fxLink: String,
     val code: String,
     val refer: Refer,
     val now: Now,
     val station: List<Now>,
     val updateTime: String
-){
-    sealed class Now (
+) {
+    sealed class Now(
         val no2: String,
         val o3: String,
         val level: String,
@@ -44,7 +44,7 @@ data class AirNow (
         val id: String? = null
     )
 
-    data class Refer (
+    data class Refer(
         val license: List<String>,
         val sources: List<String>
     )

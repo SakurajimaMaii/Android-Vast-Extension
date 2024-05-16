@@ -28,7 +28,7 @@ import com.ave.vastgui.tools.utils.ScreenSizeUtils
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/screen-size-utils/
 
 @Composable
-fun ScreenInfo(modifier: Modifier = Modifier){
+fun ScreenInfo(modifier: Modifier = Modifier) {
     val height = ScreenSizeUtils.getMobileScreenHeight()
     val width = ScreenSizeUtils.getMobileScreenWidth()
     val orientation = ScreenSizeUtils.getScreenOrientation()

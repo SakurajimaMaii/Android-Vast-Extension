@@ -19,7 +19,7 @@ package com.ave.vastgui.app.activity.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ave.vastgui.app.R
-import com.ave.vastgui.app.activity.log.mLogFactory
+import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.app.databinding.ActivityRatingBinding
 import com.ave.vastgui.tools.utils.AppUtils
 import com.ave.vastgui.tools.utils.DensityUtils.DP

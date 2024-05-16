@@ -35,6 +35,10 @@ class TestView(context: Context, attrs: AttributeSet? = null) : View(context, at
     private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mRect = Rect()
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    }
+
     override fun onDraw(canvas: Canvas) {
         val bitmap = BmpUtils.getBitmapFromDrawable(R.drawable.ic_star_unselected)
         mRect.set(0, 0, bitmap.width, bitmap.height)

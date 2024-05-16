@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.ave.vastgui.app.R
-import com.ave.vastgui.app.activity.log.mLogFactory
+import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.app.adapter.ContactAdapter
 import com.ave.vastgui.app.databinding.ActivityAlphabetSidebarBinding
 import com.ave.vastgui.core.extension.NotNUllVar
@@ -117,10 +117,7 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
         updateIndex()
     }
 
-    /**
-     * 检查数据库是否包含 **phonebook_label** 字段，
-     * 如果没有则用 [Phone.SORT_KEY_PRIMARY] 替代。
-     */
+    /** 检查数据库是否包含 **phonebook_label** 字段， 如果没有则用 [Phone.SORT_KEY_PRIMARY] 替代。 */
     private fun checkPhonebookLabel(): String {
         var cursor: Cursor? = null
         var key = "phonebook_label"
@@ -136,9 +133,7 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
         return key
     }
 
-    /**
-     * 按照名字首字母读取通讯录。
-     */
+    /** 按照名字首字母读取通讯录。 */
     private fun readContacts() {
         val bookLabel = checkPhonebookLabel()
         val projection = arrayOf(Phone.DISPLAY_NAME, Phone.NUMBER, bookLabel)
@@ -163,9 +158,7 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
         cursor?.close()
     }
 
-    /**
-     * 根据获取到的通讯录列表更新索引值。
-     */
+    /** 根据获取到的通讯录列表更新索引值。 */
     private fun updateIndex() {
         enumValues<Alphabet>().forEach { alphabet ->
             val index = mAdapter.getDataSource().indexOfFirst {

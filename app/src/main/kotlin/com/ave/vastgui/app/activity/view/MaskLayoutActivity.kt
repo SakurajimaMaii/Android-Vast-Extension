@@ -26,7 +26,6 @@ import androidx.core.database.getStringOrNull
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.adapter.ContactAdapter
-import com.ave.vastgui.app.adapter.entity.Contact
 import com.ave.vastgui.app.databinding.ActivityMaskLayoutBinding
 import com.ave.vastgui.app.sharedpreferences.ThemeSp
 import com.ave.vastgui.core.extension.nothing_to_do
@@ -44,9 +43,7 @@ import org.alee.component.skin.service.ThemeSkinService
 // Email: guihy2019@gmail.com
 // Date: 2023/9/25
 
-/**
- * [MaskLayoutActivity].
- */
+/** [MaskLayoutActivity]. */
 @androidx.annotation.OptIn(ExperimentalView::class)
 class MaskLayoutActivity : AppCompatActivity(R.layout.activity_mask_layout),
     MaskLayout.MaskAnimationListener {
@@ -129,10 +126,7 @@ class MaskLayoutActivity : AppCompatActivity(R.layout.activity_mask_layout),
         cursor?.close()
     }
 
-    /**
-     * 检查数据库是否包含 **phonebook_label** 字段，
-     * 如果没有则用 [Phone.SORT_KEY_PRIMARY] 替代。
-     */
+    /** 检查数据库是否包含 **phonebook_label** 字段， 如果没有则用 [Phone.SORT_KEY_PRIMARY] 替代。 */
     private fun checkPhonebooLabel(): String {
         var cursor: Cursor? = null
         var key = "phonebook_label"

@@ -23,7 +23,6 @@ import android.os.Build
 import android.os.Bundle
 import android.webkit.MimeTypeMap
 import androidx.activity.result.contract.ActivityResultContracts
-import com.ave.vastgui.app.activity.log.mLogFactory
 import com.ave.vastgui.app.databinding.ActivityCropImageBinding
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.activity.app.VastCropActivity
@@ -36,7 +35,6 @@ import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.cropimage.CropIntent
 import com.ave.vastgui.tools.utils.permission.Permission
 import com.ave.vastgui.tools.utils.permission.requestPermission
-import com.ave.vastgui.tools.view.toast.SimpleToast
 import java.io.File
 
 // Author: Vast Gui

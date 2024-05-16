@@ -24,9 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 // Email: guihy2019@gmail.com
 // Date: 2024/1/2
 
-/**
- * 开源 Api ，点击[开放API-2.0](https://api.apiopen.top)
- */
+/** 开源 Api ，点击[开放API-2.0](https://api.apiopen.top) */
 class OpenApi : RequestBuilder("https://api.apiopen.top") {
     override fun retrofitConfiguration(builder: Retrofit.Builder) {
         super.retrofitConfiguration(builder)

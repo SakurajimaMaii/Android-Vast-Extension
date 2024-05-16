@@ -17,23 +17,13 @@
 package com.ave.vastgui.app.activity.graphics
 
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.GradientDrawable.RECTANGLE
 import android.os.Bundle
-import android.util.Log
-import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityGradientDrawableBinding
 import com.ave.vastgui.tools.activity.VastVbActivity
-import com.ave.vastgui.tools.graphics.leftBottomRadius
-import com.ave.vastgui.tools.graphics.leftTopRadius
-import com.ave.vastgui.tools.graphics.rightBottomRadius
-import com.ave.vastgui.tools.graphics.rightTopRadius
-import com.ave.vastgui.tools.graphics.setCornerRadii
 import com.ave.vastgui.tools.graphics.setGradient
-import com.ave.vastgui.tools.graphics.setSingle
 import com.ave.vastgui.tools.utils.ColorUtils.colorHex2Int
-import com.ave.vastgui.tools.utils.DensityUtils.DP
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

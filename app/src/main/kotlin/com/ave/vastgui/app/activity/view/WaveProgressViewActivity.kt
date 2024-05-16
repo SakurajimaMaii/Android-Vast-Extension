@@ -51,16 +51,16 @@ class WaveProgressViewActivity : AppCompatActivity() {
             mTextSize = 30f.SP
         }
 
-        mBinding.progressSlider.addOnChangeListener{ _, value, _ ->
+        mBinding.progressSlider.addOnChangeListener { _, value, _ ->
             mBinding.waveProgressView.mCurrentProgress = value
             mBinding.imageProgressView.mCurrentProgress = value
         }
 
-        mBinding.strokeSlider.addOnChangeListener{ _, value, _ ->
+        mBinding.strokeSlider.addOnChangeListener { _, value, _ ->
             mBinding.waveProgressView.mStrokeWidth = 20f.DP * (value / 100f)
         }
 
-        mBinding.spaceSlider.addOnChangeListener{ _, value, _ ->
+        mBinding.spaceSlider.addOnChangeListener { _, value, _ ->
             mBinding.waveProgressView.mSpaceWidth = 20f.DP * (value / 100f)
         }
     }

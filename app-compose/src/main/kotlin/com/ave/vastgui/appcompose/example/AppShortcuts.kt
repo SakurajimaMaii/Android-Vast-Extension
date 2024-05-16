@@ -71,8 +71,12 @@ fun DynamicAppShortcuts(modifier: Modifier = Modifier) {
                 .setShortLabel("Website")
                 .setLongLabel("Open the website")
                 .setIcon(IconCompat.createWithResource(context, R.drawable.ic_launcher_foreground))
-                .setIntent(Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://www.mysite.example.com/")))
+                .setIntent(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://www.mysite.example.com/")
+                    )
+                )
                 .build()
             setDynamicShortcuts(listOf(shortcut))
         },

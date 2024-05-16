@@ -20,4 +20,4 @@ package com.ave.vastgui.app.adapter.entity
 // Email: guihy2019@gmail.com
 // Date: 2023/9/25
 
-data class Contact(val name: String, val number: String,val label: String = "")
+data class Contact(val name: String, val number: String, val label: String = "")

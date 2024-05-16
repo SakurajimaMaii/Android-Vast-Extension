@@ -29,10 +29,15 @@ subprojects {
         dokkaSourceSets.configureEach {
             notCompatibleWithConfigurationCache("https://github.com/Kotlin/dokka/issues/1217")
             jdkVersion.set(17)
-            languageVersion.set("1.9.10")
+            languageVersion.set("1.9.20")
             suppressInheritedMembers.set(true)
             documentedVisibilities.set(
-                setOf(DokkaConfiguration.Visibility.PUBLIC, DokkaConfiguration.Visibility.PROTECTED, DokkaConfiguration.Visibility.PRIVATE, DokkaConfiguration.Visibility.INTERNAL)
+                setOf(
+                    DokkaConfiguration.Visibility.PUBLIC,
+                    DokkaConfiguration.Visibility.PROTECTED,
+                    DokkaConfiguration.Visibility.PRIVATE,
+                    DokkaConfiguration.Visibility.INTERNAL
+                )
             )
         }
     }

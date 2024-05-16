@@ -35,7 +35,7 @@ class TextViewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        screenConfig(mEnableActionBar = true,mEnableFullScreen = false)
+        screenConfig(mEnableActionBar = true, mEnableFullScreen = false)
 
         mBinding.mailBoxAssociateView.apply {
             setAdapter(defaultMailBoxAssociateViewAdapter())
