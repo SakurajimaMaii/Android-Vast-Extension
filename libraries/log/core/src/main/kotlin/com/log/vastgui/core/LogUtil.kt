@@ -28,7 +28,7 @@ import kotlin.properties.Delegates
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
+// Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
 
 /**
  * LogUtils.
@@ -338,15 +338,8 @@ class LogUtil internal constructor() {
         mLogStorage?.storeLog(logInfo)
     }
 
-    /**
-     * Enable storage
-     *
-     * @since 0.5.3
-     */
-    private fun LogInfo.enableStorage() = this.mLevel >= mLevel
-
     companion object {
         /** @since 1.3.1 */
-        const val TAG = "VastLog"
+        const val TAG = "log-core"
     }
 }

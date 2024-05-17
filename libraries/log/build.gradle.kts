@@ -14,27 +14,6 @@
  * limitations under the License.
  */
 
-package com.log.vastgui.core.json
-
-// Author: Vast Gui
-// Email: guihy2019@gmail.com
-// Date: 2023/8/29
-// Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
-
-/**
- * Converter
- *
- * @since 0.5.2
- */
-interface Converter {
-    val isPretty: Boolean
-
-    fun toJson(data: Any): String
-
-    /**
-     * Parse string as json object.
-     *
-     * @since 1.3.1
-     */
-    fun parseString(jsonString: String): Any
+tasks.dokkaHtmlMultiModule {
+    dependsOn(":libraries:dokkaHtmlMultiModule")
 }
