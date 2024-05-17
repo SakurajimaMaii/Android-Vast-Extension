@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +27,14 @@ import java.util.Locale
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/5/15 22:52
-// Description: 
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/log/log-desktop/usage/
 // Reference: https://github.com/setruth/SetruthTools/blob/master/KLogr/src/main/kotlin/org/setruth/tools/klogr/KLogr.kt
 
 private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
 
 /**
  * Desktop log store.
+ *
  * ```kotlin
  * val mLogFactory: LogFactory = getLogFactory {
  *     ...
@@ -84,9 +84,7 @@ class DesktopStore : LogStore {
         "$time [${info.mLevel}|${info.mTag}|${info.mThreadName}] (${info.mMethodStackTrace?.fileName}:${info.mMethodStackTrace?.lineNumber}) ${info.mContent}"
     }
 
-    /**
-     * @since 1.3.1
-     */
+    /** @since 1.3.1 */
     override fun store(info: LogInfo) {
         storage(info)
     }
@@ -120,7 +118,10 @@ class DesktopStore : LogStore {
         } else {
             val lastFile = fileNameList.last()
             if (lastFile.length() >= fileMaxSize) {
-                File(fileRoot, "$fileNamePrefix(${fileNameList.size}).txt").apply { createNewFile() }
+                File(
+                    fileRoot,
+                    "$fileNamePrefix(${fileNameList.size}).txt"
+                ).apply { createNewFile() }
             } else {
                 lastFile
             }

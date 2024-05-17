@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ package com.log.vastgui.desktop.base
 // Email: guihy2019@gmail.com
 // Date: 2024/5/15 10:43
 // Description: Text color of log content in terminal.
-// Documentation:
+// Documentation: https://ave.entropy2020.cn/documents/log/log-desktop/usage/
 
 const val Reset  = "\u001B[0m"
 const val Red    = "\u001B[31m"
