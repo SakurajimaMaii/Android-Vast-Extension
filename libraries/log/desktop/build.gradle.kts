@@ -1,3 +1,20 @@
+/*
+ * Copyright 2024 VastGui
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -7,7 +24,7 @@ plugins {
 }
 
 group = "io.github.sakurajimamaii"
-version = "1.3.1"
+version = libs.versions.ave.get()
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -28,8 +45,8 @@ kotlin.sourceSets.all {
 }
 
 dependencies {
-    implementation(projects.libraries.log.core)
-    implementation(libs.junit)
+    implementation(libs.log.core)
+    testImplementation(libs.junit)
     testImplementation(libs.gson)
     testImplementation(libs.fastjson2.kotlin)
     testImplementation(libs.jackson.databind)
@@ -38,19 +55,22 @@ dependencies {
 
 extra["PUBLISH_ARTIFACT_ID"] = "log-core"
 extra["PUBLISH_DESCRIPTION"] = "Desktop for log"
-extra["PUBLISH_URL"] =
-    "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/log/desktop"
+extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/log/desktop"
 
 publishing {
     publications {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "log-desktop"
-            version = "1.3.1"
+            version = libs.versions.ave.get()
 
             afterEvaluate {
                 from(components["java"])
             }
         }
     }
+}
+
+tasks.withType<DokkaTaskPartial> {
+    moduleName.set("log-desktop")
 }

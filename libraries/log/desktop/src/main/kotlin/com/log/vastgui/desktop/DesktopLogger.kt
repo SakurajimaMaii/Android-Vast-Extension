@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,14 +31,12 @@ import com.log.vastgui.desktop.base.Yellow
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/5/14 23:04
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/log/log-desktop/usage/
 
+/** @since 1.3.1 */
 private val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
 
 /**
@@ -61,8 +59,7 @@ fun Logger.Companion.desktop(): DesktopLogger = DesktopLogger()
  * Desktop logger Implementation.You can view the following image to
  * preview the printing effect.
  *
- * @see <img
- *     src="file:///D:/WorkSpace/GitSpaceAndroid/Android-Vast-Extension/Android-Vast-Extension/libraries/log/desktop/image/log.png"/>
+ * @see <img src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/desktop/image/log.png?raw=true"/>
  * @since 1.3.1
  */
 class DesktopLogger internal constructor() : Logger {
