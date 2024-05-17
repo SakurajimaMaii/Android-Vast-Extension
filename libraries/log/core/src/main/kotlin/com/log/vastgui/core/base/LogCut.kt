@@ -21,7 +21,7 @@ import com.log.vastgui.core.annotation.LogApi
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/7
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
+// Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
 
 /**
  * Return true if the content of the [LogInfo] does not need to be split,

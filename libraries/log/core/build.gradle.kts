@@ -1,8 +1,10 @@
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("java-library")
     id("convention.publication")
+    id("org.jetbrains.dokka")
     alias(libs.plugins.kotlinJvm)
 }
 
@@ -51,4 +53,8 @@ publishing {
             }
         }
     }
+}
+
+tasks.withType<DokkaTaskPartial> {
+    moduleName.set("log-core")
 }

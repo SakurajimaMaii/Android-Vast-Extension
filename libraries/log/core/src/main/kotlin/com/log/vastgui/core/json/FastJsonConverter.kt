@@ -23,7 +23,7 @@ import com.alibaba.fastjson2.JSONWriter
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/29
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
+// Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
 
 /**
  * Fast json converter
