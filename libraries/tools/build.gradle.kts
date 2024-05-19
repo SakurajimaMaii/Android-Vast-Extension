@@ -78,7 +78,7 @@ kotlin.sourceSets.all {
 dependencies {
     api(libs.security.crypto)
     api(libs.zxing.core)
-    api(projects.libraries.log.core)
+    api(libs.log.core)
     implementation(libs.activity.ktx)
     implementation(libs.annotation)
     implementation(libs.appcompat)
@@ -118,7 +118,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "VastTools"
-            version = "1.2.1"
+            version = libs.versions.tools.get()
 
             afterEvaluate {
                 from(components["release"])

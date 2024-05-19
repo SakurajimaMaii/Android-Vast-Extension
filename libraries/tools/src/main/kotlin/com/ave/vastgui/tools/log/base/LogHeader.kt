@@ -21,9 +21,7 @@ import com.log.vastgui.core.base.LogInfo
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/5/13 20:53
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/logger/#_4
 
 /**
  * Log header configuration.
