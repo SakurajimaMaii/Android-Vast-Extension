@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "io.github.sakurajimamaii"
-version = libs.versions.ave.get()
+version = libs.versions.log.get()
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -46,7 +46,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "log-core"
-            version = libs.versions.ave.get()
+            version = libs.versions.log.get()
 
             afterEvaluate {
                 from(components["java"])

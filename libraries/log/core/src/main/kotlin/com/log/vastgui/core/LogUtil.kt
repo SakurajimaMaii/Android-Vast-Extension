@@ -272,16 +272,19 @@ class LogUtil internal constructor() {
             throw RuntimeException("Please init mLogConverter by LogJson.")
         if (!logEnabled) return
         val jsonString = mLogConverter!!.toJson(target)
-        val logInfo =
-            LogInfo(
-                Thread.currentThread(),
-                level,
-                mDefaultTag,
-                System.currentTimeMillis(),
-                jsonString,
-                JSON_TYPE,
-                null
-            )
+        val thread = Thread.currentThread()
+        val index =
+            thread.stackTrace.indexOfLast { it.className == LogUtil::class.java.name }
+        val logInfo = LogInfo(
+            thread.name,
+            thread.stackTrace[index + 1],
+            level,
+            mDefaultTag,
+            System.currentTimeMillis(),
+            jsonString,
+            JSON_TYPE,
+            null
+        )
         mLogPrinter.printLog(logInfo)
         mLogStorage?.storeLog(logInfo)
     }
@@ -298,8 +301,12 @@ class LogUtil internal constructor() {
             throw RuntimeException("Please init mLogConverter by LogJson.")
         if (!logEnabled) return
         val jsonString = mLogConverter!!.toJson(target)
+        val thread = Thread.currentThread()
+        val index =
+            thread.stackTrace.indexOfLast { it.className == LogUtil::class.java.name }
         val logInfo = LogInfo(
-            Thread.currentThread(),
+            thread.name,
+            thread.stackTrace[index + 1],
             level,
             tag,
             System.currentTimeMillis(),
@@ -325,8 +332,12 @@ class LogUtil internal constructor() {
         content: String,
         tr: Throwable? = null
     ) {
+        val thread = Thread.currentThread()
+        val index =
+            thread.stackTrace.indexOfLast { it.className == LogUtil::class.java.name }
         val logInfo = LogInfo(
-            Thread.currentThread(),
+            thread.name,
+            thread.stackTrace[index + 1],
             level,
             tag,
             System.currentTimeMillis(),

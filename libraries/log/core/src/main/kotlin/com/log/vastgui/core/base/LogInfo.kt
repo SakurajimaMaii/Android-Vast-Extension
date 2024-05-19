@@ -16,7 +16,6 @@
 
 package com.log.vastgui.core.base
 
-import com.log.vastgui.core.LogUtil
 import com.log.vastgui.core.annotation.LogApi
 
 // Author: Vast Gui
@@ -41,7 +40,9 @@ const val JSON_TYPE = 0x02
 /**
  * Log information.
  *
- * @property mCurrentThread The current thread.
+ * @property mThreadName The name of the current thread.
+ * @property mStackTrace an array of stack trace elements representing the
+ *     stack dump of LogInfo.
  * @property mLevel The level of the log.
  * @property mTag Used to identify the source of a log message. It usually
  *     identifies the class or activity where the log call occurs.
@@ -49,12 +50,11 @@ const val JSON_TYPE = 0x02
  * @property mType Please refer to [TEXT_TYPE] or [JSON_TYPE].
  * @property mTime The current time in milliseconds, only initialized when
  *     the object is created.
- * @property mThreadName The name of the current thread.
- * @property mMethodStackTrace The stack trace of the current method.
  * @since 0.5.2
  */
-data class LogInfo @LogApi constructor(
-    private val mCurrentThread: Thread,
+class LogInfo @LogApi constructor(
+    val mThreadName: String,
+    val mStackTrace: StackTraceElement?,
     val mLevel: LogLevel,
     val mTag: String,
     val mTime: Long,
@@ -62,24 +62,12 @@ data class LogInfo @LogApi constructor(
     val mType: Int,
     val mThrowable: Throwable? = null
 ) {
-    val mMethodStackTrace: StackTraceElement? = mCurrentThread.stackTrace.let {
-        val stackTrace = mCurrentThread.stackTrace
-        val methodStackTraceIndex = stackTrace.indexOfLast {
-            it.className == LogUtil::class.java.name
-        } + 1
-        stackTrace[methodStackTraceIndex]
-    }
+    val mTraceLength = mStackTrace.toString().length
 
-    val mTraceLength = mMethodStackTrace.toString().length
+    val mPrintLength = mTraceLength.coerceAtLeast(mContent.length)
 
-    val mContentLength = mContent.length
-
-    val mPrintLength = mTraceLength.coerceAtLeast(mContentLength)
-
-    val mPrintBytesLength = if (mTraceLength >= mContentLength) mMethodStackTrace.toString()
+    val mPrintBytesLength = if (mTraceLength >= mContent.length) mStackTrace.toString()
         .toByteArray().size else mContent.toByteArray().size
-
-    val mThreadName: String = mCurrentThread.name
 
     val mLevelPriority: Int = mLevel.priority
 
@@ -90,7 +78,7 @@ data class LogInfo @LogApi constructor(
             Tag:$mTag
             Time:$mTime
             ThreadName:$mThreadName
-            MethodStackTrace:$mMethodStackTrace
+            StackTrace:$mStackTrace
             Content:$mContent
             Exception:${mThrowable?.stackTraceToString()})
             """.trimIndent()
