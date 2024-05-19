@@ -16,9 +16,10 @@
 
 package com.ave.vastgui.tools.log
 
-import android.annotation.SuppressLint
-import android.content.ComponentCallbacks2
 import android.util.Log
+import com.ave.vastgui.tools.log.base.LogHeader
+import com.ave.vastgui.tools.log.base.LogScope
+import com.ave.vastgui.tools.log.base.timeSdf
 import com.log.vastgui.core.LogUtil
 import com.log.vastgui.core.base.JSON_TYPE
 import com.log.vastgui.core.base.LogDivider
@@ -28,28 +29,15 @@ import com.log.vastgui.core.base.Logger
 import com.log.vastgui.core.base.TEXT_TYPE
 import com.log.vastgui.core.base.cutStr
 import com.log.vastgui.core.base.needCut
-import com.ave.vastgui.tools.content.ContextHelper
-import com.ave.vastgui.tools.log.base.LogHeader
-import com.ave.vastgui.tools.utils.DateUtils
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
+import kotlin.coroutines.CoroutineContext
 import kotlin.properties.Delegates
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/5/13 20:48
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/logger/
 
 /**
  * Default maximum length of chars printed of a single log.
@@ -66,12 +54,17 @@ private const val DEFAULT_MAX_SINGLE_LOG_LENGTH = 1000
  */
 private const val DEFAULT_MAX_PRINT_TIMES = Int.MAX_VALUE
 
-/** @since 1.3.1 */
-@SuppressLint("ConstantLocale")
-private val timeSdf = SimpleDateFormat(DateUtils.FORMAT_YYYY_MM_DD_HH_MM_SS, Locale.getDefault())
-
 /**
- * [Logger] default implementation.
+ * Android Logger.
+ *
+ * ```kotlin
+ * val mLogFactory: LogFactory = getLogFactory {
+ *     ...
+ *     install(LogPrinter) {
+ *         logger = Logger.android(30,5)
+ *     }
+ * }
+ * ```
  *
  * @param maxSingleLogLength The max length of single line of log. every
  *     char in line is calculated as 4 bytes.
@@ -88,41 +81,17 @@ fun Logger.Companion.android(
 ): AndroidLogger = AndroidLogger(maxSingleLogLength, maxPrintTimes, header)
 
 /**
- * Default logger.
+ * Android logger.
  *
+ * @see <img src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/tools/image/log.png?raw=true">
  * @since 1.3.1
  */
 class AndroidLogger internal constructor(
     private val mMaxSingleLogLength: Int,
     private val mMaxPrintTimes: Int,
     private val mHeader: LogHeader
-) : Logger {
+) : LogScope(), Logger {
     private var mLogInfo by Delegates.notNull<LogInfo>()
-
-    /** @since 1.3.1 */
-    private val mHandler = CoroutineExceptionHandler { _, exception ->
-        val logInfo = LogInfo(
-            Thread.currentThread(),
-            LogLevel.ERROR,
-            LogUtil.TAG,
-            System.currentTimeMillis(),
-            exception.stackTraceToString(),
-            TEXT_TYPE,
-            null
-        )
-        log(logInfo)
-    }
-
-    /** @since 1.3.1 */
-    private val mLogScope: CoroutineScope =
-        CoroutineScope(SupervisorJob() + Dispatchers.IO + CoroutineName("LogScope") + mHandler)
-
-    /**
-     * A channel of [LogInfo].
-     *
-     * @since 1.3.1
-     */
-    private val mLogChannel: Channel<LogInfo> = Channel()
 
     override fun log(info: LogInfo) {
         mLogScope.launch { mLogChannel.send(info) }
@@ -147,9 +116,9 @@ class AndroidLogger internal constructor(
             var count = 0
             var printTheRest = true
             printLog(mMaxSingleLogLength * 4) { content ->
-                // FIX: DEAL LINESEPARATOR THAT EXIST WITHIN THE LOG CONTENT
+                // FIX: DEAL LINE SEPARATOR THAT EXIST WITHIN THE LOG CONTENT
                 val patterns = content.split(System.lineSeparator())
-                patterns.forEachIndexed { index, pattern ->
+                patterns.forEach { pattern ->
                     var bytes = pattern.toByteArray()
                     if (mMaxSingleLogLength * 4 < bytes.size) {
                         do {
@@ -219,7 +188,7 @@ class AndroidLogger internal constructor(
         }
         printLog(LogDivider.getInfo("$thread $tag $level $time"))
         printLog(LogDivider.getDivider(len))
-        printLog(LogDivider.getInfo("${mLogInfo.mMethodStackTrace}"))
+        printLog(LogDivider.getInfo("${mLogInfo.mStackTrace}"))
         printLog(LogDivider.getDivider(len))
         customScope(mContent)
         mLogInfo.mThrowable?.apply {
@@ -237,20 +206,22 @@ class AndroidLogger internal constructor(
         Log.println(mLogInfo.mLevelPriority, mLogInfo.mTag, content)
     }
 
+    override fun handleCoroutineExceptionHandler(context: CoroutineContext, exception: Throwable) {
+        val thread = Thread.currentThread()
+        val logInfo = LogInfo(
+            thread.name,
+            null,
+            LogLevel.ERROR,
+            LogUtil.TAG,
+            System.currentTimeMillis(),
+            exception.stackTraceToString(),
+            TEXT_TYPE,
+            null
+        )
+        log(logInfo)
+    }
+
     init {
-        ContextHelper.getApp().registerComponentCallbacks(object : ComponentCallbacks2 {
-            override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
-
-            }
-
-            override fun onLowMemory() {
-                mLogScope.cancel("Cancel mLogScope onLowMemory.")
-            }
-
-            override fun onTrimMemory(level: Int) {
-
-            }
-        })
         mLogScope.launch {
             while (isActive) {
                 val info = mLogChannel.receive()

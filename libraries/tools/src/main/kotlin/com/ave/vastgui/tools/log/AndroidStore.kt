@@ -17,120 +17,95 @@
 package com.ave.vastgui.tools.log
 
 import android.os.Build
-import com.ave.vastgui.core.extension.NotNullOrDefault
+import androidx.annotation.IntRange
+import com.ave.vastgui.tools.log.base.LogScope
 import com.ave.vastgui.tools.log.base.LogSp
+import com.ave.vastgui.tools.log.base.fileNameTimeSdf
+import com.ave.vastgui.tools.log.base.timeSdf
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.utils.AppUtils
-import com.ave.vastgui.tools.utils.DateUtils
+import com.google.gson.JsonParser
+import com.log.vastgui.core.base.JSON_TYPE
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogLevel
 import com.log.vastgui.core.base.LogStore
-import com.log.vastgui.core.base.cutStr
+import com.log.vastgui.core.base.TEXT_TYPE
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.serialization.json.JsonNull.content
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
 import java.nio.file.Files
 import java.nio.file.attribute.BasicFileAttributes
 import java.text.SimpleDateFormat
-import java.util.Locale
+import kotlin.coroutines.CoroutineContext
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/5/13 23:36
+// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/store/
 
 /**
- * Time of the log.
+ * Android LogStore.
  *
- * @since 0.5.3
+ * ```kotlin
+ * val mLogFactory: LogFactory = getLogFactory {
+ *     ...
+ *     install(LogStorage) {
+ *         logStore = LogStore.android()
+ *     }
+ * }
+ * ```
+ *
+ * @since 1.3.1
  */
-data class Time internal constructor(private val mills: Long, private val format: String) {
-    override fun toString(): String =
-        SimpleDateFormat(format, Locale.getDefault()).format(mills)
-}
+@JvmOverloads
+fun LogStore.Companion.android(
+    fileRoot: File = File(FileMgr.appInternalFilesDir(), "log"),
+    fileNamePrefix: String = AppUtils.getAppName(),
+    fileNameDateSuffixSdf: SimpleDateFormat = fileNameTimeSdf,
+    @IntRange(from = 0L, to = Long.MAX_VALUE) fileMaxSize: Long = 1000 * 1024L,
+    storageFormat: (LogInfo) -> String = { info ->
+        """
+        ${timeSdf.format(info.mTime)} ${info.mLevel} [${info.mThreadName}] ${info.mTag} 
+         (${info.mStackTrace?.fileName}:${info.mStackTrace?.lineNumber}) ${info.mContent}
+        """.trimIndent().replace("\n", "")
+    }
+): AndroidStore =
+    AndroidStore(fileRoot, fileNamePrefix, fileNameDateSuffixSdf, fileMaxSize, storageFormat)
 
 /**
  * Android log store.
  *
- * @property mFileNameDateSuffix The date suffix string of the log file
- *     name.
+ * @property fileRoot Folder to store log files.
+ * @property fileNamePrefix File name prefix.
+ * @property fileNameDateSuffixSdf Date format of file name date suffix.
+ * @property fileMaxSize The size of a single log file(in bytes).
+ * @property storageFormat The content format in log file.
  * @property mFileName The name of the log file.
- * @property mMaxBytesSize The max bytes size of the log file.
- * @property mStorageFormat The content format in log file.
- * @property mLevel The level corresponding to the log currently being
- *     saved to the log file.
  * @property mLogSp LogSp is used to save the log file name of the last
  *     operation.
  * @property mCurrentFile Current file which will save log.
+ * @since 1.3.1
  */
-class AndroidStore : LogStore {
-
-    /**
-     * Folder to store log files, default value is
-     * [FileMgr.appInternalFilesDir].
-     *
-     * @since 0.5.3
-     */
-    var fileRoot by NotNullOrDefault(FileMgr.appInternalFilesDir())
-
-    /**
-     * File name prefix. Default value is the app name.
-     *
-     * @see AppUtils.getAppName
-     * @since 0.5.3
-     */
-    var fileNamePrefix by NotNullOrDefault(AppUtils.getAppName())
-
-    /**
-     * The size of a single log file(in bytes).
-     *
-     * @since 0.5.3
-     */
-    var fileMaxSize by NotNullOrDefault(1024L)
-
-    /**
-     * The log level that will be recorded
-     *
-     * @see LogLevel
-     * @since 0.5.3
-     */
-    var level by NotNullOrDefault(LogLevel.DEBUG)
-
-    /**
-     * Current date format.
-     *
-     * @see DateUtils
-     * @since 0.5.3
-     */
-    var currentDateFormat by NotNullOrDefault(DateUtils.FORMAT_YYYY_MM_DD_HH_MM_SS)
-
-    /**
-     * Storage format.
-     *
-     * @since 0.5.3
-     */
-    var storageFormat: (Time, LogLevel, String) -> String by
-    NotNullOrDefault { time, logLevel, s -> "$time || $logLevel || $s" }
-
-    private val mFileNameDateSuffix = System.currentTimeMillis().toString()
+class AndroidStore internal constructor(
+    val fileRoot: File,
+    val fileNamePrefix: String,
+    val fileNameDateSuffixSdf: SimpleDateFormat,
+    val fileMaxSize: Long,
+    val storageFormat: (LogInfo) -> String
+) : LogScope(), LogStore {
 
     private val mFileName: String
-        get() = "${fileNamePrefix}_${mFileNameDateSuffix}.log"
-
-    private val mMaxBytesSize: Long
-        get() = fileMaxSize
-
-    private val mStorageFormat
-        get() = storageFormat
-
-    private val mLevel
-        get() = level
+        get() = "${fileNamePrefix}_${fileNameDateSuffixSdf.format(System.currentTimeMillis())}.log"
 
     private val mLogSp by lazy { LogSp() }
 
     private var mCurrentFile = getCurrentFile()
 
     override fun store(info: LogInfo) {
-        storage(info)
+        mLogScope.launch { mLogChannel.send(info) }
     }
 
     /**
@@ -139,50 +114,23 @@ class AndroidStore : LogStore {
      * @since 0.5.3
      */
     private fun storage(logInfo: LogInfo) {
-        if (logInfo.mLevel < mLevel) return
-        val time = logInfo.getCurrentTime()
-        storage(time, logInfo.mLevel, "Thread: ${logInfo.mThreadName}")
-        storage(time, logInfo.mLevel, "${logInfo.mMethodStackTrace}")
-        if (logInfo.mContentLength <= logInfo.mTraceLength) {
-            storage(time, logInfo.mLevel, logInfo.mContent)
+        val message = if (JSON_TYPE == logInfo.mType) {
+            val info = LogInfo(
+                logInfo.mThreadName,
+                logInfo.mStackTrace,
+                logInfo.mLevel,
+                logInfo.mTag,
+                logInfo.mTime,
+                JsonParser.parseString(logInfo.mContent).asJsonObject.toString(),
+                logInfo.mType,
+                logInfo.mThrowable
+            )
+            storageFormat(info)
         } else {
-            var bytes = logInfo.mContent.toByteArray()
-            while (logInfo.mTraceLength * 4 < bytes.size) {
-                val subStr = bytes.cutStr(logInfo.mTraceLength)
-                storage(time, logInfo.mLevel, String.format("%s", subStr))
-                bytes = bytes.copyOfRange(subStr.toByteArray().size, bytes.size)
-            }
-            storage(time, logInfo.mLevel, String.format("%s", String(bytes)))
+            storageFormat(logInfo)
         }
-        logInfo.mThrowable?.apply {
-            storage(time, logInfo.mLevel, "$this")
-            for (item in this.stackTrace) {
-                storage(time, logInfo.mLevel, "  at $item")
-            }
-        }
-    }
-
-    /**
-     * Storage the [logInfo] to file.
-     *
-     * @since 0.5.3
-     */
-    internal fun storageJson(logInfo: LogInfo) {
-        if (logInfo.mLevel < mLevel) return
-        val time = logInfo.getCurrentTime()
-        storage(time, logInfo.mLevel, "Thread: ${logInfo.mThreadName}")
-        storage(time, logInfo.mLevel, "${logInfo.mMethodStackTrace}")
-        for (line in logInfo.mContent.split("\n")) {
-            storage(time, logInfo.mLevel, line)
-        }
-    }
-
-    /** @since 0.5.3 */
-    @Throws(RuntimeException::class)
-    private fun storage(time: Time, level: LogLevel, content: String) {
-        val message = mStorageFormat(time, level, content)
         val currentNeedSize = mCurrentFile.getCurrentSize() + message.toByteArray().size.toLong()
-        if (currentNeedSize > mMaxBytesSize) {
+        if (currentNeedSize > fileMaxSize) {
             mCurrentFile = getCurrentFile(true)
         }
         mCurrentFile.storage(message)
@@ -200,6 +148,9 @@ class AndroidStore : LogStore {
         if (appendFile) {
             mLogSp.mCurrentFileName = mFileName
         }
+        if(!fileRoot.exists()){
+            FileMgr.makeDir(fileRoot).result.onFailure { throw it }
+        }
         val file = File(fileRoot, mLogSp.mCurrentFileName)
         if (!file.exists()) {
             FileMgr.saveFile(file).result
@@ -207,13 +158,6 @@ class AndroidStore : LogStore {
         }
         return file
     }
-
-    /**
-     * Get current save time for the log.
-     *
-     * @since 0.5.3
-     */
-    private fun LogInfo.getCurrentTime() = Time(mTime, currentDateFormat)
 
     /**
      * Save the [message] to the specified file.
@@ -237,6 +181,32 @@ class AndroidStore : LogStore {
         Files.readAttributes(toPath(), BasicFileAttributes::class.java).size()
     } else {
         length()
+    }
+
+    override fun handleCoroutineExceptionHandler(context: CoroutineContext, exception: Throwable) {
+        val thread = Thread.currentThread()
+        val stackTrace =
+            thread.stackTrace.findLast { it.className == AndroidStore::class.java.name }
+        val logInfo = LogInfo(
+            thread.name,
+            stackTrace,
+            LogLevel.ERROR,
+            "AndroidStore",
+            System.currentTimeMillis(),
+            content,
+            TEXT_TYPE,
+            exception
+        )
+        storage(logInfo)
+    }
+
+    init {
+        mLogScope.launch {
+            while (isActive) {
+                val info = mLogChannel.receive()
+                storage(info)
+            }
+        }
     }
 
 }
