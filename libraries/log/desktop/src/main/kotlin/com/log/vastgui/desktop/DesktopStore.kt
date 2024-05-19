@@ -81,7 +81,7 @@ class DesktopStore : LogStore {
      */
     var storageFormat: (LogInfo) -> String by NotNullOrDefault { info ->
         val time = DateFormat.getDateTimeInstance().format(info.mTime)
-        "$time [${info.mLevel}|${info.mTag}|${info.mThreadName}] (${info.mMethodStackTrace?.fileName}:${info.mMethodStackTrace?.lineNumber}) ${info.mContent}"
+        "$time [${info.mLevel}|${info.mTag}|${info.mThreadName}] (${info.mStackTrace?.fileName}:${info.mStackTrace?.lineNumber}) ${info.mContent}"
     }
 
     /** @since 1.3.1 */

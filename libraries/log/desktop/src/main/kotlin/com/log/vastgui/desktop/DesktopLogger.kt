@@ -67,7 +67,7 @@ class DesktopLogger internal constructor() : Logger {
     override fun log(info: LogInfo) {
         val time = sdf.format(info.mTime)
         val logStrInfo =
-            "$Cyan$time$Reset ${info.headColor()}[${info.mLevel}|${info.mTag}|${info.mThreadName}]$Reset $Blue(${info.mMethodStackTrace?.fileName}:${info.mMethodStackTrace?.lineNumber})$Reset ${info.mContent}"
+            "$Cyan$time$Reset ${info.headColor()}[${info.mLevel}|${info.mTag}|${info.mThreadName}]$Reset $Blue(${info.mStackTrace?.fileName}:${info.mStackTrace?.lineNumber})$Reset ${info.mContent}"
         println(logStrInfo)
     }
 

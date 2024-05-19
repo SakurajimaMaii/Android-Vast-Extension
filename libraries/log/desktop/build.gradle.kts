@@ -24,7 +24,7 @@ plugins {
 }
 
 group = "io.github.sakurajimamaii"
-version = libs.versions.ave.get()
+version = libs.versions.log.get()
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -53,7 +53,7 @@ dependencies {
     testImplementation(libs.fastjson2)
 }
 
-extra["PUBLISH_ARTIFACT_ID"] = "log-core"
+extra["PUBLISH_ARTIFACT_ID"] = "log-desktop"
 extra["PUBLISH_DESCRIPTION"] = "Desktop for log"
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/log/desktop"
 
@@ -62,7 +62,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "log-desktop"
-            version = libs.versions.ave.get()
+            version = libs.versions.log.get()
 
             afterEvaluate {
                 from(components["java"])
