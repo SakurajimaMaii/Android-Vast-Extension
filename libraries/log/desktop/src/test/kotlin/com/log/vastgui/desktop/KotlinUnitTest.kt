@@ -19,7 +19,6 @@ package com.log.vastgui.desktop
 import com.log.vastgui.core.base.LogLevel
 import org.junit.Test
 
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/5/14 23:59

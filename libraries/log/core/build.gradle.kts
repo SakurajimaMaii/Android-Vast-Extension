@@ -31,6 +31,7 @@ kotlin.sourceSets.all {
 
 dependencies {
     api(libs.vastcore)
+    testImplementation(libs.junit)
     implementation(libs.fastjson2)
     implementation(libs.gson)
     implementation(libs.jackson.databind)
