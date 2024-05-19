@@ -49,6 +49,24 @@
     implementation("io.github.sakurajimamaii:VastAdapter:$version")
     ```
 
+- **log-core**
+
+  Core of log. Lastest
+  version ![version](https://img.shields.io/maven-central/v/io.github.sakurajimamaii/log-core)
+
+    ```kotlin
+    implementation("io.github.sakurajimamaii:log-core:$version")
+    ```
+
+- **log-desktop**
+
+  Desktop of log. Lastest
+  version ![version](https://img.shields.io/maven-central/v/io.github.sakurajimamaii/log-desktop)
+
+    ```kotlin
+    implementation("io.github.sakurajimamaii:log-desktop:$version")
+    ```
+
 ## Document
 
 Please click [Android-Vast-Extension](https://ave.entropy2020.cn/) to get detailed documentation

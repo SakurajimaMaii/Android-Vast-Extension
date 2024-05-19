@@ -17,14 +17,16 @@
 package com.ave.vastgui.app.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.widget.EditText
-import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.app.databinding.ActivityFileBinding
+import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.tools.activity.VastVbActivity
+import com.ave.vastgui.tools.bean.UserBean
+import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.view.extension.hideKeyBroad
 import com.ave.vastgui.tools.view.extension.isShouldHideKeyBroad
+import com.log.vastgui.core.base.LogLevel
 
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com
@@ -37,27 +39,28 @@ class FileActivity : VastVbActivity<ActivityFileBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val length = FileMgr.appInternalFilesDir().length()
         getBinding().button.setOnClickListener {
-            getBinding().editView.hideKeyBroad()
-            mLogger.d(
-                "中华人民共和国是一个位于东亚的社会主义国家[1]，首都为北京市[17]，领土东至黑龙江省抚远市的黑瞎子岛中部，西达新疆克孜勒苏境内的帕米尔高原，南抵海南省三沙市的南海海域，北及黑龙江省大兴安岭地区的黑龙江航道，国土面积约为960万平方千米。全国共划分为23个省[注 15]、5个自治区、4个直辖市和2个特别行政区，是世界上总面积第三或第四大的国家（仅陆地面积为世界第二）[注 16][18]。" +
-                        "第二次世界大战结束后，毛泽东领导下的中国共产党和中国人民解放军在第二次国共内战中逐步取得优势，于1949年10月1日在北京宣布成立中华人民共和国中央人民政府，并实际控制中国大陆地区，与迁至台湾地区的中华民国政府形成至今的分治格局。[19]" +
-                        "截至2023年末，中华人民共和国有约14.1亿人[注 17][20]，约占世界人口的17.6%[注 18]，其也是一个多民族国家，官方承认的民族共有56个，其中汉族占总人口的91.51%[22]。在悠久的历史发展中，中华人民共和国逐渐形成了多元一体的中华文化格局[23]。国家通用语言和文字是普通话和规范汉字，在民族自治地方少数民族可以使用民族语言和文字。自1986年起中华人民共和国实行九年义务教育制度，截至2020年接受高等教育人口达2.4亿[24]。" +
-                        "中华人民共和国目前为世界第二大经济体和世界上经济最发达的发展中国家，2023年国内生产总值（GDP）总量达126万亿人民币，依国际汇率折合17.52万亿美元，位居世界第二，仅次于美国；按购买力平价则位列世界第一[25][26]。中华人民共和国是世界上最大的商品出口国及第二大的进口国[26]。1978年改革开放后，中华人民共和国很快成为经济增长最快的主要经济体之一[27][28]。贫困问题随着经济增长也逐渐得到好转，832个国家级贫困县在2020年底全部完成脱贫摘帽[29]，但区域间发展不均衡以及国民贫富差距较大这两大问题仍需解决[30][31]。"
-            )
-            Log.INFO
+            mLogger.i("苏州园林里都有假山和池沼。假山的堆叠，可以说是一项艺术而不仅是技术。或者是重峦叠嶂，或者是几座小山配合着竹子花木，全在乎设计者和匠师们生平多阅历，胸中有邱壑，才能使游览者攀登的时候忘却苏州城市，只觉得身在山间。至于池沼，大多引用活水。有些园林池沼宽敞，就把池沼作为全园的中心，其他景物配合着布置。水面假如成河道模样，往往安排桥梁。假如安排两座以上的桥梁，那就一座一个样，决不雷同。池沼或河道的边沿很少砌齐整的石岸，总是高低屈曲任其自然。还在那儿布置几块玲珑的石头，或者种些花草：这也是为了取得从各个角度看都成一幅画的效果。池沼里养着金鱼或各色鲤鱼，夏秋季节荷花或睡莲开放，游览者看“鱼戏莲叶间”，又是入画的一景。 ")
+            mLogger.d("这是一条日志")
+            mLogger.json(LogLevel.WARN, UserBean("小明", "123456789"))
+//            getBinding().editView.hideKeyBroad()
+//            ContextCompat.getDrawable(getContext(), R.drawable.ic_github)?.toBitmap()?.apply {
+//                val bmpString = BmpUtils.getBase64FromBitmap(this)
+//                mLogger.d(bmpString ?: "")
+//            }
+//            mLogger.json(LogLevel.INFO, UserBean("小明", "123456"))
 //            thread(name = "测试线程1") {
-//                repeat(5) {
+//                repeat(100) {
 //                    val bitmap = ResourcesCompat
 //                        .getDrawable(resources, R.drawable.ic_github, theme)!!.toBitmap()
-//
+//                    val bmpString = BmpUtils.getBase64FromBitmap(bitmap)
+//                    mLogger.d(bmpString ?: "")
 //                }
 //            }
 //            thread(name = "测试线程2") {
-//                repeat(5) {
-//                    val bitmap = ResourcesCompat
-//                        .getDrawable(resources, R.drawable.ic_github, theme)!!.toBitmap()
-//                    mLogger.d(BmpUtils.getBase64FromBitmap(bitmap).toString())
+//                repeat(100) {
+//                    mLogger.json(LogLevel.INFO, UserBean("小明", "123456"))
 //                }
 //            }
         }
