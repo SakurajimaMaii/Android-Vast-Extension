@@ -16,8 +16,16 @@
 
 package com.ave.vastgui.app.log
 
-import android.util.LogPrinter
-
+import com.ave.vastgui.tools.log.android
+import com.log.vastgui.core.LogFactory
+import com.log.vastgui.core.base.LogStore
+import com.log.vastgui.core.base.Logger
+import com.log.vastgui.core.getLogFactory
+import com.log.vastgui.core.json.GsonConverter
+import com.log.vastgui.core.plugin.LogJson
+import com.log.vastgui.core.plugin.LogPrinter
+import com.log.vastgui.core.plugin.LogStorage
+import com.log.vastgui.core.plugin.LogSwitch
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -30,15 +38,12 @@ val mLogFactory: LogFactory = getLogFactory {
         open = true
     }
     install(LogPrinter) {
-        logger =
+        logger = Logger.android(30)
     }
-//    install(LogStorage) {
-//        fileMaxSize = 1024L * 1000
-//        storageFormat = { time, level, content ->
-//            "$level || $time || $content "
-//        }
-//    }
-//    install(LogJson) {
-//        converter = GsonConverter(true)
-//    }
+    install(LogStorage) {
+        logStore = LogStore.android()
+    }
+    install(LogJson){
+        converter = GsonConverter(true)
+    }
 }

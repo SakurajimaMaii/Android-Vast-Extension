@@ -45,6 +45,22 @@
     implementation("io.github.sakurajimamaii:VastTools:$version")
     ```
 
+- **log-core**
+
+  日志框架核心。最后一个版本 ![version](https://img.shields.io/maven-central/v/io.github.sakurajimamaii/log-core)
+
+    ```kotlin
+    implementation("io.github.sakurajimamaii:log-core:$version")
+    ```
+
+- **log-desktop**
+
+  日志框架 Kotlin/Java 应用拓展。最后一个版本 ![version](https://img.shields.io/maven-central/v/io.github.sakurajimamaii/log-desktop)
+
+    ```kotlin
+    implementation("io.github.sakurajimamaii:log-desktop:$version")
+    ```
+
 ## 文档
 
 请点击 [Android-Vast-Extension](https://ave.entropy2020.cn/) 获取详细文档说明。
