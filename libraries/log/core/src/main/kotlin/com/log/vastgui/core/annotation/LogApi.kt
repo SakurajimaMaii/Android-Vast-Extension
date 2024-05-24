@@ -25,5 +25,10 @@ package com.log.vastgui.core.annotation
  */
 @RequiresOptIn(message = "This API should be used only by the log module.")
 @Retention(AnnotationRetention.BINARY)
-@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION, AnnotationTarget.CONSTRUCTOR)
+@Target(
+    AnnotationTarget.CLASS,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.CONSTRUCTOR,
+    AnnotationTarget.PROPERTY
+)
 internal annotation class LogApi

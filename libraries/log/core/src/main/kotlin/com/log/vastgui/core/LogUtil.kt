@@ -16,6 +16,7 @@
 
 package com.log.vastgui.core
 
+import com.log.vastgui.core.annotation.LogApi
 import com.log.vastgui.core.base.JSON_TYPE
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogLevel
@@ -43,7 +44,8 @@ class LogUtil internal constructor() {
      *
      * @since 0.5.3
      */
-    internal var mDefaultTag: String by Delegates.notNull()
+    @LogApi
+    var mDefaultTag: String by Delegates.notNull()
 
     /**
      * `true` if you want to print log,`false` if you don't want to print the
@@ -326,7 +328,8 @@ class LogUtil internal constructor() {
      * @param content log message.
      * @since 0.5.3
      */
-    private fun logPrint(
+    @LogApi
+    fun logPrint(
         level: LogLevel,
         tag: String,
         content: String,
@@ -345,6 +348,17 @@ class LogUtil internal constructor() {
             TEXT_TYPE,
             tr
         )
+        mLogPrinter.printLog(logInfo)
+        mLogStorage?.storeLog(logInfo)
+    }
+
+    /**
+     * Log print.
+     *
+     * @since 1.3.3
+     */
+    @LogApi
+    fun logPrint(logInfo: LogInfo) {
         mLogPrinter.printLog(logInfo)
         mLogStorage?.storeLog(logInfo)
     }
