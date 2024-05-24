@@ -107,7 +107,11 @@ class AndroidLogger internal constructor(
         // The length of the log content is less than mMaxSingleLogLength
         if (!mLogInfo.needCut(mMaxSingleLogLength)) {
             printLog { content ->
-                printLog(LogDivider.getInfo(content))
+                // FIX: DEAL LINE SEPARATOR THAT EXIST WITHIN THE LOG CONTENT
+                val patterns = content.split(System.lineSeparator())
+                patterns.forEach { pattern ->
+                    printLog(LogDivider.getInfo(pattern))
+                }
             }
         }
         // The length of the log content is greater than mMaxSingleLogLength
