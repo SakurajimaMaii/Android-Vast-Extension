@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ plugins {
 }
 
 group = "io.github.sakurajimamaii"
-version = "0.0.7"
+version = libs.versions.core.local.get()
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -47,14 +47,14 @@ dependencies {
 extra["PUBLISH_ARTIFACT_ID"] = "VastCore"
 extra["PUBLISH_DESCRIPTION"] = "Core for Android-Vast-Extension"
 extra["PUBLISH_URL"] =
-    "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/VastCore"
+    "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/core"
 
 publishing {
     publications {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "VastCore"
-            version = "0.0.7"
+            version = libs.versions.core.local.get()
 
             afterEvaluate {
                 from(components["java"])

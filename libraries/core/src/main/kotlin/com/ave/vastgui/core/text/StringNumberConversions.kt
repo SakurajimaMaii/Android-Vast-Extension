@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,6 @@ fun String.safeToInt(defaultValue: Int, radix: Int = 10) =
 @JvmOverloads
 fun String.safeToLong(defaultValue: Long, radix: Int = 10) =
     runCatching { toLong(radix) }.getOrDefault(defaultValue)
-
 
 /**
  * Parses the string as an [Float] number and returns the result.
