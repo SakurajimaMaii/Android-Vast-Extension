@@ -66,8 +66,8 @@ class LogInfo @LogApi constructor(
 
     val mPrintLength = mTraceLength.coerceAtLeast(mContent.length)
 
-    val mPrintBytesLength = if (mTraceLength >= mContent.length) mStackTrace.toString()
-        .toByteArray().size else mContent.toByteArray().size
+    val mPrintBytesLength = (if (mTraceLength >= mContent.length) mStackTrace.toString()
+        .toByteArray().size else mContent.toByteArray().size).coerceAtLeast(100)
 
     val mLevelPriority: Int = mLevel.priority
 

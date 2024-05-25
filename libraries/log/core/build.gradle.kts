@@ -1,5 +1,6 @@
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.net.URL
 
 plugins {
     id("java-library")
@@ -58,4 +59,11 @@ publishing {
 
 tasks.withType<DokkaTaskPartial> {
     moduleName.set("log-core")
+    dokkaSourceSets.configureEach {
+        sourceLink {
+            localDirectory.set(projectDir.resolve("src"))
+            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/core/src"))
+            remoteLineSuffix.set("#L")
+        }
+    }
 }
