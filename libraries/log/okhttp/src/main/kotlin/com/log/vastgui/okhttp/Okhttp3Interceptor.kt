@@ -1,3 +1,19 @@
+/*
+ * Copyright 2021-2024 VastGui
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.log.vastgui.okhttp
 
 import com.ave.vastgui.core.extension.NotNullOrDefault
@@ -13,7 +29,7 @@ import okhttp3.MediaType
 import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
-import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import okhttp3.internal.http.promisesBody
 import okio.Buffer
 import java.io.ByteArrayOutputStream
@@ -26,15 +42,17 @@ import java.util.concurrent.TimeUnit
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/5/24 0:01
-// Description:
-// Documentation:
+// Description: Log interceptor of Okhttp3.
+// Documentation: https://ave.entropy2020.cn/documents/log/log-okhttp/usage/
 // Reference: https://square.github.io/okhttp/features/interceptors/
 
 /**
  * Log interceptor of Okhttp3.
  *
- * The following is an example of usage, you can click [link](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/net/OpenApi.kt)
+ * The following is an example of usage, you can click
+ * [link](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/net/OpenApi.kt)
  * to view the complete code.
+ *
  * ```kotlin
  * // OpenApi.kt
  * class OpenApi : RequestBuilder("https://api.apiopen.top") {
@@ -49,6 +67,8 @@ import java.util.concurrent.TimeUnit
  * }
  * ```
  *
+ * @see <img
+ *     src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/okhttp/image/log.png?raw=true">
  * @since 1.3.3
  */
 class Okhttp3Interceptor private constructor(private val logger: LogUtil) : Interceptor {
@@ -185,7 +205,7 @@ class Okhttp3Interceptor private constructor(private val logger: LogUtil) : Inte
                     val contentType = responseBody.contentType()
                     val body = String(bytes, getCharset(contentType))
                     requestLog.appendLine("\t body:$body")
-                    responseBody = ResponseBody.create(responseBody.contentType(), bytes)
+                    responseBody = bytes.toResponseBody(responseBody.contentType())
                     return response.newBuilder().body(responseBody).build()
                 } else {
                     requestLog.appendLine("\tbody: maybe [binary body], omitted!")
@@ -233,6 +253,11 @@ class Okhttp3Interceptor private constructor(private val logger: LogUtil) : Inte
     companion object : SingletonHolder<Okhttp3Interceptor, LogUtil>(::Okhttp3Interceptor) {
         private val UTF8: Charset = StandardCharsets.UTF_8
 
+        /**
+         * Get charset.
+         *
+         * @since 1.3.3
+         */
         private fun getCharset(contentType: MediaType?): Charset {
             var charset = if (contentType != null) contentType.charset(UTF8) else UTF8
             if (charset == null) charset = UTF8
@@ -243,6 +268,8 @@ class Okhttp3Interceptor private constructor(private val logger: LogUtil) : Inte
          * Returns true if the body in question probably contains human readable
          * text. Uses a small sample of code points to detect unicode control
          * characters commonly used in binary file signatures.
+         *
+         * @since 1.3.3
          */
         private fun isPlaintext(mediaType: MediaType?): Boolean {
             if (mediaType == null) return false
