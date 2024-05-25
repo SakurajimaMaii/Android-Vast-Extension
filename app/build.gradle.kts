@@ -98,6 +98,7 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.tools)
     implementation(projects.libraries.log.core)
+    implementation(projects.libraries.log.okhttp)
     implementation(libs.activity.ktx)
     implementation(libs.adapter.rxjava3)
     implementation(libs.androidx.swiperefreshlayout)

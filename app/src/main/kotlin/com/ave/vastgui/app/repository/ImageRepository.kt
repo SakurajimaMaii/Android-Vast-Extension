@@ -36,8 +36,7 @@ class ImageRepository : PagingSource<Int, ItemWrapper<Images.Image>>() {
             val response: List<ItemWrapper<Images.Image>> = OpenApi()
                 .create(OpenApiService::class.java)
                 .getImages(nextPage, 10)
-                .result.list
-                .map { ItemWrapper(it, layoutId = it.getLayoutId()) }
+                .result?.list?.map { ItemWrapper(it, layoutId = it.getLayoutId()) } ?: emptyList()
 
             LoadResult.Page(
                 data = response,

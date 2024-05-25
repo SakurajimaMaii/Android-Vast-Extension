@@ -96,7 +96,6 @@ class ImageActivity : VastVbVmActivity<ActivityPersonBinding, NetVM>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         mImageAdapter.apply {
             setOnItemClickListener { _, pos, _ ->
                 showShortMsg("Click event and pos is $pos.")
@@ -117,12 +116,11 @@ class ImageActivity : VastVbVmActivity<ActivityPersonBinding, NetVM>() {
 //                    mImageAdapter.addTypeImage(it)
 //                }
 //        }
-
         getBinding().personRv.adapter = mImageListAdapter
         lifecycleScope.launch {
             OpenApi().create(OpenApiService::class.java)
-                .getImages(0, 10)
-                .result.list.mapIndexed { index, image ->
+                .getImages(0, 20)
+                .result?.list?.mapIndexed { index, image ->
                     if (0 == index % 2) {
                         ItemWrapper(image, image.getLayoutId(), sampleClick1)
                     } else {

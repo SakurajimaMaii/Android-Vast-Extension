@@ -24,7 +24,7 @@ import com.ave.vastgui.tools.network.response.ResponseApi
 data class Images(
     val code: Int,
     val message: String,
-    val result: Result
+    val result: Result?
 ) : ResponseApi {
     data class Result(
         val list: List<Image>,

@@ -19,9 +19,9 @@ package com.ave.vastgui.app.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.app.adapter.ImageAdapter
 import com.ave.vastgui.app.databinding.FragmentImagesBinding
+import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.app.net.OpenApi
 import com.ave.vastgui.app.net.OpenApiService
 import com.ave.vastgui.tools.fragment.VastVbFragment
@@ -53,7 +53,7 @@ class ImagesFragment : VastVbFragment<FragmentImagesBinding>() {
             }) {
                 getBinding().refresh.isRefreshing = false
                 onSuccess = {
-                    it.result.list.forEach { image ->
+                    it.result?.list?.forEach { image ->
                         mAdapter.addImage(image)
                     }
                 }
