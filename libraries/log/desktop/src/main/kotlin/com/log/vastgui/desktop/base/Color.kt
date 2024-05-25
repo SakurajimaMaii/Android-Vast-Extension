@@ -1,11 +1,11 @@
 /*
- * Copyright 2024 VastGui
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,7 @@ package com.log.vastgui.desktop.base
 // Email: guihy2019@gmail.com
 // Date: 2024/5/15 10:43
 // Description: Text color of log content in terminal.
-// Documentation: https://ave.entropy2020.cn/documents/log/log-desktop/usage/
+// Documentation: https://ave.entropy2020.cn/documents/log/log-desktop/logger/
 
 const val Reset  = "\u001B[0m"
 const val Red    = "\u001B[31m"

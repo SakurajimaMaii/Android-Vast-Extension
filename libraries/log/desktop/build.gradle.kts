@@ -1,11 +1,11 @@
 /*
- * Copyright 2024 VastGui
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,6 +16,7 @@
 
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.net.URL
 
 plugins {
     id("java-library")
@@ -24,7 +25,7 @@ plugins {
 }
 
 group = "io.github.sakurajimamaii"
-version = libs.versions.log.get()
+version = libs.versions.log.local.get()
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -62,7 +63,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "log-desktop"
-            version = libs.versions.log.get()
+            version = libs.versions.log.local.get()
 
             afterEvaluate {
                 from(components["java"])
@@ -73,4 +74,11 @@ publishing {
 
 tasks.withType<DokkaTaskPartial> {
     moduleName.set("log-desktop")
+    dokkaSourceSets.configureEach {
+        sourceLink {
+            localDirectory.set(projectDir.resolve("src"))
+            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/desktop/src"))
+            remoteLineSuffix.set("#L")
+        }
+    }
 }
