@@ -1,3 +1,6 @@
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import java.net.URL
+
 /*
  * Copyright 2024 VastGui guihy2019@gmail.com
  *
@@ -79,6 +82,7 @@ dependencies {
     api(libs.security.crypto)
     api(libs.zxing.core)
     api(libs.log.core)
+    implementation(libs.vastcore)
     implementation(libs.activity.ktx)
     implementation(libs.annotation)
     implementation(libs.appcompat)
@@ -106,7 +110,6 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.androidx.startup)
-    implementation(project(":libraries:core"))
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastTools"
@@ -123,6 +126,16 @@ publishing {
             afterEvaluate {
                 from(components["release"])
             }
+        }
+    }
+}
+
+tasks.withType<DokkaTaskPartial> {
+    dokkaSourceSets.configureEach {
+        sourceLink {
+            localDirectory.set(projectDir.resolve("src"))
+            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/tools/src"))
+            remoteLineSuffix.set("#L")
         }
     }
 }
