@@ -1,3 +1,6 @@
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import java.net.URL
+
 /*
  * Copyright 2024 VastGui guihy2019@gmail.com
  *
@@ -76,7 +79,7 @@ dependencies {
 extra["PUBLISH_ARTIFACT_ID"] = "VastAdapter"
 extra["PUBLISH_DESCRIPTION"] = "Quickly Adapter for RecyclerView."
 extra["PUBLISH_URL"] =
-    "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/VastAdapter"
+    "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/adapter"
 
 publishing {
     publications {
@@ -88,6 +91,16 @@ publishing {
             afterEvaluate {
                 from(components["release"])
             }
+        }
+    }
+}
+
+tasks.withType<DokkaTaskPartial> {
+    dokkaSourceSets.configureEach {
+        sourceLink {
+            localDirectory.set(projectDir.resolve("src"))
+            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/adapter/src"))
+            remoteLineSuffix.set("#L")
         }
     }
 }

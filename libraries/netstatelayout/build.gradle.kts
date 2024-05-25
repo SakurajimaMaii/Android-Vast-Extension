@@ -1,3 +1,6 @@
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import java.net.URL
+
 /*
  * Copyright 2024 VastGui guihy2019@gmail.com
  *
@@ -71,7 +74,7 @@ dependencies {
 extra["PUBLISH_ARTIFACT_ID"] = "VastNetStateLayout"
 extra["PUBLISH_DESCRIPTION"] = "A layout to set customized network state page."
 extra["PUBLISH_URL"] =
-    "https://github.com/SakurajimaMaii/VastUtils/tree/master/libraries/VastNetStateLayout"
+    "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/netstatelayout"
 
 publishing {
     publications {
@@ -83,6 +86,16 @@ publishing {
             afterEvaluate {
                 from(components["release"])
             }
+        }
+    }
+}
+
+tasks.withType<DokkaTaskPartial> {
+    dokkaSourceSets.configureEach {
+        sourceLink {
+            localDirectory.set(projectDir.resolve("src"))
+            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/netstatelayout/src"))
+            remoteLineSuffix.set("#L")
         }
     }
 }
