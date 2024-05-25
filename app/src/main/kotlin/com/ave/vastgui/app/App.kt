@@ -17,17 +17,32 @@
 package com.ave.vastgui.app
 
 import android.app.Application
+import android.content.Intent
+import com.ave.vastgui.app.activity.FileActivity
+import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.app.theme.OptionFactory
 import com.ave.vastgui.app.theme.compat.FabExecutorBuilder
 import com.ave.vastgui.app.theme.compat.FabFactory
+import com.ave.vastgui.tools.content.ContextHelper
+import com.ave.vastgui.tools.exception.AppCrashHandler
 import org.alee.component.skin.compat.ConstraintLayoutCompat
 import org.alee.component.skin.page.WindowManager
 import org.alee.component.skin.service.Config
 import org.alee.component.skin.service.ThemeSkinService
+import kotlin.system.exitProcess
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/12/28
+
+private val crashConfig =
+    AppCrashHandler.Configuration(mLogFactory.getLog(App::class.java)) { _, _ ->
+        val intent = Intent(ContextHelper.getAppContext(), FileActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        ContextHelper.getAppContext().startActivity(intent)
+        exitProcess(0)
+    }
 
 class App : Application() {
 
@@ -39,6 +54,7 @@ class App : Application() {
             addThemeSkinExecutorBuilder(FabExecutorBuilder())
         }
         ConstraintLayoutCompat.init()
+        Thread.setDefaultUncaughtExceptionHandler(AppCrashHandler.getInstance(crashConfig))
     }
 
     init {
