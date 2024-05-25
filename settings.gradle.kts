@@ -32,7 +32,8 @@ val libs = arrayOf(
     "netstatelayout",
     "tools",
     "log:desktop",
-    "log:core"
+    "log:core",
+    "log:okhttp"
 )
 
 libs.forEach {

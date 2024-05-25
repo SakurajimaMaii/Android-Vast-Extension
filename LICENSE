@@ -186,7 +186,7 @@
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright 2022 VastGui
+   Copyright 2021-2024 VastGui
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -218,3 +218,4 @@ The text of each license is the standard Apache 2.0 license.
 ViewBindingProperty.kt reference from pengxurui/AndroidFamilyDemo : https://github.com/pengxurui/AndroidFamilyDemo Apache 2.0
 bennyhuo/TieGuanYin : https://github.com/bennyhuo/TieGuanYin Apache 2.0
 Downloader : https://github.com/Heart-Beats/Downloader Apache 2.0
+Ktor https://github.com/ktorio/ktor Apache 2.0
