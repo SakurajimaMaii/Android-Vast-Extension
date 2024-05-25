@@ -83,7 +83,8 @@ fun Logger.Companion.android(
 /**
  * Android logger.
  *
- * @see <img src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/tools/image/log.png?raw=true">
+ * @see <img
+ *     src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/tools/image/log.png?raw=true">
  * @since 1.3.1
  */
 class AndroidLogger internal constructor(
@@ -106,11 +107,13 @@ class AndroidLogger internal constructor(
         mLogInfo = logInfo
         // The length of the log content is less than mMaxSingleLogLength
         if (!mLogInfo.needCut(mMaxSingleLogLength)) {
-            printLog { content ->
+            printLog { body, content ->
+                println(content)
                 // FIX: DEAL LINE SEPARATOR THAT EXIST WITHIN THE LOG CONTENT
                 val patterns = content.split(System.lineSeparator())
                 patterns.forEach { pattern ->
-                    printLog(LogDivider.getInfo(pattern))
+                    println(pattern)
+                    body.appendLine(LogDivider.getInfo(pattern))
                 }
             }
         }
@@ -119,7 +122,7 @@ class AndroidLogger internal constructor(
             // Segment printing count
             var count = 0
             var printTheRest = true
-            printLog(mMaxSingleLogLength * 4) { content ->
+            printLog(mMaxSingleLogLength * 4) { body, content ->
                 // FIX: DEAL LINE SEPARATOR THAT EXIST WITHIN THE LOG CONTENT
                 val patterns = content.split(System.lineSeparator())
                 patterns.forEach { pattern ->
@@ -127,7 +130,7 @@ class AndroidLogger internal constructor(
                     if (mMaxSingleLogLength * 4 < bytes.size) {
                         do {
                             val subStr = bytes.cutStr(mMaxSingleLogLength)
-                            printLog(LogDivider.getInfo(String.format("%s", subStr)))
+                            body.appendLine(LogDivider.getInfo(String.format("%s", subStr)))
                             bytes = bytes.copyOfRange(subStr.toByteArray().size, bytes.size)
                             count++
                             if (count == mMaxPrintTimes) {
@@ -140,7 +143,7 @@ class AndroidLogger internal constructor(
                     }
 
                     if (printTheRest && count <= mMaxPrintTimes) {
-                        printLog(LogDivider.getInfo(String.format("%s", String(bytes))))
+                        body.appendLine(LogDivider.getInfo(String.format("%s", String(bytes))))
                     }
                 }
             }
@@ -155,9 +158,9 @@ class AndroidLogger internal constructor(
     @Throws(RuntimeException::class)
     private fun printJsonLog(logInfo: LogInfo) {
         mLogInfo = logInfo
-        printLog {
-            for (line in it.split(System.lineSeparator())) {
-                printLog(LogDivider.getInfo(line))
+        printLog { body, content ->
+            for (line in content.split(System.lineSeparator())) {
+                body.appendLine(LogDivider.getInfo(line))
             }
         }
     }
@@ -165,11 +168,15 @@ class AndroidLogger internal constructor(
     /**
      * Print log.
      *
-     * @since 1.3.1
+     * @since 1.3.3
      */
-    private fun printLog(len: Int = mLogInfo.mPrintBytesLength, customScope: (String) -> Unit) {
-        val mContent = mLogInfo.mContent
-        printLog(LogDivider.getTop(len))
+    private inline fun printLog(
+        len: Int = mLogInfo.mPrintBytesLength,
+        customScope: (StringBuilder, String) -> Unit
+    ) {
+        val content = mLogInfo.mContent
+        val logContent = StringBuilder(content.length * 4)
+        logContent.appendLine(LogDivider.getTop(len))
         val thread = if (mHeader.thread) {
             "Thread: ${mLogInfo.mThreadName}"
         } else {
@@ -190,19 +197,20 @@ class AndroidLogger internal constructor(
         } else {
             ""
         }
-        printLog(LogDivider.getInfo("$thread $tag $level $time"))
-        printLog(LogDivider.getDivider(len))
-        printLog(LogDivider.getInfo("${mLogInfo.mStackTrace}"))
-        printLog(LogDivider.getDivider(len))
-        customScope(mContent)
+        logContent.appendLine(LogDivider.getInfo("$thread $tag $level $time"))
+        logContent.appendLine(LogDivider.getDivider(len))
+        logContent.appendLine(LogDivider.getInfo("${mLogInfo.mStackTrace}"))
+        logContent.appendLine(LogDivider.getDivider(len))
+        customScope(logContent, content)
         mLogInfo.mThrowable?.apply {
-            printLog(LogDivider.getDivider(len))
-            printLog(LogDivider.getInfo("$this"))
+            logContent.appendLine(LogDivider.getDivider(len))
+            logContent.appendLine(LogDivider.getInfo("$this"))
             for (item in this.stackTrace) {
-                printLog(LogDivider.getInfo("  at $item"))
+                logContent.appendLine(LogDivider.getInfo("  at $item"))
             }
         }
-        printLog(LogDivider.getBottom(len))
+        logContent.append(LogDivider.getBottom(len))
+        printLog(logContent.toString())
     }
 
     /** @since 1.3.1 */
