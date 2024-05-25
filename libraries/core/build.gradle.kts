@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.net.URL
 
 plugins {
     id("java-library")
@@ -59,6 +61,16 @@ publishing {
             afterEvaluate {
                 from(components["java"])
             }
+        }
+    }
+}
+
+tasks.withType<DokkaTaskPartial> {
+    dokkaSourceSets.configureEach {
+        sourceLink {
+            localDirectory.set(projectDir.resolve("src"))
+            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/core/src"))
+            remoteLineSuffix.set("#L")
         }
     }
 }
