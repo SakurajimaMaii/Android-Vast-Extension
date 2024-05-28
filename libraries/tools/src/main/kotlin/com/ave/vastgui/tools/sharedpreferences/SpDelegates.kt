@@ -16,6 +16,7 @@
 
 package com.ave.vastgui.tools.sharedpreferences
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.lifecycle.MutableLiveData
@@ -55,7 +56,7 @@ abstract class SharedPreferencesProperty<V> internal constructor() :
  *     [SharedPreferences.getString] return null.
  * @since 0.5.6
  */
-fun ISharedPreferencesOwner.string(defaultValue: String = "") =
+fun ISharedPreferencesOwner.string(defaultValue: String = "", commit: Boolean = false) =
     object : SharedPreferencesProperty<String>() {
         override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): String =
             kv.getString(property.name, defaultValue) ?: defaultValue
@@ -65,7 +66,7 @@ fun ISharedPreferencesOwner.string(defaultValue: String = "") =
             property: KProperty<*>,
             value: String
         ) {
-            kv.edit { putString(property.name, value) }
+            kv.edit(commit) { putString(property.name, value) }
         }
     }
 
@@ -74,7 +75,7 @@ fun ISharedPreferencesOwner.string(defaultValue: String = "") =
  *
  * @since 0.5.6
  */
-fun ISharedPreferencesOwner.string() =
+fun ISharedPreferencesOwner.string(commit: Boolean = false) =
     object : SharedPreferencesProperty<String?>() {
         override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): String? =
             kv.getString(property.name, null)
@@ -84,7 +85,7 @@ fun ISharedPreferencesOwner.string() =
             property: KProperty<*>,
             value: String?
         ) {
-            kv.edit { putString(property.name, value) }
+            kv.edit(commit) { putString(property.name, value) }
         }
     }
 
@@ -95,26 +96,30 @@ fun ISharedPreferencesOwner.string() =
  *     [SharedPreferences.stringSet] return null.
  * @since 0.5.6
  */
-fun ISharedPreferencesOwner.stringSet(defaultValue: Set<*> = setOf<String>()) =
-    object : SharedPreferencesProperty<Set<*>>() {
-        override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Set<*> =
-            kv.getStringSet(property.name, mutableSetOf()) ?: defaultValue
+fun ISharedPreferencesOwner.stringSet(
+    defaultValue: Set<*> = setOf<String>(),
+    commit: Boolean = false
+) = object : SharedPreferencesProperty<Set<*>>() {
+    override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Set<*> =
+        kv.getStringSet(property.name, mutableSetOf()) ?: defaultValue
 
-        override fun setValue(
-            thisRef: ISharedPreferencesOwner,
-            property: KProperty<*>,
-            value: Set<*>
-        ) {
-            kv.edit { putStringSet(property.name, value.map { it.toString() }.toMutableSet()) }
+    override fun setValue(
+        thisRef: ISharedPreferencesOwner,
+        property: KProperty<*>,
+        value: Set<*>
+    ) {
+        kv.edit(commit) {
+            putStringSet(property.name, value.map { it.toString() }.toMutableSet())
         }
     }
+}
 
 /**
  * Save or set a string set value into [SharedPreferences].
  *
  * @since 0.5.6
  */
-fun ISharedPreferencesOwner.stringSet() =
+fun ISharedPreferencesOwner.stringSet(commit: Boolean = false) =
     object : SharedPreferencesProperty<Set<*>?>() {
         override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Set<*>? =
             kv.getStringSet(property.name, null)
@@ -124,7 +129,9 @@ fun ISharedPreferencesOwner.stringSet() =
             property: KProperty<*>,
             value: Set<*>?
         ) {
-            kv.edit { putStringSet(property.name, value?.map { it.toString() }?.toMutableSet()) }
+            kv.edit(commit) {
+                putStringSet(property.name, value?.map { it.toString() }?.toMutableSet())
+            }
         }
     }
 
@@ -135,13 +142,17 @@ fun ISharedPreferencesOwner.stringSet() =
  *     not exist.
  * @since 0.5.6
  */
-fun ISharedPreferencesOwner.int(defaultValue: Int = 0) =
+fun ISharedPreferencesOwner.int(defaultValue: Int = 0, commit: Boolean = false) =
     object : SharedPreferencesProperty<Int>() {
         override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Int =
             kv.getInt(property.name, defaultValue)
 
-        override fun setValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>, value: Int) {
-            kv.edit { putInt(property.name, value) }
+        override fun setValue(
+            thisRef: ISharedPreferencesOwner,
+            property: KProperty<*>,
+            value: Int
+        ) {
+            kv.edit(commit) { putInt(property.name, value) }
         }
     }
 
@@ -152,13 +163,17 @@ fun ISharedPreferencesOwner.int(defaultValue: Int = 0) =
  *     not exist
  * @since 0.5.6
  */
-fun ISharedPreferencesOwner.long(defaultValue: Long = 0L) =
+fun ISharedPreferencesOwner.long(defaultValue: Long = 0L, commit: Boolean = false) =
     object : SharedPreferencesProperty<Long>() {
         override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Long =
             kv.getLong(property.name, defaultValue)
 
-        override fun setValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>, value: Long) {
-            kv.edit { putLong(property.name, value) }
+        override fun setValue(
+            thisRef: ISharedPreferencesOwner,
+            property: KProperty<*>,
+            value: Long
+        ) {
+            kv.edit(commit) { putLong(property.name, value) }
         }
     }
 
@@ -169,13 +184,17 @@ fun ISharedPreferencesOwner.long(defaultValue: Long = 0L) =
  *     not exist.
  * @since 0.5.6
  */
-fun ISharedPreferencesOwner.float(defaultValue: Float = 0.0f) =
+fun ISharedPreferencesOwner.float(defaultValue: Float = 0.0f, commit: Boolean = false) =
     object : SharedPreferencesProperty<Float>() {
         override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Float =
             kv.getFloat(property.name, defaultValue)
 
-        override fun setValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>, value: Float) {
-            kv.edit { putFloat(property.name, value) }
+        override fun setValue(
+            thisRef: ISharedPreferencesOwner,
+            property: KProperty<*>,
+            value: Float
+        ) {
+            kv.edit(commit) { putFloat(property.name, value) }
         }
     }
 
@@ -186,7 +205,7 @@ fun ISharedPreferencesOwner.float(defaultValue: Float = 0.0f) =
  *     not exist.
  * @since 0.5.6
  */
-fun ISharedPreferencesOwner.boolean(defaultValue: Boolean = false) =
+fun ISharedPreferencesOwner.boolean(defaultValue: Boolean = false, commit: Boolean = false) =
     object : SharedPreferencesProperty<Boolean>() {
         override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Boolean =
             kv.getBoolean(property.name, defaultValue)
@@ -196,7 +215,7 @@ fun ISharedPreferencesOwner.boolean(defaultValue: Boolean = false) =
             property: KProperty<*>,
             value: Boolean
         ) {
-            kv.edit { putBoolean(property.name, value) }
+            kv.edit(commit) { putBoolean(property.name, value) }
         }
     }
 
@@ -207,7 +226,7 @@ fun ISharedPreferencesOwner.boolean(defaultValue: Boolean = false) =
  *     not exist.
  * @since 0.5.6
  */
-fun ISharedPreferencesOwner.double(defaultValue: Double = 0.0) =
+fun ISharedPreferencesOwner.double(defaultValue: Double = 0.0, commit: Boolean = false) =
     object : SharedPreferencesProperty<Double>() {
         override fun getValue(thisRef: ISharedPreferencesOwner, property: KProperty<*>): Double =
             Double.Companion.fromBits(
@@ -219,7 +238,7 @@ fun ISharedPreferencesOwner.double(defaultValue: Double = 0.0) =
             property: KProperty<*>,
             value: Double
         ) {
-            kv.edit { putLong(property.name, value.toRawBits()) }
+            kv.edit(commit) { putLong(property.name, value.toRawBits()) }
         }
     }
 
@@ -375,6 +394,10 @@ class SharedPreferencesStateFlow<V> internal constructor(
  *
  * @since 0.5.1
  */
-fun SharedPreferences.clearAll() {
-    this.edit().clear().apply()
+@SuppressLint("ApplySharedPref")
+@JvmOverloads
+fun SharedPreferences.clearAll(commit: Boolean = false) {
+    edit().clear().apply {
+        if (commit) commit() else apply()
+    }
 }
