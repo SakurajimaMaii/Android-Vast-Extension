@@ -3028,3 +3028,15 @@
 2024年5月17日 上午1:29:36 [WARN|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:53) This is a log. 
 2024年5月17日 上午1:29:36 [ERROR|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:54) This is a log. 
 2024年5月17日 上午1:29:36 [ASSERT|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:55) This is a log. 
+2024年5月17日 上午9:25:21 [VERBOSE|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:48) {"employees":[{"firstName":"Bill","lastName":"Gates"},{"firstName":"George","lastName":"Bush"},{"firstName":"Thomas","lastName":"Carter"}]} 
+2024年5月17日 上午9:25:21 [DEBUG|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:50) {"name":"Xiao Ming","age":19} 
+2024年5月17日 上午9:25:21 [INFO|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:52) [1,2,3,4,5,6,7,8,9] 
+2024年5月17日 上午9:25:21 [WARN|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:53) This is a log. 
+2024年5月17日 上午9:25:21 [ERROR|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:54) This is a log. 
+2024年5月17日 上午9:25:21 [ASSERT|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:55) This is a log. 
+2024年5月17日 上午9:41:58 [VERBOSE|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:48) {"employees":[{"firstName":"Bill","lastName":"Gates"},{"firstName":"George","lastName":"Bush"},{"firstName":"Thomas","lastName":"Carter"}]} 
+2024年5月17日 上午9:41:58 [DEBUG|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:50) {"name":"Xiao Ming","age":19} 
+2024年5月17日 上午9:41:58 [INFO|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:52) [1,2,3,4,5,6,7,8,9] 
+2024年5月17日 上午9:41:58 [WARN|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:53) This is a log. 
+2024年5月17日 上午9:41:58 [ERROR|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:54) This is a log. 
+2024年5月17日 上午9:41:58 [ASSERT|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:55) This is a log. 
