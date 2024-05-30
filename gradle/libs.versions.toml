@@ -3,27 +3,26 @@ activity-ktx = "1.9.0"
 agp = "8.6.0-alpha03"
 androidx-junit = "1.1.5"
 androidx-startup = "1.1.1"
-annotation = "1.7.1"
-appcompat = "1.6.1"
-appcompat-resources = "1.6.1"
+annotation = "1.8.0"
+appcompat = "1.7.0"
 coil = "2.6.0"
 coil-compose = "2.5.0"
 commons-codec = "1.16.1"
 constraintlayout = "2.1.4"
 converter-gson = "2.11.0"
 zxing = "3.5.3"
-core-ktx = "1.13.0"
+core-ktx = "1.13.1"
 core-runtime = "2.2.0"
 core-splashscreen = "1.0.1"
-datastore-preferences = "1.1.0"
+datastore-preferences = "1.1.1"
 dokka = "1.9.20"
 espresso-core = "3.5.1"
 exifinterface = "1.3.7"
 fastjson2 = "2.0.46.android4"
 fastjson2Kotlin = "2.0.50"
-fragment-ktx = "1.6.2"
+fragment-ktx = "1.7.1"
 gradle = "8.4.1"
-gson = "2.10.1"
+gson = "2.11.0"
 jackson-databind = "2.17.1"
 junit = "4.13.2"
 kotlin = "1.9.20"
@@ -33,22 +32,19 @@ kotlinx-coroutines-core = "1.8.1"
 kotlinx-datetime = "0.6.0"
 kotlinx-serialization-json = "1.6.3"
 ksp = "1.9.20-1.0.14"
-lifecycle-livedata-core-ktx = "2.7.0"
-lifecycle-livedata-ktx = "2.7.0"
-lifecycle-runtime-ktx = "2.8.1"
-lifecycle-viewmodel-ktx = "2.7.0"
-material = "1.12.0-rc01"
-material-compose = "1.7.0-alpha07"
-material3-compose = "1.3.0-alpha05"
+lifecycle = "2.8.1"
+material = "1.12.0"
+material-compose = "1.7.0-beta02"
+material3-compose = "1.3.0-beta02"
 monitor = "1.6.1"
 okhttp = "4.12.0"
-paging-compose = "3.3.0-beta01"
-paging-runtime = "3.2.1"
+paging-compose = "3.3.0"
+paging-runtime = "3.3.0"
 paintedskin = "3.5.2.1"
 recyclerview = "1.3.2"
 reflex = "2.0.4"
 retrofit = "2.11.0"
-runtime-livedata-compose = "1.7.0-alpha07"
+runtime-livedata-compose = "1.7.0-beta02"
 security-crypto = "1.1.0-alpha06"
 swiperefreshlayout = "1.2.0-alpha01"
 ui-compose = "1.7.0-beta02"
@@ -72,7 +68,7 @@ androidx-startup = { module = "androidx.startup:startup-runtime", version.ref = 
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
-appcompat-resources = { module = "androidx.appcompat:appcompat-resources", version.ref = "appcompat-resources" }
+appcompat-resources = { module = "androidx.appcompat:appcompat-resources", version.ref = "appcompat" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
 commons-codec = { module = "commons-codec:commons-codec", version.ref = "commons-codec" }
@@ -101,11 +97,11 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-rx3 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-rx3", version.ref = "kotlinx-coroutines-android" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
-lifecycle-livedata-core-ktx = { module = "androidx.lifecycle:lifecycle-livedata-core-ktx", version.ref = "lifecycle-livedata-core-ktx" }
-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle-livedata-ktx" }
-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle-livedata-core-ktx" }
-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel-ktx" }
+lifecycle-livedata-core-ktx = { module = "androidx.lifecycle:lifecycle-livedata-core-ktx", version.ref = "lifecycle" }
+lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
+lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 material-compose = { module = "androidx.compose.material:material", version.ref = "material-compose" }
 material3-compose = { module = "androidx.compose.material3:material3", version.ref = "material3-compose" }
@@ -126,6 +122,7 @@ ui-graphics-compose = { module = "androidx.compose.ui:ui-graphics", version.ref 
 ui-test-manifest-compose = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "ui-compose" }
 ui-tooling-preview-compose = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "ui-compose" }
 vastcore = { module = "io.github.sakurajimamaii:VastCore", version.ref = "vastcore" }
+vasttools = { module = "io.github.sakurajimamaii:VastTools", version.ref = "tools" }
 vastnetstatelayout = { module = "io.github.sakurajimamaii:VastNetStateLayout", version.ref = "vastnetstatelayout" }
 
 [plugins]
