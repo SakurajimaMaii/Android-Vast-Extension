@@ -33,6 +33,7 @@ val libs = arrayOf(
     "tools",
     "log:desktop",
     "log:core",
+    "log:mars",
     "log:okhttp"
 )
 
