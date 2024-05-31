@@ -96,7 +96,7 @@ dependencies {
     implementation(projects.libraries.netstatelayout)
     implementation(projects.libraries.adapter)
     implementation(projects.libraries.core)
-    implementation(projects.libraries.tools)
+    implementation(libs.vasttools)
     implementation(projects.libraries.log.core)
     implementation(projects.libraries.log.okhttp)
     implementation(libs.activity.ktx)
