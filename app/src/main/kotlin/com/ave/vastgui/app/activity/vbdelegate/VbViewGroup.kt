@@ -12,10 +12,14 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 // Date: 2023/8/28
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/vb-delegate/#viewgroup
 
-class VbViewGroup1 @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+class ViewGroupGetViewBindingByDelegate @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
 
-    private val binding by viewBinding(ViewgroupVbBinding::bind)
+    // 使用方式 1
+    private val mBinding by viewBinding(ViewgroupVbBinding::bind)
+    // 使用方式 2
+    // root 是 ViewgroupVbBinding 的根布局 id
+    // private val mBinding by viewBinding(ViewgroupVbBinding::bind, R.id.root)
 
     init {
         inflate(context, R.layout.viewgroup_vb, this)
@@ -23,31 +27,11 @@ class VbViewGroup1 @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     fun setFirstName(value: String) {
-        binding.firstName.text = value
+        mBinding.firstName.text = value
     }
 
     fun setLastName(value: String) {
-        binding.lastName.text = value
-    }
-
-}
-
-class VbViewGroup2 @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    LinearLayout(context, attrs) {
-
-    private val binding by viewBinding(ViewgroupVbBinding::bind, R.id.item_textview_root)
-
-    init {
-        inflate(context, R.layout.viewgroup_vb, this)
-        orientation = VERTICAL
-    }
-
-    fun setFirstName(value: String) {
-        binding.firstName.text = value
-    }
-
-    fun setLastName(value: String) {
-        binding.lastName.text = value
+        mBinding.lastName.text = value
     }
 
 }

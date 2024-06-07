@@ -50,21 +50,34 @@ import kotlin.reflect.KProperty
 /**
  * Creates an instance of the binding class for the [Activity] to use.
  *
- * You can click
- * [VbActivity.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt)
- * and
- * [activity_vb.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/activity_vb.xml)
- * to see the sample code.
+ * ```json
+ * class VbActivity2 : Activity() {
+ *
+ *     private val viewBindingProperty = viewBinding(ActivityVbBinding::inflate)
+ *     private val mBinding by viewBindingProperty
+ *
+ *     override fun onCreate(savedInstanceState: Bundle?) {
+ *         super.onCreate(savedInstanceState)
+ *         setContentView(mBinding.root)
+ *     }
+ *
+ *     override fun onDestroy() {
+ *         super.onDestroy()
+ *         viewBindingProperty.clear()
+ *     }
+ *
+ * }
+ * ```
  *
  * @since 0.5.2
+ * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt">Example</a>
  */
 @JvmName("viewBindingActivity")
+@Suppress("UnusedReceiverParameter")
 inline fun <V : ViewBinding> Activity.viewBinding(
     crossinline viewBinder: (LayoutInflater) -> V
 ) = LazyViewBindingProperty { activity: Activity ->
-    viewBinder(activity.layoutInflater).apply {
-        setContentView(root)
-    }
+    viewBinder(activity.layoutInflater)
 }
 
 /**
@@ -74,36 +87,45 @@ inline fun <V : ViewBinding> Activity.viewBinding(
  * lifecycle of current activity is [Lifecycle.State.DESTROYED] to prevent
  * memory leaks.
  *
- * You can click
- * [VbActivity.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt)
- * and
- * [activity_vb.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/activity_vb.xml)
- * to see the sample code.
+ * ```kotlin
+ * class VbActivity1 : ComponentActivity() {
+ *
+ *     private val mBinding by viewBinding(ActivityVbBinding::inflate)
+ *
+ *     override fun onCreate(savedInstanceState: Bundle?) {
+ *         super.onCreate(savedInstanceState)
+ *         setContentView(mBinding.root)
+ *     }
+ *
+ * }
+ * ```
  *
  * @since 0.5.2
+ * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt">Example</a>
  */
 @JvmName("viewBindingActivity")
+@Suppress("UnusedReceiverParameter")
 inline fun <V : ViewBinding> ComponentActivity.viewBinding(
     crossinline viewBinder: (LayoutInflater) -> V
-) = ActivityViewBindingProperty { activity: Activity ->
-    viewBinder(activity.layoutInflater).apply {
-        setContentView(root)
-    }
+) = ActivityViewBindingProperty { activity: ComponentActivity ->
+    viewBinder(activity.layoutInflater)
 }
 
 /**
  * Creates an instance of the binding class for the [ComponentActivity] to
  * use.
  *
- * You can click
- * [VbActivity.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt)
- * and
- * [activity_vb.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/activity_vb.xml)
- * to see the sample code.
+ * ```kotlin
+ * class VbActivity3 : ComponentActivity(R.layout.activity_vb) {
+ *     private val mBinding by viewBinding(ActivityVbBinding::bind)
+ * }
+ * ```
  *
  * @since 0.5.2
+ * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt">Example</a>
  */
 @JvmName("viewBindingActivity")
+@Suppress("UnusedReceiverParameter")
 inline fun <V : ViewBinding> ComponentActivity.viewBinding(
     crossinline viewBinder: (View) -> V,
     crossinline viewProvider: (ComponentActivity) -> View = ::findRootView
@@ -115,15 +137,20 @@ inline fun <V : ViewBinding> ComponentActivity.viewBinding(
  * Creates an instance of the binding class for the [ComponentActivity] to
  * use.
  *
- * You can click
- * [VbActivity.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt)
- * and
- * [activity_vb.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/activity_vb.xml)
- * to see the sample code.
+ * ```kotlin
+ * class VbActivity4 : ComponentActivity(R.layout.activity_vb) {
+ *
+ *     // root is the root layout id of ActivityVbBinding
+ *     private val mBinding by viewBinding(ActivityVbBinding::bind, R.id.root)
+ *
+ * }
+ * ```
  *
  * @since 0.5.2
+ * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt">Example</a>
  */
 @JvmName("viewBindingActivity")
+@Suppress("UnusedReceiverParameter")
 inline fun <V : ViewBinding> ComponentActivity.viewBinding(
     crossinline viewBinder: (View) -> V,
     @IdRes viewBindingRootId: Int
@@ -134,13 +161,16 @@ inline fun <V : ViewBinding> ComponentActivity.viewBinding(
 /**
  * Creates an instance of the binding class for the [Fragment] to use.
  *
- * You can click
- * [VbFragment.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbFragment.kt)
- * and
- * [fragment_sample.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/fragment_sample.xml)
- * to see the sample code.
+ * ```kotlin
+ * class VbFragment1 : Fragment(R.layout.fragment_sender) {
+ *
+ *     private val mBinding by viewBinding(FragmentSenderBinding::bind)
+ *
+ * }
+ * ```
  *
  * @since 0.5.2
+ * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbFragment.kt">Example</a>
  */
 @JvmName("viewBindingFragment")
 inline fun <F : Fragment, V : ViewBinding> Fragment.viewBinding(
@@ -159,13 +189,16 @@ inline fun <F : Fragment, V : ViewBinding> Fragment.viewBinding(
 /**
  * Creates an instance of the binding class for the [Fragment] to use.
  *
- * You can click
- * [VbFragment.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbFragment.kt)
- * and
- * [fragment_sample.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/fragment_sample.xml)
- * to see the sample code.
+ * ```kotlin
+ * class VbFragment2 : DialogFragment(R.layout.fragment_sender) {
+ *
+ *     val mBinding by viewBinding(FragmentSenderBinding::bind, R.id.fragment_sender_root)
+ *
+ * }
+ * ```
  *
  * @since 0.5.2
+ * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbFragment.kt">Example</a>
  */
 @JvmName("viewBindingFragment")
 inline fun <F : Fragment, V : ViewBinding> Fragment.viewBinding(
@@ -184,13 +217,23 @@ inline fun <F : Fragment, V : ViewBinding> Fragment.viewBinding(
 /**
  * Creates an instance of the binding class for the [ViewGroup] to use.
  *
- * You can click
- * [VbViewGroup.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbViewGroup.kt)
- * and
- * [viewgroup_vb.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/viewgroup_vb.xml)
- * to see the sample code.
+ * ```kotlin
+ * class ViewGroupGetViewBindingByDelegate @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+ *     LinearLayout(context, attrs) {
+ *
+ *     private val mBinding by viewBinding(ViewgroupVbBinding::bind)
+ *     // Or
+ *     // private val mBinding by viewBinding(ViewgroupVbBinding::bind, R.id.root)
+ *
+ *     init {
+ *         inflate(context, R.layout.viewgroup_vb, this)
+ *     }
+ *
+ * }
+ * ```
  *
  * @since 0.5.2
+ * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbViewGroup.kt">Example</a>
  */
 @JvmName("viewBindingViewGroup")
 inline fun <V : ViewBinding> ViewGroup.viewBinding(
@@ -203,15 +246,26 @@ inline fun <V : ViewBinding> ViewGroup.viewBinding(
 /**
  * Creates an instance of the binding class for the [ViewGroup] to use.
  *
- * You can click
- * [VbViewGroup.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbViewGroup.kt)
- * and
- * [viewgroup_vb.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/viewgroup_vb.xml)
- * to see the sample code.
+ * ```kotlin
+ * class ViewGroupGetViewBindingByDelegate @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+ *     LinearLayout(context, attrs) {
+ *
+ *     private val mBinding by viewBinding(ViewgroupVbBinding::bind)
+ *     // Or
+ *     // private val mBinding by viewBinding(ViewgroupVbBinding::bind, R.id.root)
+ *
+ *     init {
+ *         inflate(context, R.layout.viewgroup_vb, this)
+ *     }
+ *
+ * }
+ * ```
  *
  * @since 0.5.2
+ * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbViewGroup.kt">Example</a>
  */
 @JvmName("viewBindingViewGroup")
+@Suppress("UnusedReceiverParameter")
 inline fun <V : ViewBinding> ViewGroup.viewBinding(
     crossinline viewBinder: (View) -> V,
     @IdRes viewBindingRootId: Int
@@ -223,40 +277,48 @@ inline fun <V : ViewBinding> ViewGroup.viewBinding(
  * Creates an instance of the binding class for the
  * [RecyclerView.ViewHolder] to use.
  *
- * You can click
- * [VbAdapter.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbAdapter.kt)
- * and
- * [item_person.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/item_person.xml)
- * to see the sample code.
+ * ```kotlin
+ * class ArticleVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+ *     private val binding by viewBinding(ItemArticleBinding::bind)
+ *     val title = binding.articleTitle
+ *     val shareUser = binding.articleShareUser
+ * }
+ * ```
  *
  * @since 0.5.2
+ * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbAdapter.kt">Example</a>
  */
 @JvmName("viewBindingViewHolder")
+@Suppress("UnusedReceiverParameter")
 inline fun <V : ViewBinding> RecyclerView.ViewHolder.viewBinding(
     crossinline viewBinder: (View) -> V,
     crossinline viewProvider: (RecyclerView.ViewHolder) -> View = RecyclerView.ViewHolder::itemView
-) = LazyViewBindingProperty { holder: RecyclerView.ViewHolder ->
-    viewBinder(viewProvider(holder))
+) = LazyViewBindingProperty { vh: RecyclerView.ViewHolder ->
+    viewBinder(viewProvider(vh))
 }
 
 /**
  * Creates an instance of the binding class for the
  * [RecyclerView.ViewHolder] to use.
  *
- * You can click
- * [VbAdapter.kt](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbAdapter.kt)
- * and
- * [item_person.xml](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/res/layout/item_person.xml)
- * to see the sample code.
+ * ```kotlin
+ * class ArticleVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+ *     private val binding by viewBinding(ItemArticleBinding::bind, R.id.article_root)
+ *     val title = binding.articleTitle
+ *     val shareUser = binding.articleShareUser
+ * }
+ * ```
  *
  * @since 0.5.2
+ * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbAdapter.kt">Example</a>
  */
 @JvmName("viewBindingViewHolder")
+@Suppress("UnusedReceiverParameter")
 inline fun <V : ViewBinding> RecyclerView.ViewHolder.viewBinding(
     crossinline viewBinder: (View) -> V,
     @IdRes viewBindingRootId: Int
-) = LazyViewBindingProperty { holder: RecyclerView.ViewHolder ->
-    viewBinder(holder.itemView.requireViewByIdCompat(viewBindingRootId))
+) = LazyViewBindingProperty { vh: RecyclerView.ViewHolder ->
+    viewBinder(vh.itemView.requireViewByIdCompat(viewBindingRootId))
 }
 
 interface ViewBindingProperty<in R : Any, out V : ViewBinding> : ReadOnlyProperty<R, V> {
@@ -302,7 +364,7 @@ abstract class LifecycleViewBindingProperty<in R : Any, out V : ViewBinding>(
         val viewBinding = viewBinder(thisRef)
         if (lifecycle.currentState == Lifecycle.State.DESTROYED) {
             Log.w(
-                "LifecycleViewBindingProperty",
+                this::class.java.simpleName,
                 "Access to viewBinding after Lifecycle is destroyed or hasn't created yet. " +
                         "The instance of viewBinding will be not cached."
             )
@@ -315,7 +377,6 @@ abstract class LifecycleViewBindingProperty<in R : Any, out V : ViewBinding>(
 
     @MainThread
     override fun clear() {
-        Log.d("VbActivity1", "clear")
         viewBinding = null
     }
 
