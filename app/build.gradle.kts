@@ -96,7 +96,7 @@ dependencies {
     implementation(projects.libraries.netstatelayout)
     implementation(projects.libraries.adapter)
     implementation(projects.libraries.core)
-    implementation(libs.vasttools)
+    implementation(projects.libraries.tools)
     implementation(projects.libraries.log.core)
     implementation(projects.libraries.log.okhttp)
     implementation(libs.activity.ktx)
@@ -125,4 +125,5 @@ dependencies {
     implementation(libs.reflex)
     implementation(libs.retrofit)
     implementation(libs.security.crypto)
+    implementation(libs.androidx.navigation.fragment)
 }

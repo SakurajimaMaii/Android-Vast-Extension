@@ -58,6 +58,7 @@ core-local = "0.1.0"
 log = "1.3.3"
 log-local = "1.3.3"
 tools = "1.4.1"
+navigationFragment = "2.7.7"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-ktx" }
@@ -126,6 +127,7 @@ ui-tooling-preview-compose = { module = "androidx.compose.ui:ui-tooling-preview"
 vastcore = { module = "io.github.sakurajimamaii:VastCore", version.ref = "vastcore" }
 vasttools = { module = "io.github.sakurajimamaii:VastTools", version.ref = "tools" }
 vastnetstatelayout = { module = "io.github.sakurajimamaii:VastNetStateLayout", version.ref = "vastnetstatelayout" }
+androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

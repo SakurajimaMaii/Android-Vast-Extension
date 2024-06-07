@@ -56,6 +56,7 @@ internal fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
  * @param VM The class type of the ViewModel.
  * @since 0.5.2
  */
+@Suppress("UNCHECKED_CAST")
 @JvmOverloads
 fun <VM : ViewModel> reflectViewModel(
     current: Class<*>,
@@ -77,11 +78,12 @@ fun <VM : ViewModel> reflectViewModel(
                     continue
                 }
                 if (ViewModel::class.java.isAssignableFrom(aClass1)) {
-                    return ViewModelProvider(store, object : ViewModelProvider.Factory {
+                    val provider = ViewModelProvider(store, object : ViewModelProvider.Factory {
                         override fun <T : ViewModel> create(modelClass: Class<T>): T {
                             return cast(createVM(modelClass))
                         }
-                    })[cast(aClass1)]
+                    })
+                    return provider[aClass1 as Class<VM>]
                 }
             }
         }
