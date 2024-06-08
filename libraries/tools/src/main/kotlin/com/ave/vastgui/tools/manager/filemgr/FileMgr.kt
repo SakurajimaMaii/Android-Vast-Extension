@@ -220,6 +220,25 @@ object FileMgr {
     }
 
     /**
+     * Creates the directory named by this abstract pathname, including any necessary but
+     * nonexistent parent directories.
+     *
+     * @since 1.5.0
+     * @see File.mkdirs
+     */
+    @JvmStatic
+    fun makeDirs(dirs: File): ResultCompat<String> = when {
+        dirs.exists() ->
+            ResultCompat.failure(IllegalArgumentException("${dirs.name} is already exists."))
+
+        dirs.mkdirs() ->
+            ResultCompat.success("${dirs.name} is created.")
+
+        else ->
+            ResultCompat.failure(RuntimeException("${dirs.name} create failed."))
+    }
+
+    /**
      * Delete directory.
      *
      * @param dir The directory you want to delete.
