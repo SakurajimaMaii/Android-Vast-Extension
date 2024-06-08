@@ -36,7 +36,7 @@ class LogSp internal constructor() : ISharedPreferencesOwner {
 
     override val name: String = LogUtil::class.java.name
     override val kv: SharedPreferences by lazy {
-        SpEncrypted.getInstance(name).getSharedPreferences()
+        SpEncrypted(name).getSharedPreferences()
     }
 
     companion object {

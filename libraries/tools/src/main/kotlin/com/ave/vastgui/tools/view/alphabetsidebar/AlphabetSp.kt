@@ -39,7 +39,7 @@ internal object AlphabetSp : ISharedPreferencesOwner {
     override val name: String =
         "${AppUtils.getPackageName("")}.${AlphabetSp::class.java.simpleName}"
     override val kv: SharedPreferences by lazy {
-        SpEncrypted.getInstance(name).getSharedPreferences()
+        SpEncrypted(name).getSharedPreferences()
     }
 
     var Favorite by int(0)

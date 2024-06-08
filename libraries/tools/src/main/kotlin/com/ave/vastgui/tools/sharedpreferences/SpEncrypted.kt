@@ -31,13 +31,13 @@ import com.ave.vastgui.tools.content.ContextHelper
  * Creating an instance of encrypted SharedPreferences.
  *
  * ```kotlin
- * val sp = SpEncrypted.getInstance(name).getSharedPreferences()
+ * val sp = SpEncrypted(name).getSharedPreferences()
  * ```
  *
  * @param name The name of the file to open; can not contain path
  *     separators.
  */
-class SpEncrypted private constructor(name: String) {
+class SpEncrypted(name: String) {
 
     private val mSharedPreferences by lazy {
         EncryptedSharedPreferences.create(
@@ -53,6 +53,10 @@ class SpEncrypted private constructor(name: String) {
         return mSharedPreferences
     }
 
+    @Deprecated(
+        level = DeprecationLevel.HIDDEN,
+        message = "Users should be able to create multiple SpEncrypted instances."
+    )
     companion object : SingletonHolder<SpEncrypted, String>(::SpEncrypted)
 
 }
