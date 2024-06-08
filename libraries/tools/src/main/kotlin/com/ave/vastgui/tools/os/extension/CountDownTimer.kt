@@ -19,6 +19,7 @@
 package com.ave.vastgui.tools.os.extension
 
 import android.os.CountDownTimer
+import android.util.Log
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -26,7 +27,12 @@ import android.os.CountDownTimer
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/os/extension/countdowntimer/
 
 /**
- * Get [CountDownTimer] .
+ * @since 1.5.0
+ */
+const val TAG = "CountDownTimerExt"
+
+/**
+ * Gets [CountDownTimer] , or null if an exception is encountered.
  *
  * @param millisInFuture The number of millis in the future from the call
  *     to [CountDownTimer.start] until the countdown is done and
@@ -35,19 +41,23 @@ import android.os.CountDownTimer
  *     [CountDownTimer.onTick] callbacks.
  * @param onTick Callback fired on regular interval.
  * @param onFinish Callback fired when the time is up.
- * @since 1.2.1
+ * @since 1.5.0
  */
 inline fun getCountDownTimer(
     millisInFuture: Long,
     countDownInterval: Long,
     crossinline onTick: (Long) -> Unit = {},
     crossinline onFinish: () -> Unit = {}
-) = object : CountDownTimer(millisInFuture, countDownInterval) {
-    override fun onTick(millisUntilFinished: Long) {
-        onTick(millisUntilFinished)
-    }
+): CountDownTimer? = runCatching {
+    object : CountDownTimer(millisInFuture, countDownInterval) {
+        override fun onTick(millisUntilFinished: Long) {
+            onTick(millisUntilFinished)
+        }
 
-    override fun onFinish() {
-        onFinish()
+        override fun onFinish() {
+            onFinish()
+        }
     }
-}
+}.onFailure {
+    Log.e(TAG, it.stackTraceToString())
+}.getOrNull()
