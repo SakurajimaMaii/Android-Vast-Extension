@@ -30,13 +30,13 @@ import com.ave.vastgui.tools.content.ContextHelper
  * Creating an instance of SharedPreferences.
  *
  * ```kotlin
- * val sp = SpNormal.getInstance(name).getSharedPreferences()
+ * val sp = SpNormal(name).getSharedPreferences()
  * ```
  *
  * @param name The name of the file to open; can not contain path
  *     separators.
  */
-class SpNormal private constructor(name: String) {
+class SpNormal(name: String) {
 
     private val mSharedPreferences by lazy {
         ContextHelper.getAppContext().getSharedPreferences(name, Context.MODE_PRIVATE)
@@ -46,6 +46,10 @@ class SpNormal private constructor(name: String) {
         return mSharedPreferences
     }
 
+    @Deprecated(
+        level = DeprecationLevel.HIDDEN,
+        message = "Users should be able to create multiple SpNormal instances."
+    )
     companion object : SingletonHolder<SpNormal, String>(::SpNormal)
 
 }
