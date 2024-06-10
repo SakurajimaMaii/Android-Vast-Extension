@@ -299,8 +299,8 @@ object NetStateUtils {
     @JvmStatic
     fun intIP2StringIP(ipv4: Int): String {
         return (((ipv4 and 0xFF).toString() + "." +
-                ((ipv4 shr 8) and 0xFF)).toString() + "." +
-                ((ipv4 shr 16) and 0xFF)).toString() + "." +
+                ((ipv4 shr 8) and 0xFF)) + "." +
+                ((ipv4 shr 16) and 0xFF)) + "." +
                 (ipv4 shr 24 and 0xFF)
     }
 
