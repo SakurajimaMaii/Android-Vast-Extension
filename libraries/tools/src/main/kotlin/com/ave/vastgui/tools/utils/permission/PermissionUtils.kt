@@ -129,7 +129,12 @@ inline fun ComponentActivity.requestPermission(
     singlePermissionLauncher()?.launch(permission) { result ->
         when {
             result -> mBuilder.granted(permission)
-            shouldShowRequestPermissionRationale(permission) -> mBuilder.denied(permission)
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+                if (shouldShowRequestPermissionRationale(permission)) {
+                    mBuilder.denied(permission)
+                }
+            }
+
             else -> mBuilder.noMoreAsk(permission)
         }
     }
@@ -160,11 +165,16 @@ inline fun ComponentActivity.requestMultiplePermissions(
         val deniedList = result.filter { !it.value }.map { it.key }
         when {
             deniedList.isNotEmpty() -> {
-                val map = deniedList.groupBy { permission ->
-                    if (shouldShowRequestPermissionRationale(permission)) DENIED else EXPLAINED
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    val map = deniedList.groupBy { permission ->
+                        if (shouldShowRequestPermissionRationale(permission)) DENIED else EXPLAINED
+                    }
+                    map[DENIED]?.let { mBuilder.denied(it) }
+                    map[EXPLAINED]?.let { mBuilder.noMoreAsk(it) }
+                } else {
+                    mBuilder.denied(deniedList)
+                    mBuilder.noMoreAsk(emptyList())
                 }
-                map[DENIED]?.let { mBuilder.denied(it) }
-                map[EXPLAINED]?.let { mBuilder.noMoreAsk(it) }
             }
 
             else -> mBuilder.allGranted()
