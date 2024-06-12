@@ -14,28 +14,33 @@
  * limitations under the License.
  */
 
-package com.log.vastgui.mars.config
-
+package com.log.vastgui.mars.base
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2024/6/1 0:16
+// Date: 2024/6/12 22:35
 // Description: 
 // Documentation:
 // Reference:
 
-object MarsConfig {
-
-    init {
-        System.loadLibrary("c++_shared")
-        System.loadLibrary("marsxlog")
-    }
-
+/**
+ * Mars write mode
+ *
+ * @since 1.3.4.
+ */
+enum class MarsWriteMode(val value: Int) {
     /**
-     * Whether to save a log file every day
+     * Async
      *
      * @since 1.3.4
      */
-    private var oneFileEveryday = true
+    Async(0),
 
+    /**
+     * Sync. Synchronous writing, recommended when the application
+     * is in debug mode, real-time writing, no encryption.
+     *
+     * @since 1.3.4
+     */
+    Sync(1)
 }
