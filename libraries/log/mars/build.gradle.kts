@@ -12,6 +12,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        ndk { abiFilters.addAll(arrayOf("armeabi-v7a", "arm64-v8a")) }
     }
 
     buildTypes {
@@ -35,8 +37,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.log.core)
     implementation(libs.mars.core)
+    implementation(libs.log.core)
     implementation(libs.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

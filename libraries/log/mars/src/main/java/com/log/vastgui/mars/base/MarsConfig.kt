@@ -138,21 +138,29 @@ internal object MarsConfig {
      * @since 1.3.4
      */
     fun init() {
-        val config = Xlog.XLogConfig()
-        config.mode = mode.value
-        config.logdir = logdir.path
-        config.cachedir = cache.path
-        config.nameprefix = namePreFix
-        config.cachedays = singleLogFileCacheDays
-        config.pubkey = pubKey
-        if (singleLogFileEveryday) {
-            MarsLog.setMaxFileSize(0L, 0)
-        } else {
-            MarsLog.setMaxFileSize(0L, singleLogFileMaxSize)
+        Xlog().apply {
+            Log.setLogImp(this)
+            if (singleLogFileEveryday) {
+                setMaxFileSize(0L, 0)
+            } else {
+                setMaxFileSize(0L, singleLogFileMaxSize)
+            }
+            setMaxAliveTime(0L, singleLogFileStoreTime)
+            Log.setConsoleLogOpen(isConsoleLogOpen)
+            Log.appenderOpen(
+                Xlog.LEVEL_ALL,
+                mode.value,
+                cache.path,
+                logdir.path,
+                namePreFix,
+                singleLogFileCacheDays
+            )
         }
-        MarsLog.setConsoleLogOpen(0L, isConsoleLogOpen)
-        MarsLog.setMaxAliveTime(0L, singleLogFileStoreTime)
-        Log.setLogImp(MarsLog)
+    }
+
+    /** @since 1.3.4 */
+    fun close() {
+        Log.appenderClose()
     }
 
 }

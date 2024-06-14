@@ -34,14 +34,13 @@ import java.io.File
 /**
  * Mars
  *
- * @since 1.3.4
  * @see MarsConfig
+ * @since 1.3.4
  */
 fun LogStore.Companion.mars(
     logdir: File,
     cache: File,
     mode: MarsWriteMode = MarsConfig.mode,
-    isConsoleLogOpen: Boolean = MarsConfig.isConsoleLogOpen,
     namePreFix: String = MarsConfig.namePreFix,
     singleLogFileEveryday: Boolean = MarsConfig.singleLogFileEveryday,
     singleLogFileMaxSize: Long = MarsConfig.singleLogFileMaxSize,
@@ -50,7 +49,6 @@ fun LogStore.Companion.mars(
     pubKey: String = MarsConfig.pubKey
 ) = MarsConfig.let {
     it.mode = mode
-    it.isConsoleLogOpen = isConsoleLogOpen
     it.logdir = logdir
     it.cache = cache
     it.namePreFix = namePreFix
@@ -63,13 +61,15 @@ fun LogStore.Companion.mars(
 }
 
 class MarsStore internal constructor() : LogStore {
-    override fun store(info: LogInfo) = when (info.mLevel) {
-        LogLevel.VERBOSE -> Log.v(info.mTag, info.mContent)
-        LogLevel.DEBUG -> Log.d(info.mTag, info.mContent)
-        LogLevel.INFO -> Log.i(info.mTag, info.mContent)
-        LogLevel.WARN -> Log.w(info.mTag, info.mContent)
-        LogLevel.ERROR -> Log.e(info.mTag, info.mContent)
-        LogLevel.ASSERT -> Log.f(info.mTag, info.mContent)
+    override fun store(info: LogInfo) {
+        when (info.mLevel) {
+            LogLevel.VERBOSE -> Log.v(info.mTag, info.mContent)
+            LogLevel.DEBUG -> Log.d(info.mTag, info.mContent)
+            LogLevel.INFO -> Log.i(info.mTag, info.mContent)
+            LogLevel.WARN -> Log.w(info.mTag, info.mContent)
+            LogLevel.ERROR -> Log.e(info.mTag, info.mContent)
+            LogLevel.ASSERT -> Log.f(info.mTag, info.mContent)
+        }
     }
 
     init {
