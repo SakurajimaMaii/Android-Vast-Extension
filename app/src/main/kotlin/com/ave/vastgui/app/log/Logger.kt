@@ -16,7 +16,7 @@
 
 package com.ave.vastgui.app.log
 
-import com.ave.vastgui.tools.log.android
+import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.log.vastgui.core.LogFactory
 import com.log.vastgui.core.base.LogStore
 import com.log.vastgui.core.base.Logger
@@ -26,11 +26,16 @@ import com.log.vastgui.core.plugin.LogJson
 import com.log.vastgui.core.plugin.LogPrinter
 import com.log.vastgui.core.plugin.LogStorage
 import com.log.vastgui.core.plugin.LogSwitch
+import com.log.vastgui.mars.mars
+import java.io.File
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/5
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
+
+val logDir = File(FileMgr.appInternalFilesDir(), "log")
+val logCache = File(FileMgr.appInternalFilesDir(), "log-cache")
 
 @JvmField
 val mLogFactory: LogFactory = getLogFactory {
@@ -38,12 +43,12 @@ val mLogFactory: LogFactory = getLogFactory {
         open = true
     }
     install(LogPrinter) {
-        logger = Logger.android(30)
+        logger = Logger.mars(true)
     }
     install(LogStorage) {
-        logStore = LogStore.android()
+        logStore = LogStore.mars(logDir, logCache)
     }
-    install(LogJson){
+    install(LogJson) {
         converter = GsonConverter(true)
     }
 }
