@@ -19,9 +19,7 @@ package com.log.vastgui.okhttp
 import com.ave.vastgui.core.extension.NotNullOrDefault
 import com.ave.vastgui.core.extension.SingletonHolder
 import com.log.vastgui.core.LogUtil
-import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogLevel
-import com.log.vastgui.core.base.TEXT_TYPE
 import com.log.vastgui.okhttp.base.ContentLevel
 import okhttp3.Connection
 import okhttp3.Interceptor
@@ -192,14 +190,8 @@ class Okhttp3Interceptor private constructor(private val logger: LogUtil) : Inte
                 if (responseBody == null) return response
                 if (isPlaintext(responseBody.contentType())) {
                     val bufferSize = 1024 * 8
-                    val buffer = ByteArray(bufferSize)
-                    var readLength: Int
                     val bytes = ByteArrayOutputStream().use { output ->
-                        while (responseBody!!.byteStream().read(buffer, 0, bufferSize)
-                                .also { readLength = it } != -1
-                        ) {
-                            output.write(buffer, 0, readLength)
-                        }
+                        responseBody!!.byteStream().copyTo(output, bufferSize)
                         output.toByteArray()
                     }
                     val contentType = responseBody.contentType()
@@ -240,14 +232,7 @@ class Okhttp3Interceptor private constructor(private val logger: LogUtil) : Inte
 
     /** @since 1.3.3 */
     private fun log(level: LogLevel, tag: String, content: String, tr: Throwable? = null) {
-        val thread = Thread.currentThread()
-        val index = thread.stackTrace
-            .indexOfLast { it.className == Okhttp3Interceptor::class.java.name }
-        val logInfo = LogInfo(
-            thread.name, thread.stackTrace[index], level, tag,
-            System.currentTimeMillis(), content, TEXT_TYPE, tr
-        )
-        logger.logPrint(logInfo)
+        logger.logPrint(level, tag, content, tr)
     }
 
     companion object : SingletonHolder<Okhttp3Interceptor, LogUtil>(::Okhttp3Interceptor) {

@@ -16,12 +16,17 @@
 
 package com.log.vastgui.core.base
 
-import com.log.vastgui.core.annotation.LogApi
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/28
 // Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
+
+/**
+ * Min Stack Offset.
+ *
+ * @since 1.3.4
+ */
+internal const val MIN_STACK_OFFSET = 3
 
 /**
  * The content representing [mContent] is text.
@@ -52,7 +57,7 @@ const val JSON_TYPE = 0x02
  *     the object is created.
  * @since 0.5.2
  */
-class LogInfo @LogApi constructor(
+class LogInfo internal constructor(
     val mThreadName: String,
     val mStackTrace: StackTraceElement?,
     val mLevel: LogLevel,
@@ -84,4 +89,23 @@ class LogInfo @LogApi constructor(
             """.trimIndent()
     }
 
+}
+
+/**
+ * [getStackOffset] .
+ *
+ * @since 1.3.4
+ * @see <a href="https://github.com/fengzhizi715/SAF-Kotlin-log/blob/4aba284fbabe8e69f324b010a2b921d4e9d0cc37/core/src/main/java/com/safframework/log/LoggerPrinter.kt#L33">getStackOffset</a>
+ */
+internal inline fun <reified T> getStackOffset(trace: Array<StackTraceElement>): Int {
+    var i = MIN_STACK_OFFSET
+    while (i < trace.size) {
+        val e = trace[i]
+        val name = e.className
+        if (name != T::class.java.name) {
+            return --i
+        }
+        i++
+    }
+    return -1
 }
