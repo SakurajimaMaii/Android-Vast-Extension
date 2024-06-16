@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.tooling.preview.Preview
+import com.ave.vastgui.tools.graphics.QRCode.createQRCodeBitmap
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -36,7 +37,7 @@ fun QRCode() {
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        val qrCode = QRCode.createQRCodeBitmap("Hello", 800, 800)
+        val qrCode = createQRCodeBitmap("Hello", 800, 800)
         Image(bitmap = qrCode.asImageBitmap(), contentDescription = null)
     }
 }
