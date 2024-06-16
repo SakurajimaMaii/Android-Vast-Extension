@@ -21,6 +21,7 @@ import com.log.vastgui.core.base.JSON_TYPE
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogLevel
 import com.log.vastgui.core.base.TEXT_TYPE
+import com.log.vastgui.core.base.getStackOffset
 import com.log.vastgui.core.json.Converter
 import com.log.vastgui.core.plugin.LogPrinter
 import com.log.vastgui.core.plugin.LogStorage
@@ -32,9 +33,7 @@ import kotlin.properties.Delegates
 // Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
 
 /**
- * LogUtils.
- *
- * @see LogPrinter
+ * [LogUtil].
  */
 class LogUtil internal constructor() {
 
@@ -275,8 +274,7 @@ class LogUtil internal constructor() {
         if (!logEnabled) return
         val jsonString = mLogConverter!!.toJson(target)
         val thread = Thread.currentThread()
-        val index =
-            thread.stackTrace.indexOfLast { it.className == LogUtil::class.java.name }
+        val index = getStackOffset<LogUtil>(thread.stackTrace)
         val logInfo = LogInfo(
             thread.name,
             thread.stackTrace[index + 1],
@@ -304,8 +302,7 @@ class LogUtil internal constructor() {
         if (!logEnabled) return
         val jsonString = mLogConverter!!.toJson(target)
         val thread = Thread.currentThread()
-        val index =
-            thread.stackTrace.indexOfLast { it.className == LogUtil::class.java.name }
+        val index = getStackOffset<LogUtil>(thread.stackTrace)
         val logInfo = LogInfo(
             thread.name,
             thread.stackTrace[index + 1],
@@ -336,8 +333,7 @@ class LogUtil internal constructor() {
         tr: Throwable? = null
     ) {
         val thread = Thread.currentThread()
-        val index =
-            thread.stackTrace.indexOfLast { it.className == LogUtil::class.java.name }
+        val index = getStackOffset<LogUtil>(thread.stackTrace)
         val logInfo = LogInfo(
             thread.name,
             thread.stackTrace[index + 1],
@@ -348,17 +344,6 @@ class LogUtil internal constructor() {
             TEXT_TYPE,
             tr
         )
-        mLogPrinter.printLog(logInfo)
-        mLogStorage?.storeLog(logInfo)
-    }
-
-    /**
-     * Log print.
-     *
-     * @since 1.3.3
-     */
-    @LogApi
-    fun logPrint(logInfo: LogInfo) {
         mLogPrinter.printLog(logInfo)
         mLogStorage?.storeLog(logInfo)
     }
