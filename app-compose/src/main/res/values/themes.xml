@@ -15,6 +15,5 @@
   -->
 
 <resources>
-
     <style name="Theme.AndroidVastExtension" parent="Theme.Material3.DayNight.NoActionBar" />
 </resources>
