@@ -34,10 +34,11 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
+
+    sourceSets["main"].jniLibs.srcDirs("libs")
 }
 
 dependencies {
-    implementation(libs.mars.core)
     implementation(libs.log.core)
     implementation(libs.core.ktx)
     testImplementation(libs.junit)
