@@ -19,9 +19,7 @@ package com.ave.vastgui.tools.exception
 import com.ave.vastgui.core.extension.SingletonHolder
 import com.ave.vastgui.core.extension.nothing_to_do
 import com.log.vastgui.core.LogUtil
-import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogLevel
-import com.log.vastgui.core.base.TEXT_TYPE
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -29,9 +27,7 @@ import com.log.vastgui.core.base.TEXT_TYPE
 // Description: App global exception handling.
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/exception/app-crash-handler/
 
-/**
- * @since 1.4.1
- */
+/** @since 1.4.1 */
 typealias dealAppCrash = (Thread, Throwable) -> Unit
 
 /**
@@ -73,17 +69,8 @@ class AppCrashHandler private constructor(private val configuration: Configurati
     override fun uncaughtException(thread: Thread, exception: Throwable) {
         if (null != configuration.logger) {
             val logger = configuration.logger
-            val info = LogInfo(
-                thread.name,
-                null,
-                LogLevel.ERROR,
-                logger.mDefaultTag,
-                System.currentTimeMillis(),
-                "Please refer to exception.",
-                TEXT_TYPE,
-                exception
-            )
-            logger.logPrint(info)
+            val content = "Please refer to exception."
+            logger.logPrint(LogLevel.ERROR, logger.mDefaultTag, content, exception)
         }
         configuration.action(thread, exception)
     }

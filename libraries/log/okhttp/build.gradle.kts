@@ -46,7 +46,8 @@ kotlin.sourceSets.all {
 }
 
 dependencies{
-    implementation(libs.log.core)
+    // implementation(libs.log.core)
+    implementation(projects.libraries.log.core)
     implementation(libs.okhttp)
 }
 

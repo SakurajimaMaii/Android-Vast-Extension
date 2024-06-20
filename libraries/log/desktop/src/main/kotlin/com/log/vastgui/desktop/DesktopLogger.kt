@@ -59,8 +59,8 @@ fun Logger.Companion.desktop(): DesktopLogger = DesktopLogger()
  * Desktop logger Implementation.You can view the following image to
  * preview the printing effect.
  *
- * @see <img src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/desktop/image/log.png?raw=true"/>
  * @since 1.3.1
+ * @see <img src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/desktop/image/log.png?raw=true"/>
  */
 class DesktopLogger internal constructor() : Logger {
 

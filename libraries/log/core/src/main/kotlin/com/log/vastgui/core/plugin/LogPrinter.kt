@@ -50,12 +50,10 @@ class LogPrinter private constructor(private val mConfiguration: Configuration) 
     }
 
     /** @since 1.3.1 */
-    private val mLevel: LogLevel
-        get() = mConfiguration.level
+    private val mLevel: LogLevel = mConfiguration.level
 
     /** @since 1.3.1 */
-    private val mLogger: Logger
-        get() = mConfiguration.logger
+    private val mLogger: Logger = mConfiguration.logger
 
     /**
      * Print log.
