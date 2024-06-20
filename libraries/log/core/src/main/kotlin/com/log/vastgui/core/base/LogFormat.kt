@@ -1,11 +1,11 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,23 +16,31 @@
 
 package com.log.vastgui.core.base
 
+import java.text.SimpleDateFormat
+import java.util.Locale
+
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2024/5/11 9:12
-// Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
+// Date: 2024/6/20 22:23
+// Description: 
+// Documentation:
+// Reference:
 
 /**
- * Logger.
+ * Log formatter.
  *
- * @since 1.3.1
+ * @since 1.3.4
  */
-interface Logger {
-    /** Formatter */
-    val logFormat: LogFormat
-        get() = TODO("Please override logFormat!")
+interface LogFormat {
+    /**
+     * Convert [logInfo] to [String] according to a certain format.
+     *
+     * @since 1.3.4
+     */
+    fun format(logInfo: LogInfo): String
 
-    /** @since 1.3.1 */
-    fun log(info: LogInfo)
-
-    companion object
+    companion object {
+        /** @since 1.3.4 */
+        internal val timeSdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
+    }
 }

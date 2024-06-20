@@ -17,6 +17,7 @@
 package com.ave.vastgui.tools.log
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.IntRange
 import com.ave.vastgui.tools.log.base.LogScope
 import com.ave.vastgui.tools.log.base.LogSp
@@ -27,12 +28,9 @@ import com.ave.vastgui.tools.utils.AppUtils
 import com.google.gson.JsonParser
 import com.log.vastgui.core.base.JSON_TYPE
 import com.log.vastgui.core.base.LogInfo
-import com.log.vastgui.core.base.LogLevel
 import com.log.vastgui.core.base.LogStore
-import com.log.vastgui.core.base.TEXT_TYPE
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.JsonNull.content
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
@@ -184,29 +182,24 @@ class AndroidStore internal constructor(
     }
 
     override fun handleCoroutineExceptionHandler(context: CoroutineContext, exception: Throwable) {
-        val thread = Thread.currentThread()
-        val stackTrace =
-            thread.stackTrace.findLast { it.className == AndroidStore::class.java.name }
-        val logInfo = LogInfo(
-            thread.name,
-            stackTrace,
-            LogLevel.ERROR,
-            "AndroidStore",
-            System.currentTimeMillis(),
-            content,
-            TEXT_TYPE,
-            exception
-        )
-        storage(logInfo)
+        Log.e(TAG, "$TAG encounter exception.", exception)
     }
 
     init {
         mLogScope.launch {
             while (isActive) {
-                val info = mLogChannel.receive()
-                storage(info)
+                runCatching {
+                    val info = mLogChannel.receive()
+                    storage(info)
+                }.onFailure {
+                    Log.e(TAG, "${TAG}:${it.stackTraceToString()}", it)
+                }
             }
         }
+    }
+
+    companion object{
+        const val TAG = "AndroidStore"
     }
 
 }

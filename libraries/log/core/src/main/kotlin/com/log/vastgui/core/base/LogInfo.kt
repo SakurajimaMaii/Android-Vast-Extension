@@ -16,6 +16,8 @@
 
 package com.log.vastgui.core.base
 
+import com.log.vastgui.core.annotation.LogApi
+
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/28
@@ -57,7 +59,7 @@ const val JSON_TYPE = 0x02
  *     the object is created.
  * @since 0.5.2
  */
-class LogInfo internal constructor(
+class LogInfo @LogApi constructor(
     val mThreadName: String,
     val mStackTrace: StackTraceElement?,
     val mLevel: LogLevel,

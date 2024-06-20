@@ -81,7 +81,7 @@ kotlin.sourceSets.all {
 dependencies {
     api(libs.security.crypto)
     api(libs.zxing.core)
-    api(libs.log.core)
+    api(projects.libraries.log.core)
     implementation(libs.vastcore)
     implementation(libs.activity.ktx)
     implementation(libs.annotation)
