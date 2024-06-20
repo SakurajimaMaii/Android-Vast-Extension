@@ -148,7 +148,7 @@ internal object MarsConfig {
             setMaxAliveTime(0L, singleLogFileStoreTime)
             Log.setConsoleLogOpen(isConsoleLogOpen)
             Log.appenderOpen(
-                Xlog.LEVEL_ALL,
+                Log.LEVEL_ALL,
                 mode.value,
                 cache.path,
                 logdir.path,

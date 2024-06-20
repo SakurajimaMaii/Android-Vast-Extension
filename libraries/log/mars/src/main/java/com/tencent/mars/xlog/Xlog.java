@@ -21,15 +21,6 @@ package com.tencent.mars.xlog;
 
 public class Xlog implements Log.LogImp {
 
-    public static final int LEVEL_ALL = 0;
-    public static final int LEVEL_VERBOSE = 0;
-    public static final int LEVEL_DEBUG = 1;
-    public static final int LEVEL_INFO = 2;
-    public static final int LEVEL_WARNING = 3;
-    public static final int LEVEL_ERROR = 4;
-    public static final int LEVEL_FATAL = 5;
-    public static final int LEVEL_NONE = 6;
-
     public static final int COMPRESS_LEVEL1 = 1;
     public static final int COMPRESS_LEVEL2 = 2;
     public static final int COMPRESS_LEVEL3 = 3;
@@ -58,7 +49,7 @@ public class Xlog implements Log.LogImp {
     }
 
     public static class XLogConfig {
-        public int level = LEVEL_INFO;
+        public int level = Log.LEVEL_INFO;
         public int mode = AppednerModeAsync;
         public String logdir;
         public String nameprefix;
@@ -94,32 +85,32 @@ public class Xlog implements Log.LogImp {
 
     @Override
     public void logV(long logInstancePtr, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log) {
-        logWrite2(logInstancePtr, LEVEL_VERBOSE, decryptTag(tag), filename, funcname, line, pid, tid, maintid, log);
+        logWrite2(logInstancePtr, Log.LEVEL_VERBOSE, decryptTag(tag), filename, funcname, line, pid, tid, maintid, log);
     }
 
     @Override
     public void logD(long logInstancePtr, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log) {
-        logWrite2(logInstancePtr, LEVEL_DEBUG, decryptTag(tag), filename, funcname, line, pid, tid, maintid, log);
+        logWrite2(logInstancePtr, Log.LEVEL_DEBUG, decryptTag(tag), filename, funcname, line, pid, tid, maintid, log);
     }
 
     @Override
     public void logI(long logInstancePtr, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log) {
-        logWrite2(logInstancePtr, LEVEL_INFO, decryptTag(tag), filename, funcname, line, pid, tid, maintid,  log);
+        logWrite2(logInstancePtr, Log.LEVEL_INFO, decryptTag(tag), filename, funcname, line, pid, tid, maintid,  log);
     }
 
     @Override
     public void logW(long logInstancePtr, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log) {
-        logWrite2(logInstancePtr, LEVEL_WARNING, decryptTag(tag), filename, funcname, line, pid, tid, maintid,  log);
+        logWrite2(logInstancePtr, Log.LEVEL_WARNING, decryptTag(tag), filename, funcname, line, pid, tid, maintid,  log);
     }
 
     @Override
     public void logE(long logInstancePtr, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log) {
-        logWrite2(logInstancePtr, LEVEL_ERROR, decryptTag(tag), filename, funcname, line, pid, tid, maintid,  log);
+        logWrite2(logInstancePtr, Log.LEVEL_ERROR, decryptTag(tag), filename, funcname, line, pid, tid, maintid,  log);
     }
 
     @Override
     public void logF(long logInstancePtr, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log) {
-        logWrite2(logInstancePtr, LEVEL_FATAL, decryptTag(tag), filename, funcname, line, pid, tid, maintid, log);
+        logWrite2(logInstancePtr, Log.LEVEL_FATAL, decryptTag(tag), filename, funcname, line, pid, tid, maintid, log);
     }
 
 

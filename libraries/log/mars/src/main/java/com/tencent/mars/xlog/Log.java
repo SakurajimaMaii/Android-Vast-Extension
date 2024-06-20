@@ -31,6 +31,7 @@ import java.util.Map;
 public class Log {
     private static final String TAG = "mars.xlog.log";
 
+    public static final int LEVEL_ALL = 0;
     public static final int LEVEL_VERBOSE = 0;
     public static final int LEVEL_DEBUG = 1;
     public static final int LEVEL_INFO = 2;
@@ -129,12 +130,7 @@ public class Log {
             }
             android.util.Log.e(tag, log);
             if (toastSupportContext != null) {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(toastSupportContext, log, Toast.LENGTH_LONG).show();
-                    }
-                });
+                handler.post(() -> Toast.makeText(toastSupportContext, log, Toast.LENGTH_LONG).show());
             }
         }
 
