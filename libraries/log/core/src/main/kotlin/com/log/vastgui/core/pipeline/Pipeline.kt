@@ -47,7 +47,7 @@ open class Pipeline<TSubject: Any, TContext: Any>(
             lastRelatedPhaseIndex = if (relatedTo == reference) i else lastRelatedPhaseIndex
         }
 
-        phasesRaw.add(lastRelatedPhaseIndex + 1, PhaseContent<TSubject, TContext>(phase, PipelinePhaseRelation.After(reference), mutableListOf())
+        phasesRaw.add(lastRelatedPhaseIndex + 1, PhaseContent<TSubject, TContext>(phase, PipelinePhaseRelation.After(reference), mutableListOf()))
     }
 
     fun insertPhaseBefore(reference: PipelinePhase, phase: PipelinePhase) {
@@ -57,7 +57,7 @@ open class Pipeline<TSubject: Any, TContext: Any>(
         if (index == -1) {
             throw IllegalArgumentException("Phase $reference not registered for this pipeline")
         }
-        phasesRaw.add(index, PhaseContent<TSubject, TContext>(phase, PipelinePhaseRelation.Before(reference), mutableListOf())
+        phasesRaw.add(index, PhaseContent<TSubject, TContext>(phase, PipelinePhaseRelation.Before(reference), mutableListOf()))
     }
 
     fun intercept(phase: PipelinePhase, block: PipelineInterceptor<TSubject, TContext>) {
