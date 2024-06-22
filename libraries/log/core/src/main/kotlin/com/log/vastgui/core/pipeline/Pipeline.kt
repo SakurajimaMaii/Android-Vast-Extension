@@ -1,4 +1,4 @@
-package com.ave.vastgui.core.pipeline
+package com.log.vastgui.core.pipeline
 
 typealias PipelineInterceptor<TSubject, TContext> = PipelineContext<TSubject, TContext>.(TSubject) -> Unit
 
@@ -204,6 +204,5 @@ open class Pipeline<TSubject: Any, TContext: Any>(
             else -> return false
         }
         return true
-    }
     }
 }
