@@ -19,6 +19,8 @@
 package com.log.vastgui.core
 
 import com.log.vastgui.core.base.LogPlugin
+import com.log.vastgui.core.plugin.LogStateChecker
+import com.log.vastgui.core.plugin.LogTypeValidator
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -42,6 +44,12 @@ class LogFactory internal constructor() {
 
     private val plugins: MutableMap<String, (LogUtil) -> Unit> = mutableMapOf()
     private val pluginConfigurations: MutableMap<String, Any.() -> Unit> = mutableMapOf()
+
+    init {
+        // install default plugin
+        install(LogTypeValidator)
+        install(LogStateChecker)
+    }
 
     /**
      * Install plugin for your log.

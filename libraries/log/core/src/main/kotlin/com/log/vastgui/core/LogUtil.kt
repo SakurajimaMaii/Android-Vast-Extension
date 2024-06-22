@@ -17,11 +17,9 @@
 package com.log.vastgui.core
 
 import com.log.vastgui.core.annotation.LogApi
-import com.log.vastgui.core.base.JSON_TYPE
-import com.log.vastgui.core.base.LogInfo
-import com.log.vastgui.core.base.LogLevel
-import com.log.vastgui.core.base.TEXT_TYPE
+import com.log.vastgui.core.base.*
 import com.log.vastgui.core.base.getStackOffset
+import com.log.vastgui.core.internel.LazyMessageWrapper
 import com.log.vastgui.core.json.Converter
 import com.log.vastgui.core.plugin.LogPrinter
 import com.log.vastgui.core.plugin.LogStorage
@@ -46,6 +44,8 @@ class LogUtil internal constructor() {
     @LogApi
     var mDefaultTag: String by Delegates.notNull()
 
+    val logPipeline: LogPipeline = LogPipeline()
+
     /**
      * `true` if you want to print log,`false` if you don't want to print the
      * log.
@@ -57,6 +57,7 @@ class LogUtil internal constructor() {
      *
      * @since 0.5.3
      */
+    @Deprecated("Use pipeline instead", level = DeprecationLevel.ERROR)
     internal var mLogPrinter: LogPrinter by Delegates.notNull()
 
     /**
@@ -64,6 +65,7 @@ class LogUtil internal constructor() {
      *
      * @since 0.5.3
      */
+    @Deprecated("Use pipeline instead", level = DeprecationLevel.ERROR)
     internal var mLogStorage: LogStorage? = null
 
     /**
@@ -71,7 +73,10 @@ class LogUtil internal constructor() {
      *
      * @since 0.5.3
      */
+    @Deprecated("Use pipeline instead", level = DeprecationLevel.ERROR)
     internal var mLogConverter: Converter? = null
+
+
 
     /**
      * Send a [LogLevel.INFO] log message.
@@ -80,6 +85,11 @@ class LogUtil internal constructor() {
      * @since 0.5.2
      */
     @JvmOverloads
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.HIDDEN,
+        replaceWith = ReplaceWith("i(content, tr)")
+    )
     fun i(content: String, tr: Throwable? = null) {
         if (logEnabled) {
             logPrint(LogLevel.INFO, mDefaultTag, content, tr)
@@ -93,6 +103,11 @@ class LogUtil internal constructor() {
      * @since 0.5.3
      */
     @JvmOverloads
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.HIDDEN,
+        replaceWith = ReplaceWith("i(tag, content, tr)")
+    )
     fun i(tag: String, content: String, tr: Throwable? = null) {
         if (logEnabled) {
             logPrint(LogLevel.INFO, tag, content, tr)
@@ -106,6 +121,11 @@ class LogUtil internal constructor() {
      * @since 0.5.2
      */
     @JvmOverloads
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.HIDDEN,
+        replaceWith = ReplaceWith("v(content, tr)")
+    )
     fun v(content: String, tr: Throwable? = null) {
         if (logEnabled) {
             logPrint(LogLevel.VERBOSE, mDefaultTag, content, tr)
@@ -119,6 +139,11 @@ class LogUtil internal constructor() {
      * @since 0.5.3
      */
     @JvmOverloads
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.HIDDEN,
+        replaceWith = ReplaceWith("v(tag, content, tr)")
+    )
     fun v(tag: String, content: String, tr: Throwable? = null) {
         if (logEnabled) {
             logPrint(LogLevel.VERBOSE, tag, content, tr)
@@ -132,6 +157,11 @@ class LogUtil internal constructor() {
      * @since 0.5.2
      */
     @JvmOverloads
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.HIDDEN,
+        replaceWith = ReplaceWith("w(content, tr)")
+    )
     fun w(content: String, tr: Throwable? = null) {
         if (logEnabled) {
             logPrint(LogLevel.WARN, mDefaultTag, content, tr)
@@ -145,6 +175,11 @@ class LogUtil internal constructor() {
      * @since 0.5.3
      */
     @JvmOverloads
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.HIDDEN,
+        replaceWith = ReplaceWith("w(tag, content, tr)")
+    )
     fun w(tag: String, content: String, tr: Throwable? = null) {
         if (logEnabled) {
             logPrint(LogLevel.WARN, tag, content, tr)
@@ -158,6 +193,11 @@ class LogUtil internal constructor() {
      * @since 0.5.2
      */
     @JvmOverloads
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.HIDDEN,
+        replaceWith = ReplaceWith("d(content, tr)")
+    )
     fun d(content: String, tr: Throwable? = null) {
         if (logEnabled) {
             logPrint(LogLevel.DEBUG, mDefaultTag, content, tr)
@@ -171,6 +211,11 @@ class LogUtil internal constructor() {
      * @since 0.5.3
      */
     @JvmOverloads
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.HIDDEN,
+        replaceWith = ReplaceWith("d(tag, content, tr)")
+    )
     fun d(tag: String, content: String, tr: Throwable? = null) {
         if (logEnabled) {
             logPrint(LogLevel.DEBUG, tag, content, tr)
@@ -184,6 +229,11 @@ class LogUtil internal constructor() {
      * @since 0.5.2
      */
     @JvmOverloads
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.HIDDEN,
+        replaceWith = ReplaceWith("e(content, tr)")
+    )
     fun e(content: String, tr: Throwable? = null) {
         if (logEnabled) {
             logPrint(LogLevel.ERROR, mDefaultTag, content, tr)
@@ -197,6 +247,11 @@ class LogUtil internal constructor() {
      * @since 0.5.3
      */
     @JvmOverloads
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.HIDDEN,
+        replaceWith = ReplaceWith("e(tag, content, tr)")
+    )
     fun e(tag: String, content: String, tr: Throwable? = null) {
         if (logEnabled) {
             logPrint(LogLevel.ERROR, tag, content, tr)
@@ -209,6 +264,11 @@ class LogUtil internal constructor() {
      * @param content Message content.
      * @since 1.3.1
      */
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.HIDDEN,
+        replaceWith = ReplaceWith("a(content, tr)")
+    )
     fun a(content: String, tr: Throwable? = null) {
         if (logEnabled) {
             logPrint(LogLevel.ASSERT, mDefaultTag, content, tr)
@@ -221,6 +281,11 @@ class LogUtil internal constructor() {
      * @param content Message content.
      * @since 1.3.1
      */
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.HIDDEN,
+        replaceWith = ReplaceWith("a(tag, content, tr)")
+    )
     fun a(tag: String, content: String, tr: Throwable? = null) {
         if (logEnabled) {
             logPrint(LogLevel.ASSERT, tag, content, tr)
@@ -234,6 +299,11 @@ class LogUtil internal constructor() {
      * @param jsonString The log content.
      * @since 1.3.1
      */
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.ERROR,
+    )
+    @Suppress("DEPRECATION_ERROR")
     fun json(logLevel: LogLevel, jsonString: String) {
         if (null == mLogConverter)
             throw RuntimeException("Please init mLogConverter by LogJson.")
@@ -251,6 +321,11 @@ class LogUtil internal constructor() {
      * @param jsonString The log content.
      * @since 1.3.1
      */
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.ERROR,
+    )
+    @Suppress("DEPRECATION_ERROR")
     fun json(tag: String, logLevel: LogLevel, jsonString: String) {
         if (null == mLogConverter)
             throw RuntimeException("Please init mLogConverter by LogJson.")
@@ -268,6 +343,12 @@ class LogUtil internal constructor() {
      * @throws RuntimeException
      * @since 0.5.2
      */
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.ERROR,
+        replaceWith = ReplaceWith("i(target)")
+    )
+    @Suppress("DEPRECATION_ERROR")
     fun json(level: LogLevel, target: Any) {
         if (null == mLogConverter)
             throw RuntimeException("Please init mLogConverter by LogJson.")
@@ -296,6 +377,12 @@ class LogUtil internal constructor() {
      * @throws RuntimeException
      * @since 0.5.3
      */
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.ERROR,
+        replaceWith = ReplaceWith("i(tag, target)")
+    )
+    @Suppress("DEPRECATION_ERROR")
     fun json(tag: String, level: LogLevel, target: Any) {
         if (null == mLogConverter)
             throw RuntimeException("Please init mLogConverter by LogJson.")
@@ -326,6 +413,12 @@ class LogUtil internal constructor() {
      * @since 0.5.3
      */
     @LogApi
+    @Deprecated(
+        "Use pipeline instead",
+        level = DeprecationLevel.WARNING,
+        replaceWith = ReplaceWith("log(level, tag, content, tr")
+    )
+    @Suppress("DEPRECATION_ERROR")
     fun logPrint(
         level: LogLevel,
         tag: String,
@@ -347,6 +440,107 @@ class LogUtil internal constructor() {
         mLogPrinter.printLog(logInfo)
         mLogStorage?.storeLog(logInfo)
     }
+
+    @LogApi
+    fun log(
+        level: LogLevel,
+        tag: String,
+        content: Any,
+        tr: Throwable? = null
+    ) {
+        logPipeline.execute(this, LogInfoBuilder(level, tag, content, tr))
+    }
+
+    @JvmOverloads
+    fun i(tag: String, content: Any, tr: Throwable? = null) {
+        log(LogLevel.INFO, tag, content, tr)
+    }
+
+    @JvmOverloads
+    fun i(content: Any, tr: Throwable? = null) {
+        i(mDefaultTag, content, tr)
+    }
+
+    @JvmOverloads
+    fun i(tag: String = mDefaultTag, tr: Throwable? = null, lazyMsg: () -> Any) {
+        i(LazyMessageWrapper(lazyMsg), tr)
+    }
+
+    @JvmOverloads
+    fun v(tag: String, content: Any, tr: Throwable? = null) {
+        log(LogLevel.VERBOSE, tag, content, tr)
+    }
+
+    @JvmOverloads
+    fun v(content: Any, tr: Throwable? = null) {
+        v(mDefaultTag, content, tr)
+    }
+
+    @JvmOverloads
+    fun v(tag: String = mDefaultTag, tr: Throwable? = null, lazyMsg: () -> Any) {
+        v(LazyMessageWrapper(lazyMsg), tr)
+    }
+
+    @JvmOverloads
+    fun w(tag: String, content: Any, tr: Throwable? = null) {
+        log(LogLevel.WARN, tag, content, tr)
+    }
+
+    @JvmOverloads
+    fun w(content: Any, tr: Throwable? = null) {
+        w(mDefaultTag, content, tr)
+    }
+
+    @JvmOverloads
+    fun w(tag: String = mDefaultTag, tr: Throwable? = null, lazyMsg: () -> Any) {
+        w(LazyMessageWrapper(lazyMsg), tr)
+    }
+
+    @JvmOverloads
+    fun d(tag: String, content: Any, tr: Throwable? = null) {
+        log(LogLevel.DEBUG, tag, content, tr)
+    }
+
+    @JvmOverloads
+    fun d(content: Any, tr: Throwable? = null) {
+        d(mDefaultTag, content, tr)
+    }
+
+    @JvmOverloads
+    fun d(tag: String = mDefaultTag, tr: Throwable? = null, lazyMsg: () -> Any) {
+        d(LazyMessageWrapper(lazyMsg), tr)
+    }
+
+    @JvmOverloads
+    fun e(tag: String, content: Any, tr: Throwable? = null) {
+        log(LogLevel.ERROR, tag, content, tr)
+    }
+
+    @JvmOverloads
+    fun e(content: Any, tr: Throwable? = null) {
+        e(mDefaultTag, content, tr)
+    }
+
+    @JvmOverloads
+    fun e(tag: String = mDefaultTag, tr: Throwable? = null, lazyMsg: () -> Any) {
+        e(LazyMessageWrapper(lazyMsg), tr)
+    }
+
+    @JvmOverloads
+    fun a(tag: String, content: Any, tr: Throwable? = null) {
+        log(LogLevel.ASSERT, tag, content, tr)
+    }
+
+    @JvmOverloads
+    fun a(content: Any, tr: Throwable? = null) {
+        a(mDefaultTag, content, tr)
+    }
+
+    @JvmOverloads
+    fun a(tag: String = mDefaultTag, tr: Throwable? = null, lazyMsg: () -> Any) {
+        a(LazyMessageWrapper(lazyMsg), tr)
+    }
+
 
     companion object {
         /** @since 1.3.1 */

@@ -16,6 +16,7 @@
 
 package com.log.vastgui.core.plugin
 
+import com.log.vastgui.core.LogPipeline
 import com.log.vastgui.core.LogUtil
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogLevel
@@ -76,7 +77,12 @@ class LogPrinter private constructor(private val mConfiguration: Configuration) 
         }
 
         override fun install(plugin: LogPrinter, scope: LogUtil) {
-            scope.mLogPrinter = plugin
+            // scope.mLogPrinter = plugin
+            scope.logPipeline.intercept(LogPipeline.Output) {
+                val logInfo = subject.build()
+                plugin.printLog(logInfo)
+                proceed()
+            }
         }
     }
 }
