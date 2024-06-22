@@ -16,9 +16,11 @@
 
 package com.log.vastgui.core.plugin
 
+import com.log.vastgui.core.LogPipeline
 import com.log.vastgui.core.LogUtil
 import com.log.vastgui.core.base.LogPlugin
 import com.log.vastgui.core.json.Converter
+import com.log.vastgui.core.pipeline.PipelinePhase
 import kotlin.properties.Delegates
 
 // Author: Vast Gui
@@ -49,7 +51,19 @@ class LogJson private constructor(private val mConfiguration: Configuration) {
             get() = LogJson::class.java.simpleName
 
         override fun install(plugin: LogJson, scope: LogUtil) {
-            scope.mLogConverter = plugin.mConfiguration.converter
+            // scope.mLogConverter = plugin.mConfiguration.converter
+            scope.logPipeline.intercept(LogPipeline.Transform) {
+                val content = subject.content()
+                if (content is String) { // already string, skip
+                    proceed()
+                    return@intercept
+                }
+                // TODO check if content need to convert, could add predicate in configuration
+                val converter = plugin.mConfiguration.converter
+                val json = converter.toJson(content)
+                subject.setStringContent(json)
+                proceedWith(subject)
+            }
         }
 
         override fun configuration(config: Configuration.() -> Unit): LogJson {
