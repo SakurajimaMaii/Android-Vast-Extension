@@ -1,4 +1,4 @@
-package com.ave.vastgui.core.pipeline
+package com.log.vastgui.core.pipeline
 
 abstract class PipelineContext<TSubject : Any, TContext : Any>(
     val context: TContext

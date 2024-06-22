@@ -1,4 +1,4 @@
-package com.ave.vastgui.core.pipeline
+package com.log.vastgui.core.pipeline
 
 internal class SimplePipelineContext<TSubject: Any, TContext: Any> (
     context: TContext,
