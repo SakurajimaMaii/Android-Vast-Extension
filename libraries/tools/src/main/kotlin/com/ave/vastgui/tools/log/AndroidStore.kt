@@ -22,13 +22,16 @@ import androidx.annotation.IntRange
 import com.ave.vastgui.tools.log.base.LogScope
 import com.ave.vastgui.tools.log.base.LogSp
 import com.ave.vastgui.tools.log.base.fileNameTimeSdf
-import com.ave.vastgui.tools.log.base.timeSdf
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.utils.AppUtils
 import com.google.gson.JsonParser
 import com.log.vastgui.core.base.JSON_TYPE
+import com.log.vastgui.core.base.LogFormat
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogStore
+import com.log.vastgui.core.format.DEFAULT_MAX_PRINT_TIMES
+import com.log.vastgui.core.format.DEFAULT_MAX_SINGLE_LOG_LENGTH
+import com.log.vastgui.core.format.TableFormat
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.io.BufferedWriter
@@ -64,14 +67,11 @@ fun LogStore.Companion.android(
     fileNamePrefix: String = AppUtils.getAppName(),
     fileNameDateSuffixSdf: SimpleDateFormat = fileNameTimeSdf,
     @IntRange(from = 0L, to = Long.MAX_VALUE) fileMaxSize: Long = 1000 * 1024L,
-    storageFormat: (LogInfo) -> String = { info ->
-        """
-        ${timeSdf.format(info.mTime)} ${info.mLevel} [${info.mThreadName}] ${info.mTag} 
-         (${info.mStackTrace?.fileName}:${info.mStackTrace?.lineNumber}) ${info.mContent}
-        """.trimIndent().replace("\n", "")
+    logFormat: LogFormat = TableFormat.LogHeader.default.let {
+        TableFormat(DEFAULT_MAX_SINGLE_LOG_LENGTH, DEFAULT_MAX_PRINT_TIMES, it)
     }
 ): AndroidStore =
-    AndroidStore(fileRoot, fileNamePrefix, fileNameDateSuffixSdf, fileMaxSize, storageFormat)
+    AndroidStore(fileRoot, fileNamePrefix, fileNameDateSuffixSdf, fileMaxSize, logFormat)
 
 /**
  * Android log store.
@@ -80,7 +80,7 @@ fun LogStore.Companion.android(
  * @property fileNamePrefix File name prefix.
  * @property fileNameDateSuffixSdf Date format of file name date suffix.
  * @property fileMaxSize The size of a single log file(in bytes).
- * @property storageFormat The content format in log file.
+ * @property logFormat The log format in file.
  * @property mFileName The name of the log file.
  * @property mLogSp LogSp is used to save the log file name of the last
  *     operation.
@@ -92,7 +92,7 @@ class AndroidStore internal constructor(
     val fileNamePrefix: String,
     val fileNameDateSuffixSdf: SimpleDateFormat,
     val fileMaxSize: Long,
-    val storageFormat: (LogInfo) -> String
+    override val logFormat: LogFormat
 ) : LogScope(), LogStore {
 
     private val mFileName: String
@@ -123,9 +123,9 @@ class AndroidStore internal constructor(
                 logInfo.mType,
                 logInfo.mThrowable
             )
-            storageFormat(info)
+            logFormat.format(info)
         } else {
-            storageFormat(logInfo)
+            logFormat.format(logInfo)
         }
         val currentNeedSize = mCurrentFile.getCurrentSize() + message.toByteArray().size.toLong()
         if (currentNeedSize > fileMaxSize) {
@@ -146,7 +146,7 @@ class AndroidStore internal constructor(
         if (appendFile) {
             mLogSp.mCurrentFileName = mFileName
         }
-        if(!fileRoot.exists()){
+        if (!fileRoot.exists()) {
             FileMgr.makeDir(fileRoot).result.onFailure { throw it }
         }
         val file = File(fileRoot, mLogSp.mCurrentFileName)
@@ -198,7 +198,7 @@ class AndroidStore internal constructor(
         }
     }
 
-    companion object{
+    companion object {
         const val TAG = "AndroidStore"
     }
 

@@ -21,6 +21,8 @@ import com.ave.vastgui.tools.log.base.LogScope
 import com.log.vastgui.core.base.LogFormat
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.Logger
+import com.log.vastgui.core.format.DEFAULT_MAX_PRINT_TIMES
+import com.log.vastgui.core.format.DEFAULT_MAX_SINGLE_LOG_LENGTH
 import com.log.vastgui.core.format.TableFormat
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -30,21 +32,6 @@ import kotlin.coroutines.CoroutineContext
 // Email: guihy2019@gmail.com
 // Date: 2024/5/13 20:48
 // Documentation: https://ave.entropy2020.cn/documents/VastTools/log/logger/
-
-/**
- * Default maximum length of chars printed of a single log.
- * **Notes:Considering fault tolerance, 1000 is set here instead of 1024.**
- *
- * @since 1.3.1
- */
-private const val DEFAULT_MAX_SINGLE_LOG_LENGTH = 1000
-
-/**
- * Default max print repeat times.
- *
- * @since 1.3.1
- */
-private const val DEFAULT_MAX_PRINT_TIMES = Int.MAX_VALUE
 
 /**
  * Android Logger.
@@ -73,7 +60,7 @@ fun Logger.Companion.android(
     maxPrintTimes: Int = DEFAULT_MAX_PRINT_TIMES,
     header: TableFormat.LogHeader =
         TableFormat.LogHeader(thread = true, tag = true, level = true, time = true)
-): AndroidLogger = AndroidLogger(TableFormat.getInstance(maxSingleLogLength, maxPrintTimes, header))
+): AndroidLogger = AndroidLogger(TableFormat(maxSingleLogLength, maxPrintTimes, header))
 
 /**
  * Android Logger with custom [LogFormat].
@@ -91,8 +78,8 @@ class AndroidLogger internal constructor(
     override val logFormat: LogFormat
 ) : LogScope(), Logger {
 
-    override fun log(info: LogInfo) {
-        mLogScope.launch { mLogChannel.send(info) }
+    override fun log(logInfo: LogInfo) {
+        mLogScope.launch { mLogChannel.send(logInfo) }
     }
 
     override fun handleCoroutineExceptionHandler(context: CoroutineContext, exception: Throwable) {

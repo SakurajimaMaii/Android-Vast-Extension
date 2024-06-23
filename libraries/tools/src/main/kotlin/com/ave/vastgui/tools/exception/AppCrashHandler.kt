@@ -18,7 +18,7 @@ package com.ave.vastgui.tools.exception
 
 import com.ave.vastgui.core.extension.SingletonHolder
 import com.ave.vastgui.core.extension.nothing_to_do
-import com.log.vastgui.core.LogUtil
+import com.log.vastgui.core.LogCat
 import com.log.vastgui.core.base.LogLevel
 
 // Author: Vast Gui
@@ -62,7 +62,7 @@ class AppCrashHandler private constructor(private val configuration: Configurati
      * @since 1.4.1
      */
     class Configuration @JvmOverloads constructor(
-        val logger: LogUtil? = null,
+        val logger: LogCat? = null,
         val action: dealAppCrash = { _, _ -> nothing_to_do() }
     )
 
@@ -70,7 +70,7 @@ class AppCrashHandler private constructor(private val configuration: Configurati
         if (null != configuration.logger) {
             val logger = configuration.logger
             val content = "Please refer to exception."
-            logger.logPrint(LogLevel.ERROR, logger.mDefaultTag, content, exception)
+            logger.log(LogLevel.ERROR, logger.mDefaultTag, content, exception)
         }
         configuration.action(thread, exception)
     }
