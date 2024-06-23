@@ -1,11 +1,11 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -57,7 +57,7 @@ class LogFactory internal constructor() {
      * @since 0.5.2
      */
     @Suppress("UNCHECKED_CAST")
-    fun <TConfig, TPlugin> install(
+    fun <TConfig : Any, TPlugin : Any> install(
         plugin: LogPlugin<TConfig, TPlugin>,
         configure: TConfig.() -> Unit = {}
     ) {
@@ -70,7 +70,9 @@ class LogFactory internal constructor() {
         if (plugins.containsKey(plugin.key)) return
 
         plugins[plugin.key] = { scope ->
-            val pluginData = plugin.configuration(configure)
+            // FIX: https://github.com/SakurajimaMaii/Android-Vast-Extension/issues/148
+            val config: (Any.() -> Unit) = pluginConfigurations[plugin.key]!!
+            val pluginData: TPlugin = plugin.configuration(config)
             plugin.install(pluginData, scope)
         }
     }
