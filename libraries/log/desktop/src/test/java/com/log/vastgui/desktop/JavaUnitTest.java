@@ -22,22 +22,22 @@ package com.log.vastgui.desktop;
 
 import static com.log.vastgui.desktop.LoggerKt.mLogFactory;
 
-import com.log.vastgui.core.LogUtil;
+import com.log.vastgui.core.LogCat;
 import com.sun.tools.javac.Main;
 
 import org.junit.Test;
 
 public class JavaUnitTest {
 
-    private static final LogUtil mLogger = mLogFactory.getLog(Main.class);
+    private static final LogCat logcat = mLogFactory.getLogCat(Main.class);
 
     @Test
     public void logTest() {
-        mLogger.v("这是一条测试日志");
-        mLogger.d("这是一条测试日志");
-        mLogger.i("这是一条测试日志");
-        mLogger.w("这是一条测试日志");
-        mLogger.e("这是一条测试日志");
+        logcat.v("这是一条测试日志");
+        logcat.d("这是一条测试日志");
+        logcat.i("这是一条测试日志");
+        logcat.w("这是一条测试日志");
+        logcat.e("这是一条测试日志");
     }
 
 }

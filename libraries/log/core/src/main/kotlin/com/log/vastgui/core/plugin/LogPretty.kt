@@ -16,66 +16,61 @@
 
 package com.log.vastgui.core.plugin
 
-import com.log.vastgui.core.LogPipeline
 import com.log.vastgui.core.LogCat
+import com.log.vastgui.core.LogPipeline
 import com.log.vastgui.core.base.LogPlugin
 import com.log.vastgui.core.json.Converter
 import kotlin.properties.Delegates
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/9/8
-// Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
+// Date: 2024/6/23 1:13
+// Description: 
+// Documentation:
+// Reference:
 
 /**
- * The [LogJson] plugin allows you to convert objects to json.
+ * [LogPretty] allows printing the json string in the log in pretty style.
  *
- * ```json
+ * ```kotlin
  * private val gsonConverter = GsonConverter.getInstance(true)
  *
+ * @JvmField
  * val mLogFactory: LogFactory = getLogFactory {
- *     ...
- *     install(LogJson) {
+ *     ....
+ *     install(LogPretty) {
  *         converter = gsonConverter
  *     }
  * }
  * ```
  *
- * @since 0.5.3
+ * @since 1.3.4
  */
-class LogJson private constructor(private val mConfiguration: Configuration) {
+class LogPretty private constructor(private val mConfiguration: Configuration) {
 
-    /**
-     * Configuration of [LogJson].
-     *
-     * @property converter The json converter.
-     * @since 0.5.3
-     */
     class Configuration internal constructor() {
         var converter: Converter by Delegates.notNull()
     }
 
-    companion object : LogPlugin<Configuration, LogJson> {
+    companion object : LogPlugin<Configuration, LogPretty> {
 
-        override val key: String = LogJson::class.java.simpleName
+        override val key: String = LogPretty::class.java.simpleName
 
-        override fun install(plugin: LogJson, scope: LogCat) {
-            scope.logPipeline.intercept(LogPipeline.Transform) {
-                val content = subject.content()
-                // already string, skip
-                if (content is String) {
-                    proceed()
-                    return@intercept
-                }
-                val json = plugin.mConfiguration.converter.toJson(content)
-                subject.setStringContent(json)
+        override fun install(plugin: LogPretty, scope: LogCat) {
+            scope.logPipeline.intercept(LogPipeline.Render) {
+                val rawContent = subject.getStringContent()
+                // Try to render the log content and return the
+                // original content if an exception occurs.
+                val content = plugin.mConfiguration
+                    .converter.parseString(rawContent)
+                subject.setStringContent(content.toString())
                 proceedWith(subject)
             }
         }
 
-        override fun configuration(config: Configuration.() -> Unit): LogJson {
+        override fun configuration(config: Configuration.() -> Unit): LogPretty {
             val configuration = Configuration().also(config)
-            return LogJson(configuration)
+            return LogPretty(configuration)
         }
     }
 }

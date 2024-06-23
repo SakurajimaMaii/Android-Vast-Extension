@@ -16,15 +16,14 @@
 
 package com.log.vastgui.desktop
 
-import com.log.vastgui.core.base.LogLevel
 import org.junit.Test
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/5/14 23:59
 
-class KotlinUnitTest {
-    private val mLogger = mLogFactory.getLog(KotlinUnitTest::class.java)
+class LogCatTest {
+    private val logcat = mLogFactory.getLogCat(LogCatTest::class.java)
 
     @Test
     fun logTest() {
@@ -44,14 +43,14 @@ class KotlinUnitTest {
                     }
                 ]
             }"""
-        mLogger.json(LogLevel.VERBOSE, jsonString)
+        logcat.v(jsonString)
         val map = mapOf("name" to "Xiao Ming", "age" to 19)
-        mLogger.json(LogLevel.DEBUG, map)
+        logcat.d(map)
         val list = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-        mLogger.json(LogLevel.INFO, list)
-        mLogger.w("This is a log.")
-        mLogger.e("This is a log.")
-        mLogger.a("This is a log.")
+        logcat.i(list)
+        logcat.w("This is a log.")
+        logcat.e("This is a log.")
+        logcat.a("This is a log.")
     }
 
     private class User(val name: String)

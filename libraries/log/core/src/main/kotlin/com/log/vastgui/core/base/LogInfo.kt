@@ -1,11 +1,11 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,13 +22,6 @@ import com.log.vastgui.core.annotation.LogApi
 // Email: guihy2019@gmail.com
 // Date: 2023/8/28
 // Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
-
-/**
- * Min Stack Offset.
- *
- * @since 1.3.4
- */
-internal const val MIN_STACK_OFFSET = 3
 
 /**
  * The content representing [mContent] is text.
@@ -74,7 +67,7 @@ class LogInfo @LogApi constructor(
     val mPrintLength = mTraceLength.coerceAtLeast(mContent.length)
 
     val mPrintBytesLength = (if (mTraceLength >= mContent.length) mStackTrace.toString()
-        .toByteArray().size else mContent.toByteArray().size).coerceAtLeast(100)
+        .toByteArray().size else mContent.toByteArray().size).coerceAtLeast(50)
 
     val mLevelPriority: Int = mLevel.priority
 
@@ -97,17 +90,7 @@ class LogInfo @LogApi constructor(
  * [getStackOffset] .
  *
  * @since 1.3.4
- * @see <a href="https://github.com/fengzhizi715/SAF-Kotlin-log/blob/4aba284fbabe8e69f324b010a2b921d4e9d0cc37/core/src/main/java/com/safframework/log/LoggerPrinter.kt#L33">getStackOffset</a>
  */
 internal inline fun <reified T> getStackOffset(trace: Array<StackTraceElement>): Int {
-    var i = MIN_STACK_OFFSET
-    while (i < trace.size) {
-        val e = trace[i]
-        val name = e.className
-        if (name != T::class.java.name) {
-            return --i
-        }
-        i++
-    }
-    return -1
+    return trace.indexOfLast { it.className == T::class.java.name }.coerceAtLeast(0)
 }

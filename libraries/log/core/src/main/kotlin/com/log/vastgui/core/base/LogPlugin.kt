@@ -1,11 +1,11 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +16,7 @@
 
 package com.log.vastgui.core.base
 
-import com.log.vastgui.core.LogUtil
+import com.log.vastgui.core.LogCat
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -46,6 +46,6 @@ interface LogPlugin<out TConfig, TPlugin> {
      * @param scope
      * @since 0.5.2
      */
-    fun install(plugin: TPlugin, scope: LogUtil)
+    fun install(plugin: TPlugin, scope: LogCat)
 
 }

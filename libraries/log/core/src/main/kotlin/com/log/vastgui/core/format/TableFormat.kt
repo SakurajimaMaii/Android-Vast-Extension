@@ -16,6 +16,7 @@
 
 package com.log.vastgui.core.format
 
+import com.log.vastgui.core.annotation.LogApi
 import com.log.vastgui.core.base.JSON_TYPE
 import com.log.vastgui.core.base.LogDivider
 import com.log.vastgui.core.base.LogFormat
@@ -33,13 +34,30 @@ import com.log.vastgui.core.base.needCut
 // Reference:
 
 /**
+ * Default maximum length of chars printed of a single log.
+ * **Notes:Considering fault tolerance, 1000 is set here instead of 1024.**
+ *
+ * @since 1.3.4
+ */
+@LogApi
+const val DEFAULT_MAX_SINGLE_LOG_LENGTH = 1000
+
+/**
+ * Default max print repeat times.
+ *
+ * @since 1.3.4
+ */
+@LogApi
+const val DEFAULT_MAX_PRINT_TIMES = Int.MAX_VALUE
+
+/**
  * Table format of [LogInfo].
  *
  * @see <img
  *     src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/tools/image/log.png?raw=true">
  * @since 1.3.4
  */
-class TableFormat private constructor(
+class TableFormat(
     private val mMaxSingleLogLength: Int,
     private val mMaxPrintTimes: Int,
     private val mHeader: LogHeader
@@ -63,7 +81,12 @@ class TableFormat private constructor(
         val tag: Boolean,
         val level: Boolean,
         val time: Boolean
-    )
+    ) {
+        companion object {
+            /** @since 1.3.4 */
+            val default = LogHeader(thread = true, tag = true, level = true, time = true)
+        }
+    }
 
     /** @since 1.3.4 */
     override fun format(logInfo: LogInfo): String = when (logInfo.mType) {
@@ -82,7 +105,7 @@ class TableFormat private constructor(
         if (!logInfo.needCut(mMaxSingleLogLength)) {
             logFormat(logInfo) { body, content ->
                 // FIX: DEAL LINE SEPARATOR THAT EXIST WITHIN THE LOG CONTENT
-                val patterns = content.split(System.lineSeparator())
+                val patterns = content.split("\n", System.lineSeparator())
                 patterns.forEach { pattern ->
                     body.appendLine(LogDivider.getInfo(pattern))
                 }
@@ -95,7 +118,7 @@ class TableFormat private constructor(
             var printTheRest = true
             logFormat(logInfo, mMaxSingleLogLength * 4) { body, content ->
                 // FIX: DEAL LINE SEPARATOR THAT EXIST WITHIN THE LOG CONTENT
-                val patterns = content.split(System.lineSeparator())
+                val patterns = content.split("\n", System.lineSeparator())
                 patterns.forEach { pattern ->
                     var bytes = pattern.toByteArray()
                     if (mMaxSingleLogLength * 4 < bytes.size) {
@@ -126,7 +149,7 @@ class TableFormat private constructor(
      * @since 1.3.4
      */
     private fun jsonFormat(logInfo: LogInfo) = logFormat(logInfo) { body, content ->
-        for (line in content.split(System.lineSeparator())) {
+        for (line in content.split("\n", System.lineSeparator())) {
             body.appendLine(LogDivider.getInfo(line))
         }
     }
@@ -141,35 +164,25 @@ class TableFormat private constructor(
         len: Int = logInfo.mPrintBytesLength,
         customScope: (StringBuilder, String) -> Unit
     ) = StringBuilder(logInfo.mContent.length * 4).apply {
-        appendLine(LogDivider.getTop(len))
+        // It makes no sense to print a separator that is too long.
+        val length = len.coerceAtMost(100)
+        appendLine(LogDivider.getTop(length))
         val thread = if (mHeader.thread) "Thread: ${logInfo.mThreadName}" else ""
         val tag = if (mHeader.tag) "Tag: ${logInfo.mTag}" else ""
         val level = if (mHeader.level) "Level: ${logInfo.mLevel}" else ""
         val time = if (mHeader.time) "Time: ${timeSdf.format(logInfo.mTime)}" else ""
         appendLine(LogDivider.getInfo("$thread $tag $level $time"))
-        appendLine(LogDivider.getDivider(len))
+        appendLine(LogDivider.getDivider(length))
         appendLine(LogDivider.getInfo("${logInfo.mStackTrace}"))
-        appendLine(LogDivider.getDivider(len))
+        appendLine(LogDivider.getDivider(length))
         customScope(this, logInfo.mContent)
         logInfo.mThrowable?.apply {
-            appendLine(LogDivider.getDivider(len))
+            appendLine(LogDivider.getDivider(length))
             appendLine(LogDivider.getInfo("$this"))
             for (item in this.stackTrace) {
                 appendLine(LogDivider.getInfo("  at $item"))
             }
         }
-        append(LogDivider.getBottom(len))
+        append(LogDivider.getBottom(length))
     }.toString()
-
-
-    companion object {
-        @Volatile
-        private var instance: TableFormat? = null
-
-        fun getInstance(maxSingleLength: Int, maxPrintTimes: Int, header: LogHeader): TableFormat =
-            instance ?: synchronized(this) {
-                instance ?: TableFormat(maxSingleLength, maxSingleLength, header)
-                    .apply { instance = this }
-            }
-    }
 }

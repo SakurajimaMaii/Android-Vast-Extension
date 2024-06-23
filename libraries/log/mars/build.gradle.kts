@@ -38,8 +38,12 @@ android {
     sourceSets["main"].jniLibs.srcDirs("libs")
 }
 
+kotlin.sourceSets.all {
+    languageSettings.optIn("com.log.vastgui.core.annotation.LogApi")
+}
+
 dependencies {
-    implementation(libs.log.core)
+    implementation(projects.libraries.log.core)
     implementation(libs.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -14,10 +14,26 @@
  * limitations under the License.
  */
 
-package com.log.vastgui.core.pipeline
+package com.log.vastgui.core.model
 
-// Author: ywnkm
-// Email: https://github.com/ywnkm
-// Date: 2024/6/22
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2024/6/23 18:24
 
-data class PipelinePhase(val name: String)
+data class Post(
+    val id: Int,
+    val title: String,
+    val content: String,
+    val author: User,
+    val comments: List<Comment>,
+    val tags: Set<String>
+)
+
+val post = Post(
+    id = 1,
+    title = "Tips for Effective Kotlin Coding",
+    content = "Learn these tips to write cleaner and more efficient Kotlin code...",
+    author = user,
+    comments = listOf(comment1, comment2),
+    tags = setOf("Kotlin", "Programming", "Tutorial")
+)

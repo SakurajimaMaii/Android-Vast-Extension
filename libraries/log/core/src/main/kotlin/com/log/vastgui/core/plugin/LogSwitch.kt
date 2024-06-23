@@ -1,11 +1,11 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +16,7 @@
 
 package com.log.vastgui.core.plugin
 
-import com.log.vastgui.core.LogUtil
+import com.log.vastgui.core.LogCat
 import com.log.vastgui.core.base.LogPlugin
 import com.log.vastgui.core.plugin.LogSwitch.Configuration
 
@@ -38,7 +38,7 @@ class LogSwitch internal constructor(
     /**
      * Configuration of [LogSwitch].
      *
-     * @property open [LogUtil] will print log when the [open] is true and the
+     * @property open [LogCat] will print log when the [open] is true and the
      *     app is in debug mode.
      * @since 0.5.4
      */
@@ -56,7 +56,7 @@ class LogSwitch internal constructor(
             return LogSwitch(configuration.open)
         }
 
-        override fun install(plugin: LogSwitch, scope: LogUtil) {
+        override fun install(plugin: LogSwitch, scope: LogCat) {
             scope.logEnabled = plugin.open
         }
 

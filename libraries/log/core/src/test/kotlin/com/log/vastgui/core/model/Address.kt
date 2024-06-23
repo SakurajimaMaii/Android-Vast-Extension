@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
-package com.log.vastgui.core.pipeline
+package com.log.vastgui.core.model
 
-// Author: ywnkm
-// Email: https://github.com/ywnkm
-// Date: 2024/6/22
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2024/6/23 18:22
 
-data class PipelinePhase(val name: String)
+data class Address(
+    val street: String,
+    val city: String,
+    val country: String
+)
+
+val address1 = Address(street = "123 Elm Street", city = "Springfield", country = "USA")
+val address2 = Address(street = "456 Oak Avenue", city = "Metropolis", country = "USA")

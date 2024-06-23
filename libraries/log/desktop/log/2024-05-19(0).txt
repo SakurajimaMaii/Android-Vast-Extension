@@ -1,6 +1,0 @@
-2024年5月19日 下午8:21:16 [VERBOSE|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:48) {"employees":[{"firstName":"Bill","lastName":"Gates"},{"firstName":"George","lastName":"Bush"},{"firstName":"Thomas","lastName":"Carter"}]} 
-2024年5月19日 下午8:21:16 [DEBUG|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:50) {"name":"Xiao Ming","age":19} 
-2024年5月19日 下午8:21:16 [INFO|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:52) [1,2,3,4,5,6,7,8,9] 
-2024年5月19日 下午8:21:16 [WARN|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:53) This is a log. 
-2024年5月19日 下午8:21:16 [ERROR|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:54) This is a log. 
-2024年5月19日 下午8:21:16 [ASSERT|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:55) This is a log. 

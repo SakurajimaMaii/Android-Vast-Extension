@@ -1,11 +1,11 @@
 /*
- * Copyright 2024 VastGui
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,21 +14,26 @@
  * limitations under the License.
  */
 
-package com.log.vastgui.core
+package com.log.vastgui.core.model
 
-import org.junit.Test
+import java.util.Date
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2024/5/19 23:49
+// Date: 2024/6/23 18:21
 
-class KotlinUnitTest {
+data class User(
+    val id: Long,
+    val name: String,
+    val email: String,
+    val registrationDate: Date,
+    val isActive: Boolean
+)
 
-    private val mLogger = mLogFactory.getLog(KotlinUnitTest::class.java)
-
-    @Test
-    fun log(){
-        mLogger.d("这是一条日志")
-    }
-
-}
+val user = User(
+    id = 1L,
+    name = "Alice Smith",
+    email = "alice.smith@example.com",
+    registrationDate = Date(), // 假设当前日期
+    isActive = true
+)

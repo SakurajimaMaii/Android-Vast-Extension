@@ -17,10 +17,11 @@
 package com.log.vastgui.desktop
 
 import com.ave.vastgui.core.extension.NotNullOrDefault
+import com.log.vastgui.core.base.LogFormat
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogStore
+import com.log.vastgui.core.format.LineFormat
 import java.io.File
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -46,9 +47,17 @@ private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
  *
  * @param fileRoot Folder to store log files.
  * @param fileMaxSize The size of a single log file(in bytes).
+ * @param logFormat The format of log in files.
+ * @see <a
+ *     href="https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/log/desktop/log">Example
+ *     log file</a>
  * @since 1.3.1
  */
-fun LogStore.Companion.desktop(fileRoot: String, fileMaxSize: Long) = DesktopStore().apply {
+fun LogStore.Companion.desktop(
+    fileRoot: String,
+    fileMaxSize: Long,
+    logFormat: LogFormat = LineFormat
+) = DesktopStore(logFormat).apply {
     this.fileRoot = fileRoot
     this.fileMaxSize = fileMaxSize
 }
@@ -58,7 +67,7 @@ fun LogStore.Companion.desktop(fileRoot: String, fileMaxSize: Long) = DesktopSto
  *
  * @since 1.3.1
  */
-class DesktopStore : LogStore {
+class DesktopStore internal constructor(override val logFormat: LogFormat) : LogStore {
 
     /**
      * Folder to store log files.
@@ -73,16 +82,6 @@ class DesktopStore : LogStore {
      * @since 1.3.1
      */
     var fileMaxSize by NotNullOrDefault(1024L)
-
-    /**
-     * Log content storage format.
-     *
-     * @since 1.3.1
-     */
-    var storageFormat: (LogInfo) -> String by NotNullOrDefault { info ->
-        val time = DateFormat.getDateTimeInstance().format(info.mTime)
-        "$time [${info.mLevel}|${info.mTag}|${info.mThreadName}] (${info.mStackTrace?.fileName}:${info.mStackTrace?.lineNumber}) ${info.mContent}"
-    }
 
     /** @since 1.3.1 */
     override fun store(info: LogInfo) {
@@ -126,7 +125,7 @@ class DesktopStore : LogStore {
                 lastFile
             }
         }
-        logFile.appendText("${storageFormat(info)} \n")
+        logFile.appendText("${logFormat.format(info)} \n")
     }
 
     /**

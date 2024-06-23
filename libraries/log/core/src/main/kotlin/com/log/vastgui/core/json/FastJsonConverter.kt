@@ -1,11 +1,11 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,8 +17,8 @@
 package com.log.vastgui.core.json
 
 import com.alibaba.fastjson2.JSON
-import com.alibaba.fastjson2.JSONObject
 import com.alibaba.fastjson2.JSONWriter
+import com.ave.vastgui.core.extension.SingletonHolder
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -30,7 +30,7 @@ import com.alibaba.fastjson2.JSONWriter
  *
  * @since 0.5.2
  */
-class FastJsonConverter(override val isPretty: Boolean) : Converter {
+class FastJsonConverter private constructor(override val isPretty: Boolean) : Converter {
 
     override fun toJson(data: Any): String = if (isPretty) {
         JSON.toJSONString(data, JSONWriter.Context(JSONWriter.Feature.PrettyFormat))
@@ -38,6 +38,10 @@ class FastJsonConverter(override val isPretty: Boolean) : Converter {
         JSON.toJSONString(data)
     }
 
-    override fun parseString(jsonString: String): JSONObject = JSON.parseObject(jsonString)
+    override fun parseString(jsonString: String): String = runCatching {
+        toJson(JSON.parseObject(jsonString))
+    }.getOrDefault(jsonString)
+
+    companion object : SingletonHolder<FastJsonConverter, Boolean>(::FastJsonConverter)
 
 }

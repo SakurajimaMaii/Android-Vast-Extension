@@ -1,11 +1,11 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,8 +16,8 @@
 
 package com.log.vastgui.core.json
 
+import com.ave.vastgui.core.extension.SingletonHolder
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 
 // Author: Vast Gui
@@ -30,7 +30,7 @@ import com.google.gson.JsonParser
  *
  * @since 0.5.2
  */
-class GsonConverter(override val isPretty: Boolean) : Converter {
+class GsonConverter private constructor(override val isPretty: Boolean) : Converter {
 
     private val gson = GsonBuilder().apply {
         if (isPretty) {
@@ -41,7 +41,10 @@ class GsonConverter(override val isPretty: Boolean) : Converter {
     override fun toJson(data: Any): String =
         gson.toJson(data)
 
-    override fun parseString(jsonString: String): JsonObject =
-        JsonParser.parseString(jsonString).asJsonObject
+    override fun parseString(jsonString: String): String = runCatching {
+        toJson(JsonParser.parseString(jsonString))
+    }.getOrDefault(jsonString)
+
+    companion object : SingletonHolder<GsonConverter, Boolean>(::GsonConverter)
 
 }

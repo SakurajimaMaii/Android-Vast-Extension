@@ -16,8 +16,12 @@
 
 package com.log.vastgui.core
 
+import com.log.vastgui.core.base.LogFormat
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.Logger
+import com.log.vastgui.core.format.DEFAULT_MAX_PRINT_TIMES
+import com.log.vastgui.core.format.DEFAULT_MAX_SINGLE_LOG_LENGTH
+import com.log.vastgui.core.format.TableFormat
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -25,7 +29,14 @@ import com.log.vastgui.core.base.Logger
 // Documentation: https://ave.entropy2020.cn/documents/log/log-core/develop/
 
 class SimpleLogger : Logger {
-    override fun log(info: LogInfo) {
-        println(info.toString())
+    override val logFormat: LogFormat =
+        TableFormat(
+            DEFAULT_MAX_SINGLE_LOG_LENGTH,
+            DEFAULT_MAX_PRINT_TIMES,
+            TableFormat.LogHeader.default
+        )
+
+    override fun log(logInfo: LogInfo) {
+        println(logFormat.format(logInfo))
     }
 }

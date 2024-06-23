@@ -1,0 +1,55 @@
+2024-06-23 23:27:55 [VERBOSE|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:46) {
+                "employees": [
+                    {
+                        "firstName": "Bill",
+                        "lastName": "Gates"
+                    },
+                    {
+                        "firstName": "George",
+                        "lastName": "Bush"
+                    },
+                    {
+                        "firstName": "Thomas",
+                        "lastName": "Carter"
+                    }
+                ]
+            } 
+2024-06-23 23:27:55 [DEBUG|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:48) {
+  "name": "Xiao Ming",
+  "age": 19
+} 
+2024-06-23 23:27:55 [INFO|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:50) [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9
+] 
+2024-06-23 23:27:55 [WARN|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:51) This is a log. 
+2024-06-23 23:27:55 [ERROR|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:52) This is a log. 
+2024-06-23 23:27:55 [ASSERT|KotlinUnitTest|Test worker] (KotlinUnitTest.kt:53) This is a log. 
+2024-06-23 23:33:28 [VERBOSE|LogcatTest|Test worker] (LogcatTest.kt:46) {
+                "employees": [
+                    {
+                        "firstName": "Bill",
+                        "lastName": "Gates"
+                    },
+                    {
+                        "firstName": "George",
+                        "lastName": "Bush"
+                    },
+                    {
+                        "firstName": "Thomas",
+                        "lastName": "Carter"
+                    }
+                ]
+            } 
+2024-06-23 23:33:28 [DEBUG|LogcatTest|Test worker] (LogcatTest.kt:48) {"name":"Xiao Ming","age":19} 
+2024-06-23 23:33:28 [INFO|LogcatTest|Test worker] (LogcatTest.kt:50) [1,2,3,4,5,6,7,8,9] 
+2024-06-23 23:33:28 [WARN|LogcatTest|Test worker] (LogcatTest.kt:51) This is a log. 
+2024-06-23 23:33:28 [ERROR|LogcatTest|Test worker] (LogcatTest.kt:52) This is a log. 
+2024-06-23 23:33:28 [ASSERT|LogcatTest|Test worker] (LogcatTest.kt:53) This is a log. 

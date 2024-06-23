@@ -42,7 +42,7 @@ fun getLogFactory(factory: LogFactory.() -> Unit): LogFactory = LogFactory().als
  */
 class LogFactory internal constructor() {
 
-    private val plugins: MutableMap<String, (LogUtil) -> Unit> = mutableMapOf()
+    private val plugins: MutableMap<String, (LogCat) -> Unit> = mutableMapOf()
     private val pluginConfigurations: MutableMap<String, Any.() -> Unit> = mutableMapOf()
 
     init {
@@ -80,9 +80,9 @@ class LogFactory internal constructor() {
     /**
      * Get log with [clazz].
      *
-     * @since 0.5.2
+     * @since 1.3.4
      */
-    fun getLog(clazz: Class<*>) = LogUtil().also {
+    fun getLogCat(clazz: Class<*>) = LogCat().also {
         it.mDefaultTag = clazz.simpleName
         install(it)
     }
@@ -90,9 +90,9 @@ class LogFactory internal constructor() {
     /**
      * Get log with [tag].
      *
-     * @since 0.5.2
+     * @since 1.3.4
      */
-    fun getLog(tag: String) = LogUtil().also {
+    fun getLogCat(tag: String) = LogCat().also {
         it.mDefaultTag = tag
         install(it)
     }
@@ -102,7 +102,7 @@ class LogFactory internal constructor() {
      *
      * @since 0.5.2
      */
-    private fun install(logUtil: LogUtil) {
+    private fun install(logUtil: LogCat) {
         plugins.values.forEach { logUtil.apply(it) }
     }
 

@@ -16,6 +16,7 @@
 
 package com.log.vastgui.core.base
 
+import com.log.vastgui.core.annotation.LogApi
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -41,6 +42,6 @@ interface LogFormat {
 
     companion object {
         /** @since 1.3.4 */
-        internal val timeSdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
+        @LogApi val timeSdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
     }
 }

@@ -1,14 +1,30 @@
+/*
+ * Copyright 2021-2024 VastGui
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.log.vastgui.core.pipeline
+
+// Author: ywnkm
+// Email: https://github.com/ywnkm
+// Date: 2024/6/22
 
 typealias PipelineInterceptor<TSubject, TContext> = PipelineContext<TSubject, TContext>.(TSubject) -> Unit
 
-open class Pipeline<TSubject: Any, TContext: Any>(
-    vararg phases: PipelinePhase
-) {
+open class Pipeline<TSubject : Any, TContext : Any>(vararg phases: PipelinePhase) {
 
-    /**
-     * [PipelinePhase] or [PhaseContent]
-     */
+    /** [PipelinePhase] or [PhaseContent] */
     private val phasesRaw: MutableList<Any> = mutableListOf(*phases)
 
     private var interceptorsQuantity = 0
@@ -21,10 +37,7 @@ open class Pipeline<TSubject: Any, TContext: Any>(
     val isEmpty: Boolean
         get() = interceptorsQuantity == 0
 
-    fun execute(
-        context: TContext,
-        subject: TSubject,
-    ): TSubject {
+    fun execute(context: TContext, subject: TSubject): TSubject {
         val pipelineContext = createContext(context, subject)
         return pipelineContext.execute(subject)
     }
@@ -46,26 +59,37 @@ open class Pipeline<TSubject: Any, TContext: Any>(
             val relatedTo = (relation as? PipelinePhaseRelation.After)?.relativeTo ?: continue
             lastRelatedPhaseIndex = if (relatedTo == reference) i else lastRelatedPhaseIndex
         }
-
-        phasesRaw.add(lastRelatedPhaseIndex + 1, PhaseContent<TSubject, TContext>(phase, PipelinePhaseRelation.After(reference), mutableListOf()))
+        phasesRaw.add(
+            lastRelatedPhaseIndex + 1,
+            PhaseContent<TSubject, TContext>(
+                phase,
+                PipelinePhaseRelation.After(reference),
+                mutableListOf()
+            )
+        )
     }
 
     fun insertPhaseBefore(reference: PipelinePhase, phase: PipelinePhase) {
         if (hasPhase(phase)) return
-
         val index = findPhaseIndex(reference)
         if (index == -1) {
             throw IllegalArgumentException("Phase $reference not registered for this pipeline")
         }
-        phasesRaw.add(index, PhaseContent<TSubject, TContext>(phase, PipelinePhaseRelation.Before(reference), mutableListOf()))
+        phasesRaw.add(
+            index,
+            PhaseContent<TSubject, TContext>(
+                phase,
+                PipelinePhaseRelation.Before(reference),
+                mutableListOf()
+            )
+        )
     }
 
     fun intercept(phase: PipelinePhase, block: PipelineInterceptor<TSubject, TContext>) {
-       val phaseContent = findPhase(phase) ?: throw IllegalArgumentException("Phase $phase is not registered")
-
+        val phaseContent =
+            findPhase(phase) ?: throw IllegalArgumentException("Phase $phase is not registered")
         phaseContent.addInterceptor(block)
         interceptorsQuantity++
-
         afterIntercepted()
     }
 
@@ -77,13 +101,11 @@ open class Pipeline<TSubject: Any, TContext: Any>(
         return phasesRaw.filterIsInstance<PhaseContent<*, *>>()
             .firstOrNull { it.phase == phase }
             ?.interceptors as List<PipelineInterceptor<TSubject, TContext>>
-            ?: emptyList()
     }
 
     fun mergePhases(from: Pipeline<TSubject, TContext>) {
         val fromPhases = from.phasesRaw
         val toInsert = fromPhases.toMutableSet()
-
         while (toInsert.isNotEmpty()) {
             val iterator = toInsert.iterator()
             while (iterator.hasNext()) {
@@ -105,7 +127,6 @@ open class Pipeline<TSubject: Any, TContext: Any>(
     }
 
     private fun mergeInterceptors(from: Pipeline<TSubject, TContext>) {
-
         val fromPhases = from.phasesRaw
         fromPhases.forEach { fromPhaseOrContent ->
             val fromPhase = (fromPhaseOrContent as? PipelinePhase)
@@ -130,7 +151,7 @@ open class Pipeline<TSubject: Any, TContext: Any>(
         context: TContext,
         subject: TSubject,
     ): PipelineContext<TSubject, TContext> {
-        return SimplePipelineContext<TSubject, TContext>(context, cacheInterceptors(), subject)
+        return SimplePipelineContext(context, subject, cacheInterceptors())
     }
 
     private fun findPhase(phase: PipelinePhase): PhaseContent<TSubject, TContext>? {
@@ -138,7 +159,12 @@ open class Pipeline<TSubject: Any, TContext: Any>(
         for (index in phasesList.indices) {
             val current = phasesList[index]
             if (phase === current) {
-                val content = PhaseContent<TSubject, TContext>(phase, PipelinePhaseRelation.Last, mutableListOf())
+                val content =
+                    PhaseContent<TSubject, TContext>(
+                        phase,
+                        PipelinePhaseRelation.Last,
+                        mutableListOf()
+                    )
                 phasesList[index] = content
                 return content
             }
@@ -171,9 +197,7 @@ open class Pipeline<TSubject: Any, TContext: Any>(
     }
 
     private fun cacheInterceptors(): List<PipelineInterceptor<TSubject, TContext>> {
-        val interceptorsQuantity = interceptorsQuantity
         if (interceptorsQuantity == 0) return emptyList()
-
         val phases = phasesRaw
         val result: MutableList<PipelineInterceptor<TSubject, TContext>> = mutableListOf()
         for (raw in phases) {
@@ -181,7 +205,6 @@ open class Pipeline<TSubject: Any, TContext: Any>(
             val phase = (raw as? PhaseContent<TSubject, TContext>) ?: continue
             phase.addTo(result)
         }
-
         return result
     }
 

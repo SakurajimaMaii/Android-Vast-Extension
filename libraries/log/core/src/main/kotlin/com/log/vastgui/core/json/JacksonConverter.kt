@@ -1,11 +1,11 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,6 +16,7 @@
 
 package com.log.vastgui.core.json
 
+import com.ave.vastgui.core.extension.SingletonHolder
 import com.fasterxml.jackson.databind.ObjectMapper
 
 // Author: Vast Gui
@@ -28,7 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
  *
  * @since 0.5.2
  */
-class JacksonConverter(override val isPretty: Boolean) : Converter {
+class JacksonConverter private constructor(override val isPretty: Boolean) : Converter {
 
     private val mapper = ObjectMapper()
 
@@ -38,9 +39,14 @@ class JacksonConverter(override val isPretty: Boolean) : Converter {
         mapper.writeValueAsString(data)
     }
 
-    override fun parseString(jsonString: String): Any = if (isPretty) {
-        mapper.readTree(jsonString).toPrettyString()
-    } else {
-        mapper.readTree(jsonString).toString()
-    }
+    override fun parseString(jsonString: String): String = runCatching {
+        if (isPretty) {
+            mapper.readTree(jsonString).toPrettyString()
+        } else {
+            mapper.readTree(jsonString).toString()
+        }
+    }.getOrDefault(jsonString)
+
+    companion object : SingletonHolder<JacksonConverter, Boolean>(::JacksonConverter)
+
 }
