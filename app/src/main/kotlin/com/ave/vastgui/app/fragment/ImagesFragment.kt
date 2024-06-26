@@ -35,7 +35,7 @@ import com.ave.vastgui.tools.network.request.create
 class ImagesFragment : VastVbFragment<FragmentImagesBinding>() {
 
     private val mAdapter by lazy { ImageAdapter(requireContext()) }
-    private val mLogger = mLogFactory.getLog(VideosFragment::class.java)
+    private val mLogger = mLogFactory.getLogCat(VideosFragment::class.java)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         getBinding().imagesRv.apply {

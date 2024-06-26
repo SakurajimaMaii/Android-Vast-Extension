@@ -43,7 +43,7 @@ import java.io.File
 
 class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>() {
 
-    private val mLogger = mLogFactory.getLog(ArcProgressViewActivity::class.java)
+    private val mLogger = mLogFactory.getLogCat(ArcProgressViewActivity::class.java)
     private lateinit var downloadTask: DLTask
 
     override fun onCreate(savedInstanceState: Bundle?) {

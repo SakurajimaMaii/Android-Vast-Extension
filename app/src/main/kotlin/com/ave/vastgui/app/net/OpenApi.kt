@@ -18,8 +18,7 @@ package com.ave.vastgui.app.net
 
 import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.tools.network.request.RequestBuilder
-import com.log.vastgui.core.LogUtil
-import com.log.vastgui.core.base.LogLevel
+import com.log.vastgui.core.LogCat
 import com.log.vastgui.okhttp.Okhttp3Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -29,18 +28,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 // Email: guihy2019@gmail.com
 // Date: 2024/1/2
 
-private val mLogger: LogUtil = mLogFactory.getLog(OpenApi::class.java)
-private val mOkhttp3Interceptor: Okhttp3Interceptor =
-    Okhttp3Interceptor.getInstance(mLogger)
-        .apply {
-            responseLevel = { response ->
-                if (200 == response.code) {
-                    LogLevel.DEBUG
-                } else {
-                    LogLevel.ERROR
-                }
-            }
-        }
+private val mLogcat: LogCat = mLogFactory.getLogCat(OpenApi::class.java)
+private val mOkhttp3Interceptor: Okhttp3Interceptor = Okhttp3Interceptor.getInstance(mLogcat)
 
 /** 开源 Api ，点击[开放API-2.0](https://api.apiopen.top) */
 class OpenApi : RequestBuilder("https://api.apiopen.top") {

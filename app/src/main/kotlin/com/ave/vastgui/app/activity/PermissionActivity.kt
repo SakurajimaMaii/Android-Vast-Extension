@@ -21,7 +21,6 @@ import com.ave.vastgui.app.databinding.ActivityPermissionBinding
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.utils.permission.Permission
 import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
-import com.ave.vastgui.tools.view.toast.SimpleToast
 
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com
@@ -31,21 +30,6 @@ class PermissionActivity : VastVbActivity<ActivityPermissionBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestMultiplePermissions(Permission.ACCESS_BACKGROUND_LOCATION) {
-            allGranted = {
-                SimpleToast
-                    .showShortMsg("${Permission.ACCESS_BACKGROUND_LOCATION} 权限已经被授予")
-            }
-            denied = {
-                SimpleToast
-                    .showShortMsg("${Permission.ACCESS_BACKGROUND_LOCATION} 权限已经被拒绝")
-            }
-            noMoreAsk = {
-                SimpleToast
-                    .showShortMsg("${Permission.ACCESS_BACKGROUND_LOCATION} 权限已经被拒绝且不会再询问")
-            }
-        }
-
         requestMultiplePermissions(Permission.ACCESS_BACKGROUND_LOCATION) {
             allGranted = {
                 getBinding().permissionInfo.text = "权限已经被授予"

@@ -80,7 +80,7 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
             by viewBinding(ActivityAlphabetSidebarBinding::bind)
     private val mAdapter by lazy { ContactAdapter(this) }
     private var mSmoothScrollLayoutManager by NotNUllVar<SmoothScrollLayoutManager>()
-    private val mLogger = mLogFactory.getLog(AlphabetSideBarActivity::class.java)
+    private val mLogger = mLogFactory.getLogCat(AlphabetSideBarActivity::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

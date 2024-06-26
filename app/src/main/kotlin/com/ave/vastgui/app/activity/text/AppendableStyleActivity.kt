@@ -32,6 +32,7 @@ import com.ave.vastgui.tools.text.appendablestylestring.withStyle
 import com.ave.vastgui.tools.utils.ColorUtils
 import com.ave.vastgui.tools.utils.DensityUtils.SP
 import com.ave.vastgui.tools.viewbinding.viewBinding
+import com.kongzue.dialogx.dialogs.MessageDialog
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -45,7 +46,7 @@ class AppendableStyleActivity : ComponentActivity(R.layout.activity_appendable_s
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appendableStyleScope(mBinding.tv) {
+        val message = appendableStyleScope {
             withStyle(AppendableStyle(QuoteSpan(ColorUtils.colorHex2Int("#27ae60"), 10, 30))) {
                 withStyle(AppendableStyle(fontSize = 20F.SP.toInt())) {
                     appendLine("什么是 Android?")
@@ -66,6 +67,7 @@ class AppendableStyleActivity : ComponentActivity(R.layout.activity_appendable_s
                 withImage(ImageSpan(this@AppendableStyleActivity, R.drawable.android_logo))
             }
         }
+        MessageDialog.show("示例", message)
     }
 
 }

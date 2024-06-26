@@ -36,7 +36,7 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 class RatingActivity : AppCompatActivity(R.layout.activity_rating) {
 
     private val mBinding by viewBinding(ActivityRatingBinding::bind)
-    private val mLogger = mLogFactory.getLog(RatingActivity::class.java)
+    private val mLogger = mLogFactory.getLogCat(RatingActivity::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

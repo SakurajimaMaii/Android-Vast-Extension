@@ -34,7 +34,7 @@ class ReceiverFragment : Fragment(R.layout.fragment_receiver) {
 
     private val mViewModel by viewModels<SharedVM>({ requireActivity() })
     private val mBinding by viewBinding(FragmentReceiverBinding::bind)
-    private val mLogger = mLogFactory.getLog(ReceiverFragment::class.java)
+    private val mLogger = mLogFactory.getLogCat(ReceiverFragment::class.java)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

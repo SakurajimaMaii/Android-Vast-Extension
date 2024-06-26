@@ -31,11 +31,8 @@ import com.ave.vastgui.app.adapter.entity.Images
 import com.ave.vastgui.app.adapter.holder.ComicImageHolder
 import com.ave.vastgui.app.adapter.holder.DefaultImageHolder
 import com.ave.vastgui.app.databinding.ActivityPersonBinding
-import com.ave.vastgui.app.net.OpenApi
-import com.ave.vastgui.app.net.OpenApiService
 import com.ave.vastgui.app.viewmodel.NetVM
 import com.ave.vastgui.tools.activity.VastVbVmActivity
-import com.ave.vastgui.tools.network.request.create
 import com.ave.vastgui.tools.view.dialog.MaterialAlertDialogBuilder
 import com.ave.vastgui.tools.view.toast.SimpleToast.showShortMsg
 import kotlinx.coroutines.launch
@@ -116,27 +113,28 @@ class ImageActivity : VastVbVmActivity<ActivityPersonBinding, NetVM>() {
 //                    mImageAdapter.addTypeImage(it)
 //                }
 //        }
-        getBinding().personRv.adapter = mImageListAdapter
-        lifecycleScope.launch {
-            OpenApi().create(OpenApiService::class.java)
-                .getImages(0, 20)
-                .result?.list?.mapIndexed { index, image ->
-                    if (0 == index % 2) {
-                        ItemWrapper(image, image.getLayoutId(), sampleClick1)
-                    } else {
-                        ItemWrapper(image, image.getLayoutId(), sampleClick2)
-                    }
-                }
-                .apply {
-                    mImageListAdapter.submitList(this)
-                }
-        }
 
-//        getBinding().personRv.adapter = mImagePagingAdapter
+//        getBinding().personRv.adapter = mImageListAdapter
 //        lifecycleScope.launch {
-//            getViewModel().imageFlow.collect{
-//                mImagePagingAdapter.submitData(it)
-//            }
+//            OpenApi().create(OpenApiService::class.java)
+//                .getImages(0, 20)
+//                .result?.list?.mapIndexed { index, image ->
+//                    if (0 == index % 2) {
+//                        ItemWrapper(image, image.getLayoutId(), sampleClick1)
+//                    } else {
+//                        ItemWrapper(image, image.getLayoutId(), sampleClick2)
+//                    }
+//                }
+//                .apply {
+//                    mImageListAdapter.submitList(this)
+//                }
 //        }
+
+        getBinding().personRv.adapter = mImagePagingAdapter
+        lifecycleScope.launch {
+            getViewModel().imageFlow.collect{
+                mImagePagingAdapter.submitData(it)
+            }
+        }
     }
 }

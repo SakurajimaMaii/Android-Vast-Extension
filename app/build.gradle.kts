@@ -35,6 +35,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        ndk { abiFilters.addAll(arrayOf("armeabi-v7a", "arm64-v8a")) }
     }
 
     buildTypes {
@@ -93,12 +94,15 @@ android {
 }
 
 dependencies {
+    implementation(libs.dialogx)
+    implementation(libs.dialogxiosstyle)
     implementation(projects.libraries.netstatelayout)
     implementation(projects.libraries.adapter)
     implementation(projects.libraries.core)
     implementation(projects.libraries.tools)
     implementation(projects.libraries.log.core)
     implementation(projects.libraries.log.okhttp)
+    implementation(projects.libraries.log.mars)
     implementation(libs.activity.ktx)
     implementation(libs.adapter.rxjava3)
     implementation(libs.androidx.swiperefreshlayout)
