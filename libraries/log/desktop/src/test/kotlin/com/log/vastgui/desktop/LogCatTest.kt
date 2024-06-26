@@ -27,23 +27,6 @@ class LogCatTest {
 
     @Test
     fun logTest() {
-        val jsonString = """{
-                "employees": [
-                    {
-                        "firstName": "Bill",
-                        "lastName": "Gates"
-                    },
-                    {
-                        "firstName": "George",
-                        "lastName": "Bush"
-                    },
-                    {
-                        "firstName": "Thomas",
-                        "lastName": "Carter"
-                    }
-                ]
-            }"""
-        logcat.v(jsonString)
         val map = mapOf("name" to "Xiao Ming", "age" to 19)
         logcat.d(map)
         val list = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)

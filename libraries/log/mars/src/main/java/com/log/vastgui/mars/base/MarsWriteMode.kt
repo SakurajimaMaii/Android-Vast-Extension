@@ -16,6 +16,8 @@
 
 package com.log.vastgui.mars.base
 
+import com.tencent.mars.xlog.Xlog
+
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/6/12 22:35
@@ -34,7 +36,7 @@ enum class MarsWriteMode(val value: Int) {
      *
      * @since 1.3.4
      */
-    Async(0),
+    Async(Xlog.AppednerModeAsync),
 
     /**
      * Sync. Synchronous writing, recommended when the application
@@ -42,5 +44,5 @@ enum class MarsWriteMode(val value: Int) {
      *
      * @since 1.3.4
      */
-    Sync(1)
+    Sync(Xlog.AppednerModeSync)
 }

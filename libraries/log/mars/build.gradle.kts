@@ -1,3 +1,6 @@
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import java.net.URL
+
 plugins {
     id(libs.plugins.androidLibrary.get().pluginId)
     alias(libs.plugins.kotlinAndroid)
@@ -48,4 +51,15 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+
+tasks.withType<DokkaTaskPartial> {
+    moduleName.set("log-mars")
+    dokkaSourceSets.configureEach {
+        sourceLink {
+            localDirectory.set(projectDir.resolve("src"))
+            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/desktop/src"))
+            remoteLineSuffix.set("#L")
+        }
+    }
 }

@@ -19,6 +19,7 @@ package com.log.vastgui.desktop
 import com.log.vastgui.core.LogFactory
 import com.log.vastgui.core.base.LogStore
 import com.log.vastgui.core.base.Logger
+import com.log.vastgui.core.format.LineFormat
 import com.log.vastgui.core.getLogFactory
 import com.log.vastgui.core.json.GsonConverter
 import com.log.vastgui.core.plugin.LogJson
@@ -36,7 +37,7 @@ val mLogFactory: LogFactory = getLogFactory {
         open = true
     }
     install(LogPrinter) {
-        logger = Logger.desktop()
+        logger = Logger.desktop(LineFormat)
     }
     install(LogStorage) {
         logStore = LogStore.desktop("", 1024L * 1000)
