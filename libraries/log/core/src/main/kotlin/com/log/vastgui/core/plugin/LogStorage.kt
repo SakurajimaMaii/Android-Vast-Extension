@@ -20,10 +20,17 @@ import com.log.vastgui.core.LogPipeline
 import com.log.vastgui.core.LogCat
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogLevel
+import com.log.vastgui.core.base.LogLevel.ASSERT
+import com.log.vastgui.core.base.LogLevel.DEBUG
+import com.log.vastgui.core.base.LogLevel.ERROR
+import com.log.vastgui.core.base.LogLevel.INFO
+import com.log.vastgui.core.base.LogLevel.VERBOSE
+import com.log.vastgui.core.base.LogLevel.WARN
 import com.log.vastgui.core.base.LogPlugin
 import com.log.vastgui.core.base.LogStore
 import com.log.vastgui.core.pipeline.PipelinePhase
 import kotlin.properties.Delegates
+import com.log.vastgui.core.base.allLogLevel as allLogLevel
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -38,21 +45,31 @@ import kotlin.properties.Delegates
 class LogStorage private constructor(private val mConfiguration: Configuration) {
 
     /**
+     * Used to determine whether logs of this level are allowed to be printed.
+     *
+     * @since 1.3.4
+     */
+    private val levelMap: MutableMap<LogLevel, Boolean> = mutableMapOf(
+        VERBOSE to false, DEBUG to false, INFO to false,
+        WARN to false, ERROR to false, ASSERT to false
+    )
+
+    /**
      * [LogStorage] configuration.
      *
      * @property level Minimum priority of the log.
+     * @property levelSet Log levels allowed to be stored.
      * @property logStore Log store implementation.
      * @since 1.3.1
      */
     class Configuration internal constructor() {
-        var level: LogLevel = LogLevel.VERBOSE
+        @Deprecated(message = "Use levelList instead.", level = DeprecationLevel.WARNING)
+        var level: LogLevel = VERBOSE
+
+        var levelSet: Set<LogLevel> = emptySet()
 
         var logStore: LogStore by Delegates.notNull()
     }
-
-    /** @since 1.3.1 */
-    private val mLevel: LogLevel
-        get() = mConfiguration.level
 
     /** @since 1.3.1 */
     private val mLogStore: LogStore
@@ -64,8 +81,22 @@ class LogStorage private constructor(private val mConfiguration: Configuration) 
      * @since 1.3.1
      */
     internal fun storeLog(logInfo: LogInfo) {
-        if (logInfo.mLevel >= mLevel) {
+        if (true == levelMap[logInfo.mLevel]) {
             mLogStore.store(logInfo)
+        }
+    }
+
+    init {
+        // Use level
+        if (mConfiguration.levelSet.isEmpty()) {
+            allLogLevel.filter { level -> level >= mConfiguration.level }
+                .forEach { levelMap[it] = true }
+        }
+        // Use levelList
+        else {
+            mConfiguration.levelSet.forEach {
+                levelMap[it] = true
+            }
         }
     }
 

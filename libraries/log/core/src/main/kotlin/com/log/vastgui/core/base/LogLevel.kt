@@ -16,10 +16,20 @@
 
 package com.log.vastgui.core.base
 
+import com.log.vastgui.core.base.LogLevel.ASSERT
+import com.log.vastgui.core.base.LogLevel.DEBUG
+import com.log.vastgui.core.base.LogLevel.ERROR
+import com.log.vastgui.core.base.LogLevel.INFO
+import com.log.vastgui.core.base.LogLevel.VERBOSE
+import com.log.vastgui.core.base.LogLevel.WARN
+
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/29
 // Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
+
+/** @since 1.3.4 */
+internal val allLogLevel = listOf(VERBOSE, DEBUG, INFO, WARN, ERROR, ASSERT)
 
 /**
  * Log level.

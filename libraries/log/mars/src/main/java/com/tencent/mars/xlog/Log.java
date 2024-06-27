@@ -51,9 +51,9 @@ public class Log {
         return logImp;
     }
 
-    public static void appenderOpen(int level, int mode, String cacheDir, String logDir, String namePrefix, int cacheDays) {
+    public static void appenderOpen(int level, int mode, String cacheDir, String logDir, String namePrefix, int cacheDays, String pubkey) {
         if (logImp != null) {
-            logImp.appenderOpen(level, mode, cacheDir, logDir, namePrefix, cacheDays);
+            logImp.appenderOpen(level, mode, cacheDir, logDir, namePrefix, cacheDays, pubkey);
         }
     }
 
@@ -235,7 +235,7 @@ public class Log {
 
         void releaseXlogInstance(String namePrefix);
 
-        void appenderOpen(int level, int mode, String cacheDir, String logDir, String namePrefix, int cacheDays);
+        void appenderOpen(int level, int mode, String cacheDir, String logDir, String namePrefix, int cacheDays, String pubKey);
 
         void appenderClose();
 
@@ -248,7 +248,7 @@ public class Log {
         void setMaxAliveTime(long logInstancePtr, long aliveSeconds);
 
     }
-    
+
     private static class LogInstance {
 
         private long mLogInstancePtr = -1;

@@ -50,17 +50,17 @@ internal object MarsConfig {
      *
      * @since 1.3.4
      */
-    lateinit var logdir: File
+    lateinit var logDir: File
 
     /**
-     * Cache directory. When [logdir] is not writable, it will be written
+     * Cache directory. When [logDir] is not writable, it will be written
      * to this directory. It is optional. If not selected, please provide
      * "". If you want to provide it, it is recommended to provide the
      * /data/data/packname/files/log directory of the application.
      *
      * @since 1.3.4
      */
-    lateinit var cache: File
+    lateinit var logCache: File
 
     /**
      * File name prefix. For example, if the value is log, the generated file
@@ -105,8 +105,8 @@ internal object MarsConfig {
 
     /**
      * The number of days to cache. Under normal circumstances, just fill in 0.
-     * Non-0 means that the log file will be stored in the [cache] directory
-     * first, and the log will be moved from [cache] to [default] after
+     * Non-0 means that the log file will be stored in the [logCache] directory
+     * first, and the log will be moved from [logCache] to [logDir] after
      * [singleLogFileCacheDays] days.
      *
      * @since 1.3.4
@@ -139,10 +139,11 @@ internal object MarsConfig {
         Log.appenderOpen(
             Log.LEVEL_ALL,
             mode.value,
-            cache.path,
-            logdir.path,
+            logCache.path,
+            logDir.path,
             namePrefix,
-            singleLogFileCacheDays
+            singleLogFileCacheDays,
+            pubKey
         )
     }
 

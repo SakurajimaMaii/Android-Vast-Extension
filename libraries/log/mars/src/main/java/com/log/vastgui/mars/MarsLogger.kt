@@ -40,8 +40,8 @@ import java.io.File
  * @since 1.3.4
  */
 fun Logger.Companion.mars(
-    logdir: File,
-    cache: File,
+    logDir: File,
+    logCache: File,
     logFormat: LogFormat = TableFormat(
         DEFAULT_MAX_SINGLE_LOG_LENGTH,
         DEFAULT_MAX_PRINT_TIMES,
@@ -56,8 +56,8 @@ fun Logger.Companion.mars(
     pubKey: String = MarsConfig.pubKey
 ) = MarsConfig.let {
     it.mode = mode
-    it.logdir = logdir
-    it.cache = cache
+    it.logDir = logDir
+    it.logCache = logCache
     it.namePrefix = namePreFix
     it.singleLogFileEveryday = singleLogFileEveryday
     it.singleLogFileMaxSize = singleLogFileMaxSize

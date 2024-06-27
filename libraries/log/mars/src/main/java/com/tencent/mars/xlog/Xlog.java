@@ -95,17 +95,17 @@ public class Xlog implements Log.LogImp {
 
     @Override
     public void logI(long logInstancePtr, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log) {
-        logWrite2(logInstancePtr, Log.LEVEL_INFO, decryptTag(tag), filename, funcname, line, pid, tid, maintid,  log);
+        logWrite2(logInstancePtr, Log.LEVEL_INFO, decryptTag(tag), filename, funcname, line, pid, tid, maintid, log);
     }
 
     @Override
     public void logW(long logInstancePtr, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log) {
-        logWrite2(logInstancePtr, Log.LEVEL_WARNING, decryptTag(tag), filename, funcname, line, pid, tid, maintid,  log);
+        logWrite2(logInstancePtr, Log.LEVEL_WARNING, decryptTag(tag), filename, funcname, line, pid, tid, maintid, log);
     }
 
     @Override
     public void logE(long logInstancePtr, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log) {
-        logWrite2(logInstancePtr, Log.LEVEL_ERROR, decryptTag(tag), filename, funcname, line, pid, tid, maintid,  log);
+        logWrite2(logInstancePtr, Log.LEVEL_ERROR, decryptTag(tag), filename, funcname, line, pid, tid, maintid, log);
     }
 
     @Override
@@ -115,25 +115,24 @@ public class Xlog implements Log.LogImp {
 
 
     @Override
-    public void appenderOpen(int level, int mode, String cacheDir, String logDir, String nameprefix, int cacheDays) {
-
+    public void appenderOpen(int level, int mode, String cacheDir, String logDir, String nameprefix, int cacheDays, String pubkey) {
         XLogConfig logConfig = new XLogConfig();
+        System.out.println("=================="+pubkey);
         logConfig.level = level;
         logConfig.mode = mode;
         logConfig.logdir = logDir;
         logConfig.nameprefix = nameprefix;
         logConfig.compressmode = ZLIB_MODE;
-        logConfig.pubkey = "";
+        logConfig.pubkey = pubkey;
         logConfig.cachedir = cacheDir;
         logConfig.cachedays = cacheDays;
-
         appenderOpen(logConfig);
     }
 
     public static native void logWrite(XLoggerInfo logInfo, String log);
 
-    public static void logWrite2(int level, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log){
-        logWrite2(0, level, tag, filename ,funcname, line, pid, tid, maintid, log);
+    public static void logWrite2(int level, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log) {
+        logWrite2(0, level, tag, filename, funcname, line, pid, tid, maintid, log);
     }
 
     public static native void logWrite2(long logInstancePtr, int level, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log);
@@ -167,7 +166,7 @@ public class Xlog implements Log.LogImp {
     public native long newXlogInstance(XLogConfig logConfig);
 
     @Override
-    public native void setConsoleLogOpen(long logInstancePtr, boolean isOpen);	//set whether the console prints log
+    public native void setConsoleLogOpen(long logInstancePtr, boolean isOpen);    //set whether the console prints log
 
     private static native void appenderOpen(XLogConfig logConfig);
 

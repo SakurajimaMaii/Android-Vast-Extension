@@ -106,15 +106,6 @@ class LogCatTest {
 
     @Test
     fun log() {
-        val json = """
-           {
-                  "minInt": -9007199254740991,
-                              "maxInt": 9007199254740991,
-                  "minFloat": -1.7976931348623157e+308,
-               "maxFloat": 1.7976931348623157e+308
-             }   
-        """.trimIndent()
-        logCat.d(json)
         // 测试 json 字符串
         jsonString.forEach {
             logCat.d(it)

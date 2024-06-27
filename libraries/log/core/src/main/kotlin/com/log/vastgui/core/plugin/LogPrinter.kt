@@ -28,6 +28,7 @@ import com.log.vastgui.core.base.LogLevel.VERBOSE
 import com.log.vastgui.core.base.LogLevel.WARN
 import com.log.vastgui.core.base.LogPlugin
 import com.log.vastgui.core.base.Logger
+import com.log.vastgui.core.base.allLogLevel
 import com.log.vastgui.core.base.default
 
 // Author: Vast Gui
@@ -42,9 +43,6 @@ import com.log.vastgui.core.base.default
  * @since 0.5.3
  */
 class LogPrinter private constructor(private val mConfiguration: Configuration) {
-
-    /** @since 1.3.4 */
-    private val allLogLevel = listOf(VERBOSE, DEBUG, INFO, WARN, ERROR, ASSERT)
 
     /**
      * Used to determine whether logs of this level are allowed to be printed.
