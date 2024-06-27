@@ -41,3 +41,21 @@ interface Logger {
 
     companion object
 }
+
+/**
+ * Default logger.
+ *
+ * @since 1.3.4
+ */
+fun Logger.Companion.default() = DefaultLogger
+
+/**
+ * Default logger.
+ *
+ * @since 1.3.4
+ */
+object DefaultLogger : Logger {
+    override fun log(logInfo: LogInfo) {
+        println(logInfo.toString())
+    }
+}

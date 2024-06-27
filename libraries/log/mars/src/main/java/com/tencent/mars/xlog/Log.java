@@ -19,18 +19,18 @@ package com.tencent.mars.xlog;
 // Documentation:
 // Reference:
 
-import android.content.Context;
-import android.os.Handler;
 import android.os.Looper;
 import android.os.Process;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.log.vastgui.core.base.LogInfo;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Log {
-    private static final String TAG = "mars.xlog.log";
-
     public static final int LEVEL_ALL = 0;
     public static final int LEVEL_VERBOSE = 0;
     public static final int LEVEL_DEBUG = 1;
@@ -39,170 +39,21 @@ public class Log {
     public static final int LEVEL_ERROR = 4;
     public static final int LEVEL_FATAL = 5;
     public static final int LEVEL_NONE = 6;
+    private static LogImp logImp;
+    private static final Map<String, LogInstance> sLogInstanceMap = new HashMap<>();
 
-    // defaults to LEVEL_NONE
-    private static int level = LEVEL_NONE;
-    public static Context toastSupportContext = null;
-
-    public interface LogImp {
-
-        void logV(long logInstancePtr, String tag, String filename, String funcname, int linuxTid, int pid, long tid, long maintid, String log);
-
-        void logI(long logInstancePtr, String tag, String filename, String funcname, int linuxTid, int pid, long tid, long maintid, String log);
-
-        void logD(long logInstancePtr, String tag, String filename, String funcname, int linuxTid, int pid, long tid, long maintid, String log);
-
-        void logW(long logInstancePtr, String tag, String filename, String funcname, int linuxTid, int pid, long tid, long maintid, String log);
-
-        void logE(long logInstancePtr, String tag, String filename, String funcname, int linuxTid, int pid, long tid, long maintid, String log);
-
-        void logF(long logInstancePtr, String tag, String filename, String funcname, int linuxTid, int pid, long tid, long maintid, String log);
-
-        int getLogLevel(long logInstancePtr);
-
-        void setAppenderMode(long logInstancePtr, int mode);
-
-        long openLogInstance(int level, int mode, String cacheDir, String logDir, String nameprefix, int cacheDays);
-
-        long getXlogInstance(String nameprefix);
-
-        void releaseXlogInstance(String nameprefix);
-
-        void appenderOpen(int level, int mode, String cacheDir, String logDir, String nameprefix, int cacheDays);
-
-        void appenderClose();
-
-        void appenderFlush(long logInstancePtr, boolean isSync);
-
-        void setConsoleLogOpen(long logInstancePtr, boolean isOpen);
-
-        void setMaxFileSize(long logInstancePtr, long aliveSeconds);
-
-        void setMaxAliveTime(long logInstancePtr, long aliveSeconds);
-
-    }
-
-    private static LogImp debugLog = new LogImp() {
-        private Handler handler = new Handler(Looper.getMainLooper());
-
-        @Override
-        public void logV(long logInstancePtr, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log) {
-            if (level <= LEVEL_VERBOSE) {
-                android.util.Log.v(tag, log);
-            }
-        }
-
-        @Override
-        public void logI(long logInstancePtr, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log) {
-            if (level <= LEVEL_INFO) {
-                android.util.Log.i(tag, log);
-            }
-        }
-
-        @Override
-        public void logD(long logInstancePtr, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log) {
-            if (level <= LEVEL_DEBUG) {
-                android.util.Log.d(tag, log);
-            }
-
-        }
-
-        @Override
-        public void logW(long logInstancePtr, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log) {
-            if (level <= LEVEL_WARNING) {
-                android.util.Log.w(tag, log);
-            }
-
-        }
-
-        @Override
-        public void logE(long logInstancePtr, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, String log) {
-            if (level <= LEVEL_ERROR) {
-                android.util.Log.e(tag, log);
-            }
-        }
-
-
-        @Override
-        public void logF(long logInstancePtr, String tag, String filename, String funcname, int line, int pid, long tid, long maintid, final String log) {
-            if (level > LEVEL_FATAL) {
-                return;
-            }
-            android.util.Log.e(tag, log);
-            if (toastSupportContext != null) {
-                handler.post(() -> Toast.makeText(toastSupportContext, log, Toast.LENGTH_LONG).show());
-            }
-        }
-
-        @Override
-        public int getLogLevel(long logInstancePtr) {
-            return level;
-        }
-
-        @Override
-        public void setAppenderMode(long logInstancePtr, int mode) {
-
-        }
-
-        @Override
-        public long openLogInstance(int level, int mode, String cacheDir, String logDir, String nameprefix, int cacheDays) {
-            return 0;
-        }
-
-        @Override
-        public long getXlogInstance(String nameprefix) {
-            return 0;
-        }
-
-        @Override
-        public void releaseXlogInstance(String nameprefix) {
-
-        }
-
-        @Override
-        public void appenderOpen(int level, int mode, String cacheDir, String logDir, String nameprefix, int cacheDays) {
-
-        }
-
-        @Override
-        public void appenderClose() {
-
-        }
-
-        @Override
-        public void appenderFlush(long logInstancePtr, boolean isSync) {
-        }
-
-        @Override
-        public void setConsoleLogOpen(long logInstancePtr, boolean isOpen) {
-
-        }
-
-        @Override
-        public void setMaxAliveTime(long logInstancePtr, long aliveSeconds) {
-
-        }
-
-        @Override
-        public void setMaxFileSize(long logInstancePtr, long aliveSeconds) {
-
-        }
-
-    };
-
-    private static LogImp logImp = debugLog;
-
-    public static void setLogImp(LogImp imp) {
+    public static void setLogImp(@NonNull LogImp imp) {
         logImp = imp;
     }
 
+    @Nullable
     public static LogImp getImpl() {
         return logImp;
     }
 
-    public static void appenderOpen(int level, int mode, String cacheDir, String logDir, String nameprefix, int cacheDays) {
+    public static void appenderOpen(int level, int mode, String cacheDir, String logDir, String namePrefix, int cacheDays) {
         if (logImp != null) {
-            logImp.appenderOpen(level, mode, cacheDir, logDir, nameprefix, cacheDays);
+            logImp.appenderOpen(level, mode, cacheDir, logDir, namePrefix, cacheDays);
         }
     }
 
@@ -238,223 +89,176 @@ public class Log {
         return LEVEL_NONE;
     }
 
-    public static void setLevel(final int level, final boolean jni) {
-        Log.level = level;
-        android.util.Log.w(TAG, "new log level: " + level);
-
-        if (jni) {
-            android.util.Log.e(TAG, "no jni log level support");
-        }
-    }
-
     public static void setConsoleLogOpen(boolean isOpen) {
         if (logImp != null) {
             logImp.setConsoleLogOpen(0, isOpen);
         }
     }
 
-    /**
-     * use f(tag, format, obj) instead
-     *
-     * @param tag
-     * @param msg
-     */
-    public static void f(final String tag, final String msg) {
-        f(tag, msg, (Object[]) null);
+    public static void setMaxFileSize(long aliveSeconds) {
+        if (null != logImp) {
+            logImp.setMaxFileSize(0, aliveSeconds);
+        }
+    }
+
+    public static void setMaxAliveTime(long aliveSeconds) {
+        if (null != logImp) {
+            logImp.setMaxAliveTime(0, aliveSeconds);
+        }
     }
 
     /**
-     * use e(tag, format, obj) instead
+     * Send a {@link Log#LEVEL_FATAL} log message.
      *
-     * @param tag
-     * @param msg
+     * @since 1.3.4
      */
-    public static void e(final String tag, final String msg) {
-        e(tag, msg, (Object[]) null);
-    }
-
-    /**
-     * use w(tag, format, obj) instead
-     *
-     * @param tag
-     * @param msg
-     */
-    public static void w(final String tag, final String msg) {
-        w(tag, msg, (Object[]) null);
-    }
-
-    /**
-     * use i(tag, format, obj) instead
-     *
-     * @param tag
-     * @param msg
-     */
-    public static void i(final String tag, final String msg) {
-        i(tag, msg, (Object[]) null);
-    }
-
-    /**
-     * use d(tag, format, obj) instead
-     *
-     * @param tag
-     * @param msg
-     */
-    public static void d(final String tag, final String msg) {
-        d(tag, msg, (Object[]) null);
-    }
-
-    /**
-     * use v(tag, format, obj) instead
-     *
-     * @param tag
-     * @param msg
-     */
-    public static void v(final String tag, final String msg) {
-        v(tag, msg, (Object[]) null);
-    }
-
-    public static void f(String tag, final String format, final Object... obj) {
+    public static void f(final String tag, LogInfo logInfo, final String msg) {
         if (logImp != null && logImp.getLogLevel(0) <= LEVEL_FATAL) {
-            final String log = obj == null ? format : String.format(format, obj);
-            logImp.logF(0, tag, "", "", 0, Process.myPid(), Thread.currentThread().getId(), Looper.getMainLooper().getThread().getId(), log);
+            logImp.logF(0, tag, logInfo.getFileName(), logInfo.getMethodName(), logInfo.getLineNumber(),
+                    Process.myPid(), Thread.currentThread().getId(), Looper.getMainLooper().getThread().getId(), msg);
         }
     }
 
-    public static void e(String tag, final String format, final Object... obj) {
+    /**
+     * Send a {@link Log#LEVEL_ERROR} log message.
+     *
+     * @since 1.3.4
+     */
+    public static void e(final String tag, LogInfo logInfo, final String msg) {
         if (logImp != null && logImp.getLogLevel(0) <= LEVEL_ERROR) {
-            String log = obj == null ? format : String.format(format, obj);
-            if (log == null) {
-                log = "";
-            }
-            logImp.logE(0, tag, "", "", 0, Process.myPid(), Thread.currentThread().getId(), Looper.getMainLooper().getThread().getId(), log);
+            logImp.logE(0, tag, logInfo.getFileName(), logInfo.getMethodName(), logInfo.getLineNumber(),
+                    Process.myPid(), Thread.currentThread().getId(), Looper.getMainLooper().getThread().getId(), msg);
         }
     }
 
-    public static void w(String tag, final String format, final Object... obj) {
+    /**
+     * Send a {@link Log#LEVEL_WARNING} log message.
+     *
+     * @since 1.3.4
+     */
+    public static void w(final String tag, LogInfo logInfo, final String msg) {
         if (logImp != null && logImp.getLogLevel(0) <= LEVEL_WARNING) {
-            String log = obj == null ? format : String.format(format, obj);
-            if (log == null) {
-                log = "";
-            }
-            logImp.logW(0, tag, "", "", 0, Process.myPid(), Thread.currentThread().getId(), Looper.getMainLooper().getThread().getId(), log);
+            logImp.logD(0, tag, logInfo.getFileName(), logInfo.getMethodName(), logInfo.getLineNumber(),
+                    Process.myPid(), Thread.currentThread().getId(), Looper.getMainLooper().getThread().getId(), msg);
         }
     }
 
-    public static void i(String tag, final String format, final Object... obj) {
+    /**
+     * Send a {@link Log#LEVEL_INFO} log message.
+     *
+     * @since 1.3.4
+     */
+    public static void i(final String tag, LogInfo logInfo, final String msg) {
         if (logImp != null && logImp.getLogLevel(0) <= LEVEL_INFO) {
-            String log = obj == null ? format : String.format(format, obj);
-            if (log == null) {
-                log = "";
-            }
-            logImp.logI(0, tag, "", "", 0, Process.myPid(), Thread.currentThread().getId(), Looper.getMainLooper().getThread().getId(), log);
+            logImp.logI(0, tag, logInfo.getFileName(), logInfo.getMethodName(), logInfo.getLineNumber(),
+                    Process.myPid(), Thread.currentThread().getId(), Looper.getMainLooper().getThread().getId(), msg);
         }
     }
 
-    public static void d(String tag, final String format, final Object... obj) {
+    /**
+     * Send a {@link Log#LEVEL_DEBUG} log message.
+     *
+     * @since 1.3.4
+     */
+    public static void d(final String tag, LogInfo logInfo, final String msg) {
         if (logImp != null && logImp.getLogLevel(0) <= LEVEL_DEBUG) {
-            String log = obj == null ? format : String.format(format, obj);
-            if (log == null) {
-                log = "";
-            }
-            logImp.logD(0, tag, "", "", 0, Process.myPid(), Thread.currentThread().getId(), Looper.getMainLooper().getThread().getId(), log);
+            logImp.logD(0, tag, logInfo.getFileName(), logInfo.getMethodName(), logInfo.getLineNumber(),
+                    Process.myPid(), Thread.currentThread().getId(), Looper.getMainLooper().getThread().getId(), msg);
         }
     }
 
-    public static void v(String tag, final String format, final Object... obj) {
+    /**
+     * Send a {@link Log#LEVEL_VERBOSE} log message.
+     *
+     * @since 1.3.4
+     */
+    public static void v(final String tag, LogInfo logInfo, final String msg) {
         if (logImp != null && logImp.getLogLevel(0) <= LEVEL_VERBOSE) {
-            String log = obj == null ? format : String.format(format, obj);
-            if (log == null) {
-                log = "";
-            }
-            logImp.logV(0, tag, "", "", 0, Process.myPid(), Thread.currentThread().getId(), Looper.getMainLooper().getThread().getId(), log);
+            logImp.logV(0, tag, logInfo.getFileName(), logInfo.getMethodName(), logInfo.getLineNumber(),
+                    Process.myPid(), Thread.currentThread().getId(), Looper.getMainLooper().getThread().getId(), msg);
         }
     }
 
-    public static void printErrStackTrace(String tag, Throwable tr, final String format, final Object... obj) {
-        if (logImp != null && logImp.getLogLevel(0) <= LEVEL_ERROR) {
-            String log = obj == null ? format : String.format(format, obj);
-            if (log == null) {
-                log = "";
-            }
-            log += "  " + android.util.Log.getStackTraceString(tr);
-            logImp.logE(0, tag, "", "", 0, Process.myPid(), Thread.currentThread().getId(), Looper.getMainLooper().getThread().getId(), log);
-        }
-    }
-
-    private static final String SYS_INFO;
-
-    static {
-        final StringBuilder sb = new StringBuilder();
-        try {
-            sb.append("VERSION.RELEASE:[" + android.os.Build.VERSION.RELEASE);
-            sb.append("] VERSION.CODENAME:[" + android.os.Build.VERSION.CODENAME);
-            sb.append("] VERSION.INCREMENTAL:[" + android.os.Build.VERSION.INCREMENTAL);
-            sb.append("] BOARD:[" + android.os.Build.BOARD);
-            sb.append("] DEVICE:[" + android.os.Build.DEVICE);
-            sb.append("] DISPLAY:[" + android.os.Build.DISPLAY);
-            sb.append("] FINGERPRINT:[" + android.os.Build.FINGERPRINT);
-            sb.append("] HOST:[" + android.os.Build.HOST);
-            sb.append("] MANUFACTURER:[" + android.os.Build.MANUFACTURER);
-            sb.append("] MODEL:[" + android.os.Build.MODEL);
-            sb.append("] PRODUCT:[" + android.os.Build.PRODUCT);
-            sb.append("] TAGS:[" + android.os.Build.TAGS);
-            sb.append("] TYPE:[" + android.os.Build.TYPE);
-            sb.append("] USER:[" + android.os.Build.USER + "]");
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-
-        SYS_INFO = sb.toString();
-    }
-
-    public static String getSysInfo() {
-        return SYS_INFO;
-    }
-
-    private static Map<String, LogInstance> sLogInstanceMap = new HashMap<>();
-
-    public static LogInstance openLogInstance(int level, int mode, String cacheDir, String logDir, String nameprefix, int cacheDays) {
+    private static LogInstance openLogInstance(int level, int mode, String cacheDir, String logDir, String namePrefix, int cacheDays) {
         synchronized (sLogInstanceMap) {
-            if (sLogInstanceMap.containsKey(nameprefix)) {
-                return sLogInstanceMap.get(nameprefix);
+            if (sLogInstanceMap.containsKey(namePrefix)) {
+                return sLogInstanceMap.get(namePrefix);
             }
-            LogInstance instance = new LogInstance(level, mode, cacheDir, logDir, nameprefix, cacheDays);
-            sLogInstanceMap.put(nameprefix, instance);
+            LogInstance instance = new LogInstance(level, mode, cacheDir, logDir, namePrefix, cacheDays);
+            sLogInstanceMap.put(namePrefix, instance);
             return instance;
         }
     }
 
-    public static void closeLogInstance(String prefix) {
+    private static void closeLogInstance(String namePrefix) {
         synchronized (sLogInstanceMap) {
             if (null != logImp) {
-                if (sLogInstanceMap.containsKey(prefix)) {
-                    LogInstance logInstance = sLogInstanceMap.remove(prefix);
-                    logImp.releaseXlogInstance(prefix);
+                if (sLogInstanceMap.containsKey(namePrefix)) {
+                    LogInstance logInstance = sLogInstanceMap.remove(namePrefix);
+                    logImp.releaseXlogInstance(namePrefix);
                     logInstance.mLogInstancePtr = -1;
                 }
             }
         }
     }
 
-    public static LogInstance getLogInstance(String prefix) {
+    private static LogInstance getLogInstance(String namePrefix) {
         synchronized (sLogInstanceMap) {
-            if (sLogInstanceMap.containsKey(prefix)) {
-                return sLogInstanceMap.get(prefix);
+            if (sLogInstanceMap.containsKey(namePrefix)) {
+                return sLogInstanceMap.get(namePrefix);
             }
             return null;
         }
     }
 
-    public static class LogInstance {
+    public interface LogImp {
+
+        void logV(long logInstancePtr, String tag, String filename, String funcname, int linuxTid, int pid, long tid, long maintid, String log);
+
+        void logI(long logInstancePtr, String tag, String filename, String funcname, int linuxTid, int pid, long tid, long maintid, String log);
+
+        void logD(long logInstancePtr, String tag, String filename, String funcname, int linuxTid, int pid, long tid, long maintid, String log);
+
+        void logW(long logInstancePtr, String tag, String filename, String funcname, int linuxTid, int pid, long tid, long maintid, String log);
+
+        void logE(long logInstancePtr, String tag, String filename, String funcname, int linuxTid, int pid, long tid, long maintid, String log);
+
+        void logF(long logInstancePtr, String tag, String filename, String funcname, int linuxTid, int pid, long tid, long maintid, String log);
+
+        int getLogLevel(long logInstancePtr);
+
+        void setAppenderMode(long logInstancePtr, int mode);
+
+        long openLogInstance(int level, int mode, String cacheDir, String logDir, String namePrefix, int cacheDays);
+
+        long getXlogInstance(String namePrefix);
+
+        void releaseXlogInstance(String namePrefix);
+
+        void appenderOpen(int level, int mode, String cacheDir, String logDir, String namePrefix, int cacheDays);
+
+        void appenderClose();
+
+        void appenderFlush(long logInstancePtr, boolean isSync);
+
+        void setConsoleLogOpen(long logInstancePtr, boolean isOpen);
+
+        void setMaxFileSize(long logInstancePtr, long aliveSeconds);
+
+        void setMaxAliveTime(long logInstancePtr, long aliveSeconds);
+
+    }
+    
+    private static class LogInstance {
 
         private long mLogInstancePtr = -1;
 
         private String mPrefix = null;
 
-        private LogInstance(int level, int mode, String cacheDir, String logDir, String nameprefix, int cacheDays) {
+        private LogInstance(int level, int mode, String cacheDir, String logDir, String namePrefix, int cacheDays) {
             if (logImp != null) {
-                mLogInstancePtr = logImp.openLogInstance(level, mode, cacheDir, logDir, nameprefix, cacheDays);
-                mPrefix = nameprefix;
+                mLogInstancePtr = logImp.openLogInstance(level, mode, cacheDir, logDir, namePrefix, cacheDays);
+                mPrefix = namePrefix;
             }
         }
 
@@ -552,7 +356,6 @@ public class Log {
                 logImp.setConsoleLogOpen(mLogInstancePtr, isOpen);
             }
         }
-
 
     }
 }

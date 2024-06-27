@@ -60,7 +60,7 @@ public class Xlog implements Log.LogImp {
         public int cachedays = 0;
     }
 
-    public static void open(boolean isLoadLib, int level, int mode, String cacheDir, String logDir, String nameprefix, String pubkey) {
+    public static void open(boolean isLoadLib, int level, int mode, String cacheDir, String logDir, String namePrefix, String pubkey) {
         if (isLoadLib) {
             System.loadLibrary("c++_shared");
             System.loadLibrary("marsxlog");
@@ -70,7 +70,7 @@ public class Xlog implements Log.LogImp {
         logConfig.level = level;
         logConfig.mode = mode;
         logConfig.logdir = logDir;
-        logConfig.nameprefix = nameprefix;
+        logConfig.nameprefix = namePrefix;
         logConfig.pubkey = pubkey;
         logConfig.compressmode = ZLIB_MODE;
         logConfig.compresslevel = 0;
@@ -141,7 +141,6 @@ public class Xlog implements Log.LogImp {
     @Override
     public native int getLogLevel(long logInstancePtr);
 
-
     @Override
     public native void setAppenderMode(long logInstancePtr, int mode);
 
@@ -160,10 +159,10 @@ public class Xlog implements Log.LogImp {
     }
 
     @Override
-    public native long getXlogInstance(String nameprefix);
+    public native long getXlogInstance(String namePrefix);
 
     @Override
-    public native void releaseXlogInstance(String nameprefix);
+    public native void releaseXlogInstance(String namePrefix);
 
     public native long newXlogInstance(XLogConfig logConfig);
 

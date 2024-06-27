@@ -43,7 +43,7 @@ class LogSwitch internal constructor(
      * @since 0.5.4
      */
     class Configuration {
-        var open: Boolean = false
+        var open: Boolean = true
     }
 
     companion object : LogPlugin<Configuration, LogSwitch> {

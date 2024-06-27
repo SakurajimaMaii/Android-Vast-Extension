@@ -16,10 +16,9 @@
 
 package com.log.vastgui.core.plugin
 
-import com.log.vastgui.core.LogPipeline
 import com.log.vastgui.core.LogCat
+import com.log.vastgui.core.LogPipeline
 import com.log.vastgui.core.base.LogInfoFactory
-import com.log.vastgui.core.base.LogLevel
 import com.log.vastgui.core.base.LogPlugin
 import com.log.vastgui.core.pipeline.PipelinePhase
 
@@ -31,10 +30,10 @@ import com.log.vastgui.core.pipeline.PipelinePhase
  * If the log content is an object, [LogTypeValidator] will check whether
  * the object has been correctly converted to a string.
  *
- * @since 1.3.4
  * @see LogJson
+ * @since 1.3.4
  */
-class LogTypeValidator internal constructor(){
+class LogTypeValidator internal constructor() {
 
     companion object : LogPlugin<Unit, LogTypeValidator> {
 
@@ -51,8 +50,11 @@ class LogTypeValidator internal constructor(){
             scope.logPipeline.insertPhaseAfter(LogPipeline.Transform, afterTransform)
             scope.logPipeline.intercept(afterTransform) {
                 if (subject.content() !is String) {
-                    val message = "Can not convert ${subject.content().javaClass}, please install a specific converter plugin."
-                    val builder = LogInfoFactory(LogLevel.ERROR, key, message)
+                    val message =
+                        "Can not convert ${subject.content().javaClass}, please install a specific converter plugin."
+                    // Because log printing will be affected by the configured level,
+                    // the original log level is retained here.
+                    val builder = LogInfoFactory(subject.level, key, message)
                     proceedWith(builder)
                 } else {
                     proceed()

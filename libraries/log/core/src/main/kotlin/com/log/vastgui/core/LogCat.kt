@@ -27,6 +27,7 @@ import com.log.vastgui.core.internel.LazyMessageWrapper
 import com.log.vastgui.core.json.Converter
 import com.log.vastgui.core.plugin.LogPrinter
 import com.log.vastgui.core.plugin.LogStorage
+import com.log.vastgui.core.plugin.LogSwitch
 import kotlin.properties.Delegates
 
 // Author: Vast Gui
@@ -60,6 +61,8 @@ class LogCat internal constructor() {
     /**
      * `true` if you want to print log,`false` if you don't want to print the
      * log.
+     *
+     * @see LogSwitch
      */
     internal var logEnabled = true
 

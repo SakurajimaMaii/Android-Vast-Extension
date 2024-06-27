@@ -130,25 +130,20 @@ internal object MarsConfig {
      * @since 1.3.4
      */
     fun init() {
-        Xlog().apply {
-            Log.setLogImp(this)
-            if (singleLogFileEveryday) {
-                setMaxFileSize(0L, 0)
-            } else {
-                setMaxFileSize(0L, singleLogFileMaxSize)
-            }
-            setMaxAliveTime(0L, singleLogFileStoreTime)
-            // The printing of logs is determined by a unified switch.
-            Log.setConsoleLogOpen(true)
-            Log.appenderOpen(
-                Log.LEVEL_ALL,
-                mode.value,
-                cache.path,
-                logdir.path,
-                namePrefix,
-                singleLogFileCacheDays
-            )
-        }
+        val size = if (singleLogFileEveryday) 0 else singleLogFileMaxSize
+        Log.setLogImp(Xlog())
+        Log.setMaxFileSize(size)
+        Log.setMaxAliveTime(singleLogFileStoreTime)
+        // The printing of logs is determined by a unified switch.
+        Log.setConsoleLogOpen(true)
+        Log.appenderOpen(
+            Log.LEVEL_ALL,
+            mode.value,
+            cache.path,
+            logdir.path,
+            namePrefix,
+            singleLogFileCacheDays
+        )
     }
 
     /** @since 1.3.4 */

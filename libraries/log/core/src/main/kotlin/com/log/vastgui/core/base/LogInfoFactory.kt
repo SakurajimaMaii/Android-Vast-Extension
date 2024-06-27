@@ -27,10 +27,10 @@ import com.log.vastgui.core.plugin.LogPretty
  * @since 1.3.4
  */
 class LogInfoFactory @JvmOverloads constructor(
-    private val level: LogLevel,
-    private val tag: String,
+    internal val level: LogLevel,
+    internal val tag: String,
     content: Any,
-    private val tr: Throwable? = null
+    internal val tr: Throwable? = null
 ) {
     internal lateinit var logInfo: LogInfo
 

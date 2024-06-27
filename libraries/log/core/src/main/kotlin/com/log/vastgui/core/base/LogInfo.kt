@@ -71,6 +71,15 @@ class LogInfo @LogApi constructor(
 
     val mLevelPriority: Int = mLevel.priority
 
+    /** @since 1.3.4 */
+    val fileName = mStackTrace?.fileName ?: ""
+
+    /** @since 1.3.4 */
+    val methodName = mStackTrace?.methodName ?: ""
+
+    /** @since 1.3.4 */
+    val lineNumber = mStackTrace?.lineNumber ?: 0
+
     /** @since 0.5.3 */
     override fun toString(): String {
         return """

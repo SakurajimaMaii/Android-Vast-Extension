@@ -49,9 +49,7 @@ fun Logger.Companion.desktop(logFormat: LogFormat = LineColorfulFormat): Desktop
  *
  * @since 1.3.1
  */
-class DesktopLogger internal constructor(
-    override val logFormat: LogFormat
-) : Logger {
+class DesktopLogger internal constructor(override val logFormat: LogFormat) : Logger {
 
     override fun log(logInfo: LogInfo) {
         println(logFormat.format(logInfo))
