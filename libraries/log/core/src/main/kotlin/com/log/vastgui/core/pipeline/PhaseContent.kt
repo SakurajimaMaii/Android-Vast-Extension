@@ -20,10 +20,10 @@ package com.log.vastgui.core.pipeline
 // Email: https://github.com/ywnkm
 // Date: 2024/6/22
 
-internal class PhaseContent<TSubject : Any, Call: Any>(
+internal class PhaseContent<TSubject : Any, Call : Any>(
     val phase: PipelinePhase,
     val relation: PipelinePhaseRelation,
-    var interceptors: MutableList<PipelineInterceptor<TSubject, Call>>
+    val interceptors: MutableList<PipelineInterceptor<TSubject, Call>>
 ) {
     val isEmpty: Boolean get() = interceptors.isEmpty()
 

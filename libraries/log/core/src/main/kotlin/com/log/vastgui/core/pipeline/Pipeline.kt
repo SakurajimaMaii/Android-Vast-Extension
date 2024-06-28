@@ -154,6 +154,16 @@ open class Pipeline<TSubject : Any, TContext : Any>(vararg phases: PipelinePhase
         return SimplePipelineContext(context, subject, cacheInterceptors())
     }
 
+    /**
+     * Find phase matching [phase] in [phasesRaw]. If [PhaseContent] exists and
+     * its phase matches [phase], return this object. If [PipelinePhase] and
+     * [phase] match, convert [PipelinePhase] to [PhaseContent] and return.
+     * Otherwise return empty.
+     *
+     * @see PhaseContent
+     * @see PipelinePhase
+     * @since 1.3.4
+     */
     private fun findPhase(phase: PipelinePhase): PhaseContent<TSubject, TContext>? {
         val phasesList = phasesRaw
         for (index in phasesList.indices) {
@@ -187,6 +197,15 @@ open class Pipeline<TSubject : Any, TContext : Any>(vararg phases: PipelinePhase
         return -1
     }
 
+    /**
+     * Find phase matching [phase] in [phasesRaw]. Returns `true` if
+     * [PhaseContent] exists and its phase matches [phase] , Returns `true`
+     * if there is a matching [PipelinePhase]. Otherwise return `false` .
+     *
+     * @see PipelinePhase
+     * @see PhaseContent
+     * @since 1.3.4
+     */
     private fun hasPhase(phase: PipelinePhase): Boolean {
         val phasesList = phasesRaw
         for (raw in phasesList) {
