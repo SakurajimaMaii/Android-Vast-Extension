@@ -16,37 +16,72 @@
 
 package com.log.vastgui.core.pipeline
 
+import com.ave.vastgui.core.extension.nothing_to_do
+
 // Author: ywnkm
 // Email: https://github.com/ywnkm
 // Date: 2024/6/22
+// Documentation: https://ave.entropy2020.cn/documents/log/log-core/advanced/advanced/
+// Reference: https://github.com/ktorio/ktor/blob/861828fee0b6c4b8056036b5bd8f371e26ee5577/ktor-utils/common/src/io/ktor/util/pipeline/Pipeline.kt
 
+/** @since 1.3.4 */
 typealias PipelineInterceptor<TSubject, TContext> = PipelineContext<TSubject, TContext>.(TSubject) -> Unit
 
+/** @since 1.3.4 */
 open class Pipeline<TSubject : Any, TContext : Any>(vararg phases: PipelinePhase) {
 
-    /** [PipelinePhase] or [PhaseContent] */
+    /**
+     * Contains a list of [PipelinePhase] and [PhaseContent].
+     *
+     * @since 1.3.4
+     */
     private val phasesRaw: MutableList<Any> = mutableListOf(*phases)
 
+    /** @since 1.3.4 */
     private var interceptorsQuantity = 0
 
+    /** @since 1.3.4 */
     val items: List<PipelinePhase>
         get() = phasesRaw.map {
             it as? PipelinePhase ?: (it as PhaseContent<*, *>).phase
         }
 
+    /**
+     * @return `true` if there are no interceptors installed regardless number
+     *     of phases.
+     * @since 1.3.4
+     */
     val isEmpty: Boolean
         get() = interceptorsQuantity == 0
 
+    /**
+     * Executes this pipeline in the given [context] and with the given
+     * [subject].
+     *
+     * @since 1.3.4
+     */
     fun execute(context: TContext, subject: TSubject): TSubject {
         val pipelineContext = createContext(context, subject)
         return pipelineContext.execute(subject)
     }
 
+    /**
+     * Add [phase] to the end of [phasesRaw].
+     *
+     * @since 1.3.4
+     */
     fun addPhase(phase: PipelinePhase) {
         if (hasPhase(phase)) return
         phasesRaw.add(phase)
     }
 
+    /**
+     * Insert [phase] as [PhaseContent] after the [reference] phase. If there
+     * are other phases inserted after [reference], then [phase] will be
+     * inserted after them.
+     *
+     * @since 1.3.4
+     */
     fun insertPhaseAfter(reference: PipelinePhase, phase: PipelinePhase) {
         if (hasPhase(phase)) return
         val index = findPhaseIndex(reference)
@@ -61,14 +96,15 @@ open class Pipeline<TSubject : Any, TContext : Any>(vararg phases: PipelinePhase
         }
         phasesRaw.add(
             lastRelatedPhaseIndex + 1,
-            PhaseContent<TSubject, TContext>(
-                phase,
-                PipelinePhaseRelation.After(reference),
-                mutableListOf()
-            )
+            PhaseContent<TSubject, TContext>(phase, PipelinePhaseRelation.After(reference))
         )
     }
 
+    /**
+     * Inserts [phase] as [PhaseContent] before the [reference] phase.
+     *
+     * @since 1.3.4
+     */
     fun insertPhaseBefore(reference: PipelinePhase, phase: PipelinePhase) {
         if (hasPhase(phase)) return
         val index = findPhaseIndex(reference)
@@ -77,14 +113,15 @@ open class Pipeline<TSubject : Any, TContext : Any>(vararg phases: PipelinePhase
         }
         phasesRaw.add(
             index,
-            PhaseContent<TSubject, TContext>(
-                phase,
-                PipelinePhaseRelation.Before(reference),
-                mutableListOf()
-            )
+            PhaseContent<TSubject, TContext>(phase, PipelinePhaseRelation.Before(reference))
         )
     }
 
+    /**
+     * Adds [block] to the [phase] of this pipeline.
+     *
+     * @since 1.3.4
+     */
     fun intercept(phase: PipelinePhase, block: PipelineInterceptor<TSubject, TContext>) {
         val phaseContent =
             findPhase(phase) ?: throw IllegalArgumentException("Phase $phase is not registered")
@@ -93,9 +130,12 @@ open class Pipeline<TSubject : Any, TContext : Any>(vararg phases: PipelinePhase
         afterIntercepted()
     }
 
+    /** @since 1.3.4 */
     open fun afterIntercepted() {
+        nothing_to_do()
     }
 
+    /** @since 1.3.4 */
     fun interceptorsForPhase(phase: PipelinePhase): List<PipelineInterceptor<TSubject, TContext>> {
         @Suppress("UNCHECKED_CAST")
         return phasesRaw.filterIsInstance<PhaseContent<*, *>>()
@@ -103,6 +143,7 @@ open class Pipeline<TSubject : Any, TContext : Any>(vararg phases: PipelinePhase
             ?.interceptors as List<PipelineInterceptor<TSubject, TContext>>
     }
 
+    /** @since 1.3.4 */
     fun mergePhases(from: Pipeline<TSubject, TContext>) {
         val fromPhases = from.phasesRaw
         val toInsert = fromPhases.toMutableSet()
@@ -126,6 +167,7 @@ open class Pipeline<TSubject : Any, TContext : Any>(vararg phases: PipelinePhase
         }
     }
 
+    /** @since 1.3.4 */
     private fun mergeInterceptors(from: Pipeline<TSubject, TContext>) {
         val fromPhases = from.phasesRaw
         fromPhases.forEach { fromPhaseOrContent ->
@@ -142,11 +184,13 @@ open class Pipeline<TSubject : Any, TContext : Any>(vararg phases: PipelinePhase
         }
     }
 
+    /** @since 1.3.4 */
     fun merge(from: Pipeline<TSubject, TContext>) {
         mergePhases(from)
         mergeInterceptors(from)
     }
 
+    /** @since 1.3.4 */
     private fun createContext(
         context: TContext,
         subject: TSubject,
@@ -187,6 +231,14 @@ open class Pipeline<TSubject : Any, TContext : Any>(vararg phases: PipelinePhase
         return null
     }
 
+    /**
+     * Find index matching [phase] in [phasesRaw]. Returns the index if
+     * [PhaseContent] exists and its phase matches [phase] .If there is a
+     * matching [PipelinePhase], return the index of the [PipelinePhase].
+     * Otherwise return -1.
+     *
+     * @return 1.3.4
+     */
     private fun findPhaseIndex(phase: PipelinePhase): Int {
         val phasesList = phasesRaw
         for (index in phasesList.indices) {
@@ -215,6 +267,7 @@ open class Pipeline<TSubject : Any, TContext : Any>(vararg phases: PipelinePhase
         return false
     }
 
+    /** @since 1.3.4 */
     private fun cacheInterceptors(): List<PipelineInterceptor<TSubject, TContext>> {
         if (interceptorsQuantity == 0) return emptyList()
         val phases = phasesRaw
@@ -227,6 +280,7 @@ open class Pipeline<TSubject : Any, TContext : Any>(vararg phases: PipelinePhase
         return result
     }
 
+    /** @since 1.3.4 */
     private fun insertRelativePhase(fromPhaseOrContent: Any, fromPhase: PipelinePhase): Boolean {
         val fromPhaseRelation = when {
             fromPhaseOrContent === fromPhase -> PipelinePhaseRelation.Last

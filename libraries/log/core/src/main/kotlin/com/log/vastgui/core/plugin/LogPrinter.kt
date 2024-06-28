@@ -80,9 +80,7 @@ class LogPrinter private constructor(private val mConfiguration: Configuration) 
      * @since 1.3.1
      */
     internal fun printLog(logInfo: LogInfo) {
-        if (true == levelMap[logInfo.mLevel]) {
-            mLogger.log(logInfo)
-        }
+        mLogger.log(logInfo)
     }
 
     init {
@@ -108,6 +106,11 @@ class LogPrinter private constructor(private val mConfiguration: Configuration) 
         }
 
         override fun install(plugin: LogPrinter, scope: LogCat) {
+            scope.logPipeline.intercept(LogPipeline.State) {
+                if (plugin.levelMap[subject.level] == false) {
+                    finish()
+                }
+            }
             scope.logPipeline.intercept(LogPipeline.Output) {
                 val logInfo = subject.build()
                 plugin.printLog(logInfo)

@@ -17,6 +17,8 @@
 package com.log.vastgui.core
 
 import com.log.vastgui.core.base.LogLevel
+import com.log.vastgui.core.base.allLogLevel
+import com.log.vastgui.core.format.OnlyMsgFormat
 import com.log.vastgui.core.json.GsonConverter
 import com.log.vastgui.core.plugin.LogJson
 import com.log.vastgui.core.plugin.LogPretty
@@ -26,7 +28,7 @@ import com.log.vastgui.core.plugin.LogSwitch
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/5
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
+// Documentation: https://ave.entropy2020.cn/documents/log/log-core/setting-up-logfactory/
 
 private val gson = GsonConverter.getInstance(true)
 
@@ -35,8 +37,8 @@ val mLogFactory: LogFactory = getLogFactory {
         open = true
     }
     install(LogPrinter) {
-        levelSet = setOf(LogLevel.DEBUG)
-        logger = SimpleLogger()
+        levelSet = allLogLevel
+        logger = SimpleLogger(OnlyMsgFormat)
     }
     install(LogJson) {
         converter = gson
@@ -44,6 +46,7 @@ val mLogFactory: LogFactory = getLogFactory {
     install(LogPretty) {
         converter = gson
     }
+    install(SysPlugin)
 }
 
 //    install(LogPrinter) {

@@ -81,9 +81,7 @@ class LogStorage private constructor(private val mConfiguration: Configuration) 
      * @since 1.3.1
      */
     internal fun storeLog(logInfo: LogInfo) {
-        if (true == levelMap[logInfo.mLevel]) {
-            mLogStore.store(logInfo)
-        }
+        mLogStore.store(logInfo)
     }
 
     init {
@@ -105,6 +103,11 @@ class LogStorage private constructor(private val mConfiguration: Configuration) 
         override val key: String = LogStorage::class.java.simpleName
 
         override fun install(plugin: LogStorage, scope: LogCat) {
+            scope.logPipeline.intercept(LogPipeline.State) {
+                if (plugin.levelMap[subject.level] == false) {
+                    finish()
+                }
+            }
             val store = PipelinePhase("Store")
             scope.logPipeline.insertPhaseAfter(LogPipeline.Output, store)
             scope.logPipeline.intercept(store) {

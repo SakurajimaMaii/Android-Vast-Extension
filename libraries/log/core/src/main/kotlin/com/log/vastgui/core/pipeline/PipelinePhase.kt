@@ -19,5 +19,12 @@ package com.log.vastgui.core.pipeline
 // Author: ywnkm
 // Email: https://github.com/ywnkm
 // Date: 2024/6/22
+// Documentation: https://ave.entropy2020.cn/documents/log/log-core/advanced/advanced/
 
+/**
+ * Pipeline phase.
+ *
+ * @see PhaseContent
+ * @since 1.3.4
+ */
 data class PipelinePhase(val name: String)

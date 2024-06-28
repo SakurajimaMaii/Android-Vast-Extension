@@ -116,6 +116,9 @@ class LogCatTest {
         }
         // 打印异常
         logCat.e(NullPointerException("this object is null."))
+        logCat.d {
+            "你好，这是一条日志"
+        }
         logCat.d(paragraph)
     }
 

@@ -28,14 +28,13 @@ import com.log.vastgui.core.format.TableFormat
 // Date: 2024/5/19 23:32
 // Documentation: https://ave.entropy2020.cn/documents/log/log-core/develop/
 
-class SimpleLogger : Logger {
-    override val logFormat: LogFormat =
-        TableFormat(
-            DEFAULT_MAX_SINGLE_LOG_LENGTH,
-            DEFAULT_MAX_PRINT_TIMES,
-            TableFormat.LogHeader.default
-        )
-
+class SimpleLogger(
+    override val logFormat: LogFormat = TableFormat(
+        DEFAULT_MAX_SINGLE_LOG_LENGTH,
+        DEFAULT_MAX_PRINT_TIMES,
+        TableFormat.LogHeader.default
+    )
+) : Logger {
     override fun log(logInfo: LogInfo) {
         println(logFormat.format(logInfo))
     }

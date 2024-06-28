@@ -29,7 +29,7 @@ import com.log.vastgui.core.base.LogLevel.WARN
 // Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
 
 /** @since 1.3.4 */
-internal val allLogLevel = listOf(VERBOSE, DEBUG, INFO, WARN, ERROR, ASSERT)
+val allLogLevel = setOf(VERBOSE, DEBUG, INFO, WARN, ERROR, ASSERT)
 
 /**
  * Log level.

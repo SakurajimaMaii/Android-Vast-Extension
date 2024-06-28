@@ -52,7 +52,7 @@ const val DEFAULT_MAX_PRINT_TIMES = Int.MAX_VALUE
  * Table format of [LogInfo].
  *
  * @see <img
- *     src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/tools/image/log.png?raw=true">
+ *     src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/core/image/table_format.png?raw=true">
  * @since 1.3.4
  */
 class TableFormat(
