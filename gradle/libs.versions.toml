@@ -57,7 +57,7 @@ targetSdk = "34"
 minSdk = "21"
 core-local = "0.1.0"
 log = "1.3.3"
-log-local = "1.3.3"
+log-local = "1.3.4"
 tools = "1.4.1"
 navigationFragment = "2.7.7"
 
