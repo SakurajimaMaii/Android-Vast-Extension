@@ -102,8 +102,8 @@ class AndroidStore internal constructor(
 
     private var mCurrentFile = getCurrentFile()
 
-    override fun store(info: LogInfo) {
-        mLogScope.launch { mLogChannel.send(info) }
+    override fun store(logInfo: LogInfo) {
+        mLogScope.launch { mLogChannel.send(logInfo) }
     }
 
     /**

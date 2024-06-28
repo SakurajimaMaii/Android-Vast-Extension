@@ -22,9 +22,7 @@ import com.log.vastgui.core.base.LogInfo
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/6/27
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/log/log-core/format/
 
 /**
  * If you just want to print the log content without additional

@@ -29,7 +29,7 @@ package com.log.vastgui.core.base
 interface Logger {
 
     /**
-     * Format [LogFormat] in the style specified by [LogFormat].
+     * Format [LogInfo] in the style specified by [LogFormat].
      *
      * @since 1.3.4
      */

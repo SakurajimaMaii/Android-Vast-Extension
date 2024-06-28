@@ -20,11 +20,31 @@ package com.log.vastgui.core.pipeline
 // Email: https://github.com/ywnkm
 // Date: 2024/6/22
 
+/**
+ * [PipelinePhaseRelation].
+ *
+ * @since 1.3.4
+ */
 internal sealed class PipelinePhaseRelation {
 
+    /**
+     * After.
+     *
+     * @since 1.3.4
+     */
     class After(val relativeTo: PipelinePhase) : PipelinePhaseRelation()
 
+    /**
+     * Before.
+     *
+     * @since 1.3.4
+     */
     class Before(val relativeTo: PipelinePhase) : PipelinePhaseRelation()
 
+    /**
+     * Last.
+     *
+     * @since 1.3.4
+     */
     data object Last : PipelinePhaseRelation()
 }

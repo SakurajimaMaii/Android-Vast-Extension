@@ -29,7 +29,7 @@ package com.log.vastgui.core.base
 interface LogStore {
 
     /**
-     * Format [LogFormat] in the style specified by [LogFormat].
+     * Format [LogInfo] in the style specified by [LogFormat].
      *
      * @since 1.3.4
      */
@@ -37,7 +37,7 @@ interface LogStore {
         get() = TODO("Please override logFormat!")
 
     /** @since 1.3.1 */
-    fun store(info: LogInfo)
+    fun store(logInfo: LogInfo)
 
     companion object
 }

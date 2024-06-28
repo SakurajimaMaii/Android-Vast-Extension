@@ -84,8 +84,8 @@ class DesktopStore internal constructor(override val logFormat: LogFormat) : Log
     var fileMaxSize by NotNullOrDefault(1024L)
 
     /** @since 1.3.1 */
-    override fun store(info: LogInfo) {
-        storage(info)
+    override fun store(logInfo: LogInfo) {
+        storage(logInfo)
     }
 
     /**

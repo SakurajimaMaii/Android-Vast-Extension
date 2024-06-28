@@ -20,14 +20,36 @@ package com.log.vastgui.core.pipeline
 // Email: https://github.com/ywnkm
 // Date: 2024/6/22
 
+/**
+ * [PipelineContext].
+ *
+ * @since 1.3.4
+ */
 abstract class PipelineContext<TSubject : Any, TContext : Any>(val context: TContext) {
+
+    /**
+     * @since 1.3.4
+     */
     abstract var subject: TSubject
 
+    /**
+     * @since 1.3.4
+     */
     abstract fun finish()
 
+    /**
+     * @since 1.3.4
+     */
     abstract fun proceedWith(subject: TSubject): TSubject
 
+    /**
+     * @since 1.3.4
+     */
     abstract fun proceed(): TSubject
 
+    /**
+     * @since 1.3.4
+     */
     internal abstract fun execute(initial: TSubject): TSubject
+
 }

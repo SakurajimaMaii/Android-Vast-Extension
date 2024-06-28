@@ -20,23 +20,40 @@ package com.log.vastgui.core.pipeline
 // Email: https://github.com/ywnkm
 // Date: 2024/6/22
 
+/**
+ * [SimplePipelineContext].
+ *
+ * @since 1.3.4
+ */
 internal class SimplePipelineContext<TSubject: Any, TContext: Any> (
     context: TContext,
     override var subject: TSubject,
     private val interceptors: List<PipelineInterceptor<TSubject, TContext>>,
 ) : PipelineContext<TSubject, TContext>(context) {
 
+    /**
+     * @since 1.3.4
+     */
     private var index = 0
 
+    /**
+     * @since 1.3.4
+     */
     override fun finish() {
         index = -1
     }
 
+    /**
+     * @since 1.3.4
+     */
     override fun proceedWith(subject: TSubject): TSubject {
         this.subject = subject
         return proceed()
     }
 
+    /**
+     * @since 1.3.4
+     */
     override fun proceed(): TSubject {
         val index = index
         if (index < 0) return subject
@@ -47,12 +64,18 @@ internal class SimplePipelineContext<TSubject: Any, TContext: Any> (
         return proceedLoop()
     }
 
+    /**
+     * @since 1.3.4
+     */
     override fun execute(initial: TSubject): TSubject {
         index = 0
         subject = initial
         return proceed()
     }
 
+    /**
+     * @since 1.3.4
+     */
     private fun proceedLoop(): TSubject {
         do {
             val index = index

@@ -29,9 +29,7 @@ import com.log.vastgui.core.base.needCut
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/6/20 22:41
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/log/log-core/format/
 
 /**
  * Default maximum length of chars printed of a single log.
