@@ -15,11 +15,11 @@
  */
 
 plugins {
-    id("kotlin-kapt")
     id("com.android.application")
-    id("kotlin-android")
-    id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+    id("kotlin-android")
+    id("kotlin-kapt")
+    id("org.jetbrains.kotlin.android")
     kotlin("plugin.serialization")
 }
 
@@ -100,9 +100,9 @@ dependencies {
     implementation(projects.libraries.adapter)
     implementation(projects.libraries.core)
     implementation(projects.libraries.tools)
-    implementation(projects.libraries.log.core)
+    implementation(libs.log.core)
+    implementation(libs.log.mars)
     implementation(projects.libraries.log.okhttp)
-    implementation(projects.libraries.log.mars)
     implementation(libs.activity.ktx)
     implementation(libs.adapter.rxjava3)
     implementation(libs.androidx.swiperefreshlayout)

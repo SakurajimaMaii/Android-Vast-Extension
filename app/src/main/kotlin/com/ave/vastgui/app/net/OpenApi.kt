@@ -16,6 +16,7 @@
 
 package com.ave.vastgui.app.net
 
+import com.ave.vastgui.app.log.gson
 import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.tools.network.request.RequestBuilder
 import com.log.vastgui.core.LogCat
@@ -29,7 +30,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 // Date: 2024/1/2
 
 private val mLogcat: LogCat = mLogFactory.getLogCat(OpenApi::class.java)
-private val mOkhttp3Interceptor: Okhttp3Interceptor = Okhttp3Interceptor.getInstance(mLogcat)
+val mOkhttp3Interceptor: Okhttp3Interceptor = Okhttp3Interceptor.getInstance(mLogcat).apply {
+    bodyJsonConverter = { gson.parseString(it) }
+}
 
 /** 开源 Api ，点击[开放API-2.0](https://api.apiopen.top) */
 class OpenApi : RequestBuilder("https://api.apiopen.top") {

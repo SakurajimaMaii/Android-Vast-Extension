@@ -101,6 +101,13 @@ class Okhttp3Interceptor private constructor(private val logger: LogCat) : Inter
      */
     var responseLevel: ((Response) -> LogLevel) by NotNullOrDefault { _ -> LogLevel.DEBUG }
 
+    /**
+     * Request body json converter.
+     *
+     * @since 1.3.4
+     */
+    var bodyJsonConverter: ((String) -> String)? = null
+
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val request: Request = chain.request()
@@ -200,7 +207,7 @@ class Okhttp3Interceptor private constructor(private val logger: LogCat) : Inter
                     }
                     val contentType = responseBody.contentType()
                     val body = String(bytes, getCharset(contentType))
-                    requestLog.appendLine("\t body:$body")
+                    requestLog.appendLine("\t body:${bodyJsonConverter?.invoke(body) ?: body}")
                     responseBody = bytes.toResponseBody(responseBody.contentType())
                     return response.newBuilder().body(responseBody).build()
                 } else {
@@ -215,7 +222,6 @@ class Okhttp3Interceptor private constructor(private val logger: LogCat) : Inter
             )
         } finally {
             requestLog.append("<-- END HTTP")
-            println(requestLog.toString())
             log(responseLevel(response), logger.mDefaultTag, requestLog.toString())
         }
         return response
@@ -233,7 +239,8 @@ class Okhttp3Interceptor private constructor(private val logger: LogCat) : Inter
             val buffer = Buffer()
             body.writeTo(buffer)
             val charset = getCharset(body.contentType())
-            appendLine("\tbody: ${buffer.readString(charset)}")
+            val bodyJson = buffer.readString(charset)
+            appendLine("\tbody: ${bodyJsonConverter?.invoke(bodyJson) ?: bodyJson}")
         } catch (e: Exception) {
             logger.e(logger.mDefaultTag, "Exception encountered while processing request body", e)
         }

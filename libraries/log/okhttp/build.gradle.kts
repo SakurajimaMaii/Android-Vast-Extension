@@ -46,8 +46,8 @@ kotlin.sourceSets.all {
 }
 
 dependencies{
-    // implementation(libs.log.core)
-    implementation(projects.libraries.log.core)
+    dokkaPlugin(libs.android.documentation.plugin)
+    implementation(libs.log.core)
     implementation(libs.okhttp)
 }
 
@@ -73,6 +73,7 @@ tasks.withType<DokkaTaskPartial> {
     moduleName.set("log-okhttp")
     dokkaSourceSets.configureEach {
         sourceLink {
+            // FIXME https://github.com/Kotlin/dokka/issues/2876
             localDirectory.set(projectDir.resolve("src"))
             remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/okhttp/src"))
             remoteLineSuffix.set("#L")

@@ -17,7 +17,12 @@
 package com.ave.vastgui.app.net
 
 import com.ave.vastgui.app.net.model.Articles
+import com.ave.vastgui.tools.bean.UserBean
+import com.ave.vastgui.tools.network.request.Request2
+import okhttp3.RequestBody
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 
 
 // Author: Vast Gui
@@ -30,5 +35,8 @@ interface WanAndroidApiService {
 
     @GET("/article/list/1/json")
     suspend fun getArticles(): Articles
+
+    @POST("/user/login")
+    suspend fun login(@Body userBean: UserBean): Request2<RequestBody>
 
 }

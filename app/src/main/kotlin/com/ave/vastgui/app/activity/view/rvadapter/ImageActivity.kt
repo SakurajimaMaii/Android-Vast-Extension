@@ -31,8 +31,15 @@ import com.ave.vastgui.app.adapter.entity.Images
 import com.ave.vastgui.app.adapter.holder.ComicImageHolder
 import com.ave.vastgui.app.adapter.holder.DefaultImageHolder
 import com.ave.vastgui.app.databinding.ActivityPersonBinding
+import com.ave.vastgui.app.log.mLogFactory
+import com.ave.vastgui.app.net.WanAndroidApi
+import com.ave.vastgui.app.net.WanAndroidApiService
 import com.ave.vastgui.app.viewmodel.NetVM
+import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.activity.VastVbVmActivity
+import com.ave.vastgui.tools.bean.UserBean
+import com.ave.vastgui.tools.network.request.Request2
+import com.ave.vastgui.tools.network.request.getApi
 import com.ave.vastgui.tools.view.dialog.MaterialAlertDialogBuilder
 import com.ave.vastgui.tools.view.toast.SimpleToast.showShortMsg
 import kotlinx.coroutines.launch
@@ -73,6 +80,8 @@ private class ImagePagingAdapter(context: Context) : VastPagingAdapter<Images.Im
 )
 
 class ImageActivity : VastVbVmActivity<ActivityPersonBinding, NetVM>() {
+
+    private val logcat = mLogFactory.getLogCat(this::class.java)
 
     private val mImageAdapter: ImageAdapter by lazy {
         ImageAdapter(this)
@@ -130,10 +139,21 @@ class ImageActivity : VastVbVmActivity<ActivityPersonBinding, NetVM>() {
 //                }
 //        }
 
-        getBinding().personRv.adapter = mImagePagingAdapter
+//        getBinding().personRv.adapter = mImagePagingAdapter
+//        lifecycleScope.launch {
+//            getViewModel().imageFlow.collect {
+//                mImagePagingAdapter.submitData(it)
+//            }
+//        }
+
         lifecycleScope.launch {
-            getViewModel().imageFlow.collect{
-                mImagePagingAdapter.submitData(it)
+            WanAndroidApi().getApi(WanAndroidApiService::class.java) {
+                login(UserBean("xxx", "xxx"))
+            }.collect {
+                when (it) {
+                    is Request2.Success -> logcat.d(it)
+                    else -> nothing_to_do()
+                }
             }
         }
     }

@@ -17,6 +17,7 @@
 package com.ave.vastgui.app.net
 
 import com.ave.vastgui.tools.network.request.RequestBuilder
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -26,9 +27,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 // Description: WanAndroid 开放 Api
 // Reference: https://www.wanandroid.com/blog/show/2
 
-class WanAndroidApi : RequestBuilder("https://www.wanandroid.com"){
+class WanAndroidApi : RequestBuilder("https://www.wanandroid.com") {
     override fun retrofitConfiguration(builder: Retrofit.Builder) {
         super.retrofitConfiguration(builder)
         builder.addConverterFactory(GsonConverterFactory.create())
+    }
+
+    override fun okHttpConfiguration(builder: OkHttpClient.Builder) {
+        super.okHttpConfiguration(builder)
+        builder.addInterceptor(mOkhttp3Interceptor)
     }
 }

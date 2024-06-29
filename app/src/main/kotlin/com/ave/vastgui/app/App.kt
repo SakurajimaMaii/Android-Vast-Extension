@@ -20,6 +20,7 @@ import android.app.Application
 import android.content.Intent
 import com.ave.vastgui.app.activity.FileActivity
 import com.ave.vastgui.app.log.mLogFactory
+import com.ave.vastgui.app.log.marsLogger
 import com.ave.vastgui.tools.content.ContextHelper
 import com.ave.vastgui.tools.exception.AppCrashHandler
 import com.ave.vastgui.tools.utils.DensityUtils.DP
@@ -55,6 +56,11 @@ class App : Application() {
 //        }
         // ConstraintLayoutCompat.init()
         // Thread.setDefaultUncaughtExceptionHandler(AppCrashHandler.getInstance(crashConfig))
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        marsLogger.close()
     }
 
     init {
