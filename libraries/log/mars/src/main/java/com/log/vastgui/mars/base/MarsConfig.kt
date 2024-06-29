@@ -23,9 +23,7 @@ import java.io.File
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/6/1 0:16
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/log/log-mars/usage/
 
 internal object MarsConfig {
 

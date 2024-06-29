@@ -16,6 +16,7 @@
 
 package com.log.vastgui.mars
 
+import com.ave.vastgui.core.extension.SingletonHolder
 import com.log.vastgui.core.base.LogFormat
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogLevel
@@ -64,7 +65,7 @@ fun Logger.Companion.mars(
     it.singleLogFileStoreTime = singleLogFileStoreTime
     it.singleLogFileCacheDays = singleLogFileCacheDays
     it.pubKey = pubKey
-    MarsLogger(logFormat)
+    MarsLogger.getInstance(logFormat)
 }
 
 /**
@@ -73,7 +74,7 @@ fun Logger.Companion.mars(
  *
  * @since 1.3.4
  */
-class MarsLogger internal constructor(override val logFormat: LogFormat) :
+class MarsLogger private constructor(override val logFormat: LogFormat) :
     Logger {
     override fun log(logInfo: LogInfo) {
         val content = logFormat.format(logInfo)
@@ -87,7 +88,14 @@ class MarsLogger internal constructor(override val logFormat: LogFormat) :
         }
     }
 
+    /** @since 1.3.4 */
+    fun close() {
+        MarsConfig.close()
+    }
+
     init {
         MarsConfig.init()
     }
+
+    companion object : SingletonHolder<MarsLogger, LogFormat>(::MarsLogger)
 }

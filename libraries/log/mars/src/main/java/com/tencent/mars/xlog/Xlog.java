@@ -15,9 +15,7 @@ package com.tencent.mars.xlog;
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/6/19 1:42
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/log/log-mars/usage/
 
 public class Xlog implements Log.LogImp {
 
@@ -117,7 +115,6 @@ public class Xlog implements Log.LogImp {
     @Override
     public void appenderOpen(int level, int mode, String cacheDir, String logDir, String nameprefix, int cacheDays, String pubkey) {
         XLogConfig logConfig = new XLogConfig();
-        System.out.println("=================="+pubkey);
         logConfig.level = level;
         logConfig.mode = mode;
         logConfig.logdir = logDir;

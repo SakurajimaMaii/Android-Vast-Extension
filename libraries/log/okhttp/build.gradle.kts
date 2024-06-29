@@ -25,7 +25,7 @@ plugins {
 }
 
 group = "io.github.sakurajimamaii"
-version = libs.versions.log.local.get()
+version = "1.3.4"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -60,7 +60,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "io.github.sakurajimamaii"
             artifactId = "log-okhttp"
-            version = libs.versions.log.local.get()
+            version = "1.3.4"
 
             afterEvaluate {
                 from(components["java"])

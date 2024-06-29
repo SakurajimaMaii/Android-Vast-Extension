@@ -46,7 +46,7 @@ kotlin.sourceSets.all {
 }
 
 dependencies {
-    implementation(projects.libraries.log.core)
+    implementation(libs.log.core)
     implementation(libs.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

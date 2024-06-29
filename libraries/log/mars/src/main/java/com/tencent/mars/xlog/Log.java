@@ -15,9 +15,7 @@ package com.tencent.mars.xlog;
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/6/19 1:40
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/log/log-mars/usage/
 
 import android.os.Looper;
 import android.os.Process;
@@ -195,6 +193,9 @@ public class Log {
             if (null != logImp) {
                 if (sLogInstanceMap.containsKey(namePrefix)) {
                     LogInstance logInstance = sLogInstanceMap.remove(namePrefix);
+                    if(null == logInstance){
+                        return;
+                    }
                     logImp.releaseXlogInstance(namePrefix);
                     logInstance.mLogInstancePtr = -1;
                 }
