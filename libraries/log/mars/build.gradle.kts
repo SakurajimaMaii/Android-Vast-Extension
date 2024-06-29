@@ -1,8 +1,26 @@
+/*
+ * Copyright 2021-2024 VastGui
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import java.net.URL
 
 plugins {
     id(libs.plugins.androidLibrary.get().pluginId)
+    id("convention.publication")
+    id("org.jetbrains.dokka")
     alias(libs.plugins.kotlinAndroid)
 }
 
@@ -39,6 +57,12 @@ android {
     }
 
     sourceSets["main"].jniLibs.srcDirs("libs")
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 
 kotlin.sourceSets.all {
@@ -46,6 +70,7 @@ kotlin.sourceSets.all {
 }
 
 dependencies {
+    dokkaPlugin(libs.android.documentation.plugin)
     implementation(libs.log.core)
     implementation(libs.core.ktx)
     testImplementation(libs.junit)
@@ -53,12 +78,32 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 }
 
+extra["PUBLISH_ARTIFACT_ID"] = "log-mars"
+extra["PUBLISH_DESCRIPTION"] = "Tencent xlog for log"
+extra["PUBLISH_URL"] =
+    "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/log/core"
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "io.github.sakurajimamaii"
+            artifactId = "log-mars"
+            version = "1.3.4"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
+}
+
 tasks.withType<DokkaTaskPartial> {
     moduleName.set("log-mars")
     dokkaSourceSets.configureEach {
         sourceLink {
+            // FIXME https://github.com/Kotlin/dokka/issues/2876
             localDirectory.set(projectDir.resolve("src"))
-            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/desktop/src"))
+            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/log/mars/src"))
             remoteLineSuffix.set("#L")
         }
     }

@@ -76,7 +76,6 @@ public class Log {
     public static void appenderFlushSync(boolean isSync) {
         if (logImp != null) {
             logImp.appenderFlush(0, isSync);
-
         }
     }
 
