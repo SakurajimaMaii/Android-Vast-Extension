@@ -143,17 +143,17 @@ class Okhttp3Interceptor private constructor(private val logger: LogCat) : Inter
             if (contentLevel.headers) {
                 if (null != requestBody) {
                     if (requestBody.contentType() != null) {
-                        requestLog.appendLine("\tContent-Type: ${requestBody.contentType()}")
+                        requestLog.appendLine("\tContent-Type : ${requestBody.contentType()}")
                     }
                     if (requestBody.contentLength() != -1L) {
-                        requestLog.appendLine("\tContent-Length: ${requestBody.contentLength()}")
+                        requestLog.appendLine("\tContent-Length : ${requestBody.contentLength()}")
                     }
                 }
                 val headers = request.headers
                 headers.forEachIndexed { index, _ ->
                     val name = headers.name(index)
                     if ("Content-Type" != name && "Content-Length" != name) {
-                        requestLog.appendLine("\t$name: ${headers.value(index)}")
+                        requestLog.appendLine("\t$name : ${headers.value(index)}")
                     }
                 }
             }
@@ -207,7 +207,10 @@ class Okhttp3Interceptor private constructor(private val logger: LogCat) : Inter
                     }
                     val contentType = responseBody.contentType()
                     val body = String(bytes, getCharset(contentType))
-                    requestLog.appendLine("\t body:${bodyJsonConverter?.invoke(body) ?: body}")
+                    val json = bodyJsonConverter
+                        ?.invoke(body)
+                        ?.replace("\n", "\n\t        ")
+                    requestLog.appendLine("\t body : ${json ?: body}")
                     responseBody = bytes.toResponseBody(responseBody.contentType())
                     return response.newBuilder().body(responseBody).build()
                 } else {
@@ -240,7 +243,10 @@ class Okhttp3Interceptor private constructor(private val logger: LogCat) : Inter
             body.writeTo(buffer)
             val charset = getCharset(body.contentType())
             val bodyJson = buffer.readString(charset)
-            appendLine("\tbody: ${bodyJsonConverter?.invoke(bodyJson) ?: bodyJson}")
+            val json = bodyJsonConverter
+                ?.invoke(bodyJson)
+                ?.replace("\n", "\n\t       ")
+            appendLine("\tbody : ${json ?: bodyJson}")
         } catch (e: Exception) {
             logger.e(logger.mDefaultTag, "Exception encountered while processing request body", e)
         }
