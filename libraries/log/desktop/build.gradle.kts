@@ -46,7 +46,7 @@ kotlin.sourceSets.all {
 }
 
 dependencies {
-    implementation(projects.libraries.log.core)
+    implementation(libs.log.core)
     testImplementation(libs.junit)
     testImplementation(libs.gson)
     testImplementation(libs.fastjson2.kotlin)
