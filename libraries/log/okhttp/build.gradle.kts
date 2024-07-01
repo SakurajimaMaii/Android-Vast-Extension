@@ -46,7 +46,6 @@ kotlin.sourceSets.all {
 }
 
 dependencies{
-    dokkaPlugin(libs.android.documentation.plugin)
     implementation(libs.log.core)
     implementation(libs.okhttp)
 }

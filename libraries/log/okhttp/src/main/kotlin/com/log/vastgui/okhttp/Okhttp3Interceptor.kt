@@ -66,7 +66,7 @@ import java.util.concurrent.TimeUnit
  * ```
  *
  * @see <img
- *     src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/okhttp/image/log.png?raw=true">
+ *     src=https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/okhttp/image/log.png?raw=true>
  * @since 1.3.3
  */
 class Okhttp3Interceptor private constructor(private val logger: LogCat) : Interceptor {
@@ -143,17 +143,17 @@ class Okhttp3Interceptor private constructor(private val logger: LogCat) : Inter
             if (contentLevel.headers) {
                 if (null != requestBody) {
                     if (requestBody.contentType() != null) {
-                        requestLog.appendLine("\tContent-Type : ${requestBody.contentType()}")
+                        requestLog.appendLine("\tContent-Type:${requestBody.contentType()}")
                     }
                     if (requestBody.contentLength() != -1L) {
-                        requestLog.appendLine("\tContent-Length : ${requestBody.contentLength()}")
+                        requestLog.appendLine("\tContent-Length:${requestBody.contentLength()}")
                     }
                 }
                 val headers = request.headers
                 headers.forEachIndexed { index, _ ->
                     val name = headers.name(index)
                     if ("Content-Type" != name && "Content-Length" != name) {
-                        requestLog.appendLine("\t$name : ${headers.value(index)}")
+                        requestLog.appendLine("\t$name:${headers.value(index)}")
                     }
                 }
             }
@@ -194,7 +194,7 @@ class Okhttp3Interceptor private constructor(private val logger: LogCat) : Inter
             if (contentLevel.headers) {
                 val headers = clone.headers
                 headers.forEachIndexed { index, _ ->
-                    requestLog.appendLine("\t ${headers.name(index)} : ${headers.value(index)}")
+                    requestLog.appendLine("\t ${headers.name(index)}:${headers.value(index)}")
                 }
             }
             if (contentLevel.body && clone.promisesBody()) {
@@ -209,12 +209,12 @@ class Okhttp3Interceptor private constructor(private val logger: LogCat) : Inter
                     val body = String(bytes, getCharset(contentType))
                     val json = bodyJsonConverter
                         ?.invoke(body)
-                        ?.replace("\n", "\n\t        ")
-                    requestLog.appendLine("\t body : ${json ?: body}")
+                        ?.replace("\n", "\n\t      ")
+                    requestLog.appendLine("\t body:${json ?: body}")
                     responseBody = bytes.toResponseBody(responseBody.contentType())
                     return response.newBuilder().body(responseBody).build()
                 } else {
-                    requestLog.appendLine("\tbody: maybe [binary body], omitted!")
+                    requestLog.appendLine("\tbody:maybe [binary body], omitted!")
                 }
             }
         } catch (e: Exception) {
@@ -245,8 +245,8 @@ class Okhttp3Interceptor private constructor(private val logger: LogCat) : Inter
             val bodyJson = buffer.readString(charset)
             val json = bodyJsonConverter
                 ?.invoke(bodyJson)
-                ?.replace("\n", "\n\t       ")
-            appendLine("\tbody : ${json ?: bodyJson}")
+                ?.replace("\n", "\n\t     ")
+            appendLine("\tbody:${json ?: bodyJson}")
         } catch (e: Exception) {
             logger.e(logger.mDefaultTag, "Exception encountered while processing request body", e)
         }
