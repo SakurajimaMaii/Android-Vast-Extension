@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ import java.io.IOException
  * @property originalImage The temporary file of the original image, it is
  *     saved in the app internal cache file directory and it will be
  *     deleted when the [VastCropActivity] is destroy.
- * @property RESULT_NULL_DATA_ERROR Returne when the [Intent.getData] is
+ * @property RESULT_NULL_DATA_ERROR Return when the [Intent.getData] is
  *     empty.
  * @property RESULT_FRAME_TYPE_ERROR Return when the value of [FRAME_TYPE]
  *     is error.

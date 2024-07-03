@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,7 +122,7 @@ const val SENSORS = Manifest.permission.BODY_SENSORS
  */
 inline fun ComponentActivity.requestPermission(
     permission: String,
-    builder: PermissionBuilder.() -> Unit
+    builder: PermissionBuilder.() -> Unit = {}
 ) {
     if (permission.isEmpty()) return
     val mBuilder = PermissionBuilder().also(builder)
@@ -149,7 +149,7 @@ inline fun ComponentActivity.requestPermission(
  */
 inline fun ComponentActivity.requestMultiplePermissions(
     permissions: Array<String>,
-    builder: MultiPermissionBuilder.() -> Unit
+    builder: MultiPermissionBuilder.() -> Unit = {}
 ) {
     val mBuilder = MultiPermissionBuilder().also(builder)
     val declaredPermissions = packageManager
@@ -191,7 +191,7 @@ inline fun ComponentActivity.requestMultiplePermissions(
  */
 inline fun Fragment.requestPermission(
     permission: String,
-    builder: PermissionBuilder.() -> Unit
+    builder: PermissionBuilder.() -> Unit = {}
 ) {
     if (permission.isEmpty()) return
     val mBuilder = PermissionBuilder().also(builder)
@@ -213,7 +213,7 @@ inline fun Fragment.requestPermission(
  */
 inline fun Fragment.requestMultiplePermissions(
     permissions: Array<String>,
-    builder: MultiPermissionBuilder.() -> Unit
+    builder: MultiPermissionBuilder.() -> Unit = {}
 ) {
     val mBuilder = MultiPermissionBuilder().also(builder)
     val declaredPermissions = requireActivity().packageManager

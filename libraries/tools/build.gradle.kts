@@ -1,8 +1,5 @@
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
-import java.net.URL
-
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +13,9 @@ import java.net.URL
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import java.net.URL
 
 plugins {
     id("com.android.library")
@@ -81,7 +81,7 @@ kotlin.sourceSets.all {
 dependencies {
     api(libs.security.crypto)
     api(libs.zxing.core)
-    api(projects.libraries.log.core)
+    api(libs.log.core)
     implementation(libs.vastcore)
     implementation(libs.activity.ktx)
     implementation(libs.annotation)
