@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.exifinterface.media.ExifInterface
 import com.ave.vastgui.tools.R
@@ -523,7 +524,7 @@ class CropViewLayout @JvmOverloads constructor(
         )
         mCropMaskColor = typeArray.getColor(
             R.styleable.CropViewLayout_crop_mask_layer_color,
-            context.getColor(R.color.default_crop_frame_mask_color)
+            ContextCompat.getColor(context, R.color.default_crop_frame_mask_color)
         )
         mCropFrameType =
             when (typeArray.getInt(R.styleable.CropViewLayout_crop_frame_type, 0)) {
@@ -535,7 +536,7 @@ class CropViewLayout @JvmOverloads constructor(
             }
         mCropFrameStrokeColor = typeArray.getColor(
             R.styleable.CropViewLayout_crop_frame_stroke_color,
-            context.getColor(R.color.md_theme_primaryFixedDim)
+            ContextCompat.getColor(context, R.color.md_theme_primaryFixedDim)
         )
         val mCropFrameWidth = typeArray.getDimension(
             R.styleable.CropView_crop_frame_width, mDefaultCropFrameWidth

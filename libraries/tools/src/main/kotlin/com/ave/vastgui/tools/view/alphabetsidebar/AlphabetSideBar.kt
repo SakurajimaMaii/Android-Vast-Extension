@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import android.view.View
 import androidx.annotation.IntDef
 import androidx.annotation.Size
 import androidx.annotation.StyleRes
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.withSave
 import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.R
@@ -529,7 +530,7 @@ class AlphabetSideBar @JvmOverloads constructor(
         mBackgroundColor =
             typeArray.getColor(
                 R.styleable.AlphabetSideBar_alphabetsidebar_background,
-                context.getColor(R.color.md_theme_primaryContainer)
+                ContextCompat.getColor(context, R.color.md_theme_primaryContainer)
             )
         mBarTextPaint.textSize =
             typeArray.getDimension(
@@ -544,12 +545,12 @@ class AlphabetSideBar @JvmOverloads constructor(
         mBarTextPaint.color =
             typeArray.getColor(
                 R.styleable.AlphabetSideBar_alphabetsidebar_text_color,
-                context.getColor(R.color.md_theme_outlineVariant)
+                ContextCompat.getColor(context, R.color.md_theme_outlineVariant)
             )
         mBarIndicatorTextPaint.color =
             typeArray.getColor(
                 R.styleable.AlphabetSideBar_alphabetsidebar_indicator_text_color,
-                context.getColor(R.color.md_theme_error)
+                ContextCompat.getColor(context, R.color.md_theme_error)
             )
         mBubbleTextPaint.textSize =
             typeArray.getDimension(
@@ -559,7 +560,7 @@ class AlphabetSideBar @JvmOverloads constructor(
         mBubbleTextPaint.color =
             typeArray.getColor(
                 R.styleable.AlphabetSideBar_alphabetsidebar_bubble_text_color,
-                context.getColor(R.color.md_theme_error)
+                ContextCompat.getColor(context, R.color.md_theme_error)
             )
         typeArray.recycle()
     }

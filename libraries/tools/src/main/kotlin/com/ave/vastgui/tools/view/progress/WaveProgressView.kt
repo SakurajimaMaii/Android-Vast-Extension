@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.getResourceIdOrThrow
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.R
@@ -382,20 +383,24 @@ class WaveProgressView @JvmOverloads constructor(
             )
         mText = typedArray.getString(R.styleable.WaveProgressView_progress_text) ?: ""
         mTextSize =
-            typedArray.getDimension(R.styleable.WaveProgressView_progress_text_size, mDefaultTexSize)
+            typedArray.getDimension(
+                R.styleable.WaveProgressView_progress_text_size,
+                mDefaultTexSize
+            )
         mTextColor =
             typedArray.getColor(
                 R.styleable.WaveProgressView_progress_text_color,
-                context.getColor(R.color.md_theme_onPrimary)
+                ContextCompat.getColor(context, R.color.md_theme_onPrimary)
             )
         mProgressBackgroundColor =
             typedArray.getColor(
                 R.styleable.WaveProgressView_progress_background_color,
-                context.getColor(R.color.md_theme_primaryContainer)
+                ContextCompat.getColor(context, R.color.md_theme_primaryContainer)
             )
         mProgressColor =
             typedArray.getColor(
-                R.styleable.WaveProgressView_progress_color, context.getColor(R.color.md_theme_primary)
+                R.styleable.WaveProgressView_progress_color,
+                ContextCompat.getColor(context, R.color.md_theme_primary)
             )
         mWaveWidth =
             typedArray.getFloat(R.styleable.WaveProgressView_wave_progress_wave_width, 200f)
@@ -409,7 +414,7 @@ class WaveProgressView @JvmOverloads constructor(
         mStrokeColor =
             typedArray.getColor(
                 R.styleable.WaveProgressView_wave_progress_stroke_color,
-                context.getColor(R.color.md_theme_primary)
+                ContextCompat.getColor(context, R.color.md_theme_primary)
             )
         mRadius =
             typedArray.getDimension(

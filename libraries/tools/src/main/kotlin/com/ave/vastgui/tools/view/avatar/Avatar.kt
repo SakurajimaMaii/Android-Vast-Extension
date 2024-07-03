@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.IntDef
 import androidx.annotation.StyleRes
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.getResourceIdOrThrow
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.R
@@ -303,7 +304,7 @@ class Avatar @JvmOverloads constructor(
         mBackground =
             typeArray.getColor(
                 R.styleable.Avatar_avatar_background,
-                context.getColor(R.color.md_theme_primary)
+                ContextCompat.getColor(context, R.color.md_theme_primary)
             )
         mText =
             typeArray.getString(R.styleable.Avatar_avatar_text) ?: mDefaultText
@@ -312,14 +313,14 @@ class Avatar @JvmOverloads constructor(
         mTextColor =
             typeArray.getColor(
                 R.styleable.Avatar_avatar_text_color,
-                context.getColor(R.color.md_theme_onPrimary)
+                ContextCompat.getColor(context, R.color.md_theme_onPrimary)
             )
         mStrokeWidth =
             typeArray.getDimension(R.styleable.Avatar_avatar_stroke_width, mDefaultStrokeWidth)
         mStrokeColor =
             typeArray.getColor(
                 R.styleable.Avatar_avatar_stroke_color,
-                context.getColor(R.color.md_theme_primaryContainer)
+                ContextCompat.getColor(context, R.color.md_theme_primaryContainer)
             )
         mCornerRadius =
             typeArray.getDimension(R.styleable.Avatar_avatar_corner_radius, mDefaultCornerRadius)

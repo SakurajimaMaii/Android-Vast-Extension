@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.withSave
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.graphics.getBaseLine
@@ -74,7 +75,7 @@ class HorizontalTextProgressView @JvmOverloads constructor(
         get() = mTextPaint.color
 
     override var mProgressColor: Int =
-        context.getColor(R.color.md_theme_primary)
+        ContextCompat.getColor(context, R.color.md_theme_primary)
         set(value) {
             field = value
             mBoxPaint.color = value
@@ -215,7 +216,7 @@ class HorizontalTextProgressView @JvmOverloads constructor(
         mTextColor =
             typedArray.getColor(
                 R.styleable.HorizontalTextProgressView_progress_text_color,
-                context.getColor(R.color.md_theme_onPrimary)
+                ContextCompat.getColor(context, R.color.md_theme_onPrimary)
             )
         mTextSize =
             typedArray.getDimension(
@@ -225,12 +226,12 @@ class HorizontalTextProgressView @JvmOverloads constructor(
         mProgressColor =
             typedArray.getColor(
                 R.styleable.HorizontalTextProgressView_progress_color,
-                context.getColor(R.color.md_theme_primary)
+                ContextCompat.getColor(context, R.color.md_theme_primary)
             )
         mProgressBackgroundColor =
             typedArray.getColor(
                 R.styleable.HorizontalTextProgressView_progress_background_color,
-                context.getColor(R.color.md_theme_primaryContainer)
+                ContextCompat.getColor(context, R.color.md_theme_primaryContainer)
             )
         mProgressHeight =
             typedArray.getDimension(
@@ -240,7 +241,7 @@ class HorizontalTextProgressView @JvmOverloads constructor(
         mTextBoxColor =
             typedArray.getColor(
                 R.styleable.HorizontalTextProgressView_horizontal_text_progress_box_color,
-                context.getColor(R.color.md_theme_primary)
+                ContextCompat.getColor(context, R.color.md_theme_primary)
             )
         mTextMargin =
             typedArray.getDimension(

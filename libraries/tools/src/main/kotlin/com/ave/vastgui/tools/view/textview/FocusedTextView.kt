@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,8 +63,8 @@ class MarqueeTextView @JvmOverloads constructor(
         this.isSingleLine = true
         this.isFocusable = true
         this.isFocusableInTouchMode = true
-        this.setHorizontallyScrolling(true);
-        this.isSelected = true;
+        this.setHorizontallyScrolling(true)
+        this.isSelected = true
     }
 
     override fun isFocused(): Boolean {

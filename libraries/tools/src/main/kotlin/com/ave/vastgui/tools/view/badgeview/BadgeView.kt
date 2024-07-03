@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.annotation.StyleRes
+import androidx.core.content.ContextCompat
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.core.extension.cast
 import com.ave.vastgui.core.extension.nothing_to_do
@@ -603,7 +604,7 @@ class BadgeView @JvmOverloads constructor(
         }
         mBadgePaint.color = typeArray.getColor(
             R.styleable.BadgeView_badge_color,
-            context.getColor(R.color.md_theme_error)
+            ContextCompat.getColor(context, R.color.md_theme_error)
         )
         mDotRadius = typeArray.getDimension(
             R.styleable.BadgeView_dot_radius, initDotRadius
@@ -622,7 +623,7 @@ class BadgeView @JvmOverloads constructor(
         )
         mTextPaint.color = typeArray.getColor(
             R.styleable.BadgeView_bubble_text_color,
-            context.getColor(R.color.white)
+            ContextCompat.getColor(context, R.color.white)
         )
         mTextPaint.textSize = typeArray.getDimension(
             R.styleable.BadgeView_bubble_text_size, initTextSize

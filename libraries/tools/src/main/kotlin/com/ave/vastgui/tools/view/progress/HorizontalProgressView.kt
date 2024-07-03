@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.toRect
 import androidx.core.graphics.withSave
 import com.ave.vastgui.tools.R
@@ -304,11 +305,11 @@ class HorizontalProgressView @JvmOverloads constructor(
         )
         mProgressColor = typedArray.getColor(
             R.styleable.HorizontalProgressView_progress_color,
-            context.getColor(R.color.md_theme_primary)
+            ContextCompat.getColor(context, R.color.md_theme_primary)
         )
         mProgressBackgroundColor = typedArray.getColor(
             R.styleable.HorizontalProgressView_progress_background_color,
-            context.getColor(R.color.md_theme_primaryContainer)
+            ContextCompat.getColor(context, R.color.md_theme_primaryContainer)
         )
         mStrokeWidth = typedArray.getDimension(
             R.styleable.HorizontalProgressView_horizontal_progress_stroke_width, mDefaultStrokeWidth

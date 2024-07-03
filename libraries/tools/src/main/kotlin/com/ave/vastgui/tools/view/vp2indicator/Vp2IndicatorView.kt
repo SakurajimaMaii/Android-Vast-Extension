@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
+import androidx.core.content.ContextCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
@@ -192,7 +193,7 @@ class Vp2IndicatorView @JvmOverloads constructor(
      * @since 0.2.0
      */
     fun setSelectedColor(@ColorRes id: Int) {
-        mColorSelected = context.getColor(id)
+        mColorSelected = ContextCompat.getColor(context, id)
     }
 
     /**
@@ -201,7 +202,7 @@ class Vp2IndicatorView @JvmOverloads constructor(
      * @since 0.2.0
      */
     fun setUnSelectedColor(@ColorRes id: Int) {
-        mColorUnSelected = context.getColor(id)
+        mColorUnSelected = ContextCompat.getColor(context, id)
     }
 
     /**
@@ -341,12 +342,12 @@ class Vp2IndicatorView @JvmOverloads constructor(
         mColorSelected =
             typeArray.getColor(
                 R.styleable.Vp2IndicatorView_indicator_selected_color,
-                context.getColor(R.color.md_theme_primary)
+                ContextCompat.getColor(context, R.color.md_theme_primary)
             )
         mColorUnSelected =
             typeArray.getColor(
                 R.styleable.Vp2IndicatorView_indicator_unselected_color,
-                context.getColor(R.color.md_theme_primaryContainer)
+                ContextCompat.getColor(context, R.color.md_theme_primaryContainer)
             )
         mIndicatorCircleRadius =
             typeArray.getDimension(
