@@ -120,6 +120,74 @@ open class VastAdapter<T> @JvmOverloads constructor(
     final override fun getOnItemLongClickListener(): OnItemLongClickListener<T>? =
         mOnItemLongClickListener
 
+    /**
+     * 将 [itemWrapper] 添加到列表尾部。
+     *
+     * @since 1.2.0
+     */
+    fun add(itemWrapper: ItemWrapper<T>) {
+        val index = itemCount
+        mDataSource.add(index, itemWrapper)
+        notifyItemChanged(index)
+    }
+
+    /**
+     * 更新 [position] 位置上的元素，仅更新数据部分。
+     *
+     * @since 1.2.0
+     */
+    fun update(position: Int, data: T): Boolean {
+        if (position !in 0 until itemCount) return false
+        val old = mDataSource[position]
+        mDataSource[position] = ItemWrapper(
+            data,
+            old.layoutId,
+            old.getOnItemClickListener(),
+            old.getOnItemLongClickListener()
+        )
+        notifyItemChanged(position)
+        return true
+    }
+
+    /**
+     * 更新 [position] 位置上的元素。
+     *
+     * @since 1.2.0
+     */
+    fun update(position: Int, itemWrapper: ItemWrapper<T>): Boolean {
+        if (position !in 0 until itemCount) return false
+        mDataSource[position] = itemWrapper
+        notifyItemChanged(position)
+        return true
+    }
+
+    /**
+     * 清除 [position] 位置的元素。
+     *
+     * @since 1.2.0
+     */
+    fun removeAt(position: Int): ItemWrapper<T> = mDataSource.removeAt(position).apply {
+        notifyItemRemoved(position)
+    }
+
+    /**
+     * 清空列表内的全部元素。
+     *
+     * @since 1.2.0
+     */
+    fun clear() {
+        val count = itemCount
+        mDataSource.clear()
+        notifyItemRangeChanged(0, count)
+    }
+
+    /**
+     * 查询 [ItemWrapper.getData] 和 [data] 匹配的第一个元素的索引。
+     *
+     * @since 1.2.0
+     */
+    fun indexOfFirst(data: T) = mDataSource.indexOfFirst { it.getData() === data }
+
     init {
         factories.forEach { factory ->
             mType2Factory.put(factory.layoutId, factory)
