@@ -69,6 +69,7 @@ android {
 }
 
 dependencies {
+    implementation("io.github.cymchad:BaseRecyclerViewAdapterHelper4:4.1.4")
     implementation(libs.paging.runtime)
     implementation(libs.recyclerview)
     implementation(libs.annotation)

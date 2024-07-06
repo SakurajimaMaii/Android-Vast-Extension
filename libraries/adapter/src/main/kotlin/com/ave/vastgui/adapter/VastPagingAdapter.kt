@@ -23,11 +23,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.util.forEach
 import androidx.paging.PagingDataAdapter
-import com.ave.vastgui.adapter.base.ItemHolder
-import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.adapter.base.ItemClickListener
 import com.ave.vastgui.adapter.base.ItemDiffUtil
+import com.ave.vastgui.adapter.base.ItemHolder
 import com.ave.vastgui.adapter.base.ItemWrapper
+import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 
 // Author: Vast Gui

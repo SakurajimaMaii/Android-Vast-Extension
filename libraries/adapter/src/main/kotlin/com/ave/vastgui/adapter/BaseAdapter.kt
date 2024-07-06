@@ -21,6 +21,7 @@ import android.content.res.Resources
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.core.util.forEach
 import androidx.recyclerview.widget.RecyclerView
 import com.ave.vastgui.adapter.base.ItemClickListener
@@ -35,11 +36,11 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * [VastAdapter] 。
+ * [BaseAdapter] 。
  *
- * @since 1.1.1
+ * @since 1.2.0
  */
-open class VastAdapter<T> @JvmOverloads constructor(
+open class BaseAdapter<T> @JvmOverloads constructor(
     protected var mContext: Context,
     factories: MutableList<ItemHolder.HolderFactory<T>>,
     protected val mDataSource: MutableList<ItemWrapper<T>> = mutableListOf(),
@@ -48,6 +49,22 @@ open class VastAdapter<T> @JvmOverloads constructor(
     private val mType2Factory = SparseArray<ItemHolder.HolderFactory<T>>()
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
+
+    /**
+     * 仅用来获取当前列表中的元素。
+     *
+     * @since 1.2.0
+     */
+    val rawData: List<ItemWrapper<T>>
+        get() = mDataSource
+
+    /**
+     * 仅用来获取当前列表中的元素的数据部分。
+     *
+     * @since 1.2.0
+     */
+    val data: List<T>
+        get() = mDataSource.map { it.getData() }
 
     final override fun getItemCount() = mDataSource.size
 
@@ -121,14 +138,47 @@ open class VastAdapter<T> @JvmOverloads constructor(
         mOnItemLongClickListener
 
     /**
-     * 将 [itemWrapper] 添加到列表尾部。
+     * 将 [item] 添加到列表尾部。
      *
      * @since 1.2.0
      */
-    fun add(itemWrapper: ItemWrapper<T>) {
+    fun add(item: ItemWrapper<T>) {
         val index = itemCount
-        mDataSource.add(index, itemWrapper)
-        notifyItemChanged(index)
+        mDataSource.add(index, item)
+        notifyItemInserted(index)
+    }
+
+    /**
+     * 将 [item] 添加到列表尾部，布局为 [layout]。
+     *
+     * @since 1.2.0
+     */
+    fun add(item: T, @LayoutRes layout: Int) {
+        val index = itemCount
+        mDataSource.add(index, ItemWrapper(item, layout))
+        notifyItemInserted(index)
+    }
+
+    /**
+     * 将 [items] 添加到列表尾部。
+     *
+     * @since 1.2.0
+     */
+    fun add(items: List<ItemWrapper<T>>) {
+        val index = itemCount
+        mDataSource.addAll(items)
+        notifyItemRangeInserted(index, items.size)
+    }
+
+    /**
+     * 将 [items] 添加到列表尾部，布局为 [layout]。
+     *
+     * @since 1.2.0
+     */
+    fun add(items: List<T>, @LayoutRes layout: Int) {
+        val index = itemCount
+        mDataSource.addAll(items.map { ItemWrapper(it, layout) })
+        notifyItemInserted(index)
     }
 
     /**
@@ -178,7 +228,7 @@ open class VastAdapter<T> @JvmOverloads constructor(
     fun clear() {
         val count = itemCount
         mDataSource.clear()
-        notifyItemRangeChanged(0, count)
+        notifyItemRangeRemoved(0, count)
     }
 
     /**
