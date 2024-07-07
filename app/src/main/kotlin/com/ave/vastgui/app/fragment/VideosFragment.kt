@@ -45,7 +45,7 @@ class VideosFragment : VastVbVmFragment<FragmentVideosBinding, SharedVM>() {
         super.onViewCreated(view, savedInstanceState)
 
         mAdapter.setOnItemClickListener { _, position, item ->
-            val data = item.getData()
+            val data = item.data
             SimpleToast.showShortMsg("位置是$position，数据是${data.userName}")
         }
 

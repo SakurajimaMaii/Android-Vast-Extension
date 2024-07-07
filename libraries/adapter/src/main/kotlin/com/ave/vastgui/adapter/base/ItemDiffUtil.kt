@@ -32,12 +32,12 @@ abstract class ItemDiffUtil<T> : DiffUtil.ItemCallback<ItemWrapper<T>>() {
 
     /** @see newAreContentsTheSame */
     final override fun areContentsTheSame(oldItem: ItemWrapper<T>, newItem: ItemWrapper<T>): Boolean {
-        return newAreContentsTheSame(oldItem.getData(), newItem.getData())
+        return newAreContentsTheSame(oldItem.data, newItem.data)
     }
 
     /** @see newAreItemsTheSame */
     final override fun areItemsTheSame(oldItem: ItemWrapper<T>, newItem: ItemWrapper<T>): Boolean {
-        return newAreItemsTheSame(oldItem.getData(), newItem.getData())
+        return newAreItemsTheSame(oldItem.data, newItem.data)
     }
 
     abstract fun newAreContentsTheSame(oldItem: T, newItem: T): Boolean

@@ -154,7 +154,7 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
     override fun onItemClick(view: View, pos: Int, data: ItemWrapper<Message>) {
         val mMessageBottomSheet = MessageBottomSheet()
         mMessageBottomSheet.show(supportFragmentManager, MessageBottomSheet.TAG)
-        mMessageBottomSheet.setMessage(data.getData())
+        mMessageBottomSheet.setMessage(data.data)
     }
 
 }
