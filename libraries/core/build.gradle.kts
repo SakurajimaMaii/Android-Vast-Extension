@@ -51,15 +51,18 @@ extra["PUBLISH_DESCRIPTION"] = "Core for Android-Vast-Extension"
 extra["PUBLISH_URL"] =
     "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/core"
 
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            groupId = "io.github.sakurajimamaii"
-            artifactId = "VastCore"
-            version = libs.versions.core.local.get()
+val mavenPropertiesFile = File(rootDir, "maven.properties")
+if (mavenPropertiesFile.exists()) {
+    publishing {
+        publications {
+            register<MavenPublication>("release") {
+                groupId = "io.github.sakurajimamaii"
+                artifactId = "VastCore"
+                version = libs.versions.core.local.get()
 
-            afterEvaluate {
-                from(components["java"])
+                afterEvaluate {
+                    from(components["java"])
+                }
             }
         }
     }

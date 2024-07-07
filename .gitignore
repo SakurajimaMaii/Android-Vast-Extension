@@ -18,13 +18,7 @@ libraries/build/
 
 # IntelliJ
 *.iml
-.idea/
-.idea/caches
-.idea/libraries
-.idea/modules.xml
-.idea/workspace.xml
-.idea/navEditor.xml
-.idea/assetWizardSettings.xml
+.idea
 
 # docs
 docs/
@@ -33,6 +27,7 @@ docs/
 .project
 
 /local.properties
+/maven.properties
 
 .DS_Store
 /build
@@ -40,16 +35,11 @@ docs/
 .externalNativeBuild
 .cxx
 
-gradle.properties
-
 #output
 debug/
 release/
 buildSrc/build
 libraries/*/build
 skin/darkskin/build
-
-#VastUtils
-libraries/VastUtils
 
 *.jar
