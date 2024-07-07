@@ -38,7 +38,7 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
  * @since 1.1.1
  */
 class ItemWrapper<T> @JvmOverloads constructor(
-    private val data: T,
+    val data: T,
     @LayoutRes override val layoutId: Int,
     private var clickListener: OnItemClickListener<T>? = null,
     private var longClickListener: OnItemLongClickListener<T>? = null
@@ -62,8 +62,6 @@ class ItemWrapper<T> @JvmOverloads constructor(
     override fun getOnItemLongClickListener(): OnItemLongClickListener<T>? {
         return longClickListener
     }
-
-    fun getData(): T = data
 
     /**
      * 用于为列表项内部的控件添加监听事件
@@ -96,7 +94,8 @@ class ItemWrapper<T> @JvmOverloads constructor(
     fun addOnItemChildLongClickListener(@IdRes id: Int, listener: OnItemChildLongClickListener<T>) =
         apply {
             mOnItemChildLongClickArray =
-                (mOnItemChildLongClickArray ?: SparseArray<OnItemChildLongClickListener<T>>(2)).apply {
+                (mOnItemChildLongClickArray
+                    ?: SparseArray<OnItemChildLongClickListener<T>>(2)).apply {
                     put(id, listener)
                 }
         }

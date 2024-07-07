@@ -21,6 +21,7 @@ import android.content.res.Resources
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.core.util.forEach
 import androidx.recyclerview.widget.RecyclerView
 import com.ave.vastgui.adapter.base.ItemClickListener
@@ -35,11 +36,11 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * [VastAdapter] 。
+ * [BaseAdapter] 。
  *
- * @since 1.1.1
+ * @since 1.2.0
  */
-open class VastAdapter<T> @JvmOverloads constructor(
+open class BaseAdapter<T> @JvmOverloads constructor(
     protected var mContext: Context,
     factories: MutableList<ItemHolder.HolderFactory<T>>,
     protected val mDataSource: MutableList<ItemWrapper<T>> = mutableListOf(),
@@ -49,11 +50,27 @@ open class VastAdapter<T> @JvmOverloads constructor(
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
 
+    /**
+     * 仅用来获取当前列表中的元素。
+     *
+     * @since 1.2.0
+     */
+    val rawData: List<ItemWrapper<T>>
+        get() = mDataSource
+
+    /**
+     * 仅用来获取当前列表中的元素的数据部分。
+     *
+     * @since 1.2.0
+     */
+    val data: List<T>
+        get() = mDataSource.map { it.data }
+
     final override fun getItemCount() = mDataSource.size
 
     final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
         val itemData = mDataSource[position]
-        holder.onBindData(itemData.getData())
+        holder.onBindData(itemData.data)
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
                 itemData.getOnItemClickListener()
@@ -119,6 +136,107 @@ open class VastAdapter<T> @JvmOverloads constructor(
 
     final override fun getOnItemLongClickListener(): OnItemLongClickListener<T>? =
         mOnItemLongClickListener
+
+    /**
+     * 将 [item] 添加到列表尾部。
+     *
+     * @since 1.2.0
+     */
+    fun add(item: ItemWrapper<T>) {
+        val index = itemCount
+        mDataSource.add(index, item)
+        notifyItemInserted(index)
+    }
+
+    /**
+     * 将 [item] 添加到列表尾部，布局为 [layout]。
+     *
+     * @since 1.2.0
+     */
+    fun add(item: T, @LayoutRes layout: Int) {
+        val index = itemCount
+        mDataSource.add(index, ItemWrapper(item, layout))
+        notifyItemInserted(index)
+    }
+
+    /**
+     * 将 [items] 添加到列表尾部。
+     *
+     * @since 1.2.0
+     */
+    fun add(items: List<ItemWrapper<T>>) {
+        val index = itemCount
+        mDataSource.addAll(items)
+        notifyItemRangeInserted(index, items.size)
+    }
+
+    /**
+     * 将 [items] 添加到列表尾部，布局为 [layout]。
+     *
+     * @since 1.2.0
+     */
+    fun add(items: List<T>, @LayoutRes layout: Int) {
+        val index = itemCount
+        mDataSource.addAll(items.map { ItemWrapper(it, layout) })
+        notifyItemInserted(index)
+    }
+
+    /**
+     * 更新 [position] 位置上的元素，仅更新数据部分。
+     *
+     * @since 1.2.0
+     */
+    fun update(position: Int, data: T): Boolean {
+        if (position !in 0 until itemCount) return false
+        val old = mDataSource[position]
+        mDataSource[position] = ItemWrapper(
+            data,
+            old.layoutId,
+            old.getOnItemClickListener(),
+            old.getOnItemLongClickListener()
+        )
+        notifyItemChanged(position)
+        return true
+    }
+
+    /**
+     * 更新 [position] 位置上的元素。
+     *
+     * @since 1.2.0
+     */
+    fun update(position: Int, itemWrapper: ItemWrapper<T>): Boolean {
+        if (position !in 0 until itemCount) return false
+        mDataSource[position] = itemWrapper
+        notifyItemChanged(position)
+        return true
+    }
+
+    /**
+     * 清除 [position] 位置的元素。
+     *
+     * @since 1.2.0
+     */
+    fun removeAt(position: Int): ItemWrapper<T> = mDataSource.removeAt(position).apply {
+        notifyItemRemoved(position)
+    }
+
+    /**
+     * 清空列表内的全部元素。
+     *
+     * @since 1.2.0
+     */
+    fun clear() {
+        val count = itemCount
+        mDataSource.clear()
+        notifyItemRangeRemoved(0, count)
+    }
+
+    /**
+     * 查询 [ItemWrapper.getData] 和 [data] 匹配的第一个元素的索引。
+     *
+     * @since 1.2.0
+     */
+    fun indexOfFirst(data: T) = mDataSource.indexOfFirst { it.data === data }
 
     init {
         factories.forEach { factory ->

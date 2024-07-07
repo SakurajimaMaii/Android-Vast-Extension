@@ -23,11 +23,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.util.forEach
 import androidx.paging.PagingDataAdapter
-import com.ave.vastgui.adapter.base.ItemHolder
-import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.adapter.base.ItemClickListener
 import com.ave.vastgui.adapter.base.ItemDiffUtil
+import com.ave.vastgui.adapter.base.ItemHolder
 import com.ave.vastgui.adapter.base.ItemWrapper
+import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 
 // Author: Vast Gui
@@ -48,7 +48,7 @@ open class VastPagingAdapter<T>(
 
     final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
         val itemData = getItem(position) ?: return
-        holder.onBindData(itemData.getData())
+        holder.onBindData(itemData.data)
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
                 itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData)

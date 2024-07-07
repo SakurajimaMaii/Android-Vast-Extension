@@ -67,7 +67,7 @@ open class VastBindAdapter<T> @JvmOverloads constructor(
 
     final override fun onBindViewHolder(holder: ItemBindHolder<T>, position: Int) {
         val itemData = mDataSource[position]
-        holder.onBindData(mVariableId, itemData.getData())
+        holder.onBindData(mVariableId, itemData.data)
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
                 itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData)

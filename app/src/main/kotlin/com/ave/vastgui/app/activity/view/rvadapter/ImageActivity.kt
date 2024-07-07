@@ -20,7 +20,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ave.vastgui.adapter.VastAdapter
+import com.ave.vastgui.adapter.BaseAdapter
 import com.ave.vastgui.adapter.VastListAdapter
 import com.ave.vastgui.adapter.VastPagingAdapter
 import com.ave.vastgui.adapter.base.ItemWrapper
@@ -30,17 +30,15 @@ import com.ave.vastgui.app.adapter.entity.ImageDiffUtil
 import com.ave.vastgui.app.adapter.entity.Images
 import com.ave.vastgui.app.adapter.holder.ComicImageHolder
 import com.ave.vastgui.app.adapter.holder.DefaultImageHolder
-import com.ave.vastgui.app.databinding.ActivityPersonBinding
+import com.ave.vastgui.app.databinding.ActivityImageBinding
 import com.ave.vastgui.app.log.mLogFactory
-import com.ave.vastgui.app.net.WanAndroidApi
-import com.ave.vastgui.app.net.WanAndroidApiService
+import com.ave.vastgui.app.net.OpenApi
+import com.ave.vastgui.app.net.OpenApiService
 import com.ave.vastgui.app.viewmodel.NetVM
-import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.activity.VastVbVmActivity
-import com.ave.vastgui.tools.bean.UserBean
-import com.ave.vastgui.tools.network.request.Request2
-import com.ave.vastgui.tools.network.request.getApi
+import com.ave.vastgui.tools.network.request.create
 import com.ave.vastgui.tools.view.dialog.MaterialAlertDialogBuilder
+import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.ave.vastgui.tools.view.toast.SimpleToast.showShortMsg
 import kotlinx.coroutines.launch
 
@@ -49,25 +47,10 @@ import kotlinx.coroutines.launch
 // Date: 2024/1/4
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
-private class ImageAdapter(context: Context) : VastAdapter<Images.Image>(
+private class ImageAdapter(context: Context) : BaseAdapter<Images.Image>(
     context,
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion)
-) {
-
-    fun addImage(image: Images.Image) {
-        val index = itemCount
-        mDataSource.add(index, ItemWrapper(image, layoutId = R.layout.item_image_default))
-        notifyItemChanged(index)
-    }
-
-
-    fun addTypeImage(image: Images.Image) {
-        val index = itemCount
-        mDataSource.add(index, ItemWrapper(image, layoutId = image.getLayoutId()))
-        notifyItemChanged(index)
-    }
-
-}
+)
 
 private class ImageListAdapter(context: Context) : VastListAdapter<Images.Image>(
     context,
@@ -79,7 +62,7 @@ private class ImagePagingAdapter(context: Context) : VastPagingAdapter<Images.Im
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion), ImageDiffUtil
 )
 
-class ImageActivity : VastVbVmActivity<ActivityPersonBinding, NetVM>() {
+class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
 
     private val logcat = mLogFactory.getLogCat(this::class.java)
 
@@ -112,16 +95,57 @@ class ImageActivity : VastVbVmActivity<ActivityPersonBinding, NetVM>() {
             }
         }
 
-        getBinding().personRv.layoutManager = LinearLayoutManager(this)
+        getBinding().images.layoutManager = LinearLayoutManager(this)
+        getBinding().images.adapter = mImageAdapter
+        lifecycleScope.launch {
+            val images = OpenApi()
+                .create(OpenApiService::class.java).getImages(0, 10)
+                .result?.list
+            if (null == images) return@launch
+            // 将列表项填充到列表中
+            images.forEach {
+                mImageAdapter.add(it, R.layout.item_image_default)
+            }
+            // 更新列表项
+            for (index in 0 until mImageAdapter.itemCount step 2) {
+                val item = ItemWrapper(mImageAdapter.data[0], R.layout.item_image_comic).apply {
+                    setOnItemClickListener { _, _, _ ->
+                        SimpleToast.showShortMsg("HAAAAAAAAA")
+                    }
+                }
+                mImageAdapter.update(index, item)
+            }
+        }
 
-//        getBinding().personRv.adapter = mImageAdapter
-//        lifecycleScope.launch {
-//            OpenApi().create(OpenApiService::class.java)
-//                .getImages(0, 10)
-//                .result.list.forEach {
-//                    mImageAdapter.addTypeImage(it)
-//                }
-//        }
+        getBinding().clear.setOnClickListener {
+            mImageAdapter.clear()
+        }
+        getBinding().removeFirst.setOnClickListener {
+            mImageAdapter.removeAt(0)
+        }
+        getBinding().load.setOnClickListener {
+            lifecycleScope.launch {
+                val images = OpenApi()
+                    .create(OpenApiService::class.java).getImages(0, 10)
+                    .result?.list
+                if (null == images) return@launch
+                mImageAdapter.add(images, R.layout.item_image_default)
+            }
+        }
+
+        val image = Images.Image(0, "", "", "")
+        val item = ItemWrapper(image, R.layout.item_image_default).apply {
+            setOnItemClickListener { _, _, _ ->
+
+            }
+            setOnItemLongClickListener { _, _, _ ->
+                false
+            }
+            addOnItemChildClickListener(R.id.iidImage) { _, _, _ ->
+
+            }
+        }
+        mImageAdapter.add(item)
 
 //        getBinding().personRv.adapter = mImageListAdapter
 //        lifecycleScope.launch {
@@ -146,15 +170,15 @@ class ImageActivity : VastVbVmActivity<ActivityPersonBinding, NetVM>() {
 //            }
 //        }
 
-        lifecycleScope.launch {
-            WanAndroidApi().getApi(WanAndroidApiService::class.java) {
-                login(UserBean("xxx", "xxx"))
-            }.collect {
-                when (it) {
-                    is Request2.Success -> logcat.d(it)
-                    else -> nothing_to_do()
-                }
-            }
-        }
+//        lifecycleScope.launch {
+//            WanAndroidApi().getApi(WanAndroidApiService::class.java) {
+//                login(UserBean("xxx", "xxx"))
+//            }.collect {
+//                when (it) {
+//                    is Request2.Success -> logcat.d(it)
+//                    else -> nothing_to_do()
+//                }
+//            }
+//        }
     }
 }
