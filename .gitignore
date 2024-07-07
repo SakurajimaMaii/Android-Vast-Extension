@@ -42,9 +42,6 @@ docs/
 
 gradle.properties
 
-# Publish
-publish-mavencentral.gradle
-
 #output
 debug/
 release/

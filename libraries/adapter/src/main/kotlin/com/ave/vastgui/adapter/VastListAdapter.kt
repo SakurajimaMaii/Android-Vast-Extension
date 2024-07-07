@@ -52,7 +52,7 @@ open class VastListAdapter<T>(
 
     final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
         val itemData = getItem(position)
-        holder.onBindData(itemData.getData())
+        holder.onBindData(itemData.data)
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
                 itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData)

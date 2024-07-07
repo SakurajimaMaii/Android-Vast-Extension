@@ -64,13 +64,13 @@ open class BaseAdapter<T> @JvmOverloads constructor(
      * @since 1.2.0
      */
     val data: List<T>
-        get() = mDataSource.map { it.getData() }
+        get() = mDataSource.map { it.data }
 
     final override fun getItemCount() = mDataSource.size
 
     final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
         val itemData = mDataSource[position]
-        holder.onBindData(itemData.getData())
+        holder.onBindData(itemData.data)
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
                 itemData.getOnItemClickListener()
@@ -236,7 +236,7 @@ open class BaseAdapter<T> @JvmOverloads constructor(
      *
      * @since 1.2.0
      */
-    fun indexOfFirst(data: T) = mDataSource.indexOfFirst { it.getData() === data }
+    fun indexOfFirst(data: T) = mDataSource.indexOfFirst { it.data === data }
 
     init {
         factories.forEach { factory ->

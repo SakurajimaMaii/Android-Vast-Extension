@@ -133,6 +133,20 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
             }
         }
 
+        val image = Images.Image(0, "", "", "")
+        val item = ItemWrapper(image, R.layout.item_image_default).apply {
+            setOnItemClickListener { _, _, _ ->
+
+            }
+            setOnItemLongClickListener { _, _, _ ->
+                false
+            }
+            addOnItemChildClickListener(R.id.iidImage) { _, _, _ ->
+
+            }
+        }
+        mImageAdapter.add(item)
+
 //        getBinding().personRv.adapter = mImageListAdapter
 //        lifecycleScope.launch {
 //            OpenApi().create(OpenApiService::class.java)
