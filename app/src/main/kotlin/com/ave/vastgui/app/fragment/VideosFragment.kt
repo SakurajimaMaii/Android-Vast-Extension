@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ave.vastgui.adapter.VastBindPagingAdapter
+import com.ave.vastgui.adapter.BaseBindPagingAdapter
 import com.ave.vastgui.app.BR
 import com.ave.vastgui.app.adapter.entity.VideoDiffUtil
 import com.ave.vastgui.app.databinding.FragmentVideosBinding
@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 class VideosFragment : VastVbVmFragment<FragmentVideosBinding, SharedVM>() {
 
     private val mAdapter by lazy {
-        VastBindPagingAdapter(requireContext(), BR.video, VideoDiffUtil)
+        BaseBindPagingAdapter(requireContext(), BR.video, VideoDiffUtil)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

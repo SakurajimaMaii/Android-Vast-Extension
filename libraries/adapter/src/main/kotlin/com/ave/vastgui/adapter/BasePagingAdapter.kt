@@ -18,55 +18,37 @@ package com.ave.vastgui.adapter
 
 import android.content.Context
 import android.content.res.Resources
-import android.view.LayoutInflater
+import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.util.forEach
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.ListAdapter
-import com.ave.vastgui.adapter.base.ItemBindHolder
-import com.ave.vastgui.adapter.listener.OnItemClickListener
+import androidx.paging.PagingDataAdapter
 import com.ave.vastgui.adapter.base.ItemClickListener
 import com.ave.vastgui.adapter.base.ItemDiffUtil
+import com.ave.vastgui.adapter.base.ItemHolder
 import com.ave.vastgui.adapter.base.ItemWrapper
+import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/10/10
+// Date: 2022/11/17
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
-/**
- * [VastBindListAdapter] 。
- *
- * @since 1.1.1
- */
-open class VastBindListAdapter<T>(
+/** [BasePagingAdapter] 。 */
+open class BasePagingAdapter<T>(
     protected var mContext: Context,
-    /**
-     * 设置变量的id，如果在布局文件中内容以下所示：
-     *
-     * ```xml
-     * <data>
-     *     <variable
-     *          name="person"
-     *          type="com.example.gutilssampledemo.Person" />
-     * </data>
-     * ```
-     *
-     * 则 [mVariableId] 的值为 person
-     */
-    private val mVariableId: Int,
+    factories: MutableList<ItemHolder.HolderFactory<T>>,
     diffCallback: ItemDiffUtil<T>
-) : ListAdapter<ItemWrapper<T>, ItemBindHolder<T>>(diffCallback), ItemClickListener<T> {
+) : PagingDataAdapter<ItemWrapper<T>, ItemHolder<T>>(diffCallback), ItemClickListener<T> {
 
+    private val mType2Factory = SparseArray<ItemHolder.HolderFactory<T>>()
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
 
-    final override fun onBindViewHolder(holder: ItemBindHolder<T>, position: Int) {
-        val itemData = getItem(position)
-        holder.onBindData(mVariableId, itemData.data)
+    final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
+        val itemData = getItem(position) ?: return
+        holder.onBindData(itemData.data)
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
                 itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData)
@@ -99,17 +81,17 @@ open class VastBindListAdapter<T>(
         }
     }
 
-    final override fun onCreateViewHolder(
-        parent: ViewGroup, viewType: Int
-    ): ItemBindHolder<T> {
-        val binding = DataBindingUtil.inflate<ViewDataBinding>(
-            LayoutInflater.from(parent.context), viewType, parent, false
-        )
-        return setViewHolder(binding)
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder<T> {
+        mType2Factory.forEach { key, factory ->
+            if (key == viewType) {
+                return factory.onCreateHolder(parent, viewType)
+            }
+        }
+        throw RuntimeException("Not found the factory according to the $viewType.")
     }
 
     final override fun getItemViewType(position: Int): Int {
-        val item = getItem(position)
+        val item = getItem(position) ?: throw NullPointerException("Can't get the item by $position")
         try {
             // 识别是否存在该资源id的资源文件。
             mContext.resources.getLayout(item.layoutId)
@@ -133,9 +115,10 @@ open class VastBindListAdapter<T>(
     final override fun getOnItemLongClickListener(): OnItemLongClickListener<T>? =
         mOnItemLongClickListener
 
-    /** @return 您要设置的 ViewHolder 。 */
-    protected open fun setViewHolder(binding: ViewDataBinding): ItemBindHolder<T> {
-        return ItemBindHolder<T>(binding)
+    init {
+        factories.forEach { factory ->
+            mType2Factory.put(factory.layoutId, factory)
+        }
     }
 
 }

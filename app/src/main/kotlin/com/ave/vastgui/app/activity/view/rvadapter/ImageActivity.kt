@@ -21,8 +21,8 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ave.vastgui.adapter.BaseAdapter
-import com.ave.vastgui.adapter.VastListAdapter
-import com.ave.vastgui.adapter.VastPagingAdapter
+import com.ave.vastgui.adapter.BaseListAdapter
+import com.ave.vastgui.adapter.BasePagingAdapter
 import com.ave.vastgui.adapter.base.ItemWrapper
 import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.app.R
@@ -52,12 +52,12 @@ private class ImageAdapter(context: Context) : BaseAdapter<Images.Image>(
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion)
 )
 
-private class ImageListAdapter(context: Context) : VastListAdapter<Images.Image>(
+private class ImageListAdapter(context: Context) : BaseListAdapter<Images.Image>(
     context,
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion), ImageDiffUtil
 )
 
-private class ImagePagingAdapter(context: Context) : VastPagingAdapter<Images.Image>(
+private class ImagePagingAdapter(context: Context) : BasePagingAdapter<Images.Image>(
     context,
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion), ImageDiffUtil
 )

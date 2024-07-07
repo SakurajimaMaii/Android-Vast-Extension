@@ -22,32 +22,36 @@ import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.util.forEach
-import androidx.paging.PagingDataAdapter
-import com.ave.vastgui.adapter.base.ItemClickListener
-import com.ave.vastgui.adapter.base.ItemDiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.ave.vastgui.adapter.base.ItemHolder
-import com.ave.vastgui.adapter.base.ItemWrapper
 import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.adapter.listener.OnItemLongClickListener
+import com.ave.vastgui.adapter.base.ItemClickListener
+import com.ave.vastgui.adapter.base.ItemDiffUtil
+import com.ave.vastgui.adapter.base.ItemWrapper
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/11/17
+// Date: 2022/10/10
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
-/** [VastPagingAdapter] 。 */
-open class VastPagingAdapter<T>(
+/**
+ * [BaseListAdapter] 。
+ *
+ * @since 1.1.1
+ */
+open class BaseListAdapter<T>(
     protected var mContext: Context,
     factories: MutableList<ItemHolder.HolderFactory<T>>,
     diffCallback: ItemDiffUtil<T>
-) : PagingDataAdapter<ItemWrapper<T>, ItemHolder<T>>(diffCallback), ItemClickListener<T> {
+) : ListAdapter<ItemWrapper<T>, ItemHolder<T>>(diffCallback), ItemClickListener<T> {
 
     private val mType2Factory = SparseArray<ItemHolder.HolderFactory<T>>()
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
 
     final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
-        val itemData = getItem(position) ?: return
+        val itemData = getItem(position)
         holder.onBindData(itemData.data)
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
@@ -91,7 +95,7 @@ open class VastPagingAdapter<T>(
     }
 
     final override fun getItemViewType(position: Int): Int {
-        val item = getItem(position) ?: throw NullPointerException("Can't get the item by $position")
+        val item = getItem(position)
         try {
             // 识别是否存在该资源id的资源文件。
             mContext.resources.getLayout(item.layoutId)

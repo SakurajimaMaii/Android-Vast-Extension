@@ -18,9 +18,9 @@ package com.ave.vastgui.adapter.base
 
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.ave.vastgui.adapter.VastBindAdapter
-import com.ave.vastgui.adapter.VastBindListAdapter
-import com.ave.vastgui.adapter.VastBindPagingAdapter
+import com.ave.vastgui.adapter.BaseBindAdapter
+import com.ave.vastgui.adapter.BaseBindListAdapter
+import com.ave.vastgui.adapter.BaseBindPagingAdapter
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -28,7 +28,7 @@ import com.ave.vastgui.adapter.VastBindPagingAdapter
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * 适用于 [VastBindAdapter] ， [VastBindListAdapter] 和 [VastBindPagingAdapter]
+ * 适用于 [BaseBindAdapter] ， [BaseBindListAdapter] 和 [BaseBindPagingAdapter]
  * 的 ViewHolder。如果你想自定义 自己的 ViewHolder ，你应该让你的 ViewHolder 继承
  * [ItemBindHolder] 并将其作为 setViewHolder 的返回值。
  *

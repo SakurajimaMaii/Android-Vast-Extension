@@ -26,7 +26,7 @@ import android.provider.Telephony
 import android.view.View
 import androidx.core.database.getStringOrNull
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ave.vastgui.adapter.VastBindListAdapter
+import com.ave.vastgui.adapter.BaseBindListAdapter
 import com.ave.vastgui.adapter.base.ItemWrapper
 import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.app.BR
@@ -48,7 +48,7 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
 
     private val mMessageRv by lazy { getBinding().messageRv }
     private val mAdapter by lazy {
-        VastBindListAdapter(this, BR.message, MessageDiffUtil)
+        BaseBindListAdapter(this, BR.message, MessageDiffUtil)
     }
     private val mSmsColumns =
         arrayOf(

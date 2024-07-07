@@ -18,7 +18,7 @@ package com.ave.vastgui.app.adapter
 
 import android.content.Context
 import com.ave.vastgui.adapter.BR
-import com.ave.vastgui.adapter.VastBindAdapter
+import com.ave.vastgui.adapter.BaseBindAdapter
 import com.ave.vastgui.adapter.base.ItemWrapper
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.adapter.entity.Images
@@ -28,7 +28,7 @@ import com.ave.vastgui.app.adapter.entity.Images
 // Date: 2024/1/6 20:45
 
 class ImageAdapter(context: Context) :
-    VastBindAdapter<Images.Image>(context, BR.image) {
+    BaseBindAdapter<Images.Image>(context, BR.image) {
     fun addImage(image: Images.Image) {
         val index = itemCount
         mDataSource.add(index, ItemWrapper(image, layoutId = R.layout.item_image_default))

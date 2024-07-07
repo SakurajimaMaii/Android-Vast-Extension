@@ -17,7 +17,7 @@
 package com.ave.vastgui.app.adapter
 
 import android.content.Context
-import com.ave.vastgui.adapter.VastBindAdapter
+import com.ave.vastgui.adapter.BaseBindAdapter
 import com.ave.vastgui.adapter.base.ItemWrapper
 import com.ave.vastgui.app.BR
 import com.ave.vastgui.app.R
@@ -28,7 +28,7 @@ import com.ave.vastgui.app.adapter.entity.Contact
 // Date: 2023/9/25
 
 class ContactAdapter(context: Context) :
-    VastBindAdapter<Contact>(context, BR.contact) {
+    BaseBindAdapter<Contact>(context, BR.contact) {
 
     fun getDataSource(): MutableList<ItemWrapper<Contact>> = mDataSource
 

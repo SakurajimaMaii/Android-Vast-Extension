@@ -37,11 +37,11 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * [VastBindAdapter] 。
+ * [BaseBindAdapter] 。
  *
  * @since 1.1.1
  */
-open class VastBindAdapter<T> @JvmOverloads constructor(
+open class BaseBindAdapter<T> @JvmOverloads constructor(
     protected var mContext: Context,
     /**
      * 设置变量的id，如果在布局文件中内容以下所示：

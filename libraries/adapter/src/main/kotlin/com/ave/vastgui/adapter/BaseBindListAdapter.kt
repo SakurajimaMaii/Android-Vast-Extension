@@ -24,7 +24,7 @@ import android.view.ViewGroup
 import androidx.core.util.forEach
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.ListAdapter
 import com.ave.vastgui.adapter.base.ItemBindHolder
 import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.adapter.base.ItemClickListener
@@ -34,15 +34,15 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/11/11
+// Date: 2022/10/10
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * [VastBindPagingAdapter] 。
+ * [BaseBindListAdapter] 。
  *
  * @since 1.1.1
  */
-open class VastBindPagingAdapter<T>(
+open class BaseBindListAdapter<T>(
     protected var mContext: Context,
     /**
      * 设置变量的id，如果在布局文件中内容以下所示：
@@ -59,13 +59,13 @@ open class VastBindPagingAdapter<T>(
      */
     private val mVariableId: Int,
     diffCallback: ItemDiffUtil<T>
-) : PagingDataAdapter<ItemWrapper<T>, ItemBindHolder<T>>(diffCallback), ItemClickListener<T> {
+) : ListAdapter<ItemWrapper<T>, ItemBindHolder<T>>(diffCallback), ItemClickListener<T> {
 
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
 
     final override fun onBindViewHolder(holder: ItemBindHolder<T>, position: Int) {
-        val itemData = getItem(position) ?: return
+        val itemData = getItem(position)
         holder.onBindData(mVariableId, itemData.data)
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
@@ -109,7 +109,7 @@ open class VastBindPagingAdapter<T>(
     }
 
     final override fun getItemViewType(position: Int): Int {
-        val item = getItem(position) ?: throw NullPointerException("Can't get the item by $position")
+        val item = getItem(position)
         try {
             // 识别是否存在该资源id的资源文件。
             mContext.resources.getLayout(item.layoutId)
@@ -135,7 +135,7 @@ open class VastBindPagingAdapter<T>(
 
     /** @return 您要设置的 ViewHolder 。 */
     protected open fun setViewHolder(binding: ViewDataBinding): ItemBindHolder<T> {
-        return ItemBindHolder(binding)
+        return ItemBindHolder<T>(binding)
     }
 
 }

@@ -18,41 +18,55 @@ package com.ave.vastgui.adapter
 
 import android.content.Context
 import android.content.res.Resources
-import android.util.SparseArray
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.util.forEach
-import androidx.recyclerview.widget.ListAdapter
-import com.ave.vastgui.adapter.base.ItemHolder
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.paging.PagingDataAdapter
+import com.ave.vastgui.adapter.base.ItemBindHolder
 import com.ave.vastgui.adapter.listener.OnItemClickListener
-import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 import com.ave.vastgui.adapter.base.ItemClickListener
 import com.ave.vastgui.adapter.base.ItemDiffUtil
 import com.ave.vastgui.adapter.base.ItemWrapper
+import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/10/10
+// Date: 2022/11/11
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * [VastListAdapter] 。
+ * [BaseBindPagingAdapter] 。
  *
  * @since 1.1.1
  */
-open class VastListAdapter<T>(
+open class BaseBindPagingAdapter<T>(
     protected var mContext: Context,
-    factories: MutableList<ItemHolder.HolderFactory<T>>,
+    /**
+     * 设置变量的id，如果在布局文件中内容以下所示：
+     *
+     * ```xml
+     * <data>
+     *     <variable
+     *          name="person"
+     *          type="com.example.gutilssampledemo.Person" />
+     * </data>
+     * ```
+     *
+     * 则 [mVariableId] 的值为 person
+     */
+    private val mVariableId: Int,
     diffCallback: ItemDiffUtil<T>
-) : ListAdapter<ItemWrapper<T>, ItemHolder<T>>(diffCallback), ItemClickListener<T> {
+) : PagingDataAdapter<ItemWrapper<T>, ItemBindHolder<T>>(diffCallback), ItemClickListener<T> {
 
-    private val mType2Factory = SparseArray<ItemHolder.HolderFactory<T>>()
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
 
-    final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
-        val itemData = getItem(position)
-        holder.onBindData(itemData.data)
+    final override fun onBindViewHolder(holder: ItemBindHolder<T>, position: Int) {
+        val itemData = getItem(position) ?: return
+        holder.onBindData(mVariableId, itemData.data)
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
                 itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData)
@@ -85,17 +99,17 @@ open class VastListAdapter<T>(
         }
     }
 
-    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder<T> {
-        mType2Factory.forEach { key, factory ->
-            if (key == viewType) {
-                return factory.onCreateHolder(parent, viewType)
-            }
-        }
-        throw RuntimeException("Not found the factory according to the $viewType.")
+    final override fun onCreateViewHolder(
+        parent: ViewGroup, viewType: Int
+    ): ItemBindHolder<T> {
+        val binding = DataBindingUtil.inflate<ViewDataBinding>(
+            LayoutInflater.from(parent.context), viewType, parent, false
+        )
+        return setViewHolder(binding)
     }
 
     final override fun getItemViewType(position: Int): Int {
-        val item = getItem(position)
+        val item = getItem(position) ?: throw NullPointerException("Can't get the item by $position")
         try {
             // 识别是否存在该资源id的资源文件。
             mContext.resources.getLayout(item.layoutId)
@@ -119,10 +133,9 @@ open class VastListAdapter<T>(
     final override fun getOnItemLongClickListener(): OnItemLongClickListener<T>? =
         mOnItemLongClickListener
 
-    init {
-        factories.forEach { factory ->
-            mType2Factory.put(factory.layoutId, factory)
-        }
+    /** @return 您要设置的 ViewHolder 。 */
+    protected open fun setViewHolder(binding: ViewDataBinding): ItemBindHolder<T> {
+        return ItemBindHolder(binding)
     }
 
 }
