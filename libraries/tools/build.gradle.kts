@@ -116,15 +116,18 @@ extra["PUBLISH_ARTIFACT_ID"] = "VastTools"
 extra["PUBLISH_DESCRIPTION"] = "Easy Quick Android Tools for you to faster project development."
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/Android-Vast-Extension"
 
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            groupId = "io.github.sakurajimamaii"
-            artifactId = "VastTools"
-            version = libs.versions.tools.get()
+val mavenPropertiesFile = File(rootDir, "maven.properties")
+if (mavenPropertiesFile.exists()) {
+    publishing {
+        publications {
+            register<MavenPublication>("release") {
+                groupId = "io.github.sakurajimamaii"
+                artifactId = "VastTools"
+                version = libs.versions.tools.get()
 
-            afterEvaluate {
-                from(components["release"])
+                afterEvaluate {
+                    from(components["release"])
+                }
             }
         }
     }

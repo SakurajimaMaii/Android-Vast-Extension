@@ -54,15 +54,18 @@ extra["PUBLISH_ARTIFACT_ID"] = "log-okhttp"
 extra["PUBLISH_DESCRIPTION"] = "Log for okhttp"
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/log/okhttp"
 
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            groupId = "io.github.sakurajimamaii"
-            artifactId = "log-okhttp"
-            version = "1.3.4"
+val mavenPropertiesFile = File(rootDir, "maven.properties")
+if (mavenPropertiesFile.exists()) {
+    publishing {
+        publications {
+            register<MavenPublication>("release") {
+                groupId = "io.github.sakurajimamaii"
+                artifactId = "log-okhttp"
+                version = "1.3.4"
 
-            afterEvaluate {
-                from(components["java"])
+                afterEvaluate {
+                    from(components["java"])
+                }
             }
         }
     }

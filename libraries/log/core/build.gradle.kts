@@ -43,15 +43,18 @@ extra["PUBLISH_DESCRIPTION"] = "Core for log"
 extra["PUBLISH_URL"] =
     "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/log/core"
 
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            groupId = "io.github.sakurajimamaii"
-            artifactId = "log-core"
-            version = "1.3.4"
+val mavenPropertiesFile = File(rootDir, "maven.properties")
+if (mavenPropertiesFile.exists()) {
+    publishing {
+        publications {
+            register<MavenPublication>("release") {
+                groupId = "io.github.sakurajimamaii"
+                artifactId = "log-core"
+                version = "1.3.4"
 
-            afterEvaluate {
-                from(components["java"])
+                afterEvaluate {
+                    from(components["java"])
+                }
             }
         }
     }
