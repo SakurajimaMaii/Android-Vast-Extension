@@ -46,6 +46,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="加载元素" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/insert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="插入元素" />
     </GridLayout>
 
     <androidx.recyclerview.widget.RecyclerView

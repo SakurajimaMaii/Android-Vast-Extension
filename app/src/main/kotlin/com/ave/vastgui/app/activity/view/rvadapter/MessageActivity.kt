@@ -107,7 +107,7 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
                     name = address
                 }
                 val message = Message("$name", address, date, type, body)
-                messages.add(ItemWrapper(message, layoutId = R.layout.item_message))
+                // messages.add(ItemWrapper(message, layoutId = R.layout.item_message))
             }
         }
         cursor.close()
@@ -151,10 +151,11 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
         return name
     }
 
-    override fun onItemClick(view: View, pos: Int, data: ItemWrapper<Message>) {
+    override fun onItemClick(view: View, pos: Int, item: Message?) {
+        if(null == item) return
         val mMessageBottomSheet = MessageBottomSheet()
         mMessageBottomSheet.show(supportFragmentManager, MessageBottomSheet.TAG)
-        data.data?.apply { mMessageBottomSheet.setMessage(this) }
+        mMessageBottomSheet.setMessage(item)
     }
 
 }

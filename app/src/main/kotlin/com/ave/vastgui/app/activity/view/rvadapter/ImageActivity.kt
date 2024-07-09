@@ -111,12 +111,11 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
             }
             // 更新列表项
             for (index in 0 until mImageAdapter.itemCount step 2) {
-                val item = ItemWrapper(mImageAdapter.data[0], R.layout.item_image_comic).apply {
+                mImageAdapter.update(mImageAdapter.data[0], R.layout.item_image_comic, index) {
                     setOnItemClickListener { _, _, _ ->
                         SimpleToast.showShortMsg("HAAAAAAAAA")
                     }
                 }
-                mImageAdapter.update(index, item)
             }
         }
 
@@ -135,20 +134,15 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
                 mImageAdapter.add(images, R.layout.item_image_default)
             }
         }
-
-        val image = Images.Image(0, "", "", "")
-        val item = ItemWrapper(image, R.layout.item_image_default).apply {
-            setOnItemClickListener { _, _, _ ->
-
-            }
-            setOnItemLongClickListener { _, _, _ ->
-                false
-            }
-            addOnItemChildClickListener(R.id.iidImage) { _, _, _ ->
-
-            }
+        getBinding().insert.setOnClickListener {
+            val image = Images.Image(
+                8008,
+                "王者荣耀司马懿 暗渊魔法",
+                "game",
+                "https://pic.netbian.com/uploads/allimg/211213/212526-16394019264e91.jpg"
+            )
+            mImageAdapter.add(image, R.layout.item_image_default, 3)
         }
-        // mImageAdapter.add(item)
 
 //        getBinding().personRv.adapter = mImageListAdapter
 //        lifecycleScope.launch {
