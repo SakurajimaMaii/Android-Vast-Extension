@@ -96,8 +96,11 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
         }
 
         getBinding().images.layoutManager = LinearLayoutManager(this)
-        getBinding().images.adapter = mImageAdapter
+        getBinding().images.adapter = mImageAdapter.apply {
+            setEmptyView(R.layout.page_empty_data_state)
+        }
         lifecycleScope.launch {
+            return@launch
             val images = OpenApi()
                 .create(OpenApiService::class.java).getImages(0, 10)
                 .result?.list
@@ -145,7 +148,7 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
 
             }
         }
-        mImageAdapter.add(item)
+        // mImageAdapter.add(item)
 
 //        getBinding().personRv.adapter = mImageListAdapter
 //        lifecycleScope.launch {

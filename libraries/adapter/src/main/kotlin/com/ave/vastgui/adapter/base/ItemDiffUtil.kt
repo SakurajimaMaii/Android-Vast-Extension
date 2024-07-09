@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.DiffUtil
  *
  * @since 1.1.1
  */
-abstract class ItemDiffUtil<T> : DiffUtil.ItemCallback<ItemWrapper<T>>() {
+abstract class ItemDiffUtil<T: Any> : DiffUtil.ItemCallback<ItemWrapper<T>>() {
 
     /** @see newAreContentsTheSame */
     final override fun areContentsTheSame(oldItem: ItemWrapper<T>, newItem: ItemWrapper<T>): Boolean {
@@ -40,8 +40,8 @@ abstract class ItemDiffUtil<T> : DiffUtil.ItemCallback<ItemWrapper<T>>() {
         return newAreItemsTheSame(oldItem.data, newItem.data)
     }
 
-    abstract fun newAreContentsTheSame(oldItem: T, newItem: T): Boolean
+    abstract fun newAreContentsTheSame(oldItem: T?, newItem: T?): Boolean
 
-    abstract fun newAreItemsTheSame(oldItem: T, newItem: T): Boolean
+    abstract fun newAreItemsTheSame(oldItem: T?, newItem: T?): Boolean
 
 }

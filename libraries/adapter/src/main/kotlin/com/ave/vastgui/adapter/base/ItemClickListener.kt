@@ -25,7 +25,7 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /** @since 1.1.1 */
-interface ItemClickListener<T> {
+interface ItemClickListener<T : Any> {
 
     /**
      * 用于为适配器注册点击事件监听。

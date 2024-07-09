@@ -16,6 +16,7 @@
 
 package com.ave.vastgui.adapter.base
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -26,17 +27,28 @@ import androidx.recyclerview.widget.RecyclerView
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /** @since 1.1.1 */
-abstract class ItemHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+open class ItemHolder<T : Any>(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     /** @since 1.1.1 */
-    abstract fun onBindData(item: T)
+    open fun onBindData(item: T) {
 
-    interface HolderFactory<T> : ItemType {
+    }
+
+    interface HolderFactory<T : Any> : ItemType {
         /**
          * 创建当前的 ViewHolder 实例。
          *
          * @since 1.1.1
          */
         fun onCreateHolder(parent: ViewGroup, viewType: Int): ItemHolder<T>
+    }
+}
+
+/** @since 1.2.0 */
+class EmptyHolderFactory<T : Any>(override val layoutId: Int) : ItemHolder.HolderFactory<T> {
+    override fun onCreateHolder(parent: ViewGroup, viewType: Int): ItemHolder<T> {
+        val view =
+            LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
+        return ItemHolder(view)
     }
 }

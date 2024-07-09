@@ -37,8 +37,8 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
  * @property longClickListener 用于监听列表项长按事件。
  * @since 1.1.1
  */
-class ItemWrapper<T> @JvmOverloads constructor(
-    val data: T,
+class ItemWrapper<T : Any> @JvmOverloads constructor(
+    val data: T?,
     @LayoutRes override val layoutId: Int,
     private var clickListener: OnItemClickListener<T>? = null,
     private var longClickListener: OnItemLongClickListener<T>? = null

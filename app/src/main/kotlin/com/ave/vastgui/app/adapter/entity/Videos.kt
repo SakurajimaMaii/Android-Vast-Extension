@@ -58,11 +58,11 @@ data class Videos(
 }
 
 object VideoDiffUtil : ItemDiffUtil<Videos.Data>() {
-    override fun newAreContentsTheSame(oldItem: Videos.Data, newItem: Videos.Data): Boolean {
-        return oldItem.id == newItem.id
+    override fun newAreContentsTheSame(oldItem: Videos.Data?, newItem: Videos.Data?): Boolean {
+        return oldItem?.id == newItem?.id
     }
 
-    override fun newAreItemsTheSame(oldItem: Videos.Data, newItem: Videos.Data): Boolean {
-        return oldItem.id == newItem.id
+    override fun newAreItemsTheSame(oldItem: Videos.Data?, newItem: Videos.Data?): Boolean {
+        return oldItem?.id == newItem?.id
     }
 }

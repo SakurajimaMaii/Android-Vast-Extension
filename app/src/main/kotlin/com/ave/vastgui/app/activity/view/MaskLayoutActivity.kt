@@ -72,10 +72,10 @@ class MaskLayoutActivity : AppCompatActivity(R.layout.activity_mask_layout),
         // 初始化 UI
         mMaskLayout.updateCoordinate(mBinding.changeDark)
         mAdapter.setOnItemClickListener { _, _, item ->
-            val contact = item.getData()
+            val contact = item.data
             requestPermission(Manifest.permission.CALL_PHONE) {
                 granted = {
-                    IntentUtils.dialPhoneNumber(this@MaskLayoutActivity, contact.number)
+                    IntentUtils.dialPhoneNumber(this@MaskLayoutActivity, contact?.number ?: "")
                 }
             }
         }

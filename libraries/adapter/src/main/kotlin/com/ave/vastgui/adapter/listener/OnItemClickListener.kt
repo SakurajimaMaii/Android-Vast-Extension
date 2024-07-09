@@ -29,7 +29,7 @@ import com.ave.vastgui.adapter.base.ItemWrapper
  *
  * @since 1.1.1
  */
-fun interface OnItemClickListener<T> {
+fun interface OnItemClickListener<T: Any> {
     /**
      * 当列表项被点击时会触发该回调。
      *

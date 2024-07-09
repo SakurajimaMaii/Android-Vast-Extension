@@ -23,12 +23,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.util.forEach
 import androidx.recyclerview.widget.ListAdapter
-import com.ave.vastgui.adapter.base.ItemHolder
-import com.ave.vastgui.adapter.listener.OnItemClickListener
-import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 import com.ave.vastgui.adapter.base.ItemClickListener
 import com.ave.vastgui.adapter.base.ItemDiffUtil
+import com.ave.vastgui.adapter.base.ItemHolder
 import com.ave.vastgui.adapter.base.ItemWrapper
+import com.ave.vastgui.adapter.listener.OnItemClickListener
+import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -40,7 +40,7 @@ import com.ave.vastgui.adapter.base.ItemWrapper
  *
  * @since 1.1.1
  */
-open class BaseListAdapter<T>(
+open class BaseListAdapter<T : Any>(
     protected var mContext: Context,
     factories: MutableList<ItemHolder.HolderFactory<T>>,
     diffCallback: ItemDiffUtil<T>
@@ -52,7 +52,7 @@ open class BaseListAdapter<T>(
 
     final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
         val itemData = getItem(position)
-        holder.onBindData(itemData.data)
+        itemData.data?.apply { holder.onBindData(this) }
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
                 itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData)

@@ -41,7 +41,7 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
  *
  * @since 1.1.1
  */
-open class BaseBindAdapter<T> @JvmOverloads constructor(
+open class BaseBindAdapter<T : Any> @JvmOverloads constructor(
     protected var mContext: Context,
     /**
      * 设置变量的id，如果在布局文件中内容以下所示：
@@ -67,7 +67,7 @@ open class BaseBindAdapter<T> @JvmOverloads constructor(
 
     final override fun onBindViewHolder(holder: ItemBindHolder<T>, position: Int) {
         val itemData = mDataSource[position]
-        holder.onBindData(mVariableId, itemData.data)
+        itemData.data?.apply { holder.onBindData(mVariableId, this) }
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
                 itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData)

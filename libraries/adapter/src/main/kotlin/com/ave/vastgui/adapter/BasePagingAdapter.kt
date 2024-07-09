@@ -36,7 +36,7 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /** [BasePagingAdapter] 。 */
-open class BasePagingAdapter<T>(
+open class BasePagingAdapter<T : Any>(
     protected var mContext: Context,
     factories: MutableList<ItemHolder.HolderFactory<T>>,
     diffCallback: ItemDiffUtil<T>
@@ -48,7 +48,7 @@ open class BasePagingAdapter<T>(
 
     final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
         val itemData = getItem(position) ?: return
-        holder.onBindData(itemData.data)
+        itemData.data?.apply { holder.onBindData(this) }
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
                 itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData)
@@ -91,7 +91,8 @@ open class BasePagingAdapter<T>(
     }
 
     final override fun getItemViewType(position: Int): Int {
-        val item = getItem(position) ?: throw NullPointerException("Can't get the item by $position")
+        val item =
+            getItem(position) ?: throw NullPointerException("Can't get the item by $position")
         try {
             // 识别是否存在该资源id的资源文件。
             mContext.resources.getLayout(item.layoutId)

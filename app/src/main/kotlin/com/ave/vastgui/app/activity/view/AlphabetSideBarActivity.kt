@@ -28,9 +28,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.ave.vastgui.app.R
-import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.app.adapter.ContactAdapter
 import com.ave.vastgui.app.databinding.ActivityAlphabetSidebarBinding
+import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.utils.ColorUtils
 import com.ave.vastgui.tools.utils.permission.requestPermission
@@ -162,7 +162,7 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
     private fun updateIndex() {
         enumValues<Alphabet>().forEach { alphabet ->
             val index = mAdapter.getDataSource().indexOfFirst {
-                it.getData().label == alphabet.letter
+                it.data?.label == alphabet.letter
             }
             mBinding.alphabetsidebar.setIndicatorLetterTargetIndex(alphabet, index)
         }

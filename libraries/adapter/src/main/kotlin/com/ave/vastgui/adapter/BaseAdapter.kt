@@ -40,7 +40,7 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
  *
  * @since 1.2.0
  */
-open class BaseAdapter<T> @JvmOverloads constructor(
+open class BaseAdapter<T : Any> @JvmOverloads constructor(
     protected var mContext: Context,
     factories: MutableList<ItemHolder.HolderFactory<T>>,
     protected val mDataSource: MutableList<ItemWrapper<T>> = mutableListOf(),
@@ -49,6 +49,7 @@ open class BaseAdapter<T> @JvmOverloads constructor(
     private val mType2Factory = SparseArray<ItemHolder.HolderFactory<T>>()
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
+    private var mEmptyItem: ItemWrapper<T>? = null
 
     /**
      * 仅用来获取当前列表中的元素。
@@ -64,13 +65,13 @@ open class BaseAdapter<T> @JvmOverloads constructor(
      * @since 1.2.0
      */
     val data: List<T>
-        get() = mDataSource.map { it.data }
+        get() = if (isEmpty()) emptyList() else mDataSource.map { it.data!! }
 
     final override fun getItemCount() = mDataSource.size
 
     final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
         val itemData = mDataSource[position]
-        holder.onBindData(itemData.data)
+        itemData.data?.apply { holder.onBindData(this) }
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
                 itemData.getOnItemClickListener()
@@ -138,25 +139,20 @@ open class BaseAdapter<T> @JvmOverloads constructor(
         mOnItemLongClickListener
 
     /**
-     * 将 [item] 添加到列表尾部。
+     * 将 [item] 添加到 [position] 指定的位置，布局为 [layout]。
      *
      * @since 1.2.0
      */
-    fun add(item: ItemWrapper<T>) {
-        val index = itemCount
-        mDataSource.add(index, item)
-        notifyItemInserted(index)
-    }
-
-    /**
-     * 将 [item] 添加到列表尾部，布局为 [layout]。
-     *
-     * @since 1.2.0
-     */
-    fun add(item: T, @LayoutRes layout: Int) {
-        val index = itemCount
-        mDataSource.add(index, ItemWrapper(item, layout))
-        notifyItemInserted(index)
+    fun add(
+        item: T,
+        @LayoutRes layout: Int,
+        position: Int = itemCount,
+        scope: ItemWrapper<T>.() -> Unit = {}
+    ) {
+        if (isEmpty()) notifyItemRemoved(0)
+        if (position !in 0..itemCount) return
+        mDataSource.add(position, ItemWrapper(item, layout).also(scope))
+        notifyItemInserted(position)
     }
 
     /**
@@ -216,8 +212,12 @@ open class BaseAdapter<T> @JvmOverloads constructor(
      *
      * @since 1.2.0
      */
-    fun removeAt(position: Int): ItemWrapper<T> = mDataSource.removeAt(position).apply {
-        notifyItemRemoved(position)
+    fun removeAt(position: Int): T? {
+        if (isEmpty() || position !in 0 until itemCount) {
+            return null
+        }
+        return mDataSource.removeAt(position)
+            .apply { notifyItemRemoved(position) }.data
     }
 
     /**
@@ -226,17 +226,39 @@ open class BaseAdapter<T> @JvmOverloads constructor(
      * @since 1.2.0
      */
     fun clear() {
+        if (isEmpty()) return
         val count = itemCount
         mDataSource.clear()
         notifyItemRangeRemoved(0, count)
     }
 
     /**
-     * 查询 [ItemWrapper.getData] 和 [data] 匹配的第一个元素的索引。
+     * 查询 [ItemWrapper.data] 和 [data] 匹配的第一个元素的索引。
      *
      * @since 1.2.0
      */
-    fun indexOfFirst(data: T) = mDataSource.indexOfFirst { it.data === data }
+    fun indexOfFirst(data: T) = if (isEmpty()) -1 else mDataSource.indexOfFirst { it.data === data }
+
+    /** 自定义空布局。通过 [id] 指定布局，通过 [scope] 指定布局相关的点击事件。 */
+    fun setEmptyView(@LayoutRes id: Int?, scope: ItemWrapper<T>.() -> Unit = {}) {
+        if (null == id) {
+            mEmptyItem = null
+            if (isEmpty()) {
+                removeAt(0)
+            }
+            return
+        }
+        mEmptyItem = ItemWrapper<T>(null, id).also(scope)
+        if(mDataSource.isEmpty()) mDataSource.add(mEmptyItem!!)
+    }
+
+    /**
+     * 判断当前列表是否为空
+     *
+     * @since 1.2.0
+     */
+    private fun isEmpty() =
+        mDataSource.isEmpty() || (1 == mDataSource.size && mEmptyItem === mDataSource.first())
 
     init {
         factories.forEach { factory ->

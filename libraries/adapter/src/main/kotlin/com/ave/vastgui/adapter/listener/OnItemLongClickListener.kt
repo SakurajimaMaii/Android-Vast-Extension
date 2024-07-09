@@ -29,7 +29,7 @@ import com.ave.vastgui.adapter.base.ItemWrapper
  *
  * @since 1.1.1
  */
-fun interface OnItemLongClickListener<T> {
+fun interface OnItemLongClickListener<T: Any> {
     /**
      * 当列表项被长按时触发该回调。
      *

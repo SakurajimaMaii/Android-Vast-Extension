@@ -55,11 +55,11 @@ data class Images(
 }
 
 object ImageDiffUtil : ItemDiffUtil<Images.Image>() {
-    override fun newAreContentsTheSame(oldItem: Images.Image, newItem: Images.Image): Boolean {
-        return oldItem.id == newItem.id
+    override fun newAreContentsTheSame(oldItem: Images.Image?, newItem: Images.Image?): Boolean {
+        return oldItem?.id == newItem?.id
     }
 
-    override fun newAreItemsTheSame(oldItem: Images.Image, newItem: Images.Image): Boolean {
-        return oldItem.id == newItem.id
+    override fun newAreItemsTheSame(oldItem: Images.Image?, newItem: Images.Image?): Boolean {
+        return oldItem?.id == newItem?.id
     }
 }

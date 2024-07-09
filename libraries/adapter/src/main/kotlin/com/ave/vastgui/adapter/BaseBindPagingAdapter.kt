@@ -26,10 +26,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.paging.PagingDataAdapter
 import com.ave.vastgui.adapter.base.ItemBindHolder
-import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.adapter.base.ItemClickListener
 import com.ave.vastgui.adapter.base.ItemDiffUtil
 import com.ave.vastgui.adapter.base.ItemWrapper
+import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 
 // Author: Vast Gui
@@ -42,7 +42,7 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
  *
  * @since 1.1.1
  */
-open class BaseBindPagingAdapter<T>(
+open class BaseBindPagingAdapter<T : Any>(
     protected var mContext: Context,
     /**
      * 设置变量的id，如果在布局文件中内容以下所示：
@@ -66,7 +66,7 @@ open class BaseBindPagingAdapter<T>(
 
     final override fun onBindViewHolder(holder: ItemBindHolder<T>, position: Int) {
         val itemData = getItem(position) ?: return
-        holder.onBindData(mVariableId, itemData.data)
+        itemData.data?.apply { holder.onBindData(mVariableId, this) }
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
                 itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData)
@@ -109,7 +109,8 @@ open class BaseBindPagingAdapter<T>(
     }
 
     final override fun getItemViewType(position: Int): Int {
-        val item = getItem(position) ?: throw NullPointerException("Can't get the item by $position")
+        val item =
+            getItem(position) ?: throw NullPointerException("Can't get the item by $position")
         try {
             // 识别是否存在该资源id的资源文件。
             mContext.resources.getLayout(item.layoutId)
