@@ -34,7 +34,8 @@ fun interface OnItemChildClickListener<T : Any> {
      * 当列表项内部的控件被点击时会触发该回调。
      *
      * @param view 当前被点击的控件。
-     * @since 1.1.1
+     * @param item 当前被点击的列表项，如果为空，则表示当前列表为空。
+     * @since 1.2.0
      */
-    fun onItemClick(view: View, pos: Int, data: ItemWrapper<T>)
+    fun onItemClick(view: View, pos: Int, item: T?)
 }

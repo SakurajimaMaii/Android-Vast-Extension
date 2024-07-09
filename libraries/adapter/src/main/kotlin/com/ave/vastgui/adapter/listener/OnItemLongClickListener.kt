@@ -29,11 +29,12 @@ import com.ave.vastgui.adapter.base.ItemWrapper
  *
  * @since 1.1.1
  */
-fun interface OnItemLongClickListener<T: Any> {
+fun interface OnItemLongClickListener<T : Any> {
     /**
      * 当列表项被长按时触发该回调。
      *
-     * @since 1.1.1
+     * @param item 当前被点击的列表项，如果为空，则表示当前列表为空。
+     * @since 1.2.0
      */
-    fun onItemLongClick(view: View, pos: Int, data: ItemWrapper<T>): Boolean
+    fun onItemLongClick(view: View, pos: Int, item: T?): Boolean
 }

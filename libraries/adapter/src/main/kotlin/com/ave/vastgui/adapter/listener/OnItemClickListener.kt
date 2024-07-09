@@ -29,11 +29,12 @@ import com.ave.vastgui.adapter.base.ItemWrapper
  *
  * @since 1.1.1
  */
-fun interface OnItemClickListener<T: Any> {
+fun interface OnItemClickListener<T : Any> {
     /**
      * 当列表项被点击时会触发该回调。
      *
-     * @since 1.1.1
+     * @param item 当前被点击的列表项，如果为空，则表示当前列表为空。
+     * @since 1.2.0
      */
-    fun onItemClick(view: View, pos: Int, data: ItemWrapper<T>)
+    fun onItemClick(view: View, pos: Int, item: T?)
 }
