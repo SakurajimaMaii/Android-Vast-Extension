@@ -69,31 +69,31 @@ open class BaseBindPagingAdapter<T : Any>(
         itemData.data?.apply { holder.onBindData(mVariableId, this) }
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
-                itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData)
+                itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData.data)
             } else {
-                mOnItemClickListener?.onItemClick(holder.itemView, position, itemData)
+                mOnItemClickListener?.onItemClick(holder.itemView, position, itemData.data)
             }
         }
         holder.itemView.setOnLongClickListener {
             val res = if (null != itemData.getOnItemLongClickListener()) {
                 itemData.getOnItemLongClickListener()
-                    ?.onItemLongClick(holder.itemView, position, itemData)
+                    ?.onItemLongClick(holder.itemView, position, itemData.data)
             } else {
-                mOnItemLongClickListener?.onItemLongClick(holder.itemView, position, itemData)
+                mOnItemLongClickListener?.onItemLongClick(holder.itemView, position, itemData.data)
             }
             return@setOnLongClickListener res ?: false
         }
         itemData.mOnItemChildClickArray?.forEach { key, value ->
             holder.itemView.findViewById<View>(key)?.let { childView ->
                 childView.setOnClickListener {
-                    value.onItemClick(childView, position, itemData)
+                    value.onItemClick(childView, position, itemData.data)
                 }
             }
         }
         itemData.mOnItemChildLongClickArray?.forEach { key, value ->
             holder.itemView.findViewById<View>(key)?.let { childView ->
                 childView.setOnClickListener {
-                    value.onItemLongClick(childView, position, itemData)
+                    value.onItemLongClick(childView, position, itemData.data)
                 }
             }
         }

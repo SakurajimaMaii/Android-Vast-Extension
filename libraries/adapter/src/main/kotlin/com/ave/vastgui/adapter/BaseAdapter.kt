@@ -18,12 +18,14 @@ package com.ave.vastgui.adapter
 
 import android.content.Context
 import android.content.res.Resources
+import android.util.Log
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.core.util.forEach
 import androidx.recyclerview.widget.RecyclerView
+import com.ave.vastgui.adapter.base.EmptyHolderFactory
 import com.ave.vastgui.adapter.base.ItemClickListener
 import com.ave.vastgui.adapter.base.ItemHolder
 import com.ave.vastgui.adapter.base.ItemWrapper
@@ -43,7 +45,7 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 open class BaseAdapter<T : Any> @JvmOverloads constructor(
     protected var mContext: Context,
     factories: MutableList<ItemHolder.HolderFactory<T>>,
-    protected val mDataSource: MutableList<ItemWrapper<T>> = mutableListOf(),
+    protected val mItemList: MutableList<ItemWrapper<T>> = mutableListOf(),
 ) : RecyclerView.Adapter<ItemHolder<T>>(), ItemClickListener<T> {
 
     private val mType2Factory = SparseArray<ItemHolder.HolderFactory<T>>()
@@ -57,7 +59,7 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
      * @since 1.2.0
      */
     val rawData: List<ItemWrapper<T>>
-        get() = mDataSource
+        get() = mItemList
 
     /**
      * 仅用来获取当前列表中的元素的数据部分。
@@ -65,41 +67,44 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
      * @since 1.2.0
      */
     val data: List<T>
-        get() = if (isEmpty()) emptyList() else mDataSource.map { it.data!! }
+        get() = if (mItemList.isEmpty()) emptyList() else mItemList.map { it.data!! }
 
-    final override fun getItemCount() = mDataSource.size
+    final override fun getItemCount() = mItemList.size
 
     final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
-        val itemData = mDataSource[position]
-        itemData.data?.apply { holder.onBindData(this) }
+        val itemData = mItemList[position]
+        itemData.data?.apply {
+            Log.d("test", "======================$this ${holder::class.java.simpleName}")
+            holder.onBindData(this)
+        }
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
                 itemData.getOnItemClickListener()
-                    ?.onItemClick(holder.itemView, position, itemData)
+                    ?.onItemClick(holder.itemView, position, itemData.data)
             } else {
-                mOnItemClickListener?.onItemClick(holder.itemView, position, itemData)
+                mOnItemClickListener?.onItemClick(holder.itemView, position, itemData.data)
             }
         }
         holder.itemView.setOnLongClickListener {
             val res = if (null != itemData.getOnItemLongClickListener()) {
                 itemData.getOnItemLongClickListener()
-                    ?.onItemLongClick(holder.itemView, position, itemData)
+                    ?.onItemLongClick(holder.itemView, position, itemData.data)
             } else {
-                mOnItemLongClickListener?.onItemLongClick(holder.itemView, position, itemData)
+                mOnItemLongClickListener?.onItemLongClick(holder.itemView, position, itemData.data)
             }
             return@setOnLongClickListener res ?: false
         }
         itemData.mOnItemChildClickArray?.forEach { key, value ->
             holder.itemView.findViewById<View>(key)?.let { childView ->
                 childView.setOnClickListener {
-                    value.onItemClick(childView, position, itemData)
+                    value.onItemClick(childView, position, itemData.data)
                 }
             }
         }
         itemData.mOnItemChildLongClickArray?.forEach { key, value ->
             holder.itemView.findViewById<View>(key)?.let { childView ->
                 childView.setOnClickListener {
-                    value.onItemLongClick(childView, position, itemData)
+                    value.onItemLongClick(childView, position, itemData.data)
                 }
             }
         }
@@ -115,7 +120,7 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
     }
 
     final override fun getItemViewType(position: Int): Int {
-        val viewType = mDataSource[position].layoutId
+        val viewType = mItemList[position].layoutId
         try {
             mContext.resources.getLayout(viewType)
         } catch (e: Resources.NotFoundException) {
@@ -149,32 +154,43 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
         position: Int = itemCount,
         scope: ItemWrapper<T>.() -> Unit = {}
     ) {
-        if (isEmpty()) notifyItemRemoved(0)
-        if (position !in 0..itemCount) return
-        mDataSource.add(position, ItemWrapper(item, layout).also(scope))
-        notifyItemInserted(position)
-    }
-
-    /**
-     * 将 [items] 添加到列表尾部。
-     *
-     * @since 1.2.0
-     */
-    fun add(items: List<ItemWrapper<T>>) {
-        val index = itemCount
-        mDataSource.addAll(items)
-        notifyItemRangeInserted(index, items.size)
-    }
-
-    /**
-     * 将 [items] 添加到列表尾部，布局为 [layout]。
-     *
-     * @since 1.2.0
-     */
-    fun add(items: List<T>, @LayoutRes layout: Int) {
-        val index = itemCount
-        mDataSource.addAll(items.map { ItemWrapper(it, layout) })
+        var index = position
+        if (isEmpty() && null != mEmptyItem) {
+            if (0 != position - 1) {
+                return
+            }
+            mItemList.remove(mEmptyItem)
+            notifyItemRemoved(0)
+            index = 0
+        }
+        if (index !in 0..itemCount) return
+        mItemList.add(index, ItemWrapper(item, layout).also(scope))
         notifyItemInserted(index)
+    }
+
+    /**
+     * 将 [items] 添加到 [position] 指定的位置，布局为 [layout]。
+     *
+     * @since 1.2.0
+     */
+    fun add(
+        items: List<T>,
+        @LayoutRes layout: Int,
+        position: Int = itemCount,
+        scope: ItemWrapper<T>.() -> Unit = {}
+    ) {
+        var index = position
+        if (isEmpty() && null != mEmptyItem) {
+            if (0 != position - 1) {
+                return
+            }
+            mItemList.remove(mEmptyItem)
+            notifyItemRemoved(0)
+            index = 0
+        }
+        if (index !in 0..itemCount) return
+        mItemList.addAll(index, items.map { ItemWrapper(it, layout).also(scope) })
+        notifyItemRangeInserted(index, items.size)
     }
 
     /**
@@ -182,27 +198,14 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
      *
      * @since 1.2.0
      */
-    fun update(position: Int, data: T): Boolean {
-        if (position !in 0 until itemCount) return false
-        val old = mDataSource[position]
-        mDataSource[position] = ItemWrapper(
-            data,
-            old.layoutId,
-            old.getOnItemClickListener(),
-            old.getOnItemLongClickListener()
-        )
-        notifyItemChanged(position)
-        return true
-    }
-
-    /**
-     * 更新 [position] 位置上的元素。
-     *
-     * @since 1.2.0
-     */
-    fun update(position: Int, itemWrapper: ItemWrapper<T>): Boolean {
-        if (position !in 0 until itemCount) return false
-        mDataSource[position] = itemWrapper
+    fun update(
+        item: T,
+        @LayoutRes layout: Int,
+        position: Int,
+        scope: ItemWrapper<T>.() -> Unit = {}
+    ): Boolean {
+        if (isEmpty()) return false
+        mItemList[position] = ItemWrapper(item, layout).also(scope)
         notifyItemChanged(position)
         return true
     }
@@ -216,8 +219,13 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
         if (isEmpty() || position !in 0 until itemCount) {
             return null
         }
-        return mDataSource.removeAt(position)
+        val item = mItemList.removeAt(position)
             .apply { notifyItemRemoved(position) }.data
+        if (isEmpty() && null != mEmptyItem) {
+            mItemList.add(itemCount, mEmptyItem!!)
+            notifyItemInserted(0)
+        }
+        return item
     }
 
     /**
@@ -228,8 +236,12 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
     fun clear() {
         if (isEmpty()) return
         val count = itemCount
-        mDataSource.clear()
+        mItemList.clear()
         notifyItemRangeRemoved(0, count)
+        if (isEmpty() && null != mEmptyItem) {
+            mItemList.add(itemCount, mEmptyItem!!)
+            notifyItemInserted(0)
+        }
     }
 
     /**
@@ -237,19 +249,22 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
      *
      * @since 1.2.0
      */
-    fun indexOfFirst(data: T) = if (isEmpty()) -1 else mDataSource.indexOfFirst { it.data === data }
+    fun indexOfFirst(data: T) = if (isEmpty()) -1 else mItemList.indexOfFirst { it.data === data }
 
     /** 自定义空布局。通过 [id] 指定布局，通过 [scope] 指定布局相关的点击事件。 */
     fun setEmptyView(@LayoutRes id: Int?, scope: ItemWrapper<T>.() -> Unit = {}) {
         if (null == id) {
-            mEmptyItem = null
-            if (isEmpty()) {
-                removeAt(0)
+            if (isEmpty() && null != mEmptyItem) {
+                mType2Factory.remove(mEmptyItem!!.layoutId)
+                mItemList.removeAt(0)
+                notifyItemRemoved(0)
             }
+            mEmptyItem = null
             return
         }
+        mType2Factory.put(id, EmptyHolderFactory(id))
         mEmptyItem = ItemWrapper<T>(null, id).also(scope)
-        if(mDataSource.isEmpty()) mDataSource.add(mEmptyItem!!)
+        if (isEmpty()) mItemList.add(mEmptyItem!!)
     }
 
     /**
@@ -258,7 +273,7 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
      * @since 1.2.0
      */
     private fun isEmpty() =
-        mDataSource.isEmpty() || (1 == mDataSource.size && mEmptyItem === mDataSource.first())
+        mItemList.isEmpty() || (1 == mItemList.size && mEmptyItem === mItemList.first())
 
     init {
         factories.forEach { factory ->

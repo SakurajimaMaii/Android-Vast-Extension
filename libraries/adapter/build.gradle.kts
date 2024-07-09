@@ -18,11 +18,11 @@ import java.net.URL
  */
 
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    id(libs.plugins.androidLibrary.get().pluginId)
     id("kotlin-kapt")
     id("org.jetbrains.dokka")
     id("convention.publication")
+    alias(libs.plugins.kotlinAndroid)
 }
 
 android {
@@ -53,6 +53,7 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
+        freeCompilerArgs += listOf("-Xjvm-default=all")
     }
 
     buildFeatures {
