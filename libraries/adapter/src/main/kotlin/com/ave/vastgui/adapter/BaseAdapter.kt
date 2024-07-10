@@ -140,7 +140,7 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
         mOnItemLongClickListener
 
     /**
-     * 将 [item] 添加到 [position] 指定的位置，布局为 [layout]。
+     * Adds [item] to the position specified by [position], with the layout being [layout].
      *
      * @since 1.2.0
      */
@@ -165,7 +165,7 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
     }
 
     /**
-     * 将 [items] 添加到 [position] 指定的位置，布局为 [layout]。
+     * Adds [items] to the position specified by [position], with the layout being [layout].
      *
      * @since 1.2.0
      */
@@ -190,7 +190,7 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
     }
 
     /**
-     * 更新 [position] 位置上的元素，仅更新数据部分。
+     * Updates item at the specified [position] from the [mItemList].
      *
      * @since 1.2.0
      */
@@ -207,7 +207,7 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
     }
 
     /**
-     * 清除 [position] 位置的元素。
+     * Removes item at the specified [position] from the [mItemList].
      *
      * @since 1.2.0
      */
@@ -225,7 +225,7 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
     }
 
     /**
-     * 清空列表内的全部元素。
+     * Removes all elements from [mItemList].。
      *
      * @since 1.2.0
      */
@@ -241,13 +241,18 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
     }
 
     /**
-     * 查询 [ItemWrapper.data] 和 [data] 匹配的第一个元素的索引。
+     * Query the index of the first element in [mItemList] that matches [data].
      *
      * @since 1.2.0
      */
     fun indexOfFirst(data: T) = if (isEmpty()) -1 else mItemList.indexOfFirst { it.data === data }
 
-    /** 自定义空布局。通过 [id] 指定布局，通过 [scope] 指定布局相关的点击事件。 */
+    /**
+     * Custom empty layout. Specify the layout through [id] and specify the
+     * click event related to the layout through [scope].
+     *
+     * @since 1.2.0
+     */
     fun setEmptyView(@LayoutRes id: Int?, scope: ItemWrapper<T>.() -> Unit = {}) {
         if (null == id) {
             if (isEmpty() && null != mEmptyItem) {
@@ -258,7 +263,7 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
             mEmptyItem = null
             return
         }
-        // 如果当前列表为空，移除老的 mEmptyItem
+        // If the current list is empty, remove the old mEmptyItem.
         if (isEmpty() && null != mEmptyItem) {
             mItemList.remove(mEmptyItem!!)
             notifyItemRemoved(0)
@@ -272,7 +277,10 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
     }
 
     /**
-     * 判断当前列表是否为空
+     * [mItemList] will be judged to be empty when it is in the following two
+     * situations:
+     * 1. [mItemList] itself is empty.
+     * 2. [mItemList] has only one element, and this element is [mEmptyItem].
      *
      * @since 1.2.0
      */

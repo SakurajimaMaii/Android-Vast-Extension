@@ -21,6 +21,7 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.core.util.forEach
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -44,33 +45,35 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 open class BaseBindAdapter<T : Any> @JvmOverloads constructor(
     protected var mContext: Context,
     /**
-     * 设置变量的id，如果在布局文件中内容以下所示：
-     *
+     * Set the id of the variable if the content in the layout file is as
+     * follows:
      * ```xml
      * <data>
      *     <variable
-     *          name="person"
-     *          type="com.example.gutilssampledemo.Person" />
+     *          name="image"
+     *          type="com.ave.vastgui.app.adapter.entity.Images.Image" />
      * </data>
      * ```
      *
-     * 则 [mVariableId] 的值为 person
+     * Then the value of [mVariableId] is `BR.image`.
      */
     private val mVariableId: Int,
-    protected var mDataSource: MutableList<ItemWrapper<T>> = mutableListOf()
+    protected var mItemList: MutableList<ItemWrapper<T>> = mutableListOf()
 ) : RecyclerView.Adapter<ItemBindHolder<T>>(), ItemClickListener<T> {
 
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
+    private var mEmptyItem: ItemWrapper<T>? = null
 
-    final override fun getItemCount() = mDataSource.size
+    final override fun getItemCount() = mItemList.size
 
     final override fun onBindViewHolder(holder: ItemBindHolder<T>, position: Int) {
-        val itemData = mDataSource[position]
+        val itemData = mItemList[position]
         itemData.data?.apply { holder.onBindData(mVariableId, this) }
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
-                itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData.data)
+                itemData.getOnItemClickListener()
+                    ?.onItemClick(holder.itemView, position, itemData.data)
             } else {
                 mOnItemClickListener?.onItemClick(holder.itemView, position, itemData.data)
             }
@@ -111,7 +114,7 @@ open class BaseBindAdapter<T : Any> @JvmOverloads constructor(
     }
 
     final override fun getItemViewType(position: Int): Int {
-        val viewType = mDataSource[position].layoutId
+        val viewType = mItemList[position].layoutId
         try {
             mContext.resources.getLayout(viewType)
         } catch (e: Resources.NotFoundException) {
@@ -134,7 +137,160 @@ open class BaseBindAdapter<T : Any> @JvmOverloads constructor(
     final override fun getOnItemLongClickListener(): OnItemLongClickListener<T>? =
         mOnItemLongClickListener
 
-    /** @return 您要设置的 ViewHolder 。 */
+    /**
+     * Adds [item] to the position specified by [position], with the layout
+     * being [layout].
+     *
+     * @since 1.2.0
+     */
+    fun add(
+        item: T,
+        @LayoutRes layout: Int,
+        position: Int = itemCount,
+        scope: ItemWrapper<T>.() -> Unit = {}
+    ) {
+        var index = position
+        if (isEmpty() && null != mEmptyItem) {
+            if (0 != position - 1) {
+                return
+            }
+            mItemList.remove(mEmptyItem)
+            notifyItemRemoved(0)
+            index = 0
+        }
+        if (index !in 0..itemCount) return
+        mItemList.add(index, ItemWrapper(item, layout).also(scope))
+        notifyItemInserted(index)
+    }
+
+    /**
+     * Adds [items] to the position specified by [position], with the layout
+     * being [layout].
+     *
+     * @since 1.2.0
+     */
+    fun add(
+        items: List<T>,
+        @LayoutRes layout: Int,
+        position: Int = itemCount,
+        scope: ItemWrapper<T>.() -> Unit = {}
+    ) {
+        var index = position
+        if (isEmpty() && null != mEmptyItem) {
+            if (0 != position - 1) {
+                return
+            }
+            mItemList.remove(mEmptyItem)
+            notifyItemRemoved(0)
+            index = 0
+        }
+        if (index !in 0..itemCount) return
+        mItemList.addAll(index, items.map { ItemWrapper(it, layout).also(scope) })
+        notifyItemRangeInserted(index, items.size)
+    }
+
+    /**
+     * Updates item at the specified [position] from the [mItemList].
+     *
+     * @since 1.2.0
+     */
+    fun update(
+        item: T,
+        @LayoutRes layout: Int,
+        position: Int,
+        scope: ItemWrapper<T>.() -> Unit = {}
+    ): Boolean {
+        if (isEmpty()) return false
+        mItemList[position] = ItemWrapper(item, layout).also(scope)
+        notifyItemChanged(position)
+        return true
+    }
+
+    /**
+     * Removes item at the specified [position] from the [mItemList].
+     *
+     * @since 1.2.0
+     */
+    fun removeAt(position: Int): T? {
+        if (isEmpty() || position !in 0 until itemCount) {
+            return null
+        }
+        val item = mItemList.removeAt(position)
+            .apply { notifyItemRemoved(position) }.data
+        if (isEmpty() && null != mEmptyItem) {
+            mItemList.add(itemCount, mEmptyItem!!)
+            notifyItemInserted(0)
+        }
+        return item
+    }
+
+    /**
+     * Removes all elements from [mItemList].。
+     *
+     * @since 1.2.0
+     */
+    fun clear() {
+        if (isEmpty()) return
+        val count = itemCount
+        mItemList.clear()
+        notifyItemRangeRemoved(0, count)
+        if (isEmpty() && null != mEmptyItem) {
+            mItemList.add(itemCount, mEmptyItem!!)
+            notifyItemInserted(0)
+        }
+    }
+
+    /**
+     * Query the index of the first element in [mItemList] that matches [data].
+     *
+     * @since 1.2.0
+     */
+    fun indexOfFirst(data: T) = if (isEmpty()) -1 else mItemList.indexOfFirst { it.data === data }
+
+    /**
+     * Custom empty layout. Specify the layout through [id] and specify the
+     * click event related to the layout through [scope].
+     *
+     * @since 1.2.0
+     */
+    fun setEmptyView(@LayoutRes id: Int?, scope: ItemWrapper<T>.() -> Unit = {}) {
+        if (null == id) {
+            if (isEmpty() && null != mEmptyItem) {
+                mItemList.removeAt(0)
+                notifyItemRemoved(0)
+            }
+            mEmptyItem = null
+            return
+        }
+        // If the current list is empty, remove the old mEmptyItem.
+        if (isEmpty() && null != mEmptyItem) {
+            mItemList.remove(mEmptyItem!!)
+            notifyItemRemoved(0)
+        }
+        mEmptyItem = ItemWrapper<T>(null, id).also(scope)
+        if (isEmpty()) {
+            mItemList.add(mEmptyItem!!)
+            notifyItemInserted(0)
+        }
+    }
+
+    /**
+     * [mItemList] will be judged to be empty when it is in the following two
+     * situations:
+     * 1. [mItemList] itself is empty.
+     * 2. [mItemList] has only one element, and this element is [mEmptyItem].
+     *
+     * @since 1.2.0
+     */
+    private fun isEmpty() =
+        mItemList.isEmpty() || (1 == mItemList.size && mEmptyItem === mItemList.first())
+
+    /**
+     * Returns [ItemBindHolder] by default. If you want to customize
+     * [ItemBindHolder] you need to inherit [ItemBindHolder] and override the
+     * [setViewHolder] method to use your customized [ItemBindHolder] as the
+     * return value.
+     */
     protected open fun setViewHolder(binding: ViewDataBinding): ItemBindHolder<T> {
         return ItemBindHolder(binding)
     }

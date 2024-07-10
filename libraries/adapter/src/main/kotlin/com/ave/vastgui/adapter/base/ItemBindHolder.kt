@@ -28,13 +28,14 @@ import com.ave.vastgui.adapter.BaseBindPagingAdapter
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * 适用于 [BaseBindAdapter] ， [BaseBindListAdapter] 和 [BaseBindPagingAdapter]
- * 的 ViewHolder。如果你想自定义 自己的 ViewHolder ，你应该让你的 ViewHolder 继承
- * [ItemBindHolder] 并将其作为 setViewHolder 的返回值。
+ * Applies to [BaseBindAdapter] , [BaseBindListAdapter] and
+ * [BaseBindPagingAdapter] ViewHolder. If you want to customize your own
+ * ViewHolder, you should make your ViewHolder inherit [ItemBindHolder] and
+ * use it as the return value of setViewHolder.
  *
  * @since 1.1.1
  */
-open class ItemBindHolder<T>(protected var binding: ViewDataBinding) :
+open class ItemBindHolder<T : Any>(protected var binding: ViewDataBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     /** @since 1.1.1 */

@@ -29,17 +29,18 @@ import androidx.recyclerview.widget.RecyclerView
 /** @since 1.1.1 */
 open class ItemHolder<T : Any>(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    /** @since 1.1.1 */
+    /**
+     * If the current [ItemHolder] represents an empty view, this method will
+     * not be called.
+     *
+     * @since 1.1.1
+     */
     open fun onBindData(item: T) {
 
     }
 
     interface HolderFactory<T : Any> : ItemType {
-        /**
-         * 创建当前的 ViewHolder 实例。
-         *
-         * @since 1.1.1
-         */
+        /** @since 1.1.1 */
         fun onCreateHolder(parent: ViewGroup, viewType: Int): ItemHolder<T>
     }
 }
