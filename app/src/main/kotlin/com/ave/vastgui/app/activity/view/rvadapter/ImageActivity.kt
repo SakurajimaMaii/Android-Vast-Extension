@@ -101,11 +101,32 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
             }
         }
 
+        testBaseListAdapter()
+
+//        getBinding().personRv.adapter = mImagePagingAdapter
+//        lifecycleScope.launch {
+//            getViewModel().imageFlow.collect {
+//                mImagePagingAdapter.submitData(it)
+//            }
+//        }
+
+//        lifecycleScope.launch {
+//            WanAndroidApi().getApi(WanAndroidApiService::class.java) {
+//                login(UserBean("xxx", "xxx"))
+//            }.collect {
+//                when (it) {
+//                    is Request2.Success -> logcat.d(it)
+//                    else -> nothing_to_do()
+//                }
+//            }
+//        }
+    }
+
+    private fun testBaseBindAdapter() {
         getBinding().images.layoutManager = LinearLayoutManager(this)
         getBinding().images.adapter = mImageBindAdapter.apply {
             setEmptyView(R.layout.page_empty_data_1)
         }
-
         getBinding().clear.setOnClickListener {
             mImageBindAdapter.clear()
         }
@@ -139,39 +160,27 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
         getBinding().removeEmpty.setOnClickListener {
             mImageBindAdapter.setEmptyView(null)
         }
+    }
 
-//        getBinding().personRv.adapter = mImageListAdapter
-//        lifecycleScope.launch {
-//            OpenApi().create(OpenApiService::class.java)
-//                .getImages(0, 20)
-//                .result?.list?.mapIndexed { index, image ->
-//                    if (0 == index % 2) {
-//                        ItemWrapper(image, image.getLayoutId(), sampleClick1)
-//                    } else {
-//                        ItemWrapper(image, image.getLayoutId(), sampleClick2)
-//                    }
-//                }
-//                .apply {
-//                    mImageListAdapter.submitList(this)
-//                }
-//        }
-
-//        getBinding().personRv.adapter = mImagePagingAdapter
-//        lifecycleScope.launch {
-//            getViewModel().imageFlow.collect {
-//                mImagePagingAdapter.submitData(it)
-//            }
-//        }
-
-//        lifecycleScope.launch {
-//            WanAndroidApi().getApi(WanAndroidApiService::class.java) {
-//                login(UserBean("xxx", "xxx"))
-//            }.collect {
-//                when (it) {
-//                    is Request2.Success -> logcat.d(it)
-//                    else -> nothing_to_do()
-//                }
-//            }
-//        }
+    private fun testBaseListAdapter() {
+        getBinding().images.layoutManager = LinearLayoutManager(this)
+        getBinding().images.adapter = mImageListAdapter
+        getBinding().load.setOnClickListener {
+            lifecycleScope.launch {
+                val list = OpenApi().create(OpenApiService::class.java)
+                    .getImages(0, 20)
+                    .result?.list ?: return@launch
+                mImageListAdapter.submitList(list, R.layout.item_image_default)
+            }
+        }
+        getBinding().clear.setOnClickListener {
+            mImageListAdapter.submitList(emptyList<Images.Image>())
+        }
+        getBinding().addEmpty1.setOnClickListener {
+            mImageListAdapter.setEmptyView(R.layout.page_empty_data_1)
+        }
+        getBinding().addEmpty2.setOnClickListener {
+            mImageListAdapter.setEmptyView(R.layout.page_empty_data_2)
+        }
     }
 }
