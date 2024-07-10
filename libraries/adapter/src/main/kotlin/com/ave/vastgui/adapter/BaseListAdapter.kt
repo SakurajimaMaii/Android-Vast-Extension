@@ -21,8 +21,10 @@ import android.content.res.Resources
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.core.util.forEach
 import androidx.recyclerview.widget.ListAdapter
+import com.ave.vastgui.adapter.base.EmptyHolderFactory
 import com.ave.vastgui.adapter.base.ItemClickListener
 import com.ave.vastgui.adapter.base.ItemDiffUtil
 import com.ave.vastgui.adapter.base.ItemHolder
@@ -36,7 +38,7 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * [BaseListAdapter] 。
+ * [BaseListAdapter].
  *
  * @since 1.1.1
  */
@@ -49,13 +51,15 @@ open class BaseListAdapter<T : Any>(
     private val mType2Factory = SparseArray<ItemHolder.HolderFactory<T>>()
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
+    private var mEmptyItem: ItemWrapper<T>? = null
 
     final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
         val itemData = getItem(position)
         itemData.data?.apply { holder.onBindData(this) }
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
-                itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData.data)
+                itemData.getOnItemClickListener()
+                    ?.onItemClick(holder.itemView, position, itemData.data)
             } else {
                 mOnItemClickListener?.onItemClick(holder.itemView, position, itemData.data)
             }
@@ -97,7 +101,6 @@ open class BaseListAdapter<T : Any>(
     final override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
         try {
-            // 识别是否存在该资源id的资源文件。
             mContext.resources.getLayout(item.layoutId)
         } catch (e: Resources.NotFoundException) {
             throw IllegalArgumentException("Please check if the return layoutId is correct.")
@@ -118,6 +121,56 @@ open class BaseListAdapter<T : Any>(
 
     final override fun getOnItemLongClickListener(): OnItemLongClickListener<T>? =
         mOnItemLongClickListener
+
+    /**
+     * Set the new list to be displayed.
+     *
+     * @since 1.2.0
+     */
+    fun submitList(
+        items: List<T>,
+        @LayoutRes id: Int? = null,
+        commitCallback: Runnable? = null,
+        scope: ItemWrapper<T>.() -> Unit = {}
+    ) {
+        if (null == id && items.isNotEmpty()) {
+            throw IllegalArgumentException("id is allowed to be empty only if items is an empty list.")
+        }
+        if (items.isEmpty() && null != mEmptyItem) {
+            super.submitList(listOf(mEmptyItem!!))
+        } else {
+            super.submitList(items.map { ItemWrapper(it, id!!).also(scope) }, commitCallback)
+        }
+    }
+
+    override fun submitList(list: List<ItemWrapper<T>>?) {
+        throw RuntimeException("Please call submitList(items: List<T>,id: Int,commitCallback: Runnable,scope: ItemWrapper<T>.() -> Unit)")
+    }
+
+    override fun submitList(list: List<ItemWrapper<T>>?, commitCallback: Runnable?) {
+        throw RuntimeException("Please call submitList(items: List<T>,id: Int,commitCallback: Runnable,scope: ItemWrapper<T>.() -> Unit)")
+    }
+
+    /**
+     * Custom empty layout. Specify the layout through [id] and specify the
+     * click event related to the layout through [scope].
+     *
+     * @since 1.2.0
+     */
+    fun setEmptyView(@LayoutRes id: Int?, scope: ItemWrapper<T>.() -> Unit = {}) {
+        mEmptyItem?.apply { mType2Factory.remove(layoutId) }
+        mEmptyItem = if (null != id) {
+            mType2Factory.put(id, EmptyHolderFactory(id))
+            ItemWrapper<T>(null, id).also(scope)
+        } else {
+            null
+        }
+        if (0 == itemCount) {
+            submitList(emptyList<T>())
+        } else if (1 == itemCount && null != getItem(0)) {
+            submitList(emptyList<T>())
+        }
+    }
 
     init {
         factories.forEach { factory ->
