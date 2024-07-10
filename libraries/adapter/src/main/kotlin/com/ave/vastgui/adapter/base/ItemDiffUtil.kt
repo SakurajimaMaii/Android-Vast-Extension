@@ -28,16 +28,24 @@ import androidx.recyclerview.widget.DiffUtil
  *
  * @since 1.1.1
  */
-abstract class ItemDiffUtil<T: Any> : DiffUtil.ItemCallback<ItemWrapper<T>>() {
+abstract class ItemDiffUtil<T : Any> : DiffUtil.ItemCallback<ItemWrapper<T>>() {
 
     /** @see newAreContentsTheSame */
-    final override fun areContentsTheSame(oldItem: ItemWrapper<T>, newItem: ItemWrapper<T>): Boolean {
+    final override fun areContentsTheSame(
+        oldItem: ItemWrapper<T>,
+        newItem: ItemWrapper<T>
+    ): Boolean {
         return newAreContentsTheSame(oldItem.data, newItem.data)
     }
 
     /** @see newAreItemsTheSame */
     final override fun areItemsTheSame(oldItem: ItemWrapper<T>, newItem: ItemWrapper<T>): Boolean {
-        return newAreItemsTheSame(oldItem.data, newItem.data)
+        return newAreItemsTheSame(oldItem.data, newItem.data) &&
+                oldItem.layoutId == newItem.layoutId &&
+                oldItem.getOnItemClickListener() == newItem.getOnItemClickListener() &&
+                oldItem.getOnItemLongClickListener() == newItem.getOnItemLongClickListener() &&
+                oldItem.mOnItemChildClickArray == newItem.mOnItemChildClickArray &&
+                oldItem.mOnItemChildLongClickArray == newItem.mOnItemChildLongClickArray
     }
 
     abstract fun newAreContentsTheSame(oldItem: T?, newItem: T?): Boolean
