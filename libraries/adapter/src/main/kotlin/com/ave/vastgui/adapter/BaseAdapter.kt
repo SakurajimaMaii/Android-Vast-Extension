@@ -18,7 +18,6 @@ package com.ave.vastgui.adapter
 
 import android.content.Context
 import android.content.res.Resources
-import android.util.Log
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
@@ -73,10 +72,7 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
 
     final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
         val itemData = mItemList[position]
-        itemData.data?.apply {
-            Log.d("test", "======================$this ${holder::class.java.simpleName}")
-            holder.onBindData(this)
-        }
+        itemData.data?.apply { holder.onBindData(this) }
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
                 itemData.getOnItemClickListener()
@@ -262,9 +258,17 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
             mEmptyItem = null
             return
         }
+        // 如果当前列表为空，移除老的 mEmptyItem
+        if (isEmpty() && null != mEmptyItem) {
+            mItemList.remove(mEmptyItem!!)
+            notifyItemRemoved(0)
+        }
         mType2Factory.put(id, EmptyHolderFactory(id))
         mEmptyItem = ItemWrapper<T>(null, id).also(scope)
-        if (isEmpty()) mItemList.add(mEmptyItem!!)
+        if (isEmpty()) {
+            mItemList.add(mEmptyItem!!)
+            notifyItemInserted(0)
+        }
     }
 
     /**
