@@ -23,7 +23,7 @@
         android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="4"
+        android:columnCount="3"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.button.MaterialButton
@@ -53,6 +53,27 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="插入元素" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_empty_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="添加空白页面1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_empty_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="添加空白页面2" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/remove_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="移除空白页面" />
     </GridLayout>
 
     <androidx.recyclerview.widget.RecyclerView

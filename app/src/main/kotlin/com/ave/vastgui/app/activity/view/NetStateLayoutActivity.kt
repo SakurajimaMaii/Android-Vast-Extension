@@ -58,7 +58,7 @@ class NetStateLayoutActivity(override val layoutId: Int = R.layout.activity_net_
         val netStateMgr = NetStateMgr(this).apply {
             setOnNetErrorListener(this@NetStateLayoutActivity)
             setOnLoadingErrorListener(this@NetStateLayoutActivity)
-            setEmptyDataView(R.layout.page_empty_data_state)
+            setEmptyDataView(R.layout.page_empty_data_1)
         }
         mNetStateLayout.setNetStateMgr(netStateMgr)
 

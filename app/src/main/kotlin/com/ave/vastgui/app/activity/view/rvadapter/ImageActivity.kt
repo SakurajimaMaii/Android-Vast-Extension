@@ -20,10 +20,11 @@ import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ave.vastgui.adapter.BR
 import com.ave.vastgui.adapter.BaseAdapter
+import com.ave.vastgui.adapter.BaseBindAdapter
 import com.ave.vastgui.adapter.BaseListAdapter
 import com.ave.vastgui.adapter.BasePagingAdapter
-import com.ave.vastgui.adapter.base.ItemWrapper
 import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.adapter.entity.ImageDiffUtil
@@ -38,7 +39,6 @@ import com.ave.vastgui.app.viewmodel.NetVM
 import com.ave.vastgui.tools.activity.VastVbVmActivity
 import com.ave.vastgui.tools.network.request.create
 import com.ave.vastgui.tools.view.dialog.MaterialAlertDialogBuilder
-import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.ave.vastgui.tools.view.toast.SimpleToast.showShortMsg
 import kotlinx.coroutines.launch
 
@@ -62,6 +62,9 @@ private class ImagePagingAdapter(context: Context) : BasePagingAdapter<Images.Im
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion), ImageDiffUtil
 )
 
+private class ImageBindAdapter(context: Context) :
+    BaseBindAdapter<Images.Image>(context, BR.image)
+
 class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
 
     private val logcat = mLogFactory.getLogCat(this::class.java)
@@ -75,6 +78,9 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
     private val mImagePagingAdapter: ImagePagingAdapter by lazy {
         ImagePagingAdapter(this)
     }
+    private val mImageBindAdapter: ImageBindAdapter by lazy {
+        ImageBindAdapter(this)
+    }
 
     private val sampleClick1 = OnItemClickListener<Images.Image> { view, _, _ ->
         MaterialAlertDialogBuilder(view.context).setMessage("这是一个点击事件").show()
@@ -85,7 +91,7 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mImageAdapter.apply {
+        mImageBindAdapter.apply {
             setOnItemClickListener { _, pos, _ ->
                 showShortMsg("Click event and pos is $pos.")
             }
@@ -96,34 +102,15 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
         }
 
         getBinding().images.layoutManager = LinearLayoutManager(this)
-        getBinding().images.adapter = mImageAdapter.apply {
-            setEmptyView(R.layout.page_empty_data_state)
-        }
-        lifecycleScope.launch {
-            return@launch
-            val images = OpenApi()
-                .create(OpenApiService::class.java).getImages(0, 10)
-                .result?.list
-            if (null == images) return@launch
-            // 将列表项填充到列表中
-            images.forEach {
-                mImageAdapter.add(it, R.layout.item_image_default)
-            }
-            // 更新列表项
-            for (index in 0 until mImageAdapter.itemCount step 2) {
-                mImageAdapter.update(mImageAdapter.data[0], R.layout.item_image_comic, index) {
-                    setOnItemClickListener { _, _, _ ->
-                        SimpleToast.showShortMsg("HAAAAAAAAA")
-                    }
-                }
-            }
+        getBinding().images.adapter = mImageBindAdapter.apply {
+            setEmptyView(R.layout.page_empty_data_1)
         }
 
         getBinding().clear.setOnClickListener {
-            mImageAdapter.clear()
+            mImageBindAdapter.clear()
         }
         getBinding().removeFirst.setOnClickListener {
-            mImageAdapter.removeAt(0)
+            mImageBindAdapter.removeAt(0)
         }
         getBinding().load.setOnClickListener {
             lifecycleScope.launch {
@@ -131,7 +118,7 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
                     .create(OpenApiService::class.java).getImages(0, 10)
                     .result?.list
                 if (null == images) return@launch
-                mImageAdapter.add(images, R.layout.item_image_default)
+                mImageBindAdapter.add(images, R.layout.item_image_default)
             }
         }
         getBinding().insert.setOnClickListener {
@@ -141,7 +128,16 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
                 "game",
                 "https://pic.netbian.com/uploads/allimg/211213/212526-16394019264e91.jpg"
             )
-            mImageAdapter.add(image, R.layout.item_image_default, 3)
+            mImageBindAdapter.add(image, R.layout.item_image_default, 3)
+        }
+        getBinding().addEmpty1.setOnClickListener {
+            mImageBindAdapter.setEmptyView(R.layout.page_empty_data_1)
+        }
+        getBinding().addEmpty2.setOnClickListener {
+            mImageBindAdapter.setEmptyView(R.layout.page_empty_data_2)
+        }
+        getBinding().removeEmpty.setOnClickListener {
+            mImageBindAdapter.setEmptyView(null)
         }
 
 //        getBinding().personRv.adapter = mImageListAdapter

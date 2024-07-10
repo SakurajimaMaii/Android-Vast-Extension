@@ -30,7 +30,7 @@ import com.ave.vastgui.app.adapter.entity.Contact
 class ContactAdapter(context: Context) :
     BaseBindAdapter<Contact>(context, BR.contact) {
 
-    fun getDataSource(): MutableList<ItemWrapper<Contact>> = mDataSource
+    fun getDataSource(): MutableList<ItemWrapper<Contact>> = mItemList
 
     /**
      * 向列表中添加通讯录对象。
@@ -40,7 +40,7 @@ class ContactAdapter(context: Context) :
      */
     fun addContact(name: String, number: String) {
         val index = itemCount
-        mDataSource.add(index, ItemWrapper(Contact(name, number), layoutId = R.layout.item_contact))
+        mItemList.add(index, ItemWrapper(Contact(name, number), layoutId = R.layout.item_contact))
         notifyItemChanged(index)
     }
 
@@ -66,7 +66,7 @@ class ContactAdapter(context: Context) :
 
     fun clearAll() {
         val count = itemCount
-        mDataSource.clear()
+        mItemList.clear()
         notifyItemRangeChanged(0, count)
     }
 
