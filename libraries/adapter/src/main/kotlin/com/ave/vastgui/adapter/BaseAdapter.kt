@@ -53,15 +53,7 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
     private var mEmptyItem: ItemWrapper<T>? = null
 
     /**
-     * 仅用来获取当前列表中的元素。
-     *
-     * @since 1.2.0
-     */
-    val rawData: List<ItemWrapper<T>>
-        get() = mItemList
-
-    /**
-     * 仅用来获取当前列表中的元素的数据部分。
+     * Only used to get the data of the element in the current list.
      *
      * @since 1.2.0
      */

@@ -46,7 +46,7 @@ open class ItemHolder<T : Any>(itemView: View) : RecyclerView.ViewHolder(itemVie
 }
 
 /** @since 1.2.0 */
-class EmptyHolderFactory<T : Any>(override val layoutId: Int) : ItemHolder.HolderFactory<T> {
+class EmptyHolderFactory<T : Any> internal constructor(override val layoutId: Int) : ItemHolder.HolderFactory<T> {
     override fun onCreateHolder(parent: ViewGroup, viewType: Int): ItemHolder<T> {
         val view =
             LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
