@@ -52,6 +52,7 @@ open class BaseListAdapter<T : Any>(
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
     private var mEmptyItem: ItemWrapper<T>? = null
+    private var mLoadingItem: ItemWrapper<T>? = null
 
     final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
         val itemData = getItem(position)
@@ -123,7 +124,7 @@ open class BaseListAdapter<T : Any>(
         mOnItemLongClickListener
 
     /**
-     * Set the new list to be displayed.
+     * Submits a new list to be diffed, and displayed.
      *
      * @since 1.2.0
      */
@@ -140,6 +141,17 @@ open class BaseListAdapter<T : Any>(
             super.submitList(listOf(mEmptyItem!!))
         } else {
             super.submitList(items.map { ItemWrapper(it, id!!).also(scope) }, commitCallback)
+        }
+    }
+
+    /**
+     * Submits a loading layout to be displayed.
+     *
+     * @since 1.2.0
+     */
+    fun submitListWithLoading() {
+        if (null != mLoadingItem) {
+            super.submitList(listOf(mLoadingItem!!))
         }
     }
 
@@ -169,6 +181,22 @@ open class BaseListAdapter<T : Any>(
             submitList(emptyList<T>())
         } else if (1 == itemCount && null != getItem(0)) {
             submitList(emptyList<T>())
+        }
+    }
+
+    /**
+     * Custom loading layout. Specify the layout through [id] and specify the
+     * click event related to the layout through [scope].
+     *
+     * @since 1.2.0
+     */
+    fun setLoadingView(@LayoutRes id: Int?, scope: ItemWrapper<T>.() -> Unit = {}) {
+        mLoadingItem?.apply { mType2Factory.remove(layoutId) }
+        mLoadingItem = if (null != id) {
+            mType2Factory.put(id, EmptyHolderFactory(id))
+            ItemWrapper<T>(null, id).also(scope)
+        } else {
+            null
         }
     }
 

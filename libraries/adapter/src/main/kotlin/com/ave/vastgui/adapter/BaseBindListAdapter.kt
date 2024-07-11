@@ -18,7 +18,6 @@ package com.ave.vastgui.adapter
 
 import android.content.Context
 import android.content.res.Resources
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -138,7 +137,7 @@ open class BaseBindListAdapter<T : Any>(
         mOnItemLongClickListener
 
     /**
-     * Set the new list to be displayed.
+     * Submits a new list to be diffed, and displayed.
      *
      * @since 1.2.0
      */
@@ -154,14 +153,17 @@ open class BaseBindListAdapter<T : Any>(
         if (items.isEmpty() && null != mEmptyItem) {
             super.submitList(listOf(mEmptyItem!!))
         } else {
-            Log.d("Test","submitList 加载数据")
             super.submitList(items.map { ItemWrapper(it, id!!).also(scope) }, commitCallback)
         }
     }
 
+    /**
+     * Submits a loading layout to be displayed.
+     *
+     * @since 1.2.0
+     */
     fun submitListWithLoading() {
         if (null != mLoadingItem) {
-            Log.d("Test","submitListWithLoading 加载页面")
             super.submitList(listOf(mLoadingItem!!))
         }
     }
