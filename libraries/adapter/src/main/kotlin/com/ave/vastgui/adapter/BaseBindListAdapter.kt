@@ -18,9 +18,11 @@ package com.ave.vastgui.adapter
 
 import android.content.Context
 import android.content.res.Resources
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.core.util.forEach
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -42,20 +44,20 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
  *
  * @since 1.1.1
  */
-open class BaseBindListAdapter<T:Any>(
+open class BaseBindListAdapter<T : Any>(
     protected var mContext: Context,
     /**
-     * 设置变量的id，如果在布局文件中内容以下所示：
-     *
+     * Set the id of the variable if the content in the layout file is as
+     * follows:
      * ```xml
      * <data>
      *     <variable
-     *          name="person"
-     *          type="com.example.gutilssampledemo.Person" />
+     *          name="image"
+     *          type="com.ave.vastgui.app.adapter.entity.Images.Image" />
      * </data>
      * ```
      *
-     * 则 [mVariableId] 的值为 person
+     * Then the value of [mVariableId] is `BR.image`.
      */
     private val mVariableId: Int,
     diffCallback: ItemDiffUtil<T>
@@ -63,13 +65,16 @@ open class BaseBindListAdapter<T:Any>(
 
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
+    private var mEmptyItem: ItemWrapper<T>? = null
+    private var mLoadingItem: ItemWrapper<T>? = null
 
     final override fun onBindViewHolder(holder: ItemBindHolder<T>, position: Int) {
         val itemData = getItem(position)
         itemData.data?.apply { holder.onBindData(mVariableId, this) }
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
-                itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData.data)
+                itemData.getOnItemClickListener()
+                    ?.onItemClick(holder.itemView, position, itemData.data)
             } else {
                 mOnItemClickListener?.onItemClick(holder.itemView, position, itemData.data)
             }
@@ -111,7 +116,6 @@ open class BaseBindListAdapter<T:Any>(
     final override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
         try {
-            // 识别是否存在该资源id的资源文件。
             mContext.resources.getLayout(item.layoutId)
         } catch (e: Resources.NotFoundException) {
             throw IllegalArgumentException("Please check if the return layoutId is correct.")
@@ -133,9 +137,84 @@ open class BaseBindListAdapter<T:Any>(
     final override fun getOnItemLongClickListener(): OnItemLongClickListener<T>? =
         mOnItemLongClickListener
 
-    /** @return 您要设置的 ViewHolder 。 */
+    /**
+     * Set the new list to be displayed.
+     *
+     * @since 1.2.0
+     */
+    fun submitList(
+        items: List<T>,
+        @LayoutRes id: Int? = null,
+        commitCallback: Runnable? = null,
+        scope: ItemWrapper<T>.() -> Unit = {}
+    ) {
+        if (null == id && items.isNotEmpty()) {
+            throw IllegalArgumentException("id is allowed to be empty only if items is an empty list.")
+        }
+        if (items.isEmpty() && null != mEmptyItem) {
+            super.submitList(listOf(mEmptyItem!!))
+        } else {
+            Log.d("Test","submitList 加载数据")
+            super.submitList(items.map { ItemWrapper(it, id!!).also(scope) }, commitCallback)
+        }
+    }
+
+    fun submitListWithLoading() {
+        if (null != mLoadingItem) {
+            Log.d("Test","submitListWithLoading 加载页面")
+            super.submitList(listOf(mLoadingItem!!))
+        }
+    }
+
+    override fun submitList(list: List<ItemWrapper<T>>?) {
+        throw RuntimeException("Please call submitList(items: List<T>,id: Int,commitCallback: Runnable,scope: ItemWrapper<T>.() -> Unit)")
+    }
+
+    override fun submitList(list: List<ItemWrapper<T>>?, commitCallback: Runnable?) {
+        throw RuntimeException("Please call submitList(items: List<T>,id: Int,commitCallback: Runnable,scope: ItemWrapper<T>.() -> Unit)")
+    }
+
+    /**
+     * Custom empty layout. Specify the layout through [id] and specify the
+     * click event related to the layout through [scope].
+     *
+     * @since 1.2.0
+     */
+    fun setEmptyView(@LayoutRes id: Int?, scope: ItemWrapper<T>.() -> Unit = {}) {
+        mEmptyItem = if (null != id) {
+            ItemWrapper<T>(null, id).also(scope)
+        } else {
+            null
+        }
+        if (0 == itemCount) {
+            submitList(emptyList<T>())
+        } else if (1 == itemCount && null != getItem(0)) {
+            submitList(emptyList<T>())
+        }
+    }
+
+    /**
+     * Custom loading layout. Specify the layout through [id] and specify the
+     * click event related to the layout through [scope].
+     *
+     * @since 1.2.0
+     */
+    fun setLoadingView(@LayoutRes id: Int?, scope: ItemWrapper<T>.() -> Unit = {}) {
+        mLoadingItem = if (null != id) {
+            ItemWrapper<T>(null, id).also(scope)
+        } else {
+            null
+        }
+    }
+
+    /**
+     * Returns [ItemBindHolder] by default. If you want to customize
+     * [ItemBindHolder] you need to inherit [ItemBindHolder] and override the
+     * [setViewHolder] method to use your customized [ItemBindHolder] as the
+     * return value.
+     */
     protected open fun setViewHolder(binding: ViewDataBinding): ItemBindHolder<T> {
-        return ItemBindHolder<T>(binding)
+        return ItemBindHolder(binding)
     }
 
 }

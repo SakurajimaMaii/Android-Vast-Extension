@@ -54,7 +54,6 @@ open class BaseBindAdapter<T : Any> @JvmOverloads constructor(
      *          type="com.ave.vastgui.app.adapter.entity.Images.Image" />
      * </data>
      * ```
-     *
      * Then the value of [mVariableId] is `BR.image`.
      */
     private val mVariableId: Int,
