@@ -18,7 +18,6 @@ package com.ave.vastgui.app.activity.view.rvadapter
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -35,11 +34,11 @@ import com.ave.vastgui.app.adapter.entity.Message
 import com.ave.vastgui.app.adapter.entity.MessageDiffUtil
 import com.ave.vastgui.app.databinding.ActivityMessageBinding
 import com.ave.vastgui.app.fragment.MessageBottomSheet
-import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -49,7 +48,6 @@ import kotlinx.coroutines.launch
 class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
     OnItemClickListener<Message> {
 
-    private val logcat = mLogFactory.getLogCat(MessageActivity::class.java)
     private val mMessageRv by lazy { getBinding().messageRv }
     private val mAdapter by lazy {
         BaseBindListAdapter(this, BR.message, MessageDiffUtil)
@@ -79,7 +77,10 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
 
         requestMultiplePermissions(mPermissions) {
             allGranted = {
-                readSms()
+                lifecycleScope.launch {
+                    mAdapter.submitListWithLoading()
+                    mAdapter.submitList(readSms(), R.layout.item_message)
+                }
             }
             denied = {
                 getSnackbar().setText("权限${it}已被拒绝").show()
@@ -94,7 +95,7 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
         getBinding().load.setOnClickListener {
             lifecycleScope.launch {
                 mAdapter.submitListWithLoading()
-                readSms()
+                mAdapter.submitList(readSms(), R.layout.item_message)
             }
         }
         getBinding().clear.setOnClickListener {
@@ -108,20 +109,21 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
         }
     }
 
+    /**
+     * 读取短信，参考 [Choosing the right storage experience](https://android-developers.googleblog.com/2023/08/choosing-right-storage-experience.html)
+     */
     @SuppressLint("Range")
-    private fun readSms() {
-        val messages: MutableList<Message> = ArrayList()
-        lifecycleScope.launch(Dispatchers.IO) {
-            val cursor: Cursor = contentResolver
-                .query(Telephony.Sms.CONTENT_URI, mSmsColumns, null, null, null)
-                ?: return@launch
-            with(cursor) {
-                while (moveToNext()) {
-                    val address = getString(getColumnIndex(Telephony.Sms.ADDRESS))
-                    val person = getString(getColumnIndex(Telephony.Sms.PERSON))
-                    val date = getLong(getColumnIndex(Telephony.Sms.DATE))
-                    val type = getInt(getColumnIndex(Telephony.Sms.TYPE))
-                    val body = getString(getColumnIndex(Telephony.Sms.BODY))
+    private suspend fun readSms(): List<Message> = withContext(Dispatchers.IO) {
+        val messages = mutableListOf<Message>()
+        contentResolver
+            .query(Telephony.Sms.CONTENT_URI, mSmsColumns, null, null, null)
+            ?.use { cursor ->
+                while (cursor.moveToNext()) {
+                    val address = cursor.getString(cursor.getColumnIndex(Telephony.Sms.ADDRESS))
+                    val person = cursor.getString(cursor.getColumnIndex(Telephony.Sms.PERSON))
+                    val date = cursor.getLong(cursor.getColumnIndex(Telephony.Sms.DATE))
+                    val type = cursor.getInt(cursor.getColumnIndex(Telephony.Sms.TYPE))
+                    val body = cursor.getString(cursor.getColumnIndex(Telephony.Sms.BODY))
                     var name = getNameFromAddress(address)
                     if (null == name) {
                         name = getNameFromPerson(person)
@@ -133,11 +135,7 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
                     messages.add(message)
                 }
             }
-            cursor.close()
-            launch(lifecycleScope.coroutineContext) {
-                mAdapter.submitList(messages, R.layout.item_message)
-            }
-        }
+        return@withContext messages
     }
 
     // 通过查询电话查找表从地址中获取姓名

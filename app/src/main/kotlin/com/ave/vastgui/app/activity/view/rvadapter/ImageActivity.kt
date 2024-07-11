@@ -102,24 +102,6 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
         }
 
         testBaseListAdapter()
-
-//        getBinding().personRv.adapter = mImagePagingAdapter
-//        lifecycleScope.launch {
-//            getViewModel().imageFlow.collect {
-//                mImagePagingAdapter.submitData(it)
-//            }
-//        }
-
-//        lifecycleScope.launch {
-//            WanAndroidApi().getApi(WanAndroidApiService::class.java) {
-//                login(UserBean("xxx", "xxx"))
-//            }.collect {
-//                when (it) {
-//                    is Request2.Success -> logcat.d(it)
-//                    else -> nothing_to_do()
-//                }
-//            }
-//        }
     }
 
     private fun testBaseBindAdapter() {
@@ -164,9 +146,12 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
 
     private fun testBaseListAdapter() {
         getBinding().images.layoutManager = LinearLayoutManager(this)
-        getBinding().images.adapter = mImageListAdapter
+        getBinding().images.adapter = mImageListAdapter.apply {
+            setLoadingView(R.layout.page_loading)
+        }
         getBinding().load.setOnClickListener {
             lifecycleScope.launch {
+                mImageListAdapter.submitListWithLoading()
                 val list = OpenApi().create(OpenApiService::class.java)
                     .getImages(0, 20)
                     .result?.list ?: return@launch
@@ -184,10 +169,20 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
             }
         }
         getBinding().addEmpty2.setOnClickListener {
-            mImageListAdapter.setEmptyView(R.layout.page_empty_box){
+            mImageListAdapter.setEmptyView(R.layout.page_empty_box) {
                 setOnItemClickListener { _, _, _ ->
                     showShortMsg("这是第二个空白界面")
                 }
+            }
+        }
+    }
+
+    private fun testBasePagingAdapter() {
+        getBinding().images.layoutManager = LinearLayoutManager(this)
+        getBinding().images.adapter = mImagePagingAdapter
+        lifecycleScope.launch {
+            getViewModel().imageFlow.collect {
+                mImagePagingAdapter.submitData(it,R.layout.item_image_default)
             }
         }
     }

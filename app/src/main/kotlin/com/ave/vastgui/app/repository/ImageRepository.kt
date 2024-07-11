@@ -28,15 +28,15 @@ import com.ave.vastgui.tools.network.request.create
 // Email: guihy2019@gmail.com
 // Date: 2024/1/6 16:46
 
-class ImageRepository : PagingSource<Int, ItemWrapper<Images.Image>>() {
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ItemWrapper<Images.Image>> {
+class ImageRepository : PagingSource<Int, Images.Image>() {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Images.Image> {
         return try {
             val nextPage = params.key ?: 1
 
-            val response: List<ItemWrapper<Images.Image>> = OpenApi()
+            val response: List<Images.Image> = OpenApi()
                 .create(OpenApiService::class.java)
                 .getImages(nextPage, 10)
-                .result?.list?.map { ItemWrapper(it, layoutId = it.getLayoutId()) } ?: emptyList()
+                .result?.list ?: emptyList()
 
             LoadResult.Page(
                 data = response,
@@ -48,7 +48,7 @@ class ImageRepository : PagingSource<Int, ItemWrapper<Images.Image>>() {
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, ItemWrapper<Images.Image>>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Images.Image>): Int? {
         return null
     }
 }
