@@ -25,9 +25,9 @@ import android.provider.ContactsContract
 import android.provider.Telephony
 import android.view.View
 import androidx.core.database.getStringOrNull
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ave.vastgui.adapter.BaseBindListAdapter
-import com.ave.vastgui.adapter.base.ItemWrapper
 import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.app.BR
 import com.ave.vastgui.app.R
@@ -35,8 +35,11 @@ import com.ave.vastgui.app.adapter.entity.Message
 import com.ave.vastgui.app.adapter.entity.MessageDiffUtil
 import com.ave.vastgui.app.databinding.ActivityMessageBinding
 import com.ave.vastgui.app.fragment.MessageBottomSheet
+import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -46,6 +49,7 @@ import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
     OnItemClickListener<Message> {
 
+    private val logcat = mLogFactory.getLogCat(MessageActivity::class.java)
     private val mMessageRv by lazy { getBinding().messageRv }
     private val mAdapter by lazy {
         BaseBindListAdapter(this, BR.message, MessageDiffUtil)
@@ -63,6 +67,7 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
         Manifest.permission.READ_CONTACTS,
         Manifest.permission.WRITE_CONTACTS
     )
+    private val mMessages: MutableList<Message> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,33 +90,54 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
         }
 
         mAdapter.setOnItemClickListener(this)
+        mAdapter.setLoadingView(R.layout.page_loading)
+        getBinding().load.setOnClickListener {
+            lifecycleScope.launch {
+                mAdapter.submitListWithLoading()
+                readSms()
+            }
+        }
+        getBinding().clear.setOnClickListener {
+            mAdapter.submitList(emptyList<Message>())
+        }
+        getBinding().setEmpty.setOnClickListener {
+            mAdapter.setEmptyView(R.layout.page_empty_box)
+        }
+        getBinding().removeEmpty.setOnClickListener {
+            mAdapter.setEmptyView(null)
+        }
     }
 
     @SuppressLint("Range")
     private fun readSms() {
-        val cursor: Cursor = contentResolver
-            .query(Telephony.Sms.CONTENT_URI, mSmsColumns, null, null, null) ?: return
-        val messages: MutableList<ItemWrapper<Message>> = ArrayList()
-        with(cursor) {
-            while (moveToNext()) {
-                val address = getString(getColumnIndex(Telephony.Sms.ADDRESS))
-                val person = getString(getColumnIndex(Telephony.Sms.PERSON))
-                val date = getLong(getColumnIndex(Telephony.Sms.DATE))
-                val type = getInt(getColumnIndex(Telephony.Sms.TYPE))
-                val body = getString(getColumnIndex(Telephony.Sms.BODY))
-                var name = getNameFromAddress(address)
-                if (null == name) {
-                    name = getNameFromPerson(person)
+        val messages: MutableList<Message> = ArrayList()
+        lifecycleScope.launch(Dispatchers.IO) {
+            val cursor: Cursor = contentResolver
+                .query(Telephony.Sms.CONTENT_URI, mSmsColumns, null, null, null)
+                ?: return@launch
+            with(cursor) {
+                while (moveToNext()) {
+                    val address = getString(getColumnIndex(Telephony.Sms.ADDRESS))
+                    val person = getString(getColumnIndex(Telephony.Sms.PERSON))
+                    val date = getLong(getColumnIndex(Telephony.Sms.DATE))
+                    val type = getInt(getColumnIndex(Telephony.Sms.TYPE))
+                    val body = getString(getColumnIndex(Telephony.Sms.BODY))
+                    var name = getNameFromAddress(address)
+                    if (null == name) {
+                        name = getNameFromPerson(person)
+                    }
+                    if (null == name) {
+                        name = address
+                    }
+                    val message = Message("$name", address, date, type, body)
+                    messages.add(message)
                 }
-                if (null == name) {
-                    name = address
-                }
-                val message = Message("$name", address, date, type, body)
-                // messages.add(ItemWrapper(message, layoutId = R.layout.item_message))
+            }
+            cursor.close()
+            launch(lifecycleScope.coroutineContext) {
+                mAdapter.submitList(messages, R.layout.item_message)
             }
         }
-        cursor.close()
-        mAdapter.submitList(messages)
     }
 
     // 通过查询电话查找表从地址中获取姓名
@@ -152,7 +178,7 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
     }
 
     override fun onItemClick(view: View, pos: Int, item: Message?) {
-        if(null == item) return
+        if (null == item) return
         val mMessageBottomSheet = MessageBottomSheet()
         mMessageBottomSheet.show(supportFragmentManager, MessageBottomSheet.TAG)
         mMessageBottomSheet.setMessage(item)

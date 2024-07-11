@@ -52,6 +52,9 @@ private class ImageAdapter(context: Context) : BaseAdapter<Images.Image>(
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion)
 )
 
+private class ImageBindAdapter(context: Context) :
+    BaseBindAdapter<Images.Image>(context, BR.image)
+
 private class ImageListAdapter(context: Context) : BaseListAdapter<Images.Image>(
     context,
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion), ImageDiffUtil
@@ -61,9 +64,6 @@ private class ImagePagingAdapter(context: Context) : BasePagingAdapter<Images.Im
     context,
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion), ImageDiffUtil
 )
-
-private class ImageBindAdapter(context: Context) :
-    BaseBindAdapter<Images.Image>(context, BR.image)
 
 class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
 
@@ -125,7 +125,7 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
     private fun testBaseBindAdapter() {
         getBinding().images.layoutManager = LinearLayoutManager(this)
         getBinding().images.adapter = mImageBindAdapter.apply {
-            setEmptyView(R.layout.page_empty_data_1)
+            setEmptyView(R.layout.page_empty_default)
         }
         getBinding().clear.setOnClickListener {
             mImageBindAdapter.clear()
@@ -152,10 +152,10 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
             mImageBindAdapter.add(image, R.layout.item_image_default, 3)
         }
         getBinding().addEmpty1.setOnClickListener {
-            mImageBindAdapter.setEmptyView(R.layout.page_empty_data_1)
+            mImageBindAdapter.setEmptyView(R.layout.page_empty_default)
         }
         getBinding().addEmpty2.setOnClickListener {
-            mImageBindAdapter.setEmptyView(R.layout.page_empty_data_2)
+            mImageBindAdapter.setEmptyView(R.layout.page_empty_box)
         }
         getBinding().removeEmpty.setOnClickListener {
             mImageBindAdapter.setEmptyView(null)
@@ -177,10 +177,18 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
             mImageListAdapter.submitList(emptyList<Images.Image>())
         }
         getBinding().addEmpty1.setOnClickListener {
-            mImageListAdapter.setEmptyView(R.layout.page_empty_data_1)
+            mImageListAdapter.setEmptyView(R.layout.page_empty_default) {
+                setOnItemClickListener { _, _, _ ->
+                    showShortMsg("这是第一个空白界面")
+                }
+            }
         }
         getBinding().addEmpty2.setOnClickListener {
-            mImageListAdapter.setEmptyView(R.layout.page_empty_data_2)
+            mImageListAdapter.setEmptyView(R.layout.page_empty_box){
+                setOnItemClickListener { _, _, _ ->
+                    showShortMsg("这是第二个空白界面")
+                }
+            }
         }
     }
 }
