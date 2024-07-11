@@ -21,14 +21,21 @@ import android.content.res.Resources
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.core.util.forEach
+import androidx.lifecycle.Lifecycle
+import androidx.paging.Pager
+import androidx.paging.PagingData
 import androidx.paging.PagingDataAdapter
+import androidx.paging.PagingSource
+import androidx.paging.map
 import com.ave.vastgui.adapter.base.ItemClickListener
 import com.ave.vastgui.adapter.base.ItemDiffUtil
 import com.ave.vastgui.adapter.base.ItemHolder
 import com.ave.vastgui.adapter.base.ItemWrapper
 import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.adapter.listener.OnItemLongClickListener
+import kotlinx.coroutines.flow.Flow
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -51,7 +58,8 @@ open class BasePagingAdapter<T : Any>(
         itemData.data?.apply { holder.onBindData(this) }
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
-                itemData.getOnItemClickListener()?.onItemClick(holder.itemView, position, itemData.data)
+                itemData.getOnItemClickListener()
+                    ?.onItemClick(holder.itemView, position, itemData.data)
             } else {
                 mOnItemClickListener?.onItemClick(holder.itemView, position, itemData.data)
             }
@@ -115,6 +123,49 @@ open class BasePagingAdapter<T : Any>(
 
     final override fun getOnItemLongClickListener(): OnItemLongClickListener<T>? =
         mOnItemLongClickListener
+
+    /**
+     * Present a [PagingData] until it is invalidated by a call to [refresh] or
+     * [PagingSource.invalidate].
+     *
+     * This method is typically used when collecting from a [Flow] produced by [Pager]. For RxJava
+     * or LiveData support, use the non-suspending overload of [submitData], which accepts a
+     * [Lifecycle].
+     *
+     * Note: This method suspends while it is actively presenting page loads from a [PagingData],
+     * until the [PagingData] is invalidated. Although cancellation will propagate to this call
+     * automatically, collecting from a [Pager.flow] with the intention of presenting the most
+     * up-to-date representation of your backing dataset should typically be done using
+     * [collectLatest][kotlinx.coroutines.flow.collectLatest].
+     *
+     * @see [Pager]
+     */
+    open suspend fun submitData(
+        pagingData: PagingData<T>,
+        @LayoutRes id: Int,
+        scope: ItemWrapper<T>.() -> Unit = {}
+    ) {
+        differ.submitData(pagingData.map { ItemWrapper<T>(it, id).also(scope) })
+    }
+
+    /**
+     * Present a [PagingData] until it is either invalidated or another call to [submitData] is
+     * made.
+     *
+     * This method is typically used when observing a RxJava or LiveData stream produced by [Pager].
+     * For [Flow] support, use the suspending overload of [submitData], which automates cancellation
+     * via [CoroutineScope][kotlinx.coroutines.CoroutineScope] instead of relying of [Lifecycle].
+     *
+     * @see submitData
+     * @see [Pager]
+     */
+    fun submitData(
+        lifecycle: Lifecycle, pagingData: PagingData<T>,
+        @LayoutRes id: Int,
+        scope: ItemWrapper<T>.() -> Unit = {}
+    ) {
+        differ.submitData(lifecycle, pagingData.map { ItemWrapper<T>(it, id).also(scope) })
+    }
 
     init {
         factories.forEach { factory ->
