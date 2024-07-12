@@ -25,16 +25,16 @@ import com.ave.vastgui.adapter.base.ItemWrapper
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * 用于监听列表项内部的控件的长按事件。
+ * Interface definition for a callback to be invoked when a view has been clicked and held in list item.
  *
  * @since 1.1.1
  */
 interface OnItemChildLongClickListener<T: Any> {
     /**
-     * 当列表项内部的控件被长按时会触发该回调。
+     * Called when a view has been clicked and held in list item.
      *
-     * @param view 当前被长按的控件。
-     * @param item 当前被点击的列表项，如果为空，则表示当前列表为空。
+     * @param item The currently clicked list item data. If it is empty, it means
+     * the current list is empty.
      * @since 1.2.0
      */
     fun onItemLongClick(view: View, pos: Int, item: T?): Boolean

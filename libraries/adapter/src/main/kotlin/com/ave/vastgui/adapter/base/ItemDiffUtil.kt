@@ -24,7 +24,8 @@ import androidx.recyclerview.widget.DiffUtil
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * 因为使用了 [ItemWrapper] ，原来的 [DiffUtil] 会 使用起来不方便，所以设计了 [ItemDiffUtil] 来替代它。
+ * Because [ItemWrapper] is used, the original [DiffUtil] will be
+ * inconvenient to use, so [ItemDiffUtil] was designed to replace it.
  *
  * @since 1.1.1
  */

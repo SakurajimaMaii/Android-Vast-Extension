@@ -28,9 +28,9 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 interface ItemClickListener<T : Any> {
 
     /**
-     * 用于为适配器注册点击事件监听。
+     * Register a callback to be invoked when the item is clicked.
      *
-     * @param listener 点击监听器。如果 [listener] 为空，它将删除点击监听器。
+     * @param listener Click callback. If [listener] is empty, it will remove the callback.
      * @since 1.1.1
      */
     fun setOnItemClickListener(listener: OnItemClickListener<T>?)
@@ -39,9 +39,9 @@ interface ItemClickListener<T : Any> {
     fun getOnItemClickListener(): OnItemClickListener<T>?
 
     /**
-     * 为适配器注册长按监听器。
+     * Register a callback to be invoked when the item is clicked and held.
      *
-     * @param listener 一个长点击监听器。如果 [listener] 为 null，它将删除长按监听器。
+     * @param listener If [listener] is empty, it will remove the callback.
      * @since 1.1.1
      */
     fun setOnItemLongClickListener(listener: OnItemLongClickListener<T>?)

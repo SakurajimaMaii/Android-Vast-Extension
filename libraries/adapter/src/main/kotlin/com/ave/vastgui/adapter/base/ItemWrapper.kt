@@ -19,6 +19,7 @@ package com.ave.vastgui.adapter.base
 import android.util.SparseArray
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.RecyclerView
 import com.ave.vastgui.adapter.listener.OnItemChildClickListener
 import com.ave.vastgui.adapter.listener.OnItemChildLongClickListener
 import com.ave.vastgui.adapter.listener.OnItemClickListener
@@ -30,11 +31,11 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * 列表项数据包装器，用于为适配器提供布局 id ，点击事件等相关信息。
+ * List item wrapper, used to provide layout id, click events and other
+ * related information to the adapter.
  *
- * @property layoutId 参考 [ItemType.layoutId] 。
- * @property clickListener 用于监听列表项点击事件。
- * @property longClickListener 用于监听列表项长按事件。
+ * @property layoutId [RecyclerView.Adapter] can find the layout and
+ * [RecyclerView.ViewHolder] corresponding to the item through [layoutId].
  * @since 1.1.1
  */
 class ItemWrapper<T : Any> @JvmOverloads constructor(
@@ -64,9 +65,9 @@ class ItemWrapper<T : Any> @JvmOverloads constructor(
     }
 
     /**
-     * 用于为列表项内部的控件添加监听事件
+     * Register a callback to be invoked when this [id] corresponding view is
+     * clicked.
      *
-     * @param id 对应控件的 id 。
      * @since 1.1.1
      */
     fun addOnItemChildClickListener(@IdRes id: Int, listener: OnItemChildClickListener<T>) = apply {
@@ -77,7 +78,8 @@ class ItemWrapper<T : Any> @JvmOverloads constructor(
     }
 
     /**
-     * 用于移除 [id] 对应控件的监听事件。
+     * Remove a callback to be invoked when this [id] corresponding view is
+     * clicked.
      *
      * @since 1.1.1
      */
@@ -86,9 +88,9 @@ class ItemWrapper<T : Any> @JvmOverloads constructor(
     }
 
     /**
-     * 用于为列表项内部的控件添加监听事件
+     * Register a callback to be invoked when this [id] corresponding view is
+     * clicked and held.
      *
-     * @param id 对应控件的 id 。
      * @since 1.1.1
      */
     fun addOnItemChildLongClickListener(@IdRes id: Int, listener: OnItemChildLongClickListener<T>) =
@@ -101,7 +103,8 @@ class ItemWrapper<T : Any> @JvmOverloads constructor(
         }
 
     /**
-     * 用于移除 [id] 对应控件的监听事件。
+     * Remove a callback to be invoked when this [id] corresponding view is
+     * clicked and held.
      *
      * @since 1.1.1
      */

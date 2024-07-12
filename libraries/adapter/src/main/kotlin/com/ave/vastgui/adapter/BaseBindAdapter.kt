@@ -54,6 +54,7 @@ open class BaseBindAdapter<T : Any> @JvmOverloads constructor(
      *          type="com.ave.vastgui.app.adapter.entity.Images.Image" />
      * </data>
      * ```
+     *
      * Then the value of [mVariableId] is `BR.image`.
      */
     private val mVariableId: Int,
@@ -63,6 +64,14 @@ open class BaseBindAdapter<T : Any> @JvmOverloads constructor(
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
     private var mEmptyItem: ItemWrapper<T>? = null
+
+    /**
+     * Only used to get the data of the element in the current list.
+     *
+     * @since 1.2.0
+     */
+    val data: List<T>
+        get() = if (mItemList.isEmpty()) emptyList() else mItemList.map { it.data!! }
 
     final override fun getItemCount() = mItemList.size
 
@@ -189,6 +198,46 @@ open class BaseBindAdapter<T : Any> @JvmOverloads constructor(
     }
 
     /**
+     * Adds [item] to the position specified by [position].
+     *
+     * @since 1.2.0
+     */
+    fun add(item: ItemWrapper<T>, position: Int = itemCount) {
+        var index = position
+        if (isEmpty() && null != mEmptyItem) {
+            if (0 != position - 1) {
+                return
+            }
+            mItemList.remove(mEmptyItem)
+            notifyItemRemoved(0)
+            index = 0
+        }
+        if (index !in 0..itemCount) return
+        mItemList.add(index, item)
+        notifyItemInserted(index)
+    }
+
+    /**
+     * Adds [items] to the position specified by [position].
+     *
+     * @since 1.2.0
+     */
+    fun add(items: List<ItemWrapper<T>>, position: Int = itemCount, ) {
+        var index = position
+        if (isEmpty() && null != mEmptyItem) {
+            if (0 != position - 1) {
+                return
+            }
+            mItemList.remove(mEmptyItem)
+            notifyItemRemoved(0)
+            index = 0
+        }
+        if (index !in 0..itemCount) return
+        mItemList.addAll(index, items)
+        notifyItemRangeInserted(index, items.size)
+    }
+
+    /**
      * Updates item at the specified [position] from the [mItemList].
      *
      * @since 1.2.0
@@ -200,7 +249,21 @@ open class BaseBindAdapter<T : Any> @JvmOverloads constructor(
         scope: ItemWrapper<T>.() -> Unit = {}
     ): Boolean {
         if (isEmpty()) return false
+        if (position !in 0 until itemCount) return false
         mItemList[position] = ItemWrapper(item, layout).also(scope)
+        notifyItemChanged(position)
+        return true
+    }
+
+    /**
+     * Updates item at the specified [position] from the [mItemList].
+     *
+     * @since 1.2.0
+     */
+    fun update(item: ItemWrapper<T>, position: Int): Boolean {
+        if (isEmpty()) return false
+        if (position !in 0 until itemCount) return false
+        mItemList[position] = item
         notifyItemChanged(position)
         return true
     }

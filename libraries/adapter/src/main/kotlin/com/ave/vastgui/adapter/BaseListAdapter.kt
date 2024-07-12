@@ -155,12 +155,24 @@ open class BaseListAdapter<T : Any>(
         }
     }
 
+    /** @since 1.2.0 */
     override fun submitList(list: List<ItemWrapper<T>>?) {
-        throw RuntimeException("Please call submitList(items: List<T>,id: Int,commitCallback: Runnable,scope: ItemWrapper<T>.() -> Unit)")
+        if (null == list) return
+        if (list.isEmpty() && null != mEmptyItem) {
+            super.submitList(listOf(mEmptyItem!!))
+        } else {
+            super.submitList(list)
+        }
     }
 
+    /** @since 1.2.0 */
     override fun submitList(list: List<ItemWrapper<T>>?, commitCallback: Runnable?) {
-        throw RuntimeException("Please call submitList(items: List<T>,id: Int,commitCallback: Runnable,scope: ItemWrapper<T>.() -> Unit)")
+        if (null == list) return
+        if (list.isEmpty() && null != mEmptyItem) {
+            super.submitList(listOf(mEmptyItem!!))
+        } else {
+            super.submitList(list, commitCallback)
+        }
     }
 
     /**

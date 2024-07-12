@@ -25,15 +25,16 @@ import com.ave.vastgui.adapter.base.ItemWrapper
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
 /**
- * 用于监听列表项的点击事件。
+ * Interface definition for a callback to be invoked when a list item is clicked.
  *
  * @since 1.1.1
  */
 fun interface OnItemClickListener<T : Any> {
     /**
-     * 当列表项被点击时会触发该回调。
+     * Called when a list item has been clicked.
      *
-     * @param item 当前被点击的列表项，如果为空，则表示当前列表为空。
+     * @param item The currently clicked list item data. If it is empty, it means
+     * the current list is empty.
      * @since 1.2.0
      */
     fun onItemClick(view: View, pos: Int, item: T?)

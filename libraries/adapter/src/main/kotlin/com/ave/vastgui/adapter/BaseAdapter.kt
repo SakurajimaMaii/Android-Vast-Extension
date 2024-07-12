@@ -132,7 +132,8 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
         mOnItemLongClickListener
 
     /**
-     * Adds [item] to the position specified by [position], with the layout being [layout].
+     * Adds [item] to the position specified by [position], with the layout
+     * being [layout].
      *
      * @since 1.2.0
      */
@@ -157,7 +158,8 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
     }
 
     /**
-     * Adds [items] to the position specified by [position], with the layout being [layout].
+     * Adds [items] to the position specified by [position], with the layout
+     * being [layout].
      *
      * @since 1.2.0
      */
@@ -182,6 +184,46 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
     }
 
     /**
+     * Adds [item] to the position specified by [position].
+     *
+     * @since 1.2.0
+     */
+    fun add(item: ItemWrapper<T>, position: Int = itemCount) {
+        var index = position
+        if (isEmpty() && null != mEmptyItem) {
+            if (0 != position - 1) {
+                return
+            }
+            mItemList.remove(mEmptyItem)
+            notifyItemRemoved(0)
+            index = 0
+        }
+        if (index !in 0..itemCount) return
+        mItemList.add(index, item)
+        notifyItemInserted(index)
+    }
+
+    /**
+     * Adds [items] to the position specified by [position].
+     *
+     * @since 1.2.0
+     */
+    fun add(items: List<ItemWrapper<T>>, position: Int = itemCount, ) {
+        var index = position
+        if (isEmpty() && null != mEmptyItem) {
+            if (0 != position - 1) {
+                return
+            }
+            mItemList.remove(mEmptyItem)
+            notifyItemRemoved(0)
+            index = 0
+        }
+        if (index !in 0..itemCount) return
+        mItemList.addAll(index, items)
+        notifyItemRangeInserted(index, items.size)
+    }
+
+    /**
      * Updates item at the specified [position] from the [mItemList].
      *
      * @since 1.2.0
@@ -193,7 +235,21 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
         scope: ItemWrapper<T>.() -> Unit = {}
     ): Boolean {
         if (isEmpty()) return false
+        if (position !in 0 until itemCount) return false
         mItemList[position] = ItemWrapper(item, layout).also(scope)
+        notifyItemChanged(position)
+        return true
+    }
+
+    /**
+     * Updates item at the specified [position] from the [mItemList].
+     *
+     * @since 1.2.0
+     */
+    fun update(item: ItemWrapper<T>, position: Int): Boolean {
+        if (isEmpty()) return false
+        if (position !in 0 until itemCount) return false
+        mItemList[position] = item
         notifyItemChanged(position)
         return true
     }
@@ -231,13 +287,6 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
             notifyItemInserted(0)
         }
     }
-
-    /**
-     * Query the index of the first element in [mItemList] that matches [data].
-     *
-     * @since 1.2.0
-     */
-    fun indexOfFirst(data: T) = if (isEmpty()) -1 else mItemList.indexOfFirst { it.data === data }
 
     /**
      * Custom empty layout. Specify the layout through [id] and specify the

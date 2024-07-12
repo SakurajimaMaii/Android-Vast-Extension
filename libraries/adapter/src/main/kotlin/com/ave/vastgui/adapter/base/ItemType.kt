@@ -26,7 +26,7 @@ import androidx.annotation.LayoutRes
 /** @since 1.1.1 */
 sealed interface ItemType {
     /**
-     * 返回项目布局资源 ID。
+     * Returns the layout id.
      *
      * @since 1.1.1
      */
