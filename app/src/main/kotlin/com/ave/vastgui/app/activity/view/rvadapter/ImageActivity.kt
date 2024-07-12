@@ -101,7 +101,7 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
             }
         }
 
-        testBaseListAdapter()
+        testBasePagingAdapter()
     }
 
     private fun testBaseBindAdapter() {
@@ -166,6 +166,9 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
                 setOnItemClickListener { _, _, _ ->
                     showShortMsg("这是第一个空白界面")
                 }
+                addOnItemChildClickListener(R.id.empty_default_image_root) { _, _, _ ->
+
+                }
             }
         }
         getBinding().addEmpty2.setOnClickListener {
@@ -182,7 +185,7 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
         getBinding().images.adapter = mImagePagingAdapter
         lifecycleScope.launch {
             getViewModel().imageFlow.collect {
-                mImagePagingAdapter.submitData(it,R.layout.item_image_default)
+                mImagePagingAdapter.submitData(it)
             }
         }
     }

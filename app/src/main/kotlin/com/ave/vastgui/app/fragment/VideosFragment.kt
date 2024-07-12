@@ -27,7 +27,6 @@ import com.ave.vastgui.app.databinding.FragmentVideosBinding
 import com.ave.vastgui.app.viewmodel.SharedVM
 import com.ave.vastgui.tools.fragment.VastVbVmFragment
 import com.ave.vastgui.tools.view.toast.SimpleToast
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 // Author: SakurajimaMai
@@ -54,9 +53,9 @@ class VideosFragment : VastVbVmFragment<FragmentVideosBinding, SharedVM>() {
         }
 
         lifecycleScope.launch {
-            getViewModel().videoFlow.collectLatest {
-                mAdapter.submitData(it)
-            }
+//            getViewModel().videoFlow.collectLatest {
+//                mAdapter.submitData(it)
+//            }
         }
     }
 }
