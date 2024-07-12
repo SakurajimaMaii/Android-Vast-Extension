@@ -23,6 +23,7 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.Telephony
 import android.view.View
+import android.widget.TextView
 import androidx.core.database.getStringOrNull
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -75,6 +76,13 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
             adapter = mAdapter
         }
 
+        mMessageRv.setOnClickListener {
+
+        }
+        mMessageRv.setOnLongClickListener {
+            false
+        }
+
         requestMultiplePermissions(mPermissions) {
             allGranted = {
                 lifecycleScope.launch {
@@ -110,7 +118,8 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
     }
 
     /**
-     * 读取短信，参考 [Choosing the right storage experience](https://android-developers.googleblog.com/2023/08/choosing-right-storage-experience.html)
+     * 读取短信，参考
+     * [Choosing the right storage experience](https://android-developers.googleblog.com/2023/08/choosing-right-storage-experience.html)
      */
     @SuppressLint("Range")
     private suspend fun readSms(): List<Message> = withContext(Dispatchers.IO) {

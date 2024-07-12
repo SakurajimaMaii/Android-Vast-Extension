@@ -24,11 +24,13 @@ import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.util.DisplayMetrics
 import androidx.activity.ComponentActivity
 import androidx.core.database.getStringOrNull
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.adapter.ContactAdapter
+import com.ave.vastgui.app.adapter.entity.Contact
 import com.ave.vastgui.app.databinding.ActivityAlphabetSidebarBinding
 import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.core.extension.NotNUllVar
@@ -39,6 +41,9 @@ import com.ave.vastgui.tools.view.alphabetsidebar.AlphabetSideBar
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
 import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.ave.vastgui.tools.viewbinding.viewBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -113,8 +118,17 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
             }
         })
 
-        readContacts()
-        updateIndex()
+        lifecycleScope.launch {
+            mAdapter.add(readContacts(), R.layout.item_contact) {
+                addOnItemChildClickListener(R.id.name) { _, _, contact ->
+                    SimpleToast.showShortMsg("名字是 ${contact?.name}")
+                }
+                addOnItemChildClickListener(R.id.number) { _, _, contact ->
+                    SimpleToast.showShortMsg("电话号码是 ${contact?.number}")
+                }
+            }
+            updateIndex()
+        }
     }
 
     /** 检查数据库是否包含 **phonebook_label** 字段， 如果没有则用 [Phone.SORT_KEY_PRIMARY] 替代。 */
@@ -134,35 +148,31 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
     }
 
     /** 按照名字首字母读取通讯录。 */
-    private fun readContacts() {
+    private suspend fun readContacts(): List<Contact> = withContext(Dispatchers.IO) {
+        val contacts = mutableListOf<Contact>()
         val bookLabel = checkPhonebookLabel()
         val projection = arrayOf(Phone.DISPLAY_NAME, Phone.NUMBER, bookLabel)
-        val cursor: Cursor? = contentResolver
+        contentResolver
             .query(Phone.CONTENT_URI, projection, null, null, bookLabel)
-        while (cursor?.moveToNext() == true) {
-            val name: String =
-                cursor.getStringOrNull(cursor.getColumnIndex(Phone.DISPLAY_NAME)).toString()
-            val number: String =
-                cursor.getStringOrNull(cursor.getColumnIndex(Phone.NUMBER)).toString()
-            val label: String =
-                cursor.getStringOrNull(cursor.getColumnIndex(bookLabel)).toString()
-            mAdapter.addContact(name, number, label) {
-                addOnItemChildClickListener(R.id.name) { _, _, _ ->
-                    SimpleToast.showShortMsg("名字是 $name")
-                }
-                addOnItemChildClickListener(R.id.number) { _, _, _ ->
-                    SimpleToast.showShortMsg("电话号码是 $number")
+            ?.use { cursor ->
+                while (cursor.moveToNext()) {
+                    val name: String =
+                        cursor.getStringOrNull(cursor.getColumnIndex(Phone.DISPLAY_NAME)).toString()
+                    val number: String =
+                        cursor.getStringOrNull(cursor.getColumnIndex(Phone.NUMBER)).toString()
+                    val label: String =
+                        cursor.getStringOrNull(cursor.getColumnIndex(bookLabel)).toString()
+                    contacts.add(Contact(name, number, label))
                 }
             }
-        }
-        cursor?.close()
+        return@withContext contacts
     }
 
     /** 根据获取到的通讯录列表更新索引值。 */
     private fun updateIndex() {
         enumValues<Alphabet>().forEach { alphabet ->
-            val index = mAdapter.getDataSource().indexOfFirst {
-                it.data?.label == alphabet.letter
+            val index = mAdapter.data.indexOfFirst {
+                it.label == alphabet.letter
             }
             mBinding.alphabetsidebar.setIndicatorLetterTargetIndex(alphabet, index)
         }
