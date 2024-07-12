@@ -41,7 +41,7 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 /**
  * [BaseBindListAdapter] 。
  *
- * @since 1.1.1
+ * @since 1.2.0
  */
 open class BaseBindListAdapter<T : Any>(
     protected var mContext: Context,

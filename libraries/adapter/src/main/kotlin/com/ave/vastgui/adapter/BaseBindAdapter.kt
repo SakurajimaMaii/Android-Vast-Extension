@@ -40,7 +40,7 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 /**
  * [BaseBindAdapter] 。
  *
- * @since 1.1.1
+ * @since 1.2.0
  */
 open class BaseBindAdapter<T : Any> @JvmOverloads constructor(
     protected var mContext: Context,
