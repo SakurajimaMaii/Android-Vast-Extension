@@ -37,7 +37,7 @@ import java.math.MathContext
  * @since 0.1.0
  */
 @JvmOverloads
-fun String.safeToInt(defaultValue: Int, radix: Int = 10) = toIntOrNull() ?: defaultValue
+fun String.safeToInt(defaultValue: Int, radix: Int = 10) = toIntOrNull(radix) ?: defaultValue
 
 /**
  * Parses the string as an [Long] number and returns the result.
@@ -48,7 +48,7 @@ fun String.safeToInt(defaultValue: Int, radix: Int = 10) = toIntOrNull() ?: defa
  * @since 0.1.0
  */
 @JvmOverloads
-fun String.safeToLong(defaultValue: Long, radix: Int = 10) = toLongOrNull() ?: defaultValue
+fun String.safeToLong(defaultValue: Long, radix: Int = 10) = toLongOrNull(radix) ?: defaultValue
 
 /**
  * Parses the string as an [Float] number and returns the result.
