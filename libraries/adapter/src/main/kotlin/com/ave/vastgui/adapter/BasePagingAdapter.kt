@@ -42,7 +42,11 @@ import kotlinx.coroutines.flow.Flow
 // Date: 2022/11/17
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
-/** [BasePagingAdapter] 。 */
+/**
+ * [BasePagingAdapter] 。
+ *
+ * @since 1.2.0
+ */
 open class BasePagingAdapter<T : Any>(
     protected var mContext: Context,
     factories: MutableList<ItemHolder.HolderFactory<T>>,
@@ -139,13 +143,14 @@ open class BasePagingAdapter<T : Any>(
      * [collectLatest][kotlinx.coroutines.flow.collectLatest].
      *
      * @see [Pager]
+     * @since 1.2.0
      */
-    open suspend fun submitData(
+    suspend fun submitData(
         pagingData: PagingData<T>,
         @LayoutRes id: Int,
         scope: ItemWrapper<T>.() -> Unit = {}
     ) {
-        differ.submitData(pagingData.map { ItemWrapper<T>(it, id).also(scope) })
+        submitData(pagingData.map { ItemWrapper(it, id).also(scope) })
     }
 
     /**
@@ -158,13 +163,14 @@ open class BasePagingAdapter<T : Any>(
      *
      * @see submitData
      * @see [Pager]
+     * @since 1.2.0
      */
     fun submitData(
         lifecycle: Lifecycle, pagingData: PagingData<T>,
         @LayoutRes id: Int,
         scope: ItemWrapper<T>.() -> Unit = {}
     ) {
-        differ.submitData(lifecycle, pagingData.map { ItemWrapper<T>(it, id).also(scope) })
+        submitData(lifecycle, pagingData.map { ItemWrapper(it, id).also(scope) })
     }
 
     init {
