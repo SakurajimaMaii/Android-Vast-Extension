@@ -1,9 +1,10 @@
-package com.ave.vastgui.tools.theme
+package com.ave.vastgui.app.theme
 
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import com.ave.vastgui.tools.R
-import com.ave.vastgui.tools.utils.findByContext
+import com.ave.vastgui.tools.content.ContextHelper
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -13,7 +14,7 @@ import com.ave.vastgui.tools.utils.findByContext
 // Reference: Material3 Compose Color System | version 1.2.0-alpha10
 
 private fun color(@ColorRes id: Int): Int =
-    findByContext { getColor(id) }
+    ContextCompat.getColor(ContextHelper.getAppContext(), id)
 
 val lightColorScheme = ColorScheme(
     color(R.color.md_theme_primary),
