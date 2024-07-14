@@ -24,8 +24,9 @@ import android.text.style.LeadingMarginSpan
 import android.text.style.QuoteSpan
 import android.text.style.TypefaceSpan
 import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import com.ave.vastgui.tools.R
-import com.ave.vastgui.tools.utils.findByContext
+import com.ave.vastgui.tools.content.ContextHelper
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -38,14 +39,14 @@ import com.ave.vastgui.tools.utils.findByContext
  * @property foreColor Color that defines the text color.
  * @property backColor Color that defines the background color.
  * @property fontStyle An enum constant describing the style for this text.
- *     Refer to [StyleMode].
+ * Refer to [StyleMode].
  * @property fontFamily Refer to [TypefaceSpan].
  * @property fontSize Set the text size to [fontSize] in pixels.
  * @property fontAlign Refer to [Alignment.ALIGN_NORMAL],
- *     [Alignment.ALIGN_OPPOSITE], [Alignment.ALIGN_CENTER].
+ * [Alignment.ALIGN_OPPOSITE], [Alignment.ALIGN_CENTER].
  * @property proportion The proportion with which the text is scaled.
  * @property xProportion Values > 1.0 will stretch the text wider. Values <
- *     1.0 will stretch the text narrower.
+ * 1.0 will stretch the text narrower.
  * @property strikeMode Add a strikethrough or underline for the text.
  * @property scriptMode Defines the text as superscript or subscript.
  * @property linesIndent Defines the text indentation.
@@ -54,13 +55,14 @@ import com.ave.vastgui.tools.utils.findByContext
  * @property clickSpan Defines the text click event.
  * @property url Defines the text as url.
  * @property blurRadius The radius to extend the blur from the original
- *     mask. Must be > 0.
+ * mask. Must be > 0.
  * @property blur The Blur to use.
  * @since 0.5.1
  */
 class AppendableStyle(
     @ColorInt val foreColor: Int? = null,
-    @ColorInt val backColor: Int = findByContext { getColor(R.color.transparent) },
+    @ColorInt val backColor: Int = ContextCompat
+        .getColor(ContextHelper.getAppContext(), R.color.transparent),
     val fontStyle: StyleMode = StyleMode.NORMAL,
     val fontFamily: TypefaceSpan? = null,
     val fontSize: Int? = null,
@@ -81,7 +83,8 @@ class AppendableStyle(
     constructor(
         linesIndent: LeadingMarginSpan.Standard,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
+        @ColorInt backColor: Int = ContextCompat
+            .getColor(ContextHelper.getAppContext(), R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
@@ -104,7 +107,8 @@ class AppendableStyle(
     constructor(
         quoteSpan: QuoteSpan,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
+        @ColorInt backColor: Int = ContextCompat
+            .getColor(ContextHelper.getAppContext(), R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
@@ -127,7 +131,8 @@ class AppendableStyle(
     constructor(
         bulletSpan: BulletSpan,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
+        @ColorInt backColor: Int = ContextCompat
+            .getColor(ContextHelper.getAppContext(), R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
@@ -150,7 +155,8 @@ class AppendableStyle(
     constructor(
         strikeMode: StrikeMode = StrikeMode.NONE,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
+        @ColorInt backColor: Int = ContextCompat
+            .getColor(ContextHelper.getAppContext(), R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
@@ -173,7 +179,8 @@ class AppendableStyle(
     constructor(
         scriptMode: ScriptMode = ScriptMode.NONE,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
+        @ColorInt backColor: Int = ContextCompat
+            .getColor(ContextHelper.getAppContext(), R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
@@ -196,7 +203,8 @@ class AppendableStyle(
     constructor(
         clickSpan: ClickableSpan,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
+        @ColorInt backColor: Int = ContextCompat
+            .getColor(ContextHelper.getAppContext(), R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
@@ -219,7 +227,8 @@ class AppendableStyle(
     constructor(
         url: String,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
+        @ColorInt backColor: Int = ContextCompat
+            .getColor(ContextHelper.getAppContext(), R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
@@ -243,7 +252,8 @@ class AppendableStyle(
         blurRadius: Float,
         blur: BlurMaskFilter.Blur,
         @ColorInt foreColor: Int? = null,
-        @ColorInt backColor: Int = findByContext { getColor(R.color.transparent) },
+        @ColorInt backColor: Int = ContextCompat
+            .getColor(ContextHelper.getAppContext(), R.color.transparent),
         fontStyle: StyleMode = StyleMode.NORMAL,
         fontFamily: TypefaceSpan? = null,
         fontSize: Int? = null,
