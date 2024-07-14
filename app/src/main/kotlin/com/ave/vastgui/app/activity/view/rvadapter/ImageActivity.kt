@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ import kotlinx.coroutines.launch
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/1/4
-// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
+// Documentation: https://ave.entropy2020.cn/documents/adapter/
 
 private class ImageAdapter(context: Context) : BaseAdapter<Images.Image>(
     context,
@@ -82,10 +82,10 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
         ImageBindAdapter(this)
     }
 
-    private val sampleClick1 = OnItemClickListener<Images.Image> { view, _, _ ->
+    private val showDialog = OnItemClickListener<Images.Image> { view, _, _ ->
         MaterialAlertDialogBuilder(view.context).setMessage("这是一个点击事件").show()
     }
-    private val sampleClick2 = OnItemClickListener<Images.Image> { _, _, _ ->
+    private val showSnackBar = OnItemClickListener<Images.Image> { _, _, _ ->
         getSnackbar().setText("列表项被点击").show()
     }
 
