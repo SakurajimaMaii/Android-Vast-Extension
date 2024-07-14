@@ -19,8 +19,20 @@
 package com.ave.vastgui.tools.utils
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.content.res.Resources
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.VectorDrawable
+import androidx.annotation.ArrayRes
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.ave.vastgui.tools.content.ContextHelper
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -38,7 +50,7 @@ import com.ave.vastgui.tools.content.ContextHelper
  * ```
  *
  * @param callback The default value if [findByContext] can't get the
- *     resource by method.
+ * resource by method.
  * @param method Method of providing resources
  * @param T Resource Type.
  * @since 0.5.2
@@ -64,7 +76,7 @@ inline fun <T : Any> findByContext(callback: T? = null, method: Context.() -> T?
  * ```
  *
  * @param callback The default value if [findByResources] can't get the
- *     resource by method.
+ * resource by method.
  * @param method Method of providing resources
  * @param T Resource Type.
  * @since 0.5.2
@@ -82,3 +94,34 @@ inline fun <T : Any> findByResources(
 } catch (exception: Exception) {
     callback ?: throw exception
 }
+
+/** @since 1.2.0 */
+fun Context.drawable(@DrawableRes resId: Int): Drawable? = runCatching {
+    AppCompatResources.getDrawable(this, resId)
+}.getOrNull()
+
+/** @since 1.2.0 */
+fun Context.vectorDrawable(@DrawableRes resId: Int): VectorDrawable? = runCatching {
+    val drawable: Drawable? = AppCompatResources.getDrawable(this, resId)
+    return drawable as? VectorDrawable
+}.getOrNull()
+
+/** @since 1.2.0 */
+fun Context.color(@ColorRes resId: Int): Int? = runCatching {
+    ContextCompat.getColor(this, resId)
+}.getOrNull()
+
+/** @since 1.2.0 */
+fun Context.colorStateList(@ColorRes resId: Int): ColorStateList? = runCatching {
+    AppCompatResources.getColorStateList(this, resId)
+}.getOrNull()
+
+/** @since 1.2.0 */
+fun Context.string(@StringRes resId: Int): String? = runCatching {
+    ContextCompat.getString(this, resId)
+}.getOrNull()
+
+/** @since 1.2.0 */
+fun Context.stringArray(@ArrayRes resId: Int): Array<String> = runCatching {
+    resources.getStringArray(resId)
+}.getOrDefault(emptyArray())
