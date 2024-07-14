@@ -19,7 +19,10 @@ package com.ave.vastgui.app.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ave.vastgui.app.adapter.ImageAdapter
+import com.ave.vastgui.adapter.BR
+import com.ave.vastgui.adapter.BaseBindAdapter
+import com.ave.vastgui.app.R
+import com.ave.vastgui.app.adapter.entity.Images
 import com.ave.vastgui.app.databinding.FragmentImagesBinding
 import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.app.net.OpenApi
@@ -34,7 +37,7 @@ import com.ave.vastgui.tools.network.request.create
 
 class ImagesFragment : VastVbFragment<FragmentImagesBinding>() {
 
-    private val mAdapter by lazy { ImageAdapter(requireContext()) }
+    private val mAdapter by lazy { BaseBindAdapter<Images.Image>(requireContext(), BR.image) }
     private val mLogger = mLogFactory.getLogCat(VideosFragment::class.java)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,7 +46,7 @@ class ImagesFragment : VastVbFragment<FragmentImagesBinding>() {
             layoutManager = LinearLayoutManager(requireContext())
             if (childCount > 0) {
                 removeAllViews()
-                mAdapter.clearAll()
+                mAdapter.clear()
             }
         }
 
@@ -54,7 +57,7 @@ class ImagesFragment : VastVbFragment<FragmentImagesBinding>() {
                 getBinding().refresh.isRefreshing = false
                 onSuccess = {
                     it.result?.list?.forEach { image ->
-                        mAdapter.addImage(image)
+                        mAdapter.add(image, R.layout.item_image_default)
                     }
                 }
                 onError = {

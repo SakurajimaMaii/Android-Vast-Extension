@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,11 @@ import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ave.vastgui.adapter.BR
 import com.ave.vastgui.adapter.BaseAdapter
-import com.ave.vastgui.adapter.VastListAdapter
-import com.ave.vastgui.adapter.VastPagingAdapter
-import com.ave.vastgui.adapter.base.ItemWrapper
+import com.ave.vastgui.adapter.BaseBindAdapter
+import com.ave.vastgui.adapter.BaseListAdapter
+import com.ave.vastgui.adapter.BasePagingAdapter
 import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.adapter.entity.ImageDiffUtil
@@ -38,26 +39,28 @@ import com.ave.vastgui.app.viewmodel.NetVM
 import com.ave.vastgui.tools.activity.VastVbVmActivity
 import com.ave.vastgui.tools.network.request.create
 import com.ave.vastgui.tools.view.dialog.MaterialAlertDialogBuilder
-import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.ave.vastgui.tools.view.toast.SimpleToast.showShortMsg
 import kotlinx.coroutines.launch
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/1/4
-// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
+// Documentation: https://ave.entropy2020.cn/documents/adapter/
 
 private class ImageAdapter(context: Context) : BaseAdapter<Images.Image>(
     context,
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion)
 )
 
-private class ImageListAdapter(context: Context) : VastListAdapter<Images.Image>(
+private class ImageBindAdapter(context: Context) :
+    BaseBindAdapter<Images.Image>(context, BR.image)
+
+private class ImageListAdapter(context: Context) : BaseListAdapter<Images.Image>(
     context,
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion), ImageDiffUtil
 )
 
-private class ImagePagingAdapter(context: Context) : VastPagingAdapter<Images.Image>(
+private class ImagePagingAdapter(context: Context) : BasePagingAdapter<Images.Image>(
     context,
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion), ImageDiffUtil
 )
@@ -75,17 +78,20 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
     private val mImagePagingAdapter: ImagePagingAdapter by lazy {
         ImagePagingAdapter(this)
     }
+    private val mImageBindAdapter: ImageBindAdapter by lazy {
+        ImageBindAdapter(this)
+    }
 
-    private val sampleClick1 = OnItemClickListener<Images.Image> { view, _, _ ->
+    private val showDialog = OnItemClickListener<Images.Image> { view, _, _ ->
         MaterialAlertDialogBuilder(view.context).setMessage("这是一个点击事件").show()
     }
-    private val sampleClick2 = OnItemClickListener<Images.Image> { _, _, _ ->
+    private val showSnackBar = OnItemClickListener<Images.Image> { _, _, _ ->
         getSnackbar().setText("列表项被点击").show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mImageAdapter.apply {
+        mImageBindAdapter.apply {
             setOnItemClickListener { _, pos, _ ->
                 showShortMsg("Click event and pos is $pos.")
             }
@@ -95,33 +101,19 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
             }
         }
 
-        getBinding().images.layoutManager = LinearLayoutManager(this)
-        getBinding().images.adapter = mImageAdapter
-        lifecycleScope.launch {
-            val images = OpenApi()
-                .create(OpenApiService::class.java).getImages(0, 10)
-                .result?.list
-            if (null == images) return@launch
-            // 将列表项填充到列表中
-            images.forEach {
-                mImageAdapter.add(it, R.layout.item_image_default)
-            }
-            // 更新列表项
-            for (index in 0 until mImageAdapter.itemCount step 2) {
-                val item = ItemWrapper(mImageAdapter.data[0], R.layout.item_image_comic).apply {
-                    setOnItemClickListener { _, _, _ ->
-                        SimpleToast.showShortMsg("HAAAAAAAAA")
-                    }
-                }
-                mImageAdapter.update(index, item)
-            }
-        }
+        testBasePagingAdapter()
+    }
 
+    private fun testBaseBindAdapter() {
+        getBinding().images.layoutManager = LinearLayoutManager(this)
+        getBinding().images.adapter = mImageBindAdapter.apply {
+            setEmptyView(R.layout.page_empty_default)
+        }
         getBinding().clear.setOnClickListener {
-            mImageAdapter.clear()
+            mImageBindAdapter.clear()
         }
         getBinding().removeFirst.setOnClickListener {
-            mImageAdapter.removeAt(0)
+            mImageBindAdapter.removeAt(0)
         }
         getBinding().load.setOnClickListener {
             lifecycleScope.launch {
@@ -129,56 +121,72 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
                     .create(OpenApiService::class.java).getImages(0, 10)
                     .result?.list
                 if (null == images) return@launch
-                mImageAdapter.add(images, R.layout.item_image_default)
+                mImageBindAdapter.add(images, R.layout.item_image_default)
             }
         }
+        getBinding().insert.setOnClickListener {
+            val image = Images.Image(
+                8008,
+                "王者荣耀司马懿 暗渊魔法",
+                "game",
+                "https://pic.netbian.com/uploads/allimg/211213/212526-16394019264e91.jpg"
+            )
+            mImageBindAdapter.add(image, R.layout.item_image_default, 3)
+        }
+        getBinding().addEmpty1.setOnClickListener {
+            mImageBindAdapter.setEmptyView(R.layout.page_empty_default)
+        }
+        getBinding().addEmpty2.setOnClickListener {
+            mImageBindAdapter.setEmptyView(R.layout.page_empty_box)
+        }
+        getBinding().removeEmpty.setOnClickListener {
+            mImageBindAdapter.setEmptyView(null)
+        }
+    }
 
-        val image = Images.Image(0, "", "", "")
-        val item = ItemWrapper(image, R.layout.item_image_default).apply {
-            setOnItemClickListener { _, _, _ ->
-
-            }
-            setOnItemLongClickListener { _, _, _ ->
-                false
-            }
-            addOnItemChildClickListener(R.id.iidImage) { _, _, _ ->
-
+    private fun testBaseListAdapter() {
+        getBinding().images.layoutManager = LinearLayoutManager(this)
+        getBinding().images.adapter = mImageListAdapter.apply {
+            setLoadingView(R.layout.page_loading)
+        }
+        getBinding().load.setOnClickListener {
+            lifecycleScope.launch {
+                mImageListAdapter.submitListWithLoading()
+                val list = OpenApi().create(OpenApiService::class.java)
+                    .getImages(0, 20)
+                    .result?.list ?: return@launch
+                mImageListAdapter.submitList(list, R.layout.item_image_default)
             }
         }
-        mImageAdapter.add(item)
+        getBinding().clear.setOnClickListener {
+            mImageListAdapter.submitList(emptyList<Images.Image>())
+        }
+        getBinding().addEmpty1.setOnClickListener {
+            mImageListAdapter.setEmptyView(R.layout.page_empty_default) {
+                setOnItemClickListener { _, _, _ ->
+                    showShortMsg("这是第一个空白界面")
+                }
+                addOnItemChildClickListener(R.id.empty_default_image_root) { _, _, _ ->
 
-//        getBinding().personRv.adapter = mImageListAdapter
-//        lifecycleScope.launch {
-//            OpenApi().create(OpenApiService::class.java)
-//                .getImages(0, 20)
-//                .result?.list?.mapIndexed { index, image ->
-//                    if (0 == index % 2) {
-//                        ItemWrapper(image, image.getLayoutId(), sampleClick1)
-//                    } else {
-//                        ItemWrapper(image, image.getLayoutId(), sampleClick2)
-//                    }
-//                }
-//                .apply {
-//                    mImageListAdapter.submitList(this)
-//                }
-//        }
+                }
+            }
+        }
+        getBinding().addEmpty2.setOnClickListener {
+            mImageListAdapter.setEmptyView(R.layout.page_empty_box) {
+                setOnItemClickListener { _, _, _ ->
+                    showShortMsg("这是第二个空白界面")
+                }
+            }
+        }
+    }
 
-//        getBinding().personRv.adapter = mImagePagingAdapter
-//        lifecycleScope.launch {
-//            getViewModel().imageFlow.collect {
-//                mImagePagingAdapter.submitData(it)
-//            }
-//        }
-
-//        lifecycleScope.launch {
-//            WanAndroidApi().getApi(WanAndroidApiService::class.java) {
-//                login(UserBean("xxx", "xxx"))
-//            }.collect {
-//                when (it) {
-//                    is Request2.Success -> logcat.d(it)
-//                    else -> nothing_to_do()
-//                }
-//            }
-//        }
+    private fun testBasePagingAdapter() {
+        getBinding().images.layoutManager = LinearLayoutManager(this)
+        getBinding().images.adapter = mImagePagingAdapter
+        lifecycleScope.launch {
+            getViewModel().imageFlow.collect {
+                mImagePagingAdapter.submitData(it)
+            }
+        }
     }
 }

@@ -39,15 +39,12 @@ open class Message(
     val body: String
 )
 
-class SubMessage(name: String, address: String, date: Long, type: Int, body: String) :
-    Message(name, address, date, type, body)
-
 object MessageDiffUtil : ItemDiffUtil<Message>() {
-    override fun newAreContentsTheSame(oldItem: Message, newItem: Message): Boolean {
-        return oldItem.body == newItem.body
+    override fun newAreContentsTheSame(oldItem: Message?, newItem: Message?): Boolean {
+        return oldItem?.body == newItem?.body
     }
 
-    override fun newAreItemsTheSame(oldItem: Message, newItem: Message): Boolean {
-        return oldItem.address == newItem.address && oldItem.date == newItem.date
+    override fun newAreItemsTheSame(oldItem: Message?, newItem: Message?): Boolean {
+        return oldItem?.address == newItem?.address && oldItem?.date == newItem?.date
     }
 }

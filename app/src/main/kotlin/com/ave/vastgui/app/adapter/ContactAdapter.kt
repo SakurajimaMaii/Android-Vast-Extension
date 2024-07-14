@@ -17,7 +17,7 @@
 package com.ave.vastgui.app.adapter
 
 import android.content.Context
-import com.ave.vastgui.adapter.VastBindAdapter
+import com.ave.vastgui.adapter.BaseBindAdapter
 import com.ave.vastgui.adapter.base.ItemWrapper
 import com.ave.vastgui.app.BR
 import com.ave.vastgui.app.R
@@ -28,9 +28,7 @@ import com.ave.vastgui.app.adapter.entity.Contact
 // Date: 2023/9/25
 
 class ContactAdapter(context: Context) :
-    VastBindAdapter<Contact>(context, BR.contact) {
-
-    fun getDataSource(): MutableList<ItemWrapper<Contact>> = mDataSource
+    BaseBindAdapter<Contact>(context, BR.contact) {
 
     /**
      * 向列表中添加通讯录对象。
@@ -39,9 +37,7 @@ class ContactAdapter(context: Context) :
      * @param number 通讯录电话。
      */
     fun addContact(name: String, number: String) {
-        val index = itemCount
-        mDataSource.add(index, ItemWrapper(Contact(name, number), layoutId = R.layout.item_contact))
-        notifyItemChanged(index)
+        add(Contact(name, number), R.layout.item_contact)
     }
 
     /**
@@ -51,23 +47,13 @@ class ContactAdapter(context: Context) :
      * @param number 通讯录电话。
      * @param scope 用于定义点击事件。
      */
-    inline fun addContact(
+    fun addContact(
         name: String,
         number: String,
         label: String,
         scope: ItemWrapper<Contact>.() -> Unit
     ) {
-        val index = itemCount
-        val wrapper =
-            ItemWrapper(Contact(name, number, label), layoutId = R.layout.item_contact).also(scope)
-        getDataSource().add(index, wrapper)
-        notifyItemChanged(index)
-    }
-
-    fun clearAll() {
-        val count = itemCount
-        mDataSource.clear()
-        notifyItemRangeChanged(0, count)
+        add(Contact(name, number, label), R.layout.item_contact) { scope() }
     }
 
 }

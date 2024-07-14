@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,19 +22,20 @@ import com.ave.vastgui.adapter.base.ItemWrapper
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/12/27
-// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
+// Documentation: https://ave.entropy2020.cn/documents/adapter/
 
 /**
- * 用于监听列表项内部的控件的点击事件。
+ * Interface definition for a callback to be invoked when a view is clicked in list item.
  *
  * @since 1.1.1
  */
-fun interface OnItemChildClickListener<T> {
+fun interface OnItemChildClickListener<T : Any> {
     /**
-     * 当列表项内部的控件被点击时会触发该回调。
+     * Called when the [view] has been clicked.
      *
-     * @param view 当前被点击的控件。
-     * @since 1.1.1
+     * @param item The currently clicked list item data. If it is empty, it means
+     * the current list is empty.
+     * @since 1.2.0
      */
-    fun onItemClick(view: View, pos: Int, data: ItemWrapper<T>)
+    fun onItemClick(view: View, pos: Int, item: T?)
 }

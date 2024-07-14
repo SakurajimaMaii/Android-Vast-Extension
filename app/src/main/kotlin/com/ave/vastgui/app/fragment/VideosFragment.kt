@@ -20,14 +20,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ave.vastgui.adapter.VastBindPagingAdapter
+import com.ave.vastgui.adapter.BaseBindPagingAdapter
 import com.ave.vastgui.app.BR
 import com.ave.vastgui.app.adapter.entity.VideoDiffUtil
 import com.ave.vastgui.app.databinding.FragmentVideosBinding
 import com.ave.vastgui.app.viewmodel.SharedVM
 import com.ave.vastgui.tools.fragment.VastVbVmFragment
 import com.ave.vastgui.tools.view.toast.SimpleToast
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 // Author: SakurajimaMai
@@ -38,15 +37,14 @@ import kotlinx.coroutines.launch
 class VideosFragment : VastVbVmFragment<FragmentVideosBinding, SharedVM>() {
 
     private val mAdapter by lazy {
-        VastBindPagingAdapter(requireContext(), BR.video, VideoDiffUtil)
+        BaseBindPagingAdapter(requireContext(), BR.video, VideoDiffUtil)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         mAdapter.setOnItemClickListener { _, position, item ->
-            val data = item.getData()
-            SimpleToast.showShortMsg("位置是$position，数据是${data.userName}")
+            SimpleToast.showShortMsg("位置是$position，数据是${item?.userName}")
         }
 
         getBinding().imagesRv.apply {
@@ -55,9 +53,9 @@ class VideosFragment : VastVbVmFragment<FragmentVideosBinding, SharedVM>() {
         }
 
         lifecycleScope.launch {
-            getViewModel().videoFlow.collectLatest {
-                mAdapter.submitData(it)
-            }
+//            getViewModel().videoFlow.collectLatest {
+//                mAdapter.submitData(it)
+//            }
         }
     }
 }

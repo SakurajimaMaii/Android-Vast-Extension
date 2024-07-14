@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,12 @@ import androidx.annotation.LayoutRes
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/1/5
-// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
+// Documentation: https://ave.entropy2020.cn/documents/adapter/
 
 /** @since 1.1.1 */
 sealed interface ItemType {
     /**
-     * 返回项目布局资源 ID。
+     * Returns the layout id.
      *
      * @since 1.1.1
      */

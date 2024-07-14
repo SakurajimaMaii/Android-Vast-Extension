@@ -18,15 +18,16 @@ package com.ave.vastgui.adapter
 
 import android.content.Context
 import android.content.res.Resources
-import android.util.SparseArray
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.core.util.forEach
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.ave.vastgui.adapter.base.EmptyHolderFactory
+import com.ave.vastgui.adapter.base.ItemBindHolder
 import com.ave.vastgui.adapter.base.ItemClickListener
-import com.ave.vastgui.adapter.base.ItemHolder
 import com.ave.vastgui.adapter.base.ItemWrapper
 import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.adapter.listener.OnItemLongClickListener
@@ -37,17 +38,29 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 // Documentation: https://ave.entropy2020.cn/documents/adapter/
 
 /**
- * [BaseAdapter] 。
+ * [BaseBindAdapter] 。
  *
  * @since 1.2.0
  */
-open class BaseAdapter<T : Any> @JvmOverloads constructor(
+open class BaseBindAdapter<T : Any> @JvmOverloads constructor(
     protected var mContext: Context,
-    factories: MutableList<ItemHolder.HolderFactory<T>>,
-    protected val mItemList: MutableList<ItemWrapper<T>> = mutableListOf(),
-) : RecyclerView.Adapter<ItemHolder<T>>(), ItemClickListener<T> {
+    /**
+     * Set the id of the variable if the content in the layout file is as
+     * follows:
+     * ```xml
+     * <data>
+     *     <variable
+     *          name="image"
+     *          type="com.ave.vastgui.app.adapter.entity.Images.Image" />
+     * </data>
+     * ```
+     *
+     * Then the value of [mVariableId] is `BR.image`.
+     */
+    private val mVariableId: Int,
+    protected var mItemList: MutableList<ItemWrapper<T>> = mutableListOf()
+) : RecyclerView.Adapter<ItemBindHolder<T>>(), ItemClickListener<T> {
 
-    private val mType2Factory = SparseArray<ItemHolder.HolderFactory<T>>()
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
     private var mEmptyItem: ItemWrapper<T>? = null
@@ -62,9 +75,9 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
 
     final override fun getItemCount() = mItemList.size
 
-    final override fun onBindViewHolder(holder: ItemHolder<T>, position: Int) {
+    final override fun onBindViewHolder(holder: ItemBindHolder<T>, position: Int) {
         val itemData = mItemList[position]
-        itemData.data?.apply { holder.onBindData(this) }
+        itemData.data?.apply { holder.onBindData(mVariableId, this) }
         holder.itemView.setOnClickListener {
             if (null != itemData.getOnItemClickListener()) {
                 itemData.getOnItemClickListener()
@@ -98,13 +111,14 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
         }
     }
 
-    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder<T> {
-        mType2Factory.forEach { key, factory ->
-            if (key == viewType) {
-                return factory.onCreateHolder(parent, viewType)
-            }
-        }
-        throw RuntimeException("Not found the factory according to the $viewType.")
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemBindHolder<T> {
+        val binding = DataBindingUtil.inflate<ViewDataBinding>(
+            LayoutInflater.from(parent.context),
+            viewType,
+            parent,
+            false
+        )
+        return setViewHolder(binding)
     }
 
     final override fun getItemViewType(position: Int): Int {
@@ -208,7 +222,7 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
      *
      * @since 1.2.0
      */
-    fun add(items: List<ItemWrapper<T>>, position: Int = itemCount) {
+    fun add(items: List<ItemWrapper<T>>, position: Int = itemCount, ) {
         var index = position
         if (isEmpty() && null != mEmptyItem) {
             if (0 != position - 1) {
@@ -297,7 +311,6 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
     fun setEmptyView(@LayoutRes id: Int?, scope: ItemWrapper<T>.() -> Unit = {}) {
         if (null == id) {
             if (isEmpty() && null != mEmptyItem) {
-                mType2Factory.remove(mEmptyItem!!.layoutId)
                 mItemList.removeAt(0)
                 notifyItemRemoved(0)
             }
@@ -309,7 +322,6 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
             mItemList.remove(mEmptyItem!!)
             notifyItemRemoved(0)
         }
-        mType2Factory.put(id, EmptyHolderFactory(id))
         mEmptyItem = ItemWrapper<T>(null, id).also(scope)
         if (isEmpty()) {
             mItemList.add(mEmptyItem!!)
@@ -328,10 +340,13 @@ open class BaseAdapter<T : Any> @JvmOverloads constructor(
     private fun isEmpty() =
         mItemList.isEmpty() || (1 == mItemList.size && mEmptyItem === mItemList.first())
 
-    init {
-        factories.forEach { factory ->
-            mType2Factory.put(factory.layoutId, factory)
-        }
+    /**
+     * Returns [ItemBindHolder] by default. If you want to customize
+     * [ItemBindHolder] you need to inherit [ItemBindHolder] and override the
+     * [setViewHolder] method to use your customized [ItemBindHolder] as the
+     * return value.
+     */
+    protected open fun setViewHolder(binding: ViewDataBinding): ItemBindHolder<T> {
+        return ItemBindHolder(binding)
     }
-
 }

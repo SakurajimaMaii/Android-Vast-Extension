@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,16 @@ package com.ave.vastgui.app.activity.view.rvadapter
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.Telephony
 import android.view.View
+import android.widget.TextView
 import androidx.core.database.getStringOrNull
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ave.vastgui.adapter.VastBindListAdapter
-import com.ave.vastgui.adapter.base.ItemWrapper
+import com.ave.vastgui.adapter.BaseBindListAdapter
 import com.ave.vastgui.adapter.listener.OnItemClickListener
 import com.ave.vastgui.app.BR
 import com.ave.vastgui.app.R
@@ -37,18 +37,21 @@ import com.ave.vastgui.app.databinding.ActivityMessageBinding
 import com.ave.vastgui.app.fragment.MessageBottomSheet
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/1/4
-// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
+// Documentation: https://ave.entropy2020.cn/documents/adapter/
 
 class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
     OnItemClickListener<Message> {
 
     private val mMessageRv by lazy { getBinding().messageRv }
     private val mAdapter by lazy {
-        VastBindListAdapter(this, BR.message, MessageDiffUtil)
+        BaseBindListAdapter(this, BR.message, MessageDiffUtil)
     }
     private val mSmsColumns =
         arrayOf(
@@ -63,6 +66,7 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
         Manifest.permission.READ_CONTACTS,
         Manifest.permission.WRITE_CONTACTS
     )
+    private val mMessages: MutableList<Message> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,9 +76,19 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
             adapter = mAdapter
         }
 
+        mMessageRv.setOnClickListener {
+
+        }
+        mMessageRv.setOnLongClickListener {
+            false
+        }
+
         requestMultiplePermissions(mPermissions) {
             allGranted = {
-                readSms()
+                lifecycleScope.launch {
+                    mAdapter.submitListWithLoading()
+                    mAdapter.submitList(readSms(), R.layout.item_message)
+                }
             }
             denied = {
                 getSnackbar().setText("权限${it}已被拒绝").show()
@@ -85,33 +99,52 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
         }
 
         mAdapter.setOnItemClickListener(this)
-    }
-
-    @SuppressLint("Range")
-    private fun readSms() {
-        val cursor: Cursor = contentResolver
-            .query(Telephony.Sms.CONTENT_URI, mSmsColumns, null, null, null) ?: return
-        val messages: MutableList<ItemWrapper<Message>> = ArrayList()
-        with(cursor) {
-            while (moveToNext()) {
-                val address = getString(getColumnIndex(Telephony.Sms.ADDRESS))
-                val person = getString(getColumnIndex(Telephony.Sms.PERSON))
-                val date = getLong(getColumnIndex(Telephony.Sms.DATE))
-                val type = getInt(getColumnIndex(Telephony.Sms.TYPE))
-                val body = getString(getColumnIndex(Telephony.Sms.BODY))
-                var name = getNameFromAddress(address)
-                if (null == name) {
-                    name = getNameFromPerson(person)
-                }
-                if (null == name) {
-                    name = address
-                }
-                val message = Message("$name", address, date, type, body)
-                messages.add(ItemWrapper(message, layoutId = R.layout.item_message))
+        mAdapter.setLoadingView(R.layout.page_loading)
+        getBinding().load.setOnClickListener {
+            lifecycleScope.launch {
+                mAdapter.submitListWithLoading()
+                mAdapter.submitList(readSms(), R.layout.item_message)
             }
         }
-        cursor.close()
-        mAdapter.submitList(messages)
+        getBinding().clear.setOnClickListener {
+            mAdapter.submitList(emptyList<Message>())
+        }
+        getBinding().setEmpty.setOnClickListener {
+            mAdapter.setEmptyView(R.layout.page_empty_box)
+        }
+        getBinding().removeEmpty.setOnClickListener {
+            mAdapter.setEmptyView(null)
+        }
+    }
+
+    /**
+     * 读取短信，参考
+     * [Choosing the right storage experience](https://android-developers.googleblog.com/2023/08/choosing-right-storage-experience.html)
+     */
+    @SuppressLint("Range")
+    private suspend fun readSms(): List<Message> = withContext(Dispatchers.IO) {
+        val messages = mutableListOf<Message>()
+        contentResolver
+            .query(Telephony.Sms.CONTENT_URI, mSmsColumns, null, null, null)
+            ?.use { cursor ->
+                while (cursor.moveToNext()) {
+                    val address = cursor.getString(cursor.getColumnIndex(Telephony.Sms.ADDRESS))
+                    val person = cursor.getString(cursor.getColumnIndex(Telephony.Sms.PERSON))
+                    val date = cursor.getLong(cursor.getColumnIndex(Telephony.Sms.DATE))
+                    val type = cursor.getInt(cursor.getColumnIndex(Telephony.Sms.TYPE))
+                    val body = cursor.getString(cursor.getColumnIndex(Telephony.Sms.BODY))
+                    var name = getNameFromAddress(address)
+                    if (null == name) {
+                        name = getNameFromPerson(person)
+                    }
+                    if (null == name) {
+                        name = address
+                    }
+                    val message = Message("$name", address, date, type, body)
+                    messages.add(message)
+                }
+            }
+        return@withContext messages
     }
 
     // 通过查询电话查找表从地址中获取姓名
@@ -151,10 +184,11 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
         return name
     }
 
-    override fun onItemClick(view: View, pos: Int, data: ItemWrapper<Message>) {
+    override fun onItemClick(view: View, pos: Int, item: Message?) {
+        if (null == item) return
         val mMessageBottomSheet = MessageBottomSheet()
         mMessageBottomSheet.show(supportFragmentManager, MessageBottomSheet.TAG)
-        mMessageBottomSheet.setMessage(data.getData())
+        mMessageBottomSheet.setMessage(item)
     }
 
 }

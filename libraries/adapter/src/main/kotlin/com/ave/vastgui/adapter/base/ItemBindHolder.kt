@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,23 +18,24 @@ package com.ave.vastgui.adapter.base
 
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.ave.vastgui.adapter.VastBindAdapter
-import com.ave.vastgui.adapter.VastBindListAdapter
-import com.ave.vastgui.adapter.VastBindPagingAdapter
+import com.ave.vastgui.adapter.BaseBindAdapter
+import com.ave.vastgui.adapter.BaseBindListAdapter
+import com.ave.vastgui.adapter.BaseBindPagingAdapter
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/10/10
-// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
+// Documentation: https://ave.entropy2020.cn/documents/adapter/
 
 /**
- * 适用于 [VastBindAdapter] ， [VastBindListAdapter] 和 [VastBindPagingAdapter]
- * 的 ViewHolder。如果你想自定义 自己的 ViewHolder ，你应该让你的 ViewHolder 继承
- * [ItemBindHolder] 并将其作为 setViewHolder 的返回值。
+ * Applies to [BaseBindAdapter] , [BaseBindListAdapter] and
+ * [BaseBindPagingAdapter] ViewHolder. If you want to customize your own
+ * ViewHolder, you should make your ViewHolder inherit [ItemBindHolder] and
+ * use it as the return value of setViewHolder.
  *
  * @since 1.1.1
  */
-open class ItemBindHolder<T>(protected var binding: ViewDataBinding) :
+open class ItemBindHolder<T : Any>(protected var binding: ViewDataBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     /** @since 1.1.1 */

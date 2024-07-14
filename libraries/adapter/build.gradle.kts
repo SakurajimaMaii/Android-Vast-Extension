@@ -1,8 +1,5 @@
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
-import java.net.URL
-
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +14,15 @@ import java.net.URL
  * limitations under the License.
  */
 
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import java.net.URL
+
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    id(libs.plugins.androidLibrary.get().pluginId)
     id("kotlin-kapt")
-    id("org.jetbrains.dokka")
     id("convention.publication")
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.kotlinAndroid)
 }
 
 android {
@@ -53,6 +53,7 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
+        freeCompilerArgs += listOf("-Xjvm-default=all")
     }
 
     buildFeatures {
@@ -71,9 +72,7 @@ android {
 dependencies {
     implementation(libs.paging.runtime)
     implementation(libs.recyclerview)
-    implementation(libs.annotation)
     implementation(libs.core.ktx)
-    implementation(libs.core.runtime)
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastAdapter"
@@ -88,7 +87,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "VastAdapter"
-                version = "1.1.1"
+                version = "1.2.0"
 
                 afterEvaluate {
                     from(components["release"])
