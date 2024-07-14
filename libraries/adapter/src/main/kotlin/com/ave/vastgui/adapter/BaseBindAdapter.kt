@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import com.ave.vastgui.adapter.listener.OnItemLongClickListener
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2021/4/2
-// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
+// Documentation: https://ave.entropy2020.cn/documents/adapter/
 
 /**
  * [BaseBindAdapter] 。
@@ -301,13 +301,6 @@ open class BaseBindAdapter<T : Any> @JvmOverloads constructor(
             notifyItemInserted(0)
         }
     }
-
-    /**
-     * Query the index of the first element in [mItemList] that matches [data].
-     *
-     * @since 1.2.0
-     */
-    fun indexOfFirst(data: T) = if (isEmpty()) -1 else mItemList.indexOfFirst { it.data === data }
 
     /**
      * Custom empty layout. Specify the layout through [id] and specify the

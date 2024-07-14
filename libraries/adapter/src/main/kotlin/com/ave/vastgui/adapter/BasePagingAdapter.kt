@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2024 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.Flow
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/11/17
-// Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
+// Documentation: https://ave.entropy2020.cn/documents/adapter/
 
 /**
  * [BasePagingAdapter] 。
@@ -106,7 +106,6 @@ open class BasePagingAdapter<T : Any>(
         val item =
             getItem(position) ?: throw NullPointerException("Can't get the item by $position")
         try {
-            // 识别是否存在该资源id的资源文件。
             mContext.resources.getLayout(item.layoutId)
         } catch (e: Resources.NotFoundException) {
             throw IllegalArgumentException("Please check if the return layoutId is correct.")
