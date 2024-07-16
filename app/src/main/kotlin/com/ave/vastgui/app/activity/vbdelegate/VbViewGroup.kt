@@ -10,7 +10,7 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/28
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/vb-delegate/#viewgroup
+// Documentation: https://ave.entropy2020.cn/documents/tools/architecture-components/ui-layer-libraries/view-bind/vb-delegate/#viewgroup
 
 class ViewGroupGetViewBindingByDelegate @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {

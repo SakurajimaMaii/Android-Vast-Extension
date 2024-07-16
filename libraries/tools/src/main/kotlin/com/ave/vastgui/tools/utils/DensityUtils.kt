@@ -24,7 +24,7 @@ import android.util.TypedValue
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/density-utils/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-resources/density-utils/
 
 object DensityUtils {
     /**

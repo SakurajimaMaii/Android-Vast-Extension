@@ -26,7 +26,7 @@ import com.ave.vastgui.tools.content.ContextHelper
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
 // Date: 2022/4/13 17:41
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/hardware/gps-utils/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/hardware/gps-utils/
 
 /**
  * Determine if GPS is turned on.

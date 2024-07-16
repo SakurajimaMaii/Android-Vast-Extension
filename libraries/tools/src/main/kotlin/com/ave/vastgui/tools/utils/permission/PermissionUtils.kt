@@ -27,7 +27,7 @@ import com.ave.vastgui.tools.utils.AppUtils
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/5
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/permission/permission/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/permission/permission/
 
 const val DENIED = "DENIED"
 const val EXPLAINED = "EXPLAINED"

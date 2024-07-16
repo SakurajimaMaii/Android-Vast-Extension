@@ -25,7 +25,7 @@ import kotlin.system.exitProcess
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/6/20
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activity-utils/
+// Documentation: https://ave.entropy2020.cn/documents/tools/app-entry-points/activity-utils/
 
 /** Activity utils. */
 object ActivityUtils {

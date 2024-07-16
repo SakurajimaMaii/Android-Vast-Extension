@@ -36,7 +36,7 @@ import java.util.Locale
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/5/30
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/file-manager/file-mgr/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-data-and-files/file-manager/file-mgr/
 
 /**
  * File path scope

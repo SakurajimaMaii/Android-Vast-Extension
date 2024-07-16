@@ -30,7 +30,7 @@ import java.util.Hashtable
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/24
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/graphics/qrcode/qrcode/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/graphics/qrcode/qrcode/
 
 object QRCode {
 

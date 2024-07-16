@@ -30,7 +30,7 @@ import com.ave.vastgui.tools.graphics.getTextHeight
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/4
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/progress/horizontal-progress-view/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/progress/horizontal-progress-view/
 
 /**
  * HorizontalTextProgressView

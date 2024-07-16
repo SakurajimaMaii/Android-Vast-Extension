@@ -22,7 +22,7 @@ package com.ave.vastgui.tools.text
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: Provides regex checks for some common strings.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/text/str-regex/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/text/str-regex/
 
 /**
  * Check if string is Email address.

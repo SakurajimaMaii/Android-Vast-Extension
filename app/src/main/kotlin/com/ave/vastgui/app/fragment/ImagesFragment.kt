@@ -33,7 +33,7 @@ import com.ave.vastgui.tools.network.request.create
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/1/2 20:33
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/fragment/
+// Documentation: https://ave.entropy2020.cn/documents/tools/app-entry-points/fragments/fragment/
 
 class ImagesFragment : VastVbFragment<FragmentImagesBinding>() {
 

@@ -29,7 +29,7 @@ import java.util.TimeZone
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: Help you get time and other related information.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/date-utils/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/information-get/date-utils/
 
 /** Date utils. */
 object DateUtils {

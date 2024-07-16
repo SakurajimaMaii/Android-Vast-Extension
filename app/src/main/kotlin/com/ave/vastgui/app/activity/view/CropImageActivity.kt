@@ -39,8 +39,8 @@ import java.io.File
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/cropview/crop-view/
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/intent/crop-intent/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/cropview/crop-view/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/intent/crop-intent/
 
 class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
 

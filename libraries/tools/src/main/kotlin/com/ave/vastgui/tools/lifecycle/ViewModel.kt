@@ -29,7 +29,7 @@ import java.lang.reflect.Type
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/4
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/lifecycle-aware-components/vm-reflection/
+// Documentation: https://ave.entropy2020.cn/documents/tools/architecture-components/ui-layer-libraries/lifecycle-aware-components/vm-reflection/
 
 /**
  * Create a [ViewModel] object by [modelClass].

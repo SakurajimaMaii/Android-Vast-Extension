@@ -28,7 +28,7 @@ import com.ave.vastgui.tools.content.ContextHelper
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/23
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/intent/crop-intent/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/intent/crop-intent/
 
 class CropIntent : CropProperty() {
 

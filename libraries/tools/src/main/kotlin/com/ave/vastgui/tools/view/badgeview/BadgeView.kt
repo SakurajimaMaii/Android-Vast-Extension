@@ -50,7 +50,7 @@ import kotlin.math.hypot
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/11
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/badge/description/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/badge/description/
 
 /**
  * Badge View.

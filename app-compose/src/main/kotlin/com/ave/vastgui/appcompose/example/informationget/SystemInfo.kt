@@ -30,7 +30,7 @@ import com.ave.vastgui.tools.utils.SystemUtils
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/5/31
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/system-utils/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/information-get/system-utils/
 
 @Composable
 fun SystemInfo() {

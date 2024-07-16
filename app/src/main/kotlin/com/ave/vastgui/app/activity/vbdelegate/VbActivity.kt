@@ -27,7 +27,7 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/11
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/vb-delegate/#activity
+// Documentation: https://ave.entropy2020.cn/documents/tools/architecture-components/ui-layer-libraries/view-bind/vb-delegate/#activity
 
 class VbActivity1 : FragmentActivity() {
 

@@ -25,7 +25,7 @@ import com.ave.vastgui.tools.lifecycle.createViewModel as viewModelInstance
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/14 17:11
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/fragment/
+// Documentation: https://ave.entropy2020.cn/documents/tools/app-entry-points/fragments/fragment/
 
 abstract class VastFragment : Fragment() {
 

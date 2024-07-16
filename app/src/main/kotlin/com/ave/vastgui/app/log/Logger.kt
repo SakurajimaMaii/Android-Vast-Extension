@@ -38,7 +38,7 @@ import java.io.File
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/5
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
+// Documentation: https://ave.entropy2020.cn/documents/tools/log/description/
 
 val logDir = File(FileMgr.appInternalFilesDir(), "log")
 val logCache = File(FileMgr.appInternalFilesDir(), "log-cache")

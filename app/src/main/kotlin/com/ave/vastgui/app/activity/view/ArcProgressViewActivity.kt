@@ -39,7 +39,7 @@ import java.io.File
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
 // Date: 2022/4/14 18:42
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/progress/arc-progress-view/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/progress/arc-progress-view/
 
 class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>() {
 

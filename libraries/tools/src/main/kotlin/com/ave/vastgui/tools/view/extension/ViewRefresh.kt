@@ -21,7 +21,7 @@ import android.view.View
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/6
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/extension/refresh-view/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/extension/refresh-view/
 
 /**
  * Refresh with [View.invalidate].

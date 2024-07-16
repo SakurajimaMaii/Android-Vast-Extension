@@ -24,7 +24,7 @@ import com.ave.vastgui.tools.network.response.ResponseMutableLiveData
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/2/22
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/response-livedata/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/performing-network-operations/response-livedata/
 
 class NetVM : ViewModel() {
 

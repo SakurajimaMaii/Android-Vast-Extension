@@ -27,7 +27,7 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/progress/wave-progress-view/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/progress/wave-progress-view/
 
 class WaveProgressViewActivity : AppCompatActivity() {
 

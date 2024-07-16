@@ -37,7 +37,7 @@ import kotlin.contracts.contract
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/6/19
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/resource-utils/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-resources/resource-utils/
 
 /**
  * Using the context provided by [ContextHelper.getAppContext] and [method]

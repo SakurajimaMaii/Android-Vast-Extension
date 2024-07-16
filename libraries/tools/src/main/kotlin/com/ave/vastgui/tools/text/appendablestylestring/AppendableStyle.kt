@@ -31,7 +31,7 @@ import com.ave.vastgui.tools.content.ContextHelper
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/5/22
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/text/appendable-style-string/appendable-style-string/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/text/appendable-style-string/appendable-style-string/
 
 /**
  * The append style.

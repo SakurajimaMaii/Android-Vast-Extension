@@ -25,7 +25,7 @@ import com.ave.vastgui.tools.text.isPwd
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/15
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/text/pwd-regex/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/text/pwd-regex/
 
 @Composable
 fun PwdRegex() {

@@ -41,7 +41,7 @@ import com.ave.vastgui.tools.utils.DensityUtils.DP
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/31
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/graphics/bitmap/bitmap/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/graphics/bitmap/bitmap/
 
 @Composable
 fun MergeBitmap() {

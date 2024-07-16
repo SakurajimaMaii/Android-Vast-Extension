@@ -27,7 +27,7 @@ import com.ave.vastgui.tools.lifecycle.createViewModel as viewModelInstance
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 16:20
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/activity/
+// Documentation: https://ave.entropy2020.cn/documents/tools/app-entry-points/activities/activity/
 
 /**
  * The parent class for [VastVmActivity] , [VastVbActivity] ,

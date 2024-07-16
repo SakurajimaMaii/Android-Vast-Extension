@@ -21,7 +21,7 @@ import java.io.File
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/23
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/download/download/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/download/download/
 
 /**
  * The event of the download.

@@ -25,7 +25,7 @@ import com.ave.vastgui.tools.utils.ScreenSizeUtils
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/6/2
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/screen-size-utils/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/information-get/screen-size-utils/
 
 @Composable
 fun ScreenInfo(modifier: Modifier = Modifier) {

@@ -27,7 +27,7 @@ import com.ave.vastgui.tools.utils.permission.PermissionRegister
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/28 10:42
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/init/tools-config/
+// Documentation: https://ave.entropy2020.cn/documents/tools/init/tools-config/
 
 /** VastTools config. */
 object ToolsConfig {

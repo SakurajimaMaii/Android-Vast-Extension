@@ -38,8 +38,8 @@ import retrofit2.http.Query
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/3
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/request/
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/response-api/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/performing-network-operations/request/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/performing-network-operations/response-api/
 
 data class RequestResponse(
     val code: Int,

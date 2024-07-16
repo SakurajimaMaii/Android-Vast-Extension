@@ -21,7 +21,7 @@ import androidx.annotation.MainThread
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/11
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/response-livedata/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/performing-network-operations/response-livedata/
 
 /**
  * Response mutable live data

@@ -23,7 +23,7 @@ import com.ave.vastgui.tools.sharedpreferences.float
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/14
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/save-key-value-data/sp-normal/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-data-and-files/save-key-value-data/sp-normal/
 
 class SpNormalExample(override val name: String) : ISharedPreferencesOwner {
 

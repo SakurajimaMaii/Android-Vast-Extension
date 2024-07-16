@@ -33,7 +33,7 @@ import com.ave.vastgui.tools.utils.AppUtils
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/19 15:37
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/app-shortcuts/
+// Documentation: https://ave.entropy2020.cn/documents/tools/app-entry-points/app-shortcuts/
 
 /**
  * Creating a pinned shortcut for your app.

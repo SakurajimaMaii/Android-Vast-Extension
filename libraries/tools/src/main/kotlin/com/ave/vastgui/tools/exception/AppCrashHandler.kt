@@ -25,7 +25,7 @@ import com.log.vastgui.core.base.LogLevel
 // Email: guihy2019@gmail.com
 // Date: 2024/5/25 1:54
 // Description: App global exception handling.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/exception/app-crash-handler/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/exception/app-crash-handler/
 
 /** @since 1.4.1 */
 typealias dealAppCrash = (Thread, Throwable) -> Unit

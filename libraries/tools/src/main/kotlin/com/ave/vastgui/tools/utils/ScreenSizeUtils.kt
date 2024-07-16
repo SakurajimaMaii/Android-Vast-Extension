@@ -34,7 +34,7 @@ import com.ave.vastgui.tools.content.ContextHelper
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: Help you to get the width and height of screen.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/information-get/screen-size-utils/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/information-get/screen-size-utils/
 
 object ScreenSizeUtils {
 

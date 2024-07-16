@@ -28,7 +28,7 @@ import com.ave.vastgui.tools.viewbinding.reflectViewBinding
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 16:11
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/fragment/
+// Documentation: https://ave.entropy2020.cn/documents/tools/app-entry-points/fragments/fragment/
 
 /**
  * VastVbVmFragment.

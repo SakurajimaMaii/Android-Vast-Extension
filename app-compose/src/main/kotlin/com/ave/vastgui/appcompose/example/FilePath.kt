@@ -37,7 +37,7 @@ import com.ave.vastgui.tools.manager.mediafilemgr.MusicMgr
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/6/5
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/file-manager/file-mgr/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-data-and-files/file-manager/file-mgr/
 
 private val devicePath = listOf(
     appInternalFilesDir().path,

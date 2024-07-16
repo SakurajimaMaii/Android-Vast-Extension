@@ -22,7 +22,7 @@ import java.io.File
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/4/14 18:11
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/download/download/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/download/download/
 
 /**
  * By using [DLManager], you can create a download task.

@@ -23,7 +23,7 @@ import java.util.Locale
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/5/18 23:17
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/log
+// Documentation: https://ave.entropy2020.cn/documents/tools/log
 
 /** @since 1.3.1 */
 internal val timeSdf = SimpleDateFormat(DateUtils.FORMAT_YYYY_MM_DD_HH_MM_SS, Locale.ENGLISH)

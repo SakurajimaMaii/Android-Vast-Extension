@@ -60,7 +60,7 @@ import retrofit2.http.Query
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/6/2
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/request2/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/performing-network-operations/request2/
 
 /**
  * 通过 Api 请求到的好看视频测试数据。

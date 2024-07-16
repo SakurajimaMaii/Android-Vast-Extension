@@ -19,7 +19,7 @@ package com.ave.vastgui.tools.network.request
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/6/2
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/request2/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/performing-network-operations/request2/
 
 /**
  * Request2

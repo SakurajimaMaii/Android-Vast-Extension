@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/24
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/request-builder/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/performing-network-operations/request-builder/
 
 open class RequestBuilder {
 

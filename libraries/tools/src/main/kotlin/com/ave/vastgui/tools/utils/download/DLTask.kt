@@ -33,7 +33,7 @@ import java.io.RandomAccessFile
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/24
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/download/download/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/download/download/
 // Reference: https://github.com/Heart-Beats/Downloader/blob/master/downloader/src/main/java/com/hl/downloader/SubDownloadTask.kt
 
 /**
