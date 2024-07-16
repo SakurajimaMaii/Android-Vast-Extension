@@ -18,11 +18,8 @@ package com.ave.vastgui.tools.fragment
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.ave.vastgui.core.extension.defaultLogTag
-import com.ave.vastgui.tools.network.response.ResponseBuilder
-import com.ave.vastgui.tools.network.response.getResponseBuilder
 import com.ave.vastgui.tools.lifecycle.createViewModel as viewModelInstance
 
 // Author: Vast Gui
@@ -34,16 +31,6 @@ abstract class VastFragment : Fragment() {
 
     protected fun getDefaultTag(): String {
         return defaultLogTag()
-    }
-
-    /** Construct a network request builder. */
-    @Deprecated(
-        level = DeprecationLevel.WARNING,
-        message = "Please use Request or Request2 to replace ResponseBuilder.",
-        replaceWith = ReplaceWith("")
-    )
-    protected fun getResponseBuilder(): ResponseBuilder {
-        return requireActivity().lifecycleScope.getResponseBuilder()
     }
 
     /**
