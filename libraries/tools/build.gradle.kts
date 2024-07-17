@@ -88,7 +88,6 @@ dependencies {
     implementation(libs.annotation)
     implementation(libs.appcompat)
     implementation(libs.appcompat.resources)
-    implementation(libs.commons.codec)
     implementation(libs.constraintlayout)
     implementation(libs.converter.gson)
     implementation(libs.core.ktx)

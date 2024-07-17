@@ -18,15 +18,14 @@ package com.ave.vastgui.tools.utils.download
 
 import com.ave.vastgui.core.extension.cast
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
+import com.ave.vastgui.tools.utils.getFileMD5
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
-import org.apache.commons.codec.digest.DigestUtils
 import java.io.BufferedInputStream
 import java.io.File
-import java.io.FileInputStream
 import java.io.IOException
 import java.io.RandomAccessFile
 
@@ -76,6 +75,7 @@ class DLTask internal constructor(private val dlBean: DLBean, val listener: DLEv
     }
 
     override fun onResponse(call: Call, response: Response) {
+        println("获取到的内容长度：${response.body?.byteStream()?.available()}")
         val body = response.body ?: run {
             event =
                 DLEvent.FAILED(RuntimeException("Can't get the response body, cancel download."))
@@ -116,7 +116,7 @@ class DLTask internal constructor(private val dlBean: DLBean, val listener: DLEv
                 listener.onDownloading(cast(event))
             }
             md5.takeIf { it != null }?.let {
-                if (it == DigestUtils.md5Hex(FileInputStream(downloadFile.path))) {
+                if (it == getFileMD5(downloadFile)) {
                     event = DLEvent.SUCCESS(downloadFile)
                     listener.onSuccess(cast(event))
                 } else {
