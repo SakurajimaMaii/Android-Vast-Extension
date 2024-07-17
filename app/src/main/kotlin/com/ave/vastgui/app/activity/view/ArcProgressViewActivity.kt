@@ -20,20 +20,16 @@ import android.Manifest
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.os.Bundle
-import android.util.Log
-import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.app.databinding.ActivityArcProgressViewBinding
-import com.ave.vastgui.core.extension.nothing_to_do
+import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.tools.activity.VastVbActivity
-import com.ave.vastgui.tools.graphics.BmpUtils
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.utils.ColorUtils
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.download.DLManager
 import com.ave.vastgui.tools.utils.download.DLTask
+import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
-import com.ave.vastgui.tools.view.extension.viewSnapshot
-import com.ave.vastgui.tools.view.toast.SimpleToast
 import java.io.File
 
 // Author: Vast Gui 
@@ -48,9 +44,8 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("TAG", "onCreate")
 
-        requestPermissions(arrayOf(Manifest.permission.ACCESS_NETWORK_STATE), 1)
+        requestMultiplePermissions(arrayOf(Manifest.permission.ACCESS_NETWORK_STATE))
 
         val colors = intArrayOf(
             ColorUtils.colorHex2Int("#F60C0C"),
@@ -74,16 +69,6 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
             mEndpointCircleColor = ColorUtils.colorHex2Int("#eb4d4b")
         }
 
-        getBinding().arcProgressView.setOnClickListener {
-            val bitmap = viewSnapshot(it)
-            BmpUtils.saveBitmapAsFile(
-                bitmap = bitmap,
-                File(FileMgr.appInternalFilesDir(), "arc_progress_endpoint_radius.jpg")
-            )?.apply {
-                SimpleToast.showShortMsg("截图${name}已保存")
-            }
-        }
-
         getBinding().download.setOnClickListener {
             mLogger.i("开始下载")
             downloadApk()
@@ -102,26 +87,15 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d("TAG", "onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("TAG", "onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("TAG", "onPause")
-    }
-
     private fun downloadApk() {
+        val root = FileMgr.appInternalFilesDir()
+        val name = "Tabby.exe"
+        val file = File(root, name)
         downloadTask = DLManager
             .createTaskConfig()
-            .setDownloadUrl("https://d1.music.126.net/dmusic/NeteaseCloudMusic_Music_official_3.0.0.Beta.03.12.202664.64.exe")
-            .setSaveDir(FileMgr.appInternalFilesDir().path)
+            .setDownloadUrl("https://objects.githubusercontent.com/github-production-release-asset-2e65be/77213120/e661ad3b-76f6-46cd-b2f3-abe38de4fc4a?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20240717%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240717T073421Z&X-Amz-Expires=300&X-Amz-Signature=bda89807f32bebb4b862b4d12ecc0834e6fca742b814288fbcac3e37f26f16ab&X-Amz-SignedHeaders=host&actor_id=46998172&key_id=0&repo_id=77213120&response-content-disposition=attachment%3B%20filename%3Dtabby-1.0.210-setup-x64.exe&response-content-type=application%2Foctet-stream")
+            .setSaveDir(root.path)
+            .setSaveName("Tabby.exe")
             .setListener {
                 onDownloading = {
                     getBinding().arcProgressView.refreshWithInvalidate {
@@ -146,52 +120,12 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
                 }
             }
             .build()
-
-        downloadTask.start()
-
-//        val url = "https://d1.music.126.net/dmusic/NeteaseCloudMusic_Music_official_3.0.0.Beta.03.12.202664.64.exe"
-//        val request = OkGo.get<File>(url)
-//        OkDownload.request(url, request)
-//            .folder(FileMgr.appInternalFilesDir().path)
-//            .save()
-//            .register(object : DownloadListener("DOWNLOAD") {
-//                override fun onStart(progress: Progress?) {
-//
-//                }
-//
-//                override fun onProgress(progress: Progress?) {
-//                    getBinding().arcProgressView.refreshWithInvalidate {
-//                        mCurrentProgress =
-//                            progress!!.fraction * getBinding().arcProgressView.mMaximumProgress
-//                    }
-//                }
-//
-//                override fun onError(progress: Progress?) {
-//
-//                }
-//
-//                override fun onFinish(t: File?, progress: Progress?) {
-//                    mLogger.i("download success.")
-//                    getBinding().arcProgressView.refreshWithInvalidate {
-//                        mCurrentProgress = getBinding().arcProgressView.mMaximumProgress
-//                    }
-//                }
-//
-//                override fun onRemove(progress: Progress?) {
-//
-//                }
-//            })
-//            .start()
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (1 == requestCode) {
-            nothing_to_do()
+        if (file.exists()) {
+            if (FileMgr.deleteFile(file).isSuccess) {
+                downloadTask.start()
+            }
+        } else {
+            downloadTask.start()
         }
     }
 
