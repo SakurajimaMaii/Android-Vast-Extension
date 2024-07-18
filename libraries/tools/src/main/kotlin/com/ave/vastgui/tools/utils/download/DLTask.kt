@@ -16,7 +16,6 @@
 
 package com.ave.vastgui.tools.utils.download
 
-import com.ave.vastgui.core.extension.cast
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.utils.getFileMD5
 import okhttp3.Call
@@ -70,29 +69,33 @@ class DLTask internal constructor(private val dlBean: DLBean, val listener: DLEv
     private var isCancel = false
 
     override fun onFailure(call: Call, e: IOException) {
-        event = DLEvent.FAILED(e)
-        listener.onFailure(cast(event))
+        listener.onFailure(DLEvent.FAILED(e).apply { event = this })
     }
 
     override fun onResponse(call: Call, response: Response) {
-        println("获取到的内容长度：${response.body?.byteStream()?.available()}")
-        val body = response.body ?: run {
-            event =
-                DLEvent.FAILED(RuntimeException("Can't get the response body, cancel download."))
-            listener.onFailure(cast(event))
+        if (200 != response.code) {
+            val failed = DLEvent.FAILED(RuntimeException("Http status code is ${response.code}"))
+            listener.onFailure(failed.also { event = it })
+            return
+        }
+        // body is a non-null value because this response was passed to Callback.onResponse
+        val body = response.body ?: return
+        val length = body.contentLength().also { contentLength = it }
+        if (-1L == length) {
+            val failed = DLEvent.FAILED(RuntimeException("ContentLength of response is -1."))
+            listener.onFailure(failed.also { event = it })
             return
         }
         val inputStream = body.byteStream()
         if (event is DLEvent.INIT || event is DLEvent.CANCEL) {
-            contentLength = body.contentLength()
-            FileMgr.saveFile(downloadFile).exceptionOrNull()?.let {
-                event = DLEvent.FAILED(it)
-                listener.onFailure(cast(event))
+            FileMgr.saveFile(downloadFile).exceptionOrNull()?.let { ex ->
+                listener.onFailure(DLEvent.FAILED(ex).also { event = it })
                 return
             }
         }
-        val outputStream = RandomAccessFile(downloadFile, "rwd")
-        outputStream.seek(completeSize)
+        val outputStream = RandomAccessFile(downloadFile, "rwd").apply {
+            seek(completeSize)
+        }
         val bufferSize = 1024 * 8
         val buffer = ByteArray(bufferSize)
         val bufferedInputStream = BufferedInputStream(inputStream, bufferSize)
@@ -112,23 +115,18 @@ class DLTask internal constructor(private val dlBean: DLBean, val listener: DLEv
                 }
                 outputStream.write(buffer, 0, readLength)
                 completeSize += readLength
-                event = DLEvent.DOWNLOADING(completeSize, contentLength)
-                listener.onDownloading(cast(event))
+                listener.onDownloading(
+                    DLEvent.DOWNLOADING(completeSize, contentLength).also { event = it })
             }
-            md5.takeIf { it != null }?.let {
-                if (it == getFileMD5(downloadFile)) {
-                    event = DLEvent.SUCCESS(downloadFile)
-                    listener.onSuccess(cast(event))
+            md5.takeIf { it != null }?.let { md5 ->
+                if (md5 == getFileMD5(downloadFile)) {
+                    listener.onSuccess(DLEvent.SUCCESS(downloadFile).also { event = it })
                 } else {
                     throw RuntimeException("File MD5($md5) verification failed, the error file has been deleted.")
                 }
-            } ?: run {
-                event = DLEvent.SUCCESS(downloadFile)
-                listener.onSuccess(cast(event))
-            }
+            } ?: listener.onSuccess(DLEvent.SUCCESS(downloadFile).also { event = it })
         } catch (exception: Throwable) {
-            event = DLEvent.FAILED(exception)
-            listener.onFailure(cast(event))
+            listener.onFailure(DLEvent.FAILED(exception).also { event = it })
             FileMgr.deleteFile(downloadFile)
         } finally {
             bufferedInputStream.close()
