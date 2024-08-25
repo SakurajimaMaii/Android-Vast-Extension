@@ -16,8 +16,10 @@
 
 package com.ave.vastgui.tools.utils.download
 
+import com.ave.vastgui.core.text.safeToLong
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.utils.getFileMD5
+import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -27,6 +29,8 @@ import java.io.BufferedInputStream
 import java.io.File
 import java.io.IOException
 import java.io.RandomAccessFile
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -39,13 +43,12 @@ import java.io.RandomAccessFile
  *
  * @since 0.5.2
  */
-class DLTask internal constructor(private val dlBean: DLBean, val listener: DLEventListener) :
+class DLTask internal constructor(private val config: DLTaskConfig) :
     Callback {
 
-    private val okHttpClient = OkHttpClient()
     private var contentLength: Long = 0L
     private val downloadUrl: String
-        get() = dlBean.url
+        get() = config.downloadUrl
     private val startPos: Long
         get() = dlBean.startPos ?: 0L
     private val endPos: Long
@@ -61,9 +64,13 @@ class DLTask internal constructor(private val dlBean: DLBean, val listener: DLEv
             dlBean.event = value
         }
     private val md5: String?
-        get() = dlBean.md5
+        get() = config.md5
     private val downloadFile: File
-        get() = dlBean.file
+        get() = File(config.saveDir, config.saveName)
+    private val items: DLTaskItems
+        get() = config.items
+    private val listener: DLEventListener
+        get() = config.eventListener
     private var requestCall: Call? = null
     private var isPause = false
     private var isCancel = false
@@ -140,18 +147,19 @@ class DLTask internal constructor(private val dlBean: DLBean, val listener: DLEv
      *
      * @since 0.5.2
      */
-    fun start() {
-        val request = Request.Builder()
-            .url(downloadUrl)
-            .apply {
-                if (endPos > completeSize) {
-                    addHeader("RANGE", "bytes=$completeSize-$endPos")
-                }
-            }
-            .build()
-        isCancel = false
-        requestCall = okHttpClient.newCall(request)
-        requestCall?.enqueue(this)
+    context(OkHttpClient)
+    suspend fun start() {
+        val head = head()
+        if (200 != head.code) {
+            listener.onFailure(DLEvent.FAILED(IllegalStateException("Response code is ${head.code}")))
+            return
+        }
+        // The http range unit is bytes
+        // https://www.iana.org/assignments/http-parameters/http-parameters.xhtml#range-units
+        if ("bytes" == head.headers["Accept-Ranges"]) {
+            val contentLength = head.headers["Content-Length"] ?: return@pointer
+            val remaining = contentLength % (items.count)
+        }
     }
 
     /**
@@ -186,6 +194,20 @@ class DLTask internal constructor(private val dlBean: DLBean, val listener: DLEv
      */
     fun cancel() {
         isCancel = true
+    }
+
+    /** @since 1.5.0 */
+    private suspend fun OkHttpClient.head(): Response = suspendCancellableCoroutine { continuation ->
+        val request = Request.Builder().url(downloadUrl).head().build()
+        newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                continuation.resumeWithException(e)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                continuation.resume(response)
+            }
+        })
     }
 
 }

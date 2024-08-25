@@ -129,4 +129,10 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
         }
     }
 
+    private fun test(){
+        DLManager.createTask {
+
+        }
+    }
+
 }

@@ -16,8 +16,7 @@
 
 package com.ave.vastgui.tools.utils.download
 
-import com.ave.vastgui.core.extension.NotNUllVar
-import java.io.File
+import okhttp3.OkHttpClient
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -48,90 +47,19 @@ import java.io.File
  *
  * @since 0.5.2
  */
-class DLManager internal constructor() {
+object DLManager {
 
-    companion object {
-        fun createTaskConfig() = DLTaskConfig()
+    private lateinit var okHttpClient: OkHttpClient
+    fun createTaskConfig() = DLTaskConfig()
+
+    /** @since 1.5.0 */
+    fun configOkhttp(config: OkHttpClient.Builder.() -> Unit) {
+        okHttpClient = OkHttpClient.Builder().also(config).build()
     }
 
-    class DLTaskConfig internal constructor() {
-
-        private var downloadUrl: String by NotNUllVar()
-        private var saveDir: String by NotNUllVar()
-        private var saveName: String? = null
-        private var md5: String? = null
-        private var eventListener: DLEventListener = DLEventListener()
-        private val dlBean: DLBean
-            get() {
-                val file = saveName.takeIf { it != null }
-                    ?.let { File(saveDir, it) }
-                    ?: File(saveDir, getNameFromUrl(downloadUrl))
-                return DLBean(downloadUrl, file, md5)
-            }
-
-        /**
-         * Set download url.
-         *
-         * @since 0.5.2
-         */
-        fun setDownloadUrl(url: String) = apply {
-            downloadUrl = url
-        }
-
-        /**
-         * Set the save directory for the download file.
-         *
-         * @since 0.5.2
-         */
-        fun setSaveDir(saveDir: String) = apply {
-            this.saveDir = saveDir
-        }
-
-        /**
-         * Set the save name for the download file.
-         *
-         * @since 0.5.2
-         */
-        fun setSaveName(saveName: String) = apply {
-            this.saveName = saveName
-        }
-
-        /**
-         * Set the event listener for the download.
-         *
-         * @since 0.5.2
-         */
-        fun setListener(listener: DLEventListener.() -> Unit) = apply {
-            eventListener = DLEventListener().also(listener)
-        }
-
-        /**
-         * Set the md5 value of the file for verification
-         *
-         * @since 0.5.2
-         */
-        fun setMD5(md5: String) = apply {
-            this.md5 = md5
-        }
-
-        /**
-         * Build the download task.
-         *
-         * @since 0.5.2
-         */
-        fun build() = DLTask(dlBean, eventListener)
-
-        /**
-         * Get file save name for url.
-         *
-         * @return app-debug.apk as the return value if the link is
-         *     [https://github.com/SakurajimaMaii/BluetoothDemo/blob/master/app-debug.apk](#)
-         * @since 0.5.2
-         */
-        private fun getNameFromUrl(url: String): String {
-            return url.substring(url.lastIndexOf("/") + 1)
-        }
-
+    /** @since 1.5.0 */
+    fun createTask(config: DLTaskConfig.() -> Unit): DLTask {
+        return DLTask(DLTaskConfig().also(config))
     }
 
 }
