@@ -123,7 +123,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "VastTools"
-                version = libs.versions.tools.get()
+                version = "1.5.0"
 
                 afterEvaluate {
                     from(components["release"])

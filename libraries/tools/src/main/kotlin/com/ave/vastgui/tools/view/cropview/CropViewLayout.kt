@@ -546,9 +546,6 @@ class CropViewLayout @JvmOverloads constructor(
         )
         setCropFrameSize(mCropFrameWidth, mCropFrameHeight)
         typeArray.recycle()
-        if (isInEditMode) {
-            mImageView.setImageResource(R.drawable.bg_demo_crop_view_image)
-        }
     }
 
 }

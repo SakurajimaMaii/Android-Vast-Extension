@@ -26,9 +26,7 @@ import com.log.vastgui.core.base.LogLevel
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/7/17
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/tools/app-entry-points/activities/lifecycle/
 
 /** @since 1.5.0 */
 class ActivityLifecycleLogger(logCat: LogCat? = null, logLevel: LogLevel = LogLevel.DEBUG) :
