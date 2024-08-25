@@ -26,7 +26,7 @@ plugins {
 }
 
 group = "io.github.sakurajimamaii"
-version = libs.versions.core.local.get()
+version = "0.1.1"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -49,7 +49,7 @@ dependencies {
 extra["PUBLISH_ARTIFACT_ID"] = "VastCore"
 extra["PUBLISH_DESCRIPTION"] = "Core for Android-Vast-Extension"
 extra["PUBLISH_URL"] =
-    "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/core"
+    "https://github.com/SakurajimaMaii/Android-Vast-Extension"
 
 val mavenPropertiesFile = File(rootDir, "maven.properties")
 if (mavenPropertiesFile.exists()) {
@@ -58,7 +58,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "VastCore"
-                version = libs.versions.core.local.get()
+                version = "0.1.1"
 
                 afterEvaluate {
                     from(components["java"])

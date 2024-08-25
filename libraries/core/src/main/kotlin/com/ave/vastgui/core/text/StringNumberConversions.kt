@@ -26,7 +26,7 @@ import java.math.MathContext
 // Email: guihy2019@gmail.com
 // Date: 2024/4/27
 // Description: String conversions.
-// Documentation: https://ave.entropy2020.cn/documents/VastCore/text/string-number-conversions/
+// Documentation: https://ave.entropy2020.cn/documents/core/text/string-number-conversions/
 
 /**
  * Parses the string as an [Int] number and returns the result.

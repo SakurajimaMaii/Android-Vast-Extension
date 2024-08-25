@@ -23,7 +23,7 @@ import kotlin.reflect.full.memberProperties
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/28
-// Documentation: https://ave.entropy2020.cn/documents/VastCore/collections/map/
+// Documentation: https://ave.entropy2020.cn/documents/core/collections/map/
 
 /**
  * Return object as a map, where key is the parameter name and value is the
