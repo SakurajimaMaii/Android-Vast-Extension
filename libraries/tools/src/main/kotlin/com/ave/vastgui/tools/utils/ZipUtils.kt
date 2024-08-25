@@ -28,7 +28,10 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 import java.util.zip.ZipOutputStream
 
-const val TAG = "ZipUtils"
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2022/6/9
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-data-and-files/file-compressed/
 
 /**
  * Compress files under [src] to [dest].
@@ -52,7 +55,7 @@ fun zip(src: File, dest: File): Boolean = runCatching {
     }
     return true
 }.onFailure {
-    Log.e(TAG, it.stackTraceToString())
+    Log.e("ZipUtils", it.stackTraceToString())
 }.getOrDefault(false)
 
 /**
