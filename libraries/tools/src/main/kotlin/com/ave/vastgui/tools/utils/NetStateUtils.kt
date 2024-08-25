@@ -40,7 +40,7 @@ import java.util.Enumeration
 // Email: guihy2019@gmail.com
 // Date: 2022/4/2 9:03
 // Description: With NetStateUtils, you can easily check some network status about your device
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/net-state-utils/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/net-state-utils/
 
 object NetStateUtils {
 

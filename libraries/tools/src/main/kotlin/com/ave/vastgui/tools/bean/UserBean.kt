@@ -19,7 +19,7 @@ package com.ave.vastgui.tools.bean
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/17 12:21
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/bean/bean/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/bean/bean/
 
 /**
  * User bean.

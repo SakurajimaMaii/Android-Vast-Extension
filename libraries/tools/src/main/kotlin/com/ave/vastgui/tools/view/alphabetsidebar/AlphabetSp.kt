@@ -25,7 +25,7 @@ import com.ave.vastgui.tools.utils.AppUtils
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/29
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/alphabetsidebar/alphabetsidebar/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/alphabetsidebar/alphabetsidebar/
 
 /**
  * Alphabet SharedPreferences.

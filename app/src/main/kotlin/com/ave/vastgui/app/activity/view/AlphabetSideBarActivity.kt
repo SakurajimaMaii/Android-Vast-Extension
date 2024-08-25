@@ -48,7 +48,7 @@ import kotlinx.coroutines.withContext
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/28
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/alphabetsidebar/alphabetsidebar/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/alphabetsidebar/alphabetsidebar/
 // Documentation: https://ave.entropy2020.cn/documents/adapter/
 
 class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sidebar) {

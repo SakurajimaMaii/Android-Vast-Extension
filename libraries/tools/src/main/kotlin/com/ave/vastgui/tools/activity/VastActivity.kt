@@ -18,19 +18,16 @@ package com.ave.vastgui.tools.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.activity.widget.screenConfig
-import com.ave.vastgui.tools.network.response.ResponseBuilder
-import com.ave.vastgui.tools.network.response.getResponseBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.ave.vastgui.tools.lifecycle.createViewModel as viewModelInstance
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 16:20
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/activity/
+// Documentation: https://ave.entropy2020.cn/documents/tools/app-entry-points/activities/activity/
 
 /**
  * The parent class for [VastVmActivity] , [VastVbActivity] ,
@@ -87,16 +84,6 @@ sealed class VastActivity : AppCompatActivity() {
     protected fun enableFullScreen(enable: Boolean) {
         mEnableFullScreen = enable
         screenConfig(mEnableActionBar, mEnableFullScreen)
-    }
-
-    /** Construct a network request builder. */
-    @Deprecated(
-        level = DeprecationLevel.WARNING,
-        message = "Please use Request or Request2 to replace ResponseBuilder.",
-        replaceWith = ReplaceWith("")
-    )
-    protected fun getResponseBuilder(): ResponseBuilder {
-        return lifecycleScope.getResponseBuilder()
     }
 
     /**

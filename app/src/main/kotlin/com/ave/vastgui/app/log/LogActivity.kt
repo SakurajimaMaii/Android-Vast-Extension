@@ -25,7 +25,7 @@ import com.ave.vastgui.tools.activity.widget.screenConfig
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/5
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/description/
+// Documentation: https://ave.entropy2020.cn/documents/tools/log/description/
 
 class LogActivity : VastVbVmActivity<ActivityLogBinding, SharedVM>() {
 

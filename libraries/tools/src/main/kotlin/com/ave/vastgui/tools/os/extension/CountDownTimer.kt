@@ -24,7 +24,7 @@ import android.util.Log
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/4/15
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/os/extension/countdowntimer/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/os/extension/countdowntimer/
 
 /**
  * @since 1.5.0

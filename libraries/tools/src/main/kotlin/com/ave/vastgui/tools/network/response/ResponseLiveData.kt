@@ -24,7 +24,7 @@ import androidx.lifecycle.Observer
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/9/28
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/connectivity/performing-network-operations/response-livedata/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/performing-network-operations/response-livedata/
 
 abstract class ResponseLiveData<T> : LiveData<T> {
 

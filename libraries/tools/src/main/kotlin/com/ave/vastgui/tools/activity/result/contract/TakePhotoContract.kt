@@ -30,7 +30,7 @@ import java.io.File
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/23
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/activities/activity-result/
+// Documentation: https://ave.entropy2020.cn/documents/tools/app-entry-points/activities/activity-result/
 
 /**
  * Taking photos from system camera.

@@ -25,7 +25,7 @@ import com.ave.vastgui.tools.anim.flipXAnimation
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/2
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/animation/flip-animation/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/animation/flip-animation/
 
 class FlipAnimActivity : VastVbActivity<ActivityFlipAnimBinding>() {
 

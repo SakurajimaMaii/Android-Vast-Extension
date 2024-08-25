@@ -25,7 +25,7 @@ import com.ave.vastgui.tools.R
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/2
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/textview/mail-box-associate-view/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/textview/mail-box-associate-view/
 
 /**
  * Default mail box postfix string array.

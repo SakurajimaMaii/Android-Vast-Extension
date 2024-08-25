@@ -28,7 +28,7 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/fragment/
+// Documentation: https://ave.entropy2020.cn/documents/tools/app-entry-points/fragments/fragment/
 
 class ReceiverFragment : Fragment(R.layout.fragment_receiver) {
 

@@ -28,7 +28,7 @@ import java.util.Locale
 // Email: lt.dygzs@qq.com
 // Date: 2022/3/10 18:32
 // Description: Validates the Chinese ID card number.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/text/id-regex/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/text/id-regex/
 
 object IDRegex {
     /**

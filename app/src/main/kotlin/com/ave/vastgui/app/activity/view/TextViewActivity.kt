@@ -26,8 +26,8 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/textview/mail-box-associate-view/
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/textview/marquee-text-view/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/textview/mail-box-associate-view/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/textview/marquee-text-view/
 
 class TextViewActivity : AppCompatActivity() {
 

@@ -79,37 +79,37 @@ kotlin.sourceSets.all {
 }
 
 dependencies {
+    api(libs.log.core)
     api(libs.security.crypto)
     api(libs.zxing.core)
-    api(libs.log.core)
-    implementation(libs.vastcore)
     implementation(libs.activity.ktx)
+    implementation(libs.androidx.startup)
+    implementation(libs.androidx.versionedparcelable)
     implementation(libs.annotation)
     implementation(libs.appcompat)
     implementation(libs.appcompat.resources)
-    implementation(libs.core.runtime)
     implementation(libs.constraintlayout)
+    implementation(libs.converter.gson)
     implementation(libs.core.ktx)
+    implementation(libs.core.runtime)
     implementation(libs.datastore.preferences)
     implementation(libs.exifinterface)
     implementation(libs.fragment.ktx)
-    implementation(libs.lifecycle.livedata.core.ktx)
-    implementation(libs.lifecycle.livedata.ktx)
-    implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.lifecycle.viewmodel.ktx)
-    implementation(libs.recyclerview)
-    implementation(libs.monitor)
-    implementation(libs.material)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.commons.codec)
+    implementation(libs.lifecycle.livedata.core.ktx)
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.material)
+    implementation(libs.monitor)
     implementation(libs.okhttp)
+    implementation(libs.recyclerview)
     implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-    implementation(libs.androidx.startup)
+    implementation(libs.vastcore)
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastTools"
@@ -123,7 +123,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "VastTools"
-                version = libs.versions.tools.get()
+                version = "1.5.0"
 
                 afterEvaluate {
                     from(components["release"])

@@ -26,7 +26,7 @@ import com.ave.vastgui.tools.text.withUnit
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/15
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/text/unit-string/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-resources/text/unit-string/
 
 class Lux : StrUnit {
     override val unit: String = "lx"

@@ -21,7 +21,7 @@ package com.ave.vastgui.tools.text
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/30 18:59
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-resources/text/unit-string/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-resources/text/unit-string/
 
 /**
  * StrUnit

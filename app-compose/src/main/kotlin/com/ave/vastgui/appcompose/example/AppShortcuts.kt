@@ -36,7 +36,7 @@ import com.ave.vastgui.tools.utils.shortcut.setDynamicShortcuts
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/6/2
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/app-shortcuts/
+// Documentation: https://ave.entropy2020.cn/documents/tools/app-entry-points/app-shortcuts/
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

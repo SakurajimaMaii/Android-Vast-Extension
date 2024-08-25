@@ -26,8 +26,8 @@ import com.ave.vastgui.tools.viewbinding.reflectViewBinding
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/6/6
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/vb-reflection/
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/lifecycle-aware-components/vm-reflection/
+// Documentation: https://ave.entropy2020.cn/documents/tools/architecture-components/ui-layer-libraries/view-bind/vb-reflection/
+// Documentation: https://ave.entropy2020.cn/documents/tools/architecture-components/ui-layer-libraries/lifecycle-aware-components/vm-reflection/
 
 abstract class ReflectBaseActivity1<VB : ViewBinding, VM : ViewModel> : AppCompatActivity() {
 

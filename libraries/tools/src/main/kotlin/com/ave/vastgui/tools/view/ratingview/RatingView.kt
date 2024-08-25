@@ -35,7 +35,7 @@ import kotlin.math.round
 // Author: Vast Gui
 // Email: sakurajimamai2020@qq.com
 // Date: 2021/7/28
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/rating/rating-view/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/rating/rating-view/
 
 /**
  * RatingView.

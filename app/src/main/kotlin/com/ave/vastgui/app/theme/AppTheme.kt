@@ -2,8 +2,6 @@ package com.ave.vastgui.app.theme
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.ave.vastgui.tools.theme.ColorScheme
-import com.ave.vastgui.tools.theme.lightColorScheme
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

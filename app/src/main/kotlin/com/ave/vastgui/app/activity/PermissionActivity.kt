@@ -24,7 +24,7 @@ import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/permission/permission/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/permission/permission/
 
 class PermissionActivity : VastVbActivity<ActivityPermissionBinding>() {
 

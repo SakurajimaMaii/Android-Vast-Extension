@@ -29,7 +29,7 @@ import androidx.annotation.RequiresApi
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: Help you to quickly build GradientDrawable.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/graphics/gradient-drawable/gradient-drawable/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/graphics/gradient-drawable/gradient-drawable/
 
 /**
  * Left top corner radius(in pixels).

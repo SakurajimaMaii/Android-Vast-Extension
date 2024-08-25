@@ -23,6 +23,7 @@ import com.ave.vastgui.app.log.mLogFactory
 import com.ave.vastgui.app.log.marsLogger
 import com.ave.vastgui.tools.content.ContextHelper
 import com.ave.vastgui.tools.exception.AppCrashHandler
+import com.ave.vastgui.tools.lifecycle.ActivityLifecycleLogger
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.kongzue.dialogx.DialogX
 import com.kongzue.dialogx.style.IOSStyle
@@ -49,6 +50,7 @@ class App : Application() {
         DialogX.dialogMaxWidth = 400f.DP.toInt()
         DialogX.globalStyle = IOSStyle()
         DialogX.init(this)
+        registerActivityLifecycleCallbacks(ActivityLifecycleLogger(mLogFactory.getLogCat(this::class.java)))
 //        WindowManager.getInstance().init(this, OptionFactory())
 //        ThemeSkinService.getInstance().apply {
 //            createViewInterceptor.add(FabFactory())

@@ -34,7 +34,7 @@ import com.ave.vastgui.tools.view.toast.SimpleToast
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: Provides you for some common Intent.
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/intent/intent-utils/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/intent/intent-utils/
 
 object IntentUtils {
 

@@ -45,7 +45,7 @@ import kotlin.coroutines.CoroutineContext
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/5/13 23:36
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/log/store/
+// Documentation: https://ave.entropy2020.cn/documents/tools/log/store/
 
 /**
  * Android LogStore.

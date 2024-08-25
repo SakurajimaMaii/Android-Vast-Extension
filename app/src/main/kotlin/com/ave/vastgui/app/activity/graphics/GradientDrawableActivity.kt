@@ -27,7 +27,7 @@ import com.ave.vastgui.tools.utils.ColorUtils.colorHex2Int
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/graphics/gradient-drawable/gradient-drawable/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/graphics/gradient-drawable/gradient-drawable/
 
 private val states = arrayOfNulls<IntArray>(6).apply {
     set(0, intArrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled))

@@ -35,7 +35,7 @@ import kotlin.reflect.KProperty
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/5/29
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/data-layer-libraries/datastore/
+// Documentation: https://ave.entropy2020.cn/documents/tools/architecture-components/data-layer-libraries/datastore/
 
 /**
  * [IPreferenceProperty].

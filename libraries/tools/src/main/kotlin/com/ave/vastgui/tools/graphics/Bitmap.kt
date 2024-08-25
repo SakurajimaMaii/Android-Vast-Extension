@@ -41,7 +41,7 @@ import java.io.IOException
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2021/11/8 15:27
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/graphics/bitmap/bitmap/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/graphics/bitmap/bitmap/
 
 /**
  * Merge position when using [BmpUtils.mergeBitmap].

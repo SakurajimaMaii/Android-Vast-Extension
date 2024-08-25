@@ -27,7 +27,7 @@ import com.google.android.material.textview.MaterialTextView
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/20
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/ui/dialog/material-alert-dialog-builder/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/dialog/material-alert-dialog-builder/
 
 class DialogActivity : AppCompatActivity(R.layout.activity_dialog) {
 

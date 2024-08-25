@@ -23,6 +23,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityFileBinding
 import com.ave.vastgui.app.log.mLogFactory
+import com.ave.vastgui.app.log.mLogFactory2
+import com.ave.vastgui.tools.utils.drawable
 import com.ave.vastgui.tools.view.extension.hideKeyBroad
 import com.ave.vastgui.tools.view.extension.isShouldHideKeyBroad
 import com.ave.vastgui.tools.viewbinding.viewBinding
@@ -30,7 +32,7 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com
 // Date: 2022/5/31
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/app-data-and-files/file-manager/file-mgr/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-data-and-files/file-manager/file-mgr/
 
 class FileActivity : AppCompatActivity(R.layout.activity_file) {
 
@@ -43,6 +45,12 @@ class FileActivity : AppCompatActivity(R.layout.activity_file) {
             logcat.d("这是一条日志")
             logcat.e(NullPointerException("this object is null."))
         }
+        val drawable = drawable(R.drawable.ic_github).also {
+            logcat.d(it!!::class.java.simpleName)
+        }
+        mBinding.icon1.run {  }
+        null.isNullOrBlank()
+        mBinding.icon1.setImageDrawable(drawable)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

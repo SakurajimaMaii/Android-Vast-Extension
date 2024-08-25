@@ -18,6 +18,7 @@ package com.ave.vastgui.app.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ave.vastgui.adapter.BR
 import com.ave.vastgui.adapter.BaseBindAdapter
@@ -29,11 +30,12 @@ import com.ave.vastgui.app.net.OpenApi
 import com.ave.vastgui.app.net.OpenApiService
 import com.ave.vastgui.tools.fragment.VastVbFragment
 import com.ave.vastgui.tools.network.request.create
+import kotlinx.coroutines.launch
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/1/2 20:33
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/app-entry-points/fragments/fragment/
+// Documentation: https://ave.entropy2020.cn/documents/tools/app-entry-points/fragments/fragment/
 
 class ImagesFragment : VastVbFragment<FragmentImagesBinding>() {
 
@@ -51,18 +53,11 @@ class ImagesFragment : VastVbFragment<FragmentImagesBinding>() {
         }
 
         getBinding().refresh.setOnRefreshListener {
-            getResponseBuilder().suspendWithListener({
-                OpenApi().create(OpenApiService::class.java).getImages(0, 10)
-            }) {
-                getBinding().refresh.isRefreshing = false
-                onSuccess = {
-                    it.result?.list?.forEach { image ->
-                        mAdapter.add(image, R.layout.item_image_default)
-                    }
-                }
-                onError = {
-                    mLogger.d(getDefaultTag(), it?.message.toString())
-                }
+            lifecycleScope.launch {
+                val images = OpenApi().create(OpenApiService::class.java)
+                    .getImages(0, 10)
+                    .result?.list ?: emptyList()
+                mAdapter.add(images, R.layout.item_image_default)
             }
         }
     }

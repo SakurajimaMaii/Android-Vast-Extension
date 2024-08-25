@@ -16,6 +16,8 @@
 
 package com.ave.vastgui.tools.utils
 
+import java.io.File
+import java.io.FileInputStream
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -23,7 +25,7 @@ import java.security.NoSuchAlgorithmException
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/6/19
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/security/encryption-utils/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/security/encryption-utils/
 
 object EncryptionUtils {
 
@@ -55,4 +57,31 @@ object EncryptionUtils {
         }
     }
 
+}
+
+/**
+ * Returns a byte array of the calculated hash of [file].
+ *
+ * @since 1.2.0
+ */
+internal fun getFileMD5(file: File): String = runCatching {
+    return@runCatching MessageDigest.getInstance("MD5").run {
+        FileInputStream(file).use { input ->
+            val dataBytes = ByteArray(1024)
+            var nread: Int
+            while ((input.read(dataBytes).also { nread = it }) != -1) {
+                update(dataBytes, 0, nread)
+            }
+        }
+        digest().bytesToHex()
+    }
+}.getOrElse {
+    it.printStackTrace()
+    ""
+}
+
+/** @since 1.2.0 */
+internal fun ByteArray.bytesToHex(): String = StringBuilder().let { builder ->
+    forEach { builder.append(String.format("%02x", it)) }
+    builder.toString()
 }

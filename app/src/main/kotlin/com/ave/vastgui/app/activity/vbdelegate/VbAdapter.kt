@@ -12,7 +12,7 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/26
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/architecture-components/ui-layer-libraries/view-bind/vb-delegate/#viewholder
+// Documentation: https://ave.entropy2020.cn/documents/tools/architecture-components/ui-layer-libraries/view-bind/vb-delegate/#viewholder
 
 class ArticleAdpt(private val data: MutableList<Articles.Article> = ArrayList()) :
     RecyclerView.Adapter<ArticleAdpt.ArticleVH>() {

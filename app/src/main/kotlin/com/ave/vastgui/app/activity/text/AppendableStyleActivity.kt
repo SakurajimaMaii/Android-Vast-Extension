@@ -37,7 +37,7 @@ import com.kongzue.dialogx.dialogs.MessageDialog
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/2
-// Documentation: https://ave.entropy2020.cn/documents/VastTools/core-topics/text/appendable-style-string/appendable-style-string/
+// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/text/appendable-style-string/appendable-style-string/
 
 class AppendableStyleActivity : ComponentActivity(R.layout.activity_appendable_style) {
 
