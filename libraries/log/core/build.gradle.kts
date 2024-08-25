@@ -1,5 +1,6 @@
+
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.net.URL
 
 plugins {
@@ -18,16 +19,16 @@ java {
     withSourcesJar()
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-}
-
 sourceSets["main"].java.srcDir("src/main/kotlin")
 
 kotlin.sourceSets.all {
     languageSettings.optIn("com.log.vastgui.core.annotation.LogApi")
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
 }
 
 dependencies {

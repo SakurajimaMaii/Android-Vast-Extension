@@ -15,6 +15,7 @@
  */
 
 plugins {
+    alias(libs.plugins.compose.compiler)
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
@@ -80,10 +81,6 @@ android {
 
     buildFeatures {
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.7"
     }
 
     sourceSets {
