@@ -36,9 +36,13 @@ object ColorUtils {
     /** Wrong result when converting color to RGB. */
     val COLOR_RGB_ARRAY_ERROR = intArrayOf(-1, -1, -1, -1)
 
-    /** Map of color opacity. */
+    /**
+     * Map of color opacity.
+     *
+     * @since 1.5.1
+     */
     @JvmField
-    val ColorTransparency = mapOf(
+    val ColorOpacity = mapOf(
         100 to "FF",
         99 to "FC",
         98 to "FA",
@@ -141,6 +145,10 @@ object ColorUtils {
         1 to "03",
         0 to "00"
     )
+
+    /** Map of color transparency. */
+    @JvmField
+    val ColorTransparency = ColorOpacity.mapKeys { 100 - it.key }
 
     /**
      * Parse the color string, and return the corresponding color-int.
@@ -249,7 +257,7 @@ object ColorUtils {
     ): String {
         val color = Color.rgb(Color.red(colorInt), Color.green(colorInt), Color.blue(colorInt))
         val colorHex = colorInt2Hex(color)
-        return StringBuilder(colorHex).replace(1, 3, ColorTransparency[100 - transparency]!!).toString()
+        return StringBuilder(colorHex).replace(1, 3, ColorTransparency[transparency]!!).toString()
     }
 
     /**
