@@ -17,7 +17,6 @@
 package com.log.vastgui.okhttp
 
 import com.ave.vastgui.core.extension.NotNullOrDefault
-import com.ave.vastgui.core.extension.SingletonHolder
 import com.log.vastgui.core.LogCat
 import com.log.vastgui.core.base.LogLevel
 import com.log.vastgui.okhttp.base.ContentLevel
@@ -66,10 +65,10 @@ import java.util.concurrent.TimeUnit
  * ```
  *
  * @see <img
- *     src=https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/okhttp/image/log.png?raw=true>
+ * src=https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/okhttp/image/log.png?raw=true>
  * @since 1.3.3
  */
-class Okhttp3Interceptor private constructor(private val logger: LogCat) : Interceptor {
+class Okhttp3Interceptor(private val logcat: LogCat) : Interceptor {
     /**
      * The filter function allows you to filter log messages for requests
      * matching the specified predicate. Return true directly by default.
@@ -120,7 +119,7 @@ class Okhttp3Interceptor private constructor(private val logger: LogCat) : Inter
         try {
             response = chain.proceed(request)
         } catch (e: Exception) {
-            logger.e(logger.mDefaultTag, "<-- HTTP FAILED", e)
+            logcat.e(logcat.mDefaultTag, "<-- HTTP FAILED", e)
             throw e
         }
         val tookMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs)
@@ -165,14 +164,14 @@ class Okhttp3Interceptor private constructor(private val logger: LogCat) : Inter
                 }
             }
         } catch (e: Exception) {
-            logger.e(
-                logger.mDefaultTag,
+            logcat.e(
+                logcat.mDefaultTag,
                 "Exception encountered while processing request information",
                 e
             )
         } finally {
             requestLog.append("--> END ${request.method}")
-            log(requestLevel(request), logger.mDefaultTag, requestLog.toString())
+            log(requestLevel(request), logcat.mDefaultTag, requestLog.toString())
         }
     }
 
@@ -218,14 +217,14 @@ class Okhttp3Interceptor private constructor(private val logger: LogCat) : Inter
                 }
             }
         } catch (e: Exception) {
-            logger.e(
-                logger.mDefaultTag,
+            logcat.e(
+                logcat.mDefaultTag,
                 "Exception encountered while processing response information",
                 e
             )
         } finally {
             requestLog.append("<-- END HTTP")
-            log(responseLevel(response), logger.mDefaultTag, requestLog.toString())
+            log(responseLevel(response), logcat.mDefaultTag, requestLog.toString())
         }
         return response
     }
@@ -248,17 +247,25 @@ class Okhttp3Interceptor private constructor(private val logger: LogCat) : Inter
                 ?.replace("\n", "\n\t     ")
             appendLine("\tbody:${json ?: bodyJson}")
         } catch (e: Exception) {
-            logger.e(logger.mDefaultTag, "Exception encountered while processing request body", e)
+            logcat.e(logcat.mDefaultTag, "Exception encountered while processing request body", e)
         }
     }
 
     /** @since 1.3.3 */
     private fun log(level: LogLevel, tag: String, content: String, tr: Throwable? = null) {
-        logger.log(level, tag, content, tr)
+        logcat.log(level, tag, content, tr)
     }
 
-    companion object : SingletonHolder<Okhttp3Interceptor, LogCat>(::Okhttp3Interceptor) {
+    companion object {
         private val UTF8: Charset = StandardCharsets.UTF_8
+
+        /**
+         * This method is only for compatibility with the way [Okhttp3Interceptor]
+         * was created before version 1.3.5.
+         *
+         * @since 1.3.5
+         */
+        fun getInstance(arg: LogCat): Okhttp3Interceptor = Okhttp3Interceptor(arg)
 
         /**
          * Get charset.
