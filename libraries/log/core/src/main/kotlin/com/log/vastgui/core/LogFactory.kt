@@ -92,7 +92,7 @@ class LogFactory internal constructor() {
      *
      * @since 1.3.4
      */
-    fun getLogCat(tag: String) = LogCat().also {
+    fun getLogCat(tag: String = "") = LogCat().also {
         it.mDefaultTag = tag
         install(it)
     }
@@ -105,5 +105,10 @@ class LogFactory internal constructor() {
     private fun install(logUtil: LogCat) {
         plugins.values.forEach { logUtil.apply(it) }
     }
+
+    /**
+     * @since 1.3.5
+     */
+    operator fun invoke(tag: String = ""): LogCat = getLogCat(tag)
 
 }
