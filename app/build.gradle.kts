@@ -100,7 +100,7 @@ dependencies {
     implementation(projects.libraries.adapter)
     implementation(projects.libraries.core)
     implementation(projects.libraries.tools)
-    implementation(libs.log.core)
+    implementation(projects.libraries.log.core)
     implementation(libs.log.mars)
     implementation(projects.libraries.log.okhttp)
     implementation(libs.activity.ktx)

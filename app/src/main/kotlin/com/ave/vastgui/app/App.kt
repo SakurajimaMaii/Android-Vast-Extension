@@ -19,7 +19,7 @@ package com.ave.vastgui.app
 import android.app.Application
 import android.content.Intent
 import com.ave.vastgui.app.activity.FileActivity
-import com.ave.vastgui.app.log.mLogFactory
+import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.app.log.marsLogger
 import com.ave.vastgui.tools.content.ContextHelper
 import com.ave.vastgui.tools.exception.AppCrashHandler
@@ -35,7 +35,7 @@ import kotlin.system.exitProcess
 // Date: 2023/12/28
 
 private val crashConfig =
-    AppCrashHandler.Configuration(mLogFactory.getLogCat(App::class.java)) { _, _ ->
+    AppCrashHandler.Configuration(logFactory.getLogCat(App::class.java)) { _, _ ->
         val intent = Intent(ContextHelper.getAppContext(), FileActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
@@ -50,7 +50,7 @@ class App : Application() {
         DialogX.dialogMaxWidth = 400f.DP.toInt()
         DialogX.globalStyle = IOSStyle()
         DialogX.init(this)
-        registerActivityLifecycleCallbacks(ActivityLifecycleLogger(mLogFactory.getLogCat(this::class.java)))
+        registerActivityLifecycleCallbacks(ActivityLifecycleLogger(logFactory.getLogCat(this::class.java)))
 //        WindowManager.getInstance().init(this, OptionFactory())
 //        ThemeSkinService.getInstance().apply {
 //            createViewInterceptor.add(FabFactory())
