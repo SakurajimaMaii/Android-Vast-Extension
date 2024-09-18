@@ -51,15 +51,16 @@ import java.util.concurrent.TimeUnit
  * to view the complete code.
  *
  * ```kotlin
+ * private val logcat: LogCat = logFactory(OpenApi::class.java)
+ * val okhttp3Interceptor: Okhttp3Interceptor = Okhttp3Interceptor(logcat)
+ *
  * // OpenApi.kt
  * class OpenApi : RequestBuilder("https://api.apiopen.top") {
  *     ...
  *
  *     override fun okHttpConfiguration(builder: OkHttpClient.Builder) {
  *         super.okHttpConfiguration(builder)
- *         mLogger = mLogFactory.getLog(OpenApi::class.java)
- *         mOkhttp3Interceptor = Okhttp3Interceptor.getInstance(mLogger)
- *         builder.addInterceptor(mOkhttp3Interceptor)
+ *         builder.addInterceptor(okhttp3Interceptor)
  *     }
  * }
  * ```
@@ -262,9 +263,8 @@ class Okhttp3Interceptor(private val logcat: LogCat) : Interceptor {
         /**
          * This method is only for compatibility with the way [Okhttp3Interceptor]
          * was created before version 1.3.5.
-         *
-         * @since 1.3.5
          */
+        @Deprecated("Use constructor instead.", ReplaceWith("Okhttp3Interceptor(arg)"))
         fun getInstance(arg: LogCat): Okhttp3Interceptor = Okhttp3Interceptor(arg)
 
         /**

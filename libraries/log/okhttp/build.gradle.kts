@@ -46,8 +46,9 @@ kotlin.sourceSets.all {
 }
 
 dependencies{
-    implementation(libs.log.core)
+    implementation(projects.libraries.log.core)
     implementation(libs.okhttp)
+    testImplementation(libs.junit)
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "log-okhttp"
