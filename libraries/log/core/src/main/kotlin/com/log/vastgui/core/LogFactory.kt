@@ -82,6 +82,7 @@ class LogFactory internal constructor() {
      *
      * @since 1.3.4
      */
+    @Deprecated("Use invoke instead.", ReplaceWith("invoke(clazz)"))
     fun getLogCat(clazz: Class<*>) = LogCat().also {
         it.mDefaultTag = clazz.simpleName
         install(it)
@@ -92,6 +93,7 @@ class LogFactory internal constructor() {
      *
      * @since 1.3.4
      */
+    @Deprecated("Use invoke instead.", ReplaceWith("invoke(tag)"))
     fun getLogCat(tag: String = "") = LogCat().also {
         it.mDefaultTag = tag
         install(it)
@@ -107,8 +109,31 @@ class LogFactory internal constructor() {
     }
 
     /**
+     * ```kt
+     * val logFactory: LogFactory = getLogFactory {
+     *     ....
+     * }
+     *
+     * val logcat: LogCat = logFactory("OpenApi")
+     * ```
+     *
      * @since 1.3.5
      */
     operator fun invoke(tag: String = ""): LogCat = getLogCat(tag)
+
+    /**
+     * Use the class name of [clazz] as the tag of the log.
+     *
+     * ```kt
+     * val logFactory: LogFactory = getLogFactory {
+     *     ....
+     * }
+     *
+     * val logcat: LogCat = logFactory(OpenApi::class.java)
+     * ```
+     *
+     * @since 1.3.5
+     */
+    operator fun invoke(clazz: Class<*>): LogCat = getLogCat(clazz)
 
 }
