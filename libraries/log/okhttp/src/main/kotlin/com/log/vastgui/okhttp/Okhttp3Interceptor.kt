@@ -17,6 +17,7 @@
 package com.log.vastgui.okhttp
 
 import com.ave.vastgui.core.extension.NotNullOrDefault
+import com.ave.vastgui.core.extension.nothing_to_do
 import com.log.vastgui.core.LogCat
 import com.log.vastgui.core.base.LogLevel
 import com.log.vastgui.okhttp.base.ContentLevel
@@ -28,6 +29,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 import okhttp3.internal.http.promisesBody
+import okhttp3.internal.sse.ServerSentEventReader
 import okio.Buffer
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -69,7 +71,8 @@ import java.util.concurrent.TimeUnit
  * src=https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/okhttp/image/log.png?raw=true>
  * @since 1.3.3
  */
-class Okhttp3Interceptor(private val logcat: LogCat) : Interceptor {
+class Okhttp3Interceptor(private val logcat: LogCat) :
+    Interceptor {
     /**
      * The filter function allows you to filter log messages for requests
      * matching the specified predicate. Return true directly by default.
@@ -199,7 +202,27 @@ class Okhttp3Interceptor(private val logcat: LogCat) : Interceptor {
             }
             if (contentLevel.body && clone.promisesBody()) {
                 if (responseBody == null) return response
-                if (isPlaintext(responseBody.contentType())) {
+                if (isEventStream(responseBody.contentType())) {
+                    var isFirst = true
+                    val reader = ServerSentEventReader(responseBody.source(), object : ServerSentEventReader.Callback {
+                        override fun onEvent(id: String?, type: String?, data: String) {
+                            val json = bodyJsonConverter
+                                ?.invoke(data)
+                                ?.replace("\n", "\n\t      ")
+                            val tab = if (isFirst) { isFirst = false; "body:" } else "     "
+                            requestLog.appendLine("\t $tab${json ?: data}")
+                        }
+
+                        override fun onRetryChange(timeMs: Long) {
+                            nothing_to_do()
+                        }
+                    })
+                    while (reader.processNextEvent()) {
+                        nothing_to_do()
+                    }
+                }
+                // Deal response as text
+                else if (isPlaintext(responseBody.contentType())) {
                     val bufferSize = 1024 * 8
                     val bytes = ByteArrayOutputStream().use { output ->
                         responseBody!!.byteStream().copyTo(output, bufferSize)
@@ -296,6 +319,11 @@ class Okhttp3Interceptor(private val logcat: LogCat) : Interceptor {
                     subtype.contains("json") ||
                     subtype.contains("xml") ||
                     subtype.contains("html")
+        }
+
+        /** @since 1.3.5 */
+        private fun isEventStream(mediaType: MediaType?): Boolean {
+            return mediaType?.type == "text" && mediaType.subtype == "event-stream"
         }
     }
 }

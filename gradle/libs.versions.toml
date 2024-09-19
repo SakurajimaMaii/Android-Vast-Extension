@@ -112,6 +112,7 @@ material-compose = { module = "androidx.compose.material:material", version.ref 
 material3-compose = { module = "androidx.compose.material3:material3", version.ref = "material3-compose" }
 monitor = { module = "androidx.test:monitor", version.ref = "monitor" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+okhttp-sse = { module = "com.squareup.okhttp3:okhttp-sse", version.ref = "okhttp" }
 paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging-compose" }
 paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging-runtime" }
 paintedskin = { module = "com.github.CoderAlee.PaintedSkin:painted-skin", version.ref = "paintedskin" }

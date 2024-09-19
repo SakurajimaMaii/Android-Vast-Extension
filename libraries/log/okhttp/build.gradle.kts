@@ -48,6 +48,7 @@ kotlin.sourceSets.all {
 dependencies{
     implementation(projects.libraries.log.core)
     implementation(libs.okhttp)
+    implementation(libs.okhttp.sse)
     testImplementation(libs.junit)
 }
 
