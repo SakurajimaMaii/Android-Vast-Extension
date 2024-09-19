@@ -14,7 +14,7 @@ class IndexController {
 
     @GetMapping("stream", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     suspend fun stream() = flow<String> {
-        repeat(5) {
+        repeat(3) {
             emit("{\"name\":\"BeJson\",\"url\":\"http://www.bejson.com\",\"page\":88,\"isNonProfit\":true}")
             delay(50)
         }

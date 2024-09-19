@@ -27,6 +27,7 @@ import okhttp3.MediaType
 import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
+import okhttp3.ResponseBody.Companion.asResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
 import okhttp3.internal.http.promisesBody
 import okhttp3.internal.sse.ServerSentEventReader
@@ -53,22 +54,22 @@ import java.util.concurrent.TimeUnit
  * to view the complete code.
  *
  * ```kotlin
- * private val logcat: LogCat = logFactory(OpenApi::class.java)
- * val okhttp3Interceptor: Okhttp3Interceptor = Okhttp3Interceptor(logcat)
+ * // Add Interceptor
+ * val logcat = logFactory("global")
+ * val okhttp = OkHttpClient
+ *     .Builder()
+ *     .addInterceptor(Okhttp3Interceptor(logcat))
+ *     .build()
  *
- * // OpenApi.kt
- * class OpenApi : RequestBuilder("https://api.apiopen.top") {
- *     ...
- *
- *     override fun okHttpConfiguration(builder: OkHttpClient.Builder) {
- *         super.okHttpConfiguration(builder)
- *         builder.addInterceptor(okhttp3Interceptor)
- *     }
- * }
+ * // Make a request
+ * val request: Request = Request.Builder()
+ *     .url("http://127.0.0.1:7777")
+ *     .build()
+ * okhttp.newCall(request).execute()
  * ```
  *
  * @see <img
- * src=https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/okhttp/image/log.png?raw=true>
+ *    src=https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/okhttp/image/log.png?raw=true>
  * @since 1.3.3
  */
 class Okhttp3Interceptor(private val logcat: LogCat) :
@@ -204,22 +205,34 @@ class Okhttp3Interceptor(private val logcat: LogCat) :
                 if (responseBody == null) return response
                 if (isEventStream(responseBody.contentType())) {
                     var isFirst = true
-                    val reader = ServerSentEventReader(responseBody.source(), object : ServerSentEventReader.Callback {
-                        override fun onEvent(id: String?, type: String?, data: String) {
-                            val json = bodyJsonConverter
-                                ?.invoke(data)
-                                ?.replace("\n", "\n\t      ")
-                            val tab = if (isFirst) { isFirst = false; "body:" } else "     "
-                            requestLog.appendLine("\t $tab${json ?: data}")
-                        }
+                    // https://stackoverflow.com/a/40002832/16905468
+                    // https://stackoverflow.com/a/33862068/16905468
+                    val source = responseBody.source()
+                        .apply { request(Long.MAX_VALUE) }
+                    val bufferClone = source.buffer.clone()
+                    val body = bufferClone
+                        .asResponseBody(responseBody.contentType(), responseBody.contentLength())
+                    val reader =
+                        ServerSentEventReader(source, object : ServerSentEventReader.Callback {
+                            override fun onEvent(id: String?, type: String?, data: String) {
+                                val json = bodyJsonConverter
+                                    ?.invoke(data)
+                                    ?.replace("\n", "\n\t      ")
+                                val tab = if (isFirst) {
+                                    isFirst = false; "body:"
+                                } else "     "
+                                requestLog.appendLine("\t $tab${json ?: data}")
+                            }
 
-                        override fun onRetryChange(timeMs: Long) {
-                            nothing_to_do()
-                        }
-                    })
+                            override fun onRetryChange(timeMs: Long) {
+                                nothing_to_do()
+                            }
+                        })
                     while (reader.processNextEvent()) {
                         nothing_to_do()
                     }
+
+                    return response.newBuilder().body(body).build()
                 }
                 // Deal response as text
                 else if (isPlaintext(responseBody.contentType())) {
