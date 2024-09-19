@@ -35,7 +35,7 @@ import com.log.vastgui.core.base.allLogLevel as allLogLevel
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/5
-// Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
+// Documentation: https://ave.entropy2020.cn/documents/log/log-core/plugin/storage/
 
 /**
  * [LogStorage].
