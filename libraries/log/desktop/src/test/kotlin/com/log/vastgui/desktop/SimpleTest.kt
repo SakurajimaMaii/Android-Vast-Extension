@@ -22,8 +22,8 @@ import org.junit.Test
 // Email: guihy2019@gmail.com
 // Date: 2024/5/14 23:59
 
-class LogCatTest {
-    private val logcat = mLogFactory.getLogCat(LogCatTest::class.java)
+class SimpleTest {
+    private val logcat = logFactory(SimpleTest::class.java)
 
     @Test
     fun logTest() {
@@ -36,5 +36,4 @@ class LogCatTest {
         logcat.a("This is a log.")
     }
 
-    private class User(val name: String)
 }
