@@ -25,7 +25,7 @@ plugins {
 }
 
 group = "io.github.sakurajimamaii"
-version = "1.3.4"
+version = "1.3.5"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -48,6 +48,9 @@ kotlin.sourceSets.all {
 dependencies{
     implementation(libs.log.core)
     implementation(libs.okhttp)
+    implementation(libs.okhttp.sse)
+    implementation(libs.vastcore)
+    testImplementation(libs.junit)
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "log-okhttp"
@@ -61,7 +64,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "log-okhttp"
-                version = "1.3.4"
+                version = "1.3.5"
 
                 afterEvaluate {
                     from(components["java"])

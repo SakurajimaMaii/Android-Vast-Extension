@@ -19,25 +19,25 @@ package com.log.vastgui.desktop
 import com.log.vastgui.core.LogFactory
 import com.log.vastgui.core.base.LogStore
 import com.log.vastgui.core.base.Logger
-import com.log.vastgui.core.format.LineFormat
 import com.log.vastgui.core.getLogFactory
 import com.log.vastgui.core.json.GsonConverter
 import com.log.vastgui.core.plugin.LogJson
 import com.log.vastgui.core.plugin.LogPrinter
 import com.log.vastgui.core.plugin.LogStorage
 import com.log.vastgui.core.plugin.LogSwitch
+import com.log.vastgui.desktop.format.LineColorfulFormat
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/5
 
 @JvmField
-val mLogFactory: LogFactory = getLogFactory {
+val logFactory: LogFactory = getLogFactory {
     install(LogSwitch) {
         open = true
     }
     install(LogPrinter) {
-        logger = Logger.desktop(LineFormat)
+        logger = Logger.desktop(LineColorfulFormat)
     }
     install(LogStorage) {
         logStore = LogStore.desktop("", 1024L * 1000)

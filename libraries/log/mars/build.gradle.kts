@@ -70,12 +70,12 @@ kotlin.sourceSets.all {
 }
 
 dependencies {
-    dokkaPlugin(libs.android.documentation.plugin)
-    implementation(libs.log.core)
     implementation(libs.core.ktx)
+    implementation(libs.log.core)
+    implementation(libs.vastcore)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.junit)
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "log-mars"
@@ -90,7 +90,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "log-mars"
-                version = "1.3.4"
+                version = "1.3.5"
 
                 afterEvaluate {
                     from(components["release"])

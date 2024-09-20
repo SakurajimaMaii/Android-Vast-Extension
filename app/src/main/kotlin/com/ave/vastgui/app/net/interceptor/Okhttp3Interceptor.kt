@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 
-package com.log.vastgui.desktop
+package com.ave.vastgui.app.net.interceptor
 
-import org.junit.Test
+import com.ave.vastgui.app.log.gson
+import com.ave.vastgui.app.log.logFactory
+import com.log.vastgui.core.LogCat
+import com.log.vastgui.okhttp.Okhttp3Interceptor
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2024/5/14 23:59
+// Date: 2024/9/18
 
-class LogCatTest {
-    private val logcat = mLogFactory.getLogCat(LogCatTest::class.java)
-
-    @Test
-    fun logTest() {
-        val map = mapOf("name" to "Xiao Ming", "age" to 19)
-        logcat.d(map)
-        val list = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-        logcat.i(list)
-        logcat.w("This is a log.")
-        logcat.e("This is a log.")
-        logcat.a("This is a log.")
-    }
-
-    private class User(val name: String)
+private val logcat: LogCat = logFactory(Okhttp3Interceptor::class.java)
+val okhttp3Interceptor: Okhttp3Interceptor = Okhttp3Interceptor(logcat).apply {
+    bodyJsonConverter = { gson.parseString(it) }
 }
