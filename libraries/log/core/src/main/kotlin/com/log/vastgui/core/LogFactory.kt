@@ -25,7 +25,7 @@ import com.log.vastgui.core.plugin.LogTypeValidator
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/5
-// Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
+// Documentation: https://ave.entropy2020.cn/documents/log/log-core/setting-up/
 
 /**
  * Get log factory
@@ -82,6 +82,7 @@ class LogFactory internal constructor() {
      *
      * @since 1.3.4
      */
+    @Deprecated("Use invoke instead.", ReplaceWith("invoke(clazz)"))
     fun getLogCat(clazz: Class<*>) = LogCat().also {
         it.mDefaultTag = clazz.simpleName
         install(it)
@@ -92,7 +93,8 @@ class LogFactory internal constructor() {
      *
      * @since 1.3.4
      */
-    fun getLogCat(tag: String) = LogCat().also {
+    @Deprecated("Use invoke instead.", ReplaceWith("invoke(tag)"))
+    fun getLogCat(tag: String = "") = LogCat().also {
         it.mDefaultTag = tag
         install(it)
     }
@@ -105,5 +107,33 @@ class LogFactory internal constructor() {
     private fun install(logUtil: LogCat) {
         plugins.values.forEach { logUtil.apply(it) }
     }
+
+    /**
+     * ```kt
+     * val logFactory: LogFactory = getLogFactory {
+     *     ....
+     * }
+     *
+     * val logcat: LogCat = logFactory("OpenApi")
+     * ```
+     *
+     * @since 1.3.5
+     */
+    operator fun invoke(tag: String = ""): LogCat = getLogCat(tag)
+
+    /**
+     * Use the class name of [clazz] as the tag of the log.
+     *
+     * ```kt
+     * val logFactory: LogFactory = getLogFactory {
+     *     ....
+     * }
+     *
+     * val logcat: LogCat = logFactory(OpenApi::class.java)
+     * ```
+     *
+     * @since 1.3.5
+     */
+    operator fun invoke(clazz: Class<*>): LogCat = getLogCat(clazz)
 
 }

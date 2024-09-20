@@ -21,7 +21,6 @@ import com.log.vastgui.core.annotation.LogApi
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/28
-// Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
 
 /**
  * The content representing [mContent] is text.

@@ -25,9 +25,7 @@ import kotlin.properties.Delegates
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/6/23 1:13
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/log/log-core/plugin/pretty/
 
 /**
  * [LogPretty] allows printing the json string in the log in pretty style.
@@ -36,7 +34,7 @@ import kotlin.properties.Delegates
  * private val gsonConverter = GsonConverter.getInstance(true)
  *
  * @JvmField
- * val mLogFactory: LogFactory = getLogFactory {
+ * val logFactory: LogFactory = getLogFactory {
  *     ....
  *     install(LogPretty) {
  *         converter = gsonConverter

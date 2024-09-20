@@ -21,7 +21,7 @@ import com.ave.vastgui.core.extension.SingletonHolder
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/14
-// Documentation: https://ave.entropy2020.cn/documents/VastCore/extension/singleton-holder/
+// Documentation: https://ave.entropy2020.cn/documents/core/extension/singleton-holder/
 
 class Singleton private constructor(name: String) {
 

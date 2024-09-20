@@ -30,7 +30,7 @@ import com.log.vastgui.desktop.format.LineColorfulFormat
  * Desktop logger.
  *
  * ```kotlin
- * val mLogFactory: LogFactory = getLogFactory {
+ * val logFactory: LogFactory = getLogFactory {
  *     ...
  *     install(LogPrinter) {
  *         logger = Logger.desktop()
@@ -38,8 +38,9 @@ import com.log.vastgui.desktop.format.LineColorfulFormat
  * }
  * ```
  *
+ * @see <img
+ * src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/desktop/image/log.png?raw=true"/>
  * @since 1.3.1
- * @see <img src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/desktop/image/log.png?raw=true"/>
  */
 fun Logger.Companion.desktop(logFormat: LogFormat = LineColorfulFormat): DesktopLogger =
     DesktopLogger(logFormat)

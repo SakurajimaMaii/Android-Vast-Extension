@@ -74,7 +74,7 @@ dependencies {
 extra["PUBLISH_ARTIFACT_ID"] = "VastNetStateLayout"
 extra["PUBLISH_DESCRIPTION"] = "A layout to set customized network state page."
 extra["PUBLISH_URL"] =
-    "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/netstatelayout"
+    "https://github.com/SakurajimaMaii/Android-Vast-Extension"
 
 val mavenPropertiesFile = File(rootDir, "maven.properties")
 if (mavenPropertiesFile.exists()) {
@@ -83,7 +83,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "VastNetStateLayout"
-                version = "1.1.1"
+                version = "1.1.2"
 
                 afterEvaluate {
                     from(components["release"])

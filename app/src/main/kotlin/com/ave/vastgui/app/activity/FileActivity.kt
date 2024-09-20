@@ -20,14 +20,18 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityFileBinding
-import com.ave.vastgui.app.log.mLogFactory
-import com.ave.vastgui.app.log.mLogFactory2
+import com.ave.vastgui.app.log.logFactory
+import com.ave.vastgui.app.net.LocalApi
+import com.ave.vastgui.app.net.LocalApiService
+import com.ave.vastgui.tools.network.request.create
 import com.ave.vastgui.tools.utils.drawable
 import com.ave.vastgui.tools.view.extension.hideKeyBroad
 import com.ave.vastgui.tools.view.extension.isShouldHideKeyBroad
 import com.ave.vastgui.tools.viewbinding.viewBinding
+import kotlinx.coroutines.launch
 
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com
@@ -36,21 +40,27 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 
 class FileActivity : AppCompatActivity(R.layout.activity_file) {
 
-    private val logcat = mLogFactory.getLogCat(FileActivity::class.java)
-    private val mBinding by viewBinding(ActivityFileBinding::bind)
+    private val logcat = logFactory(FileActivity::class.java)
+    private val binding by viewBinding(ActivityFileBinding::bind)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding.button.setOnClickListener {
+
+        lifecycleScope.launch {
+            LocalApi().create(LocalApiService::class.java)
+                .getLocalData()
+        }
+
+        binding.button.setOnClickListener {
             logcat.d("这是一条日志")
             logcat.e(NullPointerException("this object is null."))
         }
         val drawable = drawable(R.drawable.ic_github).also {
             logcat.d(it!!::class.java.simpleName)
         }
-        mBinding.icon1.run {  }
+        binding.icon1.run {  }
         null.isNullOrBlank()
-        mBinding.icon1.setImageDrawable(drawable)
+        binding.icon1.setImageDrawable(drawable)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

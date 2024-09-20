@@ -33,9 +33,6 @@ import com.log.vastgui.desktop.base.Yellow
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/6/23
-// Description: 
-// Documentation:
-// Reference:
 
 /**
  * Line format with colorful style.

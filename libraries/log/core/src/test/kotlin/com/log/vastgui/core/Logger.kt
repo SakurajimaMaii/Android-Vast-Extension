@@ -16,9 +16,8 @@
 
 package com.log.vastgui.core
 
-import com.log.vastgui.core.base.LogLevel
 import com.log.vastgui.core.base.allLogLevel
-import com.log.vastgui.core.format.OnlyMsgFormat
+import com.log.vastgui.core.format.LineFormat
 import com.log.vastgui.core.json.GsonConverter
 import com.log.vastgui.core.plugin.LogJson
 import com.log.vastgui.core.plugin.LogPretty
@@ -38,7 +37,7 @@ val mLogFactory: LogFactory = getLogFactory {
     }
     install(LogPrinter) {
         levelSet = allLogLevel
-        logger = SimpleLogger(OnlyMsgFormat)
+        logger = SimpleLogger(LineFormat)
     }
     install(LogJson) {
         converter = gson
@@ -46,7 +45,7 @@ val mLogFactory: LogFactory = getLogFactory {
     install(LogPretty) {
         converter = gson
     }
-    install(SysPlugin)
+    // install(SysPlugin)
 }
 
 //    install(LogPrinter) {

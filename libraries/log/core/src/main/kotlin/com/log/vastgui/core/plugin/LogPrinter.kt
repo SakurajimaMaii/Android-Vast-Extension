@@ -34,7 +34,7 @@ import com.log.vastgui.core.base.default
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/28
-// Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
+// Documentation: https://ave.entropy2020.cn/documents/log/log-core/plugin/printer/
 
 /**
  * LogPrinter.

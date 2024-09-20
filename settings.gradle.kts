@@ -21,11 +21,11 @@ includeBuild("convention-plugins")
 
 rootProject.name = "Android-Vast-Extension"
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 // =======
 // = Lib =
 // =======
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
 val libs = arrayOf(
     "adapter",
     "core",
@@ -39,4 +39,15 @@ val libs = arrayOf(
 
 libs.forEach {
     include(":libraries:$it")
+}
+
+// =======
+// = Dev =
+// =======
+val devenv = arrayOf(
+    "streamapp"
+)
+
+devenv.forEach {
+    include(":devenv:$it")
 }

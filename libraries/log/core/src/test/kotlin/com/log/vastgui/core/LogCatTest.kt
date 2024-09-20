@@ -102,24 +102,27 @@ private val paragraph = """
 
 class LogCatTest {
 
-    private val logCat = mLogFactory.getLogCat(LogCatTest::class.java)
+    private val logCat = mLogFactory("tag")
 
     @Test
     fun log() {
-        // 测试 json 字符串
-        jsonString.forEach {
-            logCat.d(it)
-        }
-        // 测试对象
-        obj.forEach {
-            logCat.d(it)
-        }
-        // 打印异常
-        logCat.e(NullPointerException("this object is null."))
-        logCat.d {
-            "你好，这是一条日志"
-        }
-        logCat.d(paragraph)
+//        // 测试 json 字符串
+//        jsonString.forEach {
+//            logCat.d(it)
+//        }
+//        // 测试对象
+//        obj.forEach {
+//            logCat.d(it)
+//        }
+//        // 打印异常
+//        logCat.e(NullPointerException("this object is null."))
+//        logCat.d {
+//            "你好，这是一条日志"
+//        }
+//        logCat.d(paragraph)
+
+        val key = System.getenv()["Key"]
+        logCat.d(key)
     }
 
 }

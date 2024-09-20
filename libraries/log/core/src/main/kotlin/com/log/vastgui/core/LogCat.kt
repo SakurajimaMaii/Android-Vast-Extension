@@ -33,7 +33,7 @@ import kotlin.properties.Delegates
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
-// Documentation: https://ave.entropy2020.cn/documents/log/log-core/description/
+// Documentation: https://ave.entropy2020.cn/documents/log/log-core/setting-up/
 
 /**
  * [LogCat].
@@ -453,8 +453,8 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun i(tag: String, content: Any, tr: Throwable? = null) {
-        log(LogLevel.INFO, tag, content, tr)
+    fun i(tag: String, content: Any?, tr: Throwable? = null) {
+        log(LogLevel.INFO, tag, convertIfNull(content), tr)
     }
 
     /**
@@ -463,7 +463,7 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun i(content: Any, tr: Throwable? = null) {
+    fun i(content: Any?, tr: Throwable? = null) {
         i(mDefaultTag, content, tr)
     }
 
@@ -483,8 +483,8 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun v(tag: String, content: Any, tr: Throwable? = null) {
-        log(LogLevel.VERBOSE, tag, content, tr)
+    fun v(tag: String, content: Any?, tr: Throwable? = null) {
+        log(LogLevel.VERBOSE, tag, convertIfNull(content), tr)
     }
 
     /**
@@ -493,7 +493,7 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun v(content: Any, tr: Throwable? = null) {
+    fun v(content: Any?, tr: Throwable? = null) {
         v(mDefaultTag, content, tr)
     }
 
@@ -513,8 +513,8 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun w(tag: String, content: Any, tr: Throwable? = null) {
-        log(LogLevel.WARN, tag, content, tr)
+    fun w(tag: String, content: Any?, tr: Throwable? = null) {
+        log(LogLevel.WARN, tag, convertIfNull(content), tr)
     }
 
     /**
@@ -523,7 +523,7 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun w(content: Any, tr: Throwable? = null) {
+    fun w(content: Any?, tr: Throwable? = null) {
         w(mDefaultTag, content, tr)
     }
 
@@ -543,8 +543,8 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun d(tag: String, content: Any, tr: Throwable? = null) {
-        log(LogLevel.DEBUG, tag, content, tr)
+    fun d(tag: String, content: Any?, tr: Throwable? = null) {
+        log(LogLevel.DEBUG, tag, convertIfNull(content), tr)
     }
 
     /**
@@ -553,7 +553,7 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun d(content: Any, tr: Throwable? = null) {
+    fun d(content: Any?, tr: Throwable? = null) {
         d(mDefaultTag, content, tr)
     }
 
@@ -573,8 +573,8 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun e(tag: String, content: Any, tr: Throwable? = null) {
-        log(LogLevel.ERROR, tag, content, tr)
+    fun e(tag: String, content: Any?, tr: Throwable? = null) {
+        log(LogLevel.ERROR, tag, convertIfNull(content), tr)
     }
 
     /**
@@ -583,7 +583,7 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun e(content: Any, tr: Throwable? = null) {
+    fun e(content: Any?, tr: Throwable? = null) {
         e(mDefaultTag, content, tr)
     }
 
@@ -617,8 +617,8 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun a(tag: String, content: Any, tr: Throwable? = null) {
-        log(LogLevel.ASSERT, tag, content, tr)
+    fun a(tag: String, content: Any?, tr: Throwable? = null) {
+        log(LogLevel.ASSERT, tag, convertIfNull(content), tr)
     }
 
     /**
@@ -627,7 +627,7 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun a(content: Any, tr: Throwable? = null) {
+    fun a(content: Any?, tr: Throwable? = null) {
         a(mDefaultTag, content, tr)
     }
 
@@ -639,6 +639,12 @@ class LogCat internal constructor() {
     @JvmOverloads
     fun a(tag: String = mDefaultTag, tr: Throwable? = null, lazyMsg: () -> Any) {
         a(tag, LazyMessageWrapper(lazyMsg), tr)
+    }
+
+    /** @since 1.3.5 */
+    private fun convertIfNull(content: Any?): Any {
+        if (null != content) return content
+        return "null"
     }
 
     companion object {

@@ -21,7 +21,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.ave.vastgui.app.R
-import com.ave.vastgui.app.log.mLogFactory
+import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.app.databinding.FragmentReceiverBinding
 import com.ave.vastgui.app.viewmodel.SharedVM
 import com.ave.vastgui.tools.viewbinding.viewBinding
@@ -34,7 +34,7 @@ class ReceiverFragment : Fragment(R.layout.fragment_receiver) {
 
     private val mViewModel by viewModels<SharedVM>({ requireActivity() })
     private val mBinding by viewBinding(FragmentReceiverBinding::bind)
-    private val mLogger = mLogFactory.getLogCat(ReceiverFragment::class.java)
+    private val mLogger = logFactory.getLogCat(ReceiverFragment::class.java)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

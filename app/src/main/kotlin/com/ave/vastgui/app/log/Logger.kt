@@ -49,7 +49,7 @@ val fastJson = FastJsonConverter.getInstance(true)
 val jackson = JacksonConverter.getInstance(true)
 
 @JvmField
-val mLogFactory: LogFactory = getLogFactory {
+val logFactory: LogFactory = getLogFactory {
     install(LogSwitch) {
         open = true
     }
@@ -65,7 +65,7 @@ val mLogFactory: LogFactory = getLogFactory {
 }
 
 @JvmField
-val mLogFactory2: LogFactory = getLogFactory {
+val logFactory2: LogFactory = getLogFactory {
     install(LogSwitch) {
         open = false
     }
