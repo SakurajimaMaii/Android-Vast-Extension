@@ -15,7 +15,9 @@
  */
 
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import java.net.URL
 
 plugins {
@@ -33,9 +35,9 @@ java {
     withSourcesJar()
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+tasks.named<KotlinJvmCompile>("compileKotlin") {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
@@ -46,10 +48,10 @@ kotlin.sourceSets.all {
 }
 
 dependencies{
-    implementation(libs.log.core)
+    compileOnly(projects.libraries.core)
+    compileOnly(projects.libraries.log.core)
     implementation(libs.okhttp)
     implementation(libs.okhttp.sse)
-    implementation(libs.vastcore)
     testImplementation(libs.junit)
 }
 

@@ -1,5 +1,7 @@
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import java.net.URL
 
 plugins {
@@ -18,9 +20,9 @@ java {
     withSourcesJar()
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+tasks.named<KotlinJvmCompile>("compileKotlin") {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
@@ -34,7 +36,7 @@ dependencies {
     implementation(libs.fastjson2)
     implementation(libs.gson)
     implementation(libs.jackson.databind)
-    implementation(libs.vastcore)
+    implementation(projects.libraries.core)
     testImplementation(libs.junit)
 }
 

@@ -79,9 +79,9 @@ kotlin.sourceSets.all {
 }
 
 dependencies {
-    api(libs.log.core)
     api(libs.security.crypto)
     api(libs.zxing.core)
+    api(projects.libraries.log.core)
     implementation(libs.activity.ktx)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.versionedparcelable)
@@ -109,7 +109,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.recyclerview)
     implementation(libs.retrofit)
-    implementation(libs.vastcore)
+    implementation(projects.libraries.log.core)
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastTools"
