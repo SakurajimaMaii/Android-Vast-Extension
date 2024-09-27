@@ -70,9 +70,9 @@ kotlin.sourceSets.all {
 }
 
 dependencies {
+    compileOnly(projects.libraries.core)
+    compileOnly(projects.libraries.log.core)
     implementation(libs.core.ktx)
-    implementation(libs.log.core)
-    implementation(libs.vastcore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
