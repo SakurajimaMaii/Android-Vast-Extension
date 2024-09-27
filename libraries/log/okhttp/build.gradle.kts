@@ -48,7 +48,7 @@ kotlin.sourceSets.all {
 }
 
 dependencies{
-    compileOnly(projects.libraries.core)
+    compileOnly(projects.libraries.kernel)
     compileOnly(projects.libraries.log.core)
     implementation(libs.okhttp)
     implementation(libs.okhttp.sse)

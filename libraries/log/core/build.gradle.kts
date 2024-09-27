@@ -1,6 +1,6 @@
+
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import java.net.URL
 
@@ -36,7 +36,7 @@ dependencies {
     implementation(libs.fastjson2)
     implementation(libs.gson)
     implementation(libs.jackson.databind)
-    implementation(projects.libraries.core)
+    implementation(projects.libraries.kernel)
     testImplementation(libs.junit)
 }
 

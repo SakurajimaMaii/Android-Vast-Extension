@@ -70,7 +70,7 @@ kotlin.sourceSets.all {
 }
 
 dependencies {
-    compileOnly(projects.libraries.core)
+    compileOnly(projects.libraries.kernel)
     compileOnly(projects.libraries.log.core)
     implementation(libs.core.ktx)
     testImplementation(libs.junit)

@@ -48,7 +48,7 @@ kotlin.sourceSets.all {
 }
 
 dependencies {
-    compileOnly(projects.libraries.core)
+    compileOnly(projects.libraries.kernel)
     compileOnly(projects.libraries.log.core)
     testImplementation(libs.fastjson2)
     testImplementation(libs.fastjson2.kotlin)
