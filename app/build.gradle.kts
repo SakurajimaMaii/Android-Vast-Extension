@@ -124,7 +124,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.security.crypto)
     implementation(projects.libraries.adapter)
-    implementation(projects.libraries.core)
+    implementation(projects.libraries.kernel)
     implementation(projects.libraries.log.mars)
     implementation(projects.libraries.log.okhttp)
     implementation(projects.libraries.netstatelayout)
