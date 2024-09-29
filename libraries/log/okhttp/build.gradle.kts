@@ -15,17 +15,19 @@
  */
 
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import java.net.URL
 
 plugins {
+    kotlin("jvm")
     id("java-library")
     id("convention.publication")
-    alias(libs.plugins.kotlinJvm)
 }
 
 group = "io.github.sakurajimamaii"
-version = "1.3.5"
+version = "1.3.6"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -33,9 +35,9 @@ java {
     withSourcesJar()
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+tasks.named<KotlinJvmCompile>("compileKotlin") {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
@@ -46,11 +48,16 @@ kotlin.sourceSets.all {
 }
 
 dependencies{
-    implementation(libs.log.core)
+    compileOnly(projects.libraries.kernel)
+    compileOnly(projects.libraries.log.core)
     implementation(libs.okhttp)
     implementation(libs.okhttp.sse)
-    implementation(libs.vastcore)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.ktor.client.core)
+    testImplementation(libs.ktor.client.okhttp)
+    testImplementation(projects.libraries.kernel)
+    testImplementation(projects.libraries.log.core)
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "log-okhttp"
@@ -64,7 +71,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "log-okhttp"
-                version = "1.3.5"
+                version = "1.3.6"
 
                 afterEvaluate {
                     from(components["java"])

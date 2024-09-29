@@ -38,25 +38,28 @@ import kotlin.properties.Delegates
 /**
  * [LogCat].
  *
+ * ```kotlin
+ * val logFactory: LogFactory = getLogFactory {
+ *     install(LogSwitch) {
+ *         open = true
+ *     }
+ *     install(LogPrinter)
+ * }
+ *
+ * val logcat = logFactory("global")
+ * ```
+ *
+ * @param tag The default tag of [LogCat].
  * @since 1.3.4
  */
-class LogCat internal constructor() {
-
-    /**
-     * Used to identify the source of a log message. It usually identifies the
-     * class or activity where the log call occurs.
-     *
-     * @since 0.5.3
-     */
-    @LogApi
-    var mDefaultTag: String by Delegates.notNull()
+class LogCat internal constructor(@LogApi val tag: String) {
 
     /**
      * Log pipeline.
      *
      * @since 1.3.4
      */
-    val logPipeline: LogPipeline = LogPipeline()
+    internal val logPipeline: LogPipeline = LogPipeline()
 
     /**
      * `true` if you want to print log,`false` if you don't want to print the
@@ -104,7 +107,7 @@ class LogCat internal constructor() {
     )
     fun i(content: String, tr: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.INFO, mDefaultTag, content, tr)
+            logPrint(LogLevel.INFO, tag, content, tr)
         }
     }
 
@@ -140,7 +143,7 @@ class LogCat internal constructor() {
     )
     fun v(content: String, tr: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.VERBOSE, mDefaultTag, content, tr)
+            logPrint(LogLevel.VERBOSE, tag, content, tr)
         }
     }
 
@@ -176,7 +179,7 @@ class LogCat internal constructor() {
     )
     fun w(content: String, tr: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.WARN, mDefaultTag, content, tr)
+            logPrint(LogLevel.WARN, tag, content, tr)
         }
     }
 
@@ -212,7 +215,7 @@ class LogCat internal constructor() {
     )
     fun d(content: String, tr: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.DEBUG, mDefaultTag, content, tr)
+            logPrint(LogLevel.DEBUG, tag, content, tr)
         }
     }
 
@@ -248,7 +251,7 @@ class LogCat internal constructor() {
     )
     fun e(content: String, tr: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.ERROR, mDefaultTag, content, tr)
+            logPrint(LogLevel.ERROR, tag, content, tr)
         }
     }
 
@@ -283,7 +286,7 @@ class LogCat internal constructor() {
     )
     fun a(content: String, tr: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.ASSERT, mDefaultTag, content, tr)
+            logPrint(LogLevel.ASSERT, tag, content, tr)
         }
     }
 
@@ -366,7 +369,7 @@ class LogCat internal constructor() {
             thread.name,
             thread.stackTrace[index + 1],
             level,
-            mDefaultTag,
+            tag,
             System.currentTimeMillis(),
             jsonString,
             JSON_TYPE,
@@ -464,7 +467,7 @@ class LogCat internal constructor() {
      */
     @JvmOverloads
     fun i(content: Any?, tr: Throwable? = null) {
-        i(mDefaultTag, content, tr)
+        i(tag, content, tr)
     }
 
     /**
@@ -473,7 +476,7 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun i(tag: String = mDefaultTag, tr: Throwable? = null, lazyMsg: () -> Any) {
+    fun i(tag: String = this.tag, tr: Throwable? = null, lazyMsg: () -> Any) {
         i(tag, LazyMessageWrapper(lazyMsg), tr)
     }
 
@@ -494,7 +497,7 @@ class LogCat internal constructor() {
      */
     @JvmOverloads
     fun v(content: Any?, tr: Throwable? = null) {
-        v(mDefaultTag, content, tr)
+        v(tag, content, tr)
     }
 
     /**
@@ -503,7 +506,7 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun v(tag: String = mDefaultTag, tr: Throwable? = null, lazyMsg: () -> Any) {
+    fun v(tag: String = this.tag, tr: Throwable? = null, lazyMsg: () -> Any) {
         v(tag, LazyMessageWrapper(lazyMsg), tr)
     }
 
@@ -524,7 +527,7 @@ class LogCat internal constructor() {
      */
     @JvmOverloads
     fun w(content: Any?, tr: Throwable? = null) {
-        w(mDefaultTag, content, tr)
+        w(tag, content, tr)
     }
 
     /**
@@ -533,7 +536,7 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun w(tag: String = mDefaultTag, tr: Throwable? = null, lazyMsg: () -> Any) {
+    fun w(tag: String = this.tag, tr: Throwable? = null, lazyMsg: () -> Any) {
         w(tag, LazyMessageWrapper(lazyMsg), tr)
     }
 
@@ -554,7 +557,7 @@ class LogCat internal constructor() {
      */
     @JvmOverloads
     fun d(content: Any?, tr: Throwable? = null) {
-        d(mDefaultTag, content, tr)
+        d(tag, content, tr)
     }
 
     /**
@@ -563,7 +566,7 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun d(tag: String = mDefaultTag, tr: Throwable? = null, lazyMsg: () -> Any) {
+    fun d(tag: String = this.tag, tr: Throwable? = null, lazyMsg: () -> Any) {
         d(tag, LazyMessageWrapper(lazyMsg), tr)
     }
 
@@ -584,7 +587,7 @@ class LogCat internal constructor() {
      */
     @JvmOverloads
     fun e(content: Any?, tr: Throwable? = null) {
-        e(mDefaultTag, content, tr)
+        e(tag, content, tr)
     }
 
     /**
@@ -593,7 +596,7 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun e(tag: String = mDefaultTag, tr: Throwable? = null, lazyMsg: () -> Any) {
+    fun e(tag: String = this.tag, tr: Throwable? = null, lazyMsg: () -> Any) {
         e(tag, LazyMessageWrapper(lazyMsg), tr)
     }
 
@@ -607,7 +610,7 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun e(tr: Throwable, tag: String = mDefaultTag) {
+    fun e(tr: Throwable, tag: String = this.tag) {
         e(tag, tr.message ?: "Please refer to exception.", tr)
     }
 
@@ -628,7 +631,7 @@ class LogCat internal constructor() {
      */
     @JvmOverloads
     fun a(content: Any?, tr: Throwable? = null) {
-        a(mDefaultTag, content, tr)
+        a(tag, content, tr)
     }
 
     /**
@@ -637,7 +640,7 @@ class LogCat internal constructor() {
      * @since 1.3.4
      */
     @JvmOverloads
-    fun a(tag: String = mDefaultTag, tr: Throwable? = null, lazyMsg: () -> Any) {
+    fun a(tag: String = this.tag, tr: Throwable? = null, lazyMsg: () -> Any) {
         a(tag, LazyMessageWrapper(lazyMsg), tr)
     }
 

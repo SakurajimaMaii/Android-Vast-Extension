@@ -15,14 +15,16 @@
  */
 
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import java.net.URL
 
 plugins {
-    id("java-library")
+    kotlin("jvm")
     id("convention.publication")
+    id("java-library")
     id("org.jetbrains.dokka")
-    alias(libs.plugins.kotlinJvm)
 }
 
 group = "io.github.sakurajimamaii"
@@ -34,9 +36,9 @@ java {
     withSourcesJar()
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+tasks.named<KotlinJvmCompile>("compileKotlin") {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 

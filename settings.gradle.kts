@@ -28,7 +28,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 // =======
 val libs = arrayOf(
     "adapter",
-    "core",
+    "kernel",
     "netstatelayout",
     "tools",
     "log:desktop",

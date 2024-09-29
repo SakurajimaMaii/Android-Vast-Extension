@@ -35,7 +35,7 @@ import kotlin.system.exitProcess
 // Date: 2023/12/28
 
 private val crashConfig =
-    AppCrashHandler.Configuration(logFactory.getLogCat(App::class.java)) { _, _ ->
+    AppCrashHandler.Configuration(logFactory("App")) { _, _ ->
         val intent = Intent(ContextHelper.getAppContext(), FileActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
@@ -57,7 +57,7 @@ class App : Application() {
 //            addThemeSkinExecutorBuilder(FabExecutorBuilder())
 //        }
         // ConstraintLayoutCompat.init()
-        // Thread.setDefaultUncaughtExceptionHandler(AppCrashHandler.getInstance(crashConfig))
+        Thread.setDefaultUncaughtExceptionHandler(AppCrashHandler.getInstance(crashConfig))
     }
 
     override fun onLowMemory() {
