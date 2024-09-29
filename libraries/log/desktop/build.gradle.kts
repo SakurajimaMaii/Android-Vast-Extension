@@ -21,9 +21,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import java.net.URL
 
 plugins {
-    id("java-library")
+    kotlin("jvm")
     id("convention.publication")
-    alias(libs.plugins.kotlinJvm)
+    id("java-library")
 }
 
 group = "io.github.sakurajimamaii"

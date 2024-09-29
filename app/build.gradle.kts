@@ -93,6 +93,10 @@ android {
     sourceSets["main"].java.srcDirs("src/main/kotlin", "src/main/java")
 }
 
+kotlin.sourceSets.all {
+    languageSettings.optIn("com.log.vastgui.core.annotation.LogApi")
+}
+
 dependencies {
     implementation(libs.activity.ktx)
     implementation(libs.adapter.rxjava3)

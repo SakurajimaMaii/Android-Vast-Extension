@@ -62,15 +62,15 @@ class AppCrashHandler private constructor(private val configuration: Configurati
      * @since 1.4.1
      */
     class Configuration @JvmOverloads constructor(
-        val logger: LogCat? = null,
+        val logcat: LogCat? = null,
         val action: dealAppCrash = { _, _ -> nothing_to_do() }
     )
 
     override fun uncaughtException(thread: Thread, exception: Throwable) {
-        if (null != configuration.logger) {
-            val logger = configuration.logger
+        if (null != configuration.logcat) {
+            val logcat = configuration.logcat
             val content = "Please refer to exception."
-            logger.log(LogLevel.ERROR, logger.mDefaultTag, content, exception)
+            logcat.log(LogLevel.ERROR, logcat.tag, content, exception)
         }
         configuration.action(thread, exception)
     }

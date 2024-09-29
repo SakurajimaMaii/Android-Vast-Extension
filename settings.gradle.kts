@@ -40,3 +40,14 @@ val libs = arrayOf(
 libs.forEach {
     include(":libraries:$it")
 }
+
+// =======
+// = Dev =
+// =======
+val devenv = arrayOf(
+    "streamapp"
+)
+
+devenv.forEach {
+    include(":devenv:$it")
+}

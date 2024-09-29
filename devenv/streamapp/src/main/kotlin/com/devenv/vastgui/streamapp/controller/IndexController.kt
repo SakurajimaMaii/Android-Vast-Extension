@@ -20,16 +20,23 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.print.attribute.standard.RequestingUserName
 
 @RestController
 class IndexController {
+    class User(val name: String, val age: Int)
+
     @GetMapping("/")
     suspend fun index() =
         "{\"name\":\"BeJson\",\"url\":\"http://www.bejson.com\",\"page\":88,\"isNonProfit\":true}"
 
+    @PostMapping("/post")
+    fun post() = User("小李", 19)
+
     @GetMapping("stream", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
-    suspend fun stream() = flow<String> {
+    suspend fun stream() = flow {
         repeat(3) {
             emit("{\"name\":\"BeJson\",\"url\":\"http://www.bejson.com\",\"page\":88,\"isNonProfit\":true}")
             delay(50)
@@ -37,7 +44,7 @@ class IndexController {
     }
 
     @GetMapping("multi", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
-    suspend fun multi() = flow<String> {
+    suspend fun multi() = flow {
         emit("{")
         delay(50)
         emit("\"name\": \"zhangsan\",")
@@ -46,4 +53,6 @@ class IndexController {
         delay(50)
         emit("}")
     }
+
+
 }

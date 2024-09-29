@@ -18,10 +18,10 @@ import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import java.net.URL
 
 plugins {
-    id(libs.plugins.androidLibrary.get().pluginId)
+    kotlin("android")
+    id("com.android.library")
     id("convention.publication")
     id("org.jetbrains.dokka")
-    alias(libs.plugins.kotlinAndroid)
 }
 
 android {
