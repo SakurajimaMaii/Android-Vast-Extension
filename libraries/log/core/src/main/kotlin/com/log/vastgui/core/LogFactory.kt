@@ -82,10 +82,15 @@ class LogFactory internal constructor() {
      *
      * @since 1.3.4
      */
-    @Deprecated("Use invoke instead.", ReplaceWith("invoke(clazz)"))
-    fun getLogCat(clazz: Class<*>) = LogCat().also {
-        it.mDefaultTag = clazz.simpleName
-        install(it)
+    @Deprecated(
+        "The clazz parameter is passed in just to get the class name as the default log " +
+                "tag, but this may cause misunderstanding for some users, so this API is marked as " +
+                "deprecated at the WARNING level.",
+        ReplaceWith("invoke(clazz.simpleName)"),
+        DeprecationLevel.WARNING
+    )
+    fun getLogCat(clazz: Class<*>) = LogCat(clazz.simpleName).apply {
+        install(this)
     }
 
     /**
@@ -94,9 +99,8 @@ class LogFactory internal constructor() {
      * @since 1.3.4
      */
     @Deprecated("Use invoke instead.", ReplaceWith("invoke(tag)"))
-    fun getLogCat(tag: String = "") = LogCat().also {
-        it.mDefaultTag = tag
-        install(it)
+    fun getLogCat(tag: String = "") = LogCat(tag).apply {
+        install(this)
     }
 
     /**
@@ -134,6 +138,13 @@ class LogFactory internal constructor() {
      *
      * @since 1.3.5
      */
-    operator fun invoke(clazz: Class<*>): LogCat = getLogCat(clazz)
+    @Deprecated(
+        "The clazz parameter is passed in just to get the class name as the default log " +
+                "tag, but this may cause misunderstanding for some users, so this API is marked as " +
+                "deprecated at the WARNING level.",
+        ReplaceWith("invoke(clazz.simpleName)"),
+        DeprecationLevel.WARNING
+    )
+    operator fun invoke(clazz: Class<*>): LogCat = getLogCat(clazz.simpleName)
 
 }
