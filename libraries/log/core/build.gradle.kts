@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "io.github.sakurajimamaii"
-version = "1.3.5"
+version = "1.3.6"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -52,7 +52,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "log-core"
-                version = "1.3.5"
+                version = "1.3.6"
 
                 afterEvaluate {
                     from(components["java"])
