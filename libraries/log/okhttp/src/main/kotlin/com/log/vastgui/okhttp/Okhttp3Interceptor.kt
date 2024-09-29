@@ -49,10 +49,6 @@ import java.util.concurrent.TimeUnit
 /**
  * Log interceptor of Okhttp3.
  *
- * The following is an example of usage, you can click
- * [link](https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/net/OpenApi.kt)
- * to view the complete code.
- *
  * ```kotlin
  * // Add Interceptor
  * val logcat = logFactory("global")
@@ -124,7 +120,7 @@ class Okhttp3Interceptor(private val logcat: LogCat) :
         try {
             response = chain.proceed(request)
         } catch (e: Exception) {
-            logcat.e(logcat.mDefaultTag, "<-- HTTP FAILED", e)
+            logcat.e(logcat.tag, "<-- HTTP FAILED", e)
             throw e
         }
         val tookMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs)
@@ -145,20 +141,10 @@ class Okhttp3Interceptor(private val logcat: LogCat) :
                 requestLog.appendLine("--> ${request.method} ${request.url} $protocol")
             }
             if (contentLevel.headers) {
-                if (null != requestBody) {
-                    if (requestBody.contentType() != null) {
-                        requestLog.appendLine("\tContent-Type:${requestBody.contentType()}")
-                    }
-                    if (requestBody.contentLength() != -1L) {
-                        requestLog.appendLine("\tContent-Length:${requestBody.contentLength()}")
-                    }
-                }
                 val headers = request.headers
-                headers.forEachIndexed { index, _ ->
+                request.headers.forEachIndexed { index, _ ->
                     val name = headers.name(index)
-                    if ("Content-Type" != name && "Content-Length" != name) {
-                        requestLog.appendLine("\t$name:${headers.value(index)}")
-                    }
+                    requestLog.appendLine("\t$name:${headers.value(index)}")
                 }
             }
             if (contentLevel.body && null != requestBody) {
@@ -170,13 +156,13 @@ class Okhttp3Interceptor(private val logcat: LogCat) :
             }
         } catch (e: Exception) {
             logcat.e(
-                logcat.mDefaultTag,
+                logcat.tag,
                 "Exception encountered while processing request information",
                 e
             )
         } finally {
             requestLog.append("--> END ${request.method}")
-            log(requestLevel(request), logcat.mDefaultTag, requestLog.toString())
+            log(requestLevel(request), logcat.tag, requestLog.toString())
         }
     }
 
@@ -255,13 +241,13 @@ class Okhttp3Interceptor(private val logcat: LogCat) :
             }
         } catch (e: Exception) {
             logcat.e(
-                logcat.mDefaultTag,
+                logcat.tag,
                 "Exception encountered while processing response information",
                 e
             )
         } finally {
             requestLog.append("<-- END HTTP")
-            log(responseLevel(response), logcat.mDefaultTag, requestLog.toString())
+            log(responseLevel(response), logcat.tag, requestLog.toString())
         }
         return response
     }
@@ -284,7 +270,7 @@ class Okhttp3Interceptor(private val logcat: LogCat) :
                 ?.replace("\n", "\n\t     ")
             appendLine("\tbody:${json ?: bodyJson}")
         } catch (e: Exception) {
-            logcat.e(logcat.mDefaultTag, "Exception encountered while processing request body", e)
+            logcat.e(logcat.tag, "Exception encountered while processing request body", e)
         }
     }
 
