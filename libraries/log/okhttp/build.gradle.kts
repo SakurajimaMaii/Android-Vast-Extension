@@ -27,7 +27,7 @@ plugins {
 }
 
 group = "io.github.sakurajimamaii"
-version = "1.3.5"
+version = "1.3.6"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -53,6 +53,11 @@ dependencies{
     implementation(libs.okhttp)
     implementation(libs.okhttp.sse)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.ktor.client.core)
+    testImplementation(libs.ktor.client.okhttp)
+    testImplementation(projects.libraries.kernel)
+    testImplementation(projects.libraries.log.core)
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "log-okhttp"
@@ -66,7 +71,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "log-okhttp"
-                version = "1.3.5"
+                version = "1.3.6"
 
                 afterEvaluate {
                     from(components["java"])
