@@ -72,6 +72,7 @@ if (mavenPropertiesFile.exists()) {
 
 tasks.withType<DokkaTaskPartial> {
     dokkaSourceSets.configureEach {
+        moduleName.set("core")
         sourceLink {
             localDirectory.set(projectDir.resolve("src"))
             remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/core/src"))
