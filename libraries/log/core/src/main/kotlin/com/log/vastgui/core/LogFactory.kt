@@ -108,8 +108,8 @@ class LogFactory internal constructor() {
      *
      * @since 0.5.2
      */
-    private fun install(logUtil: LogCat) {
-        plugins.values.forEach { logUtil.apply(it) }
+    private fun install(logcat: LogCat) {
+        plugins.values.forEach { logcat.apply(it) }
     }
 
     /**

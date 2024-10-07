@@ -16,6 +16,7 @@
 
 package com.log.vastgui.core
 
+import cn.hutool.core.lang.caller.CallerUtil
 import com.log.vastgui.core.annotation.LogApi
 import com.log.vastgui.core.base.JSON_TYPE
 import com.log.vastgui.core.base.LogInfo
@@ -59,7 +60,7 @@ class LogCat internal constructor(@LogApi val tag: String) {
      *
      * @since 1.3.4
      */
-    internal val logPipeline: LogPipeline = LogPipeline()
+    val logPipeline: LogPipeline = LogPipeline()
 
     /**
      * `true` if you want to print log,`false` if you don't want to print the
@@ -447,7 +448,8 @@ class LogCat internal constructor(@LogApi val tag: String) {
 
     @LogApi
     fun log(level: LogLevel, tag: String, content: Any, tr: Throwable? = null) {
-        logPipeline.execute(this, LogInfoFactory(level, tag, content, tr))
+        val caller = CallerUtil.getCaller(5)
+        logPipeline.execute(this, LogInfoFactory(level, tag, content, caller, tr))
     }
 
     /**
