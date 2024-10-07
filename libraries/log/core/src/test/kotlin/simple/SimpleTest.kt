@@ -127,4 +127,20 @@ class SimpleTest {
         logCat.d(key)
     }
 
+    @Test
+    fun a() {
+        val key = System.getenv()["Key"]
+        logCat.d(key)
+        b()
+    }
+
+    private fun b() {
+        c()
+        logCat.d(obj)
+    }
+
+    private fun c() {
+        logCat.d(obj)
+    }
+
 }
