@@ -15,15 +15,20 @@
  *
  */
 
+@file:JvmName("FactoryKt")
+
 import com.log.vastgui.core.LogFactory
-import com.log.vastgui.core.base.allLogLevel
-import com.log.vastgui.core.format.LineFormat
+import com.log.vastgui.core.base.LogLevel
+import com.log.vastgui.core.base.Logger
+import com.log.vastgui.core.base.default
 import com.log.vastgui.core.getLogFactory
 import com.log.vastgui.core.json.GsonConverter
 import com.log.vastgui.core.plugin.LogJson
 import com.log.vastgui.core.plugin.LogPretty
 import com.log.vastgui.core.plugin.LogPrinter
 import com.log.vastgui.core.plugin.LogSwitch
+import com.log.vastgui.desktop.desktop
+import com.log.vastgui.desktop.format.LineColorfulFormat
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -36,15 +41,14 @@ val logFactory: LogFactory = getLogFactory {
     install(LogSwitch) {
         open = true
     }
-    install(LogPrinter) {
-        levelSet = allLogLevel
-        logger = SimpleLogger(LineFormat)
-    }
     install(LogJson) {
         converter = gson
     }
     install(LogPretty) {
         converter = gson
     }
-    // install(SysPlugin)
+    install(LogPrinter) {
+        levelSet = setOf(LogLevel.DEBUG)
+        logger = Logger.desktop(LineColorfulFormat)
+    }
 }

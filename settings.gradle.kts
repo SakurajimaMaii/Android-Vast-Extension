@@ -34,7 +34,8 @@ val libs = arrayOf(
     "log:desktop",
     "log:core",
     "log:mars",
-    "log:okhttp"
+    "log:okhttp",
+    "log:slf4j"
 )
 
 libs.forEach {
