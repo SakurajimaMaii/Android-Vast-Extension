@@ -20,7 +20,6 @@
 import com.log.vastgui.core.LogFactory
 import com.log.vastgui.core.base.LogLevel
 import com.log.vastgui.core.base.Logger
-import com.log.vastgui.core.base.default
 import com.log.vastgui.core.getLogFactory
 import com.log.vastgui.core.json.GsonConverter
 import com.log.vastgui.core.plugin.LogJson

@@ -19,6 +19,8 @@ package com.log.vastgui.slf4j
 import com.log.vastgui.core.LogCat
 import com.log.vastgui.core.annotation.LogExperimental
 import com.log.vastgui.core.base.LogLevel
+import com.log.vastgui.core.plugin.LogPrinter
+import com.log.vastgui.core.plugin.LogStorage
 import org.slf4j.Marker
 import org.slf4j.event.Level
 import org.slf4j.helpers.LegacyAbstractLogger
@@ -27,23 +29,74 @@ import org.slf4j.helpers.MessageFormatter
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/10/7
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/log/log-slf4j/usage/
 
+/**
+ * [Slf4jLogger].
+ *
+ * @since 1.3.7
+ */
 @LogExperimental
-internal class Slf4jLogger (private val logcat: LogCat) : LegacyAbstractLogger() {
+internal class Slf4jLogger(private val logcat: LogCat) : LegacyAbstractLogger() {
+
+    /**
+     * For [LogCat], its log level control is controlled by [LogPrinter] and
+     * [LogStorage], so it is returned by default here `true`.
+     *
+     * @see LogPrinter.levelMap
+     * @see LogStorage.levelMap
+     * @since 1.3.7
+     */
     override fun isTraceEnabled() = true
 
+    /**
+     * For [LogCat], its log level control is controlled by [LogPrinter] and
+     * [LogStorage], so it is returned by default here `true`.
+     *
+     * @see LogPrinter.levelMap
+     * @see LogStorage.levelMap
+     * @since 1.3.7
+     */
     override fun isDebugEnabled() = true
 
+    /**
+     * For [LogCat], its log level control is controlled by [LogPrinter] and
+     * [LogStorage], so it is returned by default here `true`.
+     *
+     * @see LogPrinter.levelMap
+     * @see LogStorage.levelMap
+     * @since 1.3.7
+     */
     override fun isInfoEnabled() = true
 
+    /**
+     * For [LogCat], its log level control is controlled by [LogPrinter] and
+     * [LogStorage], so it is returned by default here `true`.
+     *
+     * @see LogPrinter.levelMap
+     * @see LogStorage.levelMap
+     * @since 1.3.7
+     */
     override fun isWarnEnabled() = true
 
+    /**
+     * For [LogCat], its log level control is controlled by [LogPrinter] and
+     * [LogStorage], so it is returned by default here `true`.
+     *
+     * @see LogPrinter.levelMap
+     * @see LogStorage.levelMap
+     * @since 1.3.7
+     */
     override fun isErrorEnabled() = true
 
+    /** @since 1.3.7 */
     override fun getFullyQualifiedCallerName() = logcat.tag
 
+    /**
+     * Log information is processed through [LogCat.log].
+     *
+     * @since 1.3.7
+     */
     override fun handleNormalizedLoggingCall(
         level: Level?,
         marker: Marker?,
@@ -59,6 +112,11 @@ internal class Slf4jLogger (private val logcat: LogCat) : LegacyAbstractLogger()
         )
     }
 
+    /**
+     * Convert [Level] to [LogLevel].
+     *
+     * @since 1.3.7
+     */
     private fun convertLevel(level: Level?): LogLevel {
         return when (level) {
             Level.ERROR -> LogLevel.ERROR
@@ -70,6 +128,11 @@ internal class Slf4jLogger (private val logcat: LogCat) : LegacyAbstractLogger()
         }
     }
 
+    /**
+     * Convert [Marker].
+     *
+     * @since 1.3.7
+     */
     private fun convertMarker(marker: Marker?): String {
         if (marker == null) return logcat.tag
         return marker.name

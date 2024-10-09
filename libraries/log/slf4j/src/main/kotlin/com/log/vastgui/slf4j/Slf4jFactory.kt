@@ -26,18 +26,24 @@ import java.util.concurrent.ConcurrentMap
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/10/7
-// Documentation: 
-// Reference: 
+// Documentation: https://ave.entropy2020.cn/documents/log/log-slf4j/usage/
 
+/**
+ * [Slf4jFactory] Use [LogFactory] to create [Slf4jLogger].
+ *
+ * @since 1.3.7
+ */
 @LogExperimental
-internal class Slf4jFactory(val logFactory: LogFactory): ILoggerFactory {
+internal class Slf4jFactory(val logFactory: LogFactory) : ILoggerFactory {
 
+    /** @since 1.3.7 */
     private val logcatMap: ConcurrentMap<String, Logger> = ConcurrentHashMap()
 
     override fun getLogger(name: String): Logger {
         return logcatMap.computeIfAbsent(name, this::createLogger)
     }
 
+    /** @since 1.3.7 */
     private fun createLogger(name: String): Logger {
         return Slf4jLogger(logFactory(name))
     }

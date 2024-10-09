@@ -67,7 +67,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "log-slf4j"
-                version = "1.3.6"
+                version = "1.3.7"
 
                 afterEvaluate {
                     from(components["java"])
@@ -78,12 +78,12 @@ if (mavenPropertiesFile.exists()) {
 }
 
 tasks.withType<DokkaTaskPartial> {
-    moduleName.set("log-okhttp")
+    moduleName.set("log-slf4j")
     dokkaSourceSets.configureEach {
         sourceLink {
             // FIXME https://github.com/Kotlin/dokka/issues/2876
             localDirectory.set(projectDir.resolve("src"))
-            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/okhttp/src"))
+            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/slf4j/src"))
             remoteLineSuffix.set("#L")
         }
     }
