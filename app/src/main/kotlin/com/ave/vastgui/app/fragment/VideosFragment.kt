@@ -24,9 +24,11 @@ import com.ave.vastgui.adapter.BaseBindPagingAdapter
 import com.ave.vastgui.app.BR
 import com.ave.vastgui.app.adapter.entity.VideoDiffUtil
 import com.ave.vastgui.app.databinding.FragmentVideosBinding
+import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.app.viewmodel.SharedVM
 import com.ave.vastgui.tools.fragment.VastVbVmFragment
 import com.ave.vastgui.tools.view.toast.SimpleToast
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 // Author: SakurajimaMai
@@ -39,6 +41,7 @@ class VideosFragment : VastVbVmFragment<FragmentVideosBinding, SharedVM>() {
     private val mAdapter by lazy {
         BaseBindPagingAdapter(requireContext(), BR.video, VideoDiffUtil)
     }
+    private val mLogcat = logFactory("VideosFragment")
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,5 +60,15 @@ class VideosFragment : VastVbVmFragment<FragmentVideosBinding, SharedVM>() {
 //                mAdapter.submitData(it)
 //            }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mLogcat.d("onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mLogcat.d("onPause")
     }
 }

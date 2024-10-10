@@ -45,7 +45,7 @@ import com.log.vastgui.core.base.allLogLevel as allLogLevel
 class LogStorage private constructor(private val mConfiguration: Configuration) {
 
     /**
-     * Used to determine whether logs of this level are allowed to be printed.
+     * Used to determine whether logs of this level are allowed to be storage.
      *
      * @since 1.3.4
      */

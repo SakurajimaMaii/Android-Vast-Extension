@@ -17,6 +17,8 @@
 
 package simple
 
+import com.log.vastgui.core.Tag
+import com.log.vastgui.core.base.LogLevel
 import logFactory
 import org.junit.Test
 import simple.model.address1
@@ -104,7 +106,7 @@ private val paragraph = """
 
 class SimpleTest {
 
-    private val logCat = logFactory("tag")
+    private val logcat = logFactory("tag")
 
     @Test
     fun log() {
@@ -124,23 +126,29 @@ class SimpleTest {
 //        logCat.d(paragraph)
 
         val key = System.getenv()["Key"]
-        logCat.d(key)
+        logcat.e(Tag(TAG), HELLO_WORLD)
+        logcat.e(TAG) {
+            HELLO_WORLD
+        }
+        logcat.e(TAG, HELLO_WORLD, Exception(HELLO_WORLD))
+        logcat.e(TAG, Exception(HELLO_WORLD)) {
+            HELLO_WORLD
+        }
+        logcat.e(HELLO_WORLD)
+        logcat.e {
+            HELLO_WORLD
+        }
+        logcat.e(HELLO_WORLD, Exception(HELLO_WORLD))
+        logcat.e(Exception(HELLO_WORLD)) {
+            HELLO_WORLD
+        }
+        logcat.e(Exception(HELLO_WORLD))
+        logcat.e(Exception(HELLO_WORLD), TAG)
     }
 
-    @Test
-    fun a() {
-        val key = System.getenv()["Key"]
-        logCat.d(key)
-        b()
-    }
-
-    private fun b() {
-        c()
-        logCat.d(obj)
-    }
-
-    private fun c() {
-        logCat.d(obj)
+    companion object {
+        const val TAG = "SimpleTest"
+        const val HELLO_WORLD = "Hello World."
     }
 
 }

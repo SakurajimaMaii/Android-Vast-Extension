@@ -29,7 +29,7 @@ class LogInfoFactory @JvmOverloads constructor(
     internal val level: LogLevel,
     internal val tag: String,
     content: Any,
-    internal val caller: Class<*>,
+    internal val caller: String,
     internal val tr: Throwable? = null
 ) {
     internal lateinit var logInfo: LogInfo
@@ -79,7 +79,7 @@ class LogInfoFactory @JvmOverloads constructor(
         check(!::logInfo.isInitialized) { "logInfo has been initialized." }
         val thread = Thread.currentThread()
         val index = thread.stackTrace
-            .indexOfFirst { it.className == caller.name }
+            .indexOfFirst { it.className.contains(caller) }
             .coerceAtLeast(0)
         return LogInfo(
             thread.name,

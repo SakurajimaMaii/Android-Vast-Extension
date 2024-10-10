@@ -50,7 +50,7 @@ class App : Application() {
         DialogX.dialogMaxWidth = 400f.DP.toInt()
         DialogX.globalStyle = IOSStyle()
         DialogX.init(this)
-        registerActivityLifecycleCallbacks(ActivityLifecycleLogger(logFactory.getLogCat(this::class.java)))
+//        registerActivityLifecycleCallbacks(ActivityLifecycleLogger(logFactory.getLogCat(this::class.java)))
 //        WindowManager.getInstance().init(this, OptionFactory())
 //        ThemeSkinService.getInstance().apply {
 //            createViewInterceptor.add(FabFactory())

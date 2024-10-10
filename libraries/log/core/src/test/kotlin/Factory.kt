@@ -16,6 +16,7 @@
 
 import com.log.vastgui.core.LogFactory
 import com.log.vastgui.core.base.allLogLevel
+import com.log.vastgui.core.format.LineFormat
 import com.log.vastgui.core.format.TableFormat
 import com.log.vastgui.core.getLogFactory
 import com.log.vastgui.core.json.GsonConverter
@@ -35,7 +36,8 @@ val logFactory: LogFactory = getLogFactory {
     }
     install(LogPrinter) {
         levelSet = allLogLevel
-        logger = SimpleLogger(TableFormat(1000, Int.MAX_VALUE, TableFormat.LogHeader.default))
+        //logger = SimpleLogger(TableFormat(1000, Int.MAX_VALUE, TableFormat.LogHeader.default))
+        logger = SimpleLogger(LineFormat)
     }
 //    install(LogJson) {
 //        converter = gson

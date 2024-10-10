@@ -89,9 +89,8 @@ class LogFactory internal constructor() {
         ReplaceWith("invoke(clazz.simpleName)"),
         DeprecationLevel.WARNING
     )
-    fun getLogCat(clazz: Class<*>) = LogCat(clazz.simpleName).apply {
-        install(this)
-    }
+    fun getLogCat(clazz: Class<*>) =
+        LogCat(clazz.simpleName, Throwable().stackTrace[1].className.also { println(it) }).apply(::install)
 
     /**
      * Get log with [tag].
@@ -99,12 +98,11 @@ class LogFactory internal constructor() {
      * @since 1.3.4
      */
     @Deprecated("Use invoke instead.", ReplaceWith("invoke(tag)"))
-    fun getLogCat(tag: String = "") = LogCat(tag).apply {
-        install(this)
-    }
+    fun getLogCat(tag: String = ""): LogCat =
+        LogCat(tag, Throwable().stackTrace[2].className.also { println(it) }).apply(::install)
 
     /**
-     * Install the plugin to [logUtil].
+     * Install the plugin to [logcat].
      *
      * @since 0.5.2
      */
