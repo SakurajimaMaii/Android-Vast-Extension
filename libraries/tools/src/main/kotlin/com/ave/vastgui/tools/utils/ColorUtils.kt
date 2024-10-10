@@ -36,9 +36,13 @@ object ColorUtils {
     /** Wrong result when converting color to RGB. */
     val COLOR_RGB_ARRAY_ERROR = intArrayOf(-1, -1, -1, -1)
 
-    /** Map of color transparency. */
+    /**
+     * Map of color opacity.
+     *
+     * @since 1.5.1
+     */
     @JvmField
-    val ColorTransparency = mapOf(
+    val ColorOpacity = mapOf(
         100 to "FF",
         99 to "FC",
         98 to "FA",
@@ -142,11 +146,15 @@ object ColorUtils {
         0 to "00"
     )
 
+    /** Map of color transparency. */
+    @JvmField
+    val ColorTransparency = ColorOpacity.mapKeys { 100 - it.key }
+
     /**
      * Parse the color string, and return the corresponding color-int.
      *
      * @return the corresponding color-int of the color string,
-     *     [COLOR_PARSE_ERROR] otherwise.
+     * [COLOR_PARSE_ERROR] otherwise.
      * @see Color.parseColor
      */
     @JvmStatic
@@ -161,7 +169,7 @@ object ColorUtils {
      *
      * @param colorHex Color hexadecimal string,for example:#12c2e9.
      * @return The corresponding color rgb array like {255,63,226,197},
-     *     [COLOR_RGB_ARRAY_ERROR] otherwise.
+     * [COLOR_RGB_ARRAY_ERROR] otherwise.
      * @since 0.5.3
      */
     @JvmStatic

@@ -40,7 +40,7 @@ class ActivityLifecycleLogger(logCat: LogCat? = null, logLevel: LogLevel = LogLe
 
     var mLogLevel: LogLevel by NotNUllVar()
     private val mTag: String
-        get() = mLogcat?.mDefaultTag ?: ActivityLifecycleLogger::class.java.simpleName
+        get() = mLogcat?.tag ?: ActivityLifecycleLogger::class.java.simpleName
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         mLogcat?.log(mLogLevel, mTag, "onActivityCreated:${activity::class.java.simpleName}")

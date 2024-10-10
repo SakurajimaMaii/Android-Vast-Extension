@@ -18,13 +18,12 @@ import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import java.net.URL
 
 plugins {
+    kotlin("android")
+    kotlin("kapt")
+    kotlin("plugin.serialization")
     id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("org.jetbrains.kotlin.android")
     id("convention.publication")
     id("org.jetbrains.dokka")
-    kotlin("plugin.serialization")
 }
 
 android {
@@ -79,9 +78,9 @@ kotlin.sourceSets.all {
 }
 
 dependencies {
-    api(libs.log.core)
     api(libs.security.crypto)
     api(libs.zxing.core)
+    api(projects.libraries.log.core)
     implementation(libs.activity.ktx)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.versionedparcelable)
@@ -109,7 +108,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.recyclerview)
     implementation(libs.retrofit)
-    implementation(libs.vastcore)
+    implementation(projects.libraries.kernel)
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastTools"

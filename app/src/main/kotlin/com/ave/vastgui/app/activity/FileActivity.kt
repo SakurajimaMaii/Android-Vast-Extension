@@ -20,18 +20,13 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityFileBinding
 import com.ave.vastgui.app.log.logFactory
-import com.ave.vastgui.app.net.LocalApi
-import com.ave.vastgui.app.net.LocalApiService
-import com.ave.vastgui.tools.network.request.create
 import com.ave.vastgui.tools.utils.drawable
 import com.ave.vastgui.tools.view.extension.hideKeyBroad
 import com.ave.vastgui.tools.view.extension.isShouldHideKeyBroad
 import com.ave.vastgui.tools.viewbinding.viewBinding
-import kotlinx.coroutines.launch
 
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com
@@ -45,12 +40,6 @@ class FileActivity : AppCompatActivity(R.layout.activity_file) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        lifecycleScope.launch {
-            LocalApi().create(LocalApiService::class.java)
-                .getLocalData()
-        }
-
         binding.button.setOnClickListener {
             logcat.d("这是一条日志")
             logcat.e(NullPointerException("this object is null."))

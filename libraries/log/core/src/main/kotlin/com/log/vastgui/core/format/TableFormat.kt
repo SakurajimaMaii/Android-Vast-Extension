@@ -52,7 +52,7 @@ const val DEFAULT_MAX_PRINT_TIMES = Int.MAX_VALUE
  * Table format of [LogInfo].
  *
  * @see <img
- *     src=https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/core/image/table_format.png?raw=true>
+ * src=https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/core/image/table_format.png?raw=true>
  * @since 1.3.4
  */
 class TableFormat(
@@ -65,13 +65,13 @@ class TableFormat(
      * Log header configuration.
      *
      * @property thread `true` if you want to show [LogInfo.mThreadName] in
-     *     header, `false` otherwise.
+     * header, `false` otherwise.
      * @property tag `true` if you want to show [LogInfo.mTag] in header,
-     *     `false` otherwise.
+     * `false` otherwise.
      * @property level `true` if you want to show [LogInfo.mLevel] in header,
-     *     `false` otherwise.
+     * `false` otherwise.
      * @property time `true` if you want to show [LogInfo.mTime] in header,
-     *     `false` otherwise.
+     * `false` otherwise.
      * @since 1.3.4
      */
     data class LogHeader(

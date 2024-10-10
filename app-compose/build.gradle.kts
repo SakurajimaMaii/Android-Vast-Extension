@@ -15,10 +15,10 @@
  */
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp")
+    kotlin("android")
     kotlin("plugin.serialization")
+    id("com.android.application")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -88,12 +88,6 @@ android {
 
     sourceSets {
         getByName("main").java.srcDirs("src/main/kotlin")
-    }
-
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
     }
 }
 

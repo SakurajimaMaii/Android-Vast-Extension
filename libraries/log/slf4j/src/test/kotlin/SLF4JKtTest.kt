@@ -1,3 +1,10 @@
+import com.log.vastgui.core.annotation.LogExperimental
+import com.log.vastgui.slf4j.Slf4jProvider
+import org.junit.Test
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import kotlin.properties.Delegates
+
 /*
  * Copyright 2021-2024 VastGui
  *
@@ -5,7 +12,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,22 +21,22 @@
  * limitations under the License.
  */
 
-package com.log.vastgui.core.model
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2024/6/23 18:23
+// Date: 2024/10/9
+// Documentation: 
+// Reference: 
 
-data class UserProfile(
-    val userId: Long,
-    val preferences: Map<String, String>,
-    val interests: List<String>,
-    val addresses: List<Address>
-)
+@LogExperimental
+class SLF4JKtTest {
 
-val userProfile = UserProfile(
-    userId = 1L,
-    preferences = mapOf("theme" to "dark", "notifications" to "on"),
-    interests = listOf("Programming", "Traveling", "Photography"),
-    addresses = listOf(address1, address2)
-)
+    private var logger: Logger by Delegates.notNull()
+
+    @Test
+    fun simpleTest() {
+        Slf4jProvider.Options.setFactory(logFactory)
+        logger = LoggerFactory.getLogger("SLF4JKtTest")
+        logger.debug("This is a message")
+    }
+
+}

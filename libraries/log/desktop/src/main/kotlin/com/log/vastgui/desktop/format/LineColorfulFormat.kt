@@ -37,6 +37,8 @@ import com.log.vastgui.desktop.base.Yellow
 /**
  * Line format with colorful style.
  *
+ * @see <img
+ * src=https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/desktop/image/log.png?raw=true/>
  * @since 1.3.4
  */
 object LineColorfulFormat : LogFormat {
