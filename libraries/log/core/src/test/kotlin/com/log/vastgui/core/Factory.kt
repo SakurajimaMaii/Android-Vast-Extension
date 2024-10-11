@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-import com.log.vastgui.core.LogFactory
+@file:JvmName("Factory")
+
+package com.log.vastgui.core
+
 import com.log.vastgui.core.base.allLogLevel
-import com.log.vastgui.core.format.LineFormat
 import com.log.vastgui.core.format.TableFormat
-import com.log.vastgui.core.getLogFactory
 import com.log.vastgui.core.json.GsonConverter
+import com.log.vastgui.core.plugin.LogJson
+import com.log.vastgui.core.plugin.LogPretty
 import com.log.vastgui.core.plugin.LogPrinter
 import com.log.vastgui.core.plugin.LogSwitch
 
@@ -36,14 +39,14 @@ val logFactory: LogFactory = getLogFactory {
     }
     install(LogPrinter) {
         levelSet = allLogLevel
-        //logger = SimpleLogger(TableFormat(1000, Int.MAX_VALUE, TableFormat.LogHeader.default))
-        logger = SimpleLogger(LineFormat)
+        logger = SimpleLogger(TableFormat(1000, Int.MAX_VALUE, TableFormat.LogHeader.default))
+        //logger = SimpleLogger(LineFormat)
     }
-//    install(LogJson) {
-//        converter = gson
-//    }
-//    install(LogPretty) {
-//        converter = gson
-//    }
-//     install(SysPlugin)
+    install(LogJson) {
+        converter = gson
+    }
+    install(LogPretty) {
+        converter = gson
+    }
+    install(SysPlugin)
 }

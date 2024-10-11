@@ -17,11 +17,13 @@
 package com.log.vastgui.core
 
 import com.log.vastgui.core.annotation.LogApi
+import com.log.vastgui.core.annotation.LogExperimental
 import com.log.vastgui.core.base.JSON_TYPE
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogInfoFactory
 import com.log.vastgui.core.base.LogLevel
 import com.log.vastgui.core.base.TEXT_TYPE
+import com.log.vastgui.core.base.Tag
 import com.log.vastgui.core.base.getStackOffset
 import com.log.vastgui.core.internel.LazyMessageWrapper
 import com.log.vastgui.core.json.Converter
@@ -50,10 +52,9 @@ import kotlin.properties.Delegates
  * ```
  *
  * @param tag The default tag of [LogCat].
- * @param caller The caller of [LogCat].
  * @since 1.3.4
  */
-class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: String) {
+class LogCat internal constructor(@LogApi val tag: String) {
 
     /**
      * Log pipeline.
@@ -104,11 +105,11 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     @Deprecated(
         message = "Use pipeline instead.",
         level = DeprecationLevel.HIDDEN,
-        replaceWith = ReplaceWith("i(content, tr)")
+        replaceWith = ReplaceWith("i(content, throwable)")
     )
-    fun i(content: String, tr: Throwable? = null) {
+    fun i(content: String, throwable: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.INFO, tag, content, tr)
+            logPrint(LogLevel.INFO, tag, content, throwable)
         }
     }
 
@@ -122,11 +123,11 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     @Deprecated(
         message = "Use pipeline instead.",
         level = DeprecationLevel.HIDDEN,
-        replaceWith = ReplaceWith("i(tag, content, tr)")
+        replaceWith = ReplaceWith("i(tag, content, throwable)")
     )
-    fun i(tag: String, content: String, tr: Throwable? = null) {
+    fun i(tag: String, content: String, throwable: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.INFO, tag, content, tr)
+            logPrint(LogLevel.INFO, tag, content, throwable)
         }
     }
 
@@ -140,11 +141,11 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     @Deprecated(
         message = "Use pipeline instead.",
         level = DeprecationLevel.HIDDEN,
-        replaceWith = ReplaceWith("v(content, tr)")
+        replaceWith = ReplaceWith("v(content, throwable)")
     )
-    fun v(content: String, tr: Throwable? = null) {
+    fun v(content: String, throwable: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.VERBOSE, tag, content, tr)
+            logPrint(LogLevel.VERBOSE, tag, content, throwable)
         }
     }
 
@@ -158,11 +159,11 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     @Deprecated(
         message = "Use pipeline instead.",
         level = DeprecationLevel.HIDDEN,
-        replaceWith = ReplaceWith("v(tag, content, tr)")
+        replaceWith = ReplaceWith("v(tag, content, throwable)")
     )
-    fun v(tag: String, content: String, tr: Throwable? = null) {
+    fun v(tag: String, content: String, throwable: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.VERBOSE, tag, content, tr)
+            logPrint(LogLevel.VERBOSE, tag, content, throwable)
         }
     }
 
@@ -176,11 +177,11 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     @Deprecated(
         message = "Use pipeline instead.",
         level = DeprecationLevel.HIDDEN,
-        replaceWith = ReplaceWith("w(content, tr)")
+        replaceWith = ReplaceWith("w(content, throwable)")
     )
-    fun w(content: String, tr: Throwable? = null) {
+    fun w(content: String, throwable: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.WARN, tag, content, tr)
+            logPrint(LogLevel.WARN, tag, content, throwable)
         }
     }
 
@@ -194,11 +195,11 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     @Deprecated(
         message = "Use pipeline instead.",
         level = DeprecationLevel.HIDDEN,
-        replaceWith = ReplaceWith("w(tag, content, tr)")
+        replaceWith = ReplaceWith("w(tag, content, throwable)")
     )
-    fun w(tag: String, content: String, tr: Throwable? = null) {
+    fun w(tag: String, content: String, throwable: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.WARN, tag, content, tr)
+            logPrint(LogLevel.WARN, tag, content, throwable)
         }
     }
 
@@ -212,11 +213,11 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     @Deprecated(
         message = "Use pipeline instead.",
         level = DeprecationLevel.HIDDEN,
-        replaceWith = ReplaceWith("d(content, tr)")
+        replaceWith = ReplaceWith("d(content, throwable)")
     )
-    fun d(content: String, tr: Throwable? = null) {
+    fun d(content: String, throwable: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.DEBUG, tag, content, tr)
+            logPrint(LogLevel.DEBUG, tag, content, throwable)
         }
     }
 
@@ -230,11 +231,11 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     @Deprecated(
         message = "Use pipeline instead.",
         level = DeprecationLevel.HIDDEN,
-        replaceWith = ReplaceWith("d(tag, content, tr)")
+        replaceWith = ReplaceWith("d(tag, content, throwable)")
     )
-    fun d(tag: String, content: String, tr: Throwable? = null) {
+    fun d(tag: String, content: String, throwable: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.DEBUG, tag, content, tr)
+            logPrint(LogLevel.DEBUG, tag, content, throwable)
         }
     }
 
@@ -248,11 +249,11 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     @Deprecated(
         message = "Use pipeline instead.",
         level = DeprecationLevel.HIDDEN,
-        replaceWith = ReplaceWith("e(content, tr)")
+        replaceWith = ReplaceWith("e(content, throwable)")
     )
-    fun e(content: String, tr: Throwable? = null) {
+    fun e(content: String, throwable: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.ERROR, tag, content, tr)
+            logPrint(LogLevel.ERROR, tag, content, throwable)
         }
     }
 
@@ -266,11 +267,11 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     @Deprecated(
         message = "Use pipeline instead.",
         level = DeprecationLevel.HIDDEN,
-        replaceWith = ReplaceWith("e(tag, content, tr)")
+        replaceWith = ReplaceWith("e(tag, content, throwable)")
     )
-    fun e(tag: String, content: String, tr: Throwable? = null) {
+    fun e(tag: String, content: String, throwable: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.ERROR, tag, content, tr)
+            logPrint(LogLevel.ERROR, tag, content, throwable)
         }
     }
 
@@ -283,11 +284,11 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     @Deprecated(
         message = "Use pipeline instead.",
         level = DeprecationLevel.HIDDEN,
-        replaceWith = ReplaceWith("a(content, tr)")
+        replaceWith = ReplaceWith("a(content, throwable)")
     )
-    fun a(content: String, tr: Throwable? = null) {
+    fun a(content: String, throwable: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.ASSERT, tag, content, tr)
+            logPrint(LogLevel.ASSERT, tag, content, throwable)
         }
     }
 
@@ -300,11 +301,11 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     @Deprecated(
         message = "Use pipeline instead.",
         level = DeprecationLevel.HIDDEN,
-        replaceWith = ReplaceWith("a(tag, content, tr)")
+        replaceWith = ReplaceWith("a(tag, content, throwable)")
     )
-    fun a(tag: String, content: String, tr: Throwable? = null) {
+    fun a(tag: String, content: String, throwable: Throwable? = null) {
         if (logEnabled) {
-            logPrint(LogLevel.ASSERT, tag, content, tr)
+            logPrint(LogLevel.ASSERT, tag, content, throwable)
         }
     }
 
@@ -426,10 +427,10 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     @Deprecated(
         message = "Use pipeline instead.",
         level = DeprecationLevel.WARNING,
-        replaceWith = ReplaceWith("log(level, tag, content, tr)")
+        replaceWith = ReplaceWith("log(level, tag, content, throwable)")
     )
     @Suppress("DEPRECATION_ERROR")
-    fun logPrint(level: LogLevel, tag: String, content: String, tr: Throwable? = null) {
+    fun logPrint(level: LogLevel, tag: String, content: String, throwable: Throwable? = null) {
         val thread = Thread.currentThread()
         val index = getStackOffset<LogCat>(thread.stackTrace)
         val logInfo = LogInfo(
@@ -440,58 +441,76 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
             System.currentTimeMillis(),
             content,
             TEXT_TYPE,
-            tr
+            throwable
         )
         mLogPrinter.printLog(logInfo)
         mLogStorage?.storeLog(logInfo)
     }
 
-    private fun log(level: LogLevel, tag: String, content: Any, tr: Throwable? = null) {
-        Throwable().stackTrace.forEach { println(it) }
-        println("===============================================")
-        logPipeline.execute(this, LogInfoFactory(level, tag, content, caller, tr))
+    private fun log(level: LogLevel, tag: String, content: Any, throwable: Throwable? = null) {
+        val name = Thread.currentThread().name
+        val stackTrace = Throwable().stackTrace[2]
+        logPipeline.execute(this, LogInfoFactory(level, tag, content, name, stackTrace, throwable))
     }
 
     /**
      * Send a [LogLevel.INFO] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun i(tag: String, content: Any?) {
-        log(LogLevel.INFO, tag, convertIfNull(content), null)
+    @OptIn(LogExperimental::class)
+    fun i(tag: Tag, content: Any?) {
+        log(LogLevel.INFO, tag(), convertIfNull(content), null)
     }
 
     /**
      * Send a [LogLevel.INFO] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun i(tag: String, lazyMsg: () -> Any) {
-        log(LogLevel.INFO, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), null)
+    @OptIn(LogExperimental::class)
+    fun i(tag: Tag, lazyMsg: () -> Any) {
+        log(LogLevel.INFO, tag(), convertIfNull(LazyMessageWrapper(lazyMsg)), null)
     }
 
     /**
      * Send a [LogLevel.INFO] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun i(tag: String, content: Any?, tr: Throwable) {
-        log(LogLevel.INFO, tag, convertIfNull(content), tr)
+    @OptIn(LogExperimental::class)
+    fun i(tag: Tag, content: Any?, throwable: Throwable) {
+        log(LogLevel.INFO, tag(), convertIfNull(content), throwable)
     }
 
     /**
      * Send a [LogLevel.INFO] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun i(tag: String, tr: Throwable, lazyMsg: () -> Any) {
-        log(LogLevel.INFO, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), tr)
+    @OptIn(LogExperimental::class)
+    fun i(tag: Tag, throwable: Throwable, lazyMsg: () -> Any) {
+        log(LogLevel.INFO, tag(), convertIfNull(LazyMessageWrapper(lazyMsg)), throwable)
     }
 
     /**
      * Send a [LogLevel.INFO] log message.
      *
-     * @since 1.3.4
+     * ```kotlin
+     * logcat.i(NullPointerException("this object is null."))
+     * ```
+     *
+     * @since 1.3.8
+     */
+    @OptIn(LogExperimental::class)
+    fun i(tag: Tag, throwable: Throwable) {
+        log(LogLevel.INFO, tag(), throwable.message ?: "Please refer to exception.", throwable)
+    }
+
+    /**
+     * Send a [LogLevel.INFO] log message.
+     *
+     * @since 1.3.8
      */
     fun i(content: Any?) {
         log(LogLevel.INFO, tag, convertIfNull(content), null)
@@ -500,7 +519,7 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     /**
      * Send a [LogLevel.INFO] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
     fun i(lazyMsg: () -> Any) {
         log(LogLevel.INFO, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), null)
@@ -509,61 +528,93 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     /**
      * Send a [LogLevel.INFO] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun i(content: Any?, tr: Throwable) {
-        log(LogLevel.INFO, tag, convertIfNull(content), tr)
+    fun i(content: Any?, throwable: Throwable) {
+        log(LogLevel.INFO, tag, convertIfNull(content), throwable)
     }
 
     /**
      * Send a [LogLevel.INFO] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun i(tr: Throwable?, lazyMsg: () -> Any) {
-        log(LogLevel.INFO, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), tr)
+    fun i(throwable: Throwable?, lazyMsg: () -> Any) {
+        log(LogLevel.INFO, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), throwable)
+    }
+
+    /**
+     * Send a [LogLevel.INFO] log message.
+     *
+     * ```kotlin
+     * logcat.i(NullPointerException("this object is null."))
+     * ```
+     *
+     * @since 1.3.8
+     */
+    fun i(throwable: Throwable) {
+        log(LogLevel.INFO, tag, throwable.message ?: "Please refer to exception.", throwable)
     }
 
     /**
      * Send a [LogLevel.VERBOSE] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun v(tag: String, content: Any?) {
-        log(LogLevel.VERBOSE, tag, convertIfNull(content), null)
+    @OptIn(LogExperimental::class)
+    fun v(tag: Tag, content: Any?) {
+        log(LogLevel.VERBOSE, tag(), convertIfNull(content), null)
     }
 
     /**
      * Send a [LogLevel.VERBOSE] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun v(tag: String, lazyMsg: () -> Any) {
-        log(LogLevel.VERBOSE, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), null)
+    @OptIn(LogExperimental::class)
+    fun v(tag: Tag, lazyMsg: () -> Any) {
+        log(LogLevel.VERBOSE, tag(), convertIfNull(LazyMessageWrapper(lazyMsg)), null)
     }
 
     /**
      * Send a [LogLevel.VERBOSE] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun v(tag: String, content: Any?, tr: Throwable) {
-        log(LogLevel.VERBOSE, tag, convertIfNull(content), tr)
+    @OptIn(LogExperimental::class)
+    fun v(tag: Tag, content: Any?, throwable: Throwable) {
+        log(LogLevel.VERBOSE, tag(), convertIfNull(content), throwable)
     }
 
     /**
      * Send a [LogLevel.VERBOSE] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun v(tag: String, tr: Throwable, lazyMsg: () -> Any) {
-        log(LogLevel.VERBOSE, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), tr)
+    @OptIn(LogExperimental::class)
+    fun v(tag: Tag, throwable: Throwable, lazyMsg: () -> Any) {
+        log(LogLevel.VERBOSE, tag(), convertIfNull(LazyMessageWrapper(lazyMsg)), throwable)
     }
 
     /**
      * Send a [LogLevel.VERBOSE] log message.
      *
-     * @since 1.3.4
+     * ```kotlin
+     * logcat.v(NullPointerException("this object is null."))
+     * ```
+     *
+     * @since 1.3.8
+     */
+    @OptIn(LogExperimental::class)
+    fun v(tag: Tag, throwable: Throwable) {
+        log(LogLevel.VERBOSE, tag(), throwable.message ?: "Please refer to exception.", throwable)
+    }
+
+
+    /**
+     * Send a [LogLevel.VERBOSE] log message.
+     *
+     * @since 1.3.8
      */
     fun v(content: Any?) {
         log(LogLevel.VERBOSE, tag, convertIfNull(content), null)
@@ -572,7 +623,7 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     /**
      * Send a [LogLevel.VERBOSE] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
     fun v(lazyMsg: () -> Any) {
         log(LogLevel.VERBOSE, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), null)
@@ -581,61 +632,92 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     /**
      * Send a [LogLevel.VERBOSE] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun v(content: Any?, tr: Throwable) {
-        log(LogLevel.VERBOSE, tag, convertIfNull(content), tr)
+    fun v(content: Any?, throwable: Throwable) {
+        log(LogLevel.VERBOSE, tag, convertIfNull(content), throwable)
     }
 
     /**
      * Send a [LogLevel.VERBOSE] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun v(tr: Throwable, lazyMsg: () -> Any) {
-        log(LogLevel.VERBOSE, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), tr)
+    fun v(throwable: Throwable, lazyMsg: () -> Any) {
+        log(LogLevel.VERBOSE, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), throwable)
+    }
+
+    /**
+     * Send a [LogLevel.VERBOSE] log message.
+     *
+     * ```kotlin
+     * logcat.v(NullPointerException("this object is null."))
+     * ```
+     *
+     * @since 1.3.8
+     */
+    fun v(throwable: Throwable) {
+        log(LogLevel.VERBOSE, tag, throwable.message ?: "Please refer to exception.", throwable)
     }
 
     /**
      * Send a [LogLevel.WARN] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun w(tag: String, content: Any?) {
-        log(LogLevel.WARN, tag, convertIfNull(content), null)
+    @OptIn(LogExperimental::class)
+    fun w(tag: Tag, content: Any?) {
+        log(LogLevel.WARN, tag(), convertIfNull(content), null)
     }
 
     /**
      * Send a [LogLevel.WARN] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun w(tag: String, lazyMsg: () -> Any) {
-        log(LogLevel.WARN, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), null)
+    @OptIn(LogExperimental::class)
+    fun w(tag: Tag, lazyMsg: () -> Any) {
+        log(LogLevel.WARN, tag(), convertIfNull(LazyMessageWrapper(lazyMsg)), null)
     }
 
     /**
      * Send a [LogLevel.WARN] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun w(tag: String, content: Any?, tr: Throwable) {
-        log(LogLevel.WARN, tag, convertIfNull(content), tr)
+    @OptIn(LogExperimental::class)
+    fun w(tag: Tag, content: Any?, throwable: Throwable) {
+        log(LogLevel.WARN, tag(), convertIfNull(content), throwable)
     }
 
     /**
      * Send a [LogLevel.WARN] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun w(tag: String, tr: Throwable, lazyMsg: () -> Any) {
-        log(LogLevel.WARN, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), tr)
+    @OptIn(LogExperimental::class)
+    fun w(tag: Tag, throwable: Throwable, lazyMsg: () -> Any) {
+        log(LogLevel.WARN, tag(), convertIfNull(LazyMessageWrapper(lazyMsg)), throwable)
     }
 
     /**
      * Send a [LogLevel.WARN] log message.
      *
-     * @since 1.3.4
+     * ```kotlin
+     * logcat.w(NullPointerException("this object is null."))
+     * ```
+     *
+     * @since 1.3.8
+     */
+    @OptIn(LogExperimental::class)
+    fun w(tag: Tag, throwable: Throwable) {
+        log(LogLevel.WARN, tag(), throwable.message ?: "Please refer to exception.", throwable)
+    }
+
+    /**
+     * Send a [LogLevel.WARN] log message.
+     *
+     * @since 1.3.8
      */
     fun w(content: Any?) {
         log(LogLevel.WARN, tag, convertIfNull(content), null)
@@ -644,7 +726,7 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     /**
      * Send a [LogLevel.WARN] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
     fun w(lazyMsg: () -> Any) {
         log(LogLevel.WARN, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), null)
@@ -653,61 +735,93 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     /**
      * Send a [LogLevel.WARN] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun w(content: Any?, tr: Throwable) {
-        log(LogLevel.WARN, tag, convertIfNull(content), tr)
+    fun w(content: Any?, throwable: Throwable) {
+        log(LogLevel.WARN, tag, convertIfNull(content), throwable)
     }
 
     /**
      * Send a [LogLevel.WARN] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun w(tr: Throwable, lazyMsg: () -> Any) {
-        log(LogLevel.WARN, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), tr)
+    fun w(throwable: Throwable, lazyMsg: () -> Any) {
+        log(LogLevel.WARN, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), throwable)
+    }
+
+    /**
+     * Send a [LogLevel.WARN] log message.
+     *
+     * ```kotlin
+     * logcat.w(NullPointerException("this object is null."))
+     * ```
+     *
+     * @since 1.3.8
+     */
+    fun w(throwable: Throwable) {
+        log(LogLevel.WARN, tag, throwable.message ?: "Please refer to exception.", throwable)
     }
 
     /**
      * Send a [LogLevel.DEBUG] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun d(tag: String, content: Any?) {
-        log(LogLevel.DEBUG, tag, convertIfNull(content), null)
+    @OptIn(LogExperimental::class)
+    fun d(tag: Tag, content: Any?) {
+        log(LogLevel.DEBUG, tag(), convertIfNull(content), null)
     }
 
     /**
      * Send a [LogLevel.DEBUG] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun d(tag: String, lazyMsg: () -> Any) {
-        log(LogLevel.DEBUG, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), null)
+    @OptIn(LogExperimental::class)
+    fun d(tag: Tag, lazyMsg: () -> Any) {
+        log(LogLevel.DEBUG, tag(), convertIfNull(LazyMessageWrapper(lazyMsg)), null)
     }
 
     /**
      * Send a [LogLevel.DEBUG] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun d(tag: String, content: Any?, tr: Throwable) {
-        log(LogLevel.DEBUG, tag, convertIfNull(content), tr)
+    @OptIn(LogExperimental::class)
+    fun d(tag: Tag, content: Any?, throwable: Throwable) {
+        log(LogLevel.DEBUG, tag(), convertIfNull(content), throwable)
     }
 
     /**
      * Send a [LogLevel.DEBUG] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun d(tag: String, tr: Throwable, lazyMsg: () -> Any) {
-        log(LogLevel.DEBUG, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), tr)
+    @OptIn(LogExperimental::class)
+    fun d(tag: Tag, throwable: Throwable, lazyMsg: () -> Any) {
+        log(LogLevel.DEBUG, tag(), convertIfNull(LazyMessageWrapper(lazyMsg)), throwable)
     }
 
     /**
      * Send a [LogLevel.DEBUG] log message.
      *
-     * @since 1.3.4
+     * ```kotlin
+     * logcat.d(NullPointerException("this object is null."))
+     * ```
+     *
+     * @since 1.3.8
+     */
+    @OptIn(LogExperimental::class)
+    fun d(tag: Tag, throwable: Throwable) {
+        log(LogLevel.DEBUG, tag(), throwable.message ?: "Please refer to exception.", throwable)
+    }
+
+
+    /**
+     * Send a [LogLevel.DEBUG] log message.
+     *
+     * @since 1.3.8
      */
     fun d(content: Any?) {
         log(LogLevel.DEBUG, tag, convertIfNull(content), null)
@@ -716,7 +830,7 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     /**
      * Send a [LogLevel.DEBUG] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
     fun d(lazyMsg: () -> Any) {
         log(LogLevel.DEBUG, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), null)
@@ -725,26 +839,40 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     /**
      * Send a [LogLevel.DEBUG] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun d(content: Any?, tr: Throwable) {
-        log(LogLevel.DEBUG, tag, convertIfNull(content), tr)
+    fun d(content: Any?, throwable: Throwable) {
+        log(LogLevel.DEBUG, tag, convertIfNull(content), throwable)
     }
 
     /**
      * Send a [LogLevel.DEBUG] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun d(tr: Throwable, lazyMsg: () -> Any) {
-        log(LogLevel.DEBUG, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), tr)
+    fun d(throwable: Throwable, lazyMsg: () -> Any) {
+        log(LogLevel.DEBUG, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), throwable)
+    }
+
+    /**
+     * Send a [LogLevel.DEBUG] log message.
+     *
+     * ```kotlin
+     * logcat.d(NullPointerException("this object is null."))
+     * ```
+     *
+     * @since 1.3.8
+     */
+    fun d(throwable: Throwable) {
+        log(LogLevel.DEBUG, tag, throwable.message ?: "Please refer to exception.", throwable)
     }
 
     /**
      * Send a [LogLevel.ERROR] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
+    @OptIn(LogExperimental::class)
     fun e(tag: Tag, content: Any?) {
         log(LogLevel.ERROR, tag(), convertIfNull(content), null)
     }
@@ -752,34 +880,52 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     /**
      * Send a [LogLevel.ERROR] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun e(tag: String, lazyMsg: () -> Any) {
-        log(LogLevel.ERROR, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), null)
+    @OptIn(LogExperimental::class)
+    fun e(tag: Tag, lazyMsg: () -> Any) {
+        log(LogLevel.ERROR, tag(), convertIfNull(LazyMessageWrapper(lazyMsg)), null)
     }
 
     /**
      * Send a [LogLevel.ERROR] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun e(tag: String, content: Any?, tr: Throwable?) {
-        log(LogLevel.ERROR, tag, convertIfNull(content), tr)
+    @OptIn(LogExperimental::class)
+    fun e(tag: Tag, content: Any?, throwable: Throwable) {
+        log(LogLevel.ERROR, tag(), convertIfNull(content), throwable)
     }
 
     /**
      * Send a [LogLevel.ERROR] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun e(tag: String, tr: Throwable?, lazyMsg: () -> Any) {
-        log(LogLevel.ERROR, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), tr)
+    @OptIn(LogExperimental::class)
+    fun e(tag: Tag, throwable: Throwable?, lazyMsg: () -> Any) {
+        log(LogLevel.ERROR, tag(), convertIfNull(LazyMessageWrapper(lazyMsg)), throwable)
     }
 
     /**
      * Send a [LogLevel.ERROR] log message.
      *
-     * @since 1.3.4
+     * ```kotlin
+     * logcat.e(NullPointerException("this object is null."))
+     * ```
+     *
+     * @since 1.3.8
+     */
+    @OptIn(LogExperimental::class)
+    fun e(tag: Tag, tr: Throwable) {
+        log(LogLevel.ERROR, tag(), tr.message ?: "Please refer to exception.", tr)
+    }
+
+
+    /**
+     * Send a [LogLevel.ERROR] log message.
+     *
+     * @since 1.3.8
      */
     fun e(content: Any?) {
         log(LogLevel.ERROR, tag, convertIfNull(content), null)
@@ -788,7 +934,7 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     /**
      * Send a [LogLevel.ERROR] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
     fun e(lazyMsg: () -> Any) {
         log(LogLevel.ERROR, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), null)
@@ -797,87 +943,92 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     /**
      * Send a [LogLevel.ERROR] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun e(content: Any?, tr: Throwable) {
-        log(LogLevel.ERROR, tag, convertIfNull(content), tr)
+    fun e(content: Any?, throwable: Throwable) {
+        log(LogLevel.ERROR, tag, convertIfNull(content), throwable)
     }
 
     /**
      * Send a [LogLevel.ERROR] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun e(tr: Throwable?, lazyMsg: () -> Any) {
-        log(LogLevel.ERROR, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), tr)
-    }
-
-    /**
-     * Send a [LogLevel.ERROR] log message.
-     *
-     * ```kotlin
-     * mLogger.e(NullPointerException("this object is null."))
-     * ```
-     *
-     * @since 1.3.4
-     */
-    fun e(tr: Throwable) {
-        log(LogLevel.ERROR, tag, tr.message ?: "Please refer to exception.", tr)
+    fun e(throwable: Throwable?, lazyMsg: () -> Any) {
+        log(LogLevel.ERROR, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), throwable)
     }
 
     /**
      * Send a [LogLevel.ERROR] log message.
      *
      * ```kotlin
-     * mLogger.e(NullPointerException("this object is null."))
+     * logcat.e(NullPointerException("this object is null."))
      * ```
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun e(tr: Throwable, tag: String) {
-        log(LogLevel.ERROR, tag, tr.message ?: "Please refer to exception.", tr)
+    fun e(throwable: Throwable) {
+        log(LogLevel.ERROR, tag, throwable.message ?: "Please refer to exception.", throwable)
     }
 
     /**
      * Send a [LogLevel.ASSERT] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun a(tag: String, content: Any?) {
-        log(LogLevel.ASSERT, tag, convertIfNull(content), null)
+    @OptIn(LogExperimental::class)
+    fun a(tag: Tag, content: Any?) {
+        log(LogLevel.ASSERT, tag(), convertIfNull(content), null)
     }
 
     /**
      * Send a [LogLevel.ASSERT] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun a(tag: String, lazyMsg: () -> Any) {
-        log(LogLevel.ASSERT, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), null)
+    @OptIn(LogExperimental::class)
+    fun a(tag: Tag, lazyMsg: () -> Any) {
+        log(LogLevel.ASSERT, tag(), convertIfNull(LazyMessageWrapper(lazyMsg)), null)
     }
 
     /**
      * Send a [LogLevel.ASSERT] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun a(tag: String, content: Any?, tr: Throwable) {
-        log(LogLevel.ASSERT, tag, convertIfNull(content), tr)
+    @OptIn(LogExperimental::class)
+    fun a(tag: Tag, content: Any?, throwable: Throwable) {
+        log(LogLevel.ASSERT, tag(), convertIfNull(content), throwable)
     }
 
     /**
      * Send a [LogLevel.ASSERT] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun a(tag: String, tr: Throwable, lazyMsg: () -> Any) {
-        log(LogLevel.ASSERT, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), tr)
+    @OptIn(LogExperimental::class)
+    fun a(tag: Tag, throwable: Throwable, lazyMsg: () -> Any) {
+        log(LogLevel.ASSERT, tag(), convertIfNull(LazyMessageWrapper(lazyMsg)), throwable)
     }
 
     /**
      * Send a [LogLevel.ASSERT] log message.
      *
-     * @since 1.3.4
+     * ```kotlin
+     * logcat.a(NullPointerException("this object is null."))
+     * ```
+     *
+     * @since 1.3.8
+     */
+    @OptIn(LogExperimental::class)
+    fun a(tag: Tag, throwable: Throwable) {
+        log(LogLevel.ASSERT, tag(), throwable.message ?: "Please refer to exception.", throwable)
+    }
+
+    /**
+     * Send a [LogLevel.ASSERT] log message.
+     *
+     * @since 1.3.8
      */
     fun a(content: Any?) {
         log(LogLevel.ASSERT, tag, convertIfNull(content), null)
@@ -886,7 +1037,7 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     /**
      * Send a [LogLevel.ASSERT] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
     fun a(lazyMsg: () -> Any) {
         log(LogLevel.ASSERT, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), null)
@@ -895,32 +1046,25 @@ class LogCat internal constructor(@LogApi val tag: String, @LogApi val caller: S
     /**
      * Send a [LogLevel.ASSERT] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun a(content: Any?, tr: Throwable) {
-        log(LogLevel.ASSERT, tag, convertIfNull(content), tr)
+    fun a(content: Any?, throwable: Throwable) {
+        log(LogLevel.ASSERT, tag, convertIfNull(content), throwable)
     }
 
     /**
      * Send a [LogLevel.ASSERT] log message.
      *
-     * @since 1.3.4
+     * @since 1.3.8
      */
-    fun a(tr: Throwable, lazyMsg: () -> Any) {
-        log(LogLevel.ASSERT, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), tr)
+    fun a(throwable: Throwable, lazyMsg: () -> Any) {
+        log(LogLevel.ASSERT, tag, convertIfNull(LazyMessageWrapper(lazyMsg)), throwable)
     }
 
     /** @since 1.3.5 */
     private fun convertIfNull(content: Any?): Any {
         if (null != content) return content
-        Result
         return "null"
     }
-
-}
-
-@JvmInline
-value class Tag(val tag: String) {
-    operator fun invoke(): String = tag
 
 }
