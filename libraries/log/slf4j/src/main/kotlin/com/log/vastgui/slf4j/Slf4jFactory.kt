@@ -39,6 +39,7 @@ internal class Slf4jFactory(val logFactory: LogFactory) : ILoggerFactory {
     /** @since 1.3.7 */
     private val logcatMap: ConcurrentMap<String, Logger> = ConcurrentHashMap()
 
+    @Suppress("NewApi")
     override fun getLogger(name: String): Logger {
         return logcatMap.computeIfAbsent(name, this::createLogger)
     }
