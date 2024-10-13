@@ -16,7 +16,6 @@
 
 package com.log.vastgui.core.plugin
 
-import cn.hutool.core.lang.caller.CallerUtil
 import com.log.vastgui.core.LogCat
 import com.log.vastgui.core.LogPipeline
 import com.log.vastgui.core.base.LogInfoFactory

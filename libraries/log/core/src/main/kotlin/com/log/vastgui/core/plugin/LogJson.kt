@@ -43,7 +43,9 @@ import kotlin.properties.Delegates
  *
  * @since 0.5.3
  */
-class LogJson private constructor(private val mConfiguration: Configuration) {
+class LogJson private constructor(mConfiguration: Configuration) {
+
+    private val converter: Converter = mConfiguration.converter
 
     /**
      * Configuration of [LogJson].
@@ -54,6 +56,9 @@ class LogJson private constructor(private val mConfiguration: Configuration) {
     class Configuration internal constructor() {
         var converter: Converter by Delegates.notNull()
     }
+
+    /** @since 1.3.8 */
+    private fun toJson(data: Any): String = converter.toJson(data)
 
     companion object : LogPlugin<Configuration, LogJson> {
 
@@ -67,7 +72,7 @@ class LogJson private constructor(private val mConfiguration: Configuration) {
                     proceed()
                     return@intercept
                 }
-                val json = plugin.mConfiguration.converter.toJson(content)
+                val json = plugin.toJson(content)
                 subject.setStringContent(json)
                 proceedWith(subject)
             }

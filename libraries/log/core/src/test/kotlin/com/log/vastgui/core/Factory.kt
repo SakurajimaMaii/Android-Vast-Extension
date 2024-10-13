@@ -20,7 +20,9 @@ package com.log.vastgui.core
 
 import com.log.vastgui.core.base.allLogLevel
 import com.log.vastgui.core.format.TableFormat
+import com.log.vastgui.core.json.FastJsonConverter
 import com.log.vastgui.core.json.GsonConverter
+import com.log.vastgui.core.json.JacksonConverter
 import com.log.vastgui.core.plugin.LogJson
 import com.log.vastgui.core.plugin.LogPretty
 import com.log.vastgui.core.plugin.LogPrinter
@@ -32,6 +34,8 @@ import com.log.vastgui.core.plugin.LogSwitch
 // Documentation: https://ave.entropy2020.cn/documents/log/log-core/setting-up-logfactory/
 
 private val gson = GsonConverter.getInstance(true)
+private val fastJson = FastJsonConverter.getInstance(true)
+private val jackson = JacksonConverter.getInstance(true)
 
 val logFactory: LogFactory = getLogFactory {
     install(LogSwitch) {
@@ -43,10 +47,10 @@ val logFactory: LogFactory = getLogFactory {
         //logger = SimpleLogger(LineFormat)
     }
     install(LogJson) {
-        converter = gson
+        converter = jackson
     }
     install(LogPretty) {
-        converter = gson
+        converter = jackson
     }
     install(SysPlugin)
 }
