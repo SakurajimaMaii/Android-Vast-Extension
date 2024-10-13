@@ -48,11 +48,13 @@ kotlin.sourceSets.all {
 }
 
 dependencies {
-    implementation(libs.fastjson2)
-    implementation(libs.gson)
-    implementation(libs.hutool.core)
-    implementation(libs.jackson.databind)
+    compileOnly(libs.fastjson2)
+    compileOnly(libs.gson)
+    compileOnly(libs.jackson.databind)
     implementation(projects.libraries.kernel)
+    testImplementation(libs.fastjson2)
+    testImplementation(libs.gson)
+    testImplementation(libs.jackson.databind)
     testImplementation(libs.junit)
 }
 
