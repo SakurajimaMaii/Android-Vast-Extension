@@ -5,34 +5,31 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-@file:JvmName("FactoryKt")
+package com.ave.vastgui.appcompose.log
 
+import com.ave.vastgui.tools.log.android
 import com.log.vastgui.core.LogFactory
-import com.log.vastgui.core.base.LogLevel
 import com.log.vastgui.core.base.Logger
+import com.log.vastgui.core.base.allLogLevel
 import com.log.vastgui.core.getLogFactory
 import com.log.vastgui.core.json.GsonConverter
 import com.log.vastgui.core.plugin.LogJson
 import com.log.vastgui.core.plugin.LogPretty
 import com.log.vastgui.core.plugin.LogPrinter
 import com.log.vastgui.core.plugin.LogSwitch
-import com.log.vastgui.desktop.desktop
-import com.log.vastgui.desktop.format.LineColorfulFormat
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/7/5
-// Documentation: https://ave.entropy2020.cn/documents/log/log-core/setting-up-logfactory/
+// Date: 2024/10/12
 
 private val gson = GsonConverter.getInstance(true)
 
@@ -47,7 +44,7 @@ val logFactory: LogFactory = getLogFactory {
         converter = gson
     }
     install(LogPrinter) {
-        levelSet = setOf(LogLevel.DEBUG)
-        logger = Logger.desktop(LineColorfulFormat)
+        levelSet = allLogLevel
+        logger = Logger.android()
     }
 }

@@ -1,10 +1,3 @@
-import com.log.vastgui.core.annotation.LogExperimental
-import com.log.vastgui.slf4j.Slf4jProvider
-import org.junit.Test
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import kotlin.properties.Delegates
-
 /*
  * Copyright 2021-2024 VastGui
  *
@@ -21,22 +14,25 @@ import kotlin.properties.Delegates
  * limitations under the License.
  */
 
+package com.ave.vastgui.appcompose
+
+import android.app.Application
+import com.ave.vastgui.appcompose.log.logFactory
+import com.log.vastgui.core.annotation.LogExperimental
+import com.log.vastgui.slf4j.Slf4jProvider
+
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2024/10/9
-// Documentation: 
-// Reference: 
+// Date: 2024/10/12
 
-@LogExperimental
-class SLF4JKtTest {
+class ComposeApp: Application() {
 
-    private var logger: Logger by Delegates.notNull()
-
-    @Test
-    fun simpleTest() {
-        Slf4jProvider.Options.setFactory(logFactory)
-        logger = LoggerFactory.getLogger("SLF4JKtTest")
-        logger.debug("This is a message")
+    @OptIn(LogExperimental::class)
+    override fun onCreate() {
+        super.onCreate()
+        Slf4jProvider.Options.apply {
+            setFactory(logFactory)
+        }
     }
 
 }

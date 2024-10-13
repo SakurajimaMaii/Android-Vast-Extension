@@ -110,8 +110,12 @@ dependencies {
     implementation(libs.paging.compose)
     implementation(libs.retrofit)
     implementation(libs.runtime.livedata.compose)
+    implementation(libs.slf4j.api)
     implementation(libs.ui.compose)
     implementation(libs.ui.graphics.compose)
     implementation(libs.ui.tooling.preview.compose)
+    implementation(projects.libraries.kernel)
+    implementation(projects.libraries.log.core)
+    implementation(projects.libraries.log.slf4j)
     implementation(projects.libraries.tools)
 }
