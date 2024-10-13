@@ -166,7 +166,7 @@ class Okhttp3Interceptor(private val logcat: LogCat) :
             )
         } finally {
             requestLog.append("--> END ${request.method}")
-            log(requestLevel(request), logcat.tag, requestLog.toString())
+            logcat.log(requestLevel(request), LogTag(logcat.tag)(), requestLog.toString(), null, Throwable().stackTrace[0])
         }
     }
 
@@ -252,7 +252,7 @@ class Okhttp3Interceptor(private val logcat: LogCat) :
             )
         } finally {
             requestLog.append("<-- END HTTP")
-            log(responseLevel(response), logcat.tag, requestLog.toString())
+            logcat.log(responseLevel(response), LogTag(logcat.tag)(), requestLog.toString(), null, Throwable().stackTrace[0])
         }
         return response
     }
@@ -279,47 +279,6 @@ class Okhttp3Interceptor(private val logcat: LogCat) :
             logcat.e(LogTag(logcat.tag), "Exception encountered while processing request body", e)
         }
     }
-
-    /** @since 1.3.3 */
-    @OptIn(LogExperimental::class)
-    private fun log(level: LogLevel, tag: String, content: String, tr: Throwable? = null) =
-        when (level) {
-            LogLevel.VERBOSE -> if (null == tr) {
-                logcat.v(LogTag(tag), content)
-            } else {
-                logcat.v(LogTag(tag), content, tr)
-            }
-
-            LogLevel.DEBUG -> if (null == tr) {
-                logcat.d(LogTag(tag), content)
-            } else {
-                logcat.d(LogTag(tag), content, tr)
-            }
-
-            LogLevel.INFO -> if (null == tr) {
-                logcat.i(LogTag(tag), content)
-            } else {
-                logcat.i(LogTag(tag), content, tr)
-            }
-
-            LogLevel.WARN -> if (null == tr) {
-                logcat.w(LogTag(tag), content)
-            } else {
-                logcat.w(LogTag(tag), content, tr)
-            }
-
-            LogLevel.ERROR -> if (null == tr) {
-                logcat.e(LogTag(tag), content)
-            } else {
-                logcat.e(LogTag(tag), content, tr)
-            }
-
-            LogLevel.ASSERT -> if (null == tr) {
-                logcat.a(LogTag(tag), content)
-            } else {
-                logcat.a(LogTag(tag), content, tr)
-            }
-        }
 
     companion object {
         private val UTF8: Charset = StandardCharsets.UTF_8

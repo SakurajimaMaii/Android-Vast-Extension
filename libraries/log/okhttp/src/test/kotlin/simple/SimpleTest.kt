@@ -50,9 +50,18 @@ import java.util.concurrent.CountDownLatch
 // Email: guihy2019@gmail.com
 // Date: 2024/9/18
 
-class Stream {
+class SimpleTest {
+
     @Test
-    fun simpleRequest() {
+    fun getRequest() {
+        val request: Request = Request.Builder()
+            .url("http://127.0.0.1:7777")
+            .build()
+        okhttp.newCall(request).execute()
+    }
+
+    @Test
+    fun postRequest() {
         val json = "{\"id\":1,\"name\":\"John\"}"
         val body: RequestBody = RequestBody.create(
             "application/json".toMediaTypeOrNull(), json

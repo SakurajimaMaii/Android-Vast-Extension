@@ -28,19 +28,21 @@ import kotlinx.coroutines.test.runTest
 import logcat
 import org.junit.Test
 
-val client = HttpClient(OkHttp) {
-    engine {
-        addInterceptor(Okhttp3Interceptor(logcat))
-    }
-}
-
-class ClientTest {
+class KtorTest {
 
     @Test
     fun post() = runTest {
         client.post("http://127.0.0.1:7777/post") {
             contentType(ContentType.Application.Json)
         }.body()
+    }
+
+    companion object {
+        val client = HttpClient(OkHttp) {
+            engine {
+                addInterceptor(Okhttp3Interceptor(logcat))
+            }
+        }
     }
 
 }
