@@ -21,12 +21,22 @@ import com.log.vastgui.okhttp.Okhttp3Interceptor
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.forms.ChannelProvider
+import io.ktor.client.request.forms.formData
+import io.ktor.client.request.forms.submitFormWithBinaryData
+import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.http.ContentType
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
+import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.InternalAPI
 import kotlinx.coroutines.test.runTest
 import logcat
 import org.junit.Test
+import java.io.File
 
 class KtorTest {
 
@@ -37,10 +47,36 @@ class KtorTest {
         }.body()
     }
 
+    @OptIn(InternalAPI::class)
+    @Test
+    fun upload() = runTest {
+        val file = File(javaClass.classLoader!!.getResource("t1.txt").file)
+        client.submitFormWithBinaryData(
+            url = "http://127.0.0.1:7777/files",
+            formData = formData {
+                append("purpose", "file-extract")
+                val channelProvider = ChannelProvider {
+                    ByteReadChannel(file.readBytes())
+                }
+                append("file", channelProvider, Headers.build {
+                    append(HttpHeaders.ContentDisposition, "filename=\"${file.name}\"")
+                })
+            },
+        ) {
+            header(HttpHeaders.ContentType, ContentType.Application.OctetStream)
+            header(HttpHeaders.Authorization, "Bearer XXX")
+            header(HttpHeaders.Connection, "keep-alive")
+            header(HttpHeaders.Host, "dashscope.aliyuncs.com")
+        }
+    }
+
     companion object {
         val client = HttpClient(OkHttp) {
             engine {
-                addInterceptor(Okhttp3Interceptor(logcat))
+                addInterceptor(Okhttp3Interceptor(logcat)
+                    .sanitizedHeaders("Authorization","***")
+                    .sanitizedHeaders("User-Agent","xxx")
+                )
             }
         }
     }

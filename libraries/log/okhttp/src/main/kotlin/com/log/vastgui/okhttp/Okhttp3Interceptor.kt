@@ -72,6 +72,10 @@ import java.util.concurrent.TimeUnit
  */
 class Okhttp3Interceptor(private val logcat: LogCat) :
     Interceptor {
+
+    /** @since 1.3.7 */
+    private val mSanitizedHeaders: MutableMap<String, String> = HashMap()
+
     /**
      * The filter function allows you to filter log messages for requests
      * matching the specified predicate. Return true directly by default.
@@ -148,7 +152,7 @@ class Okhttp3Interceptor(private val logcat: LogCat) :
                 val headers = request.headers
                 request.headers.forEachIndexed { index, _ ->
                     val name = headers.name(index)
-                    requestLog.appendLine("\t$name:${headers.value(index)}")
+                    requestLog.appendLine("\t$name:${mSanitizedHeaders[name] ?: headers.value(index)}")
                 }
             }
             if (contentLevel.body && null != requestBody) {
@@ -278,6 +282,22 @@ class Okhttp3Interceptor(private val logcat: LogCat) :
         } catch (e: Exception) {
             logcat.e(LogTag(logcat.tag), "Exception encountered while processing request body", e)
         }
+    }
+
+    /**
+     * Allows you to sanitize sensitive headers to avoid their values appearing
+     * in the logs. In the example below, Authorization header value will be
+     * replaced with '***' when logging:
+     *
+     * ```kotlin
+     * Okhttp3Interceptor(logcat)
+     *      .sanitizedHeaders("Authorization","***")
+     * ```
+     *
+     * @since 1.3.7
+     */
+    fun sanitizedHeaders(header: String, replaceWith: String) = apply {
+        mSanitizedHeaders[header] = replaceWith
     }
 
     companion object {

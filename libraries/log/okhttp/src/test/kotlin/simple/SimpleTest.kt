@@ -61,6 +61,14 @@ class SimpleTest {
     }
 
     @Test
+    fun base64Request() {
+        val request: Request = Request.Builder()
+            .url("http://127.0.0.1:7777/base64")
+            .build()
+        okhttp.newCall(request).execute()
+    }
+
+    @Test
     fun postRequest() {
         val json = "{\"id\":1,\"name\":\"John\"}"
         val body: RequestBody = RequestBody.create(

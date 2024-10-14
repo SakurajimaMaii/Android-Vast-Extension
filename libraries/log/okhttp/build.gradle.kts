@@ -59,6 +59,7 @@ dependencies{
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.ktor.client.core)
     testImplementation(libs.ktor.client.okhttp)
+    testImplementation(libs.ktor.client.logging)
     testImplementation(projects.libraries.kernel)
     testImplementation(projects.libraries.log.core)
 }

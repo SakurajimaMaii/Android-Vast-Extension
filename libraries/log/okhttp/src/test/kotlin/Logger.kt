@@ -37,7 +37,7 @@ val logFactory = getLogFactory {
     install(LogPrinter) {
         logger = object : Logger {
             override val logFormat: LogFormat
-                get() = TableFormat(1000, Int.MAX_VALUE, TableFormat.LogHeader.default)
+                get() = TableFormat(30, 30, TableFormat.LogHeader.default)
 
             override fun log(logInfo: LogInfo) {
                 println(logFormat.format(logInfo))
