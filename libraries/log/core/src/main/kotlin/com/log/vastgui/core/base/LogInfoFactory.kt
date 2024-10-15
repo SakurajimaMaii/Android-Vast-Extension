@@ -86,7 +86,6 @@ class LogInfoFactory @LogApi constructor(
             tag,
             System.currentTimeMillis(),
             content() as String,
-            TEXT_TYPE,
             tr
         ).also { logInfo = it }
     }

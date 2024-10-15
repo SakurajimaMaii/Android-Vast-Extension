@@ -17,12 +17,10 @@
 package com.log.vastgui.core.format
 
 import com.log.vastgui.core.annotation.LogApi
-import com.log.vastgui.core.base.JSON_TYPE
 import com.log.vastgui.core.base.LogDivider
 import com.log.vastgui.core.base.LogFormat
 import com.log.vastgui.core.base.LogFormat.Companion.timeSdf
 import com.log.vastgui.core.base.LogInfo
-import com.log.vastgui.core.base.TEXT_TYPE
 import com.log.vastgui.core.base.cutStr
 import com.log.vastgui.core.base.needCut
 
@@ -64,13 +62,13 @@ class TableFormat(
     /**
      * Log header configuration.
      *
-     * @property thread `true` if you want to show [LogInfo.mThreadName] in
+     * @property thread `true` if you want to show [LogInfo.threadName] in
      * header, `false` otherwise.
-     * @property tag `true` if you want to show [LogInfo.mTag] in header,
+     * @property tag `true` if you want to show [LogInfo.tag] in header,
      * `false` otherwise.
-     * @property level `true` if you want to show [LogInfo.mLevel] in header,
+     * @property level `true` if you want to show [LogInfo.level] in header,
      * `false` otherwise.
-     * @property time `true` if you want to show [LogInfo.mTime] in header,
+     * @property time `true` if you want to show [LogInfo.time] in header,
      * `false` otherwise.
      * @since 1.3.4
      */
@@ -87,11 +85,7 @@ class TableFormat(
     }
 
     /** @since 1.3.4 */
-    override fun format(logInfo: LogInfo): String = when (logInfo.mType) {
-        TEXT_TYPE -> textFormat(logInfo)
-        JSON_TYPE -> jsonFormat(logInfo)
-        else -> throw IllegalArgumentException("Currently only TEXT_TYPE or JSON_TYPE is supported.")
-    }
+    override fun format(logInfo: LogInfo): String = textFormat(logInfo)
 
     /**
      * Print [logInfo].
@@ -142,39 +136,28 @@ class TableFormat(
         }
 
     /**
-     * Print [logInfo].
-     *
-     * @since 1.3.4
-     */
-    private fun jsonFormat(logInfo: LogInfo) = logFormat(logInfo) { body, content ->
-        for (line in content.split("\n", System.lineSeparator())) {
-            body.appendLine(LogDivider.getInfo(line))
-        }
-    }
-
-    /**
      * Print log.
      *
      * @since 1.3.4
      */
     private inline fun logFormat(
         logInfo: LogInfo,
-        len: Int = logInfo.mPrintBytesLength,
+        len: Int = logInfo.printBytesLength,
         customScope: (StringBuilder, String) -> Unit
-    ) = StringBuilder(logInfo.mContent.length * 4).apply {
+    ) = StringBuilder(logInfo.content.length * 4).apply {
         // It makes no sense to print a separator that is too long.
         val length = len.coerceAtMost(100)
         appendLine(LogDivider.getTop(length))
-        val thread = if (mHeader.thread) "Thread: ${logInfo.mThreadName}" else ""
-        val tag = if (mHeader.tag) "Tag: ${logInfo.mTag}" else ""
-        val level = if (mHeader.level) "Level: ${logInfo.mLevel}" else ""
-        val time = if (mHeader.time) "Time: ${timeSdf.format(logInfo.mTime)}" else ""
+        val thread = if (mHeader.thread) "Thread: ${logInfo.threadName}" else ""
+        val tag = if (mHeader.tag) "Tag: ${logInfo.tag}" else ""
+        val level = if (mHeader.level) "Level: ${logInfo.level}" else ""
+        val time = if (mHeader.time) "Time: ${timeSdf.format(logInfo.time)}" else ""
         appendLine(LogDivider.getInfo("$thread $tag $level $time"))
         appendLine(LogDivider.getDivider(length))
-        appendLine(LogDivider.getInfo("${logInfo.mStackTrace}"))
+        appendLine(LogDivider.getInfo("${logInfo.stackTrace}"))
         appendLine(LogDivider.getDivider(length))
-        customScope(this, logInfo.mContent)
-        logInfo.mThrowable?.apply {
+        customScope(this, logInfo.content)
+        logInfo.throwable?.apply {
             appendLine(LogDivider.getDivider(length))
             appendLine(LogDivider.getInfo("$this"))
             for (item in this.stackTrace) {

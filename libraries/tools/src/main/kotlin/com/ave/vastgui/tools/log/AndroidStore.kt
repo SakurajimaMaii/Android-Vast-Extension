@@ -25,7 +25,6 @@ import com.ave.vastgui.tools.log.base.fileNameTimeSdf
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.utils.AppUtils
 import com.google.gson.JsonParser
-import com.log.vastgui.core.base.JSON_TYPE
 import com.log.vastgui.core.base.LogFormat
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogStore
@@ -112,16 +111,16 @@ class AndroidStore internal constructor(
      * @since 0.5.3
      */
     private fun storage(logInfo: LogInfo) {
-        val message = if (JSON_TYPE == logInfo.mType) {
+        val message = if (JSON_TYPE == logInfo.type) {
             val info = LogInfo(
-                logInfo.mThreadName,
-                logInfo.mStackTrace,
-                logInfo.mLevel,
-                logInfo.mTag,
-                logInfo.mTime,
-                JsonParser.parseString(logInfo.mContent).asJsonObject.toString(),
-                logInfo.mType,
-                logInfo.mThrowable
+                logInfo.threadName,
+                logInfo.stackTrace,
+                logInfo.level,
+                logInfo.tag,
+                logInfo.time,
+                JsonParser.parseString(logInfo.content).asJsonObject.toString(),
+                logInfo.type,
+                logInfo.throwable
             )
             logFormat.format(info)
         } else {
