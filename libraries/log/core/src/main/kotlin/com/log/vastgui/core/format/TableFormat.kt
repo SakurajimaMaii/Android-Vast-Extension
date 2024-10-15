@@ -126,26 +126,29 @@ class TableFormat(
             var count = 0
             logFormat(logInfo, maxSingleLogLength * 4) { body, content ->
                 // FIX: DEAL LINE SEPARATOR THAT EXIST WITHIN THE LOG CONTENT
-                content.split("\n", System.lineSeparator()).forEach { pattern ->
+                val patterns = content.split("\n", System.lineSeparator())
+                patterns.forEach { pattern ->
                     var bytes = pattern.toByteArray()
                     if (maxSingleLogLength * 4 < bytes.size) {
                         do {
                             val subStr = bytes.cutStr(maxSingleLogLength)
                             body.appendLine(LogDivider.getInfo(String.format("%s", subStr)))
-                            bytes = bytes.copyOfRange(subStr.toByteArray().size, bytes.size)
                             count++
+                            bytes = bytes.copyOfRange(subStr.toByteArray().size, bytes.size)
                             // Finish print
-                            if (count == maxPrintTimes) {
+                            if (count >= maxPrintTimes) {
                                 ellipsis?.also { body.appendLine(LogDivider.getInfo(it)) }
                                 return@logFormat
                             }
                         } while (maxSingleLogLength * 4 < bytes.size)
                     } else {
+                        body.appendLine(LogDivider.getInfo(String.format("%s", String(bytes))))
                         count++
                     }
 
-                    if (count <= maxPrintTimes) {
-                        body.appendLine(LogDivider.getInfo(String.format("%s", String(bytes))))
+                    if (count >= maxPrintTimes) {
+                        ellipsis?.also { body.appendLine(LogDivider.getInfo(it)) }
+                        return@logFormat
                     }
                 }
             }
