@@ -21,7 +21,6 @@ import com.log.vastgui.okhttp.Okhttp3Interceptor
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.forms.ChannelProvider
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
@@ -45,29 +44,6 @@ class KtorTest {
         client.post("http://127.0.0.1:7777/post") {
             contentType(ContentType.Application.Json)
         }.body()
-    }
-
-    @OptIn(InternalAPI::class)
-    @Test
-    fun upload() = runTest {
-        val file = File(javaClass.classLoader!!.getResource("t1.txt").file)
-        client.submitFormWithBinaryData(
-            url = "http://127.0.0.1:7777/files",
-            formData = formData {
-                append("purpose", "file-extract")
-                val channelProvider = ChannelProvider {
-                    ByteReadChannel(file.readBytes())
-                }
-                append("file", channelProvider, Headers.build {
-                    append(HttpHeaders.ContentDisposition, "filename=\"${file.name}\"")
-                })
-            },
-        ) {
-            header(HttpHeaders.ContentType, ContentType.Application.OctetStream)
-            header(HttpHeaders.Authorization, "Bearer XXX")
-            header(HttpHeaders.Connection, "keep-alive")
-            header(HttpHeaders.Host, "dashscope.aliyuncs.com")
-        }
     }
 
     companion object {

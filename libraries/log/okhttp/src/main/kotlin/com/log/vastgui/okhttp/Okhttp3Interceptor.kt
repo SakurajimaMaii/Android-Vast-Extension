@@ -74,7 +74,7 @@ class Okhttp3Interceptor(private val logcat: LogCat) :
     Interceptor {
 
     /** @since 1.3.7 */
-    private val mSanitizedHeaders: MutableMap<String, String> = HashMap()
+    private val sanitizedHeaders: MutableMap<String, String> = HashMap()
 
     /**
      * The filter function allows you to filter log messages for requests
@@ -152,7 +152,7 @@ class Okhttp3Interceptor(private val logcat: LogCat) :
                 val headers = request.headers
                 request.headers.forEachIndexed { index, _ ->
                     val name = headers.name(index)
-                    requestLog.appendLine("\t$name:${mSanitizedHeaders[name] ?: headers.value(index)}")
+                    requestLog.appendLine("\t$name:${sanitizedHeaders[name] ?: headers.value(index)}")
                 }
             }
             if (contentLevel.body && null != requestBody) {
@@ -294,10 +294,10 @@ class Okhttp3Interceptor(private val logcat: LogCat) :
      *      .sanitizedHeaders("Authorization","***")
      * ```
      *
-     * @since 1.3.7
+     * @since 1.3.9
      */
     fun sanitizedHeaders(header: String, replaceWith: String) = apply {
-        mSanitizedHeaders[header] = replaceWith
+        sanitizedHeaders[header] = replaceWith
     }
 
     companion object {

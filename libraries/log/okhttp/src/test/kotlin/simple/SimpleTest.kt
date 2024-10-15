@@ -61,9 +61,9 @@ class SimpleTest {
     }
 
     @Test
-    fun base64Request() {
+    fun contentRequest() {
         val request: Request = Request.Builder()
-            .url("http://127.0.0.1:7777/base64")
+            .url("http://127.0.0.1:7777/content")
             .build()
         okhttp.newCall(request).execute()
     }

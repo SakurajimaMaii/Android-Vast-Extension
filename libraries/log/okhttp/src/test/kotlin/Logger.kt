@@ -21,6 +21,7 @@ import com.log.vastgui.core.base.Logger
 import com.log.vastgui.core.format.TableFormat
 import com.log.vastgui.core.getLogFactory
 import com.log.vastgui.core.json.GsonConverter
+import com.log.vastgui.core.plugin.LogJson
 import com.log.vastgui.core.plugin.LogPrinter
 import com.log.vastgui.core.plugin.LogSwitch
 import com.log.vastgui.okhttp.Okhttp3Interceptor
@@ -30,6 +31,7 @@ import okhttp3.OkHttpClient
 // Email: guihy2019@gmail.com
 // Date: 2024/9/29
 
+val gson = GsonConverter.getInstance(true)
 val logFactory = getLogFactory {
     install(LogSwitch) {
         open = true
@@ -37,16 +39,18 @@ val logFactory = getLogFactory {
     install(LogPrinter) {
         logger = object : Logger {
             override val logFormat: LogFormat
-                get() = TableFormat(30, 30, TableFormat.LogHeader.default)
+                get() = TableFormat(30, 10, TableFormat.LogHeader.default)
 
             override fun log(logInfo: LogInfo) {
                 println(logFormat.format(logInfo))
             }
         }
     }
+    install(LogJson) {
+        converter = gson
+    }
 }
 val logcat = logFactory("global")
-val gson = GsonConverter.getInstance(true)
 val okhttp = OkHttpClient
     .Builder()
     .addInterceptor(Okhttp3Interceptor(logcat).apply {
