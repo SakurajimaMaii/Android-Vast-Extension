@@ -49,15 +49,26 @@ const val DEFAULT_MAX_PRINT_TIMES = Int.MAX_VALUE
 /**
  * Table format of [LogInfo].
  *
+ * @param ellipsis If the content that needs to be printed exceeds the
+ * number of times specified by [maxPrintTimes], the user can decide
+ * whether to end with [ellipsis]。
  * @see <img
  * src=https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/core/image/table_format.png?raw=true>
  * @since 1.3.4
  */
 class TableFormat(
-    private val mMaxSingleLogLength: Int,
-    private val mMaxPrintTimes: Int,
-    private val mHeader: LogHeader
+    private val maxSingleLogLength: Int,
+    private val maxPrintTimes: Int,
+    private val header: LogHeader = LogHeader.default,
+    /** @since 1.3.8 */
+    private val ellipsis: String? = null
 ) : LogFormat {
+
+    init {
+        if (null != ellipsis && ellipsis.length !in 0..10) {
+            throw IllegalArgumentException("The length of the ellipsis($ellipsis) should not exceed 10.")
+        }
+    }
 
     /**
      * Log header configuration.
@@ -94,11 +105,17 @@ class TableFormat(
      */
     private fun textFormat(logInfo: LogInfo) =
         // The length of the log content is less than mMaxSingleLogLength
-        if (!logInfo.needCut(mMaxSingleLogLength)) {
+        if (!logInfo.needCut(maxSingleLogLength)) {
             logFormat(logInfo) { body, content ->
                 // FIX: DEAL LINE SEPARATOR THAT EXIST WITHIN THE LOG CONTENT
                 val patterns = content.split("\n", System.lineSeparator())
-                patterns.forEach { pattern ->
+                patterns.forEachIndexed { index, pattern ->
+                    // To avoid inconsistencies with user expectations, the number of lines printed
+                    // should never exceed the number specified by maxPrintTimes
+                    if (index >= maxPrintTimes) {
+                        ellipsis?.also { body.appendLine(LogDivider.getInfo(it)) }
+                        return@logFormat
+                    }
                     body.appendLine(LogDivider.getInfo(pattern))
                 }
             }
@@ -107,28 +124,27 @@ class TableFormat(
         else {
             // Segment printing count
             var count = 0
-            var printTheRest = true
-            logFormat(logInfo, mMaxSingleLogLength * 4) { body, content ->
+            logFormat(logInfo, maxSingleLogLength * 4) { body, content ->
                 // FIX: DEAL LINE SEPARATOR THAT EXIST WITHIN THE LOG CONTENT
-                val patterns = content.split("\n", System.lineSeparator())
-                patterns.forEach { pattern ->
+                content.split("\n", System.lineSeparator()).forEach { pattern ->
                     var bytes = pattern.toByteArray()
-                    if (mMaxSingleLogLength * 4 < bytes.size) {
+                    if (maxSingleLogLength * 4 < bytes.size) {
                         do {
-                            val subStr = bytes.cutStr(mMaxSingleLogLength)
+                            val subStr = bytes.cutStr(maxSingleLogLength)
                             body.appendLine(LogDivider.getInfo(String.format("%s", subStr)))
                             bytes = bytes.copyOfRange(subStr.toByteArray().size, bytes.size)
                             count++
-                            if (count == mMaxPrintTimes) {
-                                printTheRest = false
-                                break
+                            // Finish print
+                            if (count == maxPrintTimes) {
+                                ellipsis?.also { body.appendLine(LogDivider.getInfo(it)) }
+                                return@logFormat
                             }
-                        } while (mMaxSingleLogLength * 4 < bytes.size)
+                        } while (maxSingleLogLength * 4 < bytes.size)
                     } else {
                         count++
                     }
 
-                    if (printTheRest && count <= mMaxPrintTimes) {
+                    if (count <= maxPrintTimes) {
                         body.appendLine(LogDivider.getInfo(String.format("%s", String(bytes))))
                     }
                 }
@@ -148,10 +164,10 @@ class TableFormat(
         // It makes no sense to print a separator that is too long.
         val length = len.coerceAtMost(100)
         appendLine(LogDivider.getTop(length))
-        val thread = if (mHeader.thread) "Thread: ${logInfo.threadName}" else ""
-        val tag = if (mHeader.tag) "Tag: ${logInfo.tag}" else ""
-        val level = if (mHeader.level) "Level: ${logInfo.level}" else ""
-        val time = if (mHeader.time) "Time: ${timeSdf.format(logInfo.time)}" else ""
+        val thread = if (header.thread) "Thread: ${logInfo.threadName}" else ""
+        val tag = if (header.tag) "Tag: ${logInfo.tag}" else ""
+        val level = if (header.level) "Level: ${logInfo.level}" else ""
+        val time = if (header.time) "Time: ${timeSdf.format(logInfo.time)}" else ""
         appendLine(LogDivider.getInfo("$thread $tag $level $time"))
         appendLine(LogDivider.getDivider(length))
         appendLine(LogDivider.getInfo("${logInfo.stackTrace}"))
