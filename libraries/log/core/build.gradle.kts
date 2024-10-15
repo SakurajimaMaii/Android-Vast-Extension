@@ -27,7 +27,7 @@ plugins {
 }
 
 group = "io.github.sakurajimamaii"
-version = "1.3.7"
+version = "1.3.8"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -48,9 +48,9 @@ kotlin.sourceSets.all {
 }
 
 dependencies {
-    compileOnly(libs.fastjson2)
     compileOnly(libs.gson)
     compileOnly(libs.jackson.databind)
+    implementation(libs.fastjson2)
     implementation(projects.libraries.kernel)
     testImplementation(libs.fastjson2)
     testImplementation(libs.gson)
@@ -70,7 +70,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "log-core"
-                version = "1.3.7"
+                version = "1.3.8"
 
                 afterEvaluate {
                     from(components["java"])

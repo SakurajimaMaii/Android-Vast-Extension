@@ -43,7 +43,7 @@ val logFactory: LogFactory = getLogFactory {
     }
     install(LogPrinter) {
         levelSet = allLogLevel
-        logger = SimpleLogger(TableFormat(1000, Int.MAX_VALUE, TableFormat.LogHeader.default))
+        logger = SimpleLogger(TableFormat(1000, 20, ellipsis = "******"))
         //logger = SimpleLogger(LineFormat)
     }
     install(LogJson) {
