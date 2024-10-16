@@ -16,6 +16,7 @@
 
 package com.ave.vastgui.appcompose.ui
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,7 +27,7 @@ import org.slf4j.MarkerFactory
 // Email: guihy2019@gmail.com
 // Date: 2024/10/12
 
-class LoggerActivity: ComponentActivity() {
+class LoggerActivity : ComponentActivity() {
 
     private val mLogger = LoggerFactory.getLogger("LoggerActivity")
 
@@ -44,16 +45,22 @@ class LoggerActivity: ComponentActivity() {
 
     private fun dSimpleUsage() {
         val marker = MarkerFactory.getMarker("Marker")
-        mLogger.debug(marker, HELLO_WORLD)
-        mLogger.debug(marker, HELLO_WORLD_FORMAT_1, HELLO_WORLD)
-        mLogger.debug(marker, HELLO_WORLD_FORMAT_2, HELLO_WORLD, HELLO_WORLD)
-        mLogger.debug(marker, HELLO_WORLD_FORMAT_MORE, HELLO_WORLD, HELLO_WORLD, HELLO_WORLD)
-        mLogger.debug(marker, HELLO_WORLD, Exception(HELLO_WORLD_EXCEPTION))
-        mLogger.debug(HELLO_WORLD)
-        mLogger.debug(HELLO_WORLD_FORMAT_1, HELLO_WORLD)
-        mLogger.debug(HELLO_WORLD_FORMAT_2, HELLO_WORLD, HELLO_WORLD)
-        mLogger.debug(HELLO_WORLD_FORMAT_MORE, HELLO_WORLD, HELLO_WORLD, HELLO_WORLD)
-        mLogger.debug(HELLO_WORLD, Exception(HELLO_WORLD_EXCEPTION))
+        if (false) {
+            mLogger.debug(marker, HELLO_WORLD)
+            mLogger.debug(marker, HELLO_WORLD_FORMAT_1, HELLO_WORLD)
+            mLogger.debug(marker, HELLO_WORLD_FORMAT_2, HELLO_WORLD, HELLO_WORLD)
+            mLogger.debug(marker, HELLO_WORLD_FORMAT_MORE, HELLO_WORLD, HELLO_WORLD, HELLO_WORLD)
+            mLogger.debug(marker, HELLO_WORLD, Exception(HELLO_WORLD_EXCEPTION))
+            mLogger.debug(HELLO_WORLD)
+            mLogger.debug(HELLO_WORLD_FORMAT_1, HELLO_WORLD)
+            mLogger.debug(HELLO_WORLD_FORMAT_2, HELLO_WORLD, HELLO_WORLD)
+            mLogger.debug(HELLO_WORLD_FORMAT_MORE, HELLO_WORLD, HELLO_WORLD, HELLO_WORLD)
+            mLogger.debug(HELLO_WORLD, Exception(HELLO_WORLD_EXCEPTION))
+        }
+        mLogger.atDebug().log {
+            Throwable().printStackTrace()
+            HELLO_WORLD
+        }
     }
 
     companion object {

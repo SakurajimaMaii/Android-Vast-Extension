@@ -22,9 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 
-import java.util.HashMap;
-import java.util.function.Supplier;
-
 public class SLF4JTest {
 
     private static final String TAG = "SLF4JTest";

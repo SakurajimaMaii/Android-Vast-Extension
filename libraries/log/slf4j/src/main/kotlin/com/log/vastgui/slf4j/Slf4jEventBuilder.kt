@@ -29,14 +29,12 @@ import java.util.function.Supplier
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/10/12
-// Description: 
-// Documentation:
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/log/log-slf4j/usage/
 
 /**
  * Slf4j event builder.
  *
- * @since 1.3.8
+ * @since 1.3.10
  */
 internal class Slf4jEventBuilder(
     private val logcat: LogCat,
@@ -91,7 +89,6 @@ internal class Slf4jEventBuilder(
 
 
     override fun setMessage(messageSupplier: Supplier<String>?): LoggingEventBuilder = apply {
-        @Suppress("NewApi")
         this.mMessage = messageSupplier?.get()
     }
 

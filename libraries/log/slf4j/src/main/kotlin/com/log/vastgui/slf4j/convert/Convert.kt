@@ -23,11 +23,12 @@ import org.slf4j.event.Level
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/10/12
+// Documentation: https://ave.entropy2020.cn/documents/log/log-slf4j/usage/
 
 /**
  * Convert [Level] to [LogLevel].
  *
- * @since 1.3.8
+ * @since 1.3.10
  */
 fun convertLevel(level: Level?): LogLevel {
     return when (level) {
@@ -43,7 +44,7 @@ fun convertLevel(level: Level?): LogLevel {
 /**
  * Convert [Marker] to [Marker.getName] or [default].
  *
- * @since 1.3.8
+ * @since 1.3.10
  */
 fun convertMarker(marker: Marker?, default: String): String {
     if (marker == null) return default
