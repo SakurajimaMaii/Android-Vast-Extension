@@ -111,21 +111,7 @@ class AndroidStore internal constructor(
      * @since 0.5.3
      */
     private fun storage(logInfo: LogInfo) {
-        val message = if (JSON_TYPE == logInfo.type) {
-            val info = LogInfo(
-                logInfo.threadName,
-                logInfo.stackTrace,
-                logInfo.level,
-                logInfo.tag,
-                logInfo.time,
-                JsonParser.parseString(logInfo.content).asJsonObject.toString(),
-                logInfo.type,
-                logInfo.throwable
-            )
-            logFormat.format(info)
-        } else {
-            logFormat.format(logInfo)
-        }
+        val message = logFormat.format(logInfo)
         val currentNeedSize = mCurrentFile.getCurrentSize() + message.toByteArray().size.toLong()
         if (currentNeedSize > fileMaxSize) {
             mCurrentFile = getCurrentFile(true)
