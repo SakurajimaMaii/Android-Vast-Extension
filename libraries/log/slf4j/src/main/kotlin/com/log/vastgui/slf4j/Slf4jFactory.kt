@@ -34,13 +34,15 @@ import java.util.concurrent.ConcurrentMap
  * @since 1.3.7
  */
 @LogExperimental
-internal class Slf4jFactory(val logFactory: LogFactory) : ILoggerFactory {
+internal class Slf4jFactory(private val logFactory: LogFactory) : ILoggerFactory {
 
     /** @since 1.3.7 */
     private val logcatMap: ConcurrentMap<String, Logger> = ConcurrentHashMap()
 
     override fun getLogger(name: String): Logger {
-        return logcatMap.computeIfAbsent(name, this::createLogger)
+        val oldValue: Logger? = logcatMap[name]
+        if (null != oldValue) return oldValue
+        return createLogger(name).also { logcatMap.putIfAbsent(name, it) }
     }
 
     /** @since 1.3.7 */

@@ -16,7 +16,6 @@
 
 package com.log.vastgui.core.plugin
 
-import cn.hutool.core.lang.caller.CallerUtil
 import com.log.vastgui.core.LogCat
 import com.log.vastgui.core.LogPipeline
 import com.log.vastgui.core.base.LogInfoFactory
@@ -55,8 +54,9 @@ class LogTypeValidator internal constructor() {
                         "Can not convert ${subject.content().javaClass}, please install a specific converter plugin."
                     // Because log printing will be affected by the configured level,
                     // the original log level is retained here.
-                    val caller = CallerUtil.getCaller(15)
-                    val builder = LogInfoFactory(subject.level, key, message, caller)
+                    val threadName = Thread.currentThread().name
+                    val trace = Throwable().stackTrace[13]
+                    val builder = LogInfoFactory(subject.level, subject.tag, message, threadName, trace)
                     proceedWith(builder)
                 } else {
                     proceed()

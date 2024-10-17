@@ -56,6 +56,8 @@ typealias dealAppCrash = (Thread, Throwable) -> Unit
 class AppCrashHandler private constructor(private val configuration: Configuration) :
     Thread.UncaughtExceptionHandler {
 
+        class Tag(val value:String)
+
     /**
      * [AppCrashHandler] configuration.
      *
@@ -70,7 +72,7 @@ class AppCrashHandler private constructor(private val configuration: Configurati
         if (null != configuration.logcat) {
             val logcat = configuration.logcat
             val content = "Please refer to exception."
-            logcat.log(LogLevel.ERROR, logcat.tag, content, exception)
+            logcat.e("", exception)
         }
         configuration.action(thread, exception)
     }

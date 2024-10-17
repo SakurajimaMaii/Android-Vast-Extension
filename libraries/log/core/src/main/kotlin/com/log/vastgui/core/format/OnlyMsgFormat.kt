@@ -33,5 +33,5 @@ import com.log.vastgui.core.base.LogInfo
  * @since 1.3.4
  */
 object OnlyMsgFormat : LogFormat {
-    override fun format(logInfo: LogInfo) = logInfo.mContent
+    override fun format(logInfo: LogInfo) = logInfo.content
 }

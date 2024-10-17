@@ -21,7 +21,9 @@ import android.app.Application.ActivityLifecycleCallbacks
 import android.os.Bundle
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.log.vastgui.core.LogCat
+import com.log.vastgui.core.annotation.LogExperimental
 import com.log.vastgui.core.base.LogLevel
+import com.log.vastgui.core.base.LogTag
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -39,39 +41,47 @@ class ActivityLifecycleLogger(logCat: LogCat? = null, logLevel: LogLevel = LogLe
         }
 
     var mLogLevel: LogLevel by NotNUllVar()
-    private val mTag: String
-        get() = mLogcat?.tag ?: ActivityLifecycleLogger::class.java.simpleName
+
+    @OptIn(LogExperimental::class)
+    private val mTag: LogTag =
+        LogTag(mLogcat?.tag ?: ActivityLifecycleLogger::class.java.simpleName)
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        mLogcat?.log(mLogLevel, mTag, "onActivityCreated:${activity::class.java.simpleName}")
+        printLog(mLogLevel, "onActivityCreated:${activity::class.java.simpleName}")
     }
 
     override fun onActivityStarted(activity: Activity) {
-        mLogcat?.log(mLogLevel, mTag, "onActivityStarted:${activity::class.java.simpleName}")
+        printLog(mLogLevel, "onActivityStarted:${activity::class.java.simpleName}")
     }
 
     override fun onActivityResumed(activity: Activity) {
-        mLogcat?.log(mLogLevel, mTag, "onActivityResumed:${activity::class.java.simpleName}")
+        printLog(mLogLevel, "onActivityResumed:${activity::class.java.simpleName}")
     }
 
     override fun onActivityPaused(activity: Activity) {
-        mLogcat?.log(mLogLevel, mTag, "onActivityPaused:${activity::class.java.simpleName}")
+        printLog(mLogLevel, "onActivityPaused:${activity::class.java.simpleName}")
     }
 
     override fun onActivityStopped(activity: Activity) {
-        mLogcat?.log(mLogLevel, mTag, "onActivityStopped:${activity::class.java.simpleName}")
+        printLog(mLogLevel, "onActivityStopped:${activity::class.java.simpleName}")
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-        mLogcat?.log(
-            mLogLevel,
-            mTag,
-            "onActivitySaveInstanceState:${activity::class.java.simpleName}"
-        )
+        printLog(mLogLevel, "onActivitySaveInstanceState:${activity::class.java.simpleName}")
     }
 
     override fun onActivityDestroyed(activity: Activity) {
-        mLogcat?.log(mLogLevel, mTag, "onActivityDestroyed:${activity::class.java.simpleName}")
+        printLog(mLogLevel, "onActivityDestroyed:${activity::class.java.simpleName}")
+    }
+
+    @OptIn(LogExperimental::class)
+    private fun printLog(level: LogLevel, content: String) = when (level) {
+        LogLevel.VERBOSE -> mLogcat?.v(mTag, content)
+        LogLevel.DEBUG -> mLogcat?.d(mTag, content)
+        LogLevel.INFO -> mLogcat?.i(mTag, content)
+        LogLevel.WARN -> mLogcat?.w(mTag, content)
+        LogLevel.ERROR -> mLogcat?.e(mTag, content)
+        LogLevel.ASSERT -> mLogcat?.a(mTag, content)
     }
 
     init {

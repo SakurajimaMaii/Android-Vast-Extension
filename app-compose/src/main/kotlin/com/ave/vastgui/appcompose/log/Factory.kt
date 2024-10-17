@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
+package com.ave.vastgui.appcompose.log
+
+import com.ave.vastgui.tools.log.android
 import com.log.vastgui.core.LogFactory
+import com.log.vastgui.core.base.Logger
 import com.log.vastgui.core.base.allLogLevel
-import com.log.vastgui.core.format.TableFormat
 import com.log.vastgui.core.getLogFactory
 import com.log.vastgui.core.json.GsonConverter
+import com.log.vastgui.core.plugin.LogJson
+import com.log.vastgui.core.plugin.LogPretty
 import com.log.vastgui.core.plugin.LogPrinter
 import com.log.vastgui.core.plugin.LogSwitch
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/7/5
-// Documentation: https://ave.entropy2020.cn/documents/log/log-core/setting-up-logfactory/
+// Date: 2024/10/12
 
 private val gson = GsonConverter.getInstance(true)
 
@@ -33,15 +37,14 @@ val logFactory: LogFactory = getLogFactory {
     install(LogSwitch) {
         open = true
     }
+    install(LogJson) {
+        converter = gson
+    }
+    install(LogPretty) {
+        converter = gson
+    }
     install(LogPrinter) {
         levelSet = allLogLevel
-        logger = SimpleLogger(TableFormat(1000, Int.MAX_VALUE, TableFormat.LogHeader.default))
+        logger = Logger.android()
     }
-//    install(LogJson) {
-//        converter = gson
-//    }
-//    install(LogPretty) {
-//        converter = gson
-//    }
-//     install(SysPlugin)
 }

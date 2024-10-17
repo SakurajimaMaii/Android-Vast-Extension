@@ -14,19 +14,25 @@
  * limitations under the License.
  */
 
-import com.log.vastgui.slf4j.Slf4jProvider;
+package com.ave.vastgui.appcompose
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MarkerFactory;
+import android.app.Application
+import com.ave.vastgui.appcompose.log.logFactory
+import com.log.vastgui.core.annotation.LogExperimental
+import com.log.vastgui.slf4j.Slf4jProvider
 
-public class SLF4JTest {
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2024/10/12
 
-    public static void main(String[] args) {
-        Slf4jProvider.Options.setFactory(FactoryKt.getLogFactory());
-        Logger logger = LoggerFactory.getLogger(SLF4JTest.class);
-        logger.info(MarkerFactory.getMarker("Hello"), "testLogger");
-        logger.debug(MarkerFactory.getMarker("Hello"), "testLogger");
+class ComposeApp: Application() {
+
+    @OptIn(LogExperimental::class)
+    override fun onCreate() {
+        super.onCreate()
+        Slf4jProvider.Options.apply {
+            setFactory(logFactory)
+        }
     }
 
 }

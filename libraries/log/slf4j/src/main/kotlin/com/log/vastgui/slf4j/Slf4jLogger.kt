@@ -18,13 +18,15 @@ package com.log.vastgui.slf4j
 
 import com.log.vastgui.core.LogCat
 import com.log.vastgui.core.annotation.LogExperimental
-import com.log.vastgui.core.base.LogLevel
 import com.log.vastgui.core.plugin.LogPrinter
 import com.log.vastgui.core.plugin.LogStorage
+import com.log.vastgui.slf4j.convert.convertLevel
+import com.log.vastgui.slf4j.convert.convertMarker
 import org.slf4j.Marker
 import org.slf4j.event.Level
 import org.slf4j.helpers.LegacyAbstractLogger
 import org.slf4j.helpers.MessageFormatter
+import org.slf4j.spi.LoggingEventBuilder
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -92,6 +94,10 @@ internal class Slf4jLogger(private val logcat: LogCat) : LegacyAbstractLogger() 
     /** @since 1.3.7 */
     override fun getFullyQualifiedCallerName() = logcat.tag
 
+    override fun makeLoggingEventBuilder(level: Level): LoggingEventBuilder {
+        return Slf4jEventBuilder(logcat, level)
+    }
+
     /**
      * Log information is processed through [LogCat.log].
      *
@@ -104,37 +110,9 @@ internal class Slf4jLogger(private val logcat: LogCat) : LegacyAbstractLogger() 
         arguments: Array<out Any>?,
         throwable: Throwable?
     ) {
-        logcat.log(
-            convertLevel(level),
-            convertMarker(marker),
-            MessageFormatter.basicArrayFormat(messagePattern, arguments),
-            throwable
-        )
+        val content = MessageFormatter.basicArrayFormat(messagePattern, arguments) ?: "null"
+        logcat.log(convertLevel(level), convertMarker(marker, logcat.tag), content,
+            throwable, Throwable().stackTrace[3])
     }
 
-    /**
-     * Convert [Level] to [LogLevel].
-     *
-     * @since 1.3.7
-     */
-    private fun convertLevel(level: Level?): LogLevel {
-        return when (level) {
-            Level.ERROR -> LogLevel.ERROR
-            Level.WARN -> LogLevel.WARN
-            Level.INFO -> LogLevel.INFO
-            Level.DEBUG -> LogLevel.DEBUG
-            Level.TRACE -> LogLevel.VERBOSE
-            null -> LogLevel.INFO
-        }
-    }
-
-    /**
-     * Convert [Marker].
-     *
-     * @since 1.3.7
-     */
-    private fun convertMarker(marker: Marker?): String {
-        if (marker == null) return logcat.tag
-        return marker.name
-    }
 }

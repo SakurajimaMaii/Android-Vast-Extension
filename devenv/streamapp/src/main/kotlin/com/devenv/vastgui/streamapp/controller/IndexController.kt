@@ -22,6 +22,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
+import java.io.File
 import javax.print.attribute.standard.RequestingUserName
 
 @RestController
@@ -31,6 +32,13 @@ class IndexController {
     @GetMapping("/")
     suspend fun index() =
         "{\"name\":\"BeJson\",\"url\":\"http://www.bejson.com\",\"page\":88,\"isNonProfit\":true}"
+
+    @GetMapping("/content")
+    suspend fun content() = run {
+        val file = File(javaClass.classLoader!!.getResource("paragraph.txt").file)
+        val content = String(file.readBytes())
+        "{\"image\":\"$content\"}"
+    }
 
     @PostMapping("/post")
     fun post() = User("小李", 19)

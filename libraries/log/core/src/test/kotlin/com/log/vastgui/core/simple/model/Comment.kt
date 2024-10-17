@@ -1,10 +1,3 @@
-import com.log.vastgui.core.annotation.LogExperimental
-import com.log.vastgui.slf4j.Slf4jProvider
-import org.junit.Test
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import kotlin.properties.Delegates
-
 /*
  * Copyright 2021-2024 VastGui
  *
@@ -21,22 +14,20 @@ import kotlin.properties.Delegates
  * limitations under the License.
  */
 
+package com.log.vastgui.core.simple.model
+
+import java.util.Date
+
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2024/10/9
-// Documentation: 
-// Reference: 
+// Date: 2024/6/23 18:23
 
-@LogExperimental
-class SLF4JKtTest {
+data class Comment(
+    val postId: Int,
+    val userId: Int,
+    val content: String,
+    val createdAt: Date
+)
 
-    private var logger: Logger by Delegates.notNull()
-
-    @Test
-    fun simpleTest() {
-        Slf4jProvider.Options.setFactory(logFactory)
-        logger = LoggerFactory.getLogger("SLF4JKtTest")
-        logger.debug("This is a message")
-    }
-
-}
+val comment1 = Comment(postId = 1, userId = 1, content = "Great post!", createdAt = Date())
+val comment2 = Comment(postId = 1, userId = 2, content = "Thanks for sharing!", createdAt = Date())

@@ -68,6 +68,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -93,6 +94,7 @@ android {
 
 dependencies {
     debugImplementation(libs.ui.test.manifest.compose)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.activity.compose)
     implementation(libs.adapter.rxjava3)
     implementation(libs.coil.compose)
@@ -110,8 +112,12 @@ dependencies {
     implementation(libs.paging.compose)
     implementation(libs.retrofit)
     implementation(libs.runtime.livedata.compose)
+    implementation(libs.slf4j.api)
     implementation(libs.ui.compose)
     implementation(libs.ui.graphics.compose)
     implementation(libs.ui.tooling.preview.compose)
+    implementation(projects.libraries.kernel)
+    implementation(projects.libraries.log.core)
+    implementation(projects.libraries.log.slf4j)
     implementation(projects.libraries.tools)
 }

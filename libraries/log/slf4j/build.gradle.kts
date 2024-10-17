@@ -26,7 +26,7 @@ plugins {
 }
 
 group = "io.github.sakurajimamaii"
-version = "1.3.7"
+version = "1.3.10"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -50,6 +50,9 @@ dependencies {
     compileOnly(projects.libraries.kernel)
     compileOnly(projects.libraries.log.core)
     implementation(libs.slf4j.api)
+    testImplementation(libs.fastjson2)
+    testImplementation(libs.gson)
+    testImplementation(libs.jackson.databind)
     testImplementation(libs.junit)
     testImplementation(projects.libraries.kernel)
     testImplementation(projects.libraries.log.core)
@@ -67,7 +70,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "log-slf4j"
-                version = "1.3.7"
+                version = "1.3.10"
 
                 afterEvaluate {
                     from(components["java"])
@@ -81,7 +84,6 @@ tasks.withType<DokkaTaskPartial> {
     moduleName.set("log-slf4j")
     dokkaSourceSets.configureEach {
         sourceLink {
-            // FIXME https://github.com/Kotlin/dokka/issues/2876
             localDirectory.set(projectDir.resolve("src"))
             remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/slf4j/src"))
             remoteLineSuffix.set("#L")
