@@ -91,7 +91,7 @@ class AndroidLogger internal constructor(
             while (isActive) {
                 runCatching {
                     val logInfo = mLogChannel.receive()
-                    Log.println(logInfo.mLevelPriority, logInfo.mTag, logFormat.format(logInfo))
+                    Log.println(logInfo.levelPriority, logInfo.tag, logFormat.format(logInfo))
                 }.onFailure {
                     Log.e(TAG, "$TAG:${it.stackTraceToString()}", it)
                 }

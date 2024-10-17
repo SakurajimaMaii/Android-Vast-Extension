@@ -109,6 +109,9 @@ dependencies {
     implementation(libs.recyclerview)
     implementation(libs.retrofit)
     implementation(projects.libraries.kernel)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.junit)
+    testImplementation(libs.junit)
 }
 
 extra["PUBLISH_ARTIFACT_ID"] = "VastTools"
