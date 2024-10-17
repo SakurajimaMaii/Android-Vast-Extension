@@ -84,7 +84,6 @@ tasks.withType<DokkaTaskPartial> {
     moduleName.set("log-slf4j")
     dokkaSourceSets.configureEach {
         sourceLink {
-            // FIXME https://github.com/Kotlin/dokka/issues/2876
             localDirectory.set(projectDir.resolve("src"))
             remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/slf4j/src"))
             remoteLineSuffix.set("#L")
