@@ -17,33 +17,21 @@
 package com.ave.vastgui.app
 
 import android.app.Application
-import android.content.Intent
-import com.ave.vastgui.app.activity.FileActivity
 import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.app.log.marsLogger
-import com.ave.vastgui.tools.content.ContextHelper
-import com.ave.vastgui.tools.exception.AppCrashHandler
-import com.ave.vastgui.tools.lifecycle.ActivityLifecycleLogger
+import com.ave.vastgui.tools.exception.AppCrashHandler.Companion.setDefaultUncaughtExceptionHandler
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.kongzue.dialogx.DialogX
 import com.kongzue.dialogx.style.IOSStyle
-import kotlin.system.exitProcess
 
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/12/28
 
-private val crashConfig =
-    AppCrashHandler.Configuration(logFactory("App")) { _, _ ->
-        val intent = Intent(ContextHelper.getAppContext(), FileActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-        ContextHelper.getAppContext().startActivity(intent)
-        exitProcess(0)
-    }
-
 class App : Application() {
+
+    private val mLogcat by lazy { logFactory("App") }
 
     override fun onCreate() {
         super.onCreate()
@@ -56,8 +44,10 @@ class App : Application() {
 //            createViewInterceptor.add(FabFactory())
 //            addThemeSkinExecutorBuilder(FabExecutorBuilder())
 //        }
-        // ConstraintLayoutCompat.init()
-        Thread.setDefaultUncaughtExceptionHandler(AppCrashHandler.getInstance(crashConfig))
+//         ConstraintLayoutCompat.init()
+        setDefaultUncaughtExceptionHandler { t, e, stackTraceInfo ->
+            mLogcat.e(stackTraceInfo)
+        }
     }
 
     override fun onLowMemory() {

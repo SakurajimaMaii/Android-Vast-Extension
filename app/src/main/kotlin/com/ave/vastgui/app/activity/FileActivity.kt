@@ -23,7 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityFileBinding
 import com.ave.vastgui.app.log.logFactory
-import com.ave.vastgui.tools.utils.drawable
+import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.view.extension.hideKeyBroad
 import com.ave.vastgui.tools.view.extension.isShouldHideKeyBroad
 import com.ave.vastgui.tools.viewbinding.viewBinding
@@ -35,21 +35,14 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 
 class FileActivity : AppCompatActivity(R.layout.activity_file) {
 
-    private val logcat = logFactory(FileActivity::class.java)
-    private val binding by viewBinding(ActivityFileBinding::bind)
+    private val mLogcat = logFactory("FileActivity")
+    private val mBinding by viewBinding(ActivityFileBinding::bind)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.button.setOnClickListener {
-            logcat.d("这是一条日志")
-            logcat.e(NullPointerException("this object is null."))
-        }
-        val drawable = drawable(R.drawable.ic_github).also {
-            logcat.d(it!!::class.java.simpleName)
-        }
-        binding.icon1.run {  }
-        null.isNullOrBlank()
-        binding.icon1.setImageDrawable(drawable)
+        getFileUri()
+
+        throw RuntimeException("12345678910")
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -62,6 +55,11 @@ class FileActivity : AppCompatActivity(R.layout.activity_file) {
             }
         }
         return super.onTouchEvent(event)
+    }
+
+    private fun getFileUri() {
+        val uri = FileMgr.getFileUriOnApi23(FileMgr.getAssetsFile("test.jpg"))
+        mBinding.icon1.setImageURI(uri)
     }
 
 }
