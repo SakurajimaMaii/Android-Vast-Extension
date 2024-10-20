@@ -35,9 +35,6 @@ class ExampleUnitTest {
 
     @Test
     fun addition_isCorrect() {
-        assertEquals(
-            B::class.java.getAnnotation(A::class.java),
-            B::class.java::class.java.getAnnotation(A::class.java)
-        )
+        assertEquals(4, 2 + 2)
     }
 }

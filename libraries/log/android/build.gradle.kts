@@ -1,3 +1,6 @@
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import java.net.URL
+
 /*
  * Copyright 2021-2024 VastGui
  *
@@ -17,6 +20,7 @@
 plugins {
     kotlin("android")
     id("com.android.library")
+    id("convention.publication")
 }
 
 android {
@@ -57,10 +61,43 @@ kotlin.sourceSets.all {
 dependencies {
     compileOnly(projects.libraries.kernel)
     compileOnly(projects.libraries.log.core)
-    implementation(libs.core.ktx)
     implementation(libs.appcompat)
-    implementation(libs.material)
+    implementation(libs.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+
+extra["PUBLISH_ARTIFACT_ID"] = "log-android"
+extra["PUBLISH_DESCRIPTION"] = "Android for log"
+extra["PUBLISH_URL"] =
+    "https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/log/android"
+
+val mavenPropertiesFile = File(rootDir, "maven.properties")
+if (mavenPropertiesFile.exists()) {
+    publishing {
+        publications {
+            register<MavenPublication>("release") {
+                groupId = "io.github.sakurajimamaii"
+                artifactId = "log-android"
+                version = "1.3.10"
+
+                afterEvaluate {
+                    from(components["release"])
+                }
+            }
+        }
+    }
+}
+
+tasks.withType<DokkaTaskPartial> {
+    moduleName.set("log-android")
+    dokkaSourceSets.configureEach {
+        sourceLink {
+            // FIXME https://github.com/Kotlin/dokka/issues/2876
+            localDirectory.set(projectDir.resolve("src"))
+            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/log/android/src"))
+            remoteLineSuffix.set("#L")
+        }
+    }
 }

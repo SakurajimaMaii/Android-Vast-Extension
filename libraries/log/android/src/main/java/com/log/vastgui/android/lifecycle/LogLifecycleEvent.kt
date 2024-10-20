@@ -16,14 +16,21 @@
 
 package com.log.vastgui.android.lifecycle
 
+import android.app.Activity
+import androidx.fragment.app.Fragment
+
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/10/18
-// Description: 
-// Documentation: 
+// Documentation: https://ave.entropy2020.cn/documents/log/log-android/lifecycle/usgae/
 // Reference: https://github.com/Chesire/LifecykleLog
 
-/** @since 1.3.10 */
+/**
+ * Contains a list of lifecycle events available on a [Fragment] or
+ * [Activity]. Use [eventName] to get its string representation.
+ *
+ * @since 1.3.10
+ */
 enum class LogLifecycleEvent(val eventName: String) {
     ON_ATTACH("onAttach"),
     ON_CREATE("onCreate"),
@@ -31,13 +38,11 @@ enum class LogLifecycleEvent(val eventName: String) {
     ON_ACTIVITY_CREATED("onActivityCreated"),
     ON_START("onStart"),
     ON_RESUME("onResume"),
-
     ON_PAUSE("onPause"),
     ON_STOP("onStop"),
     ON_DESTROY_VIEW("onDestroyView"),
     ON_DESTROY("onDestroy"),
     ON_DETACH("onDetach"),
-
     ON_PRE_ATTACHED("onPreAttached"),
     ON_PRE_CREATED("onPreCreated"),
     ON_SAVE_INSTANCE_STATE("onSaveInstanceState")

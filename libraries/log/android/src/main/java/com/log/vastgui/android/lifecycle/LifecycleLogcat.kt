@@ -32,13 +32,20 @@ import java.util.concurrent.ConcurrentMap
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/7/17
-// Documentation: https://ave.entropy2020.cn/documents/tools/app-entry-points/activities/lifecycle/
+// Documentation: https://ave.entropy2020.cn/documents/log/log-android/lifecycle/usgae/
 // Reference: https://github.com/Chesire/LifecykleLog
 
-/** @since 1.3.10 */
-class ActivityLifecycleLogcat private constructor(private val observer: LifecycleObserver) :
+/**
+ * Handles callbacks for all of the [Activity] lifecycle events. When
+ * [onActivityCreated] is called, it will register for the [Fragment]
+ * lifecycle events.
+ *
+ * @since 1.3.10
+ */
+class LifecycleLogcat private constructor(private val observer: LifecycleCallback) :
     ActivityLifecycleCallbacks, FragmentLifecycleCallbacks() {
 
+    /** @since 1.3.10 */
     private val eventOwnerMap: ConcurrentMap<Class<*>, Pair<String, Array<LogLifecycleEvent>>> =
         ConcurrentHashMap()
 
@@ -173,13 +180,16 @@ class ActivityLifecycleLogcat private constructor(private val observer: Lifecycl
     }
     // endregion
 
+    /** @since 1.3.10 */
     private fun Any.getKey(default: String = "") = default.ifBlank { this::class.java.simpleName }
 
+    /** @since 1.3.10 */
     private fun Any.pair(event: LogLifecycleEvent): Pair<String, Array<LogLifecycleEvent>>? {
         val pair = eventOwnerMap[this::class.java] ?: return null
         return pair.takeIf { it.second.contains(event) }
     }
 
+    /** @since 1.3.10 */
     private fun Any.register(): Boolean {
         val annotation: LogLifecycle =
             this::class.java.getAnnotation(LogLifecycle::class.java) ?: return false
@@ -188,6 +198,7 @@ class ActivityLifecycleLogcat private constructor(private val observer: Lifecycl
         return true
     }
 
+    /** @since 1.3.10 */
     private fun Any.unregister() {
         val annotation: LogLifecycle =
             this::class.java.getAnnotation(LogLifecycle::class.java) ?: return
@@ -195,13 +206,31 @@ class ActivityLifecycleLogcat private constructor(private val observer: Lifecycl
         eventOwnerMap.remove(this::class.java, name to annotation.obverseEvent)
     }
 
-    fun interface LifecycleObserver {
+    /** @since 1.3.10 */
+    @FunctionalInterface
+    fun interface LifecycleCallback {
         fun observeEvent(tag: String, event: LogLifecycleEvent, bundle: Bundle?)
     }
 
     companion object {
-        fun Application.registerActivityLifecycleLogcat(observer: LifecycleObserver) {
-            registerActivityLifecycleCallbacks(ActivityLifecycleLogcat(observer))
+        /**
+         * Register a lifecycle logcat.
+         *
+         * ```kotlin
+         * class App : Application() {
+         *     override fun onCreate() {
+         *         super.onCreate()
+         *         registerLifecycleLogcat { tag, event, bundle ->
+         *             // ...
+         *         }
+         *     }
+         * }
+         * ```
+         *
+         * @since 1.3.10
+         */
+        fun Application.registerLifecycleLogcat(cb: LifecycleCallback) {
+            registerActivityLifecycleCallbacks(LifecycleLogcat(cb))
         }
     }
 }

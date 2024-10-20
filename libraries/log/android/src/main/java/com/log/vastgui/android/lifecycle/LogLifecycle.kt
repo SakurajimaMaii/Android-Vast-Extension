@@ -16,14 +16,31 @@
 
 package com.log.vastgui.android.lifecycle
 
+import android.app.Activity
+import androidx.fragment.app.Fragment
+import java.lang.Class
+
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/10/18
-// Description: 
-// Documentation: 
-// Reference:
+// Documentation: https://ave.entropy2020.cn/documents/log/log-android/lifecycle/usgae/
+// Reference: https://github.com/Chesire/LifecykleLog
 
-/** @since 1.3.10 */
+/**
+ * Annotation to put on an [Activity] or a [Fragment] that denotes its
+ * lifecycle methods should be logged out. If the [name] is provided,
+ * this is the name that will be used for this class, use either the
+ * name of the class or something descriptive to see in the logs. If
+ * nothing is provided then [LogLifecycle] will attempt to get it by
+ * [Class.getSimpleName]. By default all lifecycle methods that were
+ * provided in [obverseEvent] will be logged out, if [obverseEvent] is
+ * provided then only the methods provided to it will be logged out.
+ *
+ * @since 1.3.10
+ */
+@MustBeDocumented
+@Retention
+@Target(AnnotationTarget.CLASS)
 annotation class LogLifecycle(
     val name: String = "",
     val obverseEvent: Array<LogLifecycleEvent> = [
