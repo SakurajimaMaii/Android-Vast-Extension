@@ -36,8 +36,10 @@ val logFactory: LogFactory = getLogFactory {
     install(LogSwitch) {
         open = true
     }
-    install(LogPrinter) {
-        logger = Logger.desktop(LineColorfulFormat)
+    if (false) {
+        install(LogPrinter) {
+            logger = Logger.desktop(LineColorfulFormat)
+        }
     }
     install(LogStorage) {
         logStore = LogStore.desktop("", 1024L * 1000)

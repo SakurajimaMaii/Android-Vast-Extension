@@ -22,7 +22,7 @@ import org.junit.Test
 // Email: guihy2019@gmail.com
 // Date: 2024/5/14 23:59
 
-class SimpleTest {
+class DesktopKtTest {
     private val logcat = logFactory("SimpleTest")
 
     @Test

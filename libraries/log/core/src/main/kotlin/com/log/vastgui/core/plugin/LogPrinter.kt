@@ -112,8 +112,7 @@ class LogPrinter private constructor(private val mConfiguration: Configuration) 
                 }
             }
             scope.logPipeline.intercept(LogPipeline.Output) {
-                val logInfo = subject.build()
-                plugin.printLog(logInfo)
+                plugin.printLog(subject.build())
                 proceed()
             }
         }
