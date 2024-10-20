@@ -27,12 +27,14 @@ import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.ave.vastgui.tools.view.extension.hideKeyBroad
 import com.ave.vastgui.tools.view.extension.isShouldHideKeyBroad
 import com.ave.vastgui.tools.viewbinding.viewBinding
+import com.log.vastgui.android.lifecycle.LogLifecycle
 
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com
 // Date: 2022/5/31
 // Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-data-and-files/file-manager/file-mgr/
 
+@LogLifecycle
 class FileActivity : AppCompatActivity(R.layout.activity_file) {
 
     private val mLogcat = logFactory("FileActivity")
@@ -41,8 +43,6 @@ class FileActivity : AppCompatActivity(R.layout.activity_file) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getFileUri()
-
-        throw RuntimeException("12345678910")
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

@@ -23,7 +23,9 @@ import com.ave.vastgui.tools.exception.AppCrashHandler.Companion.setDefaultUncau
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.kongzue.dialogx.DialogX
 import com.kongzue.dialogx.style.IOSStyle
-
+import com.log.vastgui.android.lifecycle.LifecycleLogcat.Companion.registerLifecycleLogcat
+import com.log.vastgui.core.annotation.LogExperimental
+import com.log.vastgui.core.base.LogTag
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -33,19 +35,23 @@ class App : Application() {
 
     private val mLogcat by lazy { logFactory("App") }
 
+    @OptIn(LogExperimental::class)
     override fun onCreate() {
         super.onCreate()
         DialogX.dialogMaxWidth = 400f.DP.toInt()
         DialogX.globalStyle = IOSStyle()
         DialogX.init(this)
-//        registerActivityLifecycleCallbacks(ActivityLifecycleLogger(logFactory.getLogCat(this::class.java)))
+        registerLifecycleLogcat { tag, event, bundle ->
+            mLogcat.i(LogTag(tag), "$event $bundle")
+            // Log.i(tag, "$event $bundle")
+        }
 //        WindowManager.getInstance().init(this, OptionFactory())
 //        ThemeSkinService.getInstance().apply {
 //            createViewInterceptor.add(FabFactory())
 //            addThemeSkinExecutorBuilder(FabExecutorBuilder())
 //        }
 //         ConstraintLayoutCompat.init()
-        setDefaultUncaughtExceptionHandler { t, e, stackTraceInfo ->
+        setDefaultUncaughtExceptionHandler { _, _, stackTraceInfo ->
             mLogcat.e(stackTraceInfo)
         }
     }
