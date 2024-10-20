@@ -29,9 +29,10 @@ import com.ave.vastgui.app.viewmodel.SharedVM
 import com.ave.vastgui.tools.bean.UserBean
 import com.ave.vastgui.tools.fragment.VastVbVmFragment
 import com.ave.vastgui.tools.view.toast.SimpleToast
+import com.log.vastgui.android.lifecycle.LogLifecycle
+import com.log.vastgui.android.lifecycle.LogLifecycleEvent
 import com.log.vastgui.core.annotation.LogExperimental
 import com.log.vastgui.core.base.LogTag
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 // Author: SakurajimaMai
@@ -39,6 +40,7 @@ import kotlinx.coroutines.launch
 // Documentation: https://ave.entropy2020.cn/documents/tools/app-entry-points/fragments/fragment/
 // Documentation: https://ave.entropy2020.cn/documents/VastAdapter/
 
+@LogLifecycle("MyFragment", [LogLifecycleEvent.ON_CREATE, LogLifecycleEvent.ON_RESUME])
 class VideosFragment : VastVbVmFragment<FragmentVideosBinding, SharedVM>() {
 
     private val mAdapter by lazy {
@@ -65,14 +67,8 @@ class VideosFragment : VastVbVmFragment<FragmentVideosBinding, SharedVM>() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        mLogcat.d("onResume")
-    }
-
     override fun onPause() {
         super.onPause()
-        mLogcat.d("onPause")
         eObjectUsage()
     }
 

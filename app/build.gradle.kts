@@ -131,6 +131,7 @@ dependencies {
     implementation(projects.libraries.kernel)
     implementation(projects.libraries.log.mars)
     implementation(projects.libraries.log.okhttp)
+    implementation(projects.libraries.log.android)
     implementation(projects.libraries.netstatelayout)
     implementation(projects.libraries.tools)
 }

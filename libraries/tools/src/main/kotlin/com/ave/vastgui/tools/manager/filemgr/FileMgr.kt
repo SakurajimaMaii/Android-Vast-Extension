@@ -110,7 +110,7 @@ object FileMgr {
      * @param file The file you want to save.
      */
     @JvmStatic
-    @Deprecated("Using getOrSaveFile instead.")
+    @Deprecated("Using getOrSaveFile instead.", ReplaceWith("getOrSaveFile(dirs)"))
     fun saveFile(file: File): ResultCompat<String> = try {
         if (file.createNewFile()) {
             ResultCompat.success("${file.name} saved successfully")
@@ -226,7 +226,7 @@ object FileMgr {
      * @param dir The file of the directory.
      */
     @JvmStatic
-    @Deprecated("Using getOrMakeDir instead.")
+    @Deprecated("Using getOrMakeDir instead.", ReplaceWith("getOrMakeDir(dirs)"))
     fun makeDir(dir: File): ResultCompat<String> = when {
         dir.exists() ->
             ResultCompat.failure(IllegalArgumentException("${dir.name} is already exists."))
@@ -245,7 +245,7 @@ object FileMgr {
      * @since 1.5.0
      */
     @JvmStatic
-    @Deprecated("Using getOrMakeDir instead.")
+    @Deprecated("Using getOrMakeDir instead.", ReplaceWith("getOrMakeDir(dirs)"))
     fun makeDirs(dirs: File): ResultCompat<String> = when {
         dirs.exists() ->
             ResultCompat.failure(IllegalArgumentException("${dirs.name} is already exists."))

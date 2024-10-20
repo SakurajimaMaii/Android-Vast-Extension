@@ -29,13 +29,14 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 val libs = arrayOf(
     "adapter",
     "kernel",
-    "netstatelayout",
-    "tools",
-    "log:desktop",
+    "log:android",
     "log:core",
+    "log:desktop",
     "log:mars",
     "log:okhttp",
-    "log:slf4j"
+    "log:slf4j",
+    "netstatelayout",
+    "tools",
 )
 
 libs.forEach {
