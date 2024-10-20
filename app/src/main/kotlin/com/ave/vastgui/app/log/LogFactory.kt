@@ -19,10 +19,10 @@ package com.ave.vastgui.app.log
 import com.ave.vastgui.tools.log.android
 import com.ave.vastgui.tools.manager.filemgr.FileMgr
 import com.log.vastgui.core.LogFactory
-import com.log.vastgui.core.base.LogLevel
 import com.log.vastgui.core.base.LogStore
 import com.log.vastgui.core.base.Logger
-import com.log.vastgui.core.format.OnlyMsgFormat
+import com.log.vastgui.core.base.allLogLevel
+import com.log.vastgui.core.format.LineFormat
 import com.log.vastgui.core.getLogFactory
 import com.log.vastgui.core.json.FastJsonConverter
 import com.log.vastgui.core.json.GsonConverter
@@ -48,30 +48,30 @@ val gson = GsonConverter.getInstance(true)
 val fastJson = FastJsonConverter.getInstance(true)
 val jackson = JacksonConverter.getInstance(true)
 
+//@JvmField
+//val logFactory: LogFactory = getLogFactory {
+//    install(LogSwitch) {
+//        open = true
+//    }
+//    install(LogPrinter) {
+//        logger = marsLogger
+//    }
+//    install(LogJson) {
+//        converter = gson
+//    }
+//    install(LogPretty) {
+//        converter = gson
+//    }
+//}
+
 @JvmField
 val logFactory: LogFactory = getLogFactory {
     install(LogSwitch) {
         open = true
     }
     install(LogPrinter) {
-        logger = marsLogger
-    }
-    install(LogJson) {
-        converter = gson
-    }
-    install(LogPretty) {
-        converter = gson
-    }
-}
-
-@JvmField
-val logFactory2: LogFactory = getLogFactory {
-    install(LogSwitch) {
-        open = false
-    }
-    install(LogPrinter) {
-        level = LogLevel.INFO
-        logger = Logger.android(logFormat = OnlyMsgFormat)
+        levelSet = allLogLevel
+        logger = Logger.android(LineFormat)
     }
     install(LogJson) {
         converter = gson
@@ -80,7 +80,7 @@ val logFactory2: LogFactory = getLogFactory {
         converter = gson
     }
     install(LogStorage) {
-        levelSet = setOf(LogLevel.INFO, LogLevel.WARN, LogLevel.ERROR)
-        logStore = LogStore.android()
+        levelSet = allLogLevel
+        logStore = LogStore.android(logFormat = LineFormat)
     }
 }

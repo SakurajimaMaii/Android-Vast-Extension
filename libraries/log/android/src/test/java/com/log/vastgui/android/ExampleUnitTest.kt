@@ -14,19 +14,27 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.log.base
+package com.log.vastgui.android
 
-import com.ave.vastgui.tools.utils.DateUtils
-import java.text.SimpleDateFormat
-import java.util.Locale
+import org.junit.Test
 
-// Author: Vast Gui
-// Email: guihy2019@gmail.com
-// Date: 2024/5/18 23:17
-// Documentation: https://ave.entropy2020.cn/documents/tools/log
+import org.junit.Assert.*
 
-/** @since 1.3.1 */
-internal val timeSdf = SimpleDateFormat(DateUtils.FORMAT_YYYY_MM_DD_HH_MM_SS, Locale.ENGLISH)
+/**
+ * Example local unit test, which will execute on the development machine
+ * (host).
+ *
+ * See [testing documentation](http://d.android.com/tools/testing).
+ */
+class ExampleUnitTest {
 
-/** @since 1.3.1 */
-internal val fileNameTimeSdf = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.ENGLISH)
+    annotation class A()
+
+    @A
+    class B()
+
+    @Test
+    fun addition_isCorrect() {
+        assertEquals(4, 2 + 2)
+    }
+}
