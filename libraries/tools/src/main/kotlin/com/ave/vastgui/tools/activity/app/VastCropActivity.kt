@@ -43,10 +43,15 @@ import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_PERM
 import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_SOURCE_IMAGE_ERROR
 import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RETURN_DATA
 import com.ave.vastgui.tools.databinding.ActivityCropBinding
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
-import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
+import com.ave.vastgui.tools.io.Policy
+import com.ave.vastgui.tools.io.asImageFile
+import com.ave.vastgui.tools.io.destroy
+import com.ave.vastgui.tools.io.getImageFile
+import com.ave.vastgui.tools.io.mimeType
+import com.ave.vastgui.tools.io.mkFile
 import com.ave.vastgui.tools.utils.DateUtils
 import com.ave.vastgui.tools.utils.permission.Permission
+import com.ave.vastgui.tools.utils.permission.isPermissionGranted
 import com.ave.vastgui.tools.view.cropview.CropFrameType
 import java.io.BufferedInputStream
 import java.io.File
@@ -67,26 +72,26 @@ import java.io.IOException
  * @property OUTPUT_X The width of output image in pixels.
  * @property OUTPUT_Y The height of output image in pixels.
  * @property AUTHORITY When the [Build.VERSION.SDK_INT] is smaller than
- *     [Build.VERSION_CODES.R], You should set it for FileProvider.
+ * [Build.VERSION_CODES.R], You should set it for FileProvider.
  * @property RETURN_DATA True if return the crop image by a bitmap object,
- *     false otherwise.
+ * false otherwise.
  * @property FRAME_TYPE See [CropFrameType].
  * @property originalImage The temporary file of the original image, it is
- *     saved in the app internal cache file directory and it will be
- *     deleted when the [VastCropActivity] is destroy.
+ * saved in the app internal cache file directory and it will be deleted
+ * when the [VastCropActivity] is destroy.
  * @property RESULT_NULL_DATA_ERROR Return when the [Intent.getData] is
- *     empty.
+ * empty.
  * @property RESULT_FRAME_TYPE_ERROR Return when the value of [FRAME_TYPE]
- *     is error.
+ * is error.
  * @property RESULT_SOURCE_IMAGE_ERROR Return when getting the file through
- *     [Intent.getData].
+ * [Intent.getData].
  * @property RESULT_GET_CROP_IMAGE_ERROR Return when getting the crop
- *     image.
+ * image.
  * @property RESULT_PERMISSION_ERROR Return when there is no
- *     [Permission.READ_MEDIA_IMAGES] permission.
+ * [Permission.READ_MEDIA_IMAGES] permission.
  * @property RESULT_PARAMETER_ERROR Return when the parameter is error.
  * @property RESULT_DESTINATION_IMAGE_ERROR Return when get the destination
- *     image.
+ * image.
  * @since 0.5.0
  */
 open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
@@ -156,17 +161,12 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
             .getSingleton()
             .getExtensionFromMimeType(contentResolver.getType(uri)) ?: DEFAULT_IMAGE_EXTENSION
         // Source image file to be cropped
-        val source = File(
-            cacheDir,
-            "crop_cache_${ImageMgr.getDefaultFileName(".$extension")}"
-        )
+        val source =
+            File(cacheDir, "crop_cache_${getImageFile().getDefaultFileName(".$extension")}")
         // Destination image file
-        val destination = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path,
-            "crop_${ImageMgr.getDefaultFileName(".$extension")}"
-        )
+        val destination = File(getImageFile().sharedPictures().path, "crop_${getImageFile().getDefaultFileName(".$extension")}")
 
-        if (FileMgr.saveFile(source).isFailure) {
+        if (source.mkFile(Policy.EXCEPTION).isFailure) {
             finish(RESULT_SOURCE_IMAGE_ERROR)
         } else {
             originalImage = source
@@ -207,9 +207,7 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
                 finish(RESULT_GET_CROP_IMAGE_ERROR)
             }
 
-            if (ContextCompat.checkSelfPermission(this, Permission.READ_MEDIA_IMAGES) ==
-                PackageManager.PERMISSION_GRANTED
-            ) {
+            if (isPermissionGranted(Permission.READ_MEDIA_IMAGES)) {
                 returnBitmapData(bitmap!!, destination, authority)
             } else {
                 finish(RESULT_PERMISSION_ERROR)
@@ -241,23 +239,18 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
 
         // Get the uri
         val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            ImageMgr.getFileUriAboveApi30 {
-                put(Media.DATA, destination.absolutePath)
-                put(Media.DISPLAY_NAME, destination.name)
-                put(Media.MIME_TYPE, FileMgr.getMimeType(destination, "image/jpeg"))
-                put(Media.DATE_ADDED, DateUtils.getCurrentTime(DateUtils.FORMAT_YYYY_MM_DD_HH_MM_SS))
-            }
+            destination.asImageFile().uri { put(Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES) }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            ImageMgr.getFileUriAboveApi24(destination, authority)
+            destination.asImageFile().uri(authority)
         } else {
-            ImageMgr.getFileUriOnApi23(destination)
+            destination.asImageFile().uri()
         }
 
         if (null == uri) {
             finish(RESULT_DESTINATION_IMAGE_ERROR)
         }
 
-        @Suppress("DEPRECATION") val format = when (FileMgr.getExtension(destination)) {
+        @Suppress("DEPRECATION") val format = when (destination.extension) {
             "jpg" -> Bitmap.CompressFormat.JPEG to 100
             "png" -> Bitmap.CompressFormat.PNG to 0
             "webp" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -291,7 +284,7 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
      * @since 0.5.6
      */
     private fun finish(resultCode: Int) {
-        originalImage?.apply { FileMgr.deleteFile(this) }
+        originalImage?.destroy()
         setResult(resultCode, intent)
         finish()
     }

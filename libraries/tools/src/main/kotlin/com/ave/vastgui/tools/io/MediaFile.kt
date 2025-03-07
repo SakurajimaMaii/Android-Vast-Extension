@@ -23,6 +23,7 @@ import android.provider.MediaStore.Images.Media
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import com.ave.vastgui.tools.content.ContextHelper
+import com.ave.vastgui.tools.utils.DateUtils
 import java.io.File
 
 // Author: Vast Gui
@@ -57,19 +58,20 @@ sealed interface MediaFile {
      * )
      * ```
      *
-     * By default, [uri] will only insert the following columns: [Media.DATA],
-     * [Media.DISPLAY_NAME], [Media.MIME_TYPE], If you want to customize, you
-     * can use [contentValues]
+     * By default, [uri] will only insert the following columns:
+     * [Media.DISPLAY_NAME], [Media.MIME_TYPE], [Media.DATE_ADDED],
+     * If you want to customize, you can use [contentValues]
      *
      * @since 1.5.2
      */
     @RequiresApi(Build.VERSION_CODES.R)
     fun uri(contentValues: ContentValues.() -> Unit = {}): Uri? {
-        val values = ContentValues().also(contentValues).apply {
-            put(Media.DATA, file.absolutePath)
+        val values = ContentValues().apply {
             put(Media.DISPLAY_NAME, file.name)
             put(Media.MIME_TYPE, file.mimeType())
-        }
+            put(Media.DATE_ADDED, DateUtils.getCurrentTime(DateUtils.FORMAT_YYYY_MM_DD_HH_MM_SS))
+        }.also(contentValues)
+
         return ContextHelper.getAppContext().contentResolver.insert(Media.EXTERNAL_CONTENT_URI, values)
     }
 
