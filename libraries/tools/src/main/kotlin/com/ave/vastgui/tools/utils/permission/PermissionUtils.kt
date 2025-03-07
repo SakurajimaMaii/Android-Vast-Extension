@@ -17,10 +17,12 @@
 package com.ave.vastgui.tools.utils.permission
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.ave.vastgui.tools.utils.AppUtils
 
@@ -126,6 +128,13 @@ inline fun ComponentActivity.requestPermission(
 ) {
     if (permission.isEmpty()) return
     val mBuilder = PermissionBuilder().also(builder)
+    val declaredPermissions = packageManager
+        .getPackageInfo(AppUtils.getPackageName(), PackageManager.GET_PERMISSIONS)
+        .requestedPermissions?.toSet() ?: emptySet()
+    if (!declaredPermissions.contains(permission)) {
+        mBuilder.noDeclare(permission)
+        return
+    }
     singlePermissionLauncher()?.launch(permission) { result ->
         when {
             result -> mBuilder.granted(permission)
@@ -194,6 +203,13 @@ inline fun Fragment.requestPermission(
 ) {
     if (permission.isEmpty()) return
     val mBuilder = PermissionBuilder().also(builder)
+    val declaredPermissions = requireActivity().packageManager
+        .getPackageInfo(AppUtils.getPackageName(), PackageManager.GET_PERMISSIONS)
+        .requestedPermissions?.toSet() ?: emptySet()
+    if (!declaredPermissions.contains(permission)) {
+        mBuilder.noDeclare(permission)
+        return
+    }
     requireActivity().singlePermissionLauncher()?.launch(permission) { result ->
         when {
             result -> mBuilder.granted(permission)
@@ -252,6 +268,15 @@ class PermissionBuilder {
     var granted: (permission: String) -> Unit = {}
     var denied: (permission: String) -> Unit = {}
     var noMoreAsk: (permission: String) -> Unit = {}
+
+    /**
+     * The permission are not declared in AndroidManifest.xml.
+     *
+     * @since 1.5.2
+     */
+    var noDeclare: (String) -> Unit = { permission ->
+        throw RuntimeException("Please declare the following permission: $permission")
+    }
 }
 
 /**
@@ -286,5 +311,26 @@ class MultiPermissionBuilder {
      *
      * @since 0.5.6
      */
-    var noDeclare: (List<String>) -> Unit = {}
+    var noDeclare: (List<String>) -> Unit = { permissions ->
+        throw RuntimeException("Please declare the following permissions: ${permissions.joinToString(",")}")
+    }
 }
+
+// region Check granted
+
+/**
+ * Is permission granted
+ *
+ * @since 1.5.2
+ */
+fun Context.isPermissionGranted(permission: String) =
+    ContextCompat.checkSelfPermission(this, Permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
+
+/**
+ * Is permission denied
+ *
+ * @since 1.5.2
+ */
+fun Context.isPermissionDenied(permission: String) = !isPermissionGranted(permission)
+
+// endregion
