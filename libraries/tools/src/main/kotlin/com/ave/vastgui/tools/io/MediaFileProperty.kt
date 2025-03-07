@@ -16,10 +16,8 @@
 
 package com.ave.vastgui.tools.io
 
-import android.database.Cursor
-import android.net.Uri
-import android.provider.MediaStore.Images.Media
-import com.ave.vastgui.tools.content.ContextHelper
+import android.os.Environment
+import com.ave.vastgui.core.onFailure
 import com.ave.vastgui.tools.utils.AppUtils
 import com.ave.vastgui.tools.utils.DateUtils
 import java.io.File
@@ -30,17 +28,38 @@ sealed interface MediaFileProperty {
     /**
      * Get application-specific storage folder.
      *
-     * @param subDir The name of the subfolder you wish to create.
-     * @since 0.5.0
+     * @param type The type of storage directory to return. Should be one
+     * of [Environment.DIRECTORY_MUSIC], [Environment.DIRECTORY_PODCASTS],
+     * [Environment.DIRECTORY_RINGTONES], [Environment.DIRECTORY_ALARMS],
+     * [Environment.DIRECTORY_NOTIFICATIONS], [Environment.DIRECTORY_PICTURES],
+     * [Environment.DIRECTORY_MOVIES], [Environment.DIRECTORY_DOWNLOADS],
+     * [Environment.DIRECTORY_DCIM], or [Environment.DIRECTORY_DOCUMENTS].
+     * @since 1.5.2
      */
-    fun getExternalFilesDir(subDir: String? = null): File?
+    fun getExternalFilesDir(type: String, subDir: String? = null): File {
+        val dictionary = appExternalFilesDir(type)
+        if (dictionary.exists()) return dictionary
+        dictionary.mkDirs().onFailure { ex -> throw ex }
+        return dictionary
+    }
 
     /**
      * Get shared storage folder.
      *
-     * @since 0.5.0
+     * @param type The type of storage directory to return. Should be one
+     * of [Environment.DIRECTORY_MUSIC], [Environment.DIRECTORY_PODCASTS],
+     * [Environment.DIRECTORY_RINGTONES], [Environment.DIRECTORY_ALARMS],
+     * [Environment.DIRECTORY_NOTIFICATIONS], [Environment.DIRECTORY_PICTURES],
+     * [Environment.DIRECTORY_MOVIES], [Environment.DIRECTORY_DOWNLOADS],
+     * [Environment.DIRECTORY_DCIM], or [Environment.DIRECTORY_DOCUMENTS].
+     * @since 1.5.2
      */
-    fun getSharedFilesDir(): File
+    fun getSharedFilesDir(type: String): File {
+        val dictionary = Environment.getExternalStoragePublicDirectory(type)
+        if (dictionary.exists()) return dictionary
+        dictionary.mkDirs().onFailure { ex -> throw ex }
+        return dictionary
+    }
 
     /**
      * Get default file name.
@@ -49,34 +68,12 @@ sealed interface MediaFileProperty {
      * @return For example, 20230313_234940_455_com_ave_vastgui_app.jpg.
      */
     fun getDefaultFileName(extension: String): String {
-        val timeStamp: String = DateUtils.getCurrentTime("yyyyMMdd_HHmmss_SSS")
+        val timeStamp: String = DateUtils.getCurrentTime(DateUtils.FORMAT_YYYY_MM_DD_HH_MM_SS)
         return try {
             "${timeStamp}_${AppUtils.getPackageName().replace(".", "_")}$extension"
         } catch (_: Exception) {
             "${timeStamp}_media_file_mgr$extension"
         }
-    }
-
-    /**
-     * Get file by [uri]. [getFileByUri] will query the [Media.DATA] field
-     * corresponding to [uri], and return the file if there is a corresponding
-     * path, null otherwise.
-     *
-     * @return file, null otherwise.
-     */
-    fun getFileByUri(uri: Uri): File? {
-        val proj = arrayOf(Media.DATA)
-        val cursor: Cursor? = ContextHelper.getAppContext().contentResolver.query(uri, proj, null, null, null)
-        if (null == cursor) return null
-
-        if (cursor.moveToFirst()) {
-            val columnIndex: Int = cursor.getColumnIndexOrThrow(Media.DATA)
-            val path: String = cursor.getString(columnIndex)
-            cursor.close()
-            return File(path)
-        }
-
-        return null
     }
 
 }
