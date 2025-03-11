@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.log
+package com.log.vastgui.android.base
 
 import android.os.Build
 import androidx.annotation.IntRange
-import com.ave.vastgui.tools.log.AndroidStore.Companion.fileNameTimeSdf
-import com.ave.vastgui.tools.log.base.LogScope
-import com.ave.vastgui.tools.log.base.LogScope.ExceptionStorage
-import com.ave.vastgui.tools.log.base.LogSp
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
-import com.ave.vastgui.tools.utils.AppUtils
+import com.ave.vastgui.core.io.FileComparator
 import com.log.vastgui.core.base.LogFormat
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogLevel
@@ -62,9 +57,9 @@ import java.util.Locale
  */
 @JvmOverloads
 fun LogStore.Companion.android(
-    fileRoot: File = File(FileMgr.appInternalFilesDir(), "log"),
-    fileNamePrefix: String = AppUtils.getAppName(),
-    fileNameDateSuffixSdf: SimpleDateFormat = fileNameTimeSdf,
+    fileRoot: File,
+    fileNamePrefix: String,
+    fileNameDateSuffixSdf: SimpleDateFormat = AndroidStore.Companion.fileNameTimeSdf,
     @IntRange(from = 0L, to = Long.MAX_VALUE) fileMaxSize: Long = 1000 * 1024L,
     logFormat: LogFormat = TableFormat.LogHeader.default.let {
         TableFormat(DEFAULT_MAX_SINGLE_LOG_LENGTH, DEFAULT_MAX_PRINT_TIMES, it)
@@ -80,10 +75,10 @@ fun LogStore.Companion.android(
  * @property fileNameDateSuffixSdf Date format of file name date suffix.
  * @property fileMaxSize The size of a single log file(in bytes).
  * @property logFormat The log format in file.
- * @property mFileName The name of the log file.
+ * @property fileName The name of the log file.
  * @property mLogSp LogSp is used to save the log file name of the last
  * operation.
- * @property mCurrentFile Current file which will save log.
+ * @property currentFile Current file which will save log.
  * @since 1.3.1
  */
 class AndroidStore internal constructor(
@@ -94,15 +89,13 @@ class AndroidStore internal constructor(
     override val logFormat: LogFormat
 ) : LogScope(), LogStore {
 
-    private val mFileName: String
+    private val fileName: String
         get() = "${fileNamePrefix}_${fileNameDateSuffixSdf.format(System.currentTimeMillis())}.log"
 
-    private val mLogSp by lazy { LogSp() }
-
-    private var mCurrentFile = getCurrentFile()
+    private var currentFile = getCurrentFile()
 
     override fun store(logInfo: LogInfo) {
-        mLogScope.launch { mLogChannel.send(logInfo) }
+        logScope.launch { mLogChannel.send(logInfo) }
     }
 
     /**
@@ -112,11 +105,11 @@ class AndroidStore internal constructor(
      */
     private fun storage(logInfo: LogInfo) {
         val message = logFormat.format(logInfo)
-        val currentNeedSize = mCurrentFile.getCurrentSize() + message.toByteArray().size.toLong()
+        val currentNeedSize = currentFile.getCurrentSize() + message.toByteArray().size.toLong()
         if (currentNeedSize > fileMaxSize) {
-            mCurrentFile = getCurrentFile(true)
+            currentFile = getCurrentFile(true)
         }
-        mCurrentFile.storage(message)
+        currentFile.storage(message)
     }
 
     /**
@@ -125,20 +118,29 @@ class AndroidStore internal constructor(
      * @since 0.5.3
      */
     private fun getCurrentFile(appendFile: Boolean = false): File {
-        if (mLogSp.mCurrentFileName == LogSp.DEFAULT_FILE_NAME) {
-            mLogSp.mCurrentFileName = mFileName
+        if (!fileRoot.exists() && !fileRoot.mkdirs()) {
+            throw RuntimeException("${fileRoot.absoluteFile} create failed!")
         }
-        if (appendFile) {
-            mLogSp.mCurrentFileName = mFileName
+
+        val listFiles: Array<File> = try {
+            fileRoot.listFiles() ?: emptyArray()
+        } catch (_: Exception) {
+            emptyArray()
         }
-        if (!fileRoot.exists()) {
-            FileMgr.makeDir(fileRoot).result.onFailure { throw it }
+
+        listFiles.sortWith(FileComparator())
+
+        val fileName = if(listFiles.isEmpty() || !appendFile) {
+            this.fileName
+        } else {
+            listFiles.last { it.isFile }.name
         }
-        val file = File(fileRoot, mLogSp.mCurrentFileName)
-        if (!file.exists()) {
-            FileMgr.saveFile(file).result
-                .onSuccess { return file }.onFailure { throw it }
+
+        val file = File(fileRoot, fileName)
+        if (!file.exists() && !file.createNewFile()) {
+            throw RuntimeException("${file.absoluteFile} create failed!")
         }
+
         return file
     }
 
@@ -167,7 +169,7 @@ class AndroidStore internal constructor(
     }
 
     init {
-        mLogScope.launch {
+        logScope.launch {
             while (isActive) {
                 val info = mLogChannel.receive()
                 storage(info)

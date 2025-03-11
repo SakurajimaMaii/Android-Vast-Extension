@@ -25,7 +25,7 @@ plugins {
 
 android {
     namespace = "com.log.vastgui.android"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 21
@@ -55,6 +55,7 @@ android {
 }
 
 kotlin.sourceSets.all {
+    languageSettings.optIn("com.ave.vastgui.core.annotation.ExperimentalApi")
     languageSettings.optIn("com.log.vastgui.core.annotation.LogApi")
 }
 

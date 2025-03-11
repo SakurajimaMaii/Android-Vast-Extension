@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.log
+package com.log.vastgui.android.base
 
 import android.util.Log
-import com.ave.vastgui.tools.log.base.LogScope
-import com.ave.vastgui.tools.log.base.LogScope.ExceptionLog
 import com.log.vastgui.core.base.LogFormat
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogLevel
@@ -80,11 +78,11 @@ class AndroidLogger internal constructor(
 ) : LogScope(), Logger {
 
     override fun log(logInfo: LogInfo) {
-        mLogScope.launch { mLogChannel.send(logInfo) }
+        logScope.launch { mLogChannel.send(logInfo) }
     }
 
     init {
-        mLogScope.launch {
+        logScope.launch {
             while (isActive) {
                 val info = mLogChannel.receive()
                 Log.println(info.levelPriority, info.tag, logFormat.format(info))

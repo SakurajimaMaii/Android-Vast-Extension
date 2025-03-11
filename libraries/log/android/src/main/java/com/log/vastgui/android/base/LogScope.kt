@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.log.base
+package com.log.vastgui.android.base
 
-import android.content.ComponentCallbacks2
-import com.ave.vastgui.core.extension.NotNUllVar
-import com.ave.vastgui.tools.content.ContextHelper
 import com.log.vastgui.core.base.LogInfo
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlin.coroutines.CoroutineContext
 
@@ -41,8 +37,8 @@ import kotlin.coroutines.CoroutineContext
  */
 open class LogScope internal constructor() {
 
-    /** @since 1.3.1 */
-    protected val mLogScope: CoroutineScope =
+    /** @since 1.3.11 */
+    protected val logScope: CoroutineScope =
         CoroutineScope(SupervisorJob() + Dispatchers.IO + CoroutineName("LogScope") + handler)
 
     /**
@@ -77,21 +73,5 @@ open class LogScope internal constructor() {
     internal fun interface ExceptionStorage {
         fun storage(context: CoroutineContext, exception: Throwable)
     }
-
-    init {
-        ContextHelper.getApp().registerComponentCallbacks(object : ComponentCallbacks2 {
-            override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
-
-            }
-
-            override fun onLowMemory() {
-                mLogScope.cancel("Cancel LogScope onLowMemory.")
-            }
-
-            override fun onTrimMemory(level: Int) {
-
-            }
-        })
-    }
-
+    
 }

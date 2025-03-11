@@ -79,7 +79,6 @@ kotlin.sourceSets.all {
 dependencies {
     api(libs.security.crypto)
     api(libs.zxing.core)
-    api(projects.libraries.log.core)
     implementation(libs.activity.ktx)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.versionedparcelable)
@@ -108,10 +107,10 @@ dependencies {
     implementation(libs.recyclerview)
     implementation(libs.retrofit)
     implementation(projects.libraries.kernel)
-    androidTestImplementation("androidx.test:rules:1.6.1")
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.junit.ktx)
+    androidTestImplementation(libs.androidx.rules)
     testImplementation(libs.junit)
 }
 
