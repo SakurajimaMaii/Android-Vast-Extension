@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,8 +82,11 @@ class CropIntent : CropProperty() {
         mOutputName = name
     }
 
+    @Deprecated("The format doesn't affect the output result.", level = DeprecationLevel.WARNING)
     override fun setOutputFormat(format: String) = apply {
-        intent.putExtra("outputFormat", format)
+        if (false) {
+            intent.putExtra("outputFormat", format)
+        }
     }
 
     override fun setReturnData(value: Boolean) = apply {
@@ -96,7 +99,6 @@ class CropIntent : CropProperty() {
 
     /** Return crop intent. */
     fun getIntent(): Intent {
-        setOutputFormat(Bitmap.CompressFormat.JPEG.toString())
         return intent
     }
 
