@@ -19,6 +19,8 @@ package com.log.vastgui.android.base
 import android.os.Build
 import androidx.annotation.IntRange
 import com.ave.vastgui.core.io.FileComparator
+import com.log.vastgui.android.base.AndroidStore.Companion.LOG_EXTENSION
+import com.log.vastgui.android.base.LogScope.ExceptionStorage
 import com.log.vastgui.core.base.LogFormat
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogLevel
@@ -53,13 +55,42 @@ import java.util.Locale
  * }
  * ```
  *
- * @since 1.3.1
+ * @since 1.3.11
  */
 @JvmOverloads
 fun LogStore.Companion.android(
     fileRoot: File,
-    fileNamePrefix: String,
-    fileNameDateSuffixSdf: SimpleDateFormat = AndroidStore.Companion.fileNameTimeSdf,
+    @IntRange(from = 0L, to = Long.MAX_VALUE) fileMaxSize: Long = 1000 * 1024L,
+    logFormat: LogFormat = TableFormat.LogHeader.default.let {
+        TableFormat(DEFAULT_MAX_SINGLE_LOG_LENGTH, DEFAULT_MAX_PRINT_TIMES, it)
+    },
+    fileGenerator: (File?) -> File
+): AndroidStore = AndroidStore(fileRoot, null, null, fileMaxSize, logFormat, fileGenerator)
+
+/**
+ * Android LogStore.
+ *
+ * ```kotlin
+ * val mLogFactory: LogFactory = getLogFactory {
+ *     ...
+ *     install(LogStorage) {
+ *         logStore = LogStore.android()
+ *     }
+ * }
+ * ```
+ *
+ * @since 1.3.1
+ */
+@JvmOverloads
+@Deprecated(
+    message = "Using fileGenerator as replacement.",
+    replaceWith = ReplaceWith("LogStore.android(fileRoot, fileMaxSize, logFormat){ _ -> }", "com.log.vastgui.android.base"),
+    level = DeprecationLevel.WARNING
+)
+fun LogStore.Companion.android(
+    fileRoot: File,
+    fileNamePrefix: String = LOG_EXTENSION,
+    fileNameDateSuffixSdf: SimpleDateFormat = AndroidStore.fileNameTimeSdf,
     @IntRange(from = 0L, to = Long.MAX_VALUE) fileMaxSize: Long = 1000 * 1024L,
     logFormat: LogFormat = TableFormat.LogHeader.default.let {
         TableFormat(DEFAULT_MAX_SINGLE_LOG_LENGTH, DEFAULT_MAX_PRINT_TIMES, it)
@@ -75,24 +106,23 @@ fun LogStore.Companion.android(
  * @property fileNameDateSuffixSdf Date format of file name date suffix.
  * @property fileMaxSize The size of a single log file(in bytes).
  * @property logFormat The log format in file.
- * @property fileName The name of the log file.
- * @property mLogSp LogSp is used to save the log file name of the last
- * operation.
  * @property currentFile Current file which will save log.
  * @since 1.3.1
  */
 class AndroidStore internal constructor(
-    val fileRoot: File,
-    val fileNamePrefix: String,
-    val fileNameDateSuffixSdf: SimpleDateFormat,
-    val fileMaxSize: Long,
-    override val logFormat: LogFormat
+    private val fileRoot: File,
+    private val fileNamePrefix: String?,
+    private val fileNameDateSuffixSdf: SimpleDateFormat?,
+    private val fileMaxSize: Long,
+    override val logFormat: LogFormat,
+    private val fileGenerator: (File?) -> File = { _ ->
+        File(fileRoot, "${fileNamePrefix}_${fileNameDateSuffixSdf?.format(System.currentTimeMillis())}.$LOG_EXTENSION")
+    }
 ) : LogScope(), LogStore {
 
-    private val fileName: String
-        get() = "${fileNamePrefix}_${fileNameDateSuffixSdf.format(System.currentTimeMillis())}.log"
-
-    private var currentFile = getCurrentFile()
+    /** @since 1.3.11 */
+    private val currentFile: File
+        get() = getLastFileOrCreate()
 
     override fun store(logInfo: LogInfo) {
         logScope.launch { mLogChannel.send(logInfo) }
@@ -101,66 +131,66 @@ class AndroidStore internal constructor(
     /**
      * Storage the [logInfo] to file.
      *
-     * @since 0.5.3
+     * @since 1.3.11
      */
     private fun storage(logInfo: LogInfo) {
         val message = logFormat.format(logInfo)
-        val currentNeedSize = currentFile.getCurrentSize() + message.toByteArray().size.toLong()
+        var file = currentFile
+        val currentNeedSize = file.getCurrentSize() + message.toByteArray().size.toLong()
         if (currentNeedSize > fileMaxSize) {
-            currentFile = getCurrentFile(true)
+            file = createFile()
         }
-        currentFile.storage(message)
+        file.storage(message)
     }
 
     /**
-     * Get file.
+     * Get the last log file or create.
      *
-     * @since 0.5.3
+     * @since 1.3.11
      */
-    private fun getCurrentFile(appendFile: Boolean = false): File {
-        if (!fileRoot.exists() && !fileRoot.mkdirs()) {
-            throw RuntimeException("${fileRoot.absoluteFile} create failed!")
-        }
+    private fun getLastFileOrCreate(): File {
+        val lastFile = getLastFile()
+        if (lastFile != null)
+            return lastFile
+        return createFile()
+    }
 
-        val listFiles: Array<File> = try {
-            fileRoot.listFiles() ?: emptyArray()
-        } catch (_: Exception) {
-            emptyArray()
-        }
-
+    /**
+     * Get the last log file in [fileRoot].
+     *
+     * @since 1.3.11
+     */
+    private fun getLastFile(): File? {
+        val listFiles: Array<File> = fileRoot
+            .listFiles { file -> file.isFile && file.extension == LOG_EXTENSION } ?: emptyArray()
         listFiles.sortWith(FileComparator())
+        return listFiles.lastOrNull()
+    }
 
-        val fileName = if(listFiles.isEmpty() || !appendFile) {
-            this.fileName
-        } else {
-            listFiles.last { it.isFile }.name
-        }
-
-        val file = File(fileRoot, fileName)
-        if (!file.exists() && !file.createNewFile()) {
-            throw RuntimeException("${file.absoluteFile} create failed!")
-        }
-
-        return file
+    /** @since 1.3.11 */
+    private fun createFile(): File {
+        val newFile = fileGenerator(getLastFile())
+        if (!newFile.exists() && !newFile.createNewFile())
+            throw RuntimeException("${newFile.absoluteFile} create failed!")
+        return newFile
     }
 
     /**
      * Save the [message] to the specified file.
      *
-     * @since 0.5.3
+     * @since 1.3.11
      */
     private fun File.storage(message: String) {
-        val fileWriter = FileWriter(this, true)
-        val bufferedWriter = BufferedWriter(fileWriter)
-        bufferedWriter.write(message)
-        bufferedWriter.newLine()
-        bufferedWriter.close()
+        BufferedWriter(FileWriter(this, true)).use { writer ->
+            writer.write(message)
+            writer.newLine()
+        }
     }
 
     /**
      * Get current size of the specified file.
      *
-     * @since 0.5.3
+     * @since 1.3.11
      */
     private fun File.getCurrentSize(): Long = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         Files.readAttributes(toPath(), BasicFileAttributes::class.java).size()
@@ -187,8 +217,10 @@ class AndroidStore internal constructor(
     companion object {
         const val TAG = "AndroidStore"
 
+        const val LOG_EXTENSION = "log"
+
         /** @since 1.3.1 */
-        internal val fileNameTimeSdf = SimpleDateFormat("yyyyMMdd", Locale.ENGLISH)
+        internal val fileNameTimeSdf = SimpleDateFormat("yyyy-MM-dd(HH:mm:ss:SSS)", Locale.ENGLISH)
     }
 
 }

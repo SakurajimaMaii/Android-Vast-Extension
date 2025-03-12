@@ -64,7 +64,7 @@ fun Logger.Companion.android(
 /**
  * Android Logger with custom [LogFormat].
  *
- * @since 1.5.0
+ * @since 1.3.11
  */
 fun Logger.Companion.android(logFormat: LogFormat): AndroidLogger = AndroidLogger(logFormat)
 

@@ -49,26 +49,26 @@ open class LogScope internal constructor() {
     protected val mLogChannel: Channel<LogInfo> = Channel()
 
     companion object {
-        /** @since 1.5.1 */
+        /** @since 1.3.11 */
         internal var exceptionLog: ExceptionLog? = null
 
-        /** @since 1.5.1 */
+        /** @since 1.3.11 */
         internal var exceptionStorage: ExceptionStorage? = null
 
-        /** @since 1.5.1 */
+        /** @since 1.3.11 */
         private val handler = CoroutineExceptionHandler { context, exception ->
             exceptionLog?.log(context, exception)
             exceptionStorage?.storage(context, exception)
         }
     }
 
-    /** @since 1.5.1 */
+    /** @since 1.3.11 */
     @FunctionalInterface
     internal fun interface ExceptionLog {
         fun log(context: CoroutineContext, exception: Throwable)
     }
 
-    /** @since 1.5.1 */
+    /** @since 1.3.11 */
     @FunctionalInterface
     internal fun interface ExceptionStorage {
         fun storage(context: CoroutineContext, exception: Throwable)
