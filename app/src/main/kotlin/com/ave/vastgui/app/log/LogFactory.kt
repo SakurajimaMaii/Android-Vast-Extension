@@ -16,8 +16,8 @@
 
 package com.ave.vastgui.app.log
 
-import com.ave.vastgui.tools.log.android
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
+import com.ave.vastgui.tools.io.appInternalFilesDir
+import com.log.vastgui.android.base.android
 import com.log.vastgui.core.LogFactory
 import com.log.vastgui.core.base.LogStore
 import com.log.vastgui.core.base.Logger
@@ -40,8 +40,8 @@ import java.io.File
 // Date: 2023/7/5
 // Documentation: https://ave.entropy2020.cn/documents/tools/log/description/
 
-val logDir = File(FileMgr.appInternalFilesDir(), "log")
-val logCache = File(FileMgr.appInternalFilesDir(), "log-cache")
+val logDir = File(appInternalFilesDir(), "log")
+val logCache = File(appInternalFilesDir(), "log-cache")
 val marsLogger = Logger.mars(logDir, logCache)
 
 val gson = GsonConverter.getInstance(true)
@@ -81,6 +81,11 @@ val logFactory: LogFactory = getLogFactory {
     }
     install(LogStorage) {
         levelSet = allLogLevel
-        logStore = LogStore.android(logFormat = LineFormat)
+        logStore = LogStore.android(
+            fileRoot = logDir,
+            fileNamePrefix = "log",
+            fileMaxSize = 50 * 1024L,
+            logFormat = LineFormat
+        )
     }
 }
