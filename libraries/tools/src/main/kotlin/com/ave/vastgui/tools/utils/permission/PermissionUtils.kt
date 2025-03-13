@@ -324,7 +324,7 @@ class MultiPermissionBuilder {
  * @since 1.5.2
  */
 fun Context.isPermissionGranted(permission: String) =
-    ContextCompat.checkSelfPermission(this, Permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
+    ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 
 /**
  * Is permission denied
