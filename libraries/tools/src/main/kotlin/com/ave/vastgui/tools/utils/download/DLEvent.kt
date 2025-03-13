@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,15 +29,36 @@ import java.io.File
  * @since 0.5.2
  */
 sealed class DLEvent {
-    class SUCCESS(val data: File) : DLEvent()
-    class DOWNLOADING(val currentLength: Long, val length: Long) : DLEvent() {
+    /** @since 1.5.2 */
+    class Success(val data: File) : DLEvent()
+
+    /** @since 1.5.2 */
+    class Downloading(val currentLength: Float, val length: Float) : DLEvent() {
+        /** @since 1.5.2 */
+        constructor() : this(Float.NaN, Float.NaN)
+
+        /**
+         * [rate] value will be [Float.NaN] if the `content-length` field is not
+         * included in the download request response.
+         *
+         * @since 1.5.2
+         */
         val rate: Float
-            get() = currentLength.toFloat() / length.toFloat()
+            get() = currentLength / length
     }
 
-    class FAILED(val exception: Throwable) : DLEvent()
-    object PAUSE : DLEvent()
-    object RESUME : DLEvent()
-    object CANCEL : DLEvent()
-    object INIT : DLEvent()
+    /** @since 1.5.2 */
+    class Failed(val exception: Throwable) : DLEvent()
+
+    /** @since 1.5.2 */
+    data object Pause : DLEvent()
+
+    /** @since 1.5.2 */
+    data object Resume : DLEvent()
+
+    /** @since 1.5.2 */
+    data object Cancel : DLEvent()
+
+    /** @since 1.5.2 */
+    data object Init : DLEvent()
 }

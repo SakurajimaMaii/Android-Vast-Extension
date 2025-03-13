@@ -23,13 +23,15 @@ import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityArcProgressViewBinding
 import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.tools.activity.VastVbActivity
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
+import com.ave.vastgui.tools.io.appInternalFilesDir
+import com.ave.vastgui.tools.io.destroy
 import com.ave.vastgui.tools.utils.ColorUtils
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.download.DLManager
 import com.ave.vastgui.tools.utils.download.DLTask
 import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
+import com.log.vastgui.okhttp.Okhttp3Interceptor
 import java.io.File
 
 // Author: Vast Gui 
@@ -39,11 +41,23 @@ import java.io.File
 
 class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>() {
 
-    private val mLogger = logFactory.getLogCat(ArcProgressViewActivity::class.java)
+    private val logger = logFactory.getLogCat(ArcProgressViewActivity::class.java)
     private lateinit var downloadTask: DLTask
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // https://developer.android.com/develop/ui/views/layout/edge-to-edge?hl=zh-cn
+        // ViewCompat.setOnApplyWindowInsetsListener(getBinding().root) { v, windowInsets ->
+        //     val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        //     v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        //         topMargin = insets.top
+        //         leftMargin = insets.left
+        //         bottomMargin = insets.bottom
+        //         rightMargin = insets.right
+        //     }
+        //     WindowInsetsCompat.CONSUMED
+        // }
 
         requestMultiplePermissions(arrayOf(Manifest.permission.ACCESS_NETWORK_STATE))
 
@@ -70,7 +84,7 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
         }
 
         getBinding().download.setOnClickListener {
-            mLogger.i("开始下载")
+            logger.i("开始下载")
             downloadApk()
         }
 
@@ -88,32 +102,37 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
     }
 
     private fun downloadApk() {
-        val root = FileMgr.appInternalFilesDir()
-        val name = "Tabby.exe"
+        DLManager.setLogger(Okhttp3Interceptor(logger))
+
+        val root = appInternalFilesDir()
+        val name = "ShapeButton-0.0.5.zip"
         val file = File(root, name)
         downloadTask = DLManager
             .createTaskConfig()
-            .setDownloadUrl("https://objects.githubusercontent.com/github-production-release-asset-2e65be/77213120/e661ad3b-76f6-46cd-b2f3-abe38de4fc4a?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20240717%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240717T073421Z&X-Amz-Expires=300&X-Amz-Signature=bda89807f32bebb4b862b4d12ecc0834e6fca742b814288fbcac3e37f26f16ab&X-Amz-SignedHeaders=host&actor_id=46998172&key_id=0&repo_id=77213120&response-content-disposition=attachment%3B%20filename%3Dtabby-1.0.210-setup-x64.exe&response-content-type=application%2Foctet-stream")
+            .setDownloadUrl("https://codeload.github.com/SakurajimaMaii/ShapeButton/zip/refs/tags/0.0.5")
             .setSaveDir(root.path)
-            .setSaveName("Tabby.exe")
+            .setSaveName(name)
+            .setMD5("9d9c7426b8af3e630f66492d70222339")
             .setListener {
                 onDownloading = {
+                    val count = (it.rate * getBinding().arcProgressView.mMaximumProgress).coerceIn(0f, 100f)
+                    logger.i("当前下载进度:${count}，最大进度:${getBinding().arcProgressView.mMaximumProgress}")
                     getBinding().arcProgressView.refreshWithInvalidate {
                         mCurrentProgress =
                             it.rate * getBinding().arcProgressView.mMaximumProgress
                     }
                 }
                 onFailure = {
-                    mLogger.e("download failed:" + it.exception.stackTraceToString())
+                    logger.e("download failed:" + it.exception.stackTraceToString())
                 }
                 onSuccess = {
-                    mLogger.i("download success.")
+                    logger.i("download success.")
                     getBinding().arcProgressView.refreshWithInvalidate {
                         mCurrentProgress = getBinding().arcProgressView.mMaximumProgress
                     }
                 }
                 onCancel = {
-                    mLogger.i("download cancel.")
+                    logger.i("download cancel.")
                     getBinding().arcProgressView.refreshWithInvalidate {
                         resetProgress()
                     }
@@ -121,7 +140,7 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
             }
             .build()
         if (file.exists()) {
-            if (FileMgr.deleteFile(file).isSuccess) {
+            if (file.destroy().isSuccess) {
                 downloadTask.start()
             }
         } else {

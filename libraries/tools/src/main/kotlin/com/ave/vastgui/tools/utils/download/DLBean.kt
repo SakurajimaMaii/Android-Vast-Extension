@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,5 +36,5 @@ data class DLBean(
     val startPos: Long? = null,
     val endPos: Long? = null,
     var completeSize: Long = startPos ?: 0L,
-    var event: DLEvent = DLEvent.INIT
+    var event: DLEvent = DLEvent.Init
 )

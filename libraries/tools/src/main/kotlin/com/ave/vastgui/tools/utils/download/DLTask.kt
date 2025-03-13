@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package com.ave.vastgui.tools.utils.download
 
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
+import com.ave.vastgui.tools.io.destroy
+import com.ave.vastgui.tools.io.mkFile
 import com.ave.vastgui.tools.utils.getFileMD5
 import okhttp3.Call
 import okhttp3.Callback
@@ -42,7 +43,7 @@ import java.io.RandomAccessFile
 class DLTask internal constructor(private val dlBean: DLBean, val listener: DLEventListener) :
     Callback {
 
-    private val okHttpClient = OkHttpClient()
+    private val okHttpClient = createOkHttpClient()
     private var contentLength: Long = 0L
     private val downloadUrl: String
         get() = dlBean.url
@@ -69,27 +70,22 @@ class DLTask internal constructor(private val dlBean: DLBean, val listener: DLEv
     private var isCancel = false
 
     override fun onFailure(call: Call, e: IOException) {
-        listener.onFailure(DLEvent.FAILED(e).apply { event = this })
+        listener.onFailure(DLEvent.Failed(e).apply { event = this })
     }
 
     override fun onResponse(call: Call, response: Response) {
         if (200 != response.code) {
-            val failed = DLEvent.FAILED(RuntimeException("Http status code is ${response.code}"))
+            val failed = DLEvent.Failed(RuntimeException("Http status code is ${response.code}"))
             listener.onFailure(failed.also { event = it })
             return
         }
         // body is a non-null value because this response was passed to Callback.onResponse
         val body = response.body ?: return
-        val length = body.contentLength().also { contentLength = it }
-        if (-1L == length) {
-            val failed = DLEvent.FAILED(RuntimeException("ContentLength of response is -1."))
-            listener.onFailure(failed.also { event = it })
-            return
-        }
+        contentLength = body.contentLength()
         val inputStream = body.byteStream()
-        if (event is DLEvent.INIT || event is DLEvent.CANCEL) {
-            FileMgr.saveFile(downloadFile).exceptionOrNull()?.let { ex ->
-                listener.onFailure(DLEvent.FAILED(ex).also { event = it })
+        if (event is DLEvent.Init || event is DLEvent.Cancel) {
+            downloadFile.mkFile().exceptionOrNull()?.let { ex ->
+                listener.onFailure(DLEvent.Failed(ex).also { event = it })
                 return
             }
         }
@@ -108,26 +104,35 @@ class DLTask internal constructor(private val dlBean: DLBean, val listener: DLEv
                     if (requestCall?.isCanceled() != true) {
                         requestCall?.cancel()
                     }
-                    event = DLEvent.CANCEL
-                    FileMgr.deleteFile(downloadFile)
+                    event = DLEvent.Cancel
+                    downloadFile.destroy()
                     listener.onCancel()
                     return
                 }
                 outputStream.write(buffer, 0, readLength)
                 completeSize += readLength
-                listener.onDownloading(
-                    DLEvent.DOWNLOADING(completeSize, contentLength).also { event = it })
+
+                // FIXME Sometimes the response doesn't contain content-length,
+                //  which doesn't mean that the download cannot be done.
+                if (-1L == contentLength) {
+                    listener.onDownloading(DLEvent.Downloading().also { event = it })
+                } else {
+                    val downloading = DLEvent
+                        .Downloading(completeSize.toFloat(), contentLength.toFloat())
+                    listener.onDownloading(downloading)
+                    event = downloading
+                }
             }
             md5.takeIf { it != null }?.let { md5 ->
                 if (md5 == getFileMD5(downloadFile)) {
-                    listener.onSuccess(DLEvent.SUCCESS(downloadFile).also { event = it })
+                    listener.onSuccess(DLEvent.Success(downloadFile).also { event = it })
                 } else {
                     throw RuntimeException("File MD5($md5) verification failed, the error file has been deleted.")
                 }
-            } ?: listener.onSuccess(DLEvent.SUCCESS(downloadFile).also { event = it })
+            } ?: listener.onSuccess(DLEvent.Success(downloadFile).also { event = it })
         } catch (exception: Throwable) {
-            listener.onFailure(DLEvent.FAILED(exception).also { event = it })
-            FileMgr.deleteFile(downloadFile)
+            listener.onFailure(DLEvent.Failed(exception).also { event = it })
+            downloadFile.destroy()
         } finally {
             bufferedInputStream.close()
             outputStream.close()
@@ -160,20 +165,21 @@ class DLTask internal constructor(private val dlBean: DLBean, val listener: DLEv
      * @since 0.5.2
      */
     fun pause() {
-        event = DLEvent.PAUSE
+        event = DLEvent.Pause
         isPause = true
         listener.onPause()
     }
 
     /**
-     * Resume download if current [event] is not [DLEvent.SUCCESS] or
-     * [DLEvent.FAILED].
+     * Resume download if current [event] is not [DLEvent.Success] or
+     * [DLEvent.Failed].
      *
      * @since 0.5.2
      */
     fun resume() {
-        if (event !is DLEvent.SUCCESS && event !is DLEvent.FAILED) {
+        if (event !is DLEvent.Success && event !is DLEvent.Failed) {
             isPause = false
+            listener.onResume()
             start()
         }
     }
@@ -186,6 +192,15 @@ class DLTask internal constructor(private val dlBean: DLBean, val listener: DLEv
      */
     fun cancel() {
         isCancel = true
+    }
+
+    /** @since 1.5.2 */
+    private fun createOkHttpClient(): OkHttpClient {
+        val builder = OkHttpClient.Builder()
+        if (null != DLManager.logger) {
+            builder.addInterceptor(DLManager.logger!!)
+        }
+        return builder.build()
     }
 
 }

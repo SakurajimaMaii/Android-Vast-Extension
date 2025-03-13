@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.ave.vastgui.tools.utils.download
 
 import com.ave.vastgui.core.extension.NotNUllVar
+import com.log.vastgui.okhttp.Okhttp3Interceptor
 import java.io.File
 
 // Author: Vast Gui
@@ -51,7 +52,14 @@ import java.io.File
 class DLManager internal constructor() {
 
     companion object {
+        /** @since 1.5.2 */
+        internal var logger: Okhttp3Interceptor? = null
+
         fun createTaskConfig() = DLTaskConfig()
+
+        fun setLogger(logger: Okhttp3Interceptor?) {
+            this.logger = logger
+        }
     }
 
     class DLTaskConfig internal constructor() {
@@ -125,7 +133,7 @@ class DLManager internal constructor() {
          * Get file save name for url.
          *
          * @return app-debug.apk as the return value if the link is
-         *     [https://github.com/SakurajimaMaii/BluetoothDemo/blob/master/app-debug.apk](#)
+         * [https://github.com/SakurajimaMaii/BluetoothDemo/blob/master/app-debug.apk](#)
          * @since 0.5.2
          */
         private fun getNameFromUrl(url: String): String {

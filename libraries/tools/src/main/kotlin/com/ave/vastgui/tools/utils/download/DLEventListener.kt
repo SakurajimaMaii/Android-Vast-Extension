@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,12 @@ package com.ave.vastgui.tools.utils.download
  * @since 0.5.2
  */
 class DLEventListener internal constructor() {
-    var onSuccess: ((DLEvent.SUCCESS) -> Unit) = {}
-    var onDownloading: ((DLEvent.DOWNLOADING) -> Unit) = {}
-    var onFailure: ((DLEvent.FAILED) -> Unit) = {}
+    var onSuccess: ((DLEvent.Success) -> Unit) = {}
+    var onDownloading: ((DLEvent.Downloading) -> Unit) = {}
+    var onFailure: ((DLEvent.Failed) -> Unit) = {}
     var onPause: (() -> Unit) = {}
+
+    /** @since 1.5.2 */
+    var onResume: (() -> Unit) = {}
     var onCancel: (() -> Unit) = {}
 }
