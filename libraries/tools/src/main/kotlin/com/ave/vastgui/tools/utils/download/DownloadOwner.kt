@@ -16,25 +16,19 @@
 
 package com.ave.vastgui.tools.utils.download
 
+import com.ave.vastgui.tools.utils.download.interfaces.DownloadListener
 import java.io.File
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/7/23
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/download/download/
+// Date: 2025/3/19
+// Documentation: 
+// Reference:
 
-/**
- * The download bean.
- *
- * @property url The url of the download file.
- * @since 0.5.2
- */
-data class DLBean(
-    val url: String,
-    val file: File,
-    val md5: String? = null,
-    val startPos: Long? = null,
-    val endPos: Long? = null,
-    var completeSize: Long = startPos ?: 0L,
-    var event: DLEvent = DLEvent.Init
-)
+sealed interface DownloadOwner {
+    val url: String
+    val maxCoreCount: Int
+    val file: File
+    val md5: String?
+    val listener: DownloadListener?
+}

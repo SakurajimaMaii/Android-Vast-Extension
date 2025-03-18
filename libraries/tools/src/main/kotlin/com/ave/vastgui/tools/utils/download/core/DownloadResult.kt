@@ -14,26 +14,28 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.utils.download
+package com.ave.vastgui.tools.utils.download.core
 
+import com.ave.vastgui.tools.utils.download.exception.DownloadException
 import java.io.File
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/7/23
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/download/download/
+// Date: 2025/3/17
+// Documentation: 
+// Reference:
 
 /**
  * The event of the download.
  *
- * @since 0.5.2
+ * @since 1.5.2
  */
-sealed class DLEvent {
+sealed class DownloadResult {
     /** @since 1.5.2 */
-    class Success(val data: File) : DLEvent()
+    class Success(val data: File) : DownloadResult()
 
     /** @since 1.5.2 */
-    class Downloading(val currentLength: Float, val length: Float) : DLEvent() {
+    class Download(val currentLength: Float, val length: Float) : DownloadResult() {
         /** @since 1.5.2 */
         constructor() : this(Float.NaN, Float.NaN)
 
@@ -48,17 +50,5 @@ sealed class DLEvent {
     }
 
     /** @since 1.5.2 */
-    class Failed(val exception: Throwable) : DLEvent()
-
-    /** @since 1.5.2 */
-    data object Pause : DLEvent()
-
-    /** @since 1.5.2 */
-    data object Resume : DLEvent()
-
-    /** @since 1.5.2 */
-    data object Cancel : DLEvent()
-
-    /** @since 1.5.2 */
-    data object Init : DLEvent()
+    class Failure(val exception: DownloadException) : DownloadResult()
 }

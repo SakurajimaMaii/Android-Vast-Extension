@@ -79,6 +79,7 @@ kotlin.sourceSets.all {
 dependencies {
     api(libs.security.crypto)
     api(libs.zxing.core)
+    compileOnly(projects.libraries.log.okhttp)
     implementation(libs.activity.ktx)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.versionedparcelable)

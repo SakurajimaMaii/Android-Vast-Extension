@@ -27,11 +27,14 @@ import com.ave.vastgui.tools.io.appInternalFilesDir
 import com.ave.vastgui.tools.io.destroy
 import com.ave.vastgui.tools.utils.ColorUtils
 import com.ave.vastgui.tools.utils.DensityUtils.DP
-import com.ave.vastgui.tools.utils.download.DLManager
-import com.ave.vastgui.tools.utils.download.DLTask
+import com.ave.vastgui.tools.utils.download.DownloadManager
+import com.ave.vastgui.tools.utils.download.DownloadTask
+import com.ave.vastgui.tools.utils.download.core.DownloadResult
+import com.ave.vastgui.tools.utils.download.interfaces.DownloadListener
 import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
 import com.log.vastgui.okhttp.Okhttp3Interceptor
+import okhttp3.OkHttpClient
 import java.io.File
 
 // Author: Vast Gui 
@@ -42,7 +45,7 @@ import java.io.File
 class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>() {
 
     private val logger = logFactory.getLogCat(ArcProgressViewActivity::class.java)
-    private lateinit var downloadTask: DLTask
+    private lateinit var downloadTask: DownloadTask
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,48 +105,52 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
     }
 
     private fun downloadApk() {
-        DLManager.setLogger(Okhttp3Interceptor(logger))
+        DownloadManager.setClient(
+            OkHttpClient.Builder()
+                .addInterceptor(Okhttp3Interceptor(logger))
+                .build()
+        )
 
         val root = appInternalFilesDir()
-        val name = "ShapeButton-0.0.5.zip"
+        val name = "unity.pdf"
         val file = File(root, name)
-        downloadTask = DLManager
-            .createTaskConfig()
-            .setDownloadUrl("https://codeload.github.com/SakurajimaMaii/ShapeButton/zip/refs/tags/0.0.5")
-            .setSaveDir(root.path)
-            .setSaveName(name)
-            .setMD5("9d9c7426b8af3e630f66492d70222339")
-            .setListener {
-                onDownloading = {
-                    val count = (it.rate * getBinding().arcProgressView.mMaximumProgress).coerceIn(0f, 100f)
-                    logger.i("当前下载进度:${count}，最大进度:${getBinding().arcProgressView.mMaximumProgress}")
-                    getBinding().arcProgressView.refreshWithInvalidate {
-                        mCurrentProgress =
-                            it.rate * getBinding().arcProgressView.mMaximumProgress
-                    }
-                }
-                onFailure = {
-                    logger.e("download failed:" + it.exception.stackTraceToString())
-                }
-                onSuccess = {
-                    logger.i("download success.")
+        downloadTask = DownloadManager
+            .getDownloadConfig()
+            .setDownloadUrl("http://192.168.0.101:7777/static/opencv.rar")
+            .setFile(file)
+            .setListener(object : DownloadListener {
+                override fun onSuccess(result: DownloadResult.Success) {
+                    logger.i("任务下载成功")
                     getBinding().arcProgressView.refreshWithInvalidate {
                         mCurrentProgress = getBinding().arcProgressView.mMaximumProgress
                     }
                 }
-                onCancel = {
-                    logger.i("download cancel.")
+
+                override fun onDownloading(result: DownloadResult.Download) {
+                    // logger.i("当前下载进度:${result.rate}，最大进度:${getBinding().arcProgressView.mMaximumProgress}")
+                    getBinding().arcProgressView.refreshWithInvalidate {
+                        mCurrentProgress =
+                            result.rate * getBinding().arcProgressView.mMaximumProgress
+                    }
+                }
+
+                override fun onFailure(result: DownloadResult.Failure) {
+                    logger.e("任务下载失败" + result.exception.stackTraceToString())
+                }
+
+                override fun onCancel() {
+                    logger.i("任务被取消")
                     getBinding().arcProgressView.refreshWithInvalidate {
                         resetProgress()
                     }
                 }
-            }
+            })
             .build()
-        if (file.exists()) {
-            if (file.destroy().isSuccess) {
-                downloadTask.start()
-            }
+        if (file.exists() && file.destroy().isSuccess) {
+            logger.i("任务下载开始")
+            downloadTask.start()
         } else {
+            logger.i("任务下载开始")
             downloadTask.start()
         }
     }

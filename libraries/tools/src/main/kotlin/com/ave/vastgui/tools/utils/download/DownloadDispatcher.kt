@@ -18,21 +18,34 @@ package com.ave.vastgui.tools.utils.download
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2023/7/23
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/download/download/
+// Date: 2025/3/19
+// Documentation: 
+// Reference:
 
-/**
- * The listener of the [DLEvent] for the download.
- *
- * @since 0.5.2
- */
-class DLEventListener internal constructor() {
-    var onSuccess: ((DLEvent.Success) -> Unit) = {}
-    var onDownloading: ((DLEvent.Downloading) -> Unit) = {}
-    var onFailure: ((DLEvent.Failed) -> Unit) = {}
-    var onPause: (() -> Unit) = {}
+class DownloadDispatcher internal constructor() : DownloadEventOwner {
 
-    /** @since 1.5.2 */
-    var onResume: (() -> Unit) = {}
-    var onCancel: (() -> Unit) = {}
+    private val _beans: MutableList<DownloadBean> = ArrayList()
+    val beans: List<DownloadBean>
+        get() = _beans
+
+    fun addBean(bean: DownloadBean) {
+        _beans.add(bean)
+    }
+
+    override fun start() {
+        _beans.forEach { bean -> bean.onStart() }
+    }
+
+    override fun pause() {
+        _beans.forEach { bean -> bean.onPause() }
+    }
+
+    override fun resume() {
+        _beans.forEach { bean -> bean.onResume() }
+    }
+
+    override fun cancel() {
+        _beans.forEach { bean -> bean.onCancel() }
+    }
+
 }
