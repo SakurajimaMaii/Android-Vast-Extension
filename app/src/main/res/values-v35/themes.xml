@@ -1,5 +1,5 @@
-<!--
-  ~ Copyright 2022 VastGui guihy2019@gmail.com
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2021-2025 VastGui
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -40,12 +40,7 @@
         <item name="colorOnSurfaceVariant">@color/colorOnSurfaceVariant</item>
         <item name="colorOutline">@color/colorOutline</item>
         <item name="android:statusBarColor">@color/colorPrimary</item>
-    </style>
-
-    <style name="VastTheme.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">?colorSecondary</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
-        <item name="windowSplashScreenAnimationDuration">2000</item>
-        <item name="postSplashScreenTheme">@style/VastTheme</item>
+        <!-- https://stackoverflow.com/questions/78832208/how-to-change-the-status-bar-color-in-android-15 -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
     </style>
 </resources>
