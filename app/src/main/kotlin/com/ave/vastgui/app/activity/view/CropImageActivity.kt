@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,21 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore.Images.Media
 import android.webkit.MimeTypeMap
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.ave.vastgui.app.databinding.ActivityCropImageBinding
+import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.activity.app.VastCropActivity
 import com.ave.vastgui.tools.activity.result.contract.CropPhotoContract
 import com.ave.vastgui.tools.activity.result.contract.PickPhotoContract
 import com.ave.vastgui.tools.activity.result.contract.TakePhotoContract
-import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
+import com.ave.vastgui.tools.io.asImageFile
+import com.ave.vastgui.tools.io.getImageFile
 import com.ave.vastgui.tools.utils.AppUtils
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.cropimage.CropIntent
@@ -39,10 +45,12 @@ import java.io.File
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/cropview/crop-view/
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/intent/crop-intent/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/cropview/crop-view/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/intent/crop-intent/
 
 class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
+
+    private val logger = logFactory("CropImageActivity")
 
     private var output: Uri? = null
 
@@ -53,6 +61,7 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
         }
     private val openWithCropActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            logger.d { "调用自定义裁剪返回代码 ${result.resultCode}" }
             if (result.resultCode == VastCropActivity.RESULT_OK) {
                 getBinding().image.setImageURI(result.data?.data)
             }
@@ -88,12 +97,25 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // NOTE https://medium.com/androiddevelopers/insets-handling-tips-for-android-15s-edge-to-edge-enforcement-872774e8839b
+        ViewCompat.setOnApplyWindowInsetsListener(getBinding().root) { v, insets ->
+            val padding = insets.getInsets(WindowInsetsCompat.Type.systemBars()
+                    or WindowInsetsCompat.Type.displayCutout())
+            v.setPadding(padding.left, padding.top, padding.right, padding.bottom)
+            insets
+        }
+
+
         requestPermission(Permission.READ_MEDIA_IMAGES) {
             granted = {
                 getSnackbar().setText("$it 权限已授予").show()
             }
             denied = {
                 getSnackbar().setText("$it 权限已被拒绝").show()
+            }
+            noMoreAsk = {
+                getSnackbar().setText("$it 权限已被拒绝并不再询问").show()
             }
         }
 
@@ -143,15 +165,16 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
 
     /** 使用 [CropIntent] 来调用系统裁剪。 */
     private fun cropImageWithCropIntent(uri: Uri) {
-        val dir = ImageMgr.getExternalFilesDir(null)
-        val name = ImageMgr.getDefaultFileName(".${getExtension(uri)}")
-        val destination = File(dir, name)
+        val dictionary = getImageFile().sharedPictures()
+        val name = getImageFile().getDefaultFileName(".${getExtension(uri)}")
+        val destination = File(dictionary, name)
         output = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            ImageMgr.getFileUriAboveApi30(destination)
+            destination.asImageFile()
+                .uri { put(Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES) }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            ImageMgr.getFileUriAboveApi24(destination, "com.ave.vastgui.app")
+            destination.asImageFile().uri("com.ave.vastgui.app")
         } else {
-            ImageMgr.getFileUriOnApi23(destination)
+            destination.asImageFile().uri()
         }
         val cropIntent = CropIntent()
             .setData(uri)

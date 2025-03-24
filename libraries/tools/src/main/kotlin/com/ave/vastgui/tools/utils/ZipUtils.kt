@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,8 @@ package com.ave.vastgui.tools.utils
 import android.util.Log
 import androidx.annotation.WorkerThread
 import com.ave.vastgui.core.extension.cast
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
+import com.ave.vastgui.core.onFailure
+import com.ave.vastgui.tools.io.mkDirs
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -31,7 +32,7 @@ import java.util.zip.ZipOutputStream
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/6/9
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-data-and-files/file-compressed/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/app-data-and-files/file-compressed/
 
 /**
  * Compress files under [src] to [dest].
@@ -40,7 +41,10 @@ import java.util.zip.ZipOutputStream
  */
 @WorkerThread
 fun zip(src: File, dest: File): Boolean = runCatching {
-    check("zip" == FileMgr.getExtension(dest)) { "Currently only zip are supported" }
+    check("zip" == dest.extension) {
+        "Currently only zip are supported"
+    }
+
     ZipOutputStream(FileOutputStream(dest)).use { out ->
         // src is file
         if (src.isFile) {
@@ -53,6 +57,7 @@ fun zip(src: File, dest: File): Boolean = runCatching {
             }
         }
     }
+
     return true
 }.onFailure {
     Log.e("ZipUtils", it.stackTraceToString())
@@ -95,7 +100,9 @@ fun unzip(src: File, dest: File) {
             if (zipEntry.isDirectory) {
                 val directory = File(dest, zipEntry.name)
                 if (!directory.exists()) {
-                    FileMgr.makeDir(directory).result.onFailure { ex -> throw ex }
+                    directory.mkDirs().onFailure {
+                        throw it
+                    }
                 }
             } else {
                 val entryName = zipEntry.name
@@ -103,7 +110,9 @@ fun unzip(src: File, dest: File) {
                 if (index != -1) {
                     val df = File(dest, entryName.substring(0, index))
                     if (!df.exists()) {
-                        FileMgr.makeDirs(df).result.onFailure { ex -> throw ex }
+                        df.mkDirs().onFailure {
+                            throw it
+                        }
                     }
                 }
                 val out = FileOutputStream(File(dest, zipEntry.name))

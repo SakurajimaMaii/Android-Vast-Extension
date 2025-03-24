@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ package com.ave.vastgui.tools.text
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/30 18:59
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-resources/text/unit-string/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/app-resources/text/unit-string/
 
 /**
  * StrUnit

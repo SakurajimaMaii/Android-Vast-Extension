@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,7 +25,7 @@ import kotlin.properties.Delegates
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/8
-// Documentation: https://ave.entropy2020.cn/documents/log/log-core/plugin/json/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/log/log-core/plugin/json/
 
 /**
  * The [LogJson] plugin allows you to convert objects to json.

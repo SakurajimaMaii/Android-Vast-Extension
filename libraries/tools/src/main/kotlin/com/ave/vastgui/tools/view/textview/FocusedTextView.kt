@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import com.ave.vastgui.tools.R
 // Email: guihy2019@gmail.com
 // Date: 2022/4/9 21:59
 // Description: When you want to show the marquee effect, you can use FocusedTextView.
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/textview/marquee-text-view/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/textview/marquee-text-view/
 
 /**
  * MarqueeTextView

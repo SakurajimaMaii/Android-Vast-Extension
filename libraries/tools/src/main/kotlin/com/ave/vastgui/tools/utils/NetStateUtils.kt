@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ import java.util.Enumeration
 // Email: guihy2019@gmail.com
 // Date: 2022/4/2 9:03
 // Description: With NetStateUtils, you can easily check some network status about your device
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/connectivity/net-state-utils/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/connectivity/net-state-utils/
 
 object NetStateUtils {
 

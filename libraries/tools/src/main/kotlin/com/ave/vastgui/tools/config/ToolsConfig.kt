@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,11 @@ import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.content.ContextHelper
 import com.ave.vastgui.tools.utils.permission.PermissionRegister
 
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/8/28 10:42
-// Documentation: https://ave.entropy2020.cn/documents/tools/init/tools-config/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/init/tools-config/
 
-/** VastTools config. */
 object ToolsConfig {
 
     /** Is initialized */

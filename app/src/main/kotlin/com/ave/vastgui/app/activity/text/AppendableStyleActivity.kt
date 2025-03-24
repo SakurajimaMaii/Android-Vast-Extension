@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import com.kongzue.dialogx.dialogs.MessageDialog
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/2
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/text/appendable-style-string/appendable-style-string/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/text/appendable-style-string/appendable-style-string/
 
 class AppendableStyleActivity : ComponentActivity(R.layout.activity_appendable_style) {
 

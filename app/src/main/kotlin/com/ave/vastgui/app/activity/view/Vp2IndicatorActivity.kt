@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,8 @@ import com.log.vastgui.android.lifecycle.LogLifecycle
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
 // Date: 2022/4/13 19:45
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/viewpager2/fragment-adapter/
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/viewpager2/vp2-indicator-view/vp2-indicator-view/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/viewpager2/fragment-adapter/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/viewpager2/vp2-indicator-view/vp2-indicator-view/
 
 @LogLifecycle
 class Vp2IndicatorActivity : AppCompatActivity() {

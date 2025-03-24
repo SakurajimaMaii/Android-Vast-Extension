@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import com.ave.vastgui.app.databinding.ActivityMaskLayoutBinding
 import com.ave.vastgui.app.sharedpreferences.ThemeSp
 import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.annotation.ExperimentalView
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
+import com.ave.vastgui.tools.io.getAssetsFile
 import com.ave.vastgui.tools.utils.IntentUtils
 import com.ave.vastgui.tools.utils.permission.requestPermission
 import com.ave.vastgui.tools.view.masklayout.MaskAnimation
@@ -60,7 +60,7 @@ class MaskLayoutActivity : AppCompatActivity(R.layout.activity_mask_layout),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 从 assets 中读取皮肤包
-        FileMgr.getAssetsFile("app-skin.skin")
+        getAssetsFile("app-skin.skin")
 
         // 申请读取通讯录权限
         requestPermission(Manifest.permission.READ_CONTACTS) {

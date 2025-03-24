@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +41,6 @@ fun getLocationManager(): LocationManager? {
  * @since 1.5.2
  */
 fun isLocationEnabled(): Boolean {
-    val locationManager = ContextCompat
-        .getSystemService(ContextHelper.getAppContext(), LocationManager::class.java)
-        ?: return false
+    val locationManager = getLocationManager() ?: return false
     return LocationManagerCompat.isLocationEnabled(locationManager)
 }

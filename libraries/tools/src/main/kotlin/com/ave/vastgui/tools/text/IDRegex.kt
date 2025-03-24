@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import java.util.Locale
 // Email: lt.dygzs@qq.com
 // Date: 2022/3/10 18:32
 // Description: Validates the Chinese ID card number.
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/text/id-regex/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/text/id-regex/
 
 object IDRegex {
     /**

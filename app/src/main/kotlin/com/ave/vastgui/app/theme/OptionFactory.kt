@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package com.ave.vastgui.app.theme
 
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
+import com.ave.vastgui.tools.io.appInternalFilesDir
 import org.alee.component.skin.service.IOptionFactory
 import org.alee.component.skin.service.IThemeSkinOption
 
@@ -40,7 +40,7 @@ class OptionFactory : IOptionFactory {
 private class NightOption : IThemeSkinOption {
     override fun getStandardSkinPackPath(): LinkedHashSet<String> {
         val pathSet = LinkedHashSet<String>()
-        pathSet.add("${FileMgr.appInternalFilesDir().path}/app-skin.skin")
+        pathSet.add("${appInternalFilesDir().path}/app-skin.skin")
         return pathSet
     }
 }

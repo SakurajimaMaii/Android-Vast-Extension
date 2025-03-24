@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,33 +26,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.ave.vastgui.appcompose.ui.theme.AndroidVastExtensionTheme
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
-import com.ave.vastgui.tools.manager.filemgr.FileMgr.appExternalCacheDir
-import com.ave.vastgui.tools.manager.filemgr.FileMgr.appExternalFilesDir
-import com.ave.vastgui.tools.manager.filemgr.FileMgr.appInternalCacheDir
-import com.ave.vastgui.tools.manager.filemgr.FileMgr.appInternalFilesDir
-import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
-import com.ave.vastgui.tools.manager.mediafilemgr.MusicMgr
+import com.ave.vastgui.tools.io.appExternalCacheDir
+import com.ave.vastgui.tools.io.appExternalFilesDir
+import com.ave.vastgui.tools.io.appInternalCacheDir
+import com.ave.vastgui.tools.io.appInternalFilesDir
+import com.ave.vastgui.tools.io.getImageFile
+import com.ave.vastgui.tools.io.getPath
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/6/5
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-data-and-files/file-manager/file-mgr/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/app-data-and-files/file-manager/file-mgr/
 
 private val devicePath = listOf(
     appInternalFilesDir().path,
     appInternalCacheDir().path,
     appExternalFilesDir(null).path,
     appExternalCacheDir().path,
-    ImageMgr.getExternalFilesDir().path,
-    ImageMgr.getSharedFilesDir().path,
-    MusicMgr.getExternalFilesDir().path,
-    MusicMgr.getSharedFilesDir().path
+    getImageFile().sharedDCIM().path,
+    getImageFile().externalDCIM().path,
 )
 
 @Composable
 fun FilePath(modifier: Modifier = Modifier) {
-    val path1 = FileMgr.getPath {
+    val path1 = getPath {
         "a" f "b" f "c"
     }
     Column(modifier) {

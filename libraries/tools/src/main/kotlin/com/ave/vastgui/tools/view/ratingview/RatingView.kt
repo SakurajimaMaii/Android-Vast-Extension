@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import kotlin.math.round
 // Author: Vast Gui
 // Email: sakurajimamai2020@qq.com
 // Date: 2021/7/28
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/rating/rating-view/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/rating/rating-view/
 
 /**
  * RatingView.

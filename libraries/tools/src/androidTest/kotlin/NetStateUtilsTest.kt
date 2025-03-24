@@ -1,17 +1,5 @@
-
-import android.net.ConnectivityManager
-import android.net.wifi.WifiManager
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import com.ave.vastgui.tools.utils.NetStateUtils
-import com.ave.vastgui.tools.utils.NetStateUtils.getConnectivityManager
-import com.ave.vastgui.tools.utils.NetStateUtils.getWifiManager
-import org.junit.Assert
-import org.junit.Test
-import org.junit.runner.RunWith
-
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +13,20 @@ import org.junit.runner.RunWith
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
+import android.net.ConnectivityManager
+import android.net.wifi.WifiManager
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import com.ave.vastgui.tools.utils.NetStateUtils
+import com.ave.vastgui.tools.utils.NetStateUtils.getConnectivityManager
+import com.ave.vastgui.tools.utils.NetStateUtils.getWifiManager
+import org.junit.Assert
+import org.junit.Test
+import org.junit.runner.RunWith
+
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

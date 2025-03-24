@@ -1,9 +1,5 @@
-import com.ave.vastgui.tools.utils.AppUtils
-import org.junit.Assert
-import org.junit.Test
-
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +13,12 @@ import org.junit.Test
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import com.ave.vastgui.tools.utils.AppUtils
+import org.junit.Assert
+import org.junit.Test
+
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

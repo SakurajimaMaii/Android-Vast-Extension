@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,6 +96,7 @@ android {
 dependencies {
     debugImplementation(libs.ui.test.manifest.compose)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+    implementation(libs.activity.ktx)
     implementation(libs.activity.compose)
     implementation(libs.adapter.rxjava3)
     implementation(libs.coil.compose)
@@ -105,6 +106,7 @@ dependencies {
     implementation(libs.fragment.ktx)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.lifecycle.common.jvm)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.material.compose)
@@ -115,6 +117,7 @@ dependencies {
     implementation(libs.runtime.livedata.compose)
     implementation(libs.slf4j.api)
     implementation(libs.ui.compose)
+    implementation(libs.ui.compose.tooling)
     implementation(libs.ui.graphics.compose)
     implementation(libs.ui.tooling.preview.compose)
     implementation(projects.libraries.kernel)

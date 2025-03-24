@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ import androidx.core.graphics.createBitmap
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2021/11/8 15:27
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/graphics/bitmap/bitmap/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/graphics/bitmap/bitmap/
 
 /**
  * Merge position when using [BmpUtils.mergeBitmap].

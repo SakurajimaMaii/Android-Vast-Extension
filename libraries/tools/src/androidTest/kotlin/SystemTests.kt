@@ -1,16 +1,5 @@
-import android.media.AudioManager
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import com.ave.vastgui.tools.media.getAudioManager
-import com.ave.vastgui.tools.media.isFeatureAudioOutput
-import com.ave.vastgui.tools.utils.isAirplaneMode
-import com.ave.vastgui.tools.utils.isLocationEnabled
-import org.junit.Assert
-import org.junit.Test
-import org.junit.runner.RunWith
-
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +14,25 @@ import org.junit.runner.RunWith
  * limitations under the License.
  */
 
+import android.media.AudioManager
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import com.ave.vastgui.tools.location.isLocationEnabled
+import com.ave.vastgui.tools.media.getAudioManager
+import com.ave.vastgui.tools.media.isFeatureAudioOutput
+import com.ave.vastgui.tools.utils.isAirplaneMode
+import org.junit.Assert
+import org.junit.Test
+import org.junit.runner.RunWith
+
+
+
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/12/31
 
 @RunWith(AndroidJUnit4::class)
-class SystemTest {
+class SystemTests {
 
 //    val runtimePermissionRule: GrantPermissionRule
 //        @Rule get() = GrantPermissionRule.grant(Manifest.permission.BLUETOOTH_CONNECT)
@@ -53,7 +55,7 @@ class SystemTest {
     @Test
     fun checkAudio() {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        println(getAudioManager().getDevices(AudioManager.GET_DEVICES_OUTPUTS).map { it.type }.joinToString())
+        println(getAudioManager()!!.getDevices(AudioManager.GET_DEVICES_OUTPUTS).map { it.type }.joinToString())
         Assert.assertTrue(isFeatureAudioOutput())
     }
 

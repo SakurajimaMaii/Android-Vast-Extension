@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/5/13 20:48
-// Documentation: https://ave.entropy2020.cn/documents/tools/log/logger/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/log/logger/
 
 /**
  * Android Logger.
@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
  * If you set maxPrintTimes to 5, only the first five lines will be
  * printed.
  * @see <img
- * src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/tools/image/log.png?raw=true">
+ * src="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/android/image/log.png?raw=true">
  * @since 1.3.1
  */
 fun Logger.Companion.android(

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import androidx.activity.ComponentActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.lifecycleScope
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityFileBinding
 import com.ave.vastgui.app.log.logFactory
@@ -36,7 +37,7 @@ import kotlin.concurrent.thread
 // Author: SakurajimaMai
 // Email: guihy2019@gmail.com
 // Date: 2022/5/31
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-data-and-files/file-manager/file-mgr/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/app-data-and-files/file-manager/file-mgr/
 
 @LogLifecycle
 class FileActivity : ComponentActivity(R.layout.activity_file) {
@@ -46,6 +47,8 @@ class FileActivity : ComponentActivity(R.layout.activity_file) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycleScope
 
         // https://developer.android.com/develop/ui/views/layout/edge-to-edge?hl=zh-cn
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, windowInsets ->
