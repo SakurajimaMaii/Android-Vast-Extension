@@ -28,7 +28,7 @@ android {
     defaultConfig {
         applicationId = "com.ave.vastgui.appskin"
         minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        targetSdk = libs.versions.compileSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 

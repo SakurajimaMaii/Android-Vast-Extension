@@ -36,7 +36,7 @@ docs/
 .externalNativeBuild
 .cxx
 
-#output
+# output
 debug/
 release/
 buildSrc/build
@@ -45,4 +45,5 @@ skin/darkskin/build
 
 *.jar
 
+# kotlin
 .kotlin
