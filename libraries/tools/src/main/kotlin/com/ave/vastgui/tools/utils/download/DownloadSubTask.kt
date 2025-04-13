@@ -19,7 +19,6 @@ package com.ave.vastgui.tools.utils.download
 import android.util.Log
 import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.utils.download.core.DownloadEvent
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.isActive
@@ -29,7 +28,6 @@ import okhttp3.Request
 import java.io.File
 import java.io.InputStream
 import java.io.RandomAccessFile
-import kotlin.coroutines.CoroutineContext
 import kotlin.properties.Delegates
 
 // Author: Vast Gui
@@ -46,9 +44,7 @@ import kotlin.properties.Delegates
 data class DownloadSubTask(
     val task: DownloadTask,
     val startPos: Long = 0L,
-    val endPos: Long = startPos) : CoroutineScope {
-
-    override val coroutineContext: CoroutineContext = task.coroutineContext
+    val endPos: Long = startPos) {
 
     private val client: OkHttpClient =
         task.client
@@ -75,45 +71,46 @@ data class DownloadSubTask(
         get() = job.isCancelled
 
     fun onStart() {
-        launch {
-            job = launch {
-                var bodyStream: InputStream? = null
-                var fileStream: RandomAccessFile? = null
-                try {
-                    val request = Request.Builder().let { builder ->
-                        builder.url(url)
-                        if (endPos > startPos + completeSize) {
-                            builder.addHeader("RANGE", "bytes=${startPos + completeSize}-$endPos")
-                        }
-                        builder.build()
+        job = task.launch {
+            var bodyStream: InputStream? = null
+            var fileStream: RandomAccessFile? = null
+            try {
+                val request = Request.Builder().let { builder ->
+                    builder.url(url)
+                    if (endPos > startPos + completeSize) {
+                        Log.d("Test", "bytes=${startPos + completeSize}-$endPos")
+                        builder.addHeader("RANGE", "bytes=${startPos + completeSize}-$endPos")
                     }
-                    val response = client.newCall(request).executeAsync()
-                    if (200 == response.code || 206 == response.code) {
-                        val body = response.body
-                            ?: throw RuntimeException("The response body of $url is null.")
-                        bodyStream = body.byteStream()
-                        fileStream = RandomAccessFile(file, "rwd")
-                        fileStream.seek(startPos + completeSize)
-                        val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-                        var bytes = bodyStream.read(buffer)
-                        while (bytes >= 0) {
-                            fileStream.write(buffer, 0, bytes)
-                            _completeSize += bytes
-                            task.onDownload()
-                            bytes = bodyStream.read(buffer)
-                        }
-                    } else {
-                        throw RuntimeException("The http status code is ${response.code}")
-                    }
-                } catch (exception: Exception) {
-                    throw exception
-                } finally {
-                    fileStream?.close()
-                    bodyStream?.close()
+                    builder.build()
                 }
+                val response = client.newCall(request).executeAsync()
+                if (200 == response.code || 206 == response.code) {
+                    val body = response.body
+                        ?: throw RuntimeException("The response body of $url is null.")
+                    bodyStream = body.byteStream()
+                    fileStream = RandomAccessFile(file, "rwd")
+                    fileStream.seek(startPos + completeSize)
+                    val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+                    var bytes = bodyStream.read(buffer)
+                    while (bytes >= 0 && isActive) {
+                        fileStream.write(buffer, 0, bytes)
+                        _completeSize += bytes
+                        task.onDownload()
+                        bytes = bodyStream.read(buffer)
+                    }
+                } else {
+                    throw RuntimeException("The http status code is ${response.code}")
+                }
+            } catch (exception: Exception) {
+                throw exception
+            } finally {
+                fileStream?.close()
+                bodyStream?.close()
             }
-            job.join()
-            task.onSuccess()
+        }
+        job.invokeOnCompletion { cause ->
+            Log.d("Test", "invokeOnCompletion ${null == cause}")
+            if (null == cause) task.onSuccess()
         }
     }
 
@@ -126,7 +123,7 @@ data class DownloadSubTask(
     }
 
     init {
-        launch {
+        task.launch {
             while (isActive) {
                 eventFlow.collect { event ->
                     when (event) {

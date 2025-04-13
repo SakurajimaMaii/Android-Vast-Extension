@@ -25,14 +25,44 @@ import com.ave.vastgui.tools.utils.download.core.DownloadResult
 // Documentation: 
 // Reference:
 
+/**
+ * Download listener.
+ *
+ * @since 1.5.2
+ */
 interface OnDownloadListener {
+    /**
+     * Called when download successful.
+     *
+     * @param result Contains file that was successfully downloaded.
+     * @since 1.5.2
+     */
     @WorkerThread
     fun onSuccess(result: DownloadResult.Success)
 
+    /**
+     * Called when downloading.
+     *
+     * @param result Contains download progress.
+     * @since 1.5.2
+     */
     @WorkerThread
     fun onDownload(result: DownloadResult.Download)
 
+    /**
+     * Called when the download encounter exception.
+     *
+     * @param result Contains download exception.
+     * @since 1.5.2
+     */
+    @WorkerThread
     fun onFailure(result: DownloadResult.Failure)
 
-    fun onCancel()
+    /**
+     * Called when the download terminated.
+     *
+     * @since 1.5.2
+     */
+    @WorkerThread
+    fun onTerminate()
 }

@@ -30,8 +30,11 @@ import java.io.File
  * @since 1.5.2
  */
 sealed class DownloadResult {
-    /** @since 1.5.2 */
-    class Success(val data: File) : DownloadResult()
+    /**
+     * @property file The file has been downloaded successfully.
+     * @since 1.5.2
+     */
+    class Success(val file: File) : DownloadResult()
 
     /** @since 1.5.2 */
     class Download(val currentLength: Float, val length: Float) : DownloadResult() {
@@ -48,6 +51,9 @@ sealed class DownloadResult {
             get() = currentLength / length
     }
 
-    /** @since 1.5.2 */
+    /**
+     * @property exception Exception that causes download failure.
+     * @since 1.5.2
+     */
     class Failure(val exception: Throwable) : DownloadResult()
 }

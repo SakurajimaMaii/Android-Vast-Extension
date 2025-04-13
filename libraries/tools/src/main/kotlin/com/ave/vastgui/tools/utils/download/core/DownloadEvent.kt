@@ -22,21 +22,26 @@ package com.ave.vastgui.tools.utils.download.core
 // Documentation: 
 // Reference:
 
+/**
+ * Download event.
+ *
+ * @since 1.5.2
+ */
 sealed class DownloadEvent(val priority: Int) : Comparable<DownloadEvent> {
     /** @since 1.5.2 */
-    data object Init : DownloadEvent(0)
+    internal data object Init : DownloadEvent(0)
 
     /** @since 1.5.2 */
-    data object Start : DownloadEvent(1)
+    internal data object Start : DownloadEvent(1)
 
     /** @since 1.5.2 */
-    data object Pause : DownloadEvent(2)
+    internal data object Pause : DownloadEvent(2)
 
     /** @since 1.5.2 */
-    data object Resume : DownloadEvent(2)
+    internal data object Resume : DownloadEvent(2)
 
     /** @since 1.5.2 */
-    data object Termination : DownloadEvent(3)
+    internal data object Termination : DownloadEvent(3)
 
     override fun compareTo(other: DownloadEvent): Int {
         return this.priority.compareTo(other.priority)

@@ -27,10 +27,9 @@ import com.ave.vastgui.tools.io.appInternalFilesDir
 import com.ave.vastgui.tools.io.destroy
 import com.ave.vastgui.tools.utils.ColorUtils
 import com.ave.vastgui.tools.utils.DensityUtils.DP
-import com.ave.vastgui.tools.utils.download.DownloadManager
 import com.ave.vastgui.tools.utils.download.DownloadTask
 import com.ave.vastgui.tools.utils.download.core.DownloadResult
-import com.ave.vastgui.tools.utils.download.interfaces.DownloadListener
+import com.ave.vastgui.tools.utils.download.interfaces.OnDownloadListener
 import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
 import com.log.vastgui.okhttp.Okhttp3Interceptor
@@ -49,6 +48,10 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        getBinding().root.setOnClickListener {
+
+        }
 
         // https://developer.android.com/develop/ui/views/layout/edge-to-edge?hl=zh-cn
         // ViewCompat.setOnApplyWindowInsetsListener(getBinding().root) { v, windowInsets ->
@@ -100,52 +103,48 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
         }
 
         getBinding().cancel.setOnClickListener {
-            downloadTask.cancel()
+            downloadTask.terminate()
         }
     }
 
     private fun downloadApk() {
-        DownloadManager.setClient(
-            OkHttpClient.Builder()
-                .addInterceptor(Okhttp3Interceptor(logger))
-                .build()
-        )
-
         val root = appInternalFilesDir()
-        val name = "unity.pdf"
+        val name = "opencv.rar"
         val file = File(root, name)
-        downloadTask = DownloadManager
-            .getDownloadConfig()
-            .setDownloadUrl("http://192.168.0.101:7777/static/opencv.rar")
-            .setFile(file)
-            .setListener(object : DownloadListener {
-                override fun onSuccess(result: DownloadResult.Success) {
+        downloadTask = DownloadTask.createNewTask {
+            setClient(OkHttpClient
+                .Builder()
+                .addInterceptor(Okhttp3Interceptor(logger))
+                .build())
+            setDownloadUrl("http://192.168.0.102:7777/static/opencv.rar")
+            setFile(file)
+            setListener(object : OnDownloadListener {
+                override fun onSuccess(result: DownloadResult.Success) = runOnUiThread {
                     logger.i("任务下载成功")
                     getBinding().arcProgressView.refreshWithInvalidate {
                         mCurrentProgress = getBinding().arcProgressView.mMaximumProgress
                     }
                 }
 
-                override fun onDownloading(result: DownloadResult.Download) {
-                    // logger.i("当前下载进度:${result.rate}，最大进度:${getBinding().arcProgressView.mMaximumProgress}")
+                override fun onDownload(result: DownloadResult.Download) = runOnUiThread {
                     getBinding().arcProgressView.refreshWithInvalidate {
                         mCurrentProgress =
                             result.rate * getBinding().arcProgressView.mMaximumProgress
                     }
                 }
 
-                override fun onFailure(result: DownloadResult.Failure) {
+                override fun onFailure(result: DownloadResult.Failure) = runOnUiThread {
                     logger.e("任务下载失败" + result.exception.stackTraceToString())
                 }
 
-                override fun onCancel() {
+                override fun onTerminate() = runOnUiThread {
                     logger.i("任务被取消")
                     getBinding().arcProgressView.refreshWithInvalidate {
                         resetProgress()
                     }
                 }
             })
-            .build()
+        }
         if (file.exists() && file.destroy().isSuccess) {
             logger.i("任务下载开始")
             downloadTask.start()
