@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.utils.download
+package com.ave.vastgui.tools.utils.download.interfaces
+
+import androidx.annotation.WorkerThread
+import com.ave.vastgui.tools.utils.download.core.DownloadResult
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -22,30 +25,14 @@ package com.ave.vastgui.tools.utils.download
 // Documentation: 
 // Reference:
 
-class DownloadDispatcher internal constructor() : DownloadEventOwner {
+interface OnDownloadListener {
+    @WorkerThread
+    fun onSuccess(result: DownloadResult.Success)
 
-    private val _beans: MutableList<DownloadBean> = ArrayList()
-    val beans: List<DownloadBean>
-        get() = _beans
+    @WorkerThread
+    fun onDownload(result: DownloadResult.Download)
 
-    fun addBean(bean: DownloadBean) {
-        _beans.add(bean)
-    }
+    fun onFailure(result: DownloadResult.Failure)
 
-    override fun start() {
-        _beans.forEach { bean -> bean.onStart() }
-    }
-
-    override fun pause() {
-        _beans.forEach { bean -> bean.onPause() }
-    }
-
-    override fun resume() {
-        _beans.forEach { bean -> bean.onResume() }
-    }
-
-    override fun cancel() {
-        _beans.forEach { bean -> bean.onCancel() }
-    }
-
+    fun onCancel()
 }

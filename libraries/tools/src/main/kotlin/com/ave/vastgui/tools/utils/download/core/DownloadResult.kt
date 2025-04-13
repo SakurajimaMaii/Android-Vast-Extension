@@ -16,7 +16,6 @@
 
 package com.ave.vastgui.tools.utils.download.core
 
-import com.ave.vastgui.tools.utils.download.exception.DownloadException
 import java.io.File
 
 // Author: Vast Gui
@@ -50,5 +49,5 @@ sealed class DownloadResult {
     }
 
     /** @since 1.5.2 */
-    class Failure(val exception: DownloadException) : DownloadResult()
+    class Failure(val exception: Throwable) : DownloadResult()
 }
