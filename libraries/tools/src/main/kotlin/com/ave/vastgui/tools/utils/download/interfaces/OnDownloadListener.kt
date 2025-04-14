@@ -17,7 +17,7 @@
 package com.ave.vastgui.tools.utils.download.interfaces
 
 import androidx.annotation.WorkerThread
-import com.ave.vastgui.tools.utils.download.core.DownloadResult
+import com.ave.vastgui.tools.utils.download.core.DownloadState
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -30,33 +30,40 @@ import com.ave.vastgui.tools.utils.download.core.DownloadResult
  *
  * @since 1.5.2
  */
+@JvmDefaultWithCompatibility
 interface OnDownloadListener {
     /**
      * Called when download successful.
      *
-     * @param result Contains file that was successfully downloaded.
+     * @param state Contains file that was successfully downloaded.
      * @since 1.5.2
      */
     @WorkerThread
-    fun onSuccess(result: DownloadResult.Success)
+    fun onSuccess(state: DownloadState.Success) {
+
+    }
 
     /**
      * Called when downloading.
      *
-     * @param result Contains download progress.
+     * @param state Contains download progress.
      * @since 1.5.2
      */
     @WorkerThread
-    fun onDownload(result: DownloadResult.Download)
+    fun onDownload(state: DownloadState.Download) {
+
+    }
 
     /**
      * Called when the download encounter exception.
      *
-     * @param result Contains download exception.
+     * @param state Contains download exception.
      * @since 1.5.2
      */
     @WorkerThread
-    fun onFailure(result: DownloadResult.Failure)
+    fun onFailure(state: DownloadState.Failure) {
+
+    }
 
     /**
      * Called when the download terminated.
@@ -64,5 +71,7 @@ interface OnDownloadListener {
      * @since 1.5.2
      */
     @WorkerThread
-    fun onTerminate()
+    fun onTerminate() {
+
+    }
 }

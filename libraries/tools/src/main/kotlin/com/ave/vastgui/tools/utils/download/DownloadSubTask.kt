@@ -16,13 +16,13 @@
 
 package com.ave.vastgui.tools.utils.download
 
-import android.util.Log
 import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.utils.download.core.DownloadEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
@@ -36,10 +36,9 @@ import kotlin.properties.Delegates
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/connectivity/download/download/
 
 /**
- * The download bean.
+ * Download subtask.
  *
- * @property url The url of the download file.
- * @since 0.5.2
+ * @since 1.5.2
  */
 data class DownloadSubTask(
     val task: DownloadTask,
@@ -78,25 +77,26 @@ data class DownloadSubTask(
                 val request = Request.Builder().let { builder ->
                     builder.url(url)
                     if (endPos > startPos + completeSize) {
-                        Log.d("Test", "bytes=${startPos + completeSize}-$endPos")
                         builder.addHeader("RANGE", "bytes=${startPos + completeSize}-$endPos")
                     }
                     builder.build()
                 }
                 val response = client.newCall(request).executeAsync()
                 if (200 == response.code || 206 == response.code) {
-                    val body = response.body
-                        ?: throw RuntimeException("The response body of $url is null.")
-                    bodyStream = body.byteStream()
-                    fileStream = RandomAccessFile(file, "rwd")
-                    fileStream.seek(startPos + completeSize)
-                    val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-                    var bytes = bodyStream.read(buffer)
-                    while (bytes >= 0 && isActive) {
-                        fileStream.write(buffer, 0, bytes)
-                        _completeSize += bytes
-                        task.onDownload()
-                        bytes = bodyStream.read(buffer)
+                    withContext(coroutineContext) {
+                        val body = response.body
+                            ?: throw RuntimeException("The response body of $url is null.")
+                        bodyStream = body.byteStream()
+                        fileStream = RandomAccessFile(file, "rwd")
+                        fileStream.seek(startPos + completeSize)
+                        val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+                        var bytes = bodyStream.read(buffer)
+                        while (bytes >= 0 && isActive) {
+                            fileStream.write(buffer, 0, bytes)
+                            _completeSize += bytes
+                            task.onDownload()
+                            bytes = bodyStream.read(buffer)
+                        }
                     }
                 } else {
                     throw RuntimeException("The http status code is ${response.code}")
@@ -109,7 +109,6 @@ data class DownloadSubTask(
             }
         }
         job.invokeOnCompletion { cause ->
-            Log.d("Test", "invokeOnCompletion ${null == cause}")
             if (null == cause) task.onSuccess()
         }
     }

@@ -16,8 +16,9 @@
 
 package com.ave.vastgui.tools.utils.download
 
+import com.ave.vastgui.core.annotation.ExperimentalApi
 import com.ave.vastgui.tools.utils.download.core.DownloadEvent
-import com.ave.vastgui.tools.utils.download.core.DownloadResult
+import com.ave.vastgui.tools.utils.download.core.DownloadState
 import com.ave.vastgui.tools.utils.download.interfaces.OnDownloadListener
 import com.ave.vastgui.tools.utils.getFileMD5
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -25,11 +26,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -52,7 +51,11 @@ import kotlin.properties.Delegates
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/connectivity/download/download/
 // Reference: https://github.com/Heart-Beats/Downloader/blob/master/downloader/src/main/java/com/hl/downloader/SubDownloadTask.kt
 
-// https://github.com/square/okhttp/blob/master/okhttp-coroutines/src/main/kotlin/okhttp3/coroutines/ExecuteAsync.kt
+/**
+ * [ExecuteAsync.kt](https://github.com/square/okhttp/blob/master/okhttp-coroutines/src/main/kotlin/okhttp3/coroutines/ExecuteAsync.kt)
+ *
+ * @since 1.5.2
+ */
 internal suspend fun Call.executeAsync(): Response = suspendCancellableCoroutine { continuation ->
     continuation.invokeOnCancellation {
         this.cancel()
@@ -81,20 +84,20 @@ class DownloadTask internal constructor(
     val client: OkHttpClient,
     val url: String,
     val file: File,
-    private val maxCoreCount: Int,
+    private val subTaskCount: Int,
     private val md5: String?,
+    private val rateInternal: Float,
     val listener: OnDownloadListener?,
 ) : CoroutineScope {
 
     private val job = SupervisorJob()
     private val handler = CoroutineExceptionHandler { _, cause ->
-        listener?.onFailure(DownloadResult.Failure(cause))
+        listener?.onFailure(DownloadState.Failure(cause))
     }
 
     override val coroutineContext: CoroutineContext = job + Dispatchers.IO + handler
 
-    var currentEvent: DownloadEvent = DownloadEvent.Init
-        private set
+    private var currentEvent: DownloadEvent = DownloadEvent.Init
 
     private val _eventFlow = MutableSharedFlow<DownloadEvent>(1)
     val eventFlow: SharedFlow<DownloadEvent>
@@ -104,31 +107,36 @@ class DownloadTask internal constructor(
 
     private val subTasks: MutableList<DownloadSubTask> = ArrayList()
 
+    private var lastRate: Float = 0f
+
+    /** @since 1.5.2 */
     internal fun onDownload() {
-        if (isActive) {
-            val progress = subTasks.fold(0f) { sum, bean ->
-                sum + if (bean.startPos == bean.endPos) Float.NaN else bean.completeSize.toFloat()
+        val progress = subTasks.fold(0f) { sum, bean ->
+            sum + if (bean.startPos == bean.endPos) Float.NaN else bean.completeSize.toFloat()
+        }
+        if (progress.isNaN()) {
+            listener?.onDownload(DownloadState.Download())
+        } else {
+            val result = DownloadState.Download(progress, length.toFloat())
+            if (result.rate - lastRate >= rateInternal) {
+                lastRate = result.rate
+                listener?.onDownload(result)
             }
-            val download = if (progress.isNaN()) {
-                DownloadResult.Download()
-            } else {
-                DownloadResult.Download(progress, length.toFloat())
-            }
-            listener?.onDownload(download)
         }
     }
 
+    /** @since 1.5.2 */
     internal fun onSuccess() {
         if (!subTasks.all { it.isCompleted }) return
         if (null == md5) {
-            listener?.onSuccess(DownloadResult.Success(file))
+            listener?.onSuccess(DownloadState.Success(file))
             return
         }
         if (md5 == getFileMD5(file)) {
-            listener?.onSuccess(DownloadResult.Success(file))
+            listener?.onSuccess(DownloadState.Success(file))
         } else {
             val e = RuntimeException(null, RuntimeException("File MD5($md5) verification failed."))
-            listener?.onFailure(DownloadResult.Failure(e))
+            listener?.onFailure(DownloadState.Failure(e))
         }
         job.cancel()
     }
@@ -148,16 +156,16 @@ class DownloadTask internal constructor(
                 }
 
                 if (subTasks.isEmpty()) {
-                    length = tryToGetDownloadSize()
+                    length = tryGetContentLength()
                     if (UNKNOWN_LENGTH == length) {
                         val bean = DownloadSubTask(this@DownloadTask)
                         subTasks.add(bean)
                     } else {
-                        val remainder = length % maxCoreCount
-                        val subLength = (length - remainder) / maxCoreCount
-                        for (index in 0 until maxCoreCount) {
+                        val remainder = length % subTaskCount
+                        val subLength = (length - remainder) / subTaskCount
+                        for (index in 0 until subTaskCount) {
                             val start = index * subLength
-                            val end = (index + 1) * subLength + if (index == maxCoreCount - 1) remainder else 0 - 1
+                            val end = (index + 1) * subLength + if (index == subTaskCount - 1) remainder else 0 - 1
                             val bean = DownloadSubTask(this@DownloadTask, start, end)
                             subTasks.add(bean)
                         }
@@ -202,7 +210,9 @@ class DownloadTask internal constructor(
         if (isValidEvent(DownloadEvent.Termination) && _eventFlow.tryEmit(DownloadEvent.Termination)) {
             currentEvent = DownloadEvent.Termination
             job.cancel(exception)
-            listener?.onTerminate()
+            job.invokeOnCompletion { cause ->
+                if (null != cause) listener?.onTerminate()
+            }
         }
     }
 
@@ -215,12 +225,14 @@ class DownloadTask internal constructor(
         if (isValidEvent(DownloadEvent.Termination) && _eventFlow.tryEmit(DownloadEvent.Termination)) {
             currentEvent = DownloadEvent.Termination
             job.cancel(message, cause)
-            listener?.onTerminate()
+            job.invokeOnCompletion { cause ->
+                if (null != cause) listener?.onTerminate()
+            }
         }
     }
 
     /** @since 1.5.2 */
-    private suspend fun tryToGetDownloadSize(): Long = withContext(coroutineContext) {
+    private suspend fun tryGetContentLength(): Long = withContext(coroutineContext) {
         var length = UNKNOWN_LENGTH
         val request = Request.Builder().url(url).build()
         runCatching {
@@ -235,67 +247,100 @@ class DownloadTask internal constructor(
      * Compare the priority of [DownloadEvent] . If the [event] priority is
      * greater than [currentEvent] , returns true and updates [currentEvent] to
      * [event], otherwise returns false.
+     *
+     * @since 1.5.2
      */
-    private fun isValidEvent(event: DownloadEvent): Boolean =
-        currentEvent <= event
+    private fun isValidEvent(event: DownloadEvent): Boolean = currentEvent <= event
 
     companion object {
         const val UNKNOWN_LENGTH = -1L
-
-        fun createNewTask(settings: Builder.() -> Unit): DownloadTask {
-            return Builder().also(settings).build()
-        }
     }
 
-    class Builder internal constructor() {
+    /** @since 1.5.2 */
+    class Builder {
 
         private var client: OkHttpClient = OkHttpClient()
         private var url: String by Delegates.notNull()
         private var file: File by Delegates.notNull()
         private var md5: String? = null
         private var listener: OnDownloadListener? = null
+        private var rateInternal: Float = 0.005f
+        private var subTaskCount: Int = 2
 
         /**
          * Set download client.
          *
-         * @param client
+         * @since 1.5.2
          */
-        fun setClient(client: OkHttpClient) {
+        fun setClient(client: OkHttpClient) = apply {
             this.client = client
         }
 
-        /** Set download url. */
+        /**
+         * Set download url.
+         *
+         * @since 1.5.2
+         */
         fun setDownloadUrl(url: String) = apply {
             this.url = url
         }
 
-        /** Set the download file. */
+        /**
+         * Set the download file.
+         *
+         * @since 1.5.2
+         */
         fun setFile(file: File) = apply {
             this.file = file
         }
 
-        /** Set the event listener for the download. */
+        /**
+         * Set the event listener for the download.
+         *
+         * @since 1.5.2
+         */
         fun setListener(listener: OnDownloadListener) = apply {
             this.listener = listener
         }
 
-        /** Set the md5 value of the file for verification */
+        /**
+         * Set the md5 value of the file for verification.
+         *
+         * @since 1.5.2
+         */
         fun setMD5(md5: String) = apply {
             this.md5 = md5
         }
 
-        /** Build the download task. */
-        fun build() = DownloadTask(client, url, file, 2, md5, listener)
+        /**
+         * Set the interval for calling [OnDownloadListener.onDownload],
+         * for example, if you set [rateInternal] to 0.01,
+         * [OnDownloadListener.onDownload] will only be called
+         * when [DownloadState.Download.rate] increases by 0.01 .
+         *
+         * @since 1.5.2
+         */
+        fun setRateInternal(internal: Float) = apply {
+            rateInternal = internal.coerceIn(0.0f, 1.0f)
+        }
 
         /**
-         * Get file save name for url.
+         * Set the count of [DownloadSubTask].
          *
-         * @return app-debug.apk as the return value if the link is
-         * [https://github.com/SakurajimaMaii/BluetoothDemo/blob/master/app-debug.apk](#)
+         * @since 1.5.2
          */
-        private fun getNameFromUrl(url: String): String {
-            return url.substring(url.lastIndexOf("/") + 1)
+        @ExperimentalApi
+        fun setSubTaskCount(count: Int) = apply {
+            subTaskCount = count.coerceIn(1, 16)
         }
+
+        /**
+         * Build the download task.
+         *
+         * @since 1.5.2
+         */
+        fun build() = DownloadTask(
+            client, url, file, subTaskCount, md5, rateInternal, listener)
 
     }
 

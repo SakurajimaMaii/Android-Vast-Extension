@@ -29,15 +29,15 @@ import java.io.File
  *
  * @since 1.5.2
  */
-sealed class DownloadResult {
+sealed class DownloadState {
     /**
      * @property file The file has been downloaded successfully.
      * @since 1.5.2
      */
-    class Success(val file: File) : DownloadResult()
+    class Success(val file: File) : DownloadState()
 
     /** @since 1.5.2 */
-    class Download(val currentLength: Float, val length: Float) : DownloadResult() {
+    class Download(val currentLength: Float, val length: Float) : DownloadState() {
         /** @since 1.5.2 */
         constructor() : this(Float.NaN, Float.NaN)
 
@@ -55,5 +55,5 @@ sealed class DownloadResult {
      * @property exception Exception that causes download failure.
      * @since 1.5.2
      */
-    class Failure(val exception: Throwable) : DownloadResult()
+    class Failure(val exception: Throwable) : DownloadState()
 }
