@@ -30,4 +30,4 @@ package com.ave.vastgui.core.annotation
 @Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
 @MustBeDocumented
-internal annotation class ExperimentalApi
+annotation class ExperimentalApi
