@@ -20,12 +20,10 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.ave.vastgui.tools.location.isLocationEnabled
 import com.ave.vastgui.tools.media.getAudioManager
 import com.ave.vastgui.tools.media.isFeatureAudioOutput
-import com.ave.vastgui.tools.utils.isAirplaneMode
+import com.ave.vastgui.tools.utils.SystemUtils
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-
-
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -39,7 +37,7 @@ class SystemTests {
 
     @Test
     fun checkAirplane() {
-        Assert.assertTrue(isAirplaneMode())
+        Assert.assertTrue(SystemUtils.isAirplaneMode)
     }
 
     @Test

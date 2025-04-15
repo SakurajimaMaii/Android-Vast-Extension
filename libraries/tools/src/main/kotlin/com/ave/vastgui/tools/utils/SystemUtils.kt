@@ -70,14 +70,13 @@ object SystemUtils {
     @JvmStatic
     val deviceBrand: String
         get() = Build.BRAND
-}
 
-/**
- * Whether Airplane Mode is on.
- *
- * @since 1.5.2
- */
-fun isAirplaneMode(): Boolean {
-    return Settings.System
-        .getInt(ContextHelper.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) == 1
+    /**
+     * Whether Airplane Mode is on.
+     *
+     * @since 1.5.2
+     */
+    @JvmStatic
+    val isAirplaneMode: Boolean
+        get() = Settings.System.getInt(ContextHelper.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) == 1
 }
