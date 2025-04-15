@@ -52,7 +52,6 @@ object DateUtils {
     const val FORMAT_MMCDDC = "MM月dd日"
     const val FORMAT_YYYYCMMCDDC = "yyyy年MM月dd日"
 
-    // GMT Format
     const val GMT_PLUS_ZONE = "GMT+00:00"
     const val GMT_PLUS_ONE = "GMT+01:00"
     const val GMT_PLUS_TWO = "GMT+02:00"
@@ -78,6 +77,15 @@ object DateUtils {
     const val GMT_MINUS_TEN = "GMT-10:00"
     const val GMT_MINUS_ELEVEN = "GMT-11:00"
     const val GMT_MINUS_TWELVE = "GMT-12:00"
+
+    /** @since 1.5.2 */
+    const val SHORT = TimeZone.SHORT
+
+    /** @since 1.5.2 */
+    const val LONG = TimeZone.LONG
+
+    /** @since 1.5.2 */
+    const val NUMBER = 2
 
     /**
      * Get current time.
@@ -116,13 +124,22 @@ object DateUtils {
     /**
      * Get the default time zone for this host in string.
      *
-     * @param style either [TimeZone.LONG] or [TimeZone.SHORT].
+     * @param style [LONG] , [SHORT] or [NUMBER] .
+     * @return Refer to the following examples:
+     * - [LONG] : 中国夏令时间
+     * - [SHORT] : GMT+08:00
+     * - [NUMBER] : 8
      * @since 0.5.3
      */
     @JvmStatic
     @JvmOverloads
-    fun getCurrentTimeZone(style: Int = TimeZone.SHORT): String {
-        return TimeZone.getDefault().getDisplayName(true, style, Locale.getDefault())
+    fun getCurrentTimeZone(style: Int = SHORT): String {
+        if (style == NUMBER) {
+            val offsetMills = TimeZone.getDefault().getOffset(System.currentTimeMillis())
+            return (offsetMills / (1000 * 60 * 60)).toString()
+        } else {
+            return TimeZone.getDefault().getDisplayName(true, style, Locale.getDefault())
+        }
     }
 
     /**
@@ -130,7 +147,7 @@ object DateUtils {
      *
      * @param timeStringFormat The pattern describing the date and time format.
      * @return If [timeString] parsing fails, it returns [callback].Otherwise,
-     *     it returns date object.
+     * it returns date object.
      * @throws ParseException
      * @since 0.5.1
      */
@@ -310,7 +327,7 @@ object DateUtils {
      *
      * @param dateFormat The pattern describing the date and time format.
      * @return [SimpleDateFormat] using the [dateFormat] and the
-     *     [Locale.getDefault].
+     * [Locale.getDefault].
      * @since 0.0.1
      */
     private fun datetimeFormat(dateFormat: String): SimpleDateFormat {
