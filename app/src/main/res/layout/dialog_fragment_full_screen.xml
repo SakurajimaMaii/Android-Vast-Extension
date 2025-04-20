@@ -14,22 +14,7 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activity.view.DialogActivity">
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/dialog_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/show_dialog" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/fullscreen_dialog_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/show_dialog" />
-</LinearLayout>
+    android:background="@color/amour" />

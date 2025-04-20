@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="BaseAlphabetSideBar">
         <item name="alphabetsidebar_location">@integer/default_alphabetsidebar_location</item>
@@ -150,5 +150,13 @@
         <item name="indicator_circle_radius">@dimen/default_indicator_circle_radius</item>
         <item name="indicator_item_distance">@dimen/default_indicator_item_distance</item>
         <item name="indicator_item_count">@integer/default_indicator_item_count</item>
+    </style>
+
+    <!-- https://juejin.cn/post/7296308638686789642 -->
+    <style name="FullScreenDialogFragmentStyle" parent="Theme.Material3.DayNight.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@color/transparent</item>-->
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 </resources>

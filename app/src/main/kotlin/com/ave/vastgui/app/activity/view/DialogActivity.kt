@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityDialogBinding
+import com.ave.vastgui.tools.fragment.FullScreenDialogFragment
 import com.ave.vastgui.tools.view.dialog.MaterialAlertDialogBuilder
 import com.ave.vastgui.tools.viewbinding.viewBinding
 import com.google.android.material.textview.MaterialTextView
@@ -31,21 +32,26 @@ import com.google.android.material.textview.MaterialTextView
 
 class DialogActivity : AppCompatActivity(R.layout.activity_dialog) {
 
-    private val mBinding by viewBinding(ActivityDialogBinding::bind)
-    private val mDialogBuilder by lazy {
+    private val binding by viewBinding(ActivityDialogBinding::bind)
+    private val dialogBuilder by lazy {
         MaterialAlertDialogBuilder(this)
     }
+    private val fullScreenDialogFragment by lazy { FullScreenDialogFragment(R.layout.dialog_fragment_full_screen) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding.show.setOnClickListener {
-            mDialogBuilder.apply {
+        binding.dialogBtn.setOnClickListener {
+            dialogBuilder.apply {
                 setView(R.layout.dialog_custom)
                 requireView().apply {
                     findViewById<MaterialTextView>(R.id.title).text = "这是一个自定义布局"
                 }
                 show()
             }
+        }
+
+        binding.fullscreenDialogBtn.setOnClickListener {
+            fullScreenDialogFragment.show(supportFragmentManager, "FullScreenDialogFragment")
         }
     }
 
