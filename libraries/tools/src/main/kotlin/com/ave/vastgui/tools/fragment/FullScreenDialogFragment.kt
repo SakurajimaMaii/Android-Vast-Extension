@@ -18,30 +18,45 @@ package com.ave.vastgui.tools.fragment
 
 import android.app.Dialog
 import android.os.Bundle
-import com.ave.vastgui.tools.R
+import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
+import com.ave.vastgui.core.annotation.ExperimentalApi
+import com.ave.vastgui.tools.R
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2025/4/21
 // Documentation:
 
+@ExperimentalApi
 open class FullScreenDialogFragment : DialogFragment {
 
     constructor() : super()
 
     constructor(@LayoutRes layoutId: Int) : super(layoutId)
 
+    @get:ColorInt
+    protected open val statusBarColor: Int
+        get() = ContextCompat.getColor(requireContext(), R.color.md_theme_primary)
+
+    protected open val isImmersionBar: Boolean = true
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return super.onCreateDialog(savedInstanceState).also {
             it.window?.let { window ->
-                WindowCompat.setDecorFitsSystemWindows(window, false)
-                val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-                windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+                WindowCompat.setDecorFitsSystemWindows(window, !isImmersionBar)
+                if (isImmersionBar) {
+                    val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+                    windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat
+                        .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                    windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+                }
+                window.statusBarColor = statusBarColor
             }
         }
     }
