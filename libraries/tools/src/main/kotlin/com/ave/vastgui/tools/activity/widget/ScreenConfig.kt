@@ -29,20 +29,26 @@ import androidx.core.view.WindowInsetsCompat
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/app-entry-points/activities/extension/#_3
 
 /**
- * @param mEnableActionBar True if you want to show the ActionBar,false
- *     otherwise
- * @param mEnableFullScreen True if you want to set fullscreen,false
- *     otherwise.
+ * @param enableActionBar True if you want to show the ActionBar,false
+ * otherwise
+ * @param enableFullScreen True if you want to set fullscreen,false
+ * otherwise.
  */
-fun AppCompatActivity.screenConfig(
-    mEnableActionBar: Boolean,
-    mEnableFullScreen: Boolean
-) {
-    if (!mEnableActionBar) {
-        this.supportActionBar?.hide()
+@Deprecated("Using enableEdgeToEdge() to replace.", ReplaceWith(expression = "enableEdgeToEdge()", imports = arrayOf("androidx.activity.enableEdgeToEdge")))
+fun AppCompatActivity.screenConfig(enableActionBar: Boolean, enableFullScreen: Boolean) {
+    if (!enableActionBar) {
+        supportActionBar?.hide()
     }
-    if (mEnableFullScreen) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+    if (enableFullScreen) {
+        supportActionBar?.hide()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(false)
+            window.insetsController?.apply {
+                hide(WindowInsetsCompat.Type.systemBars())
+                systemBarsBehavior =
+                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        } else {
             @Suppress("DEPRECATION")
             val flags = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -51,22 +57,13 @@ fun AppCompatActivity.screenConfig(
                     or View.SYSTEM_UI_FLAG_FULLSCREEN
                     or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
             @Suppress("DEPRECATION")
-            this.window.decorView.systemUiVisibility = flags
-        } else {
-            this.window.setDecorFitsSystemWindows(false)
-            this.window.insetsController?.apply {
-                hide(WindowInsetsCompat.Type.systemBars())
-                systemBarsBehavior =
-                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
+            window.decorView.systemUiVisibility = flags
         }
-        this.supportActionBar?.hide()
-        // In order to solve the black bar when state bar is gone.
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            val lp: WindowManager.LayoutParams = this.window.attributes
+            val lp: WindowManager.LayoutParams = window.attributes
             lp.layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-            this.window.attributes = lp
+            window.attributes = lp
         }
     }
 }

@@ -17,9 +17,9 @@
 package com.ave.vastgui.app.activity.view
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.ave.vastgui.app.databinding.ActivityTextViewBinding
-import com.ave.vastgui.tools.activity.widget.screenConfig
 import com.ave.vastgui.tools.view.textview.mailboxassociateview.MailBoxAssociateTokenizer
 import com.ave.vastgui.tools.view.textview.mailboxassociateview.defaultMailBoxAssociateViewAdapter
 import com.ave.vastgui.tools.viewbinding.viewBinding
@@ -34,8 +34,8 @@ class TextViewActivity : AppCompatActivity() {
     private val mBinding by viewBinding(ActivityTextViewBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        screenConfig(mEnableActionBar = true, mEnableFullScreen = false)
 
         mBinding.mailBoxAssociateView.apply {
             setAdapter(defaultMailBoxAssociateViewAdapter())

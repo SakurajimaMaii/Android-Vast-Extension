@@ -53,7 +53,7 @@ class Vp2IndicatorActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(mBinding.root)
-        screenConfig(mEnableActionBar = true, mEnableFullScreen = false)
+        screenConfig(enableActionBar = true, enableFullScreen = false)
         setSupportActionBar(mBinding.toolbar)
         mBinding.vp2.apply {
             adapter = VastFragmentAdapter(this@Vp2IndicatorActivity, fragments)

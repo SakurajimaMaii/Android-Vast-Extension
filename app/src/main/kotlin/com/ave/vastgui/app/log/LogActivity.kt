@@ -33,7 +33,7 @@ class LogActivity : VastVbVmActivity<ActivityLogBinding, SharedVM>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        screenConfig(mEnableActionBar = false, mEnableFullScreen = false)
+        screenConfig(enableActionBar = false, enableFullScreen = false)
 
         getBinding().getSentence.setOnClickListener {
             getViewModel().getSentenceWithHandle()
