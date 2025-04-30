@@ -20,6 +20,7 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
 import kotlin.math.roundToInt
+import androidx.core.graphics.toColorInt
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -64,8 +65,8 @@ object ColorUtils {
      */
     @JvmStatic
     fun colorHex2Int(colorHex: String, default: String = "#00000000"): Int =
-        if (isColorHex(colorHex)) Color.parseColor(colorHex)
-        else if (isColorHex(default)) Color.parseColor(default)
+        if (isColorHex(colorHex)) colorHex.toColorInt()
+        else if (isColorHex(default)) default.toColorInt()
         else throw IllegalArgumentException("$colorHex $default are all illegal color values.")
 
     /**
