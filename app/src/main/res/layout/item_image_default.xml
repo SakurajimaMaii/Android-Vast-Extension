@@ -27,8 +27,7 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/root"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_height="wrap_content">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -47,9 +46,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:background="@color/white"
-                android:textSize="20sp"
                 android:paddingHorizontal="10dp"
-                android:text="@{image.title}" />
+                android:text="@{image.title}"
+                android:textSize="20sp" />
         </FrameLayout>
 
     </com.google.android.material.card.MaterialCardView>

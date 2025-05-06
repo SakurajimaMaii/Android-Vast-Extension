@@ -60,7 +60,7 @@ private class ImageListAdapter(context: Context) : BaseListAdapter<Images.Image>
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion), ImageDiffUtil
 )
 
-private class ImagePagingAdapter(context: Context) : BasePagingAdapter<Images.Image>(
+class ImagePagingAdapter(context: Context) : BasePagingAdapter<Images.Image>(
     context,
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion), ImageDiffUtil
 )
