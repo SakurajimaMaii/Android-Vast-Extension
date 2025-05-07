@@ -32,7 +32,7 @@ import kotlin.math.roundToInt
  *
  * @since 1.5.2
  */
-class VerticalItemDecoration : RecyclerView.ItemDecoration {
+class VerticalIntervalDecoration : RecyclerView.ItemDecoration {
     private val space: Int
     private var setTopAndBottom = false
 

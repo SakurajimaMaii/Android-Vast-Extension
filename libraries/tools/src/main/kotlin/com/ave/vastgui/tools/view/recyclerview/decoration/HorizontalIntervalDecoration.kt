@@ -32,7 +32,7 @@ import kotlin.math.roundToInt
  *
  * @since 1.5.2
  */
-class HorizontalItemDecoration : RecyclerView.ItemDecoration {
+class HorizontalIntervalDecoration : RecyclerView.ItemDecoration {
     private val space: Int
     private var setLeftAndRight = false
 
