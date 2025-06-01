@@ -24,11 +24,13 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.VectorDrawable
+import android.view.View
 import androidx.annotation.ArrayRes
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
+import androidx.annotation.IntegerRes
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
@@ -146,3 +148,66 @@ fun Context.dimensionPixelSize(@DimenRes resId: Int, default: Int = 0) =
 @JvmOverloads
 fun Context.dimensionPixelOffset(@DimenRes resId: Int, default: Int = 0) =
     runCatching { resources.getDimensionPixelOffset(resId) }.getOrDefault(default)
+
+/**
+ * @since 1.5.2
+ */
+@JvmOverloads
+fun Context.integer(@IntegerRes resId: Int, default: Int = 0) =
+    runCatching { resources.getInteger(resId) }.getOrDefault(default)
+
+/** @since 1.5.0 */
+fun View.drawable(@DrawableRes resId: Int): Drawable? =
+    runCatching { AppCompatResources.getDrawable(context, resId) }.getOrNull()
+
+/** @since 1.5.0 */
+fun View.vectorDrawable(@DrawableRes resId: Int): VectorDrawable? =
+    runCatching { return AppCompatResources.getDrawable(context, resId) as? VectorDrawable }.getOrNull()
+
+/** @since 1.5.0 */
+@JvmOverloads
+fun View.color(@ColorRes resId: Int, @ColorInt default: Int = Color.WHITE): Int =
+    runCatching { ContextCompat.getColor(context, resId) }.getOrDefault(default)
+
+/** @since 1.5.0 */
+@JvmOverloads
+fun View.colorStateList(@ColorRes resId: Int, @ColorInt default: Int = Color.WHITE): ColorStateList =
+    runCatching { AppCompatResources.getColorStateList(context, resId) }.getOrDefault(ColorStateList.valueOf(default))
+
+/** @since 1.5.0 */
+@JvmOverloads
+fun View.string(@StringRes resId: Int, default: String = ""): String =
+    runCatching { ContextCompat.getString(context, resId) }.getOrDefault(default)
+
+/** @since 1.5.0 */
+@JvmOverloads
+fun View.stringArray(@ArrayRes resId: Int, default: Array<String> = emptyArray()): Array<String> =
+    runCatching { resources.getStringArray(resId) }.getOrDefault(default)
+
+/**
+ * @since 1.5.2
+ */
+@JvmOverloads
+fun View.dimension(@DimenRes resId: Int, default: Float = 0f) =
+    runCatching { resources.getDimension(resId) }.getOrDefault(default)
+
+/**
+ * @since 1.5.2
+ */
+@JvmOverloads
+fun View.dimensionPixelSize(@DimenRes resId: Int, default: Int = 0) =
+    runCatching { resources.getDimensionPixelSize(resId) }.getOrDefault(default)
+
+/**
+ * @since 1.5.2
+ */
+@JvmOverloads
+fun View.dimensionPixelOffset(@DimenRes resId: Int, default: Int = 0) =
+    runCatching { resources.getDimensionPixelOffset(resId) }.getOrDefault(default)
+
+/**
+ * @since 1.5.2
+ */
+@JvmOverloads
+fun View.integer(@IntegerRes resId: Int, default: Int = 0) =
+    runCatching { resources.getInteger(resId) }.getOrDefault(default)
