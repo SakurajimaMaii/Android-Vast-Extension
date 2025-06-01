@@ -29,13 +29,16 @@ import android.view.View
 import androidx.annotation.IntDef
 import androidx.annotation.Size
 import androidx.annotation.StyleRes
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.withSave
 import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import kotlin.math.floor
 import kotlin.math.sqrt
+import androidx.core.content.withStyledAttributes
+import com.ave.vastgui.tools.utils.color
+import com.ave.vastgui.tools.utils.dimension
+import com.ave.vastgui.tools.utils.integer
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -45,19 +48,19 @@ import kotlin.math.sqrt
 /**
  * AlphabetSideBar.
  *
- * @property mPreviousIndicatorIndex Used to save the index of previous
- *     indicator letter in mAlphabet. Prevent mLetterListener from being
- *     called repeatedly.
- * @property mIndicatorIndex The index of the current indicator letter in
- *     mAlphabet.
- * @property mBackgroundColor The color-int of alphabet sidebar, bezier
- *     curve and bubble.
- * @property mBarTextSize The size of letter in the alphabet sidebar.
- * @property mBarTextColor The color-int of letter in the alphabet sidebar.
- * @property mBarIndicatorTextColor The color-int of current indicator
- *     letter in the alphabet sidebar.
- * @property mBubbleTextSize The size of letter in the bubble.
- * @property mBubbleTextColor The color-int of letter in the bubble.
+ * @property previousIndicatorIndex Used to save the index of previous
+ * indicator letter in mAlphabet. Prevent mLetterListener from being called
+ * repeatedly.
+ * @property indicatorIndex The index of the current indicator letter in
+ * mAlphabet.
+ * @property barBackgroundColor The color-int of alphabet sidebar, bezier
+ * curve and bubble.
+ * @property barTextSize The size of letter in the alphabet sidebar.
+ * @property barTextColor The color-int of letter in the alphabet sidebar.
+ * @property barIndicatorTextColor The color-int of current indicator
+ * letter in the alphabet sidebar.
+ * @property bubbleTextSize The size of letter in the bubble.
+ * @property bubbleTextColor The color-int of letter in the bubble.
  * @since 0.5.4
  */
 class AlphabetSideBar @JvmOverloads constructor(
@@ -74,14 +77,19 @@ class AlphabetSideBar @JvmOverloads constructor(
 
     @IntDef(flag = true, value = [LEFT, RIGHT])
     @Retention(AnnotationRetention.SOURCE)
-    annotation class LOCATION
+    annotation class Location
 
-    private val mDefaultLocation: Int =
-        resources.getInteger(R.integer.default_alphabetsidebar_location)
-    private val mDefaultBarTextSize: Float =
-        resources.getDimension(R.dimen.default_alphabet_sidebar_text_size)
-    private val mDefaultBubbleTextSize: Float =
-        resources.getDimension(R.dimen.default_alphabet_sidebar_bubble_text_size)
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_LOCATION: Int = integer(R.integer.default_alphabetsidebar_location)
+
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_BAR_TEXT_SIZE: Float = dimension(R.dimen.default_alphabet_sidebar_text_size)
+
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_BUBBLE_TEXT_SIZE: Float = dimension(R.dimen.default_alphabet_sidebar_bubble_text_size)
 
     /**
      * Interface definition for a callback to be invoked when the indicator
@@ -94,7 +102,7 @@ class AlphabetSideBar @JvmOverloads constructor(
          * Called when the indicator letter is updated.
          *
          * @param letter The indicator letter.
-         * @param index The index of indicator letter in [mAlphabet].
+         * @param index The index of indicator letter in [alphabet].
          * @param target The target index of the indicator letter.
          * @since 0.5.4
          */
@@ -112,7 +120,8 @@ class AlphabetSideBar @JvmOverloads constructor(
         }
     }
 
-    private val mAlphabet = listOf(
+    /** @since 1.5.2 */
+    private val alphabet = listOf(
         "❤" to AlphabetSp::Favorite,
         "A" to AlphabetSp::A,
         "B" to AlphabetSp::B,
@@ -143,107 +152,159 @@ class AlphabetSideBar @JvmOverloads constructor(
         "#" to AlphabetSp::Other
     )
 
-    private val mBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    /** @since 1.5.2 */
+    private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
     }
-    private val mBarTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+
+    /** @since 1.5.2 */
+    private val barTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
     }
-    private val mBarIndicatorTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+
+    /** @since 1.5.2 */
+    private val barIndicatorTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
         typeface = Typeface.DEFAULT_BOLD
     }
-    private val mBubbleTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+
+    /** @since 1.5.2 */
+    private val bubbleTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
         typeface = Typeface.DEFAULT_BOLD
     }
 
-    // The control point of bezier curve above the part of the connection
-    // between the bubble and the sidebar is located at the sidebar.
-    private val mPointA = PointF()
+    /**
+     * The control point of bezier curve above the part of the connection
+     * between the bubble and the sidebar is located at the sidebar.
+     *
+     * @since 1.5.2
+     */
+    private val pointA = PointF()
 
-    // The control point of bezier curve below the part of the connection
-    // between the bubble and the sidebar is located at the sidebar.
-    private val mPointB = PointF()
+    /**
+     * The control point of bezier curve below the part of the connection
+     * between the bubble and the sidebar is located at the sidebar.
+     *
+     * @since 1.5.2
+     */
+    private val pointB = PointF()
 
-    // The control point of bezier curve. Located on the vertical
-    // line from the center of the bubble circle to the sidebar.
-    private val mPointC = PointF()
+    /**
+     * The control point of bezier curve. Located on the vertical line from the
+     * center of the bubble circle to the sidebar.
+     *
+     * @since 1.5.2
+     */
+    private val pointC = PointF()
 
-    // The control point of bezier curve above the part of the connection
-    // between the bubble and the sidebar is located at the bubble.
-    private val mPointD = PointF()
+    /**
+     * The control point of bezier curve above the part of the connection
+     * between the bubble and the sidebar is located at the bubble.
+     *
+     * @since 1.5.2
+     */
+    private val pointD = PointF()
 
-    // The control point of Bezier curve below the part of the connection
-    // between the bubble and the sidebar is located at the bubble.
-    private val mPointE = PointF()
-    private val mBezierPath = Path()
+    /**
+     * The control point of Bezier curve below the part of the connection
+     * between the bubble and the sidebar is located at the bubble.
+     *
+     * @since 1.5.2
+     */
+    private val pointE = PointF()
 
-    // The RectF of the sidebar round rectangle background.
-    private val mBackgroundRectF = RectF()
-    private val mCurrentTouchPointF = PointF(0f, 0f)
+    /** @since 1.5.2 */
+    private val bezierPath = Path()
 
-    private val mBubbleRadius = 30f.DP
-    private val mBubbleDistance = 45f.DP
-    private val mTextHorizontalMargin = 8f.DP
+    /**
+     * The RectF of the sidebar round rectangle background.
+     *
+     * @since 1.5.2
+     */
+    private val backgroundRectF = RectF()
 
-    private var mLetterListener: LetterListener? = null
+    /** @since 1.5.2 */
+    private val currentTouchPointF = PointF(0f, 0f)
 
-    private val mIndexCount = mAlphabet.size
+    /** @since 1.5.2 */
+    private val bubbleRadius = 30f.DP
 
-    private var mPreviousIndicatorIndex = -2
-    private var mIndicatorIndex = -1
+    /** @since 1.5.2 */
+    private val bubbleDistance = 45f.DP
 
-    @get:LOCATION
-    var mLocation: Int = LEFT
+    /** @since 1.5.2 */
+    private val textHorizontalMargin = 8f.DP
+
+    /** @since 1.5.2 */
+    private var letterListener: LetterListener? = null
+
+    /** @since 1.5.2 */
+    private val indexCount = alphabet.size
+
+    /** @since 1.5.2 */
+    private var previousIndicatorIndex = -2
+
+    /** @since 1.5.2 */
+    private var indicatorIndex = -1
+
+    /** @since 1.5.2 */
+    @get:Location
+    var location: Int = LEFT
         private set
 
-    var mBackgroundColor: Int
+    /** @since 1.5.2 */
+    var barBackgroundColor: Int
         set(value) {
-            mBackgroundPaint.color = value
+            backgroundPaint.color = value
         }
-        get() = mBackgroundPaint.color
+        get() = backgroundPaint.color
 
-    var mBarTextSize: Float
+    /** @since 1.5.2 */
+    var barTextSize: Float
         set(value) {
             if (value < 0f) return
-            mBarTextPaint.textSize = value
-            mBarIndicatorTextPaint.textSize = value
+            barTextPaint.textSize = value
+            barIndicatorTextPaint.textSize = value
         }
-        get() = mBarTextPaint.textSize
+        get() = barTextPaint.textSize
 
-    var mBarTextColor: Int
+    /** @since 1.5.2 */
+    var barTextColor: Int
         set(value) {
-            mBarTextPaint.color = value
+            barTextPaint.color = value
         }
-        get() = mBarTextPaint.color
+        get() = barTextPaint.color
 
-    var mBarIndicatorTextColor: Int
+    /** @since 1.5.2 */
+    var barIndicatorTextColor: Int
         set(value) {
-            mBarIndicatorTextPaint.color = value
+            barIndicatorTextPaint.color = value
         }
-        get() = mBarIndicatorTextPaint.color
+        get() = barIndicatorTextPaint.color
 
-    var mBubbleTextSize: Float
+    /** @since 1.5.2 */
+    var bubbleTextSize: Float
         set(value) {
             if (value < 0f) return
-            mBubbleTextPaint.textSize = value
+            bubbleTextPaint.textSize = value
         }
-        get() = mBubbleTextPaint.textSize
+        get() = bubbleTextPaint.textSize
 
-    var mBubbleTextColor: Int
+    /** @since 1.5.2 */
+    var bubbleTextColor: Int
         set(value) {
-            mBubbleTextPaint.color = value
+            bubbleTextPaint.color = value
         }
-        get() = mBubbleTextPaint.color
+        get() = bubbleTextPaint.color
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val width = resolveSize(
-            (getBarWidth() + mBubbleRadius + mBubbleDistance).toInt(),
+            (getBarWidth() + bubbleRadius + bubbleDistance).toInt(),
             widthMeasureSpec
         )
         val height = resolveSize(
-            (getBarTextHeight() * mAlphabet.size + getBarWidth() + 2 * getBarBeyondHeight()).toInt(),
+            (getBarTextHeight() * alphabet.size + getBarWidth() + 2 * getBarBeyondHeight()).toInt(),
             heightMeasureSpec
         )
         setMeasuredDimension(width, height)
@@ -254,10 +315,10 @@ class AlphabetSideBar @JvmOverloads constructor(
         val textHeight = getBarTextHeight()
         val radius = getBarCircleRadius()
         val textTop = radius + getBarBeyondHeight()
-        val textBottom = textTop + mIndexCount * textHeight
-        when (mLocation) {
+        val textBottom = textTop + indexCount * textHeight
+        when (location) {
             LEFT ->
-                mBackgroundRectF.set(
+                backgroundRectF.set(
                     0f,
                     textTop - radius,
                     textWidth,
@@ -265,26 +326,26 @@ class AlphabetSideBar @JvmOverloads constructor(
                 )
 
             RIGHT ->
-                mBackgroundRectF.set(
+                backgroundRectF.set(
                     measuredWidth - textWidth,
                     textTop - radius,
                     measuredWidth.toFloat(),
                     textBottom + radius
                 )
         }
-        canvas.drawRoundRect(mBackgroundRectF, radius, radius, mBackgroundPaint)
-        val textX = if (mLocation == LEFT) textWidth / 2f else measuredWidth - textWidth / 2f
+        canvas.drawRoundRect(backgroundRectF, radius, radius, backgroundPaint)
+        val textX = if (location == LEFT) textWidth / 2f else measuredWidth - textWidth / 2f
         canvas.withSave {
-            if (mLocation == LEFT) {
+            if (location == LEFT) {
                 clipRect(0f, textTop, textWidth, textBottom)
             } else {
                 clipRect(measuredWidth - textWidth, textTop, measuredWidth.toFloat(), textBottom)
             }
-            mAlphabet.forEachIndexed { index, letter ->
+            alphabet.forEachIndexed { index, letter ->
                 drawText(
                     letter.first, textX,
                     textTop + index * textHeight + textHeight / 2f + getBarTextBaseLine(),
-                    if (index == mIndicatorIndex) mBarIndicatorTextPaint else mBarTextPaint
+                    if (index == indicatorIndex) barIndicatorTextPaint else barTextPaint
                 )
             }
         }
@@ -295,47 +356,47 @@ class AlphabetSideBar @JvmOverloads constructor(
         // For example, if currentIndex is 2, the y of mPointA is (textTop + 2.2 * textHeight),
         // the y of mPointB is (textTop + 2.8 * textHeight).
         val barBezierX =
-            if (mLocation == LEFT) textWidth else measuredWidth - textWidth
-        mPointA.set(barBezierX, textTop + (mIndicatorIndex + 0.2f) * textHeight)
-        mPointB.set(barBezierX, textTop + (mIndicatorIndex + 0.8f) * textHeight)
+            if (location == LEFT) textWidth else measuredWidth - textWidth
+        pointA.set(barBezierX, textTop + (indicatorIndex + 0.2f) * textHeight)
+        pointB.set(barBezierX, textTop + (indicatorIndex + 0.8f) * textHeight)
         // The height of the control point of the bezier curve on the bubble corresponding to
         // the central axis of the letter is also 30% of the height of the letter.
         val distance = sqrt(
-            mBubbleRadius * mBubbleRadius -
+            bubbleRadius * bubbleRadius -
                     (0.3 * textHeight * 0.3 * textHeight)
         )
         // 2.33dp is the offset of the control point of the Bezier curve on the
         // vertical line from the center of the bubble circle to the sidebar.
         val verticalLineBezierX =
-            if (mLocation == LEFT) textWidth + (mBubbleDistance - distance.toFloat()) / 2f + 2.33f.DP
-            else measuredWidth - textWidth - (mBubbleDistance - distance.toFloat()) / 2f - 2.33f.DP
-        mPointC.set(verticalLineBezierX, textTop + (mIndicatorIndex + 0.5f) * textHeight)
+            if (location == LEFT) textWidth + (bubbleDistance - distance.toFloat()) / 2f + 2.33f.DP
+            else measuredWidth - textWidth - (bubbleDistance - distance.toFloat()) / 2f - 2.33f.DP
+        pointC.set(verticalLineBezierX, textTop + (indicatorIndex + 0.5f) * textHeight)
         val bubbleBezierX =
-            if (mLocation == LEFT) textWidth + mBubbleDistance - distance.toFloat()
-            else measuredWidth - textWidth - mBubbleDistance + distance.toFloat()
-        mPointD.set(bubbleBezierX, textTop + (mIndicatorIndex + 0.2f) * textHeight)
-        mPointE.set(bubbleBezierX, textTop + (mIndicatorIndex + 0.8f) * textHeight)
-        mBezierPath.reset()
-        mBezierPath.moveTo(mPointA.x, mPointA.y)
-        mBezierPath.quadTo(mPointC.x, mPointC.y, mPointD.x, mPointD.y)
-        mBezierPath.lineTo(mPointE.x, mPointE.y)
-        mBezierPath.quadTo(mPointC.x, mPointC.y, mPointB.x, mPointB.y)
-        mBezierPath.close()
-        canvas.drawPath(mBezierPath, mBackgroundPaint)
+            if (location == LEFT) textWidth + bubbleDistance - distance.toFloat()
+            else measuredWidth - textWidth - bubbleDistance + distance.toFloat()
+        pointD.set(bubbleBezierX, textTop + (indicatorIndex + 0.2f) * textHeight)
+        pointE.set(bubbleBezierX, textTop + (indicatorIndex + 0.8f) * textHeight)
+        bezierPath.reset()
+        bezierPath.moveTo(pointA.x, pointA.y)
+        bezierPath.quadTo(pointC.x, pointC.y, pointD.x, pointD.y)
+        bezierPath.lineTo(pointE.x, pointE.y)
+        bezierPath.quadTo(pointC.x, pointC.y, pointB.x, pointB.y)
+        bezierPath.close()
+        canvas.drawPath(bezierPath, backgroundPaint)
         val bubbleX =
-            if (mLocation == LEFT) textWidth + mBubbleDistance
-            else measuredWidth - textWidth - mBubbleDistance
+            if (location == LEFT) textWidth + bubbleDistance
+            else measuredWidth - textWidth - bubbleDistance
         canvas.drawCircle(
             bubbleX,
-            textTop + (mIndicatorIndex + 0.5f) * textHeight,
-            mBubbleRadius,
-            mBackgroundPaint
+            textTop + (indicatorIndex + 0.5f) * textHeight,
+            bubbleRadius,
+            backgroundPaint
         )
         canvas.drawText(
-            mAlphabet[mIndicatorIndex].first,
+            alphabet[indicatorIndex].first,
             bubbleX,
-            textTop + (mIndicatorIndex + 0.5f) * textHeight + getBubbleTextBaseLine(),
-            mBubbleTextPaint
+            textTop + (indicatorIndex + 0.5f) * textHeight + getBubbleTextBaseLine(),
+            bubbleTextPaint
         )
     }
 
@@ -347,49 +408,49 @@ class AlphabetSideBar @JvmOverloads constructor(
                             event.x < (-10f).DP ||
                             event.y < 0f ||
                             event.y > measuredHeight) &&
-                    mLocation == LEFT
+                    location == LEFT
                 ) {
-                    mIndicatorIndex = -1
+                    indicatorIndex = -1
                     return super.onTouchEvent(event)
                 } else if ((event.x < measuredWidth - getBarWidth() - 10f.DP ||
                             event.x > measuredWidth + 10f.DP ||
                             event.y < 0 ||
                             event.y > measuredHeight) &&
-                    mLocation == RIGHT
+                    location == RIGHT
                 ) {
-                    mIndicatorIndex = -1
+                    indicatorIndex = -1
                     return super.onTouchEvent(event)
                 }
-                mCurrentTouchPointF.set(event.x, event.y)
+                currentTouchPointF.set(event.x, event.y)
                 invalidate()
             }
 
             MotionEvent.ACTION_MOVE -> {
-                mCurrentTouchPointF.set(event.x, event.y)
-                mIndicatorIndex = getIndicatorLetterIndex()
+                currentTouchPointF.set(event.x, event.y)
+                indicatorIndex = getIndicatorLetterIndex()
                 if (event.y >= top + getBarBeyondHeight() + getBarCircleRadius() &&
                     event.y <= bottom - getBarBeyondHeight() - getBarCircleRadius() &&
                     checkIsIndexValid()
                 ) {
-                    if (mPreviousIndicatorIndex != mIndicatorIndex) {
-                        mPreviousIndicatorIndex = mIndicatorIndex
-                        mLetterListener?.onIndicatorLetterUpdate(
-                            mAlphabet[mIndicatorIndex].first,
-                            mIndicatorIndex,
-                            mAlphabet[mIndicatorIndex].second.get(),
+                    if (previousIndicatorIndex != indicatorIndex) {
+                        previousIndicatorIndex = indicatorIndex
+                        letterListener?.onIndicatorLetterUpdate(
+                            alphabet[indicatorIndex].first,
+                            indicatorIndex,
+                            alphabet[indicatorIndex].second.get(),
                         )
                     }
                     invalidate()
                 } else {
-                    mIndicatorIndex = -1
-                    mCurrentTouchPointF.set(0f, 0f)
+                    indicatorIndex = -1
+                    currentTouchPointF.set(0f, 0f)
                 }
             }
 
             MotionEvent.ACTION_UP -> {
-                mIndicatorIndex = -1
-                mPreviousIndicatorIndex = -2
-                mCurrentTouchPointF.set(0f, 0f)
+                indicatorIndex = -1
+                previousIndicatorIndex = -2
+                currentTouchPointF.set(0f, 0f)
                 performClick()
                 invalidate()
             }
@@ -403,12 +464,12 @@ class AlphabetSideBar @JvmOverloads constructor(
     }
 
     /**
-     * Set [mLocation].
+     * Set [location].
      *
      * @since 0.5.4
      */
-    fun setLocation(@LOCATION location: Int) {
-        mLocation = location
+    fun setLocation(@Location location: Int) {
+        this@AlphabetSideBar.location = location
     }
 
     /**
@@ -417,8 +478,8 @@ class AlphabetSideBar @JvmOverloads constructor(
      * @since 0.5.4
      */
     fun setFavoriteIcon(@Size(value = 1) favicon: String) {
-        mAlphabet.toMutableList()[0] = favicon to mAlphabet[0].second
-        mAlphabet.toList()
+        alphabet.toMutableList()[0] = favicon to alphabet[0].second
+        alphabet.toList()
     }
 
     /**
@@ -428,21 +489,21 @@ class AlphabetSideBar @JvmOverloads constructor(
      * @since 0.5.4
      */
     fun setLetterListener(listener: LetterListener? = null) {
-        mLetterListener = listener
+        letterListener = listener
     }
 
     /**
      * Set target index of the [alphabet] by [targetIndex].
-     * If [mLetterListener] is not null, it will also call
+     * If [letterListener] is not null, it will also call
      * [LetterListener.onIndicatorLetterTargetUpdate].
      *
      * @since 0.5.6
      */
     fun setIndicatorLetterTargetIndex(@Size(value = 1) alphabet: Alphabet, targetIndex: Int) {
-        val index = mAlphabet.indexOfFirst { it.first == alphabet.letter }
+        val index = this.alphabet.indexOfFirst { it.first == alphabet.letter }
         if (index == -1) return
-        mAlphabet[index].second.set(targetIndex)
-        mLetterListener?.onIndicatorLetterTargetUpdate(mAlphabet[index].first, targetIndex)
+        this@AlphabetSideBar.alphabet[index].second.set(targetIndex)
+        letterListener?.onIndicatorLetterTargetUpdate(this@AlphabetSideBar.alphabet[index].first, targetIndex)
     }
 
     /**
@@ -451,7 +512,7 @@ class AlphabetSideBar @JvmOverloads constructor(
      * @since 0.5.4
      */
     private fun getBarWidth(): Float =
-        mBarTextPaint.measureText("A") + mTextHorizontalMargin * 2
+        barTextPaint.measureText("A") + textHorizontalMargin * 2
 
     /**
      * Returns the radius of the top and bottom semicircles of the sidebar.
@@ -468,7 +529,7 @@ class AlphabetSideBar @JvmOverloads constructor(
      * @since 0.5.4
      */
     private fun getBarBeyondHeight(): Float {
-        return mBubbleRadius - getBarTextHeight() / 2f - getBarWidth() / 2f
+        return bubbleRadius - getBarTextHeight() / 2f - getBarWidth() / 2f
     }
 
     /**
@@ -477,7 +538,7 @@ class AlphabetSideBar @JvmOverloads constructor(
      * @since 0.5.4
      */
     private fun getBarTextHeight(): Float {
-        val fontMetrics = mBarTextPaint.fontMetrics
+        val fontMetrics = barTextPaint.fontMetrics
         return fontMetrics.bottom - fontMetrics.top
     }
 
@@ -489,7 +550,7 @@ class AlphabetSideBar @JvmOverloads constructor(
      * @since 0.5.4
      */
     private fun getBarTextBaseLine(): Float {
-        val fontMetrics = mBarTextPaint.fontMetrics
+        val fontMetrics = barTextPaint.fontMetrics
         val height = fontMetrics.bottom - fontMetrics.top
         return height / 2 - fontMetrics.bottom
     }
@@ -502,67 +563,33 @@ class AlphabetSideBar @JvmOverloads constructor(
      * @since 0.5.4
      */
     private fun getBubbleTextBaseLine(): Float {
-        val fontMetrics = mBubbleTextPaint.fontMetrics
+        val fontMetrics = bubbleTextPaint.fontMetrics
         val height = fontMetrics.bottom - fontMetrics.top
         return height / 2 - fontMetrics.bottom
     }
 
     /**
-     * Get index of current indicator letter in [mAlphabet].
+     * Get index of current indicator letter in [alphabet].
      *
      * @since 0.5.4
      */
     private fun getIndicatorLetterIndex(): Int =
-        (((mCurrentTouchPointF.y - top - getBarBeyondHeight() - getBarCircleRadius()) / getBarTextHeight())
+        (((currentTouchPointF.y - top - getBarBeyondHeight() - getBarCircleRadius()) / getBarTextHeight())
             .takeIf { it >= 0 }?.let { floor(it) } ?: -1f).toInt()
 
-    private fun checkIsIndexValid(): Boolean = mIndicatorIndex in 0..27
+    private fun checkIsIndexValid(): Boolean = indicatorIndex in 0..27
 
     init {
-        val typeArray = context.obtainStyledAttributes(
-            attrs,
-            R.styleable.AlphabetSideBar,
-            defStyleAttr,
-            defStyleRes
-        )
-        mLocation =
-            typeArray.getInt(R.styleable.AlphabetSideBar_alphabetsidebar_location, mDefaultLocation)
-        mBackgroundColor =
-            typeArray.getColor(
-                R.styleable.AlphabetSideBar_alphabetsidebar_background,
-                ContextCompat.getColor(context, R.color.md_theme_primaryContainer)
-            )
-        mBarTextPaint.textSize =
-            typeArray.getDimension(
-                R.styleable.AlphabetSideBar_alphabetsidebar_text_size,
-                mDefaultBarTextSize
-            )
-        mBarIndicatorTextPaint.textSize =
-            typeArray.getDimension(
-                R.styleable.AlphabetSideBar_alphabetsidebar_text_size,
-                mDefaultBarTextSize
-            )
-        mBarTextPaint.color =
-            typeArray.getColor(
-                R.styleable.AlphabetSideBar_alphabetsidebar_text_color,
-                ContextCompat.getColor(context, R.color.md_theme_outlineVariant)
-            )
-        mBarIndicatorTextPaint.color =
-            typeArray.getColor(
-                R.styleable.AlphabetSideBar_alphabetsidebar_indicator_text_color,
-                ContextCompat.getColor(context, R.color.md_theme_error)
-            )
-        mBubbleTextPaint.textSize =
-            typeArray.getDimension(
-                R.styleable.AlphabetSideBar_alphabetsidebar_bubble_text_size,
-                mDefaultBubbleTextSize
-            )
-        mBubbleTextPaint.color =
-            typeArray.getColor(
-                R.styleable.AlphabetSideBar_alphabetsidebar_bubble_text_color,
-                ContextCompat.getColor(context, R.color.md_theme_error)
-            )
-        typeArray.recycle()
+        context.withStyledAttributes(attrs, R.styleable.AlphabetSideBar, defStyleAttr, defStyleRes) {
+            location = getInt(R.styleable.AlphabetSideBar_alphabetsidebar_location, DEFAULT_LOCATION)
+            barBackgroundColor = getColor(R.styleable.AlphabetSideBar_alphabetsidebar_background, context.color(R.color.md_theme_primaryContainer))
+            barTextPaint.textSize = getDimension(R.styleable.AlphabetSideBar_alphabetsidebar_text_size, DEFAULT_BAR_TEXT_SIZE)
+            barIndicatorTextPaint.textSize = getDimension(R.styleable.AlphabetSideBar_alphabetsidebar_text_size, DEFAULT_BAR_TEXT_SIZE)
+            barTextPaint.color = getColor(R.styleable.AlphabetSideBar_alphabetsidebar_text_color, color(R.color.md_theme_outlineVariant))
+            barIndicatorTextPaint.color = getColor(R.styleable.AlphabetSideBar_alphabetsidebar_indicator_text_color, color(R.color.md_theme_error))
+            bubbleTextPaint.textSize = getDimension(R.styleable.AlphabetSideBar_alphabetsidebar_bubble_text_size, DEFAULT_BUBBLE_TEXT_SIZE)
+            bubbleTextPaint.color = getColor(R.styleable.AlphabetSideBar_alphabetsidebar_bubble_text_color, color(R.color.md_theme_error))
+        }
     }
 
 }

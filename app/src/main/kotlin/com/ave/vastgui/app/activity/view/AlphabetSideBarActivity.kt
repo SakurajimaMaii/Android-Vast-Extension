@@ -59,16 +59,12 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
      * [Smooth-scroll-layout-manager](https://juejin.cn/post/6844903504310435853)
      */
     private class SmoothScrollLayoutManager(context: Context) : LinearLayoutManager(context) {
-        override fun smoothScrollToPosition(
-            recyclerView: RecyclerView,
-            state: RecyclerView.State,
-            position: Int
-        ) {
+        override fun smoothScrollToPosition(recyclerView: RecyclerView, state: RecyclerView.State, position: Int) {
             val smoothScroller: LinearSmoothScroller =
                 object : LinearSmoothScroller(recyclerView.context) {
                     // 返回：滑过1px时经历的时间(ms)。
                     override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-                        return 0.08f
+                        return 0.02f
                     }
 
                     // https://blog.csdn.net/qq_16251833/article/details/81220518
@@ -81,45 +77,45 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
         }
     }
 
-    private val mBinding: ActivityAlphabetSidebarBinding
-            by viewBinding(ActivityAlphabetSidebarBinding::bind)
-    private val mAdapter by lazy { ContactAdapter(this) }
-    private var mSmoothScrollLayoutManager by NotNUllVar<SmoothScrollLayoutManager>()
-    private val mLogger = logFactory.getLogCat(AlphabetSideBarActivity::class.java)
+    private val binding: ActivityAlphabetSidebarBinding by viewBinding(ActivityAlphabetSidebarBinding::bind)
+    private val adapter by lazy { ContactAdapter(this) }
+    private var smoothScrollLayoutManager by NotNUllVar<SmoothScrollLayoutManager>()
+    private val logger = logFactory.getLogCat(AlphabetSideBarActivity::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        logger.d("#b2bec3 是否是合法颜色：${ColorUtils.isColorHex("#b2bec3")}")
+
         requestPermission(Manifest.permission.READ_CONTACTS) {
             granted = {
-                mLogger.i("已获取读取通讯录权限")
+                logger.i("已获取读取通讯录权限")
             }
         }
 
-        mSmoothScrollLayoutManager = SmoothScrollLayoutManager(this)
-        mBinding.recyclerView.apply {
-            adapter = mAdapter
-            layoutManager = mSmoothScrollLayoutManager
+        smoothScrollLayoutManager = SmoothScrollLayoutManager(this)
+        binding.recyclerView.apply {
+            this.adapter = this@AlphabetSideBarActivity.adapter
+            layoutManager = smoothScrollLayoutManager
         }
 
-        mBinding.alphabetsidebar.refreshWithInvalidate {
-            mBackgroundColor =
-                ColorUtils.getColorIntWithTransparency(15, ColorUtils.colorHex2Int("#b2bec3"))
+        binding.alphabetsidebar.refreshWithInvalidate {
+            barBackgroundColor = ColorUtils.getColorIntWithTransparency(15, ColorUtils.colorHex2Int("#b2bec3"))
         }
-        mBinding.alphabetsidebar.setLetterListener(object : AlphabetSideBar.LetterListener {
+        binding.alphabetsidebar.setLetterListener(object : AlphabetSideBar.LetterListener {
             override fun onIndicatorLetterUpdate(letter: String, index: Int, target: Int) {
                 if (-1 != target) {
-                    mBinding.recyclerView.smoothScrollToPosition(target)
+                    binding.recyclerView.smoothScrollToPosition(target)
                 }
             }
 
             override fun onIndicatorLetterTargetUpdate(letter: String, target: Int) {
-                mLogger.d("$letter 目标索引更新为 $target")
+                logger.d("$letter 目标索引更新为 $target")
             }
         })
 
         lifecycleScope.launch {
-            mAdapter.add(readContacts(), R.layout.item_contact) {
+            adapter.add(readContacts(), R.layout.item_contact) {
                 addOnItemChildClickListener(R.id.name) { _, _, contact ->
                     SimpleToast.showShortMsg("名字是 ${contact?.name}")
                 }
@@ -171,10 +167,10 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
     /** 根据获取到的通讯录列表更新索引值。 */
     private fun updateIndex() {
         enumValues<Alphabet>().forEach { alphabet ->
-            val index = mAdapter.data.indexOfFirst {
+            val index = adapter.data.indexOfFirst {
                 it.label == alphabet.letter
             }
-            mBinding.alphabetsidebar.setIndicatorLetterTargetIndex(alphabet, index)
+            binding.alphabetsidebar.setIndicatorLetterTargetIndex(alphabet, index)
         }
     }
 

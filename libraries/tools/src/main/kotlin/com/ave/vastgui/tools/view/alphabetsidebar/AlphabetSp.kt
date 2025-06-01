@@ -36,11 +36,9 @@ import com.ave.vastgui.tools.utils.AppUtils
  */
 internal object AlphabetSp : ISharedPreferencesOwner {
 
-    override val name: String =
-        "${AppUtils.getPackageName("")}.${AlphabetSp::class.java.simpleName}"
-    override val kv: SharedPreferences by lazy {
-        SpEncrypted(name).getSharedPreferences()
-    }
+    override val name: String = "${AppUtils.getPackageName("")}.${AlphabetSp::class.java.simpleName}"
+
+    override val kv: SharedPreferences by lazy { SpEncrypted(name).getSharedPreferences() }
 
     var Favorite by int(0)
     var A by int(0)
