@@ -21,6 +21,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
 import kotlin.math.roundToInt
 import androidx.core.graphics.toColorInt
+import kotlin.toUInt
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -170,18 +171,52 @@ object ColorUtils {
      * @throws IllegalArgumentException
      * @since 0.5.3
      */
-    fun getColorIntWithTransparency(@IntRange(from = 0, to = 100) transparency: Int, colorInt: Int) = colorHex2Int(getColorWithTransparency(transparency, colorInt))
+    @JvmStatic
+    fun getColorIntWithTransparency(@IntRange(from = 0, to = 100) transparency: Int, colorInt: Int) =
+        colorHex2Int(getColorWithTransparency(transparency, colorInt))
 
     /**
-     * Return true if the color hex string is right,false otherwise.
+     * Return true if the [colorHex] string is right, false otherwise.
      *
      * @param colorHex color hex string.
-     * @return true if the color hex string is right,false otherwise.
+     * @return true if the color hex string is right, false otherwise.
      * @since 1.5.1
      */
     @JvmStatic
-    fun isColorHex(vararg colorHex: String): Boolean {
-        return colorHex.all { COLOR_HEX_PATTERN.matches(it) }
+    fun isColorHex(colorHex: String): Boolean {
+        return COLOR_HEX_PATTERN.matches(colorHex)
+    }
+
+    /**
+     * Returns a list of whether the colorHex for each index is a valid value.
+     *
+     * @since 1.5.2
+     */
+    @JvmStatic
+    fun isColorHex(vararg colorHex: String): List<Pair<Int, Boolean>> {
+        if (colorHex.isEmpty()) return emptyList()
+        return colorHex.mapIndexed { index, hex -> index to COLOR_HEX_PATTERN.matches(hex) }
+    }
+
+    /**
+     * Return true if the [colorInt] string is right, false otherwise.
+     *
+     * @since 1.5.2
+     */
+    @JvmStatic
+    fun isColorInt(colorInt: Int): Boolean {
+        return colorInt.toUInt() in 0u..0xFFFFFFFFu
+    }
+
+    /**
+     * Returns a list of whether the colorInt for each index is a valid value.
+     *
+     * @since 1.5.2
+     */
+    @JvmStatic
+    fun isColorInt(vararg colorInt: Int): List<Pair<Int, Boolean>> {
+        if (colorInt.isEmpty()) return emptyList()
+        return colorInt.mapIndexed { index, color -> index to (color.toUInt() in 0u..0xFFFFFFFFu) }
     }
 
 }
