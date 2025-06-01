@@ -153,16 +153,12 @@ object ColorUtils {
      * @throws IllegalArgumentException
      */
     @JvmStatic
-    fun getColorWithTransparency(
-        @IntRange(from = 0, to = 100) transparency: Int,
-        colorInt: Int
-    ): String {
-        if (colorInt.toUInt() in 0u..0xFFFFFFFFu)
-            throw IllegalArgumentException("$colorInt(hex=${colorInt.toString(16)}) is illegal color values.")
+    fun getColorWithTransparency(@IntRange(from = 0, to = 100) transparency: Int, colorInt: Int): String {
+        if (colorInt.toUInt() !in 0u..0xFFFFFFFFu)
+            throw IllegalArgumentException("$colorInt(hex=${colorInt.toUInt().toString(16)} in UInt) is illegal color values.")
         val color = Color.rgb(Color.red(colorInt), Color.green(colorInt), Color.blue(colorInt))
         val colorHex = colorInt2Hex(color)
-        return StringBuilder(colorHex).replace(1, 3, ColorTransparency[transparency.coerceIn(0, 100)]!!)
-            .toString().uppercase()
+        return StringBuilder(colorHex).replace(1, 3, ColorTransparency[transparency.coerceIn(0, 100)]!!).toString().uppercase()
     }
 
     /**
@@ -174,10 +170,7 @@ object ColorUtils {
      * @throws IllegalArgumentException
      * @since 0.5.3
      */
-    fun getColorIntWithTransparency(
-        @IntRange(from = 0, to = 100) transparency: Int,
-        colorInt: Int
-    ) = colorHex2Int(getColorWithTransparency(transparency, colorInt))
+    fun getColorIntWithTransparency(@IntRange(from = 0, to = 100) transparency: Int, colorInt: Int) = colorHex2Int(getColorWithTransparency(transparency, colorInt))
 
     /**
      * Return true if the color hex string is right,false otherwise.
