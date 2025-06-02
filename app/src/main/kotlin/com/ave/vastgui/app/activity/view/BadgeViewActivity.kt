@@ -20,8 +20,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityBadgeViewBinding
-import com.ave.vastgui.core.extension.NotNUllVar
+import com.ave.vastgui.app.log.logFactory
+import com.ave.vastgui.tools.utils.DensityUtils.DP
+import com.ave.vastgui.tools.utils.DensityUtils.SP
+import com.ave.vastgui.tools.utils.color
+import com.ave.vastgui.tools.view.badgeview.BadgeMode
 import com.ave.vastgui.tools.viewbinding.viewBinding
+import kotlin.random.Random
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -30,28 +35,39 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 
 class BadgeViewActivity : ComponentActivity(R.layout.activity_badge_view) {
 
-    private val mBinding by viewBinding(ActivityBadgeViewBinding::bind)
+    private val logger = logFactory(BadgeViewActivity::class.java)
 
-    private var mCount by NotNUllVar<Int>()
+    private val binding by viewBinding(ActivityBadgeViewBinding::bind)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mCount = 0
-        mBinding.numbadge.mBubbleTextNum = mCount
-        mBinding.add.setOnClickListener {
-            mBinding.numbadge.mBubbleText = "新消息"
+
+        logger.d("The mode of binding.numbadge is ${binding.dotBadge.badgeMode}")
+
+        binding.numBadge.bubbleTextNum = 90
+        binding.numBadge.bubbleTextMaxNum = 99
+        binding.numBadge.bubbleTextSize = 12f.SP
+        binding.numBadge.bubbleTextColor = color(com.ave.vastgui.tools.R.color.md_theme_secondaryContainer)
+
+        binding.textBadge.bubbleText = "你好"
+
+        binding.add.setOnClickListener {
+            binding.textBadge.badgeColor = color(com.ave.vastgui.tools.R.color.amour)
+            binding.numBadge.bubbleTextNum++
         }
 
-        mBinding.reset.setOnClickListener {
-            mCount = 0
+        binding.reset.setOnClickListener {
+            binding.numBadge.bubbleTextNum = 90
         }
 
-        mBinding.showDot.setOnClickListener {
-            mBinding.dotbadge.showDot()
+        binding.showDot.setOnClickListener {
+            binding.dotBadge.badgeMode = BadgeMode.DOT
+            binding.dotBadge.dotRadius = Random(System.currentTimeMillis()).nextInt(0, 10).toFloat().DP
+            binding.dotBadge.showDot()
         }
 
-        mBinding.hideDot.setOnClickListener {
-            mBinding.dotbadge.hideDot()
+        binding.hideDot.setOnClickListener {
+            binding.dotBadge.hideDot()
         }
     }
 

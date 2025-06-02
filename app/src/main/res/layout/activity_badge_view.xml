@@ -56,13 +56,13 @@
         app:layout_constraintTop_toBottomOf="@id/showDot" />
 
     <com.ave.vastgui.tools.view.badgeview.BadgeLayout
-        android:id="@+id/numbadge"
+        android:id="@+id/num_badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         app:badge_mode="number"
         app:icon="@drawable/ic_chat_36px"
-        app:layout_constraintEnd_toStartOf="@id/dotbadge"
+        app:layout_constraintEnd_toStartOf="@id/dot_badge"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/hideDot">
 
@@ -77,14 +77,13 @@
     </com.ave.vastgui.tools.view.badgeview.BadgeLayout>
 
     <com.ave.vastgui.tools.view.badgeview.BadgeLayout
-        android:id="@+id/dotbadge"
+        android:id="@+id/dot_badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        app:badge_mode="dot"
         app:icon="@drawable/ic_duo_36px"
-        app:layout_constraintEnd_toStartOf="@id/textbadge"
-        app:layout_constraintStart_toEndOf="@id/numbadge"
+        app:layout_constraintEnd_toStartOf="@id/text_badge"
+        app:layout_constraintStart_toEndOf="@id/num_badge"
         app:layout_constraintTop_toBottomOf="@id/hideDot">
 
         <com.google.android.material.textview.MaterialTextView
@@ -98,7 +97,7 @@
     </com.ave.vastgui.tools.view.badgeview.BadgeLayout>
 
     <com.ave.vastgui.tools.view.badgeview.BadgeLayout
-        android:id="@+id/textbadge"
+        android:id="@+id/text_badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -106,7 +105,7 @@
         app:bubble_text="新消息"
         app:icon="@drawable/ic_mail_36px"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/dotbadge"
+        app:layout_constraintStart_toEndOf="@id/dot_badge"
         app:layout_constraintTop_toBottomOf="@id/hideDot">
 
         <com.google.android.material.textview.MaterialTextView
@@ -117,5 +116,13 @@
             android:textStyle="bold" />
 
     </com.ave.vastgui.tools.view.badgeview.BadgeLayout>
+
+    <com.ave.vastgui.tools.view.badgeview.BadgeView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dot_badge" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

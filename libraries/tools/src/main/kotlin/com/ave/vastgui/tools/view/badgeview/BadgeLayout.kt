@@ -20,6 +20,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
@@ -32,6 +33,8 @@ import com.ave.vastgui.tools.databinding.BadgeLayoutBinding
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
 import com.ave.vastgui.tools.viewbinding.viewBinding
+import androidx.core.content.withStyledAttributes
+import com.ave.vastgui.tools.utils.color
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -41,8 +44,8 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 /**
  * Badge Layout.
  *
- * @property mIcon The icon resources id.
- * @property mIconPadding The padding of the [mIcon].
+ * @property iconResId The icon resources id.
+ * @property iconPadding The padding of the [iconResId].
  * @since 0.5.3
  */
 class BadgeLayout @JvmOverloads constructor(
@@ -52,122 +55,122 @@ class BadgeLayout @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = R.style.BaseBadgeLayout
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
 
-    private val mBinding by viewBinding(BadgeLayoutBinding::bind)
+    private val binding by viewBinding(BadgeLayoutBinding::bind)
 
-    private val mBadgeView
-        get() = mBinding.badgeLayoutBadge
+    private val badgeView
+        get() = binding.badgeLayoutBadge
 
-    private var mIcon by NotNUllVar<Int>()
-    private var mIconPadding by NotNUllVar<Quadruple<Float, Float, Float, Float>>()
+    /** @since 1.5.2 */
+    private var iconResId by NotNUllVar<Int>()
+
+    /** @since 1.5.2 */
+    private var iconPadding by NotNUllVar<Quadruple<Float, Float, Float, Float>>()
 
     /**
-     * @see BadgeView.mBadgeState
-     * @since 0.5.3
+     * @see BadgeView.badgeState
+     * @since 1.5.2
      */
-    val mState
-        get() = mBadgeView.mBadgeState
+    val badgeState
+        get() = badgeView.badgeState
 
     /**
      * @see BadgeView.setMode
-     * @since 0.5.3
+     * @since 1.5.2
      */
-    var mMode: BadgeMode
-        set(value) = mBadgeView.refreshWithInvalidate {
-            setMode(value)
+    var badgeMode: BadgeMode
+        set(value) {
+            badgeView.badgeMode = value
         }
-        get() = mBadgeView.mBadgeMode
+        get() = badgeView.badgeMode
 
     /**
      * @see BadgeView.setColor
-     * @since 0.5.3
+     * @since 1.5.2
      */
-    var mColor: Int
-        set(value) = mBadgeView.refreshWithInvalidate {
-            setColor(value)
+    @get:ColorInt
+    @setparam:ColorInt
+    var badgeColor: Int
+        set(value) {
+            badgeView.setColor(value)
         }
-        get() = mBadgeView.mBadgeColor
+        get() = badgeView.badgeColor
 
     /**
      * @see BadgeView.setDotRadius
      * @since 0.5.3
      */
-    var mDotRadius: Float
-        set(value) = mBadgeView.refreshWithInvalidate {
-            setDotRadius(value)
-        }
-        get() = mBadgeView.mDotRadius
+    var dotRadius: Float
+        set(value) = badgeView.setDotRadius(value)
+        get() = badgeView.dotRadius
 
     /**
      * @see BadgeView.setBubbleRadius
      * @since 0.5.3
      */
-    var mBubbleRadius: Float
-        set(value) = mBadgeView.refreshWithInvalidate {
+    var bubbleRadius: Float
+        set(value) = badgeView.refreshWithInvalidate {
             setBubbleRadius(value)
         }
-        get() = mBadgeView.mMoveRadius
+        get() = badgeView.moveRadius
 
     /**
      * @see BadgeView.setBubbleText
-     * @since 0.5.3
+     * @since 1.5.2
      */
-    var mBubbleText: String
-        set(value) = mBadgeView.refreshWithInvalidate {
-            setBubbleText(value)
+    var bubbleText: String
+        set(value) {
+            if (value.isBlank()) return
+            badgeView.setBubbleText(value)
         }
-        get() = mBadgeView.mText
+        get() = badgeView.text
 
     /**
      * @throws IllegalArgumentException The given value should be greater
-     *     than 0.
+     * than 0.
      * @see BadgeView.setBubbleTextNum
-     * @since 0.5.3
+     * @since 1.5.2
      */
-    var mBubbleTextNum: Int
+    var bubbleTextNum: Int
         set(value) {
-            if (value < 0)
-                throw IllegalArgumentException("The value should be greater than 0.")
-            mBadgeView.refreshWithInvalidate {
-                setBubbleTextNum(value)
-            }
+            check(value >= 0) { "The value should be greater than 0." }
+            badgeView.setBubbleTextNum(value)
         }
-        get() = mBadgeView.mTextNumber
+        get() = badgeView.textNumber
 
     /**
      * @throws IllegalArgumentException The given value should be greater
-     *     than 0.
+     * than 0.
      * @see BadgeView.setBubbleTextMaxNum
-     * @since 0.5.3
+     * @since 1.5.2
      */
-    var mBubbleTextMaxNum: Int
+    var bubbleTextMaxNum: Int
         set(value) {
-            if (value < 0)
-                throw IllegalArgumentException("The value should be greater than 0.")
-            mBadgeView.refreshWithInvalidate {
-                setBubbleTextMaxNum(value)
-            }
+            check(value >= 0) { "The value should be greater than 0." }
+            badgeView.setBubbleTextMaxNum(value)
         }
-        get() = mBadgeView.mTextMaxNumber
+        get() = badgeView.textMaxNumber
 
     /**
      * @see BadgeView.setBubbleTextColor
-     * @since 0.5.3
+     * @since 1.5.2
      */
-    var mBubbleTextColor: Int
-        set(value) = mBadgeView.refreshWithInvalidate {
-            setBubbleTextColor(value)
+    @get:ColorInt
+    @setparam:ColorInt
+    var bubbleTextColor: Int
+        set(value) {
+            badgeView.setBubbleTextColor(value)
         }
-        get() = mBadgeView.mTextColor
+        get() = badgeView.textColor
 
     /**
      * @see BadgeView.setBubbleTextSize
-     * @since 0.5.3
+     * @since 1.5.2
      */
-    var mBubbleTextSize: Float
-        set(value) = mBadgeView.refreshWithInvalidate {
-            setBubbleTextSize(value)
+    var bubbleTextSize: Float
+        set(value) {
+            badgeView.setBubbleTextSize(value)
         }
-        get() = mBadgeView.mTextSize
+        get() = badgeView.textSize
 
     /**
      * Set icon margin.
@@ -181,7 +184,7 @@ class BadgeLayout @JvmOverloads constructor(
         @FloatRange(from = 0.0) end: Float = 0f,
         @FloatRange(from = 0.0) bottom: Float = 0f
     ) {
-        mIconPadding = mIconPadding.copy(top, start, end, bottom)
+        iconPadding = iconPadding.copy(top, start, end, bottom)
     }
 
     /**
@@ -189,7 +192,7 @@ class BadgeLayout @JvmOverloads constructor(
      * @since 0.5.3
      */
     fun hideDot() {
-        mBadgeView.refreshWithInvalidate {
+        badgeView.refreshWithInvalidate {
             hideDot()
         }
     }
@@ -199,7 +202,7 @@ class BadgeLayout @JvmOverloads constructor(
      * @since 0.5.3
      */
     fun showDot() {
-        mBadgeView.refreshWithInvalidate {
+        badgeView.refreshWithInvalidate {
             showDot()
         }
     }
@@ -245,60 +248,32 @@ class BadgeLayout @JvmOverloads constructor(
 
     init {
         inflate(context, R.layout.badge_layout, this)
-        val typeArray = context.obtainStyledAttributes(
-            attrs, R.styleable.BadgeLayout, defStyleAttr, defStyleRes
-        )
-        mMode = when (typeArray.getInt(
-            R.styleable.BadgeLayout_badge_mode,
-            BadgeMode.UNSPECIFIED.code
-        )) {
-            BadgeMode.DOT.code -> BadgeMode.DOT
-            BadgeMode.BUBBLE.TEXT.code -> BadgeMode.BUBBLE.TEXT
-            BadgeMode.BUBBLE.NUMBER.code -> BadgeMode.BUBBLE.NUMBER
-            else -> BadgeMode.UNSPECIFIED
+        context.withStyledAttributes(attrs, R.styleable.BadgeLayout, defStyleAttr, defStyleRes) {
+            badgeMode = when (getInt(R.styleable.BadgeLayout_badge_mode, BadgeMode.UNSPECIFIED.code)) {
+                BadgeMode.DOT.code -> BadgeMode.DOT
+                BadgeMode.BUBBLE.TEXT.code -> BadgeMode.BUBBLE.TEXT
+                BadgeMode.BUBBLE.NUMBER.code -> BadgeMode.BUBBLE.NUMBER
+                else -> BadgeMode.UNSPECIFIED
+            }
+            badgeView.badgePaint.color = getColor(R.styleable.BadgeView_badge_color, color(R.color.md_theme_error))
+            dotRadius = getDimension(R.styleable.BadgeLayout_dot_radius, BadgeView.INIT_DOT_RADIUS)
+            bubbleRadius = getDimension(R.styleable.BadgeLayout_bubble_radius, BadgeView.DEFAULT_BUBBLE_RADIUS)
+            bubbleText = getString(R.styleable.BadgeLayout_bubble_text) ?: ""
+            bubbleTextMaxNum = getInteger(R.styleable.BadgeView_bubble_text_max_num, BadgeView.INIT_MAX_NUMBER)
+            bubbleTextNum = getInteger(R.styleable.BadgeView_bubble_text_max_num, BadgeView.INIT_NUMBER)
+            bubbleTextColor = getColor(R.styleable.BadgeLayout_bubble_text_color, ContextCompat.getColor(context, R.color.white))
+            bubbleTextSize = getDimension(R.styleable.BadgeLayout_bubble_text_size, BadgeView.DEFAULT_TEXT_SIZE)
+            iconResId = getResourceId(R.styleable.BadgeLayout_icon, R.drawable.ic_badge_default_icon)
+            iconPadding = Quadruple(
+                getDimension(R.styleable.BadgeLayout_icon_top_margin, 5F.DP),
+                getDimension(R.styleable.BadgeLayout_icon_start_margin, 5F.DP),
+                getDimension(R.styleable.BadgeLayout_icon_end_margin, 5F.DP),
+                getDimension(R.styleable.BadgeLayout_icon_bottom_margin, 5F.DP)
+            )
         }
-        mColor = typeArray.getColor(
-            R.styleable.BadgeView_badge_color,
-            ContextCompat.getColor(context, R.color.md_theme_error)
-        )
-        mDotRadius =
-            typeArray.getDimension(R.styleable.BadgeLayout_dot_radius, BadgeView.initDotRadius)
-        mBubbleRadius =
-            typeArray.getDimension(
-                R.styleable.BadgeLayout_bubble_radius,
-                BadgeView.initBubbleRadius
-            )
-        typeArray.getString(R.styleable.BadgeLayout_bubble_text)?.also { mBubbleText = it }
-        mBubbleTextMaxNum =
-            typeArray.getInteger(
-                R.styleable.BadgeView_bubble_text_max_num,
-                BadgeView.INIT_MAX_NUMBER
-            )
-        mBubbleTextNum =
-            typeArray.getInteger(R.styleable.BadgeView_bubble_text_max_num, BadgeView.INIT_NUMBER)
-        mBubbleTextColor = typeArray.getColor(
-            R.styleable.BadgeLayout_bubble_text_color,
-            ContextCompat.getColor(context, R.color.white)
-        )
-        mBubbleTextSize =
-            typeArray.getDimension(R.styleable.BadgeLayout_bubble_text_size, BadgeView.initTextSize)
-        mIcon =
-            typeArray.getResourceId(R.styleable.BadgeLayout_icon, R.drawable.ic_badge_default_icon)
-        mIconPadding = Quadruple(
-            typeArray.getDimension(R.styleable.BadgeLayout_icon_top_margin, 5F.DP),
-            typeArray.getDimension(R.styleable.BadgeLayout_icon_start_margin, 5F.DP),
-            typeArray.getDimension(R.styleable.BadgeLayout_icon_end_margin, 5F.DP),
-            typeArray.getDimension(R.styleable.BadgeLayout_icon_bottom_margin, 5F.DP)
-        )
-        typeArray.recycle()
-        mBinding.badgeLayoutIcon.apply {
-            setImageResource(mIcon)
-            setPadding(
-                mIconPadding.param2.toInt(),
-                mIconPadding.param1.toInt(),
-                mIconPadding.param3.toInt(),
-                mIconPadding.param4.toInt()
-            )
+        binding.badgeLayoutIcon.apply {
+            setImageResource(iconResId)
+            setPadding(iconPadding.param2.toInt(), iconPadding.param1.toInt(), iconPadding.param3.toInt(), iconPadding.param4.toInt())
         }
         clipChildren = false
     }

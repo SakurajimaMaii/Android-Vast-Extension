@@ -39,7 +39,7 @@ object BindingAdapter {
     @BindingAdapter("avatar_text")
     fun setAvatarText(view: Avatar, text: String?) {
         view.refreshWithInvalidate {
-            mText = text?.first().toString()
+            srcText = text?.first().toString()
         }
     }
 
