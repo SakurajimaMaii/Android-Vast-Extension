@@ -105,7 +105,10 @@
             android:layout_weight="1"
             android:background="@color/white"
             android:padding="10dp"
+            app:avatar_corner_radius="20dp"
             app:avatar_overlap_distance="20dp"
+            app:avatar_overlap_from="end"
+            app:avatar_shape="round"
             app:avatar_size="50dp">
 
             <com.ave.vastgui.tools.view.avatar.Avatar
@@ -154,6 +157,14 @@
                 app:avatar_text="张" />
         </com.ave.vastgui.tools.view.avatar.AvatarGroup>
     </LinearLayout>
+
+    <com.ave.vastgui.tools.view.avatar.Avatar
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:avatar_corner_radius="30dp"
+        app:avatar_shape="round"
+        app:avatar_size="150dp"
+        app:avatar_stroke_width="25dp" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/viewSnapshot"
