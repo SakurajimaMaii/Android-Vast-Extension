@@ -35,17 +35,20 @@ import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.annotation.StyleRes
-import androidx.core.content.ContextCompat
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.core.extension.cast
 import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.R
-import com.ave.vastgui.tools.graphics.BmpUtils
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.DensityUtils.SP
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.hypot
+import androidx.core.content.withStyledAttributes
+import androidx.core.graphics.drawable.toBitmap
+import com.ave.vastgui.tools.utils.ColorUtils
+import com.ave.vastgui.tools.utils.color
+import com.ave.vastgui.tools.utils.drawable
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -55,9 +58,9 @@ import kotlin.math.hypot
 /**
  * Badge View.
  *
- * @property mMinOffsetDistance When the coordinate of first touch is
- *     smaller than mMoveRadius + MIN_OFFSET_DISTANCE, it means you touched
- *     the starting red dot.
+ * @property minOffsetDistance When the coordinate of first touch is
+ * smaller than mMoveRadius + MIN_OFFSET_DISTANCE, it means you touched the
+ * starting red dot.
  * @since 0.5.3
  */
 class BadgeView @JvmOverloads constructor(
@@ -67,54 +70,68 @@ class BadgeView @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = R.style.BaseBadgeView
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
-    companion object {
-        private const val INIT_RADIUS = 0f
-        internal const val INIT_NUMBER = 0
-        private const val INIT_TEXT = ""
-        internal const val INIT_MAX_NUMBER = 99
-        internal val initDotRadius = 5f.DP
-        internal val initTextSize = 8f.SP
-        internal val initBubbleRadius = 10f.DP
-    }
+    /** @since 1.5.2 */
+    private val minOffsetDistance = 5F.DP
 
-    private val mMinOffsetDistance = 5F.DP
-    private var mFixedRadius = INIT_RADIUS
-    private val mFixedPoint = PointF()
-    private var mMovePoint = PointF()
-    private val mControlPoint = PointF()
-    private val mPointA = PointF()
-    private val mPointB = PointF()
-    private val mPointC = PointF()
-    private val mPointD = PointF()
+    /** @since 1.5.2 */
+    private var fixedRadius = INIT_RADIUS
 
-    private val mBezierPath = Path()
+    /** @since 1.5.2 */
+    private val fixedPoint = PointF()
 
-    private val mExplosionRect: Rect = Rect()
-    private var mExplosionBmp = if (!isInEditMode) listOf(
-        BmpUtils.getBitmapFromDrawable(R.drawable.badge_explode_1, context),
-        BmpUtils.getBitmapFromDrawable(R.drawable.badge_explode_2, context),
-        BmpUtils.getBitmapFromDrawable(R.drawable.badge_explode_3, context),
-        BmpUtils.getBitmapFromDrawable(R.drawable.badge_explode_4, context),
-        BmpUtils.getBitmapFromDrawable(R.drawable.badge_explode_5, context)
-    ) else listOf()
-    private var mBmpIndex = 0
+    /** @since 1.5.2 */
+    private var movePoint = PointF()
 
-    private val mTextPaint = Paint().apply {
-        isAntiAlias = true
+    /** @since 1.5.2 */
+    private val controlPoint = PointF()
+
+    /** @since 1.5.2 */
+    private val pointA = PointF()
+
+    /** @since 1.5.2 */
+    private val pointB = PointF()
+
+    /** @since 1.5.2 */
+    private val pointC = PointF()
+
+    /** @since 1.5.2 */
+    private val pointD = PointF()
+
+    /** @since 1.5.2 */
+    private val bezierPath = Path()
+
+    /** @since 1.5.2 */
+    private val explosionRect: Rect = Rect()
+
+    /** @since 1.5.2 */
+    private var explosionBmp = listOf(
+        drawable(R.drawable.badge_explode_1)!!.toBitmap(),
+        drawable(R.drawable.badge_explode_2)!!.toBitmap(),
+        drawable(R.drawable.badge_explode_3)!!.toBitmap(),
+        drawable(R.drawable.badge_explode_4)!!.toBitmap(),
+        drawable(R.drawable.badge_explode_5)!!.toBitmap())
+
+    /** @since 1.5.2 */
+    private var bmpIndex = 0
+
+    /** @since 1.5.2 */
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
     }
-    private val mBadgePaint = Paint().apply {
-        isAntiAlias = true
-    }
-    private val mBezierPaint
-        get() = mBadgePaint.apply {
-            style = Paint.Style.FILL
-        }
 
-    private val mMinimumRadius
-        get() = when (mBadgeMode) {
+    /** @since 1.5.2 */
+    internal val badgePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    /** @since 1.5.2 */
+    private val bezierPaint = badgePaint.apply {
+        style = Paint.Style.FILL
+    }
+
+    /** @since 1.5.2 */
+    private val minimumRadius
+        get() = when (badgeMode) {
             BadgeMode.BUBBLE.TEXT -> {
-                mText.getMinimumRadius()
+                text.getMinimumRadius()
             }
 
             BadgeMode.BUBBLE.NUMBER -> {
@@ -124,137 +141,157 @@ class BadgeView @JvmOverloads constructor(
             else -> 0f
         }
 
-    var mBadgeState by NotNUllVar<BadgeState>()
+    /** @since 1.5.2 */
+    var badgeState by NotNUllVar<BadgeState>()
         private set
-    var mBadgeMode by NotNUllVar<BadgeMode>()
+
+    /** @since 1.5.2 */
+    var badgeMode by NotNUllVar<BadgeMode>()
+        internal set
+
+    /** @since 1.5.2 */
+    val badgeColor: Int
+        get() = badgePaint.color
+
+    /** @since 1.5.2 */
+    var moveRadius = INIT_RADIUS
         private set
-    val mBadgeColor: Int
-        get() = mBadgePaint.color
-    var mMoveRadius = INIT_RADIUS
+
+    /** @since 1.5.2 */
+    var dotRadius = INIT_RADIUS
         private set
-    var mDotRadius = INIT_RADIUS
+
+    /** @since 1.5.2 */
+    var textNumber = INIT_NUMBER
         private set
-    var mTextNumber = INIT_NUMBER
+
+    /** @since 1.5.2 */
+    var textMaxNumber = INIT_NUMBER
         private set
-    var mTextMaxNumber = INIT_NUMBER
+
+    /** @since 1.5.2 */
+    var text = INIT_TEXT
         private set
-    var mText = INIT_TEXT
-        private set
-    val mTextSize
-        get() = mTextPaint.textSize
-    val mTextColor
-        get() = mTextPaint.color
+
+    /** @since 1.5.2 */
+    val textSize
+        get() = textPaint.textSize
+
+    /** @since 1.5.2 */
+    @get:ColorInt
+    val textColor
+        get() = textPaint.color
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        if (mBadgeMode == BadgeMode.UNSPECIFIED) {
+        if (badgeMode == BadgeMode.UNSPECIFIED) {
             setMeasuredDimension(0, 0)
             return
         }
-        val size = if (mBadgeMode is BadgeMode.DOT) {
-            mMovePoint.x = mDotRadius
-            mMovePoint.y = mDotRadius
-            ceil(mDotRadius * 2).toInt()
+        val size = if (badgeMode is BadgeMode.DOT) {
+            movePoint.x = dotRadius
+            movePoint.y = dotRadius
+            ceil(dotRadius * 2).toInt()
         } else {
-            mMovePoint.x = mMoveRadius
-            mMovePoint.y = mMoveRadius
-            mFixedPoint.x = mFixedRadius
-            mFixedPoint.y = mFixedRadius
-            ceil(mMoveRadius * 2).coerceAtLeast(mMinimumRadius).toInt()
+            movePoint.x = moveRadius
+            movePoint.y = moveRadius
+            fixedPoint.x = fixedRadius
+            fixedPoint.y = fixedRadius
+            ceil(moveRadius * 2).coerceAtLeast(minimumRadius).toInt()
         }
         setMeasuredDimension(size, size)
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        when (mBadgeMode) {
+        when (badgeMode) {
             BadgeMode.UNSPECIFIED -> {
                 return
             }
 
             BadgeMode.DOT -> {
-                if (mBadgeState == BadgeState.DOT.SHOW) {
-                    canvas.drawCircle(mMovePoint.x, mMovePoint.y, mDotRadius, mBadgePaint)
+                if (badgeState == BadgeState.DOT.SHOW) {
+                    canvas.drawCircle(movePoint.x, movePoint.y, dotRadius, badgePaint)
                 }
             }
 
             BadgeMode.BUBBLE.TEXT -> {
-                if (mBadgeState == BadgeState.BUBBLE.DEFAULT) {
-                    if (mFixedRadius != mMoveRadius) mFixedRadius = mMoveRadius
-                    canvas.drawCircle(mFixedPoint.x, mFixedPoint.y, mFixedRadius, mBadgePaint)
+                if (badgeState == BadgeState.BUBBLE.DEFAULT) {
+                    if (fixedRadius != moveRadius) fixedRadius = moveRadius
+                    canvas.drawCircle(fixedPoint.x, fixedPoint.y, fixedRadius, badgePaint)
                     canvas.drawText(
-                        mText,
-                        mFixedPoint.x,
-                        mFixedPoint.y + getTextBaseline(),
-                        mTextPaint
+                        text,
+                        fixedPoint.x,
+                        fixedPoint.y + getTextBaseline(),
+                        textPaint
                     )
                 }
-                if (mBadgeState == BadgeState.BUBBLE.CONNECT) {
+                if (badgeState == BadgeState.BUBBLE.CONNECT) {
                     canvas.drawBezier()
                     canvas.drawText(
-                        mText,
-                        mMovePoint.x,
-                        mMovePoint.y + getTextBaseline(),
-                        mTextPaint
+                        text,
+                        movePoint.x,
+                        movePoint.y + getTextBaseline(),
+                        textPaint
                     )
                 }
-                if (mBadgeState == BadgeState.BUBBLE.APART) {
-                    canvas.drawCircle(mMovePoint.x, mMovePoint.y, mMoveRadius, mBadgePaint)
+                if (badgeState == BadgeState.BUBBLE.APART) {
+                    canvas.drawCircle(movePoint.x, movePoint.y, moveRadius, badgePaint)
                     canvas.drawText(
-                        mText,
-                        mMovePoint.x,
-                        mMovePoint.y + getTextBaseline(),
-                        mTextPaint
+                        text,
+                        movePoint.x,
+                        movePoint.y + getTextBaseline(),
+                        textPaint
                     )
                 }
-                if (mBadgeState == BadgeState.BUBBLE.HIDE && mBmpIndex != mExplosionBmp.size) {
-                    mExplosionRect.left = (mMovePoint.x - mMoveRadius).toInt()
-                    mExplosionRect.right = (mMovePoint.x + mMoveRadius).toInt()
-                    mExplosionRect.top = (mMovePoint.y - mMoveRadius).toInt()
-                    mExplosionRect.bottom = (mMovePoint.y + mMoveRadius).toInt()
-                    canvas.drawBitmap(mExplosionBmp[mBmpIndex], null, mExplosionRect, mBadgePaint)
+                if (badgeState == BadgeState.BUBBLE.HIDE && bmpIndex != explosionBmp.size) {
+                    explosionRect.left = (movePoint.x - moveRadius).toInt()
+                    explosionRect.right = (movePoint.x + moveRadius).toInt()
+                    explosionRect.top = (movePoint.y - moveRadius).toInt()
+                    explosionRect.bottom = (movePoint.y + moveRadius).toInt()
+                    canvas.drawBitmap(explosionBmp[bmpIndex], null, explosionRect, badgePaint)
                 }
-                if (mBadgeState == BadgeState.BUBBLE.HIDE && mBmpIndex == mExplosionBmp.size) {
+                if (badgeState == BadgeState.BUBBLE.HIDE && bmpIndex == explosionBmp.size) {
                     resetPoint()
                 }
             }
 
             BadgeMode.BUBBLE.NUMBER -> {
-                if (mBadgeState == BadgeState.BUBBLE.DEFAULT && mTextNumber != INIT_NUMBER) {
-                    if (mFixedRadius != mMoveRadius) mFixedRadius = mMoveRadius
-                    canvas.drawCircle(mFixedPoint.x, mFixedPoint.y, mFixedRadius, mBadgePaint)
+                if (badgeState == BadgeState.BUBBLE.DEFAULT && textNumber != INIT_NUMBER) {
+                    if (fixedRadius != moveRadius) fixedRadius = moveRadius
+                    canvas.drawCircle(fixedPoint.x, fixedPoint.y, fixedRadius, badgePaint)
                     canvas.drawText(
                         getBubbleTextNumber(),
-                        mFixedPoint.x,
-                        mFixedPoint.y + getTextBaseline(),
-                        mTextPaint
+                        fixedPoint.x,
+                        fixedPoint.y + getTextBaseline(),
+                        textPaint
                     )
                 }
-                if (mBadgeState == BadgeState.BUBBLE.CONNECT) {
+                if (badgeState == BadgeState.BUBBLE.CONNECT) {
                     canvas.drawBezier()
                     canvas.drawText(
                         getBubbleTextNumber(),
-                        mMovePoint.x,
-                        mMovePoint.y + getTextBaseline(),
-                        mTextPaint
+                        movePoint.x,
+                        movePoint.y + getTextBaseline(),
+                        textPaint
                     )
                 }
-                if (mBadgeState == BadgeState.BUBBLE.APART) {
-                    canvas.drawCircle(mMovePoint.x, mMovePoint.y, mMoveRadius, mBadgePaint)
+                if (badgeState == BadgeState.BUBBLE.APART) {
+                    canvas.drawCircle(movePoint.x, movePoint.y, moveRadius, badgePaint)
                     canvas.drawText(
                         getBubbleTextNumber(),
-                        mMovePoint.x,
-                        mMovePoint.y + getTextBaseline(),
-                        mTextPaint
+                        movePoint.x,
+                        movePoint.y + getTextBaseline(),
+                        textPaint
                     )
                 }
-                if (mBadgeState == BadgeState.BUBBLE.HIDE && mBmpIndex != mExplosionBmp.size) {
-                    mExplosionRect.left = (mMovePoint.x - mMoveRadius).toInt()
-                    mExplosionRect.right = (mMovePoint.x + mMoveRadius).toInt()
-                    mExplosionRect.top = (mMovePoint.y - mMoveRadius).toInt()
-                    mExplosionRect.bottom = (mMovePoint.y + mMoveRadius).toInt()
-                    canvas.drawBitmap(mExplosionBmp[mBmpIndex], null, mExplosionRect, mBadgePaint)
+                if (badgeState == BadgeState.BUBBLE.HIDE && bmpIndex != explosionBmp.size) {
+                    explosionRect.left = (movePoint.x - moveRadius).toInt()
+                    explosionRect.right = (movePoint.x + moveRadius).toInt()
+                    explosionRect.top = (movePoint.y - moveRadius).toInt()
+                    explosionRect.bottom = (movePoint.y + moveRadius).toInt()
+                    canvas.drawBitmap(explosionBmp[bmpIndex], null, explosionRect, badgePaint)
                 }
-                if (mBadgeState == BadgeState.BUBBLE.HIDE && mBmpIndex == mExplosionBmp.size) {
+                if (badgeState == BadgeState.BUBBLE.HIDE && bmpIndex == explosionBmp.size) {
                     resetPoint()
                 }
             }
@@ -262,17 +299,17 @@ class BadgeView @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (mBadgeMode == BadgeMode.DOT)
+        if (badgeMode == BadgeMode.DOT)
             return super.onTouchEvent(event)
-        if (mBadgeMode == BadgeMode.BUBBLE.NUMBER && mTextNumber == INIT_NUMBER)
+        if (badgeMode == BadgeMode.BUBBLE.NUMBER && textNumber == INIT_NUMBER)
             return super.onTouchEvent(event)
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 val mDistance = hypot(
-                    (event.x - mFixedPoint.x).toDouble(),
-                    (event.y - mFixedPoint.y).toDouble()
+                    (event.x - fixedPoint.x).toDouble(),
+                    (event.y - fixedPoint.y).toDouble()
                 )
-                mBadgeState = if (mDistance <= mMoveRadius + mMinOffsetDistance) {
+                badgeState = if (mDistance <= moveRadius + minOffsetDistance) {
                     BadgeState.BUBBLE.CONNECT
                 } else {
                     BadgeState.BUBBLE.DEFAULT
@@ -281,22 +318,22 @@ class BadgeView @JvmOverloads constructor(
 
             MotionEvent.ACTION_MOVE -> {
                 val mDistance = hypot(
-                    (event.x - mFixedPoint.x).toDouble(),
-                    (event.y - mFixedPoint.y).toDouble()
+                    (event.x - fixedPoint.x).toDouble(),
+                    (event.y - fixedPoint.y).toDouble()
                 )
-                mMovePoint.set(event.x, event.y)
-                if (mMoveRadius - mDistance / 15 >= 0.0) {
-                    mFixedRadius = (mMoveRadius - mDistance / 15).toFloat()
+                movePoint.set(event.x, event.y)
+                if (moveRadius - mDistance / 15 >= 0.0) {
+                    fixedRadius = (moveRadius - mDistance / 15).toFloat()
                 } else {
-                    mBadgeState = BadgeState.BUBBLE.APART
+                    badgeState = BadgeState.BUBBLE.APART
                 }
                 invalidate()
             }
 
             MotionEvent.ACTION_UP -> {
-                if (mBadgeState == BadgeState.BUBBLE.CONNECT) {
+                if (badgeState == BadgeState.BUBBLE.CONNECT) {
                     resetAnimation()
-                } else if (mBadgeState == BadgeState.BUBBLE.APART) {
+                } else if (badgeState == BadgeState.BUBBLE.APART) {
                     startExplosionAnim()
                 }
                 performClick()
@@ -311,22 +348,22 @@ class BadgeView @JvmOverloads constructor(
     }
 
     /**
-     * Set badge mode. Only useful when the current value of [mBadgeMode] is
+     * Set badge mode. Only useful when the current value of [badgeMode] is
      * [BadgeMode.UNSPECIFIED]
      *
      * @since 0.5.3
      */
     fun setMode(mode: BadgeMode) {
-        if (mBadgeMode == BadgeMode.UNSPECIFIED) {
-            mBadgeMode = mode
-            visibility = VISIBLE
-        }
-        mBadgeState = when (mBadgeMode) {
+        if (badgeMode !is BadgeMode.UNSPECIFIED) return
+        badgeMode = mode
+        visibility = VISIBLE
+        badgeState = when (badgeMode) {
             BadgeMode.DOT -> BadgeState.DOT.HIDE
             BadgeMode.BUBBLE.TEXT -> BadgeState.BUBBLE.DEFAULT
             BadgeMode.BUBBLE.NUMBER -> BadgeState.BUBBLE.DEFAULT
             BadgeMode.UNSPECIFIED -> BadgeState.UNSPECIFIED
         }
+        invalidate()
     }
 
     /**
@@ -335,7 +372,9 @@ class BadgeView @JvmOverloads constructor(
      * @since 0.5.3
      */
     fun setColor(@ColorInt colorInt: Int) {
-        mBadgePaint.color = colorInt
+        check(ColorUtils.isColorInt(colorInt)) { "The value of bubble color isn't a valid value." }
+        badgePaint.color = colorInt
+        invalidate()
     }
 
     /**
@@ -343,12 +382,12 @@ class BadgeView @JvmOverloads constructor(
      * [BadgeMode.BUBBLE.NUMBER] or [BadgeMode.BUBBLE.TEXT].
      *
      * @param bubbleRadius The radius of bubble at the current finger touch
-     *     position.
+     * position.
      * @since 0.5.3
      */
     fun setBubbleRadius(@FloatRange(from = 0.0) bubbleRadius: Float) {
-        mMoveRadius = bubbleRadius.coerceAtLeast(mMoveRadius)
-        mFixedRadius = mMoveRadius
+        moveRadius = bubbleRadius.coerceAtLeast(moveRadius)
+        fixedRadius = moveRadius
     }
 
     /**
@@ -358,30 +397,32 @@ class BadgeView @JvmOverloads constructor(
      * minimum bubble is the circumscribed circle of the [text] bounding
      * rectangle.
      *
-     * The setting will only take effect when the [mBadgeMode] is
+     * The setting will only take effect when the [badgeMode] is
      * [BadgeMode.BUBBLE.TEXT].
      *
      * @since 0.5.3
      */
     fun setBubbleText(text: String) {
-        if (text.isEmpty()) return
-        if (mBadgeMode == BadgeMode.UNSPECIFIED) return
-        mText = text
-        mMoveRadius = mMoveRadius.coerceAtLeast(mMinimumRadius)
-        mFixedRadius = mMoveRadius
+        if (text.isBlank()) return
+        if (badgeMode == BadgeMode.UNSPECIFIED) return
+        this.text = text
+        moveRadius = moveRadius.coerceAtLeast(minimumRadius)
+        fixedRadius = moveRadius
+        invalidate()
     }
 
     /**
      * Set the number to be displayed in bubble.
      *
-     * The setting will only take effect when the [mBadgeMode] is
+     * The setting will only take effect when the [badgeMode] is
      * [BadgeMode.BUBBLE.NUMBER].
      *
      * @since 0.5.3
      */
     fun setBubbleTextNum(@IntRange(from = 0) number: Int) {
-        if (mBadgeMode == BadgeMode.UNSPECIFIED) return
-        mTextNumber = number.coerceAtMost(mTextMaxNumber)
+        if (badgeMode == BadgeMode.UNSPECIFIED) return
+        textNumber = number.coerceIn(0, textMaxNumber)
+        invalidate()
     }
 
     /**
@@ -392,16 +433,17 @@ class BadgeView @JvmOverloads constructor(
      * the circumscribed circle of the bounding rectangle of the string **99+**
      * in the specified style.
      *
-     * The setting will only take effect when the [mBadgeMode] is
+     * The setting will only take effect when the [badgeMode] is
      * [BadgeMode.BUBBLE.NUMBER].
      *
      * @since 0.5.3
      */
     fun setBubbleTextMaxNum(@IntRange(from = 0) maxNumber: Int) {
-        if (mBadgeMode == BadgeMode.UNSPECIFIED) return
-        mTextMaxNumber = maxNumber
-        mMoveRadius = mMoveRadius.coerceAtLeast(mMinimumRadius)
-        mFixedRadius = mMoveRadius
+        if (badgeMode == BadgeMode.UNSPECIFIED) return
+        textMaxNumber = maxNumber.coerceAtLeast(0)
+        moveRadius = moveRadius.coerceAtLeast(minimumRadius)
+        fixedRadius = moveRadius
+        invalidate()
     }
 
     /**
@@ -413,7 +455,9 @@ class BadgeView @JvmOverloads constructor(
      * @since 0.5.3
      */
     fun setBubbleTextColor(colorInt: Int) {
-        mTextPaint.color = colorInt
+        check(ColorUtils.isColorInt(colorInt)) { "The font color of text is invalid." }
+        textPaint.color = colorInt
+        invalidate()
     }
 
     /**
@@ -425,9 +469,9 @@ class BadgeView @JvmOverloads constructor(
      * @since 0.5.3
      */
     fun setBubbleTextSize(size: Float) {
-        if (mBadgeMode == BadgeMode.DOT) {
-            mTextPaint.textSize = size
-        }
+        if (badgeMode == BadgeMode.DOT) return
+        textPaint.textSize = size.coerceAtLeast(0f)
+        invalidate()
     }
 
     /**
@@ -436,8 +480,9 @@ class BadgeView @JvmOverloads constructor(
      * @since 0.5.3
      */
     fun setDotRadius(dotRadius: Float) {
-        if (mBadgeMode == BadgeMode.DOT) {
-            mDotRadius = dotRadius
+        this.dotRadius = dotRadius
+        if (badgeMode == BadgeMode.DOT) {
+            invalidate()
         }
     }
 
@@ -448,8 +493,8 @@ class BadgeView @JvmOverloads constructor(
      * @since 0.5.3
      */
     fun hideDot() {
-        if (mBadgeMode == BadgeMode.DOT) {
-            mBadgeState = BadgeState.DOT.HIDE
+        if (badgeMode == BadgeMode.DOT) {
+            badgeState = BadgeState.DOT.HIDE
         }
     }
 
@@ -461,26 +506,26 @@ class BadgeView @JvmOverloads constructor(
      * @since 0.5.3
      */
     fun showDot() {
-        if (mBadgeMode == BadgeMode.DOT) {
-            mBadgeState = BadgeState.DOT.SHOW
+        if (badgeMode == BadgeMode.DOT) {
+            badgeState = BadgeState.DOT.SHOW
         }
     }
 
     /**
-     * Get number string of [mTextNumber].
+     * Get number string of [textNumber].
      *
      * @since 0.5.3
      */
     private fun getBubbleTextNumber() =
-        if (mTextNumber == mTextMaxNumber) "$mTextMaxNumber+" else "$mTextNumber"
+        if (textNumber == textMaxNumber) "$textMaxNumber+" else "$textNumber"
 
     private fun startExplosionAnim() {
-        mBadgeState = BadgeState.BUBBLE.HIDE
-        ValueAnimator.ofInt(0, mExplosionBmp.size).apply {
+        badgeState = BadgeState.BUBBLE.HIDE
+        ValueAnimator.ofInt(0, explosionBmp.size).apply {
             interpolator = LinearInterpolator()
             duration = 800
             addUpdateListener {
-                mBmpIndex = cast(it.animatedValue)
+                bmpIndex = cast(it.animatedValue)
                 invalidate()
             }
             start()
@@ -488,17 +533,17 @@ class BadgeView @JvmOverloads constructor(
     }
 
     private fun resetAnimation() {
-        ValueAnimator.ofObject(PointFEvaluator(), mMovePoint, mFixedPoint).apply {
+        ValueAnimator.ofObject(PointFEvaluator(), movePoint, fixedPoint).apply {
             duration = 1000
             interpolator = OvershootInterpolator(1F)
             addUpdateListener {
-                mMovePoint = cast(it.animatedValue)
+                movePoint = cast(it.animatedValue)
                 invalidate()
             }
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
-                    mBadgeState = BadgeState.BUBBLE.DEFAULT
+                    badgeState = BadgeState.BUBBLE.DEFAULT
                 }
             })
             start()
@@ -506,20 +551,20 @@ class BadgeView @JvmOverloads constructor(
     }
 
     /**
-     * Reset [mMovePoint] and [mFixedPoint].
+     * Reset [movePoint] and [fixedPoint].
      *
      * @since 0.5.3
      */
     private fun resetPoint() {
-        mBadgeState = BadgeState.BUBBLE.DEFAULT
-        mFixedRadius = mMoveRadius
-        if (mBadgeMode == BadgeMode.BUBBLE.NUMBER) {
-            mTextNumber = INIT_NUMBER
+        badgeState = BadgeState.BUBBLE.DEFAULT
+        fixedRadius = moveRadius
+        if (badgeMode == BadgeMode.BUBBLE.NUMBER) {
+            textNumber = INIT_NUMBER
         }
-        mMovePoint.x = (width / 2.0).toFloat()
-        mMovePoint.y = (height / 2.0).toFloat()
-        mFixedPoint.x = (width / 2.0).toFloat()
-        mFixedPoint.y = (height / 2.0).toFloat()
+        movePoint.x = (width / 2.0).toFloat()
+        movePoint.y = (height / 2.0).toFloat()
+        fixedPoint.x = (width / 2.0).toFloat()
+        fixedPoint.y = (height / 2.0).toFloat()
     }
 
     /**
@@ -528,8 +573,8 @@ class BadgeView @JvmOverloads constructor(
      * @since 0.5.3
      */
     private fun String.getMinimumRadius(): Float {
-        val textLength = mTextPaint.measureText(this)
-        val fontMetrics = mTextPaint.fontMetrics
+        val textLength = textPaint.measureText(this)
+        val fontMetrics = textPaint.fontMetrics
         val textHeight = fontMetrics.bottom - fontMetrics.top
         return (hypot(textLength, textHeight) / 2.0).toFloat()
     }
@@ -540,95 +585,81 @@ class BadgeView @JvmOverloads constructor(
      * @since 0.5.3
      */
     private fun getTextBaseline(): Float {
-        val fontMetrics = mTextPaint.fontMetrics
+        val fontMetrics = textPaint.fontMetrics
         val textHeight = fontMetrics.bottom - fontMetrics.top
         return textHeight / 2 - fontMetrics.bottom
     }
 
     /**
-     * Draw a Bezier curve connecting circles centered at [mMovePoint] and
-     * [mFixedPoint].
+     * Draw a Bezier curve connecting circles centered at [movePoint] and
+     * [fixedPoint].
      *
      * @since 0.5.3
      */
     private fun Canvas.drawBezier() {
-        drawCircle(mFixedPoint.x, mFixedPoint.y, mFixedRadius, mBadgePaint)
-        drawCircle(mMovePoint.x, mMovePoint.y, mMoveRadius, mBadgePaint)
+        drawCircle(fixedPoint.x, fixedPoint.y, fixedRadius, badgePaint)
+        drawCircle(movePoint.x, movePoint.y, moveRadius, badgePaint)
         val mDistance = hypot(
-            (mMovePoint.x - mFixedPoint.x).toDouble(),
-            (mMovePoint.y - mFixedPoint.y).toDouble()
+            (movePoint.x - fixedPoint.x).toDouble(),
+            (movePoint.y - fixedPoint.y).toDouble()
         )
-        val sinAlpha = abs(mMovePoint.y - mFixedPoint.y) / mDistance
-        val cosAlpha = abs(mMovePoint.x - mFixedPoint.x) / mDistance
-        mControlPoint.x = (mMovePoint.x + mFixedPoint.x) / 2
-        mControlPoint.y = (mMovePoint.y + mFixedPoint.y) / 2
-        mPointA.x = (mFixedPoint.x - sinAlpha * mFixedRadius).toFloat()
-        mPointA.y = (mFixedPoint.y - cosAlpha * mFixedRadius).toFloat()
-        mPointB.x = (mFixedPoint.x + sinAlpha * mFixedRadius).toFloat()
-        mPointB.y = (mFixedPoint.y + cosAlpha * mFixedRadius).toFloat()
-        mPointC.x = (mMovePoint.x - sinAlpha * mMoveRadius).toFloat()
-        mPointC.y = (mMovePoint.y - cosAlpha * mMoveRadius).toFloat()
-        mPointD.x = (mMovePoint.x + sinAlpha * mMoveRadius).toFloat()
-        mPointD.y = (mMovePoint.y + cosAlpha * mMoveRadius).toFloat()
-        mBezierPath.reset()
-        mBezierPath.moveTo(mPointA.x, mPointA.y)
-        mBezierPath.quadTo(mControlPoint.x, mControlPoint.y, mPointC.x, mPointC.y)
-        mBezierPath.lineTo(mPointD.x, mPointD.y)
-        mBezierPath.quadTo(mControlPoint.x, mControlPoint.y, mPointB.x, mPointB.y)
-        mBezierPath.close()
-        drawPath(mBezierPath, mBezierPaint)
+        val sinAlpha = abs(movePoint.y - fixedPoint.y) / mDistance
+        val cosAlpha = abs(movePoint.x - fixedPoint.x) / mDistance
+        controlPoint.x = (movePoint.x + fixedPoint.x) / 2
+        controlPoint.y = (movePoint.y + fixedPoint.y) / 2
+        pointA.x = (fixedPoint.x - sinAlpha * fixedRadius).toFloat()
+        pointA.y = (fixedPoint.y - cosAlpha * fixedRadius).toFloat()
+        pointB.x = (fixedPoint.x + sinAlpha * fixedRadius).toFloat()
+        pointB.y = (fixedPoint.y + cosAlpha * fixedRadius).toFloat()
+        pointC.x = (movePoint.x - sinAlpha * moveRadius).toFloat()
+        pointC.y = (movePoint.y - cosAlpha * moveRadius).toFloat()
+        pointD.x = (movePoint.x + sinAlpha * moveRadius).toFloat()
+        pointD.y = (movePoint.y + cosAlpha * moveRadius).toFloat()
+        bezierPath.reset()
+        bezierPath.moveTo(pointA.x, pointA.y)
+        bezierPath.quadTo(controlPoint.x, controlPoint.y, pointC.x, pointC.y)
+        bezierPath.lineTo(pointD.x, pointD.y)
+        bezierPath.quadTo(controlPoint.x, controlPoint.y, pointB.x, pointB.y)
+        bezierPath.close()
+        drawPath(bezierPath, bezierPaint)
     }
 
     init {
-        val typeArray = context.obtainStyledAttributes(
-            attrs,
-            R.styleable.BadgeView,
-            defStyleAttr,
-            defStyleRes
-        )
-        mBadgeMode =
-            when (typeArray.getInt(R.styleable.BadgeView_badge_mode, BadgeMode.UNSPECIFIED.code)) {
+        context.withStyledAttributes(attrs, R.styleable.BadgeView, defStyleAttr, defStyleRes) {
+            badgeMode = when (getInt(R.styleable.BadgeView_badge_mode, BadgeMode.UNSPECIFIED.code)) {
                 BadgeMode.DOT.code -> BadgeMode.DOT
                 BadgeMode.BUBBLE.TEXT.code -> BadgeMode.BUBBLE.TEXT
                 BadgeMode.BUBBLE.NUMBER.code -> BadgeMode.BUBBLE.NUMBER
                 else -> {
-                    this.visibility = GONE
+                    this@BadgeView.visibility = GONE
                     BadgeMode.UNSPECIFIED
                 }
             }
-        mBadgeState = when (mBadgeMode) {
-            BadgeMode.DOT -> BadgeState.DOT.HIDE
-            BadgeMode.BUBBLE.TEXT -> BadgeState.BUBBLE.DEFAULT
-            BadgeMode.BUBBLE.NUMBER -> BadgeState.BUBBLE.DEFAULT
-            BadgeMode.UNSPECIFIED -> BadgeState.UNSPECIFIED
-        }
-        mBadgePaint.color = typeArray.getColor(
-            R.styleable.BadgeView_badge_color,
-            ContextCompat.getColor(context, R.color.md_theme_error)
-        )
-        mDotRadius = typeArray.getDimension(
-            R.styleable.BadgeView_dot_radius, initDotRadius
-        )
-        typeArray.getString(R.styleable.BadgeView_bubble_text)?.also { string ->
-            setBubbleText(string)
-        }
-        typeArray.getInteger(R.styleable.BadgeView_bubble_text_max_num, INIT_MAX_NUMBER)
-            .also { num ->
-                val value = if (num <= 0) INIT_MAX_NUMBER else num
-                setBubbleTextMaxNum(value)
+            badgeState = when (badgeMode) {
+                BadgeMode.DOT -> BadgeState.DOT.HIDE
+                BadgeMode.BUBBLE.TEXT -> BadgeState.BUBBLE.DEFAULT
+                BadgeMode.BUBBLE.NUMBER -> BadgeState.BUBBLE.DEFAULT
+                BadgeMode.UNSPECIFIED -> BadgeState.UNSPECIFIED
             }
-        setBubbleTextNum(INIT_NUMBER)
-        setBubbleRadius(
-            typeArray.getDimension(R.styleable.BadgeView_bubble_radius, initBubbleRadius)
-        )
-        mTextPaint.color = typeArray.getColor(
-            R.styleable.BadgeView_bubble_text_color,
-            ContextCompat.getColor(context, R.color.white)
-        )
-        mTextPaint.textSize = typeArray.getDimension(
-            R.styleable.BadgeView_bubble_text_size, initTextSize
-        )
-        typeArray.recycle()
+            badgePaint.color = getColor(R.styleable.BadgeView_badge_color, color(R.color.md_theme_error))
+            dotRadius = getDimension(R.styleable.BadgeView_dot_radius, INIT_DOT_RADIUS)
+            text = getString(R.styleable.BadgeView_bubble_text) ?: ""
+            textMaxNumber = getInteger(R.styleable.BadgeView_bubble_text_max_num, INIT_MAX_NUMBER).let { if (it <= 0) INIT_MAX_NUMBER else it }
+            setBubbleTextNum(INIT_NUMBER)
+            setBubbleRadius(getDimension(R.styleable.BadgeView_bubble_radius, DEFAULT_BUBBLE_RADIUS))
+            textPaint.color = getColor(R.styleable.BadgeView_bubble_text_color, color(R.color.white))
+            textPaint.textSize = getDimension(R.styleable.BadgeView_bubble_text_size, DEFAULT_TEXT_SIZE)
+        }
+    }
+
+    companion object {
+        private const val INIT_RADIUS = 0f
+        internal const val INIT_NUMBER = 0
+        private const val INIT_TEXT = ""
+        internal const val INIT_MAX_NUMBER = 99
+        internal val INIT_DOT_RADIUS = 5f.DP
+        internal val DEFAULT_TEXT_SIZE = 8f.SP
+        internal val DEFAULT_BUBBLE_RADIUS = 10f.DP
     }
 
 }
