@@ -372,7 +372,7 @@ class BadgeView @JvmOverloads constructor(
         if (badgeMode is BadgeMode.Bubble) {
             this.bubbleRadius = bubbleRadius.coerceAtLeast(0f)
             touchBubbleRadius = this.bubbleRadius
-            invalidate()
+            requestLayout()
         }
     }
 
@@ -424,7 +424,7 @@ class BadgeView @JvmOverloads constructor(
     fun setBubbleTextMaxNum(@IntRange(from = 0) maxNumber: Int) {
         if (textMaxNumber == maxNumber) return
         if (badgeMode is BadgeMode.Bubble.Number) {
-            textNumber = maxNumber.coerceIn(0, textMaxNumber)
+            textMaxNumber = maxNumber.coerceAtLeast(0)
             invalidate()
         }
     }
@@ -463,6 +463,8 @@ class BadgeView @JvmOverloads constructor(
     }
 
     /**
+     * Set the radius of dot badge(in pixels).
+     *
      * The setting will only take effect when the mode is [BadgeMode.Dot].
      *
      * @since 0.5.3
@@ -470,8 +472,8 @@ class BadgeView @JvmOverloads constructor(
     fun setDotRadius(dotRadius: Float) {
         if (this.dotRadius == dotRadius) return
         if (badgeMode is BadgeMode.Dot) {
-            this.bubbleRadius = dotRadius
-            invalidate()
+            this.dotRadius = dotRadius
+            requestLayout()
         }
     }
 
