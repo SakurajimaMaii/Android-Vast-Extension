@@ -27,12 +27,19 @@ package com.ave.vastgui.tools.view.badgeview
  * @since 0.5.3
  */
 sealed class BadgeMode(val code: Int) {
-    internal object UNSPECIFIED : BadgeMode(-1)
-    object DOT : BadgeMode(0)
-    sealed class BUBBLE(code: Int) : BadgeMode(code) {
-        object TEXT : BUBBLE(1)
-        object NUMBER : BUBBLE(2)
-    }
 
-    override fun toString(): String = this::class.java.simpleName
+    /** @since 1.5.2 */
+    internal data object Unspecified : BadgeMode(-1)
+
+    /** @since 1.5.2 */
+    data object Dot : BadgeMode(0)
+
+    /** @since 1.5.2 */
+    sealed class Bubble(code: Int) : BadgeMode(code) {
+        /** @since 1.5.2 */
+        data object Text : Bubble(1)
+
+        /** @since 1.5.2 */
+        data object Number : Bubble(2)
+    }
 }

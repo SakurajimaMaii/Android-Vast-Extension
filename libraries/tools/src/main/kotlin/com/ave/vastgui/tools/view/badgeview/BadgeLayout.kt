@@ -101,7 +101,7 @@ class BadgeLayout @JvmOverloads constructor(
      */
     var dotRadius: Float
         set(value) = badgeView.setDotRadius(value)
-        get() = badgeView.dotRadius
+        get() = badgeView.bubbleRadius
 
     /**
      * @see BadgeView.setBubbleRadius
@@ -111,7 +111,7 @@ class BadgeLayout @JvmOverloads constructor(
         set(value) = badgeView.refreshWithInvalidate {
             setBubbleRadius(value)
         }
-        get() = badgeView.moveRadius
+        get() = badgeView.bubbleRadius
 
     /**
      * @see BadgeView.setBubbleText
@@ -249,14 +249,14 @@ class BadgeLayout @JvmOverloads constructor(
     init {
         inflate(context, R.layout.badge_layout, this)
         context.withStyledAttributes(attrs, R.styleable.BadgeLayout, defStyleAttr, defStyleRes) {
-            badgeMode = when (getInt(R.styleable.BadgeLayout_badge_mode, BadgeMode.UNSPECIFIED.code)) {
-                BadgeMode.DOT.code -> BadgeMode.DOT
-                BadgeMode.BUBBLE.TEXT.code -> BadgeMode.BUBBLE.TEXT
-                BadgeMode.BUBBLE.NUMBER.code -> BadgeMode.BUBBLE.NUMBER
-                else -> BadgeMode.UNSPECIFIED
+            badgeMode = when (getInt(R.styleable.BadgeLayout_badge_mode, BadgeMode.Unspecified.code)) {
+                BadgeMode.Dot.code -> BadgeMode.Dot
+                BadgeMode.Bubble.Text.code -> BadgeMode.Bubble.Text
+                BadgeMode.Bubble.Number.code -> BadgeMode.Bubble.Number
+                else -> BadgeMode.Unspecified
             }
             badgeView.badgePaint.color = getColor(R.styleable.BadgeView_badge_color, color(R.color.md_theme_error))
-            dotRadius = getDimension(R.styleable.BadgeLayout_dot_radius, BadgeView.INIT_DOT_RADIUS)
+            dotRadius = getDimension(R.styleable.BadgeLayout_dot_radius, BadgeView.DEFAULT_DOT_RADIUS)
             bubbleRadius = getDimension(R.styleable.BadgeLayout_bubble_radius, BadgeView.DEFAULT_BUBBLE_RADIUS)
             bubbleText = getString(R.styleable.BadgeLayout_bubble_text) ?: ""
             bubbleTextMaxNum = getInteger(R.styleable.BadgeView_bubble_text_max_num, BadgeView.INIT_MAX_NUMBER)
