@@ -18,7 +18,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.ave.vastgui.tools.view.recyclerview.RecyclerCoverFlowView
         android:id="@+id/image_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

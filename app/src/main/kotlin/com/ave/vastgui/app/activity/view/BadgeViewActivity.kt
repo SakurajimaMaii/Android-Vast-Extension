@@ -61,7 +61,7 @@ class BadgeViewActivity : ComponentActivity(R.layout.activity_badge_view) {
         }
 
         binding.showDot.setOnClickListener {
-            binding.dotBadge.badgeMode = BadgeMode.DOT
+            binding.dotBadge.badgeMode = BadgeMode.Dot
             binding.dotBadge.dotRadius = Random(System.currentTimeMillis()).nextInt(0, 10).toFloat().DP
             binding.dotBadge.showDot()
         }

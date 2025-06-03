@@ -87,7 +87,7 @@
         app:layout_constraintTop_toBottomOf="@id/hideDot">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/dotlabel"
+            android:id="@+id/dot_label_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/badge_view_dot"
@@ -117,12 +117,20 @@
 
     </com.ave.vastgui.tools.view.badgeview.BadgeLayout>
 
+
     <com.ave.vastgui.tools.view.badgeview.BadgeView
+        android:id="@+id/test_badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:badge_mode="text"
+        app:bubble_radius="15dp"
+        app:bubble_text_size="10sp"
+        app:bubble_text="新消息"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dot_badge" />
+        app:layout_constraintTop_toBottomOf="@id/text_badge"
+        app:layout_constraintVertical_weight="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
