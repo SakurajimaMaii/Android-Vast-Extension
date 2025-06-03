@@ -20,12 +20,25 @@
     <string name="add_one">加一</string>
     <string name="app_name">AVE</string>
     <string name="back">反面</string>
+
+    <!-- 徽标控件 start -->
+    <string name="badge_view_base_usage">基础使用</string>
+    <string name="badge_view_change_color">切换颜色</string>
+    <string name="badge_view_show_dot">展示dot</string>
+    <string name="badge_view_hide_dot">隐藏dot</string>
+    <string name="badge_view_bubble_usage">气泡使用</string>
     <string name="badge_view_add">添加</string>
+    <string name="badge_view_reset">重置</string>
+    <string name="badge_view_set_max_num">设置最大值，当前为:%d</string>
+    <string name="badge_view_bubble_radius">当前气泡半径:%.3fdp</string>
+    <string name="badge_view_bubble_text_size">当前字体大小:%.3fsp</string>
+    <string name="badge_view_try_move">可以尝试移动徽标</string>
+    <string name="badge_view_text_usage">文本使用</string>
+    <string name="badge_view_text">新消息</string>
     <string name="badge_view_bubble">气泡徽标</string>
     <string name="badge_view_dot">红点徽标</string>
-    <string name="badge_view_hide_dot">隐藏dot</string>
-    <string name="badge_view_reset">重置</string>
-    <string name="badge_view_show_dot">展示dot</string>
+    <!-- 徽标控件 end -->
+
     <string name="base_adapter">通用RecyclerView BaseAdapter</string>
     <string name="base_bind_adapter">通用RecyclerView BaseBindingAdapter</string>
     <string name="base_fragment_activity">FragmentActivity示例</string>
