@@ -81,9 +81,16 @@
     <declare-styleable name="BadgeLayout">
         <attr name="badge_mode" />
         <attr name="badge_color" />
+        <attr name="badge_position" format="enum">
+            <enum name="left_top" value="0" />
+            <enum name="left_bottom" value="1" />
+            <enum name="right_top" value="2" />
+            <enum name="right_bottom" value="3" />
+        </attr>
         <attr name="dot_radius" />
         <attr name="bubble_radius" />
         <attr name="bubble_text" />
+        <attr name="bubble_text_num" />
         <attr name="bubble_text_max_num" />
         <attr name="bubble_text_color" />
         <attr name="bubble_text_size" />

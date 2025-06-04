@@ -16,8 +16,10 @@
 
 package com.ave.vastgui.tools.view.badgeview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
+import android.view.Gravity
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.ColorInt
@@ -31,10 +33,10 @@ import com.ave.vastgui.core.utils.Quadruple
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.databinding.BadgeLayoutBinding
 import com.ave.vastgui.tools.utils.DensityUtils.DP
-import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
 import com.ave.vastgui.tools.viewbinding.viewBinding
 import androidx.core.content.withStyledAttributes
 import com.ave.vastgui.tools.utils.color
+import kotlin.math.roundToInt
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -55,10 +57,12 @@ class BadgeLayout @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = R.style.BaseBadgeLayout
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
 
+    /** @since 1.5.2 */
     private val binding by viewBinding(BadgeLayoutBinding::bind)
 
+    /** @since 1.5.2 */
     private val badgeView
-        get() = binding.badgeLayoutBadge
+        get() = binding.badgeView
 
     /** @since 1.5.2 */
     private var iconResId by NotNUllVar<Int>()
@@ -78,10 +82,27 @@ class BadgeLayout @JvmOverloads constructor(
      * @since 1.5.2
      */
     var badgeMode: BadgeMode
-        set(value) {
-            badgeView.badgeMode = value
-        }
+        set(value) = badgeView.setMode(value)
         get() = badgeView.badgeMode
+
+    /** @since 1.5.2 */
+    var badgePosition: Int
+        @SuppressLint("RtlHardcoded")
+        set(value) {
+            val lp = badgeView.layoutParams as LayoutParams
+            when (value) {
+                POSITION_LEFT_TOP -> lp.gravity = Gravity.LEFT or Gravity.TOP
+                POSITION_LEFT_BOTTOM -> lp.gravity = Gravity.LEFT or Gravity.BOTTOM
+                POSITION_RIGHT_TOP -> lp.gravity = Gravity.RIGHT or Gravity.TOP
+                POSITION_RIGHT_BOTTOM -> lp.gravity = Gravity.RIGHT or Gravity.BOTTOM
+                POSITION_START_TOP -> lp.gravity = Gravity.START or Gravity.TOP
+                POSITION_START_BOTTOM -> lp.gravity = Gravity.START or Gravity.BOTTOM
+                POSITION_END_TOP -> lp.gravity = Gravity.END or Gravity.TOP
+                POSITION_END_BOTTOM -> lp.gravity = Gravity.END or Gravity.BOTTOM
+            }
+            badgeView.layoutParams = lp
+        }
+        get() = (badgeView.layoutParams as LayoutParams).gravity
 
     /**
      * @see BadgeView.setColor
@@ -90,14 +111,12 @@ class BadgeLayout @JvmOverloads constructor(
     @get:ColorInt
     @setparam:ColorInt
     var badgeColor: Int
-        set(value) {
-            badgeView.setColor(value)
-        }
+        set(value) = badgeView.setColor(value)
         get() = badgeView.badgeColor
 
     /**
      * @see BadgeView.setDotRadius
-     * @since 0.5.3
+     * @since 1.5.2
      */
     var dotRadius: Float
         set(value) = badgeView.setDotRadius(value)
@@ -105,12 +124,10 @@ class BadgeLayout @JvmOverloads constructor(
 
     /**
      * @see BadgeView.setBubbleRadius
-     * @since 0.5.3
+     * @since 1.5.2
      */
     var bubbleRadius: Float
-        set(value) = badgeView.refreshWithInvalidate {
-            setBubbleRadius(value)
-        }
+        set(value) = badgeView.setBubbleRadius(value)
         get() = badgeView.bubbleRadius
 
     /**
@@ -118,10 +135,7 @@ class BadgeLayout @JvmOverloads constructor(
      * @since 1.5.2
      */
     var bubbleText: String
-        set(value) {
-            if (value.isBlank()) return
-            badgeView.setBubbleText(value)
-        }
+        set(value) = badgeView.setBubbleText(value)
         get() = badgeView.text
 
     /**
@@ -145,7 +159,7 @@ class BadgeLayout @JvmOverloads constructor(
      */
     var bubbleTextMaxNum: Int
         set(value) {
-            check(value >= 0) { "The value should be greater than 0." }
+            check(value >= 0) { "The value(current=$value) should be greater than 0." }
             badgeView.setBubbleTextMaxNum(value)
         }
         get() = badgeView.textMaxNumber
@@ -157,9 +171,7 @@ class BadgeLayout @JvmOverloads constructor(
     @get:ColorInt
     @setparam:ColorInt
     var bubbleTextColor: Int
-        set(value) {
-            badgeView.setBubbleTextColor(value)
-        }
+        set(value) = badgeView.setBubbleTextColor(value)
         get() = badgeView.textColor
 
     /**
@@ -178,13 +190,13 @@ class BadgeLayout @JvmOverloads constructor(
      * @since 0.5.3
      */
     @JvmOverloads
-    fun setIconPadding(
-        @FloatRange(from = 0.0) top: Float = 0f,
-        @FloatRange(from = 0.0) start: Float = 0f,
-        @FloatRange(from = 0.0) end: Float = 0f,
-        @FloatRange(from = 0.0) bottom: Float = 0f
-    ) {
-        iconPadding = iconPadding.copy(top, start, end, bottom)
+    fun setIconPadding(@FloatRange(from = 0.0) top: Float = 0f, @FloatRange(from = 0.0) start: Float = 0f,
+                       @FloatRange(from = 0.0) end: Float = 0f, @FloatRange(from = 0.0) bottom: Float = 0f) {
+        iconPadding = iconPadding.copy(top.coerceAtLeast(0f),
+            start.coerceAtLeast(0f),
+            end.coerceAtLeast(0f),
+            bottom.coerceAtLeast(0f))
+        binding.iconIv.setPadding(iconPadding.param2.toInt(), iconPadding.param1.toInt(), iconPadding.param3.toInt(), iconPadding.param4.toInt())
     }
 
     /**
@@ -192,9 +204,7 @@ class BadgeLayout @JvmOverloads constructor(
      * @since 0.5.3
      */
     fun hideDot() {
-        badgeView.refreshWithInvalidate {
-            hideDot()
-        }
+        badgeView.hideDot()
     }
 
     /**
@@ -202,47 +212,43 @@ class BadgeLayout @JvmOverloads constructor(
      * @since 0.5.3
      */
     fun showDot() {
-        badgeView.refreshWithInvalidate {
-            showDot()
-        }
+        badgeView.showDot()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
-        val widthMeasureMode = MeasureSpec.getMode(widthMeasureSpec)
-        val heightMeasureMode = MeasureSpec.getMode(heightMeasureSpec)
-        var height = 0
-        var width = 0
-        for (child in children) {
+        var contentWidth = 0
+        var contentHeight = 0
+        children.forEach { child ->
             measureChild(child, widthMeasureSpec, heightMeasureSpec)
-            height += child.measuredHeight
-            width = width.coerceAtLeast(child.measuredWidth)
+            contentWidth = contentWidth.coerceAtLeast(child.measuredWidth)
+            contentHeight += child.measuredHeight
         }
-        setMeasuredDimension(
-            if (widthMeasureMode == MeasureSpec.EXACTLY) widthSize else width,
-            if (heightMeasureMode == MeasureSpec.EXACTLY) heightSize else height
-        )
+        val neededMinimumWidth = paddingStart + contentWidth + paddingEnd
+        val neededMinimumHeight = paddingTop + contentHeight + paddingBottom
+        val width = resolveSize(neededMinimumWidth, widthMeasureSpec)
+        val height = resolveSize(neededMinimumHeight, heightMeasureSpec)
+        setMeasuredDimension(width, height)
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         when (childCount) {
             1 -> nothing_to_do()
             2 -> if (getChildAt(0) !is TextView && getChildAt(1) !is TextView) {
-                throw IllegalArgumentException("BadgeView can only contain one child element of type TextView.")
+                throw IllegalArgumentException("BadgeLayout can only contain one child element of type TextView.")
             }
 
-            else -> throw IllegalArgumentException("BadgeView can only contain one child element of type TextView.")
+            else -> throw IllegalArgumentException("BadgeLayout can only contain one child element of type TextView.")
         }
-        var childTop = 0
-        var childHeight: Int
-        var childWidth: Int
-        for (child in children) {
-            childHeight = child.measuredHeight
-            childWidth = child.measuredWidth
-            val childLeft = (width - childWidth) / 2
-            child.layout(childLeft, childTop, childLeft + childWidth, childTop + childHeight)
-            childTop += childHeight
+
+        if (measuredWidth - paddingStart - paddingEnd < 0 || measuredHeight - paddingTop - paddingBottom < 0) return
+
+        var childTop = paddingTop
+        children.forEach { child ->
+            val childCenter = (paddingStart + measuredWidth - paddingEnd) / 2f
+            val childLeft = (childCenter - child.measuredWidth / 2f).roundToInt()
+            val childRight = (childCenter + child.measuredWidth / 2f).roundToInt()
+            child.layout(childLeft, childTop, childRight, childTop + child.measuredHeight)
+            childTop += child.measuredHeight
         }
     }
 
@@ -256,11 +262,12 @@ class BadgeLayout @JvmOverloads constructor(
                 else -> BadgeMode.Unspecified
             }
             badgeView.badgePaint.color = getColor(R.styleable.BadgeView_badge_color, color(R.color.md_theme_error))
+            badgePosition = getInt(R.styleable.BadgeLayout_badge_position, POSITION_RIGHT_TOP)
             dotRadius = getDimension(R.styleable.BadgeLayout_dot_radius, BadgeView.DEFAULT_DOT_RADIUS)
             bubbleRadius = getDimension(R.styleable.BadgeLayout_bubble_radius, BadgeView.DEFAULT_BUBBLE_RADIUS)
             bubbleText = getString(R.styleable.BadgeLayout_bubble_text) ?: ""
-            bubbleTextMaxNum = getInteger(R.styleable.BadgeView_bubble_text_max_num, BadgeView.INIT_MAX_NUMBER)
-            bubbleTextNum = getInteger(R.styleable.BadgeView_bubble_text_max_num, BadgeView.INIT_NUMBER)
+            bubbleTextMaxNum = getInteger(R.styleable.BadgeLayout_bubble_text_max_num, BadgeView.INIT_MAX_NUMBER)
+            bubbleTextNum = getInteger(R.styleable.BadgeLayout_bubble_text_num, BadgeView.INIT_NUMBER)
             bubbleTextColor = getColor(R.styleable.BadgeLayout_bubble_text_color, ContextCompat.getColor(context, R.color.white))
             bubbleTextSize = getDimension(R.styleable.BadgeLayout_bubble_text_size, BadgeView.DEFAULT_TEXT_SIZE)
             iconResId = getResourceId(R.styleable.BadgeLayout_icon, R.drawable.ic_badge_default_icon)
@@ -271,11 +278,67 @@ class BadgeLayout @JvmOverloads constructor(
                 getDimension(R.styleable.BadgeLayout_icon_bottom_margin, 5F.DP)
             )
         }
-        binding.badgeLayoutIcon.apply {
-            setImageResource(iconResId)
-            setPadding(iconPadding.param2.toInt(), iconPadding.param1.toInt(), iconPadding.param3.toInt(), iconPadding.param4.toInt())
-        }
+        binding.iconIv.setImageResource(iconResId)
+        binding.iconIv.setPadding(iconPadding.param2.toInt(), iconPadding.param1.toInt(), iconPadding.param3.toInt(), iconPadding.param4.toInt())
         clipChildren = false
+    }
+
+    companion object {
+        /**
+         * Position of [BadgeView].
+         *
+         * @since 1.5.2
+         */
+        const val POSITION_LEFT_TOP = 0
+
+        /**
+         * Position of [BadgeView].
+         *
+         * @since 1.5.2
+         */
+        const val POSITION_LEFT_BOTTOM = 1
+
+        /**
+         * Position of [BadgeView].
+         *
+         * @since 1.5.2
+         */
+        const val POSITION_RIGHT_TOP = 2
+
+        /**
+         * Position of [BadgeView].
+         *
+         * @since 1.5.2
+         */
+        const val POSITION_RIGHT_BOTTOM = 3
+
+        /**
+         * Position of [BadgeView].
+         *
+         * @since 1.5.2
+         */
+        const val POSITION_START_TOP = 4
+
+        /**
+         * Position of [BadgeView].
+         *
+         * @since 1.5.2
+         */
+        const val POSITION_START_BOTTOM = 5
+
+        /**
+         * Position of [BadgeView].
+         *
+         * @since 1.5.2
+         */
+        const val POSITION_END_TOP = 6
+
+        /**
+         * Position of [BadgeView].
+         *
+         * @since 1.5.2
+         */
+        const val POSITION_END_BOTTOM = 7
     }
 
 }

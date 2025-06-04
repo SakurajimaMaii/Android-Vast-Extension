@@ -183,7 +183,7 @@ class BadgeView @JvmOverloads constructor(
 
     /** @since 1.5.2 */
     var badgeMode by NotNUllVar<BadgeMode>()
-        internal set
+        private set
 
     /** @since 1.5.2 */
     val badgeColor: Int
