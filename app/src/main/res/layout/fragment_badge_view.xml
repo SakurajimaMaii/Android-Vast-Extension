@@ -14,12 +14,12 @@
   ~ limitations under the License.
   -->
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.view.BadgeViewActivity">
+    tools:context=".activity.view.BadgeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="@string/badge_view_base_usage" />
+            android:text="@string/badge_base_usage" />
 
         <com.ave.vastgui.tools.view.badgeview.BadgeView
             android:id="@+id/dot_badge"
@@ -45,21 +45,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/badge_view_change_color" />
+            android:text="@string/badge_change_color" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/show_dot_badge_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/badge_view_show_dot" />
+            android:text="@string/badge_dot_show" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/hide_dot_badge_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/badge_view_hide_dot" />
+            android:text="@string/badge_dot_hide" />
 
         <com.google.android.material.slider.Slider
             android:id="@+id/dot_badge_radius_slider"
@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="@string/badge_view_bubble_usage" />
+            android:text="@string/badge_bubble_usage" />
 
         <com.ave.vastgui.tools.view.badgeview.BadgeView
             android:id="@+id/number_badge"
@@ -90,7 +90,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/badge_view_try_move"
+            android:text="@string/badge_try_move"
             android:textStyle="bold" />
 
         <com.google.android.material.button.MaterialButton
@@ -98,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/badge_view_add"
+            android:text="@string/badge_num_add"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
@@ -106,23 +106,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/badge_view_reset"
-            app:layout_constraintTop_toBottomOf="@id/add" />
+            android:text="@string/badge_num_reset" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/number_badge_set_max_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            app:layout_constraintTop_toBottomOf="@id/add"
-            tools:text="@string/badge_view_set_max_num" />
+            tools:text="@string/badge_num_set_max" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/number_badge_change_color_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/badge_view_change_color" />
+            android:text="@string/badge_bubble_change_text_color" />
 
         <com.google.android.material.slider.Slider
             android:id="@+id/number_badge_radius_slider"
@@ -148,7 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/badge_view_text_usage" />
+            android:text="@string/badge_text_usage" />
 
         <com.ave.vastgui.tools.view.badgeview.BadgeView
             android:id="@+id/text_badge"
@@ -158,91 +156,23 @@
             android:layout_margin="10dp"
             app:badge_mode="text"
             app:bubble_radius="15dp"
-            app:bubble_text="@string/badge_view_text"
+            app:bubble_text="@string/badge_text_message"
             app:bubble_text_max_num="10" />
 
-        <View
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/text_badge_change_text_btn"
             android:layout_width="match_parent"
-            android:layout_height="100dp" />
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/badge_bubble_change_text" />
 
-        <!--        <com.ave.vastgui.tools.view.badgeview.BadgeLayout-->
-        <!--            android:id="@+id/num_badge"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_margin="10dp"-->
-        <!--            app:badge_mode="number"-->
-        <!--            app:icon="@drawable/ic_chat_36px"-->
-        <!--            app:layout_constraintEnd_toStartOf="@id/dot_badge"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/hide_badge_btn">-->
-
-        <!--            <com.google.android.material.textview.MaterialTextView-->
-        <!--                android:id="@+id/numlabel"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:text="@string/badge_view_bubble"-->
-        <!--                android:textColor="@color/black"-->
-        <!--                android:textStyle="bold" />-->
-
-        <!--        </com.ave.vastgui.tools.view.badgeview.BadgeLayout>-->
-
-        <!--        <com.ave.vastgui.tools.view.badgeview.BadgeLayout-->
-        <!--            android:id="@+id/dot_badge"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_margin="10dp"-->
-        <!--            app:icon="@drawable/ic_duo_36px"-->
-        <!--            app:layout_constraintEnd_toStartOf="@id/text_badge"-->
-        <!--            app:layout_constraintStart_toEndOf="@id/num_badge"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/hide_badge_btn">-->
-
-        <!--            <com.google.android.material.textview.MaterialTextView-->
-        <!--                android:id="@+id/dot_label_tv"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:text="@string/badge_view_dot"-->
-        <!--                android:textColor="@color/black"-->
-        <!--                android:textStyle="bold" />-->
-
-        <!--        </com.ave.vastgui.tools.view.badgeview.BadgeLayout>-->
-
-        <!--        <com.ave.vastgui.tools.view.badgeview.BadgeLayout-->
-        <!--            android:id="@+id/text_badge"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_margin="10dp"-->
-        <!--            app:badge_mode="text"-->
-        <!--            app:bubble_text="新消息"-->
-        <!--            app:icon="@drawable/ic_mail_36px"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toEndOf="@id/dot_badge"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/hide_badge_btn">-->
-
-        <!--            <com.google.android.material.textview.MaterialTextView-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:text="@string/badge_view_bubble"-->
-        <!--                android:textColor="@color/black"-->
-        <!--                android:textStyle="bold" />-->
-
-        <!--        </com.ave.vastgui.tools.view.badgeview.BadgeLayout>-->
-
-
-        <!--        <com.ave.vastgui.tools.view.badgeview.BadgeView-->
-        <!--            android:id="@+id/test_badge"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_margin="10dp"-->
-        <!--            app:badge_mode="text"-->
-        <!--            app:bubble_radius="15dp"-->
-        <!--            app:bubble_text="新消息"-->
-        <!--            app:bubble_text_size="10sp"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/text_badge"-->
-        <!--            app:layout_constraintVertical_weight="1" />-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/text_badge_clear_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/badge_bubble_clear_text" />
 
     </LinearLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

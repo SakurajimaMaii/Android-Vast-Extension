@@ -207,7 +207,7 @@
             <!--            </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.view.BadgeViewActivity"
+            android:name=".activity.view.BadgeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

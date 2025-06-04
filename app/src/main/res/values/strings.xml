@@ -22,21 +22,33 @@
     <string name="back">反面</string>
 
     <!-- 徽标控件 start -->
-    <string name="badge_view_base_usage">基础使用</string>
-    <string name="badge_view_change_color">切换颜色</string>
-    <string name="badge_view_show_dot">展示dot</string>
-    <string name="badge_view_hide_dot">隐藏dot</string>
-    <string name="badge_view_bubble_usage">气泡使用</string>
-    <string name="badge_view_add">添加</string>
-    <string name="badge_view_reset">重置</string>
-    <string name="badge_view_set_max_num">设置最大值，当前为:%d</string>
-    <string name="badge_view_bubble_radius">当前气泡半径:%.3fdp</string>
-    <string name="badge_view_bubble_text_size">当前字体大小:%.3fsp</string>
-    <string name="badge_view_try_move">可以尝试移动徽标</string>
-    <string name="badge_view_text_usage">文本使用</string>
-    <string name="badge_view_text">新消息</string>
-    <string name="badge_view_bubble">气泡徽标</string>
-    <string name="badge_view_dot">红点徽标</string>
+    <string name="badge_base_usage">基础使用</string>
+    <string name="badge_change_color">切换徽标颜色</string>
+    <string name="badge_change_position">切换徽标位置</string>
+    <string name="badge_click">点击徽标</string>
+    <string name="badge_long_click">长按徽标</string>
+    <string name="badge_try_move">可以尝试移动徽标</string>
+    <string name="badge_bubble_usage">气泡使用</string>
+    <string name="badge_bubble_radius">当前气泡半径:%.3fdp</string>
+    <string name="badge_bubble_change_bubble_radius">修改徽标大小</string>
+    <string name="badge_bubble_text_size">当前字体大小:%.3fsp</string>
+    <string name="badge_bubble_change_text">切换文本</string>
+    <string name="badge_bubble_change_text_color">切换文本颜色</string>
+    <string name="badge_bubble_change_text_size">切换文本字体大小</string>
+    <string name="badge_bubble_clear_text">清空文本</string>
+    <string name="badge_dot">红点徽标</string>
+    <string name="badge_dot_hide">隐藏dot</string>
+    <string name="badge_dot_show">展示dot</string>
+    <string name="badge_num">数字徽标</string>
+    <string name="badge_num_add">数字＋1</string>
+    <string name="badge_num_reset">重置数字</string>
+    <string name="badge_num_set_max">设置最大值，当前为:%d</string>
+    <string name="badge_text_usage">文本使用</string>
+    <string name="badge_text">文本徽标</string>
+    <string name="badge_text_message">新消息</string>
+    <string name="badge_text_receive">新邮件</string>
+    <string name="badge_icon_padding_usage">图标内边距设置</string>
+    <string name="badge_icon_padding">图标内边距:%.3fdp</string>
     <!-- 徽标控件 end -->
 
     <string name="base_adapter">通用RecyclerView BaseAdapter</string>
