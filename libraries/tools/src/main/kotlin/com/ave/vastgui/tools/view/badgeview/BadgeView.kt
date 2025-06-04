@@ -20,6 +20,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.PointFEvaluator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -27,6 +28,8 @@ import android.graphics.Path
 import android.graphics.PointF
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.LinearInterpolator
@@ -37,6 +40,9 @@ import androidx.annotation.IntRange
 import androidx.annotation.StyleRes
 import androidx.core.content.withStyledAttributes
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.NestedScrollingChild
+import androidx.core.view.NestedScrollingChildHelper
+import androidx.core.view.ViewCompat
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.core.extension.cast
 import com.ave.vastgui.tools.R
@@ -46,10 +52,12 @@ import com.ave.vastgui.tools.utils.DensityUtils.SP
 import com.ave.vastgui.tools.utils.color
 import com.ave.vastgui.tools.utils.drawable
 import com.ave.vastgui.tools.view.extension.gone
+import com.ave.vastgui.tools.view.extension.visible
 import kotlin.math.abs
 import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.roundToInt
+
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -59,9 +67,6 @@ import kotlin.math.roundToInt
 /**
  * Badge View.
  *
- * @property minOffsetDistance When the coordinate of first touch is
- * smaller than mMoveRadius + MIN_OFFSET_DISTANCE, it means you touched the
- * starting red dot.
  * @since 0.5.3
  */
 class BadgeView @JvmOverloads constructor(
@@ -69,9 +74,16 @@ class BadgeView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.Default_BadgeView_Style,
     @StyleRes defStyleRes: Int = R.style.BaseBadgeView
-) : View(context, attrs, defStyleAttr, defStyleRes) {
+) : View(context, attrs, defStyleAttr, defStyleRes),
+    NestedScrollingChild {
 
-    /** @since 1.5.2 */
+    /**
+     * When the coordinate of first touch is smaller than
+     * [bubbleRadius] + [minOffsetDistance], it means you touched the
+     * [BadgeView].
+     *
+     * @since 1.5.2
+     */
     private val minOffsetDistance = 5F.DP
 
     /**
@@ -148,13 +160,17 @@ class BadgeView @JvmOverloads constructor(
         style = Paint.Style.FILL
     }
 
-    /** @since 1.5.2 */
+    /**
+     * The radius of badge when the [badgeMode] is [BadgeMode.Dot] (in pixels).
+     *
+     * @since 1.5.2
+     */
     var dotRadius = DEFAULT_DOT_RADIUS
         private set
 
     /**
      * The radius of badge when the [badgeMode] is [BadgeMode.Bubble.Text] or
-     * [BadgeMode.Bubble.Number].
+     * [BadgeMode.Bubble.Number] (in pixels).
      *
      * @since 1.5.2
      */
@@ -185,7 +201,11 @@ class BadgeView @JvmOverloads constructor(
     var text = INIT_TEXT
         private set
 
-    /** @since 1.5.2 */
+    /**
+     * The text of [BadgeMode.Bubble] (in pixels).
+     *
+     * @since 1.5.2
+     */
     val textSize
         get() = textPaint.textSize
 
@@ -193,6 +213,20 @@ class BadgeView @JvmOverloads constructor(
     @get:ColorInt
     val textColor
         get() = textPaint.color
+
+    /** @since 1.5.2 */
+    private val nestedScrollingChildHelper = NestedScrollingChildHelper(this)
+
+    /** @since 1.5.2 */
+    private val gestureDetector: GestureDetector = GestureDetector(context, object : SimpleOnGestureListener() {
+        override fun onSingleTapUp(e: MotionEvent): Boolean {
+            return performClick()
+        }
+
+        override fun onLongPress(e: MotionEvent) {
+            performLongClick()
+        }
+    })
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         when (badgeMode) {
@@ -218,7 +252,6 @@ class BadgeView @JvmOverloads constructor(
         }
     }
 
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         when (badgeMode) {
@@ -232,7 +265,7 @@ class BadgeView @JvmOverloads constructor(
 
             BadgeMode.Bubble.Text -> {
                 if (measuredWidth - paddingStart - paddingEnd < 0 || measuredHeight - paddingTop - paddingBottom < 0) return
-                if (badgeState == BadgeState.BubbleState.Default) {
+                if (badgeState == BadgeState.BubbleState.Default && !text.isBlank()) {
                     if (bubbleRadius != touchBubbleRadius) bubbleRadius = touchBubbleRadius
                     canvas.drawCircle(fixedBubbleCoordPointF.x, fixedBubbleCoordPointF.y, bubbleRadius, badgePaint)
                     canvas.drawText(text, fixedBubbleCoordPointF.x, fixedBubbleCoordPointF.y + getTextBaseline(), textPaint)
@@ -286,48 +319,101 @@ class BadgeView @JvmOverloads constructor(
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (badgeMode == BadgeMode.Dot)
+        if (badgeMode == BadgeMode.Dot) {
             return super.onTouchEvent(event)
-        if (badgeMode == BadgeMode.Bubble.Number && textNumber == INIT_NUMBER)
+        } else if (badgeMode == BadgeMode.Bubble.Number && textNumber == INIT_NUMBER) {
             return super.onTouchEvent(event)
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                val distance = hypot((event.x - fixedBubbleCoordPointF.x).toDouble(), (event.y - fixedBubbleCoordPointF.y).toDouble())
-                badgeState = if (distance <= bubbleRadius + minOffsetDistance) {
-                    BadgeState.BubbleState.Connect
-                } else {
-                    BadgeState.BubbleState.Default
-                }
-            }
-
-            MotionEvent.ACTION_MOVE -> {
-                if (badgeState is BadgeState.BubbleState.Connect) {
+        } else {
+            gestureDetector.onTouchEvent(event)
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
                     val distance = hypot((event.x - fixedBubbleCoordPointF.x).toDouble(), (event.y - fixedBubbleCoordPointF.y).toDouble())
-                    touchBubbleCoordPointF.set(event.x, event.y)
-                    if (bubbleRadius - distance / 100 >= 0.0) {
-                        bubbleRadius = (bubbleRadius - distance / 100).toFloat()
+                    badgeState = if (distance <= bubbleRadius + minOffsetDistance) {
+                        startNestedScroll(ViewCompat.SCROLL_AXIS_HORIZONTAL or ViewCompat.SCROLL_AXIS_VERTICAL)
+                        BadgeState.BubbleState.Connect
                     } else {
-                        badgeState = BadgeState.BubbleState.Apart
+                        BadgeState.BubbleState.Default
                     }
-                    invalidate()
                 }
-            }
 
-            MotionEvent.ACTION_UP -> {
-                if (badgeState == BadgeState.BubbleState.Connect) {
-                    resetAnimation()
-                } else if (badgeState == BadgeState.BubbleState.Apart) {
-                    startExplosionAnim()
+                MotionEvent.ACTION_MOVE -> {
+                    if (badgeState is BadgeState.BubbleState.Connect) {
+                        val distance = hypot((event.x - fixedBubbleCoordPointF.x).toDouble(), (event.y - fixedBubbleCoordPointF.y).toDouble())
+                        touchBubbleCoordPointF.set(event.x, event.y)
+                        if (bubbleRadius - distance / 50 >= 0.0) {
+                            bubbleRadius = (bubbleRadius - distance / 50).toFloat()
+                        } else {
+                            badgeState = BadgeState.BubbleState.Apart
+                        }
+                        invalidate()
+                    }
                 }
-                performClick()
+
+                MotionEvent.ACTION_UP -> {
+                    if (badgeState == BadgeState.BubbleState.Connect) {
+                        resetAnimation()
+                        stopNestedScroll()
+                    } else if (badgeState == BadgeState.BubbleState.Apart) {
+                        startExplosionAnim()
+                        stopNestedScroll()
+                    }
+                }
             }
         }
         return true
     }
 
-    override fun performClick(): Boolean {
-        return super.performClick()
+    /** @since 1.5.2 */
+    override fun setNestedScrollingEnabled(enabled: Boolean) {
+        nestedScrollingChildHelper.isNestedScrollingEnabled = enabled
+    }
+
+    /** @since 1.5.2 */
+    override fun isNestedScrollingEnabled(): Boolean {
+        return nestedScrollingChildHelper.isNestedScrollingEnabled
+    }
+
+    /** @since 1.5.2 */
+    override fun startNestedScroll(axes: Int): Boolean {
+        return nestedScrollingChildHelper.startNestedScroll(axes)
+    }
+
+    /** @since 1.5.2 */
+    override fun stopNestedScroll() {
+        nestedScrollingChildHelper.stopNestedScroll()
+    }
+
+    /** @since 1.5.2 */
+    override fun hasNestedScrollingParent(): Boolean {
+        return nestedScrollingChildHelper.hasNestedScrollingParent()
+    }
+
+    /** @since 1.5.2 */
+    override fun dispatchNestedScroll(dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int, dyUnconsumed: Int, offsetInWindow: IntArray?): Boolean {
+        return nestedScrollingChildHelper.dispatchNestedScroll(dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed, offsetInWindow)
+    }
+
+    /** @since 1.5.2 */
+    override fun dispatchNestedPreScroll(dx: Int, dy: Int, consumed: IntArray?, offsetInWindow: IntArray?): Boolean {
+        return nestedScrollingChildHelper.dispatchNestedPreScroll(dx, dy, consumed, offsetInWindow)
+    }
+
+    /** @since 1.5.2 */
+    override fun dispatchNestedFling(velocityX: Float, velocityY: Float, consumed: Boolean): Boolean {
+        return nestedScrollingChildHelper.dispatchNestedFling(velocityX, velocityY, consumed)
+    }
+
+    /** @since 1.5.2 */
+    override fun dispatchNestedPreFling(velocityX: Float, velocityY: Float): Boolean {
+        return nestedScrollingChildHelper.dispatchNestedPreFling(velocityX, velocityY)
+    }
+
+    /** @since 1.5.2 */
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        nestedScrollingChildHelper.onDetachedFromWindow()
     }
 
     /**
@@ -339,7 +425,7 @@ class BadgeView @JvmOverloads constructor(
     fun setMode(mode: BadgeMode) {
         if (badgeMode !is BadgeMode.Unspecified) return
         badgeMode = mode
-        visibility = VISIBLE
+        visible()
         badgeState = when (badgeMode) {
             BadgeMode.Dot -> BadgeState.DotState.Hide
             BadgeMode.Bubble.Text -> BadgeState.BubbleState.Default
@@ -361,11 +447,11 @@ class BadgeView @JvmOverloads constructor(
     }
 
     /**
+     * Set the radius of bubble(in pixels).
+     *
      * The setting will only take effect when the mode is
      * [BadgeMode.Bubble.Number] or [BadgeMode.Bubble.Text].
      *
-     * @param bubbleRadius The radius of bubble at the current finger touch
-     * position.
      * @since 0.5.3
      */
     fun setBubbleRadius(@FloatRange(from = 0.0) bubbleRadius: Float) {
@@ -385,7 +471,7 @@ class BadgeView @JvmOverloads constructor(
      * @since 0.5.3
      */
     fun setBubbleText(text: String) {
-        if (text.isBlank() || this.text == text) return
+        if (this.text == text) return
         if (badgeMode is BadgeMode.Bubble.Text) {
             this.text = text
             invalidate()
@@ -410,11 +496,6 @@ class BadgeView @JvmOverloads constructor(
 
     /**
      * Set the max number to be displayed in bubble.
-     *
-     * The [maxNumber] determines the minimum radius of the bubble. For
-     * example, if the value of maxNumber is 99, then the smallest bubble is
-     * the circumscribed circle of the bounding rectangle of the string **99+**
-     * in the specified style.
      *
      * The setting will only take effect when the [badgeMode] is
      * [BadgeMode.Bubble.Number].
@@ -447,7 +528,7 @@ class BadgeView @JvmOverloads constructor(
     }
 
     /**
-     * Set the text size of bubble in pixels.
+     * Set the text size of bubble(in pixels).
      *
      * The setting will only take effect when the mode is
      * [BadgeMode.Bubble.Number] or [BadgeMode.Bubble.Text].
@@ -478,13 +559,14 @@ class BadgeView @JvmOverloads constructor(
     }
 
     /**
-     * Hide dot. The setting will only take effect when the mode is
-     * [BadgeMode.Dot].
+     * Hide dot.
+     *
+     * The setting will only take effect when the mode is [BadgeMode.Dot].
      *
      * @since 0.5.3
      */
     fun hideDot() {
-        if (badgeMode == BadgeMode.Dot) {
+        if (badgeMode is BadgeMode.Dot) {
             badgeState = BadgeState.DotState.Hide
             invalidate()
         }
@@ -492,13 +574,14 @@ class BadgeView @JvmOverloads constructor(
 
 
     /**
-     * Show dot. The setting will only take effect when the mode is
-     * [BadgeMode.Dot].
+     * Show dot.
+     *
+     * The setting will only take effect when the mode is [BadgeMode.Dot].
      *
      * @since 0.5.3
      */
     fun showDot() {
-        if (badgeMode == BadgeMode.Dot) {
+        if (badgeMode is BadgeMode.Dot) {
             badgeState = BadgeState.DotState.Show
             invalidate()
         }
@@ -507,10 +590,16 @@ class BadgeView @JvmOverloads constructor(
     /**
      * Get number string of [textNumber].
      *
+     * The setting will only take effect when the mode is
+     * [BadgeMode.Bubble.Number].
+     *
      * @since 0.5.3
      */
-    private fun getBubbleTextNumber() =
+    fun getBubbleTextNumber(): String = if (badgeMode is BadgeMode.Bubble.Number) {
         if (textNumber == textMaxNumber) "$textMaxNumber+" else "$textNumber"
+    } else {
+        ""
+    }
 
     private fun startExplosionAnim() {
         badgeState = BadgeState.BubbleState.Hide
@@ -610,7 +699,7 @@ class BadgeView @JvmOverloads constructor(
                 else -> gone().let { BadgeMode.Unspecified }
             }
             badgeState = when (badgeMode) {
-                BadgeMode.Dot -> BadgeState.DotState.Show
+                BadgeMode.Dot -> BadgeState.DotState.Hide
                 BadgeMode.Bubble.Text -> BadgeState.BubbleState.Default
                 BadgeMode.Bubble.Number -> BadgeState.BubbleState.Default
                 BadgeMode.Unspecified -> BadgeState.UnspecifiedState
@@ -625,6 +714,8 @@ class BadgeView @JvmOverloads constructor(
             textPaint.color = getColor(R.styleable.BadgeView_bubble_text_color, color(R.color.white))
             textPaint.textSize = getDimension(R.styleable.BadgeView_bubble_text_size, DEFAULT_TEXT_SIZE)
         }
+
+        isNestedScrollingEnabled = true
     }
 
     companion object {
