@@ -118,6 +118,7 @@
     <declare-styleable name="CropViewLayout">
         <attr name="crop_mask_layer_color" />
         <attr name="crop_frame_type" />
+        <attr name="crop_frame_size" />
         <attr name="crop_frame_width" />
         <attr name="crop_frame_height" />
         <attr name="crop_frame_stroke_color" />
