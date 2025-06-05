@@ -35,7 +35,7 @@
                 android:src="@drawable/img_forest" />
 
             <com.ave.vastgui.tools.view.cropview.CropViewLayout
-                android:id="@+id/crop_view"
+                android:id="@+id/crop_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:crop_frame_type="rectangle" />

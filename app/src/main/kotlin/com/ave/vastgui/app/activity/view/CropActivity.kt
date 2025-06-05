@@ -17,12 +17,13 @@
 package com.ave.vastgui.app.activity.view
 
 import android.os.Bundle
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.ave.vastgui.app.databinding.ActivityCropBinding
-import com.ave.vastgui.app.fragment.view.CropLayoutFragment
+import com.ave.vastgui.app.R
+import com.ave.vastgui.app.databinding.ActivityCropViewBinding
+import com.ave.vastgui.app.fragment.view.CropFragment
 import com.ave.vastgui.app.log.logFactory
-import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.viewbinding.viewBinding
 
 // Author: Vast Gui
@@ -30,18 +31,18 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/cropview/crop-view/
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/intent/crop-intent/
 
-class CropActivity : VastVbActivity<ActivityCropBinding>() {
+class CropActivity : FragmentActivity(R.layout.activity_crop_view) {
 
     private val logcat = logFactory("CropActivity")
 
-    private val binding by viewBinding(ActivityCropBinding::bind)
+    private val binding by viewBinding(ActivityCropViewBinding::bind)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         supportFragmentManager.commit {
             setReorderingAllowed(true)
-            replace<CropLayoutFragment>(binding.container.id)
+            replace<CropFragment>(binding.container.id)
         }
     }
 
