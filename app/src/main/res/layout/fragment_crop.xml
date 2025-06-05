@@ -19,31 +19,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.view.CropImageActivity">
+    tools:context=".activity.view.CropActivity">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/open_with_crop_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="调用自定义裁剪" />
+        android:text="@string/crop_by_view" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/open_with_crop_photocontract"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="调用系统裁剪(CropPhotoContract)" />
+        android:text="@string/crop_by_contract" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/open_with_crop_intent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="调用系统裁剪(CropIntent)" />
+        android:text="@string/crop_by_intent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/open_camera"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="打开相机" />
+        android:text="@string/crop_open_camera" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/image"

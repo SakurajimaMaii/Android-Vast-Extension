@@ -51,6 +51,27 @@
     <string name="badge_icon_padding">图标内边距:%.3fdp</string>
     <!-- 徽标控件 end -->
 
+    <!-- 裁剪控件 start -->
+    <string name="crop_by_view">调用自定义裁剪</string>
+    <string name="crop_by_contract">调用系统裁剪(CropPhotoContract)</string>
+    <string name="crop_by_intent">调用系统裁剪(CropIntent)</string>
+    <string name="crop_open_camera">打开相机</string>
+    <string name="crop_switch_type">切换裁剪框类型</string>
+    <string name="crop_switch_type_fmt">裁剪框类型：%s</string>
+    <string name="crop_switch_mask_color">切换遮罩颜色</string>
+    <string name="crop_switch_stroke_color">切换边框颜色</string>
+    <string name="crop_change_width_and_height">切换裁剪框width/height</string>
+    <string name="crop_change_size">切换裁剪框size</string>
+    <string name="crop_change_size_fmt">%.2fdp</string>
+    <string name="crop_change_get_photo">获取裁剪图片</string>
+    <!-- 裁剪控件 end -->
+
+    <!-- 权限申请 start -->
+    <string name="permission_granted_fmt">%s权限已授予</string>
+    <string name="permission_denied_fmt">%s权限已被拒绝</string>
+    <string name="permission_no_more_ask_fmt">%s权限已被拒绝并不再询问</string>
+    <!-- 权限申请 end -->
+
     <string name="base_adapter">通用RecyclerView BaseAdapter</string>
     <string name="base_bind_adapter">通用RecyclerView BaseBindingAdapter</string>
     <string name="base_fragment_activity">FragmentActivity示例</string>

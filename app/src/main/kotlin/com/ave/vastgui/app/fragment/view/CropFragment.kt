@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.app.activity.view
+package com.ave.vastgui.app.fragment.view
 
 import android.app.Activity
 import android.content.Intent
@@ -23,13 +23,15 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore.Images.Media
+import android.view.View
 import android.webkit.MimeTypeMap
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.ave.vastgui.app.databinding.ActivityCropImageBinding
+import androidx.fragment.app.Fragment
+import com.ave.vastgui.app.R
+import com.ave.vastgui.app.databinding.FragmentCropBinding
 import com.ave.vastgui.app.log.logFactory
-import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.activity.app.VastCropActivity
 import com.ave.vastgui.tools.activity.result.contract.CropPhotoContract
 import com.ave.vastgui.tools.activity.result.contract.PickPhotoContract
@@ -41,16 +43,19 @@ import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.cropimage.CropIntent
 import com.ave.vastgui.tools.utils.permission.Permission
 import com.ave.vastgui.tools.utils.permission.requestPermission
+import com.ave.vastgui.tools.view.toast.SimpleToast
+import com.ave.vastgui.tools.viewbinding.viewBinding
 import java.io.File
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/cropview/crop-view/
-// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/intent/crop-intent/
+// Date: 2025/6/5
 
-class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
+class CropFragment : Fragment(R.layout.fragment_crop) {
 
-    private val logger = logFactory("CropImageActivity")
+    private val logcat = logFactory("CropFragment")
+
+    private val binding by viewBinding(FragmentCropBinding::bind)
 
     private var output: Uri? = null
 
@@ -59,11 +64,12 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
         registerForActivityResult(PickPhotoContract()) { uri ->
             uri?.let { cropImageWithActivity(it) }
         }
+
     private val openWithCropActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            logger.d { "调用自定义裁剪返回代码 ${result.resultCode}" }
+            logcat.d { "调用自定义裁剪返回代码 ${result.resultCode}" }
             if (result.resultCode == VastCropActivity.RESULT_OK) {
-                getBinding().image.setImageURI(result.data?.data)
+                binding.image.setImageURI(result.data?.data)
             }
         }
 
@@ -72,9 +78,10 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
         registerForActivityResult(PickPhotoContract()) { uri ->
             uri?.let { cropImageWithCropContract(it) }
         }
+
     private val openWithCropPhotoContract =
         registerForActivityResult(CropPhotoContract(AppUtils.getPackageName())) { uri ->
-            getBinding().image.setImageURI(uri)
+            binding.image.setImageURI(uri)
         }
 
     // 从相册选择图片之后通过 CropIntent 调用系统裁剪
@@ -82,24 +89,25 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
         registerForActivityResult(PickPhotoContract()) { uri ->
             uri?.let { cropImageWithCropIntent(it) }
         }
+
     private val openWithCropIntent =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                getBinding().image.setImageURI(result.data?.data)
+                binding.image.setImageURI(result.data?.data)
                 removePermission()
             }
         }
 
     private val takePhoto =
         registerForActivityResult(TakePhotoContract("com.ave.vastgui.app")) {
-            getBinding().image.setImageURI(it)
+            binding.image.setImageURI(it)
         }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // NOTE https://medium.com/androiddevelopers/insets-handling-tips-for-android-15s-edge-to-edge-enforcement-872774e8839b
-        ViewCompat.setOnApplyWindowInsetsListener(getBinding().root) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val padding = insets.getInsets(WindowInsetsCompat.Type.systemBars()
                     or WindowInsetsCompat.Type.displayCutout())
             v.setPadding(padding.left, padding.top, padding.right, padding.bottom)
@@ -109,36 +117,36 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
 
         requestPermission(Permission.READ_MEDIA_IMAGES) {
             granted = {
-                getSnackbar().setText("$it 权限已授予").show()
+                SimpleToast.showShortMsg(String.format(getString(R.string.permission_granted_fmt), it))
             }
             denied = {
-                getSnackbar().setText("$it 权限已被拒绝").show()
+                SimpleToast.showShortMsg(String.format(getString(R.string.permission_denied_fmt), it))
             }
             noMoreAsk = {
-                getSnackbar().setText("$it 权限已被拒绝并不再询问").show()
+                SimpleToast.showShortMsg(String.format(getString(R.string.permission_no_more_ask_fmt), it))
             }
         }
 
-        getBinding().openWithCropActivity.setOnClickListener {
+        binding.openWithCropActivity.setOnClickListener {
             pickWithCropActivity.launch(null)
         }
 
-        getBinding().openWithCropPhotocontract.setOnClickListener {
+        binding.openWithCropPhotocontract.setOnClickListener {
             pickWithCropPhotoContract.launch(null)
         }
 
-        getBinding().openWithCropIntent.setOnClickListener {
+        binding.openWithCropIntent.setOnClickListener {
             pickWithCropIntent.launch(null)
         }
 
-        getBinding().openCamera.setOnClickListener {
+        binding.openCamera.setOnClickListener {
             takePhoto.launch(null)
         }
     }
 
     /** 使用 [VastCropActivity] 来调用裁剪。 */
     private fun cropImageWithActivity(uri: Uri) {
-        val intent = Intent(this, VastCropActivity::class.java).apply {
+        val intent = Intent(requireContext(), VastCropActivity::class.java).apply {
             data = uri
             putExtra(VastCropActivity.AUTHORITY, "com.ave.vastgui.app")
             putExtra(VastCropActivity.FRAME_TYPE, VastCropActivity.FRAME_TYPE_RECTANGLE)
@@ -191,7 +199,7 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
     private fun removePermission() {
         /** Revoke uri permission that is granted in [CropIntent.setOutputUri] */
         if (Build.VERSION.SDK_INT in (Build.VERSION_CODES.N until Build.VERSION_CODES.R) && null != output) {
-            revokeUriPermission(
+            requireContext().revokeUriPermission(
                 output, Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
                         Intent.FLAG_GRANT_READ_URI_PERMISSION
             )
@@ -199,5 +207,6 @@ class CropImageActivity : VastVbActivity<ActivityCropImageBinding>() {
     }
 
     private fun getExtension(uri: Uri): String =
-        MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri)) ?: "jpg"
+        MimeTypeMap.getSingleton().getExtensionFromMimeType(requireContext().contentResolver.getType(uri)) ?: "jpg"
+
 }
