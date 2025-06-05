@@ -109,6 +109,7 @@
             <enum name="grid9" value="2" />
             <enum name="rectangle" value="3" />
         </attr>
+        <attr name="crop_frame_size" format="dimension|reference" />
         <attr name="crop_frame_width" format="dimension|reference" />
         <attr name="crop_frame_height" format="dimension|reference" />
         <attr name="crop_frame_stroke_color" format="dimension|reference" />
