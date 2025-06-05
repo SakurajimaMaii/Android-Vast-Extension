@@ -33,7 +33,6 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.exifinterface.media.ExifInterface
 import com.ave.vastgui.tools.R
@@ -46,6 +45,9 @@ import java.io.File
 import java.io.IOException
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
+import androidx.core.content.withStyledAttributes
+import com.ave.vastgui.tools.utils.color
+import com.ave.vastgui.tools.utils.dimension
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -55,25 +57,25 @@ import kotlin.math.sqrt
 /**
  * Crop View Layout.
  *
- * @property mImageView The imageview is used to show original image.
- * @property mCropView The crop view.
+ * @property srcImage The imageview is used to show original image.
+ * @property cropView The crop view.
  * @property mMatrix The matrix that is used to record state of the
- *     original image.
+ * original image.
  * @property mSavedMatrix The matrix that is used to record last time state
- *     of the original image.
+ * of the original image.
  * @property mode Currently gesture.
  * @property mStart The coordinate when [MotionEvent.getAction] is
- *     [MotionEvent.ACTION_DOWN].
+ * [MotionEvent.ACTION_DOWN].
  * @property mMid The coordinate of the middle point of the two fingers
- *     when zooming.
+ * when zooming.
  * @property mOldDist The distance of the two fingers last time.
- * @property mMatrixValues The value of [mMatrix].
- * @property mMinScale The minimum allowable scale value.
- * @property mMaxScale The maximum allowable scale value.
+ * @property matrixValues The value of [mMatrix].
+ * @property minScale The minimum allowable scale value.
+ * @property maxScale The maximum allowable scale value.
  * @property mCurrentlyScale The currently scale value of original image.
- * @property mCropMaskColor See [CropView.mCropMaskColor].
- * @property mCropFrameType See [CropView.mCropFrameType].
- * @property mCropFrameStrokeColor See [CropView.mCropFrameStrokeColor].
+ * @property mCropMaskColor See [CropView.cropMaskColor].
+ * @property mCropFrameType See [CropView._cropFrameType].
+ * @property cropFrameStrokeColor See [CropView._cropFrameStrokeColor].
  * @since 0.5.0
  */
 class CropViewLayout @JvmOverloads constructor(
@@ -83,35 +85,64 @@ class CropViewLayout @JvmOverloads constructor(
     defStyleRes: Int = R.style.BaseCropViewLayout
 ) : ConstraintLayout(context, attrs, defStyleAttr, defStyleRes) {
 
-    private val mDefaultCropFrameWidth
-        get() = context.resources.getDimension(R.dimen.default_crop_frame_width)
-    private val mDefaultCropFrameHeight
-        get() = context.resources.getDimension(R.dimen.default_crop_frame_height)
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_CROP_FRAME_WIDTH = dimension(R.dimen.default_crop_frame_width)
 
-    private val mBinding by viewBinding(CropLayoutBinding::bind, R.id.crop_layout_root)
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_CROP_FRAME_HEIGHT = dimension(R.dimen.default_crop_frame_height)
 
-    private val mImageView
-        get() = mBinding.cropLayoutImage
-    private val mCropView
-        get() = mBinding.cropLayoutCrop
+    /** @since 1.5.2 */
+    private val binding by viewBinding(CropLayoutBinding::bind, R.id.crop_layout_root)
+
+    /** @since 1.5.2 */
+    private val srcImage
+        get() = binding.cropLayoutImage
+
+    /** @since 1.5.2 */
+    private val cropView
+        get() = binding.cropLayoutCrop
+
+    /** @since 1.5.2 */
     private val mMatrix: Matrix = Matrix()
+
+    /** @since 1.5.2 */
     private val mSavedMatrix: Matrix = Matrix()
+
+    /** @since 1.5.2 */
     private var mode = CropViewLayoutGesture.NONE
+
+    /** @since 1.5.2 */
     private val mStart = PointF()
+
+    /** @since 1.5.2 */
     private val mMid = PointF()
+
+    /** @since 1.5.2 */
     private var mOldDist = 1f
-    private val mMatrixValues = FloatArray(9)
-    private var mMinScale = 0f
-    private val mMaxScale = 4f
-    private val mWidthPixels
+
+    /** @since 1.5.2 */
+    private val matrixValues = FloatArray(9)
+
+    /** @since 1.5.2 */
+    private var minScale = 0f
+
+    /** @since 1.5.2 */
+    private val maxScale = 4f
+
+    /** @since 1.5.2 */
+    private val widthPixels
         get() = ScreenSizeUtils.getMobileScreenWidth(context)
-    private val mHeightPixels
+
+    /** @since 1.5.2 */
+    private val heightPixels
         get() = ScreenSizeUtils.getMobileScreenHeight(context)
 
     val mCurrentlyScale: Float
         get() {
-            mMatrix.getValues(mMatrixValues)
-            return mMatrixValues[Matrix.MSCALE_X]
+            mMatrix.getValues(matrixValues)
+            return matrixValues[Matrix.MSCALE_X]
         }
 
     /**
@@ -120,11 +151,11 @@ class CropViewLayout @JvmOverloads constructor(
      */
     var mCropMaskColor: Int
         set(value) {
-            mCropView.refreshWithInvalidate {
+            cropView.refreshWithInvalidate {
                 setCropMaskColor(value)
             }
         }
-        get() = mCropView.mCropMaskColor
+        get() = cropView.cropMaskColor
 
     /**
      * @see CropView.setCropFrameType
@@ -132,29 +163,27 @@ class CropViewLayout @JvmOverloads constructor(
      */
     var mCropFrameType: CropFrameType
         set(value) {
-            mCropView.refreshWithInvalidate {
+            cropView.refreshWithInvalidate {
                 setCropFrameType(value)
             }
         }
-        get() = mCropView.mCropFrameType
+        get() = cropView.cropFrameType
 
     /**
      * @see CropView.setCropFrameStrokeColor
      * @since 0.5.0
      */
-    var mCropFrameStrokeColor: Int
-        set(value) {
-            mCropView.refreshWithInvalidate {
-                setCropFrameStrokeColor(value)
-            }
-        }
-        get() = mCropView.mCropFrameStrokeColor
+    var cropFrameStrokeColor: Int
+        set(value) = cropView.setCropFrameStrokeColor(value)
+        get() = cropView.cropFrameStrokeColor
 
-    val mCropFrameWidth: Float
-        get() = mCropView.mCropFrameWidth
+    /** @since 1.5.2 */
+    val cropFrameWidth: Float
+        get() = cropView.cropFrameWidth
 
-    val mCropFrameHeight: Float
-        get() = mCropView.mCropFrameHeight
+    /** @since 1.5.2 */
+    val cropFrameHeight: Float
+        get() = cropView.cropFrameHeight
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -204,24 +233,24 @@ class CropViewLayout @JvmOverloads constructor(
                     if (newDist > 10f) {
                         var scale = newDist / mOldDist
                         if (scale < 1) {
-                            if (mCurrentlyScale > mMinScale) {
+                            if (mCurrentlyScale > minScale) {
                                 mMatrix.set(mSavedMatrix)
                                 mMatrix.postScale(scale, scale, mMid.x, mMid.y)
-                                while (mCurrentlyScale < mMinScale) {
+                                while (mCurrentlyScale < minScale) {
                                     scale = 1 + 0.01f
                                     mMatrix.postScale(scale, scale, mMid.x, mMid.y)
                                 }
                             }
                             checkBorder()
                         } else {
-                            if (mCurrentlyScale <= mMaxScale) {
+                            if (mCurrentlyScale <= maxScale) {
                                 mMatrix.set(mSavedMatrix)
                                 mMatrix.postScale(scale, scale, mMid.x, mMid.y)
                             }
                         }
                     }
                 }
-                mImageView.imageMatrix = mMatrix
+                srcImage.imageMatrix = mMatrix
             }
         }
         return true
@@ -234,11 +263,11 @@ class CropViewLayout @JvmOverloads constructor(
      * @since 0.5.0
      */
     fun setImageSrc(file: File) {
-        val observer = mImageView.viewTreeObserver
+        val observer = srcImage.viewTreeObserver
         observer.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 initSrcPic(file)
-                mImageView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                srcImage.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
     }
@@ -255,13 +284,13 @@ class CropViewLayout @JvmOverloads constructor(
     ): Bitmap? {
         var cropBitmap: Bitmap? = null
         var scaleCropBitmap: Bitmap? = null
-        val rect: Rect = mCropView.getCropFrameRect()
+        val rect: Rect = cropView.getCropFrameRect()
         try {
             val origin = Bitmap.createBitmap(
-                mImageView.width, mImageView.height, Bitmap.Config.ARGB_8888
+                srcImage.width, srcImage.height, Bitmap.Config.ARGB_8888
             )
             val canvas = Canvas(origin)
-            mImageView.draw(canvas)
+            srcImage.draw(canvas)
             cropBitmap = Bitmap.createBitmap(
                 origin, rect.left, rect.top, rect.width(), rect.height()
             )
@@ -283,12 +312,12 @@ class CropViewLayout @JvmOverloads constructor(
     fun getCroppedImageUnderApi28(requireWidth: Int, requireHeight: Int): Bitmap? {
         var cropBitmap: Bitmap? = null
         var scaleCropBitmap: Bitmap? = null
-        mImageView.isDrawingCacheEnabled = true
-        mImageView.buildDrawingCache()
-        val rect: Rect = mCropView.getCropFrameRect()
+        srcImage.isDrawingCacheEnabled = true
+        srcImage.buildDrawingCache()
+        val rect: Rect = cropView.getCropFrameRect()
         try {
             cropBitmap = Bitmap.createBitmap(
-                mImageView.drawingCache, rect.left, rect.top, rect.width(), rect.height()
+                srcImage.drawingCache, rect.left, rect.top, rect.width(), rect.height()
             )
             scaleCropBitmap =
                 BmpUtils.scaleBitmap(cropBitmap, requireWidth, requireHeight)
@@ -296,7 +325,7 @@ class CropViewLayout @JvmOverloads constructor(
             e.printStackTrace()
         }
         cropBitmap?.recycle()
-        mImageView.destroyDrawingCache()
+        srcImage.destroyDrawingCache()
         return scaleCropBitmap
     }
 
@@ -305,7 +334,7 @@ class CropViewLayout @JvmOverloads constructor(
      * @since 0.5.0
      */
     fun setCropFrameSize(width: Float, height: Float) {
-        mCropView.setCropFrameSize(width, height)
+        cropView.setCropFrameSize(width, height)
     }
 
     /**
@@ -315,7 +344,7 @@ class CropViewLayout @JvmOverloads constructor(
      */
     private fun getMatrixRectF(matrix: Matrix): RectF {
         val rect = RectF()
-        mImageView.drawable?.let {
+        srcImage.drawable?.let {
             rect.set(0f, 0f, it.intrinsicWidth.toFloat(), it.intrinsicHeight.toFloat())
             matrix.mapRect(rect)
         }
@@ -382,7 +411,7 @@ class CropViewLayout @JvmOverloads constructor(
         val rect = getMatrixRectF(mMatrix)
         var deltaX = 0f
         var deltaY = 0f
-        val frame = mCropView.getCropFrameRect()
+        val frame = cropView.getCropFrameRect()
         if (rect.width() + 0.01 >= frame.width()) {
             // Image left side > Crop frame left side.
             if (rect.left > frame.left) {
@@ -421,8 +450,8 @@ class CropViewLayout @JvmOverloads constructor(
         }
         var bitmap: Bitmap = getBitmapWithRequireSize(
             path,
-            if (w > mWidthPixels) mWidthPixels else w,
-            if (h > mHeightPixels) mHeightPixels else h
+            if (w > widthPixels) widthPixels else w,
+            if (h > heightPixels) heightPixels else h
         ) ?: return
 
         val rotation = getExifOrientation(path)
@@ -436,30 +465,30 @@ class CropViewLayout @JvmOverloads constructor(
         // not smaller than the cropping frame scale value.
         var scaleX: Float
         if (bitmap.width >= bitmap.height) {
-            scaleX = mImageView.width.toFloat() / bitmap.width
-            val rect: Rect = mCropView.getCropFrameRect()
-            mMinScale = rect.height() / bitmap.height.toFloat()
-            if (scaleX < mMinScale) {
-                scaleX = mMinScale
+            scaleX = srcImage.width.toFloat() / bitmap.width
+            val rect: Rect = cropView.getCropFrameRect()
+            minScale = rect.height() / bitmap.height.toFloat()
+            if (scaleX < minScale) {
+                scaleX = minScale
             }
         } else {
-            scaleX = mImageView.height.toFloat() / bitmap.height
-            val rect: Rect = mCropView.getCropFrameRect()
-            mMinScale = rect.width() / bitmap.width.toFloat()
-            if (scaleX < mMinScale) {
-                scaleX = mMinScale
+            scaleX = srcImage.height.toFloat() / bitmap.height
+            val rect: Rect = cropView.getCropFrameRect()
+            minScale = rect.width() / bitmap.width.toFloat()
+            if (scaleX < minScale) {
+                scaleX = minScale
             }
         }
         val scaleY: Float = scaleX
         mMatrix.postScale(scaleX, scaleY)
-        val midX = mImageView.width / 2
-        val midY = mImageView.height / 2
+        val midX = srcImage.width / 2
+        val midY = srcImage.height / 2
         val imageMidX = (bitmap.width * scaleX / 2).toInt()
         val imageMidY = (bitmap.height * scaleY / 2).toInt()
         mMatrix.postTranslate((midX - imageMidX).toFloat(), (midY - imageMidY).toFloat())
-        mImageView.scaleType = ImageView.ScaleType.MATRIX
-        mImageView.imageMatrix = mMatrix
-        mImageView.setImageBitmap(bitmap)
+        srcImage.scaleType = ImageView.ScaleType.MATRIX
+        srcImage.imageMatrix = mMatrix
+        srcImage.setImageBitmap(bitmap)
     }
 
     /**
@@ -516,36 +545,21 @@ class CropViewLayout @JvmOverloads constructor(
 
     init {
         inflate(context, R.layout.crop_layout, this)
-        val typeArray = context.obtainStyledAttributes(
-            attrs,
-            R.styleable.CropViewLayout,
-            defStyleAttr,
-            defStyleRes
-        )
-        mCropMaskColor = typeArray.getColor(
-            R.styleable.CropViewLayout_crop_mask_layer_color,
-            ContextCompat.getColor(context, R.color.default_crop_frame_mask_color)
-        )
-        mCropFrameType =
-            when (typeArray.getInt(R.styleable.CropViewLayout_crop_frame_type, 0)) {
-                CropFrameType.CIRCLE.ordinal -> CropFrameType.CIRCLE
-                CropFrameType.SQUARE.ordinal -> CropFrameType.SQUARE
-                CropFrameType.GRID9.ordinal -> CropFrameType.GRID9
-                CropFrameType.RECTANGLE.ordinal -> CropFrameType.RECTANGLE
-                else -> CropFrameType.CIRCLE
-            }
-        mCropFrameStrokeColor = typeArray.getColor(
-            R.styleable.CropViewLayout_crop_frame_stroke_color,
-            ContextCompat.getColor(context, R.color.md_theme_primaryFixedDim)
-        )
-        val mCropFrameWidth = typeArray.getDimension(
-            R.styleable.CropView_crop_frame_width, mDefaultCropFrameWidth
-        )
-        val mCropFrameHeight = typeArray.getDimension(
-            R.styleable.CropView_crop_frame_height, mDefaultCropFrameHeight
-        )
-        setCropFrameSize(mCropFrameWidth, mCropFrameHeight)
-        typeArray.recycle()
+        context.withStyledAttributes(attrs, R.styleable.CropViewLayout, defStyleAttr, defStyleRes) {
+            mCropMaskColor = getColor(R.styleable.CropViewLayout_crop_mask_layer_color, color(R.color.default_crop_frame_mask_color))
+            mCropFrameType =
+                when (getInt(R.styleable.CropViewLayout_crop_frame_type, 0)) {
+                    CropFrameType.CIRCLE.ordinal -> CropFrameType.CIRCLE
+                    CropFrameType.SQUARE.ordinal -> CropFrameType.SQUARE
+                    CropFrameType.GRID9.ordinal -> CropFrameType.GRID9
+                    CropFrameType.RECTANGLE.ordinal -> CropFrameType.RECTANGLE
+                    else -> CropFrameType.CIRCLE
+                }
+            cropFrameStrokeColor = getColor(R.styleable.CropViewLayout_crop_frame_stroke_color, color(R.color.md_theme_primaryFixedDim))
+            val width = getDimension(R.styleable.CropViewLayout_crop_frame_width, DEFAULT_CROP_FRAME_WIDTH)
+            val height = getDimension(R.styleable.CropViewLayout_crop_frame_height, DEFAULT_CROP_FRAME_HEIGHT)
+            setCropFrameSize(width, height)
+        }
     }
 
 }
