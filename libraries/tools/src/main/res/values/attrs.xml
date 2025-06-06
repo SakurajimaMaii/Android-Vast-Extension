@@ -232,9 +232,8 @@
         </attr>
         <!--Star orientation. -->
         <attr name="star_orientation" format="enum">
-            <enum name="unspecified" value="0" />
-            <enum name="horizontal" value="1" />
-            <enum name="vertical" value="2" />
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
         </attr>
     </declare-styleable>
 

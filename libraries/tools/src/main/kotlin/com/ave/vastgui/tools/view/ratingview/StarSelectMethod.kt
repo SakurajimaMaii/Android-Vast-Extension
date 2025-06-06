@@ -24,10 +24,8 @@ package com.ave.vastgui.tools.view.ratingview
 /**
  * Rating select method
  *
- * @since 0.5.3
+ * @since 1.5.2
  */
-sealed class StarSelectMethod(val code: Int) {
-    data object UNABLE : StarSelectMethod(0)
-    data object CLICK : StarSelectMethod(1)
-    data object SLIDING : StarSelectMethod(2)
+enum class StarSelectMethod {
+    Unable, Click, Sliding
 }
