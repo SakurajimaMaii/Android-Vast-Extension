@@ -26,7 +26,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import androidx.core.animation.addListener
+import androidx.core.animation.doOnEnd
 import com.ave.vastgui.core.extension.NotNUllVar
 
 // Author: Vast Gui
@@ -38,39 +38,59 @@ import com.ave.vastgui.core.extension.NotNUllVar
  *
  * @since 0.5.6
  */
-class MaskView internal constructor(context: Context) : View(context) {
+internal class MaskView(context: Context) : View(context) {
 
-    private val mPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    /** @since 1.5.2 */
+    private val paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
     }
-    private val mExpandedXfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
-    private val mCollapsedXfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
-    private var mMaskRadius: Float = 0f
 
-    internal lateinit var mBitmap: Bitmap
-    internal var mTargetMaskRadius: Float = 0f
-    internal var mMaskAnimation: MaskAnimation = MaskAnimation.COLLAPSED
-    internal var mMaskDuration: Long = 1000L
-    internal var mMaskTimeInterpolator: TimeInterpolator = AccelerateDecelerateInterpolator()
-    internal var mMaskCenterX: Float by NotNUllVar()
-    internal var mMaskCenterY: Float by NotNUllVar()
+    /** @since 1.5.2 */
+    private val expandedXfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+
+    /** @since 1.5.2 */
+    private val collapsedXfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+
+    /** @since 1.5.2 */
+    private var maskRadius: Float = 0f
+
+    /** @since 1.5.2 */
+    internal lateinit var bitmap: Bitmap
+
+    /** @since 1.5.2 */
+    internal var targetMaskRadius: Float = 0f
+
+    /** @since 1.5.2 */
+    internal var maskAnimation: MaskAnimation = MaskAnimation.COLLAPSED
+
+    /** @since 1.5.2 */
+    internal var maskDuration: Long = 1000L
+
+    /** @since 1.5.2 */
+    internal var maskTimeInterpolator: TimeInterpolator = AccelerateDecelerateInterpolator()
+
+    /** @since 1.5.2 */
+    internal var maskCenterX: Float by NotNUllVar()
+
+    /** @since 1.5.2 */
+    internal var maskCenterY: Float by NotNUllVar()
 
     override fun onDraw(canvas: Canvas) = with(canvas) {
         val layer = saveLayer(0f, 0f, width.toFloat(), height.toFloat(), null)
-        when (mMaskAnimation) {
+        when (maskAnimation) {
             MaskAnimation.EXPANDED -> {
-                drawBitmap(mBitmap, 0f, 0f, null)
-                mPaint.xfermode = mExpandedXfermode
-                drawCircle(mMaskCenterX, mMaskCenterY, mMaskRadius, mPaint)
+                drawBitmap(bitmap, 0f, 0f, null)
+                paint.xfermode = expandedXfermode
+                drawCircle(maskCenterX, maskCenterY, maskRadius, paint)
             }
 
             MaskAnimation.COLLAPSED -> {
-                drawCircle(mMaskCenterX, mMaskCenterY, mMaskRadius, mPaint)
-                mPaint.xfermode = mCollapsedXfermode
-                drawBitmap(mBitmap, 0f, 0f, mPaint)
+                drawCircle(maskCenterX, maskCenterY, maskRadius, paint)
+                paint.xfermode = collapsedXfermode
+                drawBitmap(bitmap, 0f, 0f, paint)
             }
         }
-        mPaint.xfermode = null
+        paint.xfermode = null
         restoreToCount(layer)
     }
 
@@ -80,21 +100,19 @@ class MaskView internal constructor(context: Context) : View(context) {
      * @since 0.5.6
      */
     fun activeMask(animation: MaskAnimation, animFinish: () -> Unit) {
-        mMaskAnimation = animation
+        maskAnimation = animation
         val radiusRange = when (animation) {
-            MaskAnimation.EXPANDED -> 0f to mTargetMaskRadius
-            MaskAnimation.COLLAPSED -> mTargetMaskRadius to 0f
+            MaskAnimation.EXPANDED -> 0f to targetMaskRadius
+            MaskAnimation.COLLAPSED -> targetMaskRadius to 0f
         }
         ValueAnimator.ofFloat(radiusRange.first, radiusRange.second).apply {
-            duration = mMaskDuration
-            interpolator = mMaskTimeInterpolator
-            addUpdateListener { valueAnimator ->
-                mMaskRadius = valueAnimator.animatedValue as Float
+            duration = maskDuration
+            interpolator = maskTimeInterpolator
+            addUpdateListener {
+                maskRadius = it.animatedValue as Float
                 invalidate()
             }
-            addListener(onEnd = {
-                animFinish()
-            })
+            doOnEnd { animFinish() }
             start()
         }
     }

@@ -19,6 +19,7 @@ package com.ave.vastgui.tools.view.masklayout
 import android.animation.TimeInterpolator
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -28,6 +29,7 @@ import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.annotation.ExperimentalView
 import com.ave.vastgui.tools.view.extension.viewSnapshot
 import kotlin.math.hypot
+import kotlin.system.measureTimeMillis
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -42,7 +44,9 @@ import kotlin.math.hypot
 class MaskLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-) : FrameLayout(context, attrs) {
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     interface MaskAnimationListener {
         /**
@@ -52,7 +56,7 @@ class MaskLayout @JvmOverloads constructor(
          *
          * **Warning: You cannot call method like
          * [AppCompatDelegate.setDefaultNightMode] in this callback to modify the
-         * mode ofthe activity, because modifying the activity mode will cause
+         * mode of the activity, because modifying the activity mode will cause
          * activity recreate, leading to serious consequences such as animation
          * abnormalities.**
          *
@@ -69,25 +73,30 @@ class MaskLayout @JvmOverloads constructor(
         fun onMaskFinished()
     }
 
-    private var mAnimationRunning: Boolean = false
-    private var mTargetMaskRadius: Float = 0f
+    /** @since 1.5.2 */
+    private var animationRunning: Boolean = false
 
-    var mMaskCenterX: Float by NotNUllVar()
+    /** @since 1.5.2 */
+    private var targetMaskRadius: Float = 0f
 
-    var mMaskCenterY: Float by NotNUllVar()
+    /** @since 1.5.2 */
+    var maskCenterX: Float by NotNUllVar()
 
-    var mMaskDuration: Long = 1000L
+    /** @since 1.5.2 */
+    var maskCenterY: Float by NotNUllVar()
+
+    /** @since 1.5.2 */
+    var maskDuration: Long = 1000L
         set(value) {
             field = value.coerceAtLeast(0L)
         }
 
-    var mMaskTimeInterpolator: TimeInterpolator =
-        AccelerateDecelerateInterpolator()
+    /** @since 1.5.2 */
+    var maskTimeInterpolator: TimeInterpolator = AccelerateDecelerateInterpolator()
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        mTargetMaskRadius =
-            hypot(measuredWidth.toFloat(), measuredHeight.toFloat())
+        this@MaskLayout.targetMaskRadius = hypot(measuredWidth.toFloat(), measuredHeight.toFloat())
     }
 
     /**
@@ -98,25 +107,22 @@ class MaskLayout @JvmOverloads constructor(
      * @since 0.5.6
      */
     fun activeMask(animation: MaskAnimation, listener: MaskAnimationListener) {
-        if (mAnimationRunning) {
-            return
-        } else {
-            mAnimationRunning = true
-            val maskView = MaskView(context).apply {
-                mBitmap = viewSnapshot(this@MaskLayout)
-                mTargetMaskRadius = this@MaskLayout.mTargetMaskRadius
-                mMaskDuration = this@MaskLayout.mMaskDuration
-                mMaskTimeInterpolator = this@MaskLayout.mMaskTimeInterpolator
-                mMaskCenterX = this@MaskLayout.mMaskCenterX
-                mMaskCenterY = this@MaskLayout.mMaskCenterY
-            }
-            addView(maskView)
-            listener.onMaskComplete()
-            maskView.activeMask(animation) {
-                removeView(maskView)
-                mAnimationRunning = false
-                listener.onMaskFinished()
-            }
+        if (animationRunning) return
+        animationRunning = true
+        val maskView: MaskView = MaskView(context).apply {
+            bitmap = viewSnapshot(this@MaskLayout)
+            this.targetMaskRadius = this@MaskLayout.targetMaskRadius
+            this.maskDuration = this@MaskLayout.maskDuration
+            this.maskTimeInterpolator = this@MaskLayout.maskTimeInterpolator
+            this.maskCenterX = this@MaskLayout.maskCenterX
+            this.maskCenterY = this@MaskLayout.maskCenterY
+        }
+        addView(maskView)
+        listener.onMaskComplete()
+        maskView.activeMask(animation) {
+            removeView(maskView)
+            animationRunning = false
+            listener.onMaskFinished()
         }
     }
 
@@ -129,15 +135,11 @@ class MaskLayout @JvmOverloads constructor(
         view.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                mMaskCenterX = view.left + view.width / 2f
-                mMaskCenterY = view.top + view.height / 2f
+                this@MaskLayout.maskCenterX = view.left + view.width / 2f
+                this@MaskLayout.maskCenterY = view.top + view.height / 2f
                 view.getViewTreeObserver().removeOnGlobalLayoutListener(this)
             }
         })
     }
 
-    init {
-        mMaskDuration = 1000L
-        mMaskTimeInterpolator = AccelerateDecelerateInterpolator()
-    }
 }
