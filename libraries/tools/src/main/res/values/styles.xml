@@ -147,6 +147,8 @@
         <item name="indicator_style">circle</item>
         <item name="indicator_selected_color">@color/md_theme_primary</item>
         <item name="indicator_unselected_color">@color/md_theme_primaryContainer</item>
+        <item name="indicator_bitmap_width">@dimen/default_indicator_bitmap_width</item>
+        <item name="indicator_bitmap_height">@dimen/default_indicator_bitmap_height</item>
         <item name="indicator_circle_radius">@dimen/default_indicator_circle_radius</item>
         <item name="indicator_item_distance">@dimen/default_indicator_item_distance</item>
         <item name="indicator_item_count">@integer/default_indicator_item_count</item>

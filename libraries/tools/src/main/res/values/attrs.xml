@@ -244,6 +244,8 @@
         </attr>
         <attr name="indicator_selected_color" format="color|reference" />
         <attr name="indicator_unselected_color" format="color|reference" />
+        <attr name="indicator_bitmap_width" format="dimension|reference" />
+        <attr name="indicator_bitmap_height" format="dimension|reference" />
         <attr name="indicator_circle_radius" format="dimension" />
         <attr name="indicator_item_count" format="integer" />
         <attr name="indicator_item_distance" format="dimension" />
