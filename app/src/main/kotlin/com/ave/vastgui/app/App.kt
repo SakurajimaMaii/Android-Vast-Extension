@@ -19,6 +19,9 @@ package com.ave.vastgui.app
 import android.app.Application
 import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.app.log.marsLogger
+import com.ave.vastgui.app.theme.OptionFactory
+import com.ave.vastgui.app.theme.compat.FabExecutorBuilder
+import com.ave.vastgui.app.theme.compat.FabFactory
 import com.ave.vastgui.tools.exception.AppCrashHandler.Companion.setDefaultUncaughtExceptionHandler
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.kongzue.dialogx.DialogX
@@ -26,6 +29,10 @@ import com.kongzue.dialogx.style.IOSStyle
 import com.log.vastgui.android.lifecycle.LifecycleLogcat.Companion.registerLifecycleLogcat
 import com.log.vastgui.core.annotation.LogExperimental
 import com.log.vastgui.core.base.LogTag
+import org.alee.component.skin.compat.ConstraintLayoutCompat
+import org.alee.component.skin.page.WindowManager
+import org.alee.component.skin.service.Config
+import org.alee.component.skin.service.ThemeSkinService
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -44,12 +51,14 @@ class App : Application() {
         registerLifecycleLogcat { tag, event, bundle ->
             mLogcat.i(LogTag(tag), "$event $bundle")
         }
-//        WindowManager.getInstance().init(this, OptionFactory())
-//        ThemeSkinService.getInstance().apply {
-//            createViewInterceptor.add(FabFactory())
-//            addThemeSkinExecutorBuilder(FabExecutorBuilder())
-//        }
-//         ConstraintLayoutCompat.init()
+
+        WindowManager.getInstance().init(this, OptionFactory())
+        ThemeSkinService.getInstance().apply {
+            createViewInterceptor.add(FabFactory())
+            addThemeSkinExecutorBuilder(FabExecutorBuilder())
+        }
+        ConstraintLayoutCompat.init()
+
         setDefaultUncaughtExceptionHandler { _, _, stackTraceInfo ->
             mLogcat.e(stackTraceInfo)
         }
@@ -61,10 +70,10 @@ class App : Application() {
     }
 
     init {
-//        Config.getInstance().skinMode = Config.SkinMode.REPLACE_ALL
-//        Config.getInstance().isEnableDebugMode = true
-//        Config.getInstance().isEnableStrictMode = true
-//        Config.getInstance().performanceMode = Config.PerformanceMode.EXPERIENCE_FIRST
+        Config.getInstance().skinMode = Config.SkinMode.REPLACE_ALL
+        Config.getInstance().isEnableDebugMode = true
+        Config.getInstance().isEnableStrictMode = true
+        Config.getInstance().performanceMode = Config.PerformanceMode.EXPERIENCE_FIRST
     }
 
 }

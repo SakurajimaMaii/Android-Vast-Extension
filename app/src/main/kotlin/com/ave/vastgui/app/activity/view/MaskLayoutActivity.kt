@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.adapter.ContactAdapter
 import com.ave.vastgui.app.databinding.ActivityMaskLayoutBinding
+import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.app.sharedpreferences.ThemeSp
 import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.annotation.ExperimentalView
@@ -48,13 +49,20 @@ import org.alee.component.skin.service.ThemeSkinService
 class MaskLayoutActivity : AppCompatActivity(R.layout.activity_mask_layout),
     MaskLayout.MaskAnimationListener {
 
-    private val mBinding: ActivityMaskLayoutBinding by viewBinding(ActivityMaskLayoutBinding::bind)
-    private val mAdapter: ContactAdapter by lazy {
-        ContactAdapter(this)
-    }
-    private val mMaskLayout by lazy { mBinding.maskLayout }
-    private val mDarKBtn by lazy { mBinding.changeDark }
-    private val mContentRv by lazy { mBinding.recyclerView }
+    private val logcat = logFactory(MaskLayoutActivity::class.java)
+
+    private val binding: ActivityMaskLayoutBinding by viewBinding(ActivityMaskLayoutBinding::bind)
+
+    private val adapter: ContactAdapter = ContactAdapter(this)
+
+    private val maskLayout
+        get() = binding.maskLayout
+
+    private val darKBtn
+        get() = binding.changeDark
+
+    private val contentRv
+        get() = binding.recyclerView
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,21 +78,23 @@ class MaskLayoutActivity : AppCompatActivity(R.layout.activity_mask_layout),
         }
 
         // 初始化 UI
-        mMaskLayout.updateCoordinate(mBinding.changeDark)
-        mAdapter.setOnItemClickListener { _, _, item ->
-            if(null == item) return@setOnItemClickListener
+        maskLayout.updateCoordinate(binding.changeDark)
+        maskLayout.maskDuration = 1000L
+
+        adapter.setOnItemClickListener { _, _, item ->
+            if (null == item) return@setOnItemClickListener
             requestPermission(Manifest.permission.CALL_PHONE) {
-                granted = {
-                    IntentUtils.dialPhoneNumber(this@MaskLayoutActivity, item.number)
-                }
+                granted = { IntentUtils.dialPhoneNumber(this@MaskLayoutActivity, item.number) }
             }
         }
-        mContentRv.apply {
-            adapter = mAdapter
+
+        contentRv.apply {
+            this.adapter = this@MaskLayoutActivity.adapter
             layoutManager = LinearLayoutManager(context)
         }
-        mDarKBtn.setOnClickListener {
-            mBinding.maskLayout.activeMask(MaskAnimation.COLLAPSED, this)
+
+        darKBtn.setOnClickListener {
+            binding.maskLayout.activeMask(MaskAnimation.COLLAPSED, this)
         }
 
         // 读取通讯录
@@ -93,13 +103,14 @@ class MaskLayoutActivity : AppCompatActivity(R.layout.activity_mask_layout),
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onMaskComplete() {
+        logcat.d { "当前的主题模式：${ThemeSp.isDark}" }
         if (ThemeSp.isDark) {
             ThemeSkinService.getInstance().switchThemeSkin(0)
         } else {
             ThemeSkinService.getInstance().switchThemeSkin(1)
         }
         ThemeSp.isDark = !ThemeSp.isDark
-        mAdapter.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
 
     override fun onMaskFinished() {
@@ -109,19 +120,13 @@ class MaskLayoutActivity : AppCompatActivity(R.layout.activity_mask_layout),
     // 读取通讯录
     private fun readContacts() {
         val cursor: Cursor? = contentResolver
-            .query(
-                Phone.CONTENT_URI,
-                arrayOf(Phone.DISPLAY_NAME, Phone.NUMBER),
-                null,
-                null,
-                checkPhonebooLabel()
-            )
+            .query(Phone.CONTENT_URI, arrayOf(Phone.DISPLAY_NAME, Phone.NUMBER), null, null, checkPhonebooLabel())
         while (cursor?.moveToNext() == true) {
             val name: String =
                 cursor.getStringOrNull(cursor.getColumnIndex(Phone.DISPLAY_NAME)).toString()
             val number: String =
                 cursor.getStringOrNull(cursor.getColumnIndex(Phone.NUMBER)).toString()
-            mAdapter.addContact(name.first().toString(), "${number.first()}**********")
+            adapter.addContact(name.first().toString(), "${number.first()}**********")
         }
         cursor?.close()
     }

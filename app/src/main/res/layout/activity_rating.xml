@@ -14,48 +14,121 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
-    android:orientation="vertical"
-    android:padding="10dp"
-    tools:context="com.ave.vastgui.app.activity.view.RatingActivity">
+    android:layout_height="match_parent">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:scaleType="fitXY" />
-
-    <com.ave.vastgui.tools.view.ratingview.RatingView
-        android:id="@+id/ratingView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        app:star_count="5"
-        app:star_height="40dp"
-        app:star_interval_width="1dp"
-        app:star_orientation="horizontal"
-        app:star_select_method="unable"
-        app:star_selected="@drawable/ic_star_selected"
-        app:star_unselected="@drawable/ic_star_unselected"
-        app:star_width="40dp" />
+        android:orientation="vertical"
+        tools:context="com.ave.vastgui.app.activity.view.RatingActivity">
 
-    <com.ave.vastgui.tools.view.ratingview.RatingView
-        android:id="@+id/starBarView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        app:star_count="5"
-        app:star_height="40dp"
-        app:star_interval_width="15dp"
-        app:star_orientation="vertical"
-        app:star_rating="2"
-        app:star_select_method="sliding"
-        app:star_selected="@drawable/ic_star_selected"
-        app:star_unselected="@drawable/ic_star_unselected"
-        app:star_width="40dp" />
-</LinearLayout>
+        <com.ave.vastgui.tools.view.ratingview.RatingView
+            android:id="@+id/ratingView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            app:star_count="5"
+            app:star_height="40dp"
+            app:star_interval_width="1dp"
+            app:star_orientation="horizontal"
+            app:star_select_method="sliding"
+            app:star_selected="@drawable/ic_star_selected"
+            app:star_unselected="@drawable/ic_star_unselected"
+            app:star_width="40dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_star_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/rating_add_star" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/remove_star_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/rating_remove_star" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/switch_star_orientation_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/rating_switch_orientation" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/switch_star_bitmap_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/rating_switch_bitmap" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/switch_select_method_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/rating_switch_method" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/rating_size_setting"
+            android:textStyle="bold" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/change_star_size_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:value="40"
+            android:valueFrom="20"
+            android:valueTo="50"
+            app:thumbHeight="20dp"
+            app:trackHeight="10dp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/rating_internal_setting"
+            android:textStyle="bold" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/change_star_internal_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:value="10"
+            android:valueFrom="0"
+            android:valueTo="20"
+            app:thumbHeight="20dp"
+            app:trackHeight="10dp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/rating_setting"
+            android:textStyle="bold" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/change_rating_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:value="0.5"
+            android:valueFrom="0.0"
+            android:valueTo="1.0"
+            app:thumbHeight="20dp"
+            app:trackHeight="10dp" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

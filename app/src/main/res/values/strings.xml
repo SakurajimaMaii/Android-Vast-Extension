@@ -72,6 +72,20 @@
     <string name="permission_no_more_ask_fmt">%s权限已被拒绝并不再询问</string>
     <!-- 权限申请 end -->
 
+    <!-- 评分控件 start -->
+    <string name="rating_add_star">增加星星</string>
+    <string name="rating_remove_star">减少星星</string>
+    <string name="rating_switch_orientation">切换星星方向</string>
+    <string name="rating_switch_bitmap">切换星星图片</string>
+    <string name="rating_switch_method">切换选择方式</string>
+    <string name="rating_switch_method_fmt">切换选择方式：%s</string>
+    <string name="rating_size_setting">星星尺寸设定</string>
+    <string name="rating_size_fmt">星星大小：%.2fdp</string>
+    <string name="rating_internal_setting">星星间隔设定</string>
+    <string name="rating_internal_fmt">星星间距：%.2fdp</string>
+    <string name="rating_setting">星星评分设定</string>
+    <!-- 评分控件 end -->
+
     <string name="base_adapter">通用RecyclerView BaseAdapter</string>
     <string name="base_bind_adapter">通用RecyclerView BaseBindingAdapter</string>
     <string name="base_fragment_activity">FragmentActivity示例</string>
