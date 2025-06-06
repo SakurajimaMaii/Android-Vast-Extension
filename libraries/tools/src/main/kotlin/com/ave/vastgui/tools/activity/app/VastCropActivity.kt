@@ -17,14 +17,12 @@
 package com.ave.vastgui.tools.activity.app
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore.Images.Media
 import android.webkit.MimeTypeMap
-import androidx.core.content.ContextCompat
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.activity.VastVbActivity
 import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.ACTION
@@ -47,9 +45,7 @@ import com.ave.vastgui.tools.io.Policy
 import com.ave.vastgui.tools.io.asImageFile
 import com.ave.vastgui.tools.io.destroy
 import com.ave.vastgui.tools.io.getImageFile
-import com.ave.vastgui.tools.io.mimeType
 import com.ave.vastgui.tools.io.mkFile
-import com.ave.vastgui.tools.utils.DateUtils
 import com.ave.vastgui.tools.utils.permission.Permission
 import com.ave.vastgui.tools.utils.permission.isPermissionGranted
 import com.ave.vastgui.tools.view.cropview.CropFrameType
@@ -96,38 +92,16 @@ import java.io.IOException
  */
 open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
 
-    companion object {
-        const val ACTION = "com.ave.vastgui.tools.action.CROP"
-        const val PREVIEW_WIDTH = "preview_width"
-        const val PREVIEW_HEIGHT = "preview_height"
-        const val OUTPUT_X = "outputX"
-        const val OUTPUT_Y = "outputY"
-        const val AUTHORITY = "authority"
-        const val RETURN_DATA = "return-data"
-        const val FRAME_TYPE = "frameType"
-        const val FRAME_TYPE_CIRCLE = "circle"
-        const val FRAME_TYPE_SQUARE = "square"
-        const val FRAME_TYPE_GRID9 = "grid9"
-        const val FRAME_TYPE_RECTANGLE = "rectangle"
-        const val RESULT_NULL_DATA_ERROR = 0x01
-        const val RESULT_FRAME_TYPE_ERROR = 0x02
-        const val RESULT_SOURCE_IMAGE_ERROR = 0x03
-        const val RESULT_GET_CROP_IMAGE_ERROR = 0x04
-        const val RESULT_PERMISSION_ERROR = 0x05
-        const val RESULT_PARAMETER_ERROR = 0x06
-        const val RESULT_DESTINATION_IMAGE_ERROR = 0x07
-        const val RESULT_OK = 0x08
-        const val RESULT_CANCELED = 0x09
-        private const val DEFAULT_AUTHORITY = ""
-        private const val DEFAULT_OUTPUT_X = -1F
-        private const val DEFAULT_OUTPUT_Y = -1F
-        private const val DEFAULT_IMAGE_EXTENSION = "jpg"
-    }
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_PREVIEW_WIDTH
+        get() = resources.getDimension(R.dimen.default_crop_frame_width)
 
-    private val defaultPreviewWidth
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_PREVIEW_HEIGHT
         get() = resources.getDimension(R.dimen.default_crop_frame_width)
-    private val defaultPreviewHeight
-        get() = resources.getDimension(R.dimen.default_crop_frame_width)
+
     private var originalImage: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -138,8 +112,8 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
         }
 
         // Set size.
-        val previewWidth = intent.getFloatExtra(PREVIEW_WIDTH, defaultPreviewWidth)
-        val previewHeight = intent.getFloatExtra(PREVIEW_HEIGHT, defaultPreviewHeight)
+        val previewWidth = intent.getFloatExtra(PREVIEW_WIDTH, DEFAULT_PREVIEW_WIDTH)
+        val previewHeight = intent.getFloatExtra(PREVIEW_HEIGHT, DEFAULT_PREVIEW_HEIGHT)
         getBinding().cropViewLayout.apply {
             setCropFrameSize(previewWidth, previewHeight)
         }
@@ -148,10 +122,10 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
         val frameType = intent.getStringExtra(FRAME_TYPE)
         if (null == frameType) finish(RESULT_FRAME_TYPE_ERROR)
         when (frameType) {
-            FRAME_TYPE_CIRCLE -> getBinding().cropViewLayout.mCropFrameType = CropFrameType.CIRCLE
-            FRAME_TYPE_SQUARE -> getBinding().cropViewLayout.mCropFrameType = CropFrameType.SQUARE
-            FRAME_TYPE_GRID9 -> getBinding().cropViewLayout.mCropFrameType = CropFrameType.GRID9
-            FRAME_TYPE_RECTANGLE -> getBinding().cropViewLayout.mCropFrameType =
+            FRAME_TYPE_CIRCLE -> getBinding().cropViewLayout.cropFrameType = CropFrameType.CIRCLE
+            FRAME_TYPE_SQUARE -> getBinding().cropViewLayout.cropFrameType = CropFrameType.SQUARE
+            FRAME_TYPE_GRID9 -> getBinding().cropViewLayout.cropFrameType = CropFrameType.GRID9
+            FRAME_TYPE_RECTANGLE -> getBinding().cropViewLayout.cropFrameType =
                 CropFrameType.RECTANGLE
         }
 
@@ -287,6 +261,34 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
         originalImage?.destroy()
         setResult(resultCode, intent)
         finish()
+    }
+
+    companion object {
+        const val ACTION = "com.ave.vastgui.tools.action.CROP"
+        const val PREVIEW_WIDTH = "preview_width"
+        const val PREVIEW_HEIGHT = "preview_height"
+        const val OUTPUT_X = "outputX"
+        const val OUTPUT_Y = "outputY"
+        const val AUTHORITY = "authority"
+        const val RETURN_DATA = "return-data"
+        const val FRAME_TYPE = "frameType"
+        const val FRAME_TYPE_CIRCLE = "circle"
+        const val FRAME_TYPE_SQUARE = "square"
+        const val FRAME_TYPE_GRID9 = "grid9"
+        const val FRAME_TYPE_RECTANGLE = "rectangle"
+        const val RESULT_NULL_DATA_ERROR = 0x01
+        const val RESULT_FRAME_TYPE_ERROR = 0x02
+        const val RESULT_SOURCE_IMAGE_ERROR = 0x03
+        const val RESULT_GET_CROP_IMAGE_ERROR = 0x04
+        const val RESULT_PERMISSION_ERROR = 0x05
+        const val RESULT_PARAMETER_ERROR = 0x06
+        const val RESULT_DESTINATION_IMAGE_ERROR = 0x07
+        const val RESULT_OK = 0x08
+        const val RESULT_CANCELED = 0x09
+        private const val DEFAULT_AUTHORITY = ""
+        private const val DEFAULT_OUTPUT_X = -1F
+        private const val DEFAULT_OUTPUT_Y = -1F
+        private const val DEFAULT_IMAGE_EXTENSION = "jpg"
     }
 
 }
