@@ -26,5 +26,17 @@ package com.ave.vastgui.tools.view.vp2indicator
  * @since 0.5.0
  */
 enum class Vp2IndicatorType {
-    CIRCLE, BITMAP
+    /**
+     * Circle
+     *
+     * @since 1.5.2
+     */
+    Circle,
+
+    /**
+     * Circle
+     *
+     * @since 1.5.2
+     */
+    Bitmap
 }

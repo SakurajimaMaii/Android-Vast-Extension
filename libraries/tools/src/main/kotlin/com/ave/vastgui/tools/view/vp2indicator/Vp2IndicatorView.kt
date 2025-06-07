@@ -20,10 +20,13 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.RectF
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.VectorDrawable
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.FloatRange
@@ -35,6 +38,14 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.graphics.BmpUtils
+import com.ave.vastgui.tools.utils.dimension
+import androidx.core.content.withStyledAttributes
+import com.ave.vastgui.tools.utils.ColorUtils
+import com.ave.vastgui.tools.utils.color
+import com.ave.vastgui.tools.utils.integer
+import com.ave.vastgui.tools.view.extension.gone
+import com.ave.vastgui.tools.view.extension.visible
+import kotlin.math.roundToInt
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -42,7 +53,7 @@ import com.ave.vastgui.tools.graphics.BmpUtils
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/viewpager2/vp2-indicator-view/vp2-indicator-view/
 
 /**
- * Vp2IndicatorView.
+ * [Vp2IndicatorView].
  *
  * ```xml
  * <com.ave.vastgui.tools.view.vp2indicatorview.Vp2IndicatorView
@@ -53,26 +64,6 @@ import com.ave.vastgui.tools.graphics.BmpUtils
  *     app:indicator_item_count="3"
  * ```
  *
- * @property mColorSelected Indicator selected color.
- * @property mColorUnSelected Indicator unselected color.
- * @property mBitmapSelectedWidth The width of mBitmapSelected and
- *     mBitmapUnSelected.
- * @property mBitmapSelectedHeight The height of mBitmapSelected and
- *     mBitmapUnSelected.
- * @property mBitmapSelected The bitmap when indicator is selected.
- * @property mBitmapUnSelected The bitmap when indicator is unselected.
- * @property mIndicatorItemDistance The indicator item distance in pixels.
- * @property mIndicatorStyle Indicator style. By default the value is
- *     CIRCLE.
- * @property mIndicatorCircleRadius The radius of the indicator circle in
- *     pixels.
- * @property mIndicatorItemWidth The width of the indicator view.
- * @property mIndicatorItemHeight The height of the indicator view.
- * @property mIndicatorItemCount The count of the indicator item.
- * @property mCurrentSelectedPosition The current position of the
- *     indicator.
- * @property mViewPager2 The [ViewPager2] that the [Vp2IndicatorView] will
- *     attach to.
  * @since 0.2.0
  */
 class Vp2IndicatorView @JvmOverloads constructor(
@@ -82,97 +73,218 @@ class Vp2IndicatorView @JvmOverloads constructor(
     defStyleRes: Int = R.style.BaseVp2Indicator
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
-    private val mDefaultindicatorCircleRadius
-        get() = context.resources.getDimension(R.dimen.default_indicator_circle_radius)
-    private val mDefaultIndicatorItemDistance
-        get() = context.resources.getDimension(R.dimen.default_indicator_item_distance)
-    private val mDefaultIndicatorItemCount
-        get() = context.resources.getInteger(R.integer.default_indicator_item_count)
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_INDICATOR_CIRCLE_RADIUS
+        get() = dimension(R.dimen.default_indicator_circle_radius)
 
-    private val mUnSelectedPaint = Paint().apply {
-        style = Paint.Style.FILL
-        isAntiAlias = true
-    }
-    private val mSelectedPaint = Paint().apply {
-        style = Paint.Style.FILL
-        isAntiAlias = true
-    }
-    private val mBitmapPaint = Paint()
-    private var mIndicatorItemWidth = 0
-    private var mIndicatorItemHeight = 0
-    private var mViewPager2: ViewPager2? = null
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_INDICATOR_ITEM_DISTANCE
+        get() = dimension(R.dimen.default_indicator_item_distance)
 
-    var mColorSelected: Int by NotNUllVar()
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_INDICATOR_ITEM_COUNT
+        get() = integer(R.integer.default_indicator_item_count)
+
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_INDICATOR_BITMAP_WIDTH
+        get() = dimension(R.dimen.default_indicator_bitmap_width)
+
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_INDICATOR_BITMAP_HEIGHT
+        get() = dimension(R.dimen.default_indicator_bitmap_height)
+
+    /** @since 1.5.2 */
+    private val bmpSrcRect = Rect()
+
+    /** @since 1.5.2 */
+    private val bmpDstRectF = RectF()
+
+    /** @since 1.5.2 */
+    private val unselectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+    }
+
+    /** @since 1.5.2 */
+    private val selectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+    }
+
+    /** @since 1.5.2 */
+    private val bmpPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    /**
+     * The [ViewPager2] that the [Vp2IndicatorView] will attach to.
+     *
+     * @since 1.5.2
+     */
+    private var viewPager2: ViewPager2? = null
+
+    /** @since 1.5.2 */
+    @get:ColorInt
+    @setparam:ColorInt
+    private var _selectedColor: Int
+        set(value) {
+            check(ColorUtils.isColorInt(value)) { "The selected color of text is invalid." }
+            selectedPaint.setColor(value)
+        }
+        get() = selectedPaint.color
+
+
+    /**
+     * Indicator selected color.
+     *
+     * @since 1.5.2
+     */
+    @get:ColorInt
+    val selectedColor: Int
+        get() = _selectedColor
+
+    /** @since 1.5.2 */
+    @get:ColorInt
+    @setparam:ColorInt
+    private var _unselectedColor: Int
+        set(value) {
+            check(ColorUtils.isColorInt(value)) { "The unselected color of text is invalid." }
+            unselectedPaint.setColor(value)
+        }
+        get() = unselectedPaint.color
+
+    /**
+     * Indicator unselected color.
+     *
+     * @since 1.5.2
+     */
+    @get:ColorInt
+    val unselectedColor: Int
+        get() = _unselectedColor
+
+    /**
+     * The width of [selectedBmp] and [unselectedBmp].
+     *
+     * @since 1.5.2
+     */
+    var bmpWidth: Int by NotNUllVar()
         private set
-    var mColorUnSelected: Int by NotNUllVar()
+
+    /**
+     * The height of [selectedBmp] and [unselectedBmp].
+     *
+     * @since 1.5.2
+     */
+    var bmpHeight: Int by NotNUllVar()
         private set
-    var mBitmapSelectedWidth: Int by NotNUllVar()
+
+    /**
+     * The bitmap shown when indicator is selected.
+     *
+     * @since 1.5.2
+     */
+    var selectedBmp: Bitmap? = null
         private set
-    var mBitmapSelectedHeight: Int by NotNUllVar()
+
+    /**
+     * The bitmap shown when indicator is unselected.
+     *
+     * @since 1.5.2
+     */
+    var unselectedBmp: Bitmap? = null
         private set
-    var mBitmapSelected: Bitmap by NotNUllVar()
+
+    /**
+     * The indicator item distance(in pixels).
+     *
+     * @since 1.5.2
+     */
+    var indicatorItemDistance: Float = 0f
         private set
-    var mBitmapUnSelected: Bitmap by NotNUllVar()
+
+    /**
+     * Indicator style. By default the value is [Vp2IndicatorType.Circle].
+     *
+     * @since 1.5.2
+     */
+    var indicatorStyle: Vp2IndicatorType = Vp2IndicatorType.Circle
         private set
-    var mIndicatorItemDistance: Float = 0f
+
+    /**
+     * The radius of the indicator circle(in pixels).
+     *
+     * @since 1.5.2
+     */
+    var indicatorCircleRadius: Float = 0f
         private set
-    var mIndicatorStyle: Vp2IndicatorType = Vp2IndicatorType.CIRCLE
+
+    /**
+     * The count of the indicator item.
+     *
+     * @since 1.5.2
+     */
+    var indicatorItemCount = 0
         private set
-    var mIndicatorCircleRadius: Float = 0f
-        private set
-    var mIndicatorItemCount = 0
-        private set
-    var mCurrentSelectedPosition = 0
+
+    /**
+     * The current position of the indicator.
+     *
+     * @since 1.5.2
+     */
+    var currentSelectedPosition = 0
         private set
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
-        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-        when (mIndicatorStyle) {
-            Vp2IndicatorType.CIRCLE -> {
-                mIndicatorItemWidth = widthSize.toFloat().coerceAtMost(
-                    2 * mIndicatorCircleRadius * mIndicatorItemCount
-                            + (mIndicatorItemCount - 1) * mIndicatorItemDistance
-                ).toInt()
-                mIndicatorItemHeight =
-                    heightSize.toFloat().coerceAtMost(2 * mIndicatorCircleRadius).toInt()
+        when (indicatorStyle) {
+            Vp2IndicatorType.Circle -> {
+                val neededMinimumWidth = (2 * indicatorCircleRadius * indicatorItemCount) +
+                        (indicatorItemDistance * (indicatorItemCount - 1)) +
+                        paddingStart + paddingEnd
+                val neededMinimumHeight = (2 * indicatorCircleRadius) + paddingTop + paddingBottom
+                val width = resolveSize(neededMinimumWidth.roundToInt(), widthMeasureSpec)
+                val height = resolveSize(neededMinimumHeight.roundToInt(), heightMeasureSpec)
+                setMeasuredDimension(width, height)
             }
 
-            Vp2IndicatorType.BITMAP -> {
-                mIndicatorItemWidth = widthSize.toFloat().coerceAtMost(
-                    mBitmapSelectedWidth * mIndicatorItemCount
-                            + (mIndicatorItemCount - 1) * mIndicatorItemDistance
-                ).toInt()
-                mIndicatorItemHeight =
-                    heightSize.coerceAtMost(mBitmapSelectedHeight)
+            Vp2IndicatorType.Bitmap -> {
+                val neededMinimumWidth = (bmpWidth * indicatorItemCount) +
+                        (indicatorItemDistance * (indicatorItemCount - 1)) +
+                        paddingStart + paddingEnd
+                val neededMinimumHeight = bmpHeight + paddingTop + paddingBottom
+                val width = resolveSize(neededMinimumWidth.roundToInt(), widthMeasureSpec)
+                val height = resolveSize(neededMinimumHeight, heightMeasureSpec)
+                setMeasuredDimension(width, height)
             }
         }
-        setMeasuredDimension(mIndicatorItemWidth, mIndicatorItemHeight)
+
     }
 
     override fun onDraw(canvas: Canvas) {
-        mSelectedPaint.color = mColorSelected
-        mUnSelectedPaint.color = mColorUnSelected
-        when (mIndicatorStyle) {
-            Vp2IndicatorType.CIRCLE -> {
-                val itemStart = (width - mIndicatorItemWidth) / 2 + mIndicatorCircleRadius
-                val cy = (mIndicatorItemHeight / 2).toFloat()
-                for (i in 0 until mIndicatorItemCount) {
-                    val cx = itemStart + i * (mIndicatorCircleRadius * 2 + mIndicatorItemDistance)
+        when (indicatorStyle) {
+            Vp2IndicatorType.Circle -> {
+                val itemStart = paddingStart + indicatorCircleRadius
+                val cy = (paddingTop + measuredHeight - paddingBottom) / 2f
+                for (i in 0 until indicatorItemCount) {
+                    val cx = itemStart + i * (indicatorCircleRadius * 2 + indicatorItemDistance)
                     canvas.drawCircle(
-                        cx, cy, mIndicatorCircleRadius,
-                        (if (i == mCurrentSelectedPosition) mSelectedPaint else mUnSelectedPaint)
+                        cx, cy, indicatorCircleRadius,
+                        (if (i == currentSelectedPosition) selectedPaint else unselectedPaint)
                     )
                 }
             }
 
-            Vp2IndicatorType.BITMAP -> {
-                for (i in 0 until mIndicatorItemCount) {
-                    val cx = i * (mBitmapSelectedWidth + mIndicatorItemDistance)
-                    val bmp =
-                        if (i == mCurrentSelectedPosition) mBitmapSelected else mBitmapUnSelected
-                    canvas.drawBitmap(bmp, cx, 0f, mBitmapPaint)
+            Vp2IndicatorType.Bitmap -> {
+                val selectedBitmap = BmpUtils.scaleBitmap(selectedBmp!!, bmpWidth, bmpHeight)
+                val unselectedBitmap = BmpUtils.scaleBitmap(unselectedBmp!!, bmpWidth, bmpHeight)
+                bmpSrcRect.set(0, 0, bmpWidth, bmpHeight)
+                val itemStart = paddingStart + bmpWidth / 2f
+                val cy = (paddingTop + measuredHeight - paddingBottom) / 2f
+                for (i in 0 until indicatorItemCount) {
+                    val bmp = if (i == currentSelectedPosition) selectedBitmap else unselectedBitmap
+                    val cx = itemStart + i * (bmpWidth + indicatorItemDistance)
+                    bmpDstRectF.set(cx - bmpWidth / 2f, cy - bmpHeight / 2f, cx + bmpWidth / 2f, cy + bmpHeight / 2f)
+                    canvas.drawBitmap(bmp, bmpSrcRect, bmpDstRectF, bmpPaint)
                 }
             }
         }
@@ -184,7 +296,12 @@ class Vp2IndicatorView @JvmOverloads constructor(
      * @since 0.5.0
      */
     fun setIndicatorStyle(style: Vp2IndicatorType) {
-        mIndicatorStyle = style
+        if (indicatorStyle == style) return
+        if (style == Vp2IndicatorType.Bitmap && (selectedBmp == null || unselectedBmp == null)) {
+            return
+        }
+        indicatorStyle = style
+        requestLayout()
     }
 
     /**
@@ -193,7 +310,18 @@ class Vp2IndicatorView @JvmOverloads constructor(
      * @since 0.2.0
      */
     fun setSelectedColor(@ColorRes id: Int) {
-        mColorSelected = ContextCompat.getColor(context, id)
+        _selectedColor = ContextCompat.getColor(context, id)
+        invalidate()
+    }
+
+    /**
+     * Set indicator selected color-int.
+     *
+     * @since 1.5.2
+     */
+    fun setSelectedColorInt(@ColorInt color: Int) {
+        _selectedColor = color
+        invalidate()
     }
 
     /**
@@ -202,17 +330,29 @@ class Vp2IndicatorView @JvmOverloads constructor(
      * @since 0.2.0
      */
     fun setUnSelectedColor(@ColorRes id: Int) {
-        mColorUnSelected = ContextCompat.getColor(context, id)
+        _unselectedColor = ContextCompat.getColor(context, id)
+        invalidate()
     }
 
     /**
-     * Set the size of [mBitmapSelected] and [mBitmapUnSelected].
+     * Set indicator unselected color-int.
+     *
+     * @since 1.5.2
+     */
+    fun setUnSelectedColorInt(@ColorInt color: Int) {
+        _unselectedColor = color
+        invalidate()
+    }
+
+    /**
+     * Set the size of [selectedBmp] and [unselectedBmp] (in pixels).
      *
      * @since 0.5.0
      */
     fun setBitmapSize(@IntRange(from = 0) width: Int, @IntRange(from = 0) height: Int) {
-        mBitmapSelectedWidth = width
-        mBitmapSelectedHeight = height
+        bmpWidth = width.coerceAtLeast(0)
+        bmpHeight = height.coerceAtLeast(0)
+        requestLayout()
     }
 
     /**
@@ -222,8 +362,8 @@ class Vp2IndicatorView @JvmOverloads constructor(
      * @since 0.5.0
      */
     fun setSelectedBitmap(@DrawableRes id: Int) {
-        val bitmap = BmpUtils.getBitmapFromDrawable(id, context)
-        mBitmapSelected = BmpUtils.scaleBitmap(bitmap, mBitmapSelectedWidth, mBitmapSelectedHeight)
+        selectedBmp = BmpUtils.getBitmapFromDrawable(id, context)
+        invalidate()
     }
 
     /**
@@ -233,9 +373,8 @@ class Vp2IndicatorView @JvmOverloads constructor(
      * @since 0.5.0
      */
     fun setUnSelectedBitmap(@DrawableRes id: Int) {
-        val bitmap = BmpUtils.getBitmapFromDrawable(id, context)
-        mBitmapUnSelected =
-            BmpUtils.scaleBitmap(bitmap, mBitmapSelectedWidth, mBitmapSelectedHeight)
+        unselectedBmp = BmpUtils.getBitmapFromDrawable(id, context)
+        invalidate()
     }
 
     /**
@@ -244,21 +383,26 @@ class Vp2IndicatorView @JvmOverloads constructor(
      * @since 0.2.0
      */
     fun setIndicatorCircleRadius(@FloatRange(from = 0.0) radius: Float) {
-        mIndicatorCircleRadius = radius
+        if (indicatorCircleRadius == radius) return
+        indicatorCircleRadius = radius.coerceAtLeast(0f)
+        requestLayout()
     }
 
     /**
      * Set indicator item count.
      *
-     * @throws RuntimeException
+     * @throws IllegalStateException If you have set the specified ViewPager2,
+     * calling this method will throw [IllegalStateException].
      * @since 0.2.0
      */
     fun setIndicatorItemCount(@IntRange(from = 0) count: Int) {
-        if (null != mViewPager2) {
-            throw RuntimeException("You should not call this method when Vp2IndicatorView is attached to ViewPager2.")
+        if (indicatorItemCount == count) return
+        check(null == viewPager2) {
+            "You should not call setIndicatorItemCount() when Vp2IndicatorView is attached to ViewPager2."
         }
-        mIndicatorItemCount = count
+        indicatorItemCount = count
         verifyItemCount()
+        requestLayout()
     }
 
     /**
@@ -267,22 +411,25 @@ class Vp2IndicatorView @JvmOverloads constructor(
      * @since 0.2.0
      */
     fun setIndicatorItemDistance(@FloatRange(from = 0.0) distance: Float) {
-        mIndicatorItemDistance = distance
+        if (indicatorItemDistance == distance) return
+        indicatorItemDistance = distance.coerceAtLeast(0f)
+        requestLayout()
     }
 
     /**
      * Set current selected indicator item position.
      *
-     * @throws RuntimeException If you have set the specified ViewPager2,
-     *     calling this method will throw [RuntimeException].
+     * @throws IllegalStateException If you have set the specified ViewPager2,
+     * calling this method will throw [IllegalStateException].
      * @since 0.2.0
      */
     @Throws(RuntimeException::class)
     fun setCurrentSelectedPosition(position: Int) {
-        if (null != mViewPager2) {
-            throw RuntimeException("You should not call this method when Vp2IndicatorView is attached to ViewPager2.")
+        check(null == viewPager2) {
+            "You shouldn't call setCurrentSelectedPosition() when Vp2IndicatorView is attached to ViewPager2."
         }
-        mCurrentSelectedPosition = position.coerceIn(0, mIndicatorItemCount)
+        currentSelectedPosition = position.coerceIn(0, indicatorItemCount - 1)
+        invalidate()
     }
 
     /**
@@ -291,17 +438,17 @@ class Vp2IndicatorView @JvmOverloads constructor(
      * @since 0.2.0
      */
     fun attachToViewPager2(vp2: ViewPager2) {
-        mViewPager2 = vp2
-        val pagerAdapter = mViewPager2!!.adapter
+        viewPager2 = vp2
+        val pagerAdapter = viewPager2!!.adapter
         if (pagerAdapter != null) {
-            mIndicatorItemCount = pagerAdapter.itemCount
-            mCurrentSelectedPosition = mViewPager2!!.currentItem
+            indicatorItemCount = pagerAdapter.itemCount
+            currentSelectedPosition = viewPager2!!.currentItem
             verifyItemCount()
         }
         vp2.registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 if (pagerAdapter != null) {
-                    mCurrentSelectedPosition = mViewPager2!!.currentItem
+                    currentSelectedPosition = viewPager2!!.currentItem
                 }
                 postInvalidate()
             }
@@ -311,60 +458,33 @@ class Vp2IndicatorView @JvmOverloads constructor(
     /**
      * Verifies that the indicator item count.
      *
-     * If [mIndicatorItemCount] is 0, it will set the [View.GONE] as the
+     * If [indicatorItemCount] is 0, it will set the [View.GONE] as the
      * visibility value.
      *
      * @since 0.2.0
      */
     private fun verifyItemCount() {
-        if (mCurrentSelectedPosition >= mIndicatorItemCount) {
-            mCurrentSelectedPosition = mIndicatorItemCount - 1
+        if (currentSelectedPosition >= indicatorItemCount) {
+            currentSelectedPosition = indicatorItemCount - 1
         }
-        visibility = if (mIndicatorItemCount <= 0) GONE else VISIBLE
+        if (indicatorItemCount <= 0) gone() else visible()
     }
 
     init {
-        val typeArray = context.obtainStyledAttributes(
-            attrs,
-            R.styleable.Vp2IndicatorView,
-            defStyleAttr,
-            defStyleRes
-        )
-        mIndicatorStyle =
-            when (typeArray.getInt(
-                R.styleable.Vp2IndicatorView_indicator_style,
-                Vp2IndicatorType.CIRCLE.ordinal
-            )) {
-                Vp2IndicatorType.CIRCLE.ordinal -> Vp2IndicatorType.CIRCLE
-                Vp2IndicatorType.BITMAP.ordinal -> Vp2IndicatorType.BITMAP
-                else -> Vp2IndicatorType.CIRCLE
+        context.withStyledAttributes(attrs, R.styleable.Vp2IndicatorView, defStyleAttr, defStyleRes) {
+            indicatorStyle = when (getInt(R.styleable.Vp2IndicatorView_indicator_style, Vp2IndicatorType.Circle.ordinal)) {
+                Vp2IndicatorType.Circle.ordinal -> Vp2IndicatorType.Circle
+                Vp2IndicatorType.Bitmap.ordinal -> Vp2IndicatorType.Bitmap
+                else -> Vp2IndicatorType.Circle
             }
-        mColorSelected =
-            typeArray.getColor(
-                R.styleable.Vp2IndicatorView_indicator_selected_color,
-                ContextCompat.getColor(context, R.color.md_theme_primary)
-            )
-        mColorUnSelected =
-            typeArray.getColor(
-                R.styleable.Vp2IndicatorView_indicator_unselected_color,
-                ContextCompat.getColor(context, R.color.md_theme_primaryContainer)
-            )
-        mIndicatorCircleRadius =
-            typeArray.getDimension(
-                R.styleable.Vp2IndicatorView_indicator_circle_radius,
-                mDefaultindicatorCircleRadius
-            )
-        mIndicatorItemCount =
-            typeArray.getInt(
-                R.styleable.Vp2IndicatorView_indicator_item_count,
-                mDefaultIndicatorItemCount
-            )
-        mIndicatorItemDistance =
-            typeArray.getDimension(
-                R.styleable.Vp2IndicatorView_indicator_item_distance,
-                mDefaultIndicatorItemDistance
-            )
-        typeArray.recycle()
+            _selectedColor = getColor(R.styleable.Vp2IndicatorView_indicator_selected_color, color(R.color.md_theme_primary))
+            _unselectedColor = getColor(R.styleable.Vp2IndicatorView_indicator_unselected_color, color(R.color.md_theme_primaryContainer))
+            bmpWidth = getDimension(R.styleable.Vp2IndicatorView_indicator_bitmap_width, DEFAULT_INDICATOR_BITMAP_WIDTH).roundToInt()
+            bmpHeight = getDimension(R.styleable.Vp2IndicatorView_indicator_bitmap_height, DEFAULT_INDICATOR_BITMAP_HEIGHT).roundToInt()
+            indicatorCircleRadius = getDimension(R.styleable.Vp2IndicatorView_indicator_circle_radius, DEFAULT_INDICATOR_CIRCLE_RADIUS)
+            indicatorItemCount = getInt(R.styleable.Vp2IndicatorView_indicator_item_count, DEFAULT_INDICATOR_ITEM_COUNT)
+            indicatorItemDistance = getDimension(R.styleable.Vp2IndicatorView_indicator_item_distance, DEFAULT_INDICATOR_ITEM_DISTANCE)
+        }
         verifyItemCount()
     }
 }
