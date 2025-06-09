@@ -215,6 +215,14 @@
             <!--            </intent-filter>-->
         </activity>
         <activity
+            android:name=".activity.view.BreadcrumbActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activity.view.CropActivity"
             android:exported="true">
             <!--            <intent-filter>-->
@@ -258,10 +266,10 @@
         <activity
             android:name=".activity.view.RatingActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".activity.view.SnappingRecyclerViewActivity"
@@ -282,7 +290,6 @@
         <activity
             android:name=".activity.view.Vp2IndicatorActivity"
             android:exported="true">
-
             <!--            <intent-filter>-->
             <!--                <action android:name="android.intent.action.MAIN" />-->
             <!--                <category android:name="android.intent.category.LAUNCHER" />-->

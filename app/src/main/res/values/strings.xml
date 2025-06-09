@@ -86,6 +86,21 @@
     <string name="rating_setting">星星评分设定</string>
     <!-- 评分控件 end -->
 
+    <!-- Vp2 指示器 start -->
+    <string name="vp2_indicator_switch_count_fmt">切换指示器数量，当前为：%d</string>
+    <string name="vp2_indicator_switch_style_fmt">切换指示器类型，当前为：%s</string>
+    <string name="vp2_indicator_switch_select_color">切换指示器选中颜色（Circle 风格）</string>
+    <string name="vp2_indicator_switch_unselect_color">切换指示器未选中颜色（Circle 风格）</string>
+    <string name="vp2_indicator_change_bitmap_size">切换指示器Bitmap尺寸（Bitmap 风格）</string>
+    <string name="vp2_indicator_change_radius">切换指示器半径（Circle 风格）</string>
+    <string name="vp2_indicator_change_distance">切换指示器间距</string>
+    <string name="vp2_indicator_change_position">切换指示器选中项</string>
+    <!-- Vp2 指示器 end -->
+
+    <!-- 面包屑 start -->
+    <string name="bread_crumb_add">增加导航项</string>
+    <!-- 面包屑 end -->
+
     <string name="base_adapter">通用RecyclerView BaseAdapter</string>
     <string name="base_bind_adapter">通用RecyclerView BaseBindingAdapter</string>
     <string name="base_fragment_activity">FragmentActivity示例</string>
