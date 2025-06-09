@@ -251,6 +251,16 @@
         <attr name="indicator_item_distance" format="dimension" />
     </declare-styleable>
 
+    <declare-styleable name="BreadCrumbView">
+        <attr name="breadcrumb_item_max_width" format="dimension|reference" />
+        <attr name="breadcrumb_text_color" format="color|reference" />
+        <attr name="breadcrumb_text_size" format="dimension|reference" />
+        <attr name="breadcrumb_interval_width" format="dimension|reference" />
+        <attr name="breadcrumb_interval_icon" format="reference" />
+        <attr name="breadcrumb_interval_icon_width" format="dimension|reference" />
+        <attr name="breadcrumb_interval_icon_height" format="dimension|reference" />
+    </declare-styleable>
+
     <!-- Theme default style. -->
     <attr name="Default_AlphabetSideBar_Style" format="reference" />
     <attr name="Default_Avatar_Style" format="reference" />
