@@ -99,6 +99,10 @@
 
     <!-- 面包屑 start -->
     <string name="bread_crumb_add">增加导航项</string>
+    <string name="bread_crumb_remove">移除导航项</string>
+    <string name="bread_crumb_switch_text_color">切换字体颜色</string>
+    <string name="bread_crumb_change_text_size">切换字体大小</string>
+    <string name="bread_crumb_switch_internal_icon">切换分隔符</string>
     <!-- 面包屑 end -->
 
     <string name="base_adapter">通用RecyclerView BaseAdapter</string>
