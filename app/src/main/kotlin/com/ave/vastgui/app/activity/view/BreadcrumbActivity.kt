@@ -20,10 +20,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityBreadcrumbBinding
+import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.DensityUtils.SP
 import com.ave.vastgui.tools.utils.color
+import com.ave.vastgui.tools.utils.drawable
 import com.ave.vastgui.tools.view.breadcrumb.BreadCrumb
-import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.ave.vastgui.tools.viewbinding.viewBinding
 import java.util.Stack
 
@@ -38,7 +39,11 @@ class BreadcrumbActivity : ComponentActivity(R.layout.activity_breadcrumb) {
 
     private var index = 0
 
-    private val items = arrayOf("首页", "当这个页面标题很长很长很长时需要省略", "详情页")
+    private val items by lazy {
+        arrayOf(BreadCrumb(drawable(R.drawable.ic_home_24dp)!!),
+            BreadCrumb(drawable(R.drawable.ic_menu_24dp), "当这个页面标题很长很长很长时需要省略"),
+            BreadCrumb("详情页"))
+    }
 
     private val textColors by lazy {
         intArrayOf(color(R.color.honeydew), color(R.color.lightslategray), color(R.color.lime))
@@ -46,7 +51,7 @@ class BreadcrumbActivity : ComponentActivity(R.layout.activity_breadcrumb) {
 
     private var textColorsIndex = 0
 
-    private val icons = intArrayOf(R.drawable.ic_breadcrumb_interval_icon,
+    private val icons = intArrayOf(R.drawable.ic_breadcrumb_interval_icon_32dp,
         com.ave.vastgui.tools.R.drawable.ic_breadcrumb_default_interval_icon)
 
     private var iconIndex = 0
@@ -56,23 +61,22 @@ class BreadcrumbActivity : ComponentActivity(R.layout.activity_breadcrumb) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        items.forEach {
-            binding.breadCrumbLayout.addItem(BreadCrumb(it)).also { id ->
-                breadcrumbIds.push(id)
-            }
+
+        binding.breadCrumbLayout.addItems(items).forEach { id ->
+            breadcrumbIds.push(id)
         }
 
         // 添加导航路径
         binding.addItemBtn.setOnClickListener {
-            binding.breadCrumbLayout.addItem(BreadCrumb("${index++}")).also { id ->
+            binding.breadCrumbLayout.addItem(BreadCrumb(path = "${index++}")).also { id ->
                 breadcrumbIds.push(id)
             }
         }
 
         // 移除导航路径
         binding.removeItemBtn.setOnClickListener {
-            if(breadcrumbIds.isEmpty()) return@setOnClickListener
-            binding.breadCrumbLayout.removeItem(breadcrumbIds.pop())
+            if (breadcrumbIds.isEmpty()) return@setOnClickListener
+            binding.breadCrumbLayout.removeLastItem(breadcrumbIds.pop())
         }
 
         // 切换导航字体颜色
@@ -90,8 +94,17 @@ class BreadcrumbActivity : ComponentActivity(R.layout.activity_breadcrumb) {
             binding.breadCrumbLayout.setIntervalIcon(icons[(iconIndex++) % icons.size])
         }
 
-        binding.breadCrumbLayout.addOnBreadCrumbClickListener { _, id ->
-            SimpleToast.showShortMsg(id.toString())
+        // 改变分隔符大小
+        binding.internalIconSizeSlider.addOnChangeListener { _, value, _ ->
+            binding.breadCrumbLayout.setIntervalIconSize(value.DP, value.DP)
+        }
+
+        binding.itemWidthSlider.addOnChangeListener { _, value, _ ->
+            binding.breadCrumbLayout.setItemWidth(value.DP)
+        }
+
+        binding.breadCrumbLayout.addBreadCrumbClickListener { _, id ->
+            binding.breadCrumbLayout.removeAfterItem(id)
         }
     }
 

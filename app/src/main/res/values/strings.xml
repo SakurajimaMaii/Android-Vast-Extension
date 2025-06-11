@@ -103,6 +103,8 @@
     <string name="bread_crumb_switch_text_color">切换字体颜色</string>
     <string name="bread_crumb_change_text_size">切换字体大小</string>
     <string name="bread_crumb_switch_internal_icon">切换分隔符</string>
+    <string name="bread_crumb_change_internal_icon_size">改变分隔符大小</string>
+    <string name="bread_crumb_change_item_width">改变截断长度</string>
     <!-- 面包屑 end -->
 
     <string name="base_adapter">通用RecyclerView BaseAdapter</string>

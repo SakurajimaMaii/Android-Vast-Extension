@@ -73,4 +73,39 @@
         android:valueTo="20"
         app:thumbHeight="20dp"
         app:trackHeight="10dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/bread_crumb_change_internal_icon_size"
+        android:textStyle="bold" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/internal_icon_size_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:valueFrom="10"
+        android:valueTo="30"
+        app:thumbHeight="20dp"
+        app:trackHeight="10dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/bread_crumb_change_item_width"
+        android:textStyle="bold" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/item_width_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:value="100"
+        android:valueFrom="100"
+        android:valueTo="300"
+        app:thumbHeight="20dp"
+        app:trackHeight="10dp" />
 </LinearLayout>
