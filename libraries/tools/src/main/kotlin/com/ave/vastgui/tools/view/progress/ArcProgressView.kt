@@ -22,14 +22,18 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Shader
 import android.util.AttributeSet
-import androidx.core.content.ContextCompat
-import com.ave.vastgui.core.extension.NotNUllVar
+import androidx.annotation.ColorInt
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.graphics.getBaseLine
 import com.ave.vastgui.tools.graphics.getTextHeight
 import java.text.DecimalFormat
 import kotlin.math.cos
 import kotlin.math.sin
+import androidx.core.content.withStyledAttributes
+import com.ave.vastgui.tools.utils.ColorUtils
+import com.ave.vastgui.tools.utils.color
+import com.ave.vastgui.tools.utils.dimension
+import kotlin.properties.Delegates
 
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
@@ -37,20 +41,8 @@ import kotlin.math.sin
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/progress/arc-progress-view/
 
 /**
- * ArcProgressView.
+ * [ArcProgressView].
  *
- * @property mArcRectF The scope of the arc.
- * @property mProgressRadius Radius of the circle.
- * @property mProgressWidth Width of the circle progress.
- * @property mStartpointCircleColor Progress startpoint circle color-int.
- * @property mEndpointCircleColor Progress endpoint circle color-int.
- * @property mShowText True if you want to show the text, false otherwise.
- * @property mProgressShader Progress shader.
- * @property mShowStartpointCircle Ture if you want to show the startpoint
- *     circle, false otherwise.
- * @property mShowEndpointCircle Ture if you want to show the endpoint
- *     circle, false otherwise.
- * @property mEndpointCircleRadius The radius of the endpoint circle.
  * @since 0.2.0
  */
 class ArcProgressView @JvmOverloads constructor(
@@ -60,97 +52,209 @@ class ArcProgressView @JvmOverloads constructor(
     defStyleRes: Int = R.style.BaseArcProgressView
 ) : ProgressView(context, attrs, defStyleAttr, defStyleRes) {
 
-    private val mDefaultRadius: Float = resources.getDimension(R.dimen.default_arc_progress_radius)
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_RADIUS: Float = dimension(R.dimen.default_arc_progress_radius)
 
-    private var mProgressBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    /** @since 1.5.2 */
+    private val progressBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
     }
-    private var mProgressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+
+    /** @since 1.5.2 */
+    private val progressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
     }
-    private var mStartpointCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+
+    /** @since 1.5.2 */
+    private val startpointCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
     }
-    private var mEndpointCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+
+    /** @since 1.5.2 */
+    private val endpointCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
     }
-    private var mTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+
+    /** @since 1.5.2 */
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         textAlign = Paint.Align.CENTER
     }
-    private val mArcRectF = RectF()
-    private val mShowStartpointCircle: Boolean =
-        mStartpointCircleColor != ContextCompat.getColor(context, R.color.transparent)
-    private val mShowEndpointCircle: Boolean =
-        mEndpointCircleColor != ContextCompat.getColor(context, R.color.transparent)
 
-    override val mDefaultText: String
-        get() = DecimalFormat("##0%").format(mCurrentProgress / mMaximumProgress)
+    /** @since 1.5.2 */
+    private val arcRectF = RectF()
 
-    override var mProgressColor: Int
+    /**
+     * `ture` if the startpoint circle needs to be displayed, `false`
+     * otherwise.
+     *
+     * @since 1.5.2
+     */
+    private val isStartpointCircleShow: Boolean
+        get() = startpointCircleColor != color(R.color.transparent)
+
+    /**
+     * `ture` if the endpoint circle needs to be displayed, `false` otherwise.
+     *
+     * @since 1.5.2
+     */
+    private val isEndpointCircleShow: Boolean
+        get() = endpointCircleColor != color(R.color.transparent)
+
+    override val defaultText: String
+        get() = DecimalFormat("##0%").format(currentProgress / maximumProgress)
+
+    override var progressColor: Int
         set(value) {
-            mProgressPaint.color = value
+            progressPaint.color = value
+            invalidate()
         }
-        get() = mProgressPaint.color
+        get() = progressPaint.color
 
-    override var mProgressBackgroundColor: Int
+    override var progressBackgroundColor: Int
         set(value) {
-            mProgressBackgroundPaint.color = value
+            progressBackgroundPaint.color = value
+            invalidate()
         }
-        get() = mProgressBackgroundPaint.color
+        get() = progressBackgroundPaint.color
 
-    override var mTextColor: Int
+    override var textColor: Int
         set(value) {
-            mTextPaint.color = value
+            textPaint.color = value
+            invalidate()
         }
-        get() = mTextPaint.color
+        get() = textPaint.color
 
-    override var mTextSize: Float
+    override var textSize: Float
         set(value) {
-            mTextPaint.textSize = value
+            textPaint.textSize = value
+            invalidate()
         }
-        get() = mTextPaint.textSize
+        get() = textPaint.textSize
 
-    var mShowText: Boolean by NotNUllVar()
+    /** @since 1.5.2 */
+    private var _showText: Boolean by Delegates.notNull()
 
-    var mProgressShader: Shader? = null
+    /**
+     * `true` if you want to show the text, `false` otherwise.
+     *
+     * @since 1.5.2
+     */
+    var showText: Boolean
         set(value) {
-            field = mProgressPaint.setShader(value)
+            if (_showText == value) return
+            _showText = value
+            invalidate()
+        }
+        get() = _showText
+
+    /** @since 1.5.2 */
+    var progressShader: Shader? = null
+        set(value) {
+            field = progressPaint.setShader(value)
+            invalidate()
         }
 
-    var mProgressRadius = mDefaultRadius
+    /** @since 1.5.2 */
+    private var _progressRadius = DEFAULT_RADIUS
         set(value) {
             field = value.coerceAtLeast(0f)
         }
 
-    var mProgressWidth = recommendedWidth()
+    /**
+     * Radius of the circle(in pixels).
+     *
+     * @since 1.5.2
+     */
+    var progressRadius: Float
+        set(value) {
+            if (_progressRadius == value) return
+            _progressRadius = value
+            requestLayout()
+        }
+        get() = _progressRadius
+
+    /** @since 1.5.2 */
+    private var _progressWidth = recommendedWidth()
         set(value) {
             field = value.coerceAtLeast(0f)
-            mProgressBackgroundPaint.strokeWidth = field
-            mProgressPaint.strokeWidth = field
+            progressBackgroundPaint.strokeWidth = field
+            progressPaint.strokeWidth = field
         }
 
-    var mStartpointCircleColor: Int
+    /**
+     * Width of the circle progress.
+     *
+     * @since 1.5.2
+     */
+    var progressWidth
         set(value) {
-            mStartpointCirclePaint.color = value
+            if (_progressWidth == value) return
+            _progressWidth = value
+            invalidate()
         }
-        get() = mStartpointCirclePaint.color
+        get() = _progressWidth
 
-    var mEndpointCircleColor: Int
+    /**
+     * The color-int of progress startpoint circle.
+     *
+     * @since 1.5.2
+     */
+    @get:ColorInt
+    @setparam:ColorInt
+    var startpointCircleColor: Int
         set(value) {
-            mEndpointCirclePaint.color = value
+            if (startpointCirclePaint.color == value) return
+            check(ColorUtils.isColorInt(value)) {
+                "The color-int(current=${value.toUInt().toString(16)}) of progress startpoint circle is invalid."
+            }
+            startpointCirclePaint.color = value
+            invalidate()
         }
-        get() = mEndpointCirclePaint.color
+        get() = startpointCirclePaint.color
 
-    var mEndpointCircleRadius: Float = recommendedRadius()
+    /**
+     * The color-int of progress endpoint circle.
+     *
+     * @since 1.5.2
+     */
+    @get:ColorInt
+    @setparam:ColorInt
+    var endpointCircleColor: Int
+        set(value) {
+            if (endpointCirclePaint.color == value) return
+            check(ColorUtils.isColorInt(value)) {
+                "The color-int(current=${value.toUInt().toString(16)}) of progress endpoint circle is invalid."
+            }
+            endpointCirclePaint.color = value
+            invalidate()
+        }
+        get() = endpointCirclePaint.color
+
+    /** @since 1.5.2 */
+    private var _endpointCircleRadius: Float = recommendedRadius()
         set(value) {
             field = value.coerceAtLeast(0f)
         }
+
+    /**
+     * The radius of the endpoint circle.
+     *
+     * @since 1.5.2
+     */
+    var endpointCircleRadius: Float
+        set(value) {
+            if (_endpointCircleRadius == value) return
+            _endpointCircleRadius = value
+            requestLayout()
+        }
+        get() = _endpointCircleRadius
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val requiredSize =
-            (2f * mProgressRadius + 2f * mEndpointCircleRadius).toInt()
+            (2f * _progressRadius + 2f * _endpointCircleRadius).toInt()
         val width = resolveSize(requiredSize, widthMeasureSpec)
         val height = resolveSize(requiredSize, heightMeasureSpec)
         setMeasuredDimension(width, height)
@@ -161,50 +265,50 @@ class ArcProgressView @JvmOverloads constructor(
         canvas.drawCircle(
             measuredWidth / 2f,
             measuredHeight / 2f,
-            mProgressRadius,
-            mProgressBackgroundPaint
+            _progressRadius,
+            progressBackgroundPaint
         )
-        mArcRectF.left = measuredWidth / 2f - mProgressRadius
-        mArcRectF.top = measuredWidth / 2f - mProgressRadius
-        mArcRectF.right = measuredWidth / 2f + mProgressRadius
-        mArcRectF.bottom = measuredWidth / 2f + mProgressRadius
-        val range: Float = 360f * (mCurrentProgress / mMaximumProgress)
-        canvas.drawArc(mArcRectF, -90f, range, false, mProgressPaint)
-        if (mShowStartpointCircle) {
+        arcRectF.left = measuredWidth / 2f - _progressRadius
+        arcRectF.top = measuredWidth / 2f - _progressRadius
+        arcRectF.right = measuredWidth / 2f + _progressRadius
+        arcRectF.bottom = measuredWidth / 2f + _progressRadius
+        val range: Float = 360f * (currentProgress / maximumProgress)
+        canvas.drawArc(arcRectF, -90f, range, false, progressPaint)
+        if (isStartpointCircleShow) {
             canvas.drawCircle(
                 measuredWidth / 2f,
-                measuredHeight / 2f - mProgressRadius,
-                mProgressWidth / 2f,
-                mStartpointCirclePaint
+                measuredHeight / 2f - _progressRadius,
+                _progressWidth / 2f,
+                startpointCirclePaint
             )
         }
-        if (mShowEndpointCircle) {
-            val x1 = circlePoint - mProgressRadius * cos((range + 90) * 3.14f / 180f)
-            val y1 = circlePoint - mProgressRadius * sin((range + 90) * 3.14f / 180f)
+        if (isEndpointCircleShow) {
+            val x1 = circlePoint - _progressRadius * cos((range + 90) * 3.14f / 180f)
+            val y1 = circlePoint - _progressRadius * sin((range + 90) * 3.14f / 180f)
             canvas.drawCircle(
-                x1, y1, mEndpointCircleRadius, mEndpointCirclePaint
+                x1, y1, _endpointCircleRadius, endpointCirclePaint
             )
         }
-        if (mShowText) {
-            val x1 = circlePoint - mProgressRadius * cos((range + 90) * 3.14f / 180f)
-            val y1 = circlePoint - mProgressRadius * sin((range + 90) * 3.14f / 180f)
+        if (_showText) {
+            val x1 = circlePoint - _progressRadius * cos((range + 90) * 3.14f / 180f)
+            val y1 = circlePoint - _progressRadius * sin((range + 90) * 3.14f / 180f)
             canvas.drawText(
-                textOrDefault(), x1, y1 + mTextPaint.getBaseLine(), mTextPaint
+                textOrDefault(), x1, y1 + textPaint.getBaseLine(), textPaint
             )
         }
     }
 
     /**
-     * Recommended value of [mEndpointCircleRadius].
+     * Recommended value of [_endpointCircleRadius].
      *
      * @since 0.5.5
      */
     fun recommendedRadius(): Float =
-        mTextPaint.measureText(mText.ifEmpty { "000%" })
-            .coerceAtLeast(mTextPaint.getTextHeight()) / 2f
+        textPaint.measureText(text.ifEmpty { "000%" })
+            .coerceAtLeast(textPaint.getTextHeight()) / 2f
 
     /**
-     * Recommended value of [mProgressWidth].
+     * Recommended value of [_progressWidth].
      *
      * @since 0.5.5
      */
@@ -212,65 +316,21 @@ class ArcProgressView @JvmOverloads constructor(
         recommendedRadius() * 2f
 
     init {
-        val typedArray =
-            context.obtainStyledAttributes(
-                attrs, R.styleable.ArcProgressView, defStyleAttr, defStyleRes
-            )
-        mMaximumProgress =
-            typedArray.getFloat(
-                R.styleable.ArcProgressView_progress_maximum_value, mDefaultMaximumProgress
-            )
-        mCurrentProgress =
-            typedArray.getFloat(
-                R.styleable.ArcProgressView_progress_current_value, mDefaultCurrentProgress
-            )
-        mText =
-            typedArray.getString(R.styleable.ArcProgressView_progress_text) ?: ""
-        mTextSize =
-            typedArray.getDimension(
-                R.styleable.ArcProgressView_progress_text_size,
-                mDefaultTexSize
-            )
-        mTextColor =
-            typedArray.getColor(
-                R.styleable.ArcProgressView_progress_text_color,
-                ContextCompat.getColor(context, R.color.md_theme_onPrimary)
-            )
-        mProgressColor =
-            typedArray.getColor(
-                R.styleable.ArcProgressView_progress_color,
-                ContextCompat.getColor(context, R.color.md_theme_primary)
-            )
-        mProgressBackgroundColor =
-            typedArray.getColor(
-                R.styleable.ArcProgressView_progress_background_color,
-                ContextCompat.getColor(context, R.color.md_theme_primaryContainer)
-            )
-        mShowText =
-            typedArray.getBoolean(R.styleable.ArcProgressView_arc_progress_show_text, true)
-        mProgressRadius =
-            typedArray.getDimension(R.styleable.ArcProgressView_arc_progress_radius, mDefaultRadius)
-        mProgressWidth =
-            typedArray.getDimension(
-                R.styleable.ArcProgressView_arc_progress_width,
-                recommendedWidth()
-            )
-        mStartpointCircleColor =
-            typedArray.getColor(
-                R.styleable.ArcProgressView_arc_progress_startpoint_circle_color,
-                ContextCompat.getColor(context, R.color.transparent)
-            )
-        mEndpointCircleColor =
-            typedArray.getColor(
-                R.styleable.ArcProgressView_arc_progress_endpoint_circle_color,
-                ContextCompat.getColor(context, R.color.md_theme_primary)
-            )
-        mEndpointCircleRadius =
-            typedArray.getDimension(
-                R.styleable.ArcProgressView_arc_progress_endpoint_circle_radius,
-                recommendedRadius()
-            )
-        typedArray.recycle()
+        context.withStyledAttributes(attrs, R.styleable.ArcProgressView, defStyleAttr, defStyleRes) {
+            maximumProgress = getFloat(R.styleable.ArcProgressView_progress_maximum_value, DEFAULT_MAXIMUM_PROGRESS)
+            currentProgress = getFloat(R.styleable.ArcProgressView_progress_current_value, DEFAULT_CURRENT_PROGRESS)
+            text = getString(R.styleable.ArcProgressView_progress_text) ?: ""
+            textPaint.textSize = getDimension(R.styleable.ArcProgressView_progress_text_size, DEFAULT_TEXT_SIZE)
+            textPaint.color = getColor(R.styleable.ArcProgressView_progress_text_color, color(R.color.md_theme_onPrimary))
+            progressPaint.color = getColor(R.styleable.ArcProgressView_progress_color, color(R.color.md_theme_primary))
+            progressBackgroundPaint.color = getColor(R.styleable.ArcProgressView_progress_background_color, color(R.color.md_theme_primaryContainer))
+            _showText = getBoolean(R.styleable.ArcProgressView_arc_progress_show_text, true)
+            _progressRadius = getDimension(R.styleable.ArcProgressView_arc_progress_radius, DEFAULT_RADIUS)
+            _progressWidth = getDimension(R.styleable.ArcProgressView_arc_progress_width, recommendedWidth())
+            startpointCirclePaint.color = getColor(R.styleable.ArcProgressView_arc_progress_startpoint_circle_color, color(R.color.transparent))
+            endpointCirclePaint.color = getColor(R.styleable.ArcProgressView_arc_progress_endpoint_circle_color, color(R.color.md_theme_primary))
+            _endpointCircleRadius = getDimension(R.styleable.ArcProgressView_arc_progress_endpoint_circle_radius, recommendedRadius())
+        }
     }
 
 }

@@ -52,8 +52,8 @@ import com.ave.vastgui.tools.graphics.getBaseLine
  *     waves.
  * @property mUpdateInterval Interval time between every frame in
  *     milliseconds.
- * @property mProgressColor The wave color.
- * @property mProgressBackgroundColor The wave background color.
+ * @property progressColor The wave color.
+ * @property progressBackgroundColor The wave background color.
  * @property mWaveCount The count number of waves.
  * @property mWaveWidth The width of the each wave.
  * @property mHalfWaveWidth A quarter of the [mWaveWidth].
@@ -111,25 +111,25 @@ class WaveProgressView @JvmOverloads constructor(
 
     private var mUpdateInterval: Long = 20
 
-    override var mProgressBackgroundColor: Int
+    override var progressBackgroundColor: Int
         get() = mBackgroundPaint.color
         set(value) {
             mBackgroundPaint.color = value
         }
 
-    override var mProgressColor: Int
+    override var progressColor: Int
         get() = mWavePaint.color
         set(value) {
             mWavePaint.color = value
         }
 
-    override var mTextColor: Int
+    override var textColor: Int
         get() = mTextPaint.color
         set(value) {
             mTextPaint.color = value
         }
 
-    override var mTextSize: Float
+    override var textSize: Float
         get() = mTextPaint.textSize
         set(value) {
             mTextPaint.textSize = value
@@ -278,7 +278,7 @@ class WaveProgressView @JvmOverloads constructor(
 
     /**
      * Create a circular Bimap with radius [radius] and color
-     * [mProgressBackgroundColor].
+     * [progressBackgroundColor].
      *
      * @since 0.2.0
      */
@@ -300,9 +300,9 @@ class WaveProgressView @JvmOverloads constructor(
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val mCurY =
-            if (mMaximumProgress == mCurrentProgress) (-0.05f * height).toInt()
-            else if (0f == mCurrentProgress) (1.05f * height).toInt()
-            else (height * (mMaximumProgress - mCurrentProgress) / mMaximumProgress).toInt()
+            if (maximumProgress == currentProgress) (-0.05f * height).toInt()
+            else if (0f == currentProgress) (1.05f * height).toInt()
+            else (height * (maximumProgress - currentProgress) / maximumProgress).toInt()
         mWavePath.reset()
         mWavePath.moveTo(-mWaveOffsetDistance, mCurY.toFloat())
         for (i in 0 until mWaveCount) {
@@ -358,15 +358,15 @@ class WaveProgressView @JvmOverloads constructor(
         val typedArray: TypedArray = context.obtainStyledAttributes(
             attrs, R.styleable.WaveProgressView, defStyleAttr, defStyleRes
         )
-        mMaximumProgress =
+        maximumProgress =
             typedArray.getFloat(
                 R.styleable.WaveProgressView_progress_maximum_value,
-                mDefaultMaximumProgress
+                DEFAULT_MAXIMUM_PROGRESS
             )
-        mCurrentProgress =
+        currentProgress =
             typedArray.getFloat(
                 R.styleable.WaveProgressView_progress_current_value,
-                mDefaultCurrentProgress
+                DEFAULT_CURRENT_PROGRESS
             )
         mImage =
             try {
@@ -381,23 +381,23 @@ class WaveProgressView @JvmOverloads constructor(
             typedArray.getBoolean(
                 R.styleable.WaveProgressView_wave_progress_show_text, true
             )
-        mText = typedArray.getString(R.styleable.WaveProgressView_progress_text) ?: ""
-        mTextSize =
+        text = typedArray.getString(R.styleable.WaveProgressView_progress_text) ?: ""
+        textSize =
             typedArray.getDimension(
                 R.styleable.WaveProgressView_progress_text_size,
-                mDefaultTexSize
+                DEFAULT_TEXT_SIZE
             )
-        mTextColor =
+        textColor =
             typedArray.getColor(
                 R.styleable.WaveProgressView_progress_text_color,
                 ContextCompat.getColor(context, R.color.md_theme_onPrimary)
             )
-        mProgressBackgroundColor =
+        progressBackgroundColor =
             typedArray.getColor(
                 R.styleable.WaveProgressView_progress_background_color,
                 ContextCompat.getColor(context, R.color.md_theme_primaryContainer)
             )
-        mProgressColor =
+        progressColor =
             typedArray.getColor(
                 R.styleable.WaveProgressView_progress_color,
                 ContextCompat.getColor(context, R.color.md_theme_primary)

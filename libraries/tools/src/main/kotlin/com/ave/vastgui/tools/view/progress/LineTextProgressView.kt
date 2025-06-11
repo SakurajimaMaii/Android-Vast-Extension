@@ -68,19 +68,19 @@ class LineTextProgressView @JvmOverloads constructor(
     private val mTextWidth: Float
         get() = mTextPaint.measureText(textOrDefault())
 
-    override var mTextSize: Float
+    override var textSize: Float
         set(value) {
             mTextPaint.textSize = value
         }
         get() = mTextPaint.textSize
 
-    override var mTextColor: Int
+    override var textColor: Int
         set(value) {
             mTextPaint.color = value
         }
         get() = mTextPaint.color
 
-    override var mProgressColor: Int =
+    override var progressColor: Int =
         ContextCompat.getColor(context, R.color.md_theme_primary)
         set(value) {
             field = value
@@ -88,7 +88,7 @@ class LineTextProgressView @JvmOverloads constructor(
             mBoxPaint.color = value
         }
 
-    override var mProgressBackgroundColor: Int
+    override var progressBackgroundColor: Int
         set(value) {
             mBackgroundPaint.color = value
         }
@@ -126,7 +126,7 @@ class LineTextProgressView @JvmOverloads constructor(
 
         val boxWidth: Float = baseWidth + (mTextMargin * 2f)
         val boxHeight: Float = textHeight + (mTextMargin * 2f)
-        val boxLeft: Float = mCurrentProgress / mMaximumProgress * (measuredWidth - boxWidth)
+        val boxLeft: Float = currentProgress / maximumProgress * (measuredWidth - boxWidth)
         drawBox(canvas, boxLeft, boxWidth, boxHeight)
 
         // The distance between the baseline and text central axis
@@ -183,7 +183,7 @@ class LineTextProgressView @JvmOverloads constructor(
         bottom: Float,
         paint: Paint
     ) {
-        val width = (mCurrentProgress / mMaximumProgress) * (right - left) + left
+        val width = (currentProgress / maximumProgress) * (right - left) + left
         mProgressRectF.set(left, top, width, bottom)
         val radius = (right - left)
             .coerceAtMost(bottom - top) / 2f
@@ -213,34 +213,34 @@ class LineTextProgressView @JvmOverloads constructor(
             defStyleAttr,
             defStyleRes
         )
-        mMaximumProgress =
+        maximumProgress =
             typedArray.getFloat(
                 R.styleable.LineTextProgressView_progress_maximum_value,
-                mDefaultMaximumProgress
+                DEFAULT_MAXIMUM_PROGRESS
             )
-        mCurrentProgress =
+        currentProgress =
             typedArray.getFloat(
                 R.styleable.LineTextProgressView_progress_current_value,
-                mDefaultCurrentProgress
+                DEFAULT_CURRENT_PROGRESS
             )
-        mText =
+        text =
             typedArray.getString(R.styleable.LineTextProgressView_progress_text) ?: ""
-        mTextColor =
+        textColor =
             typedArray.getColor(
                 R.styleable.LineTextProgressView_progress_text_color,
                 ContextCompat.getColor(context, R.color.md_theme_onPrimary)
             )
-        mTextSize =
+        textSize =
             typedArray.getDimension(
                 R.styleable.LineTextProgressView_progress_text_size,
-                mDefaultTexSize
+                DEFAULT_TEXT_SIZE
             )
-        mProgressColor =
+        progressColor =
             typedArray.getColor(
                 R.styleable.LineTextProgressView_progress_color,
                 ContextCompat.getColor(context, R.color.md_theme_primary)
             )
-        mProgressBackgroundColor =
+        progressBackgroundColor =
             typedArray.getColor(
                 R.styleable.LineTextProgressView_progress_background_color,
                 ContextCompat.getColor(context, R.color.md_theme_primaryContainer)

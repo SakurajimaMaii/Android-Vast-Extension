@@ -62,19 +62,19 @@ class HorizontalTextProgressView @JvmOverloads constructor(
     private val mTextWidth: Float
         get() = mTextPaint.measureText(textOrDefault())
 
-    override var mTextSize: Float
+    override var textSize: Float
         set(value) {
             mTextPaint.textSize = value
         }
         get() = mTextPaint.textSize
 
-    override var mTextColor: Int
+    override var textColor: Int
         set(value) {
             mTextPaint.color = value
         }
         get() = mTextPaint.color
 
-    override var mProgressColor: Int =
+    override var progressColor: Int =
         ContextCompat.getColor(context, R.color.md_theme_primary)
         set(value) {
             field = value
@@ -82,7 +82,7 @@ class HorizontalTextProgressView @JvmOverloads constructor(
             mProgressPaint.color = value
         }
 
-    override var mProgressBackgroundColor: Int
+    override var progressBackgroundColor: Int
         set(value) {
             mBackgroundPaint.color = value
         }
@@ -135,7 +135,7 @@ class HorizontalTextProgressView @JvmOverloads constructor(
      * @since 0.5.3
      */
     private fun drawBox(canvas: Canvas) {
-        val progressWidth: Float = (mCurrentProgress / mMaximumProgress * measuredWidth)
+        val progressWidth: Float = (currentProgress / maximumProgress * measuredWidth)
         // The width of text box.
         val boxWidth: Float = (mTextMargin * 2 + mTextWidth)
         // The maximum value in order to ensure that the right side of
@@ -172,7 +172,7 @@ class HorizontalTextProgressView @JvmOverloads constructor(
         val top = (measuredHeight - mProgressHeight) / 2f
         val right = measuredWidth.toFloat()
         val bottom = measuredHeight - top
-        val width = (mCurrentProgress / mMaximumProgress) * measuredWidth
+        val width = (currentProgress / maximumProgress) * measuredWidth
         val radius = (bottom - top).coerceAtMost(right - left) / 2f
         mProgressRectF.set(left, top, width, bottom)
         canvas.withSave {
@@ -201,34 +201,34 @@ class HorizontalTextProgressView @JvmOverloads constructor(
             defStyleAttr,
             defStyleRes
         )
-        mMaximumProgress =
+        maximumProgress =
             typedArray.getFloat(
                 R.styleable.HorizontalTextProgressView_progress_maximum_value,
-                mDefaultMaximumProgress
+                DEFAULT_MAXIMUM_PROGRESS
             )
-        mCurrentProgress =
+        currentProgress =
             typedArray.getFloat(
                 R.styleable.HorizontalTextProgressView_progress_current_value,
-                mDefaultCurrentProgress
+                DEFAULT_CURRENT_PROGRESS
             )
-        mText =
+        text =
             typedArray.getString(R.styleable.HorizontalTextProgressView_progress_text) ?: ""
-        mTextColor =
+        textColor =
             typedArray.getColor(
                 R.styleable.HorizontalTextProgressView_progress_text_color,
                 ContextCompat.getColor(context, R.color.md_theme_onPrimary)
             )
-        mTextSize =
+        textSize =
             typedArray.getDimension(
                 R.styleable.HorizontalTextProgressView_progress_text_size,
-                mDefaultTexSize
+                DEFAULT_TEXT_SIZE
             )
-        mProgressColor =
+        progressColor =
             typedArray.getColor(
                 R.styleable.HorizontalTextProgressView_progress_color,
                 ContextCompat.getColor(context, R.color.md_theme_primary)
             )
-        mProgressBackgroundColor =
+        progressBackgroundColor =
             typedArray.getColor(
                 R.styleable.HorizontalTextProgressView_progress_background_color,
                 ContextCompat.getColor(context, R.color.md_theme_primaryContainer)

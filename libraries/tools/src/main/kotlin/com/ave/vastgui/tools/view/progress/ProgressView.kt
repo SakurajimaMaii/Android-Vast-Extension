@@ -20,7 +20,9 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
+import androidx.annotation.ColorInt
 import com.ave.vastgui.tools.R
+import com.ave.vastgui.tools.utils.dimension
 import java.text.DecimalFormat
 
 // Author: Vast Gui
@@ -28,15 +30,8 @@ import java.text.DecimalFormat
 // Date: 2023/4/3
 
 /**
- * ProgressView
+ * [ProgressView]
  *
- * @property mMaximumProgress The maximum progress value.
- * @property mCurrentProgress The current progress value.
- * @property mText The text that will be displayed with progress.
- * @property mTextSize Ths size of the [mText].
- * @property mTextColor The color of the text.
- * @property mProgressBackgroundColor The background color of the progress.
- * @property mProgressColor The progress color.
  * @since 0.2.0
  */
 sealed class ProgressView(
@@ -47,63 +42,103 @@ sealed class ProgressView(
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
     /**
-     * Default value of [mMaximumProgress].
+     * Default value of [maximumProgress].
      *
-     * @since 0.5.3
+     * @since 1.5.2
      */
-    protected val mDefaultMaximumProgress
-        get() = TypedValue().apply {
-            resources.getValue(R.dimen.default_maximum_progress, this, true)
-        }.float
+    @Suppress("PropertyName")
+    protected val DEFAULT_MAXIMUM_PROGRESS = TypedValue()
+        .apply { resources.getValue(R.dimen.default_maximum_progress, this, true) }
+        .float
 
     /**
-     * Default value of [mCurrentProgress].
+     * Default value of [currentProgress].
      *
-     * @since 0.5.3
+     * @since 1.5.2
      */
-    protected val mDefaultCurrentProgress
-        get() = TypedValue().apply {
-            resources.getValue(R.dimen.default_current_progress, this, true)
-        }.float
+    @Suppress("PropertyName")
+    protected val DEFAULT_CURRENT_PROGRESS = TypedValue()
+        .apply { resources.getValue(R.dimen.default_current_progress, this, true) }.float
 
     /**
-     * Default value of [mTextSize].
+     * Default value of [textSize].
      *
-     * @since 0.5.3
+     * @since 1.5.2
      */
-    protected val mDefaultTexSize
-        get() = resources.getDimension(R.dimen.default_progress_text_size)
+    @Suppress("PropertyName")
+    protected val DEFAULT_TEXT_SIZE = dimension(R.dimen.default_progress_text_size)
 
     /**
      * Default text.
      *
-     * @since 0.5.5
+     * @since 1.5.2
      */
-    protected open val mDefaultText
-        get() = DecimalFormat("0.00%").format(mCurrentProgress / mMaximumProgress)
+    protected open val defaultText: String
+        get() = DecimalFormat("0.00%").format(currentProgress / maximumProgress)
 
-    var mMaximumProgress = mDefaultMaximumProgress
+    /**
+     * The maximum progress value.
+     *
+     * @since 1.5.2
+     */
+    var maximumProgress = DEFAULT_MAXIMUM_PROGRESS
         set(value) {
             field = value.coerceAtLeast(0f)
         }
 
-    var mCurrentProgress: Float = mDefaultCurrentProgress
+    /**
+     * The current progress value.
+     *
+     * @since 1.5.2
+     */
+    var currentProgress: Float = DEFAULT_CURRENT_PROGRESS
         set(value) {
-            field = value.coerceIn(0f, mMaximumProgress)
+            field = value.coerceIn(0f, maximumProgress)
         }
 
-    open var mText: String = ""
+    /**
+     * The text displayed.
+     *
+     * @since 1.5.2
+     */
+    open var text: String = ""
 
-    open var mTextSize: Float = mDefaultTexSize
+    /**
+     * The text size of [text] (in pixels).
+     *
+     * @since 1.5.2
+     */
+    open var textSize: Float = DEFAULT_TEXT_SIZE
 
-    open var mTextColor: Int = 0
+    /**
+     * The color-int of [text].
+     *
+     * @since 1.5.2
+     */
+    @get:ColorInt
+    @setparam:ColorInt
+    open var textColor: Int = 0
 
-    open var mProgressBackgroundColor: Int = 0
+    /**
+     * The color-int of progress background.
+     *
+     * @since 1.5.2
+     */
+    @get:ColorInt
+    @setparam:ColorInt
+    open var progressBackgroundColor: Int = 0
 
-    open var mProgressColor: Int = 0
+    /**
+     * The color-int of progress.
+     *
+     * @since 1.5.2
+     */
+    @get:ColorInt
+    @setparam:ColorInt
+    open var progressColor: Int = 0
 
     /** @since 0.5.5 */
-    protected fun textOrDefault(): String = mText.ifEmpty { mDefaultText }
+    protected fun textOrDefault(): String = text.ifEmpty { defaultText }
 
     /**
      * Reset progress.
@@ -111,7 +146,7 @@ sealed class ProgressView(
      * @since 0.2.0
      */
     fun resetProgress() {
-        mCurrentProgress = 0f
+        currentProgress = 0f
     }
 
 }

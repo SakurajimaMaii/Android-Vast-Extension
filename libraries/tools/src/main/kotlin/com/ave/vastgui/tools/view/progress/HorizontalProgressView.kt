@@ -76,25 +76,25 @@ class HorizontalProgressView @JvmOverloads constructor(
     private val mBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mProgressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-    override var mText: String
-        get() = throw RuntimeException("You can't get ${this::mText.name}.")
-        set(_) = throw RuntimeException("You can't set ${this::mText.name}.")
+    override var text: String
+        get() = throw RuntimeException("You can't get ${this::text.name}.")
+        set(_) = throw RuntimeException("You can't set ${this::text.name}.")
 
-    override var mTextColor: Int
-        get() = throw RuntimeException("You can't get ${this::mTextColor.name}.")
-        set(_) = throw RuntimeException("You can't set ${this::mTextColor.name}.")
+    override var textColor: Int
+        get() = throw RuntimeException("You can't get ${this::textColor.name}.")
+        set(_) = throw RuntimeException("You can't set ${this::textColor.name}.")
 
-    override var mTextSize: Float
-        get() = throw RuntimeException("You can't get ${this::mTextSize.name}.")
-        set(_) = throw RuntimeException("You can't set ${this::mTextSize.name}.")
+    override var textSize: Float
+        get() = throw RuntimeException("You can't get ${this::textSize.name}.")
+        set(_) = throw RuntimeException("You can't set ${this::textSize.name}.")
 
-    override var mProgressColor: Int
+    override var progressColor: Int
         set(value) {
             mProgressPaint.color = value
         }
         get() = mProgressPaint.color
 
-    override var mProgressBackgroundColor: Int
+    override var progressBackgroundColor: Int
         set(value) {
             mBackgroundPaint.color = value
         }
@@ -113,7 +113,7 @@ class HorizontalProgressView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         val radius = measuredWidth.coerceAtMost(measuredHeight) / 2f
-        if (mProgressBackgroundColor != 0 && mBackgroundDrawable == null) {
+        if (progressBackgroundColor != 0 && mBackgroundDrawable == null) {
             mRectF.set(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat())
             canvas.drawRoundRect(
                 mRectF, radius, radius, mBackgroundPaint
@@ -136,8 +136,8 @@ class HorizontalProgressView @JvmOverloads constructor(
                 )
             }
         }
-        val width = ((measuredWidth - 2 * mStrokeWidth) * (mCurrentProgress / mMaximumProgress))
-        if (mProgressColor != 0 && mProgressDrawable == null && mCurrentProgress != 0f) {
+        val width = ((measuredWidth - 2 * mStrokeWidth) * (currentProgress / maximumProgress))
+        if (progressColor != 0 && mProgressDrawable == null && currentProgress != 0f) {
             drawProgress(
                 canvas,
                 mStrokeWidth,
@@ -148,7 +148,7 @@ class HorizontalProgressView @JvmOverloads constructor(
                 mProgressPaint
             )
         }
-        if (mProgressDrawable != null && mCurrentProgress != 0f) {
+        if (mProgressDrawable != null && currentProgress != 0f) {
             drawProgressDrawable(
                 canvas,
                 mStrokeWidth,
@@ -297,17 +297,17 @@ class HorizontalProgressView @JvmOverloads constructor(
         val typedArray = context.obtainStyledAttributes(
             attrs, R.styleable.HorizontalProgressView, defStyleAttr, defStyleRes
         )
-        mMaximumProgress = typedArray.getFloat(
-            R.styleable.HorizontalProgressView_progress_maximum_value, mDefaultMaximumProgress
+        maximumProgress = typedArray.getFloat(
+            R.styleable.HorizontalProgressView_progress_maximum_value, DEFAULT_MAXIMUM_PROGRESS
         )
-        mCurrentProgress = typedArray.getFloat(
-            R.styleable.HorizontalProgressView_progress_current_value, mDefaultCurrentProgress
+        currentProgress = typedArray.getFloat(
+            R.styleable.HorizontalProgressView_progress_current_value, DEFAULT_CURRENT_PROGRESS
         )
-        mProgressColor = typedArray.getColor(
+        progressColor = typedArray.getColor(
             R.styleable.HorizontalProgressView_progress_color,
             ContextCompat.getColor(context, R.color.md_theme_primary)
         )
-        mProgressBackgroundColor = typedArray.getColor(
+        progressBackgroundColor = typedArray.getColor(
             R.styleable.HorizontalProgressView_progress_background_color,
             ContextCompat.getColor(context, R.color.md_theme_primaryContainer)
         )
