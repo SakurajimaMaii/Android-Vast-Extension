@@ -20,7 +20,6 @@ import android.Manifest
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.os.Bundle
-import android.util.Log
 import com.ave.vastgui.app.databinding.ActivityArcProgressViewBinding
 import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.core.annotation.ExperimentalApi
@@ -81,14 +80,14 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
         val pos = floatArrayOf(1f / 7, 2f / 7, 3f / 7, 4f / 7, 5f / 7, 6f / 7, 1f)
 
         getBinding().arcProgressView.apply {
-            mProgressShader = LinearGradient(
+            progressShader = LinearGradient(
                 -700f, 0f, 700f, 0f,
                 colors, pos,
                 Shader.TileMode.CLAMP
             )
-            mEndpointCircleRadius = 15f.DP.coerceAtLeast(recommendedRadius())
-            mProgressWidth = 15f.DP
-            mEndpointCircleColor = ColorUtils.colorHex2Int("#eb4d4b")
+            endpointCircleRadius = 15f.DP.coerceAtLeast(recommendedRadius())
+            progressWidth = 15f.DP
+            endpointCircleColor = ColorUtils.colorHex2Int("#eb4d4b")
         }
 
         getBinding().download.setOnClickListener {
@@ -125,14 +124,14 @@ class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>()
             .setListener(object : OnDownloadListener {
                 override fun onSuccess(state: DownloadState.Success) = runOnUiThread {
                     getBinding().arcProgressView.refreshWithInvalidate {
-                        mCurrentProgress = getBinding().arcProgressView.mMaximumProgress
+                        currentProgress = getBinding().arcProgressView.maximumProgress
                     }
                 }
 
                 override fun onDownload(state: DownloadState.Download) = runOnUiThread {
                     getBinding().arcProgressView.refreshWithInvalidate {
-                        mCurrentProgress =
-                            state.rate * getBinding().arcProgressView.mMaximumProgress
+                        currentProgress =
+                            state.rate * getBinding().arcProgressView.maximumProgress
                     }
                 }
 

@@ -47,13 +47,13 @@ class HorizontalProgressViewActivity : ComponentActivity() {
         mBinding.bottomSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 mBinding.horizontalProgressView.refreshWithInvalidate {
-                    mCurrentProgress = progress.toFloat()
+                    currentProgress = progress.toFloat()
                 }
                 mBinding.horizontalTextProgressView.refreshWithInvalidate {
-                    mCurrentProgress = progress.toFloat()
+                    currentProgress = progress.toFloat()
                 }
                 mBinding.lineTextProgressView.refreshWithInvalidate {
-                    mCurrentProgress = progress.toFloat()
+                    currentProgress = progress.toFloat()
                 }
             }
 

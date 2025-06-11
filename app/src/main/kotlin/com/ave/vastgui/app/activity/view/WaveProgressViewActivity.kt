@@ -37,23 +37,23 @@ class WaveProgressViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         mBinding.waveProgressView.apply {
-            mProgressBackgroundColor = ColorUtils.colorHex2Int("#e74c3c")
-            mProgressColor = ColorUtils.colorHex2Int("#27ae60")
-            mTextColor = ColorUtils.colorHex2Int("#000000")
+            progressBackgroundColor = ColorUtils.colorHex2Int("#e74c3c")
+            progressColor = ColorUtils.colorHex2Int("#27ae60")
+            textColor = ColorUtils.colorHex2Int("#000000")
             mRadius = 100f.DP
             mStrokeColor = ColorUtils.colorHex2Int("#8e44ad")
             mShowText = false
             setImage(R.drawable.ic_github)
-            mTextSize = 30f.SP
+            textSize = 30f.SP
         }
 
         mBinding.imageProgressView.apply {
-            mTextSize = 30f.SP
+            textSize = 30f.SP
         }
 
         mBinding.progressSlider.addOnChangeListener { _, value, _ ->
-            mBinding.waveProgressView.mCurrentProgress = value
-            mBinding.imageProgressView.mCurrentProgress = value
+            mBinding.waveProgressView.currentProgress = value
+            mBinding.imageProgressView.currentProgress = value
         }
 
         mBinding.strokeSlider.addOnChangeListener { _, value, _ ->
