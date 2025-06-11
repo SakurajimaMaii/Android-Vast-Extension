@@ -61,6 +61,15 @@
         <item name="icon_end_margin">5dp</item>
         <item name="icon_bottom_margin">5dp</item>
     </style>
+    
+    <style name="BaseBreadCrumbLayout">
+        <item name="breadcrumb_item_max_width">@dimen/default_breadcrumb_item_max_width</item>
+        <item name="breadcrumb_text_color">@color/md_theme_onSurface</item>
+        <item name="breadcrumb_text_size">@dimen/default_breadcrumb_text_size</item>
+        <item name="breadcrumb_interval_icon">@drawable/ic_breadcrumb_default_interval_icon</item>
+        <item name="breadcrumb_interval_icon_width">@dimen/default_breadcrumb_icon_size</item>
+        <item name="breadcrumb_interval_icon_height">@dimen/default_breadcrumb_icon_size</item>
+    </style>
 
     <style name="BaseCropView">
         <item name="crop_mask_layer_color">@color/default_crop_frame_mask_color</item>

@@ -53,6 +53,6 @@
     <dimen name="default_indicator_bitmap_height">20dp</dimen>
     <!-- See BreadCrumbView-->
     <dimen name="default_breadcrumb_item_max_width">100dp</dimen>
-    <dimen name="default_breadcrumb_text_size">8sp</dimen>
+    <dimen name="default_breadcrumb_text_size">16sp</dimen>
     <dimen name="default_breadcrumb_icon_size">15dp</dimen>
 </resources>
