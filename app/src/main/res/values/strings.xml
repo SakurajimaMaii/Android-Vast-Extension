@@ -83,14 +83,15 @@
     <!-- 权限申请 end -->
 
     <!-- 进度条 start -->
+    <string name="progress_switch_text_color">切换文字颜色</string>
+    <string name="progress_change_text_size">改变文字大小</string>
+    <string name="progress_switch_text_show">切换文字显示</string>
+
     <string name="arc_progress_switch_progress_color">切换进度条颜色</string>
     <string name="arc_progress_switch_progress_background_color">切换进度条背景颜色</string>
     <string name="arc_progress_switch_progress_shader">切换进度条Shader</string>
-    <string name="arc_progress_switch_text_show">切换文字显示</string>
-    <string name="arc_progress_switch_text_color">切换文字颜色</string>
     <string name="arc_progress_switch_startpoint_color">切换 startpoint 颜色</string>
     <string name="arc_progress_switch_endpoint_color">切换 endpoint 颜色</string>
-    <string name="arc_progress_change_text_size">改变文字大小</string>
     <string name="arc_progress_change_radius">改变进度条半径</string>
     <string name="arc_progress_change_width">改变进度条宽度</string>
     <string name="arc_progress_change_endpoint_radius">改变 endpoint 半径</string>
@@ -100,6 +101,13 @@
     <string name="wave_progress_set_progress">设置进度</string>
     <string name="wave_progress_set_space">设置Space</string>
     <string name="wave_progress_set_stroke">设置Stroke</string>
+    <string name="wave_progress_change_wave_speed">改变水波纹速度</string>
+    <string name="wave_progress_change_wave_width">改变水波纹宽度</string>
+    <string name="wave_progress_change_wave_height">改变水波纹高度</string>
+    <string name="wave_progress_switch_stroke_color">切换边框颜色</string>
+    <string name="wave_progress_change_update">改变刷新频率</string>
+
+    <string name="horizontal_pv_switch_background">修改背景图片</string>
     <!-- 进度条 end -->
 
     <!-- 评分控件 start -->

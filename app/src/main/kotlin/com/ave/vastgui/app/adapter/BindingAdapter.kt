@@ -60,7 +60,7 @@ object BindingAdapter {
         // 参考 https://github.com/CoderAlee/PaintedSkin/issues/30
         view.load(url) {
             crossfade(true)
-            placeholder(R.drawable.background)
+            placeholder(R.drawable.img_horizontal_pv_background)
         }
     }
 

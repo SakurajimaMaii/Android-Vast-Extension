@@ -19,6 +19,7 @@ package com.ave.vastgui.app.activity.view
 import android.os.Bundle
 import android.widget.SeekBar
 import androidx.activity.ComponentActivity
+import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityHorizontalProgressViewBinding
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
 import com.ave.vastgui.tools.viewbinding.viewBinding
@@ -29,42 +30,24 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 
 class HorizontalProgressViewActivity : ComponentActivity() {
 
-    private val mBinding by viewBinding(ActivityHorizontalProgressViewBinding::inflate)
+    private val binding by viewBinding(ActivityHorizontalProgressViewBinding::inflate)
+
+    private val gradientImages = arrayOf(R.drawable.img_gradient_256dp, R.drawable.img_horizontal_pv_foreground, 0)
+    private var gradientIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(binding.root)
 
-//        mBinding.lineTextProgressView.setOnClickListener {
-//            val bitmap = viewSnapshot(it)
-//            BmpUtils.saveBitmapAsFile(
-//                bitmap = bitmap,
-//                File(FileMgr.appInternalFilesDir(), "line_text_box_color.jpg")
-//            )?.apply {
-//                SimpleToast.showShortMsg("截图${name}已保存")
-//            }
-//        }
+        binding.progressSlider.addOnChangeListener { _, value, _ ->
+            binding.horizontalPv.currentProgress = value
+            binding.horizontalTextPv.currentProgress = value
+            binding.lineTextPv.currentProgress = value
+        }
 
-        mBinding.bottomSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                mBinding.horizontalProgressView.refreshWithInvalidate {
-                    currentProgress = progress.toFloat()
-                }
-                mBinding.horizontalTextProgressView.refreshWithInvalidate {
-                    currentProgress = progress.toFloat()
-                }
-                mBinding.lineTextProgressView.refreshWithInvalidate {
-                    currentProgress = progress.toFloat()
-                }
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-
-            }
-        })
+        binding.horizontalPvSwitchBackground.setOnClickListener {
+            binding.horizontalPv.setProgressDrawable(gradientImages[(gradientIndex++) % gradientImages.size])
+        }
     }
 
 }

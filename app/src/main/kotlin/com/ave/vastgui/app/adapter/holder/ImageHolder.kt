@@ -37,7 +37,7 @@ class DefaultImageHolder(itemView: View) : ItemHolder<Images.Image>(itemView) {
     override fun onBindData(item: Images.Image) {
         image.load(item.url) {
             crossfade(true)
-            placeholder(R.drawable.background)
+            placeholder(R.drawable.img_horizontal_pv_background)
         }
         title.text = item.title
     }
@@ -61,7 +61,7 @@ class ComicImageHolder(itemView: View) : ItemHolder<Images.Image>(itemView) {
     override fun onBindData(item: Images.Image) {
         image.load(item.url) {
             crossfade(true)
-            placeholder(R.drawable.background)
+            placeholder(R.drawable.img_horizontal_pv_background)
         }
         title.text = item.title
     }
