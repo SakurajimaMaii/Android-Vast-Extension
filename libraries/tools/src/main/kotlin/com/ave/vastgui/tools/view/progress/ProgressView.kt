@@ -81,20 +81,14 @@ sealed class ProgressView(
      *
      * @since 1.5.2
      */
-    var maximumProgress = DEFAULT_MAXIMUM_PROGRESS
-        set(value) {
-            field = value.coerceAtLeast(0f)
-        }
+    open var maximumProgress = DEFAULT_MAXIMUM_PROGRESS
 
     /**
      * The current progress value.
      *
      * @since 1.5.2
      */
-    var currentProgress: Float = DEFAULT_CURRENT_PROGRESS
-        set(value) {
-            field = value.coerceIn(0f, maximumProgress)
-        }
+    open var currentProgress: Float = DEFAULT_CURRENT_PROGRESS
 
     /**
      * The text displayed.

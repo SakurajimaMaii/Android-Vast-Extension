@@ -19,23 +19,24 @@ package com.ave.vastgui.tools.view.progress
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.Shader
 import android.util.AttributeSet
-import android.util.Log
 import androidx.annotation.ColorInt
+import androidx.core.content.withStyledAttributes
+import androidx.core.graphics.withClip
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.graphics.getBaseLine
 import com.ave.vastgui.tools.graphics.getTextHeight
-import java.text.DecimalFormat
-import kotlin.math.cos
-import kotlin.math.sin
-import androidx.core.content.withStyledAttributes
 import com.ave.vastgui.tools.utils.ColorUtils
 import com.ave.vastgui.tools.utils.color
 import com.ave.vastgui.tools.utils.dimension
+import java.text.DecimalFormat
+import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.roundToInt
+import kotlin.math.sin
 import kotlin.properties.Delegates
 
 // Author: Vast Gui 
@@ -89,6 +90,9 @@ class ArcProgressView @JvmOverloads constructor(
     /** @since 1.5.2 */
     private val arcRectF = RectF()
 
+    /** @since 1.5.2 */
+    private val textScopePath: Path = Path()
+
     /**
      * `ture` if the startpoint circle needs to be displayed, `false`
      * otherwise.
@@ -107,10 +111,33 @@ class ArcProgressView @JvmOverloads constructor(
         get() = endpointCircleColor != color(R.color.transparent)
 
     override val defaultText: String
-        get() = DecimalFormat("##0%").format(currentProgress / maximumProgress)
+        get() = DecimalFormat("##0%").format(_currentProgress / _maximumProgress)
+
+    private var _maximumProgress = DEFAULT_MAXIMUM_PROGRESS
+
+    override var maximumProgress: Float
+        get() = _maximumProgress
+        set(value) {
+            _maximumProgress = value.coerceAtLeast(0f)
+            resetProgress()
+            invalidate()
+        }
+
+    private var _currentProgress = DEFAULT_CURRENT_PROGRESS
+
+    override var currentProgress: Float
+        get() = _currentProgress
+        set(value) {
+            _currentProgress = value.coerceIn(0f, _maximumProgress)
+            invalidate()
+        }
 
     override var progressColor: Int
         set(value) {
+            if (progressPaint.color == value || progressShader != null) return
+            check(ColorUtils.isColorInt(value)) {
+                "The color-int(current=${value.toUInt().toString(16)}) of progress is invalid."
+            }
             progressPaint.color = value
             invalidate()
         }
@@ -118,6 +145,10 @@ class ArcProgressView @JvmOverloads constructor(
 
     override var progressBackgroundColor: Int
         set(value) {
+            if (progressBackgroundPaint.color == value) return
+            check(ColorUtils.isColorInt(value)) {
+                "The color-int(current=${value.toUInt().toString(16)}) of progress background is invalid."
+            }
             progressBackgroundPaint.color = value
             invalidate()
         }
@@ -125,6 +156,10 @@ class ArcProgressView @JvmOverloads constructor(
 
     override var textColor: Int
         set(value) {
+            if (textPaint.color == value) return
+            check(ColorUtils.isColorInt(value)) {
+                "The color-int(current=${value.toUInt().toString(16)}) of text is invalid."
+            }
             textPaint.color = value
             invalidate()
         }
@@ -132,7 +167,7 @@ class ArcProgressView @JvmOverloads constructor(
 
     override var textSize: Float
         set(value) {
-            textPaint.textSize = value
+            textPaint.textSize = value.coerceAtLeast(0f)
             invalidate()
         }
         get() = textPaint.textSize
@@ -193,7 +228,7 @@ class ArcProgressView @JvmOverloads constructor(
         set(value) {
             if (_progressWidth == value) return
             _progressWidth = value.coerceAtLeast(0f)
-            invalidate()
+            requestLayout()
         }
         get() = _progressWidth
 
@@ -235,9 +270,6 @@ class ArcProgressView @JvmOverloads constructor(
 
     /** @since 1.5.2 */
     private var _endpointCircleRadius: Float = recommendedRadius()
-        set(value) {
-            field = value.coerceAtLeast(0f)
-        }
 
     /**
      * The radius of the endpoint circle.
@@ -247,16 +279,16 @@ class ArcProgressView @JvmOverloads constructor(
     var endpointCircleRadius: Float
         set(value) {
             if (_endpointCircleRadius == value) return
-            _endpointCircleRadius = value
+            _endpointCircleRadius = value.coerceAtLeast(0f)
             requestLayout()
         }
         get() = _endpointCircleRadius
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val neededMinimumWidth =
-            max((2f * _progressRadius + 2f * _endpointCircleRadius + paddingStart + paddingEnd).roundToInt(), suggestedMinimumWidth)
-        val neededMinimumHeight =
-            max((2f * _progressRadius + 2f * _endpointCircleRadius + paddingTop + paddingBottom).roundToInt(),suggestedMinimumHeight)
+        val viewMinimumWidth = (2f * _progressRadius + 2f * max(_progressWidth / 2f, _endpointCircleRadius) + paddingStart + paddingEnd).roundToInt()
+        val viewMinimumHeight = (2f * _progressRadius + 2f * max(_progressWidth / 2f, _endpointCircleRadius) + paddingTop + paddingBottom).roundToInt()
+        val neededMinimumWidth = max(viewMinimumWidth, suggestedMinimumWidth)
+        val neededMinimumHeight = max(viewMinimumHeight, suggestedMinimumHeight)
         val width = resolveSize(neededMinimumWidth, widthMeasureSpec)
         val height = resolveSize(neededMinimumHeight, heightMeasureSpec)
         setMeasuredDimension(width, height)
@@ -267,7 +299,7 @@ class ArcProgressView @JvmOverloads constructor(
         val centerY: Float = (paddingTop + measuredHeight - paddingBottom) / 2f
         canvas.drawCircle(centerX, centerY, _progressRadius, progressBackgroundPaint)
         arcRectF.set(centerX - _progressRadius, centerY - _progressRadius, centerX + _progressRadius, centerY + _progressRadius)
-        val range: Float = 360f * (currentProgress / maximumProgress)
+        val range: Float = 360f * (_currentProgress / _maximumProgress)
         canvas.drawArc(arcRectF, -90f, range, false, progressPaint)
         if (isStartpointCircleShow) {
             canvas.drawCircle(centerX, centerY - _progressRadius, _progressWidth / 2f, startpointCirclePaint)
@@ -275,16 +307,16 @@ class ArcProgressView @JvmOverloads constructor(
         if (isEndpointCircleShow) {
             val x1 = centerX - _progressRadius * cos((range + 90) * 3.14f / 180f)
             val y1 = centerY - _progressRadius * sin((range + 90) * 3.14f / 180f)
-            canvas.drawCircle(
-                x1, y1, _endpointCircleRadius, endpointCirclePaint
-            )
+            canvas.drawCircle(x1, y1, _endpointCircleRadius, endpointCirclePaint)
         }
         if (_showText) {
             val x1 = centerX - _progressRadius * cos((range + 90) * 3.14f / 180f)
             val y1 = centerY - _progressRadius * sin((range + 90) * 3.14f / 180f)
-            canvas.drawText(
-                textOrDefault(), x1, y1 + textPaint.getBaseLine(), textPaint
-            )
+            textScopePath.reset()
+            textScopePath.addCircle(x1, y1, _endpointCircleRadius, Path.Direction.CW)
+            canvas.withClip(textScopePath) {
+                canvas.drawText(textOrDefault(), x1, y1 + textPaint.getBaseLine(), textPaint)
+            }
         }
     }
 
@@ -306,8 +338,8 @@ class ArcProgressView @JvmOverloads constructor(
 
     init {
         context.withStyledAttributes(attrs, R.styleable.ArcProgressView, defStyleAttr, defStyleRes) {
-            maximumProgress = getFloat(R.styleable.ArcProgressView_progress_maximum_value, DEFAULT_MAXIMUM_PROGRESS)
-            currentProgress = getFloat(R.styleable.ArcProgressView_progress_current_value, DEFAULT_CURRENT_PROGRESS)
+            _maximumProgress = getFloat(R.styleable.ArcProgressView_progress_maximum_value, DEFAULT_MAXIMUM_PROGRESS)
+            _currentProgress = getFloat(R.styleable.ArcProgressView_progress_current_value, DEFAULT_CURRENT_PROGRESS)
             text = getString(R.styleable.ArcProgressView_progress_text) ?: ""
             textPaint.textSize = getDimension(R.styleable.ArcProgressView_progress_text_size, DEFAULT_TEXT_SIZE)
             textPaint.color = getColor(R.styleable.ArcProgressView_progress_text_color, color(R.color.md_theme_onPrimary))
