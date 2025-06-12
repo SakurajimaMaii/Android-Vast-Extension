@@ -37,6 +37,7 @@ import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.graphics.BmpUtils.getBitmapFromDrawable
 import com.ave.vastgui.tools.graphics.getBaseLine
 import com.ave.vastgui.tools.utils.ColorUtils
+import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.color
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
@@ -105,14 +106,16 @@ class WaveProgressView @JvmOverloads constructor(
      *
      * @since 1.5.2
      */
-    private var waveWidth = 0f
+    var waveWidth = 0f
+        private set
 
     /**
      * The height of each wave(in pixels).
      *
      * @since 1.5.2
      */
-    private var waveHeight = 0f
+    var waveHeight = 0f
+        private set
 
     /**
      * A quarter of the [waveWidth].
@@ -129,7 +132,7 @@ class WaveProgressView @JvmOverloads constructor(
     private var waveOffsetDistance = 0f
 
     /**
-     * Offset per frame. By default, the value is [waveWidth] / 70.
+     * Offset per frame (in pixels). The default value is [waveWidth] / 70.
      *
      * @since 1.5.2
      */
@@ -265,6 +268,7 @@ class WaveProgressView @JvmOverloads constructor(
     override var textSize: Float
         get() = textPaint.textSize
         set(value) {
+            if (textPaint.textSize == value) return
             textPaint.textSize = value.coerceAtLeast(0f)
             invalidate()
         }
@@ -332,7 +336,7 @@ class WaveProgressView @JvmOverloads constructor(
         } else {
             canvas.drawBitmap(bitmap, left, top, waveBitmapPaint)
         }
-        if (_showText && image == null) {
+        if (_showText) {
             canvas.drawText(textOrDefault(), centerX, centerY + textPaint.getBaseLine(), textPaint)
         }
         if (updateInterval != -1L) {
@@ -363,10 +367,11 @@ class WaveProgressView @JvmOverloads constructor(
      */
     fun setImage(@DrawableRes id: Int) {
         runCatching {
-            AppCompatResources.getDrawable(context, id)?.let {
-                image = it
-                _image = getBitmapFromDrawable(it)
-            } ?: {
+            val drawable = AppCompatResources.getDrawable(context, id)
+            if (drawable != null) {
+                image = drawable
+                _image = getBitmapFromDrawable(drawable)
+            } else {
                 image = null
                 _image = createDefaultImageBitmap(_radius.roundToInt())
             }
@@ -383,7 +388,8 @@ class WaveProgressView @JvmOverloads constructor(
      * @since 0.2.0
      */
     fun setSpeed(@FloatRange(from = 0.0) speed: Float) {
-        waveSpeed = speed
+        waveSpeed = speed.coerceAtLeast(0f)
+        invalidate()
     }
 
     /**
@@ -403,11 +409,13 @@ class WaveProgressView @JvmOverloads constructor(
      *
      * @since 0.2.0
      */
-    fun setWave(@FloatRange(from = 0.0) waveWidth: Float, @FloatRange(from = 0.0) waveHeight: Float) {
-        this.waveWidth = waveWidth.coerceAtLeast(0f)
-        this.waveHeight = waveHeight.coerceAtLeast(0f)
-        halfWaveWidth = waveWidth / 4
-        waveCount = calWaveCount(_image.width, this.waveWidth)
+    fun setWave(@FloatRange(from = 0.0) width: Float, @FloatRange(from = 0.0) height: Float) {
+        if (waveWidth == width && waveHeight == height) return
+        waveWidth = width.coerceAtLeast(0f)
+        waveHeight = height.coerceAtLeast(0f)
+        halfWaveWidth = width / 4
+        waveCount = calWaveCount(_image.width, waveWidth)
+        invalidate()
     }
 
     /**
@@ -432,24 +440,24 @@ class WaveProgressView @JvmOverloads constructor(
     private fun createWaveBitmap(width: Int, height: Int): Bitmap {
         val bitmap = createBitmap(width, height)
         val canvas = Canvas(bitmap)
-        val mCurY =
+        val currentY =
             if (_maximumProgress == _currentProgress) (-0.05f * height).toInt()
             else if (0f == _currentProgress) (1.05f * height).toInt()
             else (height * (_maximumProgress - _currentProgress) / _maximumProgress).toInt()
         wavePath.reset()
-        wavePath.moveTo(-waveOffsetDistance, mCurY.toFloat())
-        for (i in 0 until waveCount) {
+        wavePath.moveTo(-waveOffsetDistance, currentY.toFloat())
+        for (i in 0..waveCount) {
             wavePath.quadTo(
                 i * waveWidth + halfWaveWidth - waveOffsetDistance,
-                mCurY - waveHeight,
+                currentY - waveHeight,
                 i * waveWidth + halfWaveWidth * 2 - waveOffsetDistance,
-                mCurY.toFloat()
+                currentY.toFloat()
             )
             wavePath.quadTo(
                 i * waveWidth + halfWaveWidth * 3 - waveOffsetDistance,
-                mCurY + waveHeight,
+                currentY + waveHeight,
                 i * waveWidth + halfWaveWidth * 4 - waveOffsetDistance,
-                mCurY.toFloat()
+                currentY.toFloat()
             )
         }
         wavePath.lineTo(width.toFloat(), height.toFloat())
@@ -510,9 +518,9 @@ class WaveProgressView @JvmOverloads constructor(
             textPaint.color = getColor(R.styleable.WaveProgressView_progress_text_color, color(R.color.md_theme_onPrimary))
             backgroundPaint.color = getColor(R.styleable.WaveProgressView_progress_background_color, color(R.color.md_theme_primaryContainer))
             wavePaint.color = getColor(R.styleable.WaveProgressView_progress_color, color(R.color.md_theme_primary))
-            waveWidth = getFloat(R.styleable.WaveProgressView_wave_progress_wave_width, 200f)
+            waveWidth = getFloat(R.styleable.WaveProgressView_wave_progress_wave_width, 100f.DP)
             halfWaveWidth = waveWidth / 4
-            waveHeight = getFloat(R.styleable.WaveProgressView_wave_progress_wave_height, 20f)
+            waveHeight = getFloat(R.styleable.WaveProgressView_wave_progress_wave_height, 10f.DP)
             waveSpeed = getFloat(R.styleable.WaveProgressView_wave_progress_wave_speed, waveWidth / 70)
             strokePaint.color = getColor(R.styleable.WaveProgressView_wave_progress_stroke_color, color(R.color.md_theme_primary))
             strokePaint.strokeWidth = getDimension(R.styleable.WaveProgressView_wave_progress_stroke_width, 0f)
