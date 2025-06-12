@@ -28,6 +28,7 @@ import com.ave.vastgui.tools.io.appInternalFilesDir
 import com.ave.vastgui.tools.io.destroy
 import com.ave.vastgui.tools.utils.ColorUtils
 import com.ave.vastgui.tools.utils.DensityUtils.DP
+import com.ave.vastgui.tools.utils.DensityUtils.SP
 import com.ave.vastgui.tools.utils.download.DownloadTask
 import com.ave.vastgui.tools.utils.download.core.DownloadState
 import com.ave.vastgui.tools.utils.download.interfaces.OnDownloadListener
@@ -45,66 +46,88 @@ import java.io.File
 class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>() {
 
     private val logger = logFactory.getLogCat(ArcProgressViewActivity::class.java)
+
+    private val colors = intArrayOf(
+        ColorUtils.colorHex2Int("#F60C0C"),
+        ColorUtils.colorHex2Int("#F3B913"),
+        ColorUtils.colorHex2Int("#E7F716"),
+        ColorUtils.colorHex2Int("#3DF30B"),
+        ColorUtils.colorHex2Int("#0DF6EF"),
+        ColorUtils.colorHex2Int("#0829FB"),
+        ColorUtils.colorHex2Int("#B709F4")
+    )
+
+    private var progressColorIndex = 0
+
+    private var progressBackgroundColorIndex = 0
+
+    private val pos = floatArrayOf(1f / 7, 2f / 7, 3f / 7, 4f / 7, 5f / 7, 6f / 7, 1f)
+
+    private val shaders = arrayOf(null, LinearGradient(-700f, 0f, 700f, 0f, colors, pos, Shader.TileMode.CLAMP))
+
+    private var shaderIndex = 0
+
+    private var textColorIndex = 0
+
+    private var startpointColorIndex = 0
+
+    private var endpointColorIndex = 0
+
     private lateinit var downloadTask: DownloadTask
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        getBinding().root.setOnClickListener {
-
+        getBinding().switchProgressColorBtn.setOnClickListener {
+            getBinding().arcProgressView.progressColor = colors[(progressColorIndex++) % colors.size]
         }
 
-        // https://developer.android.com/develop/ui/views/layout/edge-to-edge?hl=zh-cn
-        // ViewCompat.setOnApplyWindowInsetsListener(getBinding().root) { v, windowInsets ->
-        //     val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-        //     v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-        //         topMargin = insets.top
-        //         leftMargin = insets.left
-        //         bottomMargin = insets.bottom
-        //         rightMargin = insets.right
-        //     }
-        //     WindowInsetsCompat.CONSUMED
-        // }
-
-        requestMultiplePermissions(arrayOf(Manifest.permission.ACCESS_NETWORK_STATE))
-
-        val colors = intArrayOf(
-            ColorUtils.colorHex2Int("#F60C0C"),
-            ColorUtils.colorHex2Int("#F3B913"),
-            ColorUtils.colorHex2Int("#E7F716"),
-            ColorUtils.colorHex2Int("#3DF30B"),
-            ColorUtils.colorHex2Int("#0DF6EF"),
-            ColorUtils.colorHex2Int("#0829FB"),
-            ColorUtils.colorHex2Int("#B709F4")
-        )
-        val pos = floatArrayOf(1f / 7, 2f / 7, 3f / 7, 4f / 7, 5f / 7, 6f / 7, 1f)
-
-        getBinding().arcProgressView.apply {
-            progressShader = LinearGradient(
-                -700f, 0f, 700f, 0f,
-                colors, pos,
-                Shader.TileMode.CLAMP
-            )
-            endpointCircleRadius = 15f.DP.coerceAtLeast(recommendedRadius())
-            progressWidth = 15f.DP
-            endpointCircleColor = ColorUtils.colorHex2Int("#eb4d4b")
+        getBinding().switchProgressBackgroundColorBtn.setOnClickListener {
+            getBinding().arcProgressView.progressBackgroundColor = colors[(progressBackgroundColorIndex++) % colors.size]
         }
 
-        getBinding().download.setOnClickListener {
-            downloadApk()
+        getBinding().switchProgressShaderBtn.setOnClickListener {
+            getBinding().arcProgressView.progressShader = shaders[(++shaderIndex) % shaders.size]
         }
 
-        getBinding().pause.setOnClickListener {
-            downloadTask.pause()
+        getBinding().switchTextShowBtn.setOnClickListener {
+            getBinding().arcProgressView.showText = !getBinding().arcProgressView.showText
         }
 
-        getBinding().resume.setOnClickListener {
-            downloadTask.resume()
+        getBinding().switchTextColorBtn.setOnClickListener {
+            getBinding().arcProgressView.textColor = colors[(textColorIndex++) % colors.size]
         }
 
-        getBinding().cancel.setOnClickListener {
-            downloadTask.terminate()
+        getBinding().switchStartpointColorBtn.setOnClickListener {
+            getBinding().arcProgressView.startpointCircleColor = colors[(startpointColorIndex++) % colors.size]
         }
+
+        getBinding().switchEndpointColorBtn.setOnClickListener {
+            getBinding().arcProgressView.endpointCircleColor = colors[(endpointColorIndex++) % colors.size]
+        }
+
+        getBinding().progressTextSizeSlider.addOnChangeListener { _, value, _ ->
+            getBinding().arcProgressView.textSize = value.SP
+        }
+
+        getBinding().progressRadiusSlider.addOnChangeListener { _, value, _ ->
+            getBinding().arcProgressView.progressRadius = value.DP
+        }
+
+        getBinding().progressWidthSlider.addOnChangeListener { _, value, _ ->
+            getBinding().arcProgressView.progressWidth = value.DP
+        }
+
+        getBinding().progressEndpointRadiusSlider.addOnChangeListener { _, value, _ ->
+            getBinding().arcProgressView.endpointCircleRadius = value.DP
+        }
+
+        getBinding().progressSlider.valueTo = getBinding().arcProgressView.maximumProgress
+        getBinding().progressSlider.value = getBinding().arcProgressView.currentProgress
+        getBinding().progressSlider.addOnChangeListener { _, value, _ ->
+            getBinding().arcProgressView.currentProgress = value
+        }
+
     }
 
     @OptIn(ExperimentalApi::class)

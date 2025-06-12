@@ -30,61 +30,77 @@
         android:layout_margin="10dp"
         app:progress_current_value="50" />
 
-    <com.ave.vastgui.tools.view.progress.WaveProgressView
-        android:id="@+id/imageProgressView"
-        android:layout_width="wrap_content"
+    <!--    <com.ave.vastgui.tools.view.progress.WaveProgressView-->
+    <!--        android:id="@+id/imageProgressView"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="center_horizontal"-->
+    <!--        android:layout_margin="10dp"-->
+    <!--        app:progress_current_value="50"-->
+    <!--        app:wave_progress_image="@drawable/ic_github" />-->
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/switch_icon_btn"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="10dp"
-        app:progress_current_value="50"
-        app:wave_progress_image="@drawable/ic_github" />
+        android:layout_margin="5dp"
+        android:text="@string/wave_progress_switch_image" />
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:gravity="start"
-        android:text="@string/set_progress" />
+        android:text="@string/wave_progress_set_progress"
+        android:textStyle="bold" />
 
     <com.google.android.material.slider.Slider
         android:id="@+id/progressSlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:contentDescription="@string/set_progress"
+        android:layout_margin="5dp"
+        android:contentDescription="@string/wave_progress_set_progress"
         android:valueFrom="0.0"
-        android:valueTo="100.0" />
+        android:valueTo="100.0"
+        app:thumbHeight="20dp"
+        app:trackHeight="10dp" />
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:gravity="start"
-        android:text="@string/set_space" />
+        android:text="@string/wave_progress_set_space"
+        android:textStyle="bold" />
 
     <com.google.android.material.slider.Slider
         android:id="@+id/spaceSlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:contentDescription="@string/set_space"
+        android:layout_margin="5dp"
+        android:contentDescription="@string/wave_progress_set_space"
         android:valueFrom="0.0"
-        android:valueTo="100.0" />
+        android:valueTo="100.0"
+        app:thumbHeight="20dp"
+        app:trackHeight="10dp" />
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:gravity="start"
-        android:text="@string/set_stroke" />
+        android:text="@string/wave_progress_set_stroke"
+        android:textStyle="bold" />
 
     <com.google.android.material.slider.Slider
         android:id="@+id/strokeSlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:contentDescription="@string/set_stroke"
+        android:layout_margin="5dp"
+        android:contentDescription="@string/wave_progress_set_stroke"
         android:valueFrom="0.0"
-        android:valueTo="100.0" />
+        android:valueTo="100.0"
+        app:thumbHeight="20dp"
+        app:trackHeight="10dp" />
 
 </LinearLayout>

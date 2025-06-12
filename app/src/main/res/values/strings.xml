@@ -51,6 +51,16 @@
     <string name="badge_icon_padding">图标内边距:%.3fdp</string>
     <!-- 徽标控件 end -->
 
+    <!-- 面包屑 start -->
+    <string name="bread_crumb_add">增加导航项</string>
+    <string name="bread_crumb_remove">移除导航项</string>
+    <string name="bread_crumb_switch_text_color">切换字体颜色</string>
+    <string name="bread_crumb_change_text_size">切换字体大小</string>
+    <string name="bread_crumb_switch_internal_icon">切换分隔符</string>
+    <string name="bread_crumb_change_internal_icon_size">改变分隔符大小</string>
+    <string name="bread_crumb_change_item_width">改变截断长度</string>
+    <!-- 面包屑 end -->
+
     <!-- 裁剪控件 start -->
     <string name="crop_by_view">调用自定义裁剪</string>
     <string name="crop_by_contract">调用系统裁剪(CropPhotoContract)</string>
@@ -71,6 +81,26 @@
     <string name="permission_denied_fmt">%s权限已被拒绝</string>
     <string name="permission_no_more_ask_fmt">%s权限已被拒绝并不再询问</string>
     <!-- 权限申请 end -->
+
+    <!-- 进度条 start -->
+    <string name="arc_progress_switch_progress_color">切换进度条颜色</string>
+    <string name="arc_progress_switch_progress_background_color">切换进度条背景颜色</string>
+    <string name="arc_progress_switch_progress_shader">切换进度条Shader</string>
+    <string name="arc_progress_switch_text_show">切换文字显示</string>
+    <string name="arc_progress_switch_text_color">切换文字颜色</string>
+    <string name="arc_progress_switch_startpoint_color">切换 startpoint 颜色</string>
+    <string name="arc_progress_switch_endpoint_color">切换 endpoint 颜色</string>
+    <string name="arc_progress_change_text_size">改变文字大小</string>
+    <string name="arc_progress_change_radius">改变进度条半径</string>
+    <string name="arc_progress_change_width">改变进度条宽度</string>
+    <string name="arc_progress_change_endpoint_radius">改变 endpoint 半径</string>
+    <string name="arc_progress_change_progress">修改进度</string>
+
+    <string name="wave_progress_switch_image">切换图片</string>
+    <string name="wave_progress_set_progress">设置进度</string>
+    <string name="wave_progress_set_space">设置Space</string>
+    <string name="wave_progress_set_stroke">设置Stroke</string>
+    <!-- 进度条 end -->
 
     <!-- 评分控件 start -->
     <string name="rating_add_star">增加星星</string>
@@ -96,16 +126,6 @@
     <string name="vp2_indicator_change_distance">切换指示器间距</string>
     <string name="vp2_indicator_change_position">切换指示器选中项</string>
     <!-- Vp2 指示器 end -->
-
-    <!-- 面包屑 start -->
-    <string name="bread_crumb_add">增加导航项</string>
-    <string name="bread_crumb_remove">移除导航项</string>
-    <string name="bread_crumb_switch_text_color">切换字体颜色</string>
-    <string name="bread_crumb_change_text_size">切换字体大小</string>
-    <string name="bread_crumb_switch_internal_icon">切换分隔符</string>
-    <string name="bread_crumb_change_internal_icon_size">改变分隔符大小</string>
-    <string name="bread_crumb_change_item_width">改变截断长度</string>
-    <!-- 面包屑 end -->
 
     <string name="base_adapter">通用RecyclerView BaseAdapter</string>
     <string name="base_bind_adapter">通用RecyclerView BaseBindingAdapter</string>
@@ -150,9 +170,6 @@
     <string name="resume">继续</string>
     <string name="revoke">撤消</string>
     <string name="search">搜索</string>
-    <string name="set_progress">设置进度</string>
-    <string name="set_space">设置Space</string>
-    <string name="set_stroke">设置Stroke</string>
     <string name="shape">Shape工具类</string>
     <string name="show_dialog">展示对话框</string>
     <string name="show_full_screen_dialog">展示全屏对话框</string>
