@@ -22,6 +22,7 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Shader
 import android.util.AttributeSet
+import android.util.Log
 import androidx.annotation.ColorInt
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.graphics.getBaseLine
@@ -33,6 +34,8 @@ import androidx.core.content.withStyledAttributes
 import com.ave.vastgui.tools.utils.ColorUtils
 import com.ave.vastgui.tools.utils.color
 import com.ave.vastgui.tools.utils.dimension
+import kotlin.math.max
+import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 
 // Author: Vast Gui 
@@ -159,9 +162,6 @@ class ArcProgressView @JvmOverloads constructor(
 
     /** @since 1.5.2 */
     private var _progressRadius = DEFAULT_RADIUS
-        set(value) {
-            field = value.coerceAtLeast(0f)
-        }
 
     /**
      * Radius of the circle(in pixels).
@@ -171,7 +171,7 @@ class ArcProgressView @JvmOverloads constructor(
     var progressRadius: Float
         set(value) {
             if (_progressRadius == value) return
-            _progressRadius = value
+            _progressRadius = value.coerceAtLeast(0f)
             requestLayout()
         }
         get() = _progressRadius
@@ -179,7 +179,7 @@ class ArcProgressView @JvmOverloads constructor(
     /** @since 1.5.2 */
     private var _progressWidth = recommendedWidth()
         set(value) {
-            field = value.coerceAtLeast(0f)
+            field = value
             progressBackgroundPaint.strokeWidth = field
             progressPaint.strokeWidth = field
         }
@@ -192,7 +192,7 @@ class ArcProgressView @JvmOverloads constructor(
     var progressWidth
         set(value) {
             if (_progressWidth == value) return
-            _progressWidth = value
+            _progressWidth = value.coerceAtLeast(0f)
             invalidate()
         }
         get() = _progressWidth
@@ -253,45 +253,35 @@ class ArcProgressView @JvmOverloads constructor(
         get() = _endpointCircleRadius
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val requiredSize =
-            (2f * _progressRadius + 2f * _endpointCircleRadius).toInt()
-        val width = resolveSize(requiredSize, widthMeasureSpec)
-        val height = resolveSize(requiredSize, heightMeasureSpec)
+        val neededMinimumWidth =
+            max((2f * _progressRadius + 2f * _endpointCircleRadius + paddingStart + paddingEnd).roundToInt(), suggestedMinimumWidth)
+        val neededMinimumHeight =
+            max((2f * _progressRadius + 2f * _endpointCircleRadius + paddingTop + paddingBottom).roundToInt(),suggestedMinimumHeight)
+        val width = resolveSize(neededMinimumWidth, widthMeasureSpec)
+        val height = resolveSize(neededMinimumHeight, heightMeasureSpec)
         setMeasuredDimension(width, height)
     }
 
     override fun onDraw(canvas: Canvas) {
-        val circlePoint: Float = measuredWidth / 2f
-        canvas.drawCircle(
-            measuredWidth / 2f,
-            measuredHeight / 2f,
-            _progressRadius,
-            progressBackgroundPaint
-        )
-        arcRectF.left = measuredWidth / 2f - _progressRadius
-        arcRectF.top = measuredWidth / 2f - _progressRadius
-        arcRectF.right = measuredWidth / 2f + _progressRadius
-        arcRectF.bottom = measuredWidth / 2f + _progressRadius
+        val centerX: Float = (paddingStart + measuredWidth - paddingEnd) / 2f
+        val centerY: Float = (paddingTop + measuredHeight - paddingBottom) / 2f
+        canvas.drawCircle(centerX, centerY, _progressRadius, progressBackgroundPaint)
+        arcRectF.set(centerX - _progressRadius, centerY - _progressRadius, centerX + _progressRadius, centerY + _progressRadius)
         val range: Float = 360f * (currentProgress / maximumProgress)
         canvas.drawArc(arcRectF, -90f, range, false, progressPaint)
         if (isStartpointCircleShow) {
-            canvas.drawCircle(
-                measuredWidth / 2f,
-                measuredHeight / 2f - _progressRadius,
-                _progressWidth / 2f,
-                startpointCirclePaint
-            )
+            canvas.drawCircle(centerX, centerY - _progressRadius, _progressWidth / 2f, startpointCirclePaint)
         }
         if (isEndpointCircleShow) {
-            val x1 = circlePoint - _progressRadius * cos((range + 90) * 3.14f / 180f)
-            val y1 = circlePoint - _progressRadius * sin((range + 90) * 3.14f / 180f)
+            val x1 = centerX - _progressRadius * cos((range + 90) * 3.14f / 180f)
+            val y1 = centerY - _progressRadius * sin((range + 90) * 3.14f / 180f)
             canvas.drawCircle(
                 x1, y1, _endpointCircleRadius, endpointCirclePaint
             )
         }
         if (_showText) {
-            val x1 = circlePoint - _progressRadius * cos((range + 90) * 3.14f / 180f)
-            val y1 = circlePoint - _progressRadius * sin((range + 90) * 3.14f / 180f)
+            val x1 = centerX - _progressRadius * cos((range + 90) * 3.14f / 180f)
+            val y1 = centerY - _progressRadius * sin((range + 90) * 3.14f / 180f)
             canvas.drawText(
                 textOrDefault(), x1, y1 + textPaint.getBaseLine(), textPaint
             )
@@ -312,8 +302,7 @@ class ArcProgressView @JvmOverloads constructor(
      *
      * @since 0.5.5
      */
-    fun recommendedWidth(): Float =
-        recommendedRadius() * 2f
+    fun recommendedWidth(): Float = recommendedRadius() * 2f
 
     init {
         context.withStyledAttributes(attrs, R.styleable.ArcProgressView, defStyleAttr, defStyleRes) {
