@@ -113,6 +113,8 @@ class ArcProgressView @JvmOverloads constructor(
     override val defaultText: String
         get() = DecimalFormat("##0%").format(_currentProgress / _maximumProgress)
 
+
+    /** @since 1.5.2 */
     private var _maximumProgress = DEFAULT_MAXIMUM_PROGRESS
 
     override var maximumProgress: Float
@@ -123,6 +125,8 @@ class ArcProgressView @JvmOverloads constructor(
             invalidate()
         }
 
+
+    /** @since 1.5.2 */
     private var _currentProgress = DEFAULT_CURRENT_PROGRESS
 
     override var currentProgress: Float
@@ -153,6 +157,16 @@ class ArcProgressView @JvmOverloads constructor(
             invalidate()
         }
         get() = progressBackgroundPaint.color
+
+    /** @since 1.5.2 */
+    private var _text: String = ""
+
+    override var text: String
+        get() = _text
+        set(value) {
+            _text = value
+            invalidate()
+        }
 
     override var textColor: Int
         set(value) {
@@ -326,7 +340,7 @@ class ArcProgressView @JvmOverloads constructor(
      * @since 0.5.5
      */
     fun recommendedRadius(): Float =
-        textPaint.measureText(text.ifEmpty { "000%" })
+        textPaint.measureText(_text.ifEmpty { "000%" })
             .coerceAtLeast(textPaint.getTextHeight()) / 2f
 
     /**
@@ -340,7 +354,7 @@ class ArcProgressView @JvmOverloads constructor(
         context.withStyledAttributes(attrs, R.styleable.ArcProgressView, defStyleAttr, defStyleRes) {
             _maximumProgress = getFloat(R.styleable.ArcProgressView_progress_maximum_value, DEFAULT_MAXIMUM_PROGRESS)
             _currentProgress = getFloat(R.styleable.ArcProgressView_progress_current_value, DEFAULT_CURRENT_PROGRESS)
-            text = getString(R.styleable.ArcProgressView_progress_text) ?: ""
+            _text = getString(R.styleable.ArcProgressView_progress_text) ?: ""
             textPaint.textSize = getDimension(R.styleable.ArcProgressView_progress_text_size, DEFAULT_TEXT_SIZE)
             textPaint.color = getColor(R.styleable.ArcProgressView_progress_text_color, color(R.color.md_theme_onPrimary))
             progressPaint.color = getColor(R.styleable.ArcProgressView_progress_color, color(R.color.md_theme_primary))
