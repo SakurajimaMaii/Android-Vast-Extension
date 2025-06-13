@@ -45,14 +45,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="@string/arc_progress_switch_progress_color" />
+                android:text="@string/progress_switch_progress_color" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/switch_progress_background_color_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="@string/arc_progress_switch_progress_background_color" />
+                android:text="@string/progress_switch_progress_background_color" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/switch_progress_shader_btn"
@@ -165,7 +165,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="@string/arc_progress_change_progress"
+                android:text="@string/progress_change_progress"
                 android:textStyle="bold" />
 
             <com.google.android.material.slider.Slider

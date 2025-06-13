@@ -19,44 +19,129 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activity.view.HorizontalProgressViewActivity">
+    android:orientation="vertical">
 
     <com.ave.vastgui.tools.view.progress.HorizontalProgressView
         android:id="@+id/horizontal_pv"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="100dp"
         android:layout_margin="10dp"
-        android:padding="5dp"
+        android:padding="10dp"
         app:progress_current_value="50" />
 
     <com.ave.vastgui.tools.view.progress.HorizontalTextProgressView
         android:id="@+id/horizontal_text_pv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"
+        android:padding="10dp" />
 
     <com.ave.vastgui.tools.view.progress.LineTextProgressView
         android:id="@+id/line_text_pv"
         android:layout_width="match_parent"
+        android:padding="10dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/horizontal_pv_switch_background"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/horizontal_pv_switch_background"
-        android:layout_margin="5dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <com.google.android.material.slider.Slider
-        android:id="@+id/progress_slider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:valueFrom="0"
-        android:valueTo="100"
-        app:thumbHeight="20dp"
-        app:trackHeight="10dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context=".activity.view.HorizontalProgressViewActivity">
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/horizontal_pv_switch_background_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/horizontal_pv_switch_background" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/horizontal_pv_switch_progress_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/horizontal_pv_switch_progress" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/horizontal_pv_switch_progress_color_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/progress_switch_progress_color" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/horizontal_pv_switch_background_color_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/progress_switch_progress_background_color" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/horizontal_pv_switch_text_box_color_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/horizontal_tpv_switch_text_box_color" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/progress_change_progress"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/progress_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:valueFrom="0"
+                android:valueTo="100"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/horizontal_tpv_change_text_margin"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/text_margin_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:stepSize="1"
+                android:valueFrom="0"
+                android:valueTo="5"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/horizontal_tpv_change_progress_height"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/progress_height_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:stepSize="5"
+                android:valueFrom="10"
+                android:valueTo="50"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
