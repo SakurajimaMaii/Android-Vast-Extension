@@ -32,13 +32,13 @@ import com.ave.vastgui.tools.R
  * MarqueeTextView
  *
  * @property marqueeNum Set to -1 to repeat indefinitely, the number of
- *     repetitions is an integer greater than or equal to 0 otherwise.
+ * repetitions is an integer greater than or equal to 0 otherwise.
  * @since 0.2.0
  */
 class MarqueeTextView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = R.attr.Default_MarqueeTextView_Style,
+    defStyleAttr: Int = R.attr.Default_MarqueeTextView_Style
 ) : AppCompatTextView(context, attrs, defStyleAttr) {
 
     private var marqueeNum = -1
@@ -52,21 +52,6 @@ class MarqueeTextView @JvmOverloads constructor(
         this.marqueeNum = marqueeNum
     }
 
-    /**
-     * Set related properties.
-     *
-     * @since 0.2.0
-     */
-    private fun setAttr() {
-        this.ellipsize = TextUtils.TruncateAt.MARQUEE
-        this.marqueeRepeatLimit = marqueeNum
-        this.isSingleLine = true
-        this.isFocusable = true
-        this.isFocusableInTouchMode = true
-        this.setHorizontallyScrolling(true)
-        this.isSelected = true
-    }
-
     override fun isFocused(): Boolean {
         if (!isSelected) {
             return true
@@ -75,7 +60,13 @@ class MarqueeTextView @JvmOverloads constructor(
     }
 
     init {
-        setAttr()
+        this.ellipsize = TextUtils.TruncateAt.MARQUEE
+        this.marqueeRepeatLimit = marqueeNum
+        this.isSingleLine = true
+        this.isFocusable = true
+        this.isFocusableInTouchMode = true
+        this.setHorizontallyScrolling(true)
+        this.isSelected = true
     }
 
 }
