@@ -133,6 +133,7 @@ class HorizontalTextProgressView @JvmOverloads constructor(
     var progressHeight: Float
         get() = _progressHeight
         set(value) {
+            if(_progressHeight == value) return
             _progressHeight = value.coerceAtLeast(0f)
             requestLayout()
         }
@@ -176,6 +177,7 @@ class HorizontalTextProgressView @JvmOverloads constructor(
     var textMargin
         get() = _textMargin
         set(value) {
+            if(_textMargin == value) return
             _textMargin = value.coerceAtLeast(0f)
             requestLayout()
         }
