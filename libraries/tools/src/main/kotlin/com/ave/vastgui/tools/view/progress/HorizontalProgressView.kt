@@ -18,25 +18,25 @@ package com.ave.vastgui.tools.view.progress
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import androidx.annotation.DrawableRes
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.graphics.toRect
-import androidx.core.graphics.withSave
-import com.ave.vastgui.tools.R
-import com.ave.vastgui.tools.graphics.BmpUtils
-import com.ave.vastgui.tools.utils.dimension
 import androidx.core.content.withStyledAttributes
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toBitmapOrNull
+import androidx.core.graphics.withClip
+import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.utils.ColorUtils
 import com.ave.vastgui.tools.utils.color
-import androidx.core.graphics.createBitmap
+import com.ave.vastgui.tools.utils.dimension
+import kotlin.math.max
+import kotlin.math.min
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -44,15 +44,8 @@ import androidx.core.graphics.createBitmap
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/progress/horizontal-progress-view/
 
 /**
- * HorizontalProgressView
+ * [HorizontalProgressView]
  *
- * @property backgroundPath The path for the canvas to draw the
- * [progressDrawable].
- * @property rectF The scope of the background and progress in the canvas.
- * @property progressDrawable The drawable used to replace the progress
- * color.
- * @property backgroundDrawable The drawable used to replace the progress
- * background color.
  * @since 0.2.0
  */
 class HorizontalProgressView @JvmOverloads constructor(
@@ -62,28 +55,42 @@ class HorizontalProgressView @JvmOverloads constructor(
     defStyleRes: Int = R.style.BaseHorizontalProgressView
 ) : ProgressView(context, attrs, defStyleAttr, defStyleRes) {
 
-    private val xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+    /**
+     * The [Matrix] of [progressBackgroundBitmap].
+     *
+     * @since 1.5.2
+     */
+    private val progressBackgroundMatrix: Matrix = Matrix()
 
-    /** @since 1.5.2 */
-    private var backgroundDrawable: Drawable? = null
+    /**
+     * The [Matrix] of [progressBitmap].
+     *
+     * @since 1.5.2
+     */
+    private val progressMatrix: Matrix = Matrix()
 
-    /** @since 1.5.2 */
-    private var backgroundBitmap: Bitmap? = null
+    /**
+     * The background bitmap of progress.
+     *
+     * @since 1.5.2
+     */
+    private var progressBackgroundBitmap: Bitmap? = null
 
-    /** @since 1.5.2 */
-    private val backgroundPath = Path()
-
-    /** @since 1.5.2 */
-    private var progressDrawable: Drawable? = null
-
-    /** @since 1.5.2 */
+    /**
+     * The background bitmap of progress.
+     *
+     * @since 1.5.2
+     */
     private var progressBitmap: Bitmap? = null
 
     /** @since 1.5.2 */
-    private val rectF = RectF()
+    private val progressBackgroundPath = Path()
 
     /** @since 1.5.2 */
-    private val progressDrawableRectF = RectF()
+    private val progressPath: Path = Path()
+
+    /** @since 1.5.2 */
+    private val rectF = RectF()
 
     /** @since 1.5.2 */
     private val backgroundDrawablePaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -164,61 +171,38 @@ class HorizontalProgressView @JvmOverloads constructor(
     override var currentProgress: Float
         get() = _currentProgress
         set(value) {
-            _currentProgress = value.coerceIn(0f, _maximumProgress)
+            _currentProgress = value.coerceIn(0f, maximumProgress)
             invalidate()
         }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val min = measuredWidth.coerceAtMost(measuredHeight)
-        _strokeWidth = _strokeWidth.coerceAtMost(min / 2f)
+        _strokeWidth = strokeWidth.coerceAtMost(min / 2f)
     }
 
     override fun onDraw(canvas: Canvas) {
         val radius = measuredWidth.coerceAtMost(measuredHeight) / 2f
-        val background = backgroundDrawable
-        val progress = progressDrawable
-        if (progressBackgroundColor != 0 && background == null) {
-            rectF.set(paddingStart.toFloat(), paddingTop.toFloat(),
-                (measuredWidth - paddingEnd).toFloat(),
-                (measuredHeight - paddingBottom).toFloat())
+        val progressBackground = progressBackgroundBitmap
+        val progress = progressBitmap
+        rectF.set(paddingStart.toFloat(), paddingTop.toFloat(),
+            (measuredWidth - paddingEnd).toFloat(),
+            (measuredHeight - paddingBottom).toFloat())
+        if (progressBackgroundColor != 0 && progressBackground == null) {
             canvas.drawRoundRect(rectF, radius, radius, backgroundPaint)
-        }
-        if (background != null) {
-            rectF.set(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat())
-            backgroundBitmap = BmpUtils.getBitmapFromDrawable(background).let {
-                BmpUtils.scaleBitmap(it, (right - left), (bottom - top))
-            }
-            backgroundPath.apply {
-                reset()
-                addRoundRect(rectF, radius, radius, Path.Direction.CW)
-                close()
-            }
-            canvas.withSave {
-                clipPath(backgroundPath)
-                canvas.drawBitmap(
-                    backgroundBitmap!!, rectF.toRect(), rectF, backgroundDrawablePaint
-                )
+        } else if (progressBackground != null) {
+            progressBackgroundPath.reset()
+            progressBackgroundPath.addRoundRect(rectF, radius, radius, Path.Direction.CW)
+            canvas.withClip(progressBackgroundPath) {
+                canvas.drawBitmap(progressBackground, progressBackgroundMatrix, backgroundDrawablePaint)
             }
         }
-        val width = (measuredWidth - 2f * _strokeWidth - paddingStart - paddingEnd) * (_currentProgress / _maximumProgress)
-        if (progressColor != 0 && progress == null && _currentProgress != 0f) {
-            drawProgress(canvas,
-                paddingStart + _strokeWidth,
-                paddingTop + _strokeWidth,
-                measuredWidth - paddingEnd - _strokeWidth,
-                measuredHeight - paddingBottom - _strokeWidth,
-                width, progressPaint
-            )
-        }
-        if (progress != null && _currentProgress != 0f) {
-            drawProgressDrawable(canvas,
-                paddingStart + _strokeWidth,
-                paddingTop + _strokeWidth,
-                measuredWidth - paddingEnd - _strokeWidth,
-                measuredHeight - paddingBottom - _strokeWidth,
-                width, drawablePaint
-            )
+        val width = (measuredWidth - (2f * strokeWidth) - paddingStart - paddingEnd) * (currentProgress / maximumProgress)
+        rectF.set(rectF.left + strokeWidth, rectF.top + strokeWidth, rectF.right - strokeWidth, rectF.bottom - strokeWidth)
+        if (progressColor != 0 && progress == null && currentProgress != 0f) {
+            drawProgress(canvas, rectF, width, progressPaint)
+        } else if (progress != null && currentProgress != 0f) {
+            drawProgressDrawable(canvas, rectF, width, drawablePaint)
         }
     }
 
@@ -227,8 +211,21 @@ class HorizontalProgressView @JvmOverloads constructor(
      *
      * @since 0.5.4
      */
-    fun setProgressDrawable(@DrawableRes drawable: Int) {
-        progressDrawable = runCatching { AppCompatResources.getDrawable(context, drawable) }.getOrNull()
+    fun setProgressDrawable(@DrawableRes id: Int) {
+        val bmpById = runCatching { BitmapFactory.decodeResource(context.resources, id) }.getOrNull()
+        progressBitmap = bmpById
+        if (null != bmpById) {
+            progressMatrix.reset()
+            val targetX = (measuredWidth - 2 * strokeWidth - paddingStart - paddingEnd)
+            val targetY = (measuredHeight - 2 * strokeWidth - paddingTop - paddingBottom)
+            val scale = max(targetX / bmpById.width, targetY / bmpById.height)
+            progressMatrix.postScale(scale, scale)
+            val scaledWidth = bmpById.width * scale
+            val scaledHeight = bmpById.height * scale
+            val dx: Float = (measuredWidth - paddingEnd + paddingStart - scaledWidth) / 2
+            val dy: Float = (measuredHeight - paddingBottom + paddingTop - scaledHeight) / 2
+            progressMatrix.postTranslate(dx, dy)
+        }
         invalidate()
     }
 
@@ -237,8 +234,22 @@ class HorizontalProgressView @JvmOverloads constructor(
      *
      * @since 0.2.0
      */
-    fun setProgressDrawable(drawable: Drawable) {
-        progressDrawable = drawable
+    fun setProgressDrawable(drawable: Drawable?) {
+        val bmpById = drawable?.toBitmapOrNull()
+        progressBitmap = bmpById
+        if (null != bmpById) {
+            progressMatrix.reset()
+            val targetX = (measuredWidth - 2 * strokeWidth - paddingStart - paddingEnd)
+            val targetY = (measuredHeight - 2 * strokeWidth - paddingTop - paddingBottom)
+            val scale = max(targetX / bmpById.width, targetY / bmpById.height)
+            progressMatrix.postScale(scale, scale)
+            val scaledWidth = bmpById.width * scale
+            val scaledHeight = bmpById.height * scale
+            val dx: Float = (measuredWidth - paddingEnd + paddingStart - scaledWidth) / 2
+            val dy: Float = (measuredHeight - paddingBottom + paddingTop - scaledHeight) / 2
+            progressMatrix.postTranslate(dx, dy)
+        }
+        invalidate()
     }
 
     /**
@@ -246,8 +257,22 @@ class HorizontalProgressView @JvmOverloads constructor(
      *
      * @since 0.5.4
      */
-    fun setProgressBkDrawable(@DrawableRes drawable: Int) {
-        backgroundDrawable = AppCompatResources.getDrawable(context, drawable)
+    fun setProgressBkDrawable(@DrawableRes id: Int) {
+        val bmpById = runCatching { BitmapFactory.decodeResource(context.resources, id) }.getOrNull()
+        progressBackgroundBitmap = bmpById
+        if (null != bmpById) {
+            progressBackgroundMatrix.reset()
+            val targetX = (measuredWidth - paddingStart - paddingEnd).toFloat()
+            val targetY = (measuredHeight - paddingTop - paddingBottom).toFloat()
+            val scale = max(targetX / bmpById.width, targetY / bmpById.height)
+            progressBackgroundMatrix.postScale(scale, scale)
+            val scaledWidth = bmpById.width * scale
+            val scaledHeight = bmpById.height * scale
+            val dx: Float = (measuredWidth - paddingEnd + paddingStart - scaledWidth) / 2f
+            val dy: Float = (measuredHeight - paddingBottom + paddingTop - scaledHeight) / 2f
+            progressBackgroundMatrix.postTranslate(dx, dy)
+        }
+        invalidate()
     }
 
     /**
@@ -255,85 +280,59 @@ class HorizontalProgressView @JvmOverloads constructor(
      *
      * @since 0.2.0
      */
-    fun setProgressBkDrawable(drawable: Drawable) {
-        backgroundDrawable = drawable
+    fun setProgressBkDrawable(drawable: Drawable?) {
+        val bmpByDrawable = drawable?.toBitmap()
+        progressBackgroundBitmap = bmpByDrawable
+        if (null != bmpByDrawable) {
+            progressBackgroundMatrix.reset()
+            val targetX = (measuredWidth - paddingStart - paddingEnd).toFloat()
+            val targetY = (measuredHeight - paddingTop - paddingBottom).toFloat()
+            val scale = max(targetX / bmpByDrawable.width, targetY / bmpByDrawable.height)
+            progressBackgroundMatrix.postScale(scale, scale)
+            val scaledWidth = bmpByDrawable.width * scale
+            val scaledHeight = bmpByDrawable.height * scale
+            val dx: Float = (measuredWidth - paddingEnd + paddingStart - scaledWidth) / 2f
+            val dy: Float = (measuredHeight - paddingBottom + paddingTop - scaledHeight) / 2f
+            progressBackgroundMatrix.postTranslate(dx, dy)
+        }
+        invalidate()
     }
 
     /**
      * Draw progress.
      *
-     * @param left The left of the progress.
-     * @param top The left of the progress.
-     * @param right The right of the progress.
-     * @param bottom The bottom of the progress.
-     * @param width The width of the progress from [left].
+     * @param rectF The [RectF] of progress.
+     * @param width The width of progress.
      * @since 0.5.4
      */
-    private fun drawProgress(canvas: Canvas, left: Float, top: Float, right: Float, bottom: Float, width: Float, paint: Paint) {
+    private fun drawProgress(canvas: Canvas, rectF: RectF, width: Float, paint: Paint) {
         val radius = (bottom - top).coerceAtMost(right - left) / 2f
-        rectF.set(left, top, width, bottom)
-        canvas.withSave {
-            clipRect(rectF)
-            drawRoundRect(left, top, right, bottom, radius, radius, paint)
-        }
-
-        if (width - left >= left + radius) {
-            canvas.drawRect(
-                left + radius, top, width.coerceAtMost(right - radius), bottom, paint
-            )
-        }
-
-        if (width >= right - radius) {
-            rectF.set(right - radius, top, left + width, bottom)
-            canvas.withSave {
-                clipRect(rectF)
-                drawRoundRect(left, top, right, bottom, radius, radius, paint)
-            }
+        progressPath.reset()
+        progressPath.addRoundRect(rectF, radius, radius, Path.Direction.CW)
+        canvas.withClip(progressPath) {
+            rectF.right = rectF.left + width
+            drawRect(rectF, paint)
         }
     }
 
     /**
      * Draw progress drawable.
      *
-     * @param left The left of the progress.
-     * @param top The left of the progress.
-     * @param right The right of the progress.
-     * @param bottom The bottom of the progress.
-     * @param width The width of the progress from [left].
+     * @param rectF The [RectF] of progress.
+     * @param width The width of progress.
      * @since 0.5.4
      */
-    private fun drawProgressDrawable(canvas: Canvas, left: Float, top: Float, right: Float, bottom: Float, width: Float, paint: Paint) {
-        val bitmap = createBitmap((right - left).toInt(), (bottom - top).toInt())
-        val bitmapCanvas = Canvas(bitmap)
-        progressBitmap = BmpUtils.getBitmapFromDrawable(progressDrawable!!).let {
-            BmpUtils.scaleBitmap(it, (right - left).toInt(), (bottom - top).toInt())
-        }
-        val radius = (bottom - top).coerceAtMost(right - left) / 2f
-        rectF.set(0f, 0f, width, bottom - top)
-        bitmapCanvas.withSave {
-            clipRect(rectF)
-            drawRoundRect(0f, 0f, right - left, bottom - top, radius, radius, paint)
-        }
-        if (width >= radius) {
-            bitmapCanvas.drawRect(
-                radius, 0f, width.coerceAtMost(right - left - radius), bottom - top, paint
-            )
-        }
-        if (width >= right - left - radius) {
-            rectF.set(right - left - radius, 0f, width, bottom - top)
-            bitmapCanvas.withSave {
-                clipRect(rectF)
-                drawRoundRect(0f, 0f, right - left, bottom - top, radius, radius, paint)
+    private fun drawProgressDrawable(canvas: Canvas, rectF: RectF, width: Float, paint: Paint) {
+        val bmp = progressBitmap ?: return
+        val radius = min(rectF.width(), rectF.height()) / 2f
+        progressPath.reset()
+        progressPath.addRoundRect(rectF, radius, radius, Path.Direction.CW)
+        canvas.withClip(progressPath) {
+            rectF.right = rectF.left + width
+            canvas.withClip(rectF) {
+                drawBitmap(bmp, progressMatrix, paint)
             }
         }
-        progressDrawableRectF.set(0f, 0f, right - left, bottom - top)
-        rectF.set(left, top, right, bottom)
-        val cs = canvas.saveLayer(rectF, null)
-        canvas.drawBitmap(bitmap, progressDrawableRectF.toRect(), rectF, paint)
-        paint.xfermode = xfermode
-        canvas.drawBitmap(progressBitmap!!, progressDrawableRectF.toRect(), rectF, paint)
-        paint.xfermode = null
-        canvas.restoreToCount(cs)
     }
 
 
@@ -344,8 +343,8 @@ class HorizontalProgressView @JvmOverloads constructor(
             progressPaint.color = getColor(R.styleable.HorizontalProgressView_progress_color, color(R.color.md_theme_primary))
             backgroundPaint.color = getColor(R.styleable.HorizontalProgressView_progress_background_color, color(R.color.md_theme_primaryContainer))
             _strokeWidth = getDimension(R.styleable.HorizontalProgressView_horizontal_progress_stroke_width, dimension(R.dimen.default_horizontal_progress_stroke_width))
-            backgroundDrawable = getDrawable(R.styleable.HorizontalProgressView_horizontal_progress_background_drawable)
-            progressDrawable = getDrawable(R.styleable.HorizontalProgressView_horizontal_progress_drawable)
+            progressBackgroundBitmap = getDrawable(R.styleable.HorizontalProgressView_horizontal_progress_background_drawable)?.toBitmap()
+            progressBitmap = getDrawable(R.styleable.HorizontalProgressView_horizontal_progress_drawable)?.toBitmap()
         }
     }
 
