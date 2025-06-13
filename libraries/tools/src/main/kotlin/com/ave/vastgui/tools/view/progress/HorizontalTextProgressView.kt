@@ -19,13 +19,20 @@ package com.ave.vastgui.tools.view.progress
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.withSave
+import androidx.annotation.ColorInt
+import androidx.core.content.withStyledAttributes
+import androidx.core.graphics.withClip
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.graphics.getBaseLine
-import com.ave.vastgui.tools.graphics.getTextHeight
+import com.ave.vastgui.tools.utils.ColorUtils
+import com.ave.vastgui.tools.utils.color
+import com.ave.vastgui.tools.utils.dimension
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.roundToInt
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -33,12 +40,8 @@ import com.ave.vastgui.tools.graphics.getTextHeight
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/progress/horizontal-progress-view/
 
 /**
- * HorizontalTextProgressView
+ * [HorizontalTextProgressView]
  *
- * @property mTextWidth The width of the text.
- * @property mProgressHeight The height of the progress.
- * @property mTextBoxColor Color-int of the text box.
- * @property mTextMargin The stroke width of the text.
  * @since 0.2.0
  */
 class HorizontalTextProgressView @JvmOverloads constructor(
@@ -48,84 +51,187 @@ class HorizontalTextProgressView @JvmOverloads constructor(
     defStyleRes: Int = R.style.BaseHorizontalTextProgressView
 ) : ProgressView(context, attrs, defStyleAttr, defStyleRes) {
 
-    private val mDefaultProgressHeight =
-        resources.getDimension(R.dimen.default_horizontal_text_progress_height)
-    private val mDefaultTextMargin =
-        resources.getDimension(R.dimen.default_horizontal_text_progress_text_margin)
+    /** @since 1.5.2 */
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        textAlign = Paint.Align.CENTER
+    }
 
-    private var mTextPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var mProgressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var mBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var mBoxPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val mProgressRectF = RectF()
-    private val mBoxRectF = RectF()
-    private val mTextWidth: Float
-        get() = mTextPaint.measureText(textOrDefault())
+    /** @since 1.5.2 */
+    private val progressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    /** @since 1.5.2 */
+    private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    /** @since 1.5.2 */
+    private val boxPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    /** @since 1.5.2 */
+    private val progressPath = Path()
+
+    /** @since 1.5.2 */
+    private val progressRectF = RectF()
+
+    /** @since 1.5.2 */
+    private val boxRectF = RectF()
+
+    /**
+     * The width of the text(in pixels).
+     *
+     * @since 1.5.2
+     */
+    private val textWidth: Float
+        get() = textPaint.measureText(textOrDefault())
 
     override var textSize: Float
+        get() = textPaint.textSize
         set(value) {
-            mTextPaint.textSize = value
+            if (textPaint.textSize == value) return
+            textPaint.textSize = value.coerceAtLeast(0f)
+            invalidate()
         }
-        get() = mTextPaint.textSize
 
     override var textColor: Int
+        get() = textPaint.color
         set(value) {
-            mTextPaint.color = value
+            if (textPaint.color == value) return
+            check(ColorUtils.isColorInt(value)) {
+                "The color-int(current=${value.toUInt().toString(16)}) of text is invalid."
+            }
+            textPaint.color = value
+            invalidate()
         }
-        get() = mTextPaint.color
 
-    override var progressColor: Int =
-        ContextCompat.getColor(context, R.color.md_theme_primary)
+    override var progressColor: Int
+        get() = progressPaint.color
         set(value) {
-            field = value
-            mBoxPaint.color = value
-            mProgressPaint.color = value
+            if (progressPaint.color == value) return
+            check(ColorUtils.isColorInt(value)) {
+                "The color-int(current=${value.toUInt().toString(16)}) of progress is invalid."
+            }
+            progressPaint.color = value
+            invalidate()
         }
 
     override var progressBackgroundColor: Int
+        get() = backgroundPaint.color
         set(value) {
-            mBackgroundPaint.color = value
-        }
-        get() = mBackgroundPaint.color
-
-    var mTextBoxColor: Int
-        set(value) {
-            mBoxPaint.color = value
-        }
-        get() = mBoxPaint.color
-
-    var mProgressHeight = mDefaultProgressHeight
-        set(value) {
-            field = value.coerceAtLeast(mTextPaint.getTextHeight())
+            if (backgroundPaint.color == value) return
+            check(ColorUtils.isColorInt(value)) {
+                "The color-int(current=${value.toUInt().toString(16)}) of progress background is invalid."
+            }
+            backgroundPaint.color = value
+            invalidate()
         }
 
-    var mTextMargin = mDefaultTextMargin
+    private var _progressHeight: Float = dimension(R.dimen.default_horizontal_text_progress_height)
+
+    /**
+     * The height of the progress(in pixels).
+     *
+     * @since 1.5.2
+     */
+    var progressHeight: Float
+        get() = _progressHeight
         set(value) {
-            field = value.coerceAtLeast(0f)
+            _progressHeight = value.coerceAtLeast(0f)
+            requestLayout()
+        }
+
+    /**
+     * The color-int of text box.
+     *
+     * @since 1.5.2
+     */
+    @get:ColorInt
+    @setparam:ColorInt
+    var textBoxColor: Int
+        get() = boxPaint.color
+        set(value) {
+            if (boxPaint.color == value) return
+            check(ColorUtils.isColorInt(value)) {
+                "The color-int(current=${value.toUInt().toString(16)}) of text box is invalid."
+            }
+            boxPaint.color = value
+            invalidate()
+        }
+
+    /** @since 1.5.2 */
+    private var _text: String = ""
+
+    override var text: String
+        get() = _text
+        set(value) {
+            _text = value
+            invalidate()
+        }
+
+    /** @since 1.5.2 */
+    private var _textMargin: Float = dimension(R.dimen.default_horizontal_text_progress_text_margin)
+
+    /**
+     * The margin width of the text(in pixels).
+     *
+     * @since 1.5.2
+     */
+    var textMargin
+        get() = _textMargin
+        set(value) {
+            _textMargin = value.coerceAtLeast(0f)
+            requestLayout()
+        }
+
+    /** @since 1.5.2 */
+    private var _maximumProgress = DEFAULT_MAXIMUM_PROGRESS
+
+    override var maximumProgress: Float
+        get() = _maximumProgress
+        set(value) {
+            _maximumProgress = value.coerceAtLeast(0f)
+            resetProgress()
+            invalidate()
+        }
+
+    /** @since 1.5.2 */
+    private var _currentProgress = DEFAULT_CURRENT_PROGRESS
+
+    override var currentProgress: Float
+        get() = _currentProgress
+        set(value) {
+            _currentProgress = value.coerceIn(0f, maximumProgress)
+            invalidate()
         }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val maxHeight = mTextPaint.getTextHeight().coerceAtLeast(mProgressHeight)
-        val neededHeight = resolveSize((maxHeight + 2 * mTextMargin).toInt(), heightMeasureSpec)
-        setMeasuredDimension(measuredWidth, neededHeight)
+        val contentMinimumWidth = 2f * textMargin
+        val contentMinimumHeight = progressHeight + 2f * textMargin
+        val neededMinimumWidth = max(contentMinimumWidth.roundToInt() + paddingStart + paddingEnd, suggestedMinimumWidth)
+        val neededMinimumHeight = max(contentMinimumHeight.roundToInt() + paddingTop + paddingBottom, suggestedMinimumHeight)
+        val width = resolveSize(neededMinimumWidth, widthMeasureSpec)
+        val height = resolveSize(neededMinimumHeight, heightMeasureSpec)
+        setMeasuredDimension(width, height)
     }
 
     override fun onDraw(canvas: Canvas) {
-        val backgroundTop = (measuredHeight - mProgressHeight) / 2f
-        val radius = (bottom - top).coerceAtMost(right - left) / 2f
-        canvas.drawRoundRect(
-            0f,
-            backgroundTop,
-            measuredWidth.toFloat(),
-            measuredHeight - backgroundTop,
-            radius, radius,
-            mBackgroundPaint
-        )
-        drawProgress(
-            canvas,
-            mProgressPaint
-        )
+        val left = paddingStart.toFloat()
+        val top = (paddingTop + measuredHeight - paddingBottom) / 2f - progressHeight / 2f
+        val right = (measuredWidth - paddingEnd).toFloat()
+        val bottom = (paddingTop + measuredHeight - paddingBottom) / 2f + progressHeight / 2f
+        progressRectF.set(left, top, right, bottom)
+        val radius = min(progressRectF.width(), progressRectF.height()) / 2f
+
+        // Draw background
+        canvas.drawRoundRect(progressRectF, radius, radius, backgroundPaint)
+
+        // Draw progress
+        progressPath.reset()
+        progressPath.addRoundRect(progressRectF, radius, radius, Path.Direction.CW)
+        canvas.withClip(progressPath) {
+            val width = (currentProgress / maximumProgress) * (measuredWidth - paddingStart - paddingEnd)
+            progressRectF.set(left, top, left + width, bottom)
+            canvas.drawRect(progressRectF, progressPaint)
+        }
+
+        // Draw text box
         drawBox(canvas)
     }
 
@@ -135,120 +241,37 @@ class HorizontalTextProgressView @JvmOverloads constructor(
      * @since 0.5.3
      */
     private fun drawBox(canvas: Canvas) {
-        val progressWidth: Float = (currentProgress / maximumProgress * measuredWidth)
+        val progressWidth: Float = (currentProgress / maximumProgress) * (measuredWidth - paddingStart - paddingEnd)
+        val centerY = (paddingTop + measuredHeight - paddingBottom) / 2f
         // The width of text box.
-        val boxWidth: Float = (mTextMargin * 2 + mTextWidth)
+        val boxWidth = textMargin * 2f + textWidth
         // The maximum value in order to ensure that the right side of
         // the TextBox will not cross the border.
         // The minimum value in order to ensure that the left side of
         // the TextBox will not cross the border.
-        val boxStart: Float = progressWidth.coerceIn(boxWidth / 2f, measuredWidth - boxWidth / 2f)
-        val boxHeight: Float = (mProgressHeight + 2 * mTextMargin)
-        mBoxRectF.set(
-            (boxStart - boxWidth / 2f),
-            ((measuredHeight - boxHeight) / 2f),
-            (boxStart + boxWidth / 2f),
-            ((measuredHeight + boxHeight) / 2f)
-        )
-        canvas.drawRoundRect(
-            mBoxRectF, (boxHeight / 2f), (boxHeight / 2f), mBoxPaint
-        )
+        val centerX = (progressWidth + paddingStart).coerceIn(paddingStart + boxWidth / 2f, measuredWidth - paddingEnd - boxWidth / 2f)
+        val boxHeight = (progressHeight + 2 * textMargin)
+        boxRectF.set(centerX - boxWidth / 2f, centerY - boxHeight / 2f,
+            centerX + boxWidth / 2f, centerY + boxHeight / 2f)
+        val radius = min(boxRectF.width(), boxRectF.height()) / 2f
+        canvas.drawRoundRect(boxRectF, radius, radius, boxPaint)
         // Draw text of box.
-        canvas.drawText(
-            textOrDefault(),
-            (boxStart - mTextWidth / 2f),
-            measuredHeight / 2f + mTextPaint.getBaseLine(),
-            mTextPaint
-        )
-    }
-
-    /**
-     * Draw progress.
-     *
-     * @since 0.2.0
-     */
-    private fun drawProgress(canvas: Canvas, paint: Paint) {
-        val left = 0f
-        val top = (measuredHeight - mProgressHeight) / 2f
-        val right = measuredWidth.toFloat()
-        val bottom = measuredHeight - top
-        val width = (currentProgress / maximumProgress) * measuredWidth
-        val radius = (bottom - top).coerceAtMost(right - left) / 2f
-        mProgressRectF.set(left, top, width, bottom)
-        canvas.withSave {
-            clipRect(mProgressRectF)
-            drawRoundRect(left, top, right, bottom, radius, radius, paint)
-        }
-
-        if (width >= left + radius) {
-            mProgressRectF.set(left + radius, top, width.coerceAtMost(right - radius), bottom)
-            canvas.drawRect(mProgressRectF, paint)
-        }
-
-        if (width >= right - radius) {
-            mProgressRectF.set(right - radius, top, left + width, bottom)
-            canvas.withSave {
-                clipRect(mProgressRectF)
-                drawRoundRect(left, top, right, bottom, radius, radius, paint)
-            }
-        }
+        canvas.drawText(textOrDefault(), centerX, centerY + textPaint.getBaseLine(), textPaint)
     }
 
     init {
-        val typedArray = context.obtainStyledAttributes(
-            attrs,
-            R.styleable.HorizontalTextProgressView,
-            defStyleAttr,
-            defStyleRes
-        )
-        maximumProgress =
-            typedArray.getFloat(
-                R.styleable.HorizontalTextProgressView_progress_maximum_value,
-                DEFAULT_MAXIMUM_PROGRESS
-            )
-        currentProgress =
-            typedArray.getFloat(
-                R.styleable.HorizontalTextProgressView_progress_current_value,
-                DEFAULT_CURRENT_PROGRESS
-            )
-        text =
-            typedArray.getString(R.styleable.HorizontalTextProgressView_progress_text) ?: ""
-        textColor =
-            typedArray.getColor(
-                R.styleable.HorizontalTextProgressView_progress_text_color,
-                ContextCompat.getColor(context, R.color.md_theme_onPrimary)
-            )
-        textSize =
-            typedArray.getDimension(
-                R.styleable.HorizontalTextProgressView_progress_text_size,
-                DEFAULT_TEXT_SIZE
-            )
-        progressColor =
-            typedArray.getColor(
-                R.styleable.HorizontalTextProgressView_progress_color,
-                ContextCompat.getColor(context, R.color.md_theme_primary)
-            )
-        progressBackgroundColor =
-            typedArray.getColor(
-                R.styleable.HorizontalTextProgressView_progress_background_color,
-                ContextCompat.getColor(context, R.color.md_theme_primaryContainer)
-            )
-        mProgressHeight =
-            typedArray.getDimension(
-                R.styleable.HorizontalTextProgressView_horizontal_text_progress_height,
-                mDefaultProgressHeight
-            )
-        mTextBoxColor =
-            typedArray.getColor(
-                R.styleable.HorizontalTextProgressView_horizontal_text_progress_box_color,
-                ContextCompat.getColor(context, R.color.md_theme_primary)
-            )
-        mTextMargin =
-            typedArray.getDimension(
-                R.styleable.HorizontalTextProgressView_horizontal_text_progress_text_margin,
-                mDefaultTextMargin
-            )
-        typedArray.recycle()
+        context.withStyledAttributes(attrs, R.styleable.HorizontalTextProgressView, defStyleAttr, defStyleRes) {
+            _maximumProgress = getFloat(R.styleable.HorizontalTextProgressView_progress_maximum_value, DEFAULT_MAXIMUM_PROGRESS)
+            _currentProgress = getFloat(R.styleable.HorizontalTextProgressView_progress_current_value, DEFAULT_CURRENT_PROGRESS)
+            _text = getString(R.styleable.HorizontalTextProgressView_progress_text) ?: ""
+            textPaint.color = getColor(R.styleable.HorizontalTextProgressView_progress_text_color, color(R.color.md_theme_onPrimary))
+            textPaint.textSize = getDimension(R.styleable.HorizontalTextProgressView_progress_text_size, DEFAULT_TEXT_SIZE)
+            boxPaint.color = getColor(R.styleable.HorizontalTextProgressView_progress_color, color(R.color.md_theme_primary))
+            progressPaint.color = getColor(R.styleable.HorizontalTextProgressView_progress_color, color(R.color.md_theme_primary))
+            backgroundPaint.color = getColor(R.styleable.HorizontalTextProgressView_progress_background_color, color(R.color.md_theme_primaryContainer))
+            _progressHeight = getDimension(R.styleable.HorizontalTextProgressView_horizontal_text_progress_height, dimension(R.dimen.default_horizontal_text_progress_height))
+            textMargin = getDimension(R.styleable.HorizontalTextProgressView_horizontal_text_progress_text_margin, dimension(R.dimen.default_horizontal_text_progress_text_margin))
+        }
     }
 
 }
