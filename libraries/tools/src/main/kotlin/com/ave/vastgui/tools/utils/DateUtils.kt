@@ -36,6 +36,8 @@ object DateUtils {
 
     const val TAG = "DateUtils"
 
+    // region Date Format
+
     const val FORMAT_YYYYhMMhDD = "yyyy-MM-dd"
     const val FORMAT_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss"
     const val FORMAT_YYYY_MM = "yyyy-MM"
@@ -51,6 +53,10 @@ object DateUtils {
     const val FORMAT_MMCDDC_HH_MM = "MM月dd日 HH:mm"
     const val FORMAT_MMCDDC = "MM月dd日"
     const val FORMAT_YYYYCMMCDDC = "yyyy年MM月dd日"
+
+    // endregion
+
+    // region Gmt
 
     const val GMT_PLUS_ZONE = "GMT+00:00"
     const val GMT_PLUS_ONE = "GMT+01:00"
@@ -77,6 +83,8 @@ object DateUtils {
     const val GMT_MINUS_TEN = "GMT-10:00"
     const val GMT_MINUS_ELEVEN = "GMT-11:00"
     const val GMT_MINUS_TWELVE = "GMT-12:00"
+
+    // endregion
 
     /** @since 1.5.2 */
     const val SHORT = TimeZone.SHORT

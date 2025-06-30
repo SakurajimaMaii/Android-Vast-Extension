@@ -31,8 +31,13 @@ import com.ave.vastgui.tools.R
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2025/4/21
-// Documentation:
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/app-entry-points/fragments/fullscreendialogfragment/
 
+/**
+ * [DialogFragment] with full-screen style.
+ *
+ * @since 1.5.2
+ */
 @ExperimentalApi
 open class FullScreenDialogFragment : DialogFragment {
 
@@ -40,22 +45,26 @@ open class FullScreenDialogFragment : DialogFragment {
 
     constructor(@LayoutRes layoutId: Int) : super(layoutId)
 
+    /**
+     * Status bar color.
+     *
+     * @since 1.5.2
+     */
     @get:ColorInt
     protected open val statusBarColor: Int
-        get() = ContextCompat.getColor(requireContext(), R.color.md_theme_primary)
+        get() = ContextCompat.getColor(requireContext(), R.color.transparent)
 
+    /**
+     * Whether the decor view should fit root-level content views for insets
+     *
+     * @since 1.5.2
+     */
     protected open val isImmersionBar: Boolean = true
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return super.onCreateDialog(savedInstanceState).also {
             it.window?.let { window ->
                 WindowCompat.setDecorFitsSystemWindows(window, !isImmersionBar)
-                if (isImmersionBar) {
-                    val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-                    windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat
-                        .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                    windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
-                }
                 window.statusBarColor = statusBarColor
             }
         }
