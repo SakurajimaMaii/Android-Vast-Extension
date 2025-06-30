@@ -127,24 +127,24 @@ inline fun ComponentActivity.requestPermission(
     builder: PermissionBuilder.() -> Unit = {}
 ) {
     if (permission.isEmpty()) return
-    val mBuilder = PermissionBuilder().also(builder)
+    val builder = PermissionBuilder().also(builder)
     val declaredPermissions = packageManager
         .getPackageInfo(AppUtils.getPackageName(), PackageManager.GET_PERMISSIONS)
         .requestedPermissions?.toSet() ?: emptySet()
     if (!declaredPermissions.contains(permission)) {
-        mBuilder.noDeclare(permission)
+        builder.noDeclare(permission)
         return
     }
     singlePermissionLauncher()?.launch(permission) { result ->
         when {
-            result -> mBuilder.granted(permission)
+            result -> builder.granted(permission)
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                 if (shouldShowRequestPermissionRationale(permission)) {
-                    mBuilder.denied(permission)
+                    builder.denied(permission)
                 }
             }
 
-            else -> mBuilder.noMoreAsk(permission)
+            else -> builder.noMoreAsk(permission)
         }
     }
 }
@@ -160,13 +160,13 @@ inline fun ComponentActivity.requestMultiplePermissions(
     permissions: Array<String>,
     builder: MultiPermissionBuilder.() -> Unit = {}
 ) {
-    val mBuilder = MultiPermissionBuilder().also(builder)
+    val builder = MultiPermissionBuilder().also(builder)
     val declaredPermissions = packageManager
         .getPackageInfo(AppUtils.getPackageName(), PackageManager.GET_PERMISSIONS)
         .requestedPermissions?.toSet() ?: emptySet()
     val requestPermissions = permissions.filter { !declaredPermissions.contains(it) }
     if (requestPermissions.isNotEmpty()) {
-        mBuilder.noDeclare(requestPermissions)
+        builder.noDeclare(requestPermissions)
         return
     }
     multiPermissionLauncher()?.launch(permissions) { result: Map<String, Boolean> ->
@@ -177,15 +177,15 @@ inline fun ComponentActivity.requestMultiplePermissions(
                     val map = deniedList.groupBy { permission ->
                         if (shouldShowRequestPermissionRationale(permission)) DENIED else EXPLAINED
                     }
-                    map[DENIED]?.let { mBuilder.denied(it) }
-                    map[EXPLAINED]?.let { mBuilder.noMoreAsk(it) }
+                    map[DENIED]?.let { builder.denied(it) }
+                    map[EXPLAINED]?.let { builder.noMoreAsk(it) }
                 } else {
-                    mBuilder.denied(deniedList)
-                    mBuilder.noMoreAsk(emptyList())
+                    builder.denied(deniedList)
+                    builder.noMoreAsk(emptyList())
                 }
             }
 
-            else -> mBuilder.allGranted()
+            else -> builder.allGranted()
         }
     }
 }
@@ -332,5 +332,20 @@ fun Context.isPermissionGranted(permission: String) =
  * @since 1.5.2
  */
 fun Context.isPermissionDenied(permission: String) = !isPermissionGranted(permission)
+
+/**
+ * Is permission granted
+ *
+ * @since 1.5.2
+ */
+fun Fragment.isPermissionGranted(permission: String) =
+    ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED
+
+/**
+ * Is permission denied
+ *
+ * @since 1.5.2
+ */
+fun Fragment.isPermissionDenied(permission: String) = !isPermissionGranted(permission)
 
 // endregion

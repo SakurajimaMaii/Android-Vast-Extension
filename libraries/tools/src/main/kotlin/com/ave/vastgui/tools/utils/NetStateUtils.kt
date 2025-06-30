@@ -225,7 +225,7 @@ object NetStateUtils {
      * is represented by 0-[WifiManager.getMaxSignalLevel].
      *
      * @throws SecurityException Throw this exception if there is no
-     * [ACCESS_WIFI_STATE] permission.
+     * [android.Manifest.permission.ACCESS_WIFI_STATE] permission.
      * @since 0.5.3
      */
     @JvmStatic

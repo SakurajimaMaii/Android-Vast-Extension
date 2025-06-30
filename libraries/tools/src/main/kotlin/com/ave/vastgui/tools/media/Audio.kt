@@ -26,6 +26,7 @@ import com.ave.vastgui.tools.content.ContextHelper
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/6/3 9:53
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/hardware/audio/
 
 /**
  * Audio manager

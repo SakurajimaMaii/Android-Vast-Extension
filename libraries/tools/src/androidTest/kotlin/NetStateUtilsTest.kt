@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -25,8 +24,6 @@ import com.ave.vastgui.tools.utils.NetStateUtils.getWifiManager
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-
-
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -86,6 +83,11 @@ class NetStateUtilsTest {
     @Test
     fun hasVPN() {
         Assert.assertEquals("VPN", manager.getNetworkInfo(NetStateUtils.hasVPN(context))?.typeName)
+    }
+
+    @Test
+    fun getWifiDBM() {
+        println("wifi-dbm is ${NetStateUtils.getWifiDBM(context)}")
     }
 
     companion object {

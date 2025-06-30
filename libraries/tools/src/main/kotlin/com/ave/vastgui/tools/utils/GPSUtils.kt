@@ -26,7 +26,7 @@ import com.ave.vastgui.tools.content.ContextHelper
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
 // Date: 2022/4/13 17:41
-// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/hardware/gps-utils/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/hardware/location/
 
 /**
  * Determine if GPS is turned on.

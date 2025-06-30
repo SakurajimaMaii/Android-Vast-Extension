@@ -27,6 +27,7 @@ import com.ave.vastgui.tools.os.extension.fromApi31
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/12/31
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/hardware/bluetooth/
 
 /**
  * Get [BluetoothManager].
