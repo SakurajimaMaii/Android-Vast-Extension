@@ -271,7 +271,7 @@
             <!--            </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.view.SnappingRecyclerViewActivity"
+            android:name=".activity.VibratorActivity"
             android:exported="true">
             <!--            <intent-filter>-->
             <!--                <action android:name="android.intent.action.MAIN" />-->

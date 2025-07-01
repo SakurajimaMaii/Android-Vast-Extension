@@ -140,6 +140,22 @@
     <string name="vp2_indicator_change_position">切换指示器选中项</string>
     <!-- Vp2 指示器 end -->
 
+    <!-- 振动器 start -->
+    <string name="vibrator_manager">振动管理器</string>
+    <string name="vibrator_manager_ids">当前设备的振动器id列表为：%s</string>
+    <string name="vibrator_manager_is_available">当前设备的振动器是否可用：%s</string>
+    <string name="vibrator_manager_single_vibrate">默认振动器单次震动：%d ms</string>
+    <string name="vibrator_manager_cancel_vibrate">取消全部震动</string>
+    <string name="vibrator">振动器</string>
+    <string name="vibrator_has_hardware">振动器是否有硬件：%s</string>
+    <string name="vibrator_has_amplitude_control">振动器是否有支持振幅控制：%s</string>
+    <string name="vibrator_id">振动器的id为：%d</string>
+    <string name="vibrator_qfactor">振动器的qFactor为：%.4f</string>
+    <string name="vibrator_resonantfrequency">振动器的resonantFrequency为：%.4f</string>
+    <string name="vibrator_single_vibrate">振动器单次振动：%d ms</string>
+    <string name="vibrator_cancel_vibrate">取消振动</string>
+    <!-- 振动器 end -->
+
     <string name="base_adapter">通用RecyclerView BaseAdapter</string>
     <string name="base_bind_adapter">通用RecyclerView BaseBindingAdapter</string>
     <string name="base_fragment_activity">FragmentActivity示例</string>
