@@ -34,6 +34,7 @@ import kotlin.properties.Delegates
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2025/4/30
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/hardware/vibrator/
 
 /**
  * Helper for accessing features in [Vibrator] in a backwards compatible
@@ -48,7 +49,7 @@ class VibratorCompat {
      * @since 1.5.2
      */
     constructor(context: Context) {
-        this.context = context
+        this.context = context.applicationContext
         vibrator = ContextCompat.getSystemService(context, Vibrator::class.java)
     }
 
@@ -58,7 +59,7 @@ class VibratorCompat {
      */
     @RequiresApi(Build.VERSION_CODES.S)
     internal constructor(context: Context, vibrator: Vibrator) {
-        this.context = context
+        this.context = context.applicationContext
         this.vibrator = vibrator
     }
 
@@ -131,10 +132,12 @@ class VibratorCompat {
      * @see Vibrator.areEffectsSupported
      * @since 1.5.2
      */
-    fun areEffectsSupported(@EffectType effectIds: IntArray): IntArray {
+    @SuppressLint("WrongConstant")
+    fun areEffectsSupported(vararg effectTypes: EffectType): IntArray {
         var result: IntArray = intArrayOf()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            result = vibrator?.areEffectsSupported(*effectIds) ?: result
+            val ids = IntArray(effectTypes.size) { effectTypes[it].value }
+            result = vibrator?.areEffectsSupported(*ids) ?: result
         }
         return result
     }
@@ -143,19 +146,23 @@ class VibratorCompat {
      * @see Vibrator.areAllEffectsSupported
      * @since 1.5.2
      */
-    fun areAllEffectsSupported(@EffectType effectIds: IntArray): Boolean {
+    @SuppressLint("WrongConstant")
+    fun areAllEffectsSupported(vararg effectTypes: EffectType): Boolean {
+        val ids = IntArray(effectTypes.size) { effectTypes[it].value }
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-                vibrator?.areAllEffectsSupported(*effectIds) == VIBRATION_EFFECT_SUPPORT_YES
+                vibrator?.areAllEffectsSupported(*ids) == VIBRATION_EFFECT_SUPPORT_YES
     }
 
     /**
      * @see Vibrator.arePrimitivesSupported
      * @since 1.5.2
      */
-    fun arePrimitivesSupported(@PrimitiveType primitiveIds: IntArray): BooleanArray {
-        var result: BooleanArray = booleanArrayOf()
+    @SuppressLint("WrongConstant")
+    fun arePrimitivesSupported(vararg primitiveTypes: PrimitiveType): BooleanArray {
+        var result = BooleanArray(primitiveTypes.size)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            result = vibrator?.arePrimitivesSupported(*primitiveIds) ?: result
+            val ids = IntArray(primitiveTypes.size) { primitiveTypes[it].value }
+            result = vibrator?.arePrimitivesSupported(*ids) ?: result
         }
         return result
     }
@@ -164,19 +171,23 @@ class VibratorCompat {
      * @see Vibrator.areAllPrimitivesSupported
      * @since 1.5.2
      */
-    fun areAllPrimitivesSupported(@PrimitiveType primitiveIds: IntArray): Boolean {
+    @SuppressLint("WrongConstant")
+    fun areAllPrimitivesSupported(vararg primitiveTypes: PrimitiveType): Boolean {
+        val ids = IntArray(primitiveTypes.size) { primitiveTypes[it].value }
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-                vibrator?.areAllPrimitivesSupported(*primitiveIds) == true
+                vibrator?.areAllPrimitivesSupported(*ids) == true
     }
 
     /**
      * @see Vibrator.getPrimitiveDurations
      * @since 1.5.2
      */
-    fun getPrimitiveDurations(@PrimitiveType primitiveIds: IntArray): IntArray {
-        var result: IntArray = intArrayOf()
+    @SuppressLint("WrongConstant")
+    fun getPrimitiveDurations(vararg primitiveTypes: PrimitiveType): IntArray {
+        var result = IntArray(primitiveTypes.size)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            result = vibrator?.getPrimitiveDurations(*primitiveIds) ?: result
+            val ids = IntArray(primitiveTypes.size) { primitiveTypes[it].value }
+            result = vibrator?.getPrimitiveDurations(*ids) ?: result
         }
         return result
     }

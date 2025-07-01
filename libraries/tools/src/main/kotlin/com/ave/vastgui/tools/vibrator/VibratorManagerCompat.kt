@@ -29,7 +29,7 @@ import com.ave.vastgui.tools.utils.permission.isPermissionGranted
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2025/5/1
-// Documentation:
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/hardware/vibrator/
 
 /**
  * Helper for accessing features in [VibratorManager] in a backwards
@@ -37,7 +37,9 @@ import com.ave.vastgui.tools.utils.permission.isPermissionGranted
  *
  * @since 1.5.2
  */
-class VibratorManagerCompat(private val context: Context) {
+class VibratorManagerCompat private constructor(context: Context) {
+
+    private val context = context.applicationContext
 
     /**
      * The device's [VibratorManager].
@@ -62,7 +64,7 @@ class VibratorManagerCompat(private val context: Context) {
      * @since 1.5.2
      */
     val isAvailable: Boolean
-        get() = isPermissionGranted() && vibratorManager != null
+        get() = isPermissionGranted() && ids.isNotEmpty()
 
     /**
      * List all available vibrator ids, returning a possible empty list.

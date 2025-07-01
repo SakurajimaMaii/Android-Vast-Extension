@@ -16,24 +16,23 @@
 
 package com.ave.vastgui.tools.vibrator
 
+import android.os.Build
 import android.os.VibrationEffect.Composition
-import androidx.annotation.IntDef
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2025/5/1
-// Documentation:
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/hardware/vibrator/
 
 /** @since 1.5.2 */
-@IntDef(
-    Composition.PRIMITIVE_CLICK,
-    Composition.PRIMITIVE_SPIN,
-    Composition.PRIMITIVE_THUD,
-    Composition.PRIMITIVE_TICK,
-    Composition.PRIMITIVE_LOW_TICK,
-    Composition.PRIMITIVE_QUICK_FALL,
-    Composition.PRIMITIVE_QUICK_RISE,
-    Composition.PRIMITIVE_SLOW_RISE
-)
-@Retention(AnnotationRetention.SOURCE)
-annotation class PrimitiveType
+enum class PrimitiveType(val value: Int) {
+    PRIMITIVE_UNKNOW(-1),
+    PRIMITIVE_CLICK(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) Composition.PRIMITIVE_CLICK else PRIMITIVE_UNKNOW.value),
+    PRIMITIVE_THUD(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) Composition.PRIMITIVE_THUD else PRIMITIVE_UNKNOW.value),
+    PRIMITIVE_SPIN(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) Composition.PRIMITIVE_SPIN else PRIMITIVE_UNKNOW.value),
+    PRIMITIVE_QUICK_RISE(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) Composition.PRIMITIVE_QUICK_RISE else PRIMITIVE_UNKNOW.value),
+    PRIMITIVE_SLOW_RISE(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) Composition.PRIMITIVE_SLOW_RISE else PRIMITIVE_UNKNOW.value),
+    PRIMITIVE_QUICK_FALL(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) Composition.PRIMITIVE_QUICK_FALL else PRIMITIVE_UNKNOW.value),
+    PRIMITIVE_TICK(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) Composition.PRIMITIVE_TICK else PRIMITIVE_UNKNOW.value),
+    PRIMITIVE_LOW_TICK(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) Composition.PRIMITIVE_LOW_TICK else PRIMITIVE_UNKNOW.value)
+}

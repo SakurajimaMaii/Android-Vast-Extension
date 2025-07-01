@@ -16,20 +16,20 @@
 
 package com.ave.vastgui.tools.vibrator
 
+import android.os.Build
 import android.os.VibrationEffect
 import androidx.annotation.IntDef
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2025/5/1
-// Documentation:
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/hardware/vibrator/
 
 /** @since 1.5.2 */
-@IntDef(
-    VibrationEffect.EFFECT_TICK,
-    VibrationEffect.EFFECT_CLICK,
-    VibrationEffect.EFFECT_HEAVY_CLICK,
-    VibrationEffect.EFFECT_DOUBLE_CLICK
-)
-@Retention(AnnotationRetention.SOURCE)
-annotation class EffectType
+enum class EffectType(val value: Int) {
+    UNKNOW(-1),
+    TICK(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) VibrationEffect.EFFECT_TICK else UNKNOW.value),
+    CLICK(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) VibrationEffect.EFFECT_CLICK else UNKNOW.value),
+    HEAVY_CLICK(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) VibrationEffect.EFFECT_HEAVY_CLICK else UNKNOW.value),
+    DOUBLE_CLICK(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) VibrationEffect.EFFECT_DOUBLE_CLICK else UNKNOW.value)
+}
