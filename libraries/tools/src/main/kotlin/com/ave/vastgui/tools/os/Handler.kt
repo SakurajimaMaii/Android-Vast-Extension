@@ -30,6 +30,7 @@ import kotlin.reflect.KProperty
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2025/4/30
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/architecture-components/ui-layer-libraries/lifecycle-aware-components/handler/
 
 /**
  * Default implementation of [Handler.Callback].
@@ -64,6 +65,7 @@ open class LifecycleHandler @JvmOverloads constructor(
         removeCallbacksAndMessages(null)
         owner.lifecycle.addObserver(this)
     }
+
 }
 
 /**
@@ -132,7 +134,7 @@ open class LifecycleHandlerThread @JvmOverloads constructor(
 
     override fun onDestroy(owner: LifecycleOwner) {
         this.quitSafely()
-        owner.lifecycle.addObserver(this)
+        owner.lifecycle.removeObserver(this)
     }
 
     /**
