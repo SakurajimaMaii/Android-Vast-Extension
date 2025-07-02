@@ -176,7 +176,14 @@
         <activity
             android:name=".activity.view.rvadapter.MessageActivity"
             android:exported="true">
-
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".activity.view.rvdecoration.RecyclerViewDecorationActivity"
+            android:exported="true">
             <!--            <intent-filter>-->
             <!--                <action android:name="android.intent.action.MAIN" />-->
             <!--                <category android:name="android.intent.category.LAUNCHER" />-->
@@ -185,10 +192,10 @@
         <activity
             android:name=".activity.view.AlphabetSideBarActivity"
             android:exported="true">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activity.view.ArcProgressViewActivity"
@@ -241,10 +248,10 @@
         <activity
             android:name=".activity.view.HorizontalProgressViewActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".activity.view.MaskLayoutActivity"

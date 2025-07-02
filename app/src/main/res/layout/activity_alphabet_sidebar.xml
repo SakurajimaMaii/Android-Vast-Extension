@@ -15,19 +15,92 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/switch_text_color_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/alphabetsidebar_switch_text_color" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/switch_indicator_text_color_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/alphabetsidebar_switch_indicator_text_color" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/switch_bubble_text_color_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/alphabetsidebar_switch_bubble_text_color" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/alphabetsidebar_change_text_size"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/change_text_size_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:stepSize="1"
+                android:value="15"
+                android:valueFrom="15.0"
+                android:valueTo="20.0"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/alphabetsidebar_change_bubble_text_size"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/change_bubble_text_size_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:stepSize="1"
+                android:value="20"
+                android:valueFrom="20.0"
+                android:valueTo="25.0"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
     <com.ave.vastgui.tools.view.alphabetsidebar.AlphabetSideBar
         android:id="@+id/alphabetsidebar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
-        android:layout_margin="15dp" />
+        android:layout_margin="15dp"
+        app:alphabetsidebar_bubble_text_size="15sp" />
 </FrameLayout>

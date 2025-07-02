@@ -21,6 +21,14 @@
     <string name="app_name">AVE</string>
     <string name="back">反面</string>
 
+    <!-- 字母索引栏 start -->
+    <string name="alphabetsidebar_switch_text_color">切换索引栏字体颜色</string>
+    <string name="alphabetsidebar_switch_indicator_text_color">切换索引栏当前字体颜色</string>
+    <string name="alphabetsidebar_switch_bubble_text_color">切换索引栏气泡字体颜色</string>
+    <string name="alphabetsidebar_change_text_size">修改索引栏字体大小</string>
+    <string name="alphabetsidebar_change_bubble_text_size">修改索引栏气泡字体大小</string>
+    <!-- 字母索引栏 end -->
+
     <!-- 徽标控件 start -->
     <string name="badge_base_usage">基础使用</string>
     <string name="badge_change_color">切换徽标颜色</string>

@@ -35,10 +35,11 @@ import com.ave.vastgui.app.databinding.ActivityAlphabetSidebarBinding
 import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.utils.ColorUtils
+import com.ave.vastgui.tools.utils.DensityUtils.SP
 import com.ave.vastgui.tools.utils.permission.requestPermission
 import com.ave.vastgui.tools.view.alphabetsidebar.Alphabet
 import com.ave.vastgui.tools.view.alphabetsidebar.AlphabetSideBar
-import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
+import com.ave.vastgui.tools.view.extension.gone
 import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.ave.vastgui.tools.viewbinding.viewBinding
 import kotlinx.coroutines.Dispatchers
@@ -52,6 +53,22 @@ import kotlinx.coroutines.withContext
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/adapter/
 
 class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sidebar) {
+
+    private val colors = intArrayOf(
+        ColorUtils.colorHex2Int("#F60C0C"),
+        ColorUtils.colorHex2Int("#F3B913"),
+        ColorUtils.colorHex2Int("#E7F716"),
+        ColorUtils.colorHex2Int("#3DF30B"),
+        ColorUtils.colorHex2Int("#0DF6EF"),
+        ColorUtils.colorHex2Int("#0829FB"),
+        ColorUtils.colorHex2Int("#B709F4")
+    )
+
+    private var textColorIndex = 0
+
+    private var indicatorTextColorIndex = 0
+
+    private var bubbleTextColorIndex = 0
 
     /**
      * SmoothScrollLayoutManager
@@ -99,9 +116,6 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
             layoutManager = smoothScrollLayoutManager
         }
 
-        binding.alphabetsidebar.refreshWithInvalidate {
-            barBackgroundColor = ColorUtils.getColorIntWithTransparency(15, ColorUtils.colorHex2Int("#b2bec3"))
-        }
         binding.alphabetsidebar.setLetterListener(object : AlphabetSideBar.LetterListener {
             override fun onIndicatorLetterUpdate(letter: String, index: Int, target: Int) {
                 if (-1 != target) {
@@ -125,6 +139,31 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
             }
             updateIndex()
         }
+
+        binding.switchTextColorBtn.setOnClickListener {
+            binding.alphabetsidebar.barTextColor = colors[(textColorIndex++) % colors.size]
+        }
+
+        binding.switchIndicatorTextColorBtn.setOnClickListener {
+            binding.alphabetsidebar.barIndicatorTextColor = colors[(indicatorTextColorIndex++) % colors.size]
+        }
+
+        binding.switchBubbleTextColorBtn.setOnClickListener {
+            binding.alphabetsidebar.bubbleTextColor = colors[(indicatorTextColorIndex++) % colors.size]
+        }
+
+        binding.changeTextSizeSlider.addOnChangeListener { _, value, _ ->
+            binding.alphabetsidebar.barTextSize = value.SP
+        }
+
+        binding.changeBubbleTextSizeSlider.addOnChangeListener { _, value, _ ->
+            binding.alphabetsidebar.bubbleTextSize = value.SP
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.recyclerView.gone()
     }
 
     /** 检查数据库是否包含 **phonebook_label** 字段， 如果没有则用 [Phone.SORT_KEY_PRIMARY] 替代。 */
