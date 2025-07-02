@@ -18,30 +18,36 @@ package com.ave.vastgui.tools.view.recyclerview.decoration
 
 import android.graphics.Rect
 import android.view.View
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.math.roundToInt
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2025/5/3
-// Documentation:
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/recyclerview/decoration/spacing-decoration/
 // Reference: https://juejin.cn/post/6844904116859174926
 
 /**
- * [GridIntervalDecoration]
+ * Spacing decoration of grid layout for [RecyclerView].
  *
  * @since 1.5.2
  */
-class GridIntervalDecoration(private val spanCount: Int, private val rowSpacing: Int, private val columnSpacing: Int) : RecyclerView.ItemDecoration() {
+class GridSpacingDecoration(val spanCount: Int, val rowSpacingPx: Float, val columnSpacingPx: Float) : RecyclerView.ItemDecoration() {
 
-    constructor(spanCount: Int, spacing: Int) : this(spanCount, spacing, spacing)
+    /** @since 1.5.2 */
+    constructor(spanCount: Int, spacingPx: Float) : this(spanCount, spacingPx, spacingPx)
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        val manager = parent.layoutManager as? GridLayoutManager
+        if (null == manager) return
         val position = parent.getChildAdapterPosition(view)
         val column = position % spanCount
-        outRect.left = column * columnSpacing / spanCount
-        outRect.right = columnSpacing - (column + 1) * columnSpacing / spanCount
+        outRect.left = (column * columnSpacingPx / spanCount).roundToInt()
+        outRect.right = (columnSpacingPx - (column + 1) * columnSpacingPx / spanCount).roundToInt()
         if (position >= spanCount) {
-            outRect.top = rowSpacing
+            outRect.top = rowSpacingPx.roundToInt()
         }
     }
 
