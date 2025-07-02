@@ -36,6 +36,7 @@ import com.ave.vastgui.tools.utils.DensityUtils.DP
 import kotlin.math.floor
 import kotlin.math.sqrt
 import androidx.core.content.withStyledAttributes
+import com.ave.vastgui.tools.utils.ColorUtils
 import com.ave.vastgui.tools.utils.color
 import com.ave.vastgui.tools.utils.dimension
 import com.ave.vastgui.tools.utils.integer
@@ -255,48 +256,70 @@ class AlphabetSideBar @JvmOverloads constructor(
 
     /** @since 1.5.2 */
     var barBackgroundColor: Int
-        set(value) {
-            backgroundPaint.color = value
-        }
         get() = backgroundPaint.color
+        set(value) {
+            if (backgroundPaint.color == value) return
+            check(ColorUtils.isColorInt(value)) {
+                "The color-int(current=${value.toUInt().toString(16)}) of bar is invalid."
+            }
+            backgroundPaint.color = value
+            invalidate()
+        }
 
     /** @since 1.5.2 */
-    var barTextSize: Float
+    var barTextSize: Float = DEFAULT_BAR_TEXT_SIZE
         set(value) {
-            if (value < 0f) return
-            barTextPaint.textSize = value
-            barIndicatorTextPaint.textSize = value
+            if (value == field) return
+            field = value.coerceAtLeast(0f)
+            barTextPaint.textSize = field
+            barIndicatorTextPaint.textSize = field
+            requestLayout()
         }
-        get() = barTextPaint.textSize
 
     /** @since 1.5.2 */
     var barTextColor: Int
-        set(value) {
-            barTextPaint.color = value
-        }
         get() = barTextPaint.color
+        set(value) {
+            if (barTextPaint.color == value) return
+            check(ColorUtils.isColorInt(value)) {
+                "The color-int(current=${value.toUInt().toString(16)}) of bar text is invalid."
+            }
+            barTextPaint.color = value
+            invalidate()
+        }
 
     /** @since 1.5.2 */
     var barIndicatorTextColor: Int
-        set(value) {
-            barIndicatorTextPaint.color = value
-        }
         get() = barIndicatorTextPaint.color
+        set(value) {
+            if (barIndicatorTextPaint.color == value) return
+            check(ColorUtils.isColorInt(value)) {
+                "The color-int(current=${value.toUInt().toString(16)}) of bar indicator text is invalid."
+            }
+            barIndicatorTextPaint.color = value
+            invalidate()
+        }
 
     /** @since 1.5.2 */
     var bubbleTextSize: Float
-        set(value) {
-            if (value < 0f) return
-            bubbleTextPaint.textSize = value
-        }
         get() = bubbleTextPaint.textSize
+        set(value) {
+            if (bubbleTextPaint.textSize == value) return
+            bubbleTextPaint.textSize = value.coerceAtLeast(0f)
+            invalidate()
+        }
 
     /** @since 1.5.2 */
     var bubbleTextColor: Int
-        set(value) {
-            bubbleTextPaint.color = value
-        }
         get() = bubbleTextPaint.color
+        set(value) {
+            if (bubbleTextPaint.color == value) return
+            check(ColorUtils.isColorInt(value)) {
+                "The color-int(current=${value.toUInt().toString(16)}) of bubble text is invalid."
+            }
+            bubbleTextPaint.color = value
+            invalidate()
+        }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val width = resolveSize(
@@ -404,12 +427,7 @@ class AlphabetSideBar @JvmOverloads constructor(
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 // 10dp is the redundant range of the finger detection area.
-                if ((event.x > getBarWidth() + 10f.DP ||
-                            event.x < (-10f).DP ||
-                            event.y < 0f ||
-                            event.y > measuredHeight) &&
-                    location == LEFT
-                ) {
+                if ((event.x > getBarWidth() + 10f.DP || event.x < (-10f).DP || event.y < 0f || event.y > measuredHeight) && location == LEFT) {
                     indicatorIndex = -1
                     return super.onTouchEvent(event)
                 } else if ((event.x < measuredWidth - getBarWidth() - 10f.DP ||
@@ -428,17 +446,13 @@ class AlphabetSideBar @JvmOverloads constructor(
             MotionEvent.ACTION_MOVE -> {
                 currentTouchPointF.set(event.x, event.y)
                 indicatorIndex = getIndicatorLetterIndex()
-                if (event.y >= top + getBarBeyondHeight() + getBarCircleRadius() &&
-                    event.y <= bottom - getBarBeyondHeight() - getBarCircleRadius() &&
-                    checkIsIndexValid()
+                if (event.y >= top + getBarBeyondHeight() + getBarCircleRadius()
+                    && event.y <= bottom - getBarBeyondHeight() - getBarCircleRadius()
+                    && checkIsIndexValid()
                 ) {
                     if (previousIndicatorIndex != indicatorIndex) {
                         previousIndicatorIndex = indicatorIndex
-                        letterListener?.onIndicatorLetterUpdate(
-                            alphabet[indicatorIndex].first,
-                            indicatorIndex,
-                            alphabet[indicatorIndex].second.get(),
-                        )
+                        letterListener?.onIndicatorLetterUpdate(alphabet[indicatorIndex].first, indicatorIndex, alphabet[indicatorIndex].second.get())
                     }
                     invalidate()
                 } else {
@@ -469,7 +483,12 @@ class AlphabetSideBar @JvmOverloads constructor(
      * @since 0.5.4
      */
     fun setLocation(@Location location: Int) {
-        this@AlphabetSideBar.location = location
+        if (this.location == location) return
+        check(LEFT == location || RIGHT == location) {
+            "The value(current=$location) of location is invalid."
+        }
+        this.location = location
+        invalidate()
     }
 
     /**
