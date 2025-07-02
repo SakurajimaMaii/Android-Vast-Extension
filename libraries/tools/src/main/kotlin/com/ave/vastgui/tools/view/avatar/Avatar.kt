@@ -227,7 +227,7 @@ class Avatar @JvmOverloads constructor(
         set(value) {
             if (strokePaint.strokeWidth == value) return
             strokePaint.strokeWidth = value.coerceAtLeast(0f)
-            invalidate()
+            requestLayout()
         }
 
     /**
