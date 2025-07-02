@@ -343,10 +343,10 @@ class Avatar @JvmOverloads constructor(
      * @since 0.5.4
      */
     fun setShape(@Shape shape: Int) {
+        if (this.shape == shape) return
         check(shape == SHAPE_CIRCLE || shape == SHAPE_ROUND_CORNER) {
             "shape(current=$shape) should be one of two values: SHAPE_CIRCLE($SHAPE_CIRCLE) or SHAPE_ROUND_CORNER($SHAPE_ROUND_CORNER)"
         }
-        if (this.shape == shape) return
         this.shape = shape
         invalidate()
     }

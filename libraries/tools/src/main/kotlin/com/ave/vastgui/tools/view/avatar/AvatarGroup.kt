@@ -236,10 +236,10 @@ class AvatarGroup @JvmOverloads constructor(
      * @since 0.5.4
      */
     fun setOverlapFrom(@OverlapFrom overlapFrom: Int) {
+        if (this.overlapFrom == overlapFrom) return
         check(overlapFrom == START || overlapFrom == END) {
             "overlapFrom(current=$overlapFrom) should be one of two values: START($START) or END($END)"
         }
-        if (this.overlapFrom == overlapFrom) return
         this.overlapFrom = overlapFrom
         requestLayout()
     }
@@ -250,10 +250,10 @@ class AvatarGroup @JvmOverloads constructor(
      * @since 0.5.4
      */
     fun setOverlapDistance(@FloatRange(from = 0.0) distance: Float) {
+        if (overlapDistance == distance) return
         check(distance in 0f..size) {
             "overlapDistance(current=$distance) should in the range of [0, ${size}]"
         }
-        if (overlapDistance == distance) return
         overlapDistance = distance
         requestLayout()
     }
@@ -264,7 +264,7 @@ class AvatarGroup @JvmOverloads constructor(
      * @since 1.5.2
      */
     fun setSize(@FloatRange(from = 0.0) size: Float) {
-        this@AvatarGroup.size = size.coerceAtLeast(0f)
+        this.size = size.coerceAtLeast(0f)
         requestLayout()
     }
 
@@ -274,10 +274,10 @@ class AvatarGroup @JvmOverloads constructor(
      * @since 0.5.4
      */
     fun setShape(@Avatar.Shape shape: Int) {
-        check(shape == SHAPE_CIRCLE || shape == SHAPE_ROUND_CORNER) { "shape(current=$shape) should be one of two values: SHAPE_CIRCLE($SHAPE_CIRCLE) or SHAPE_ROUND_CORNER($SHAPE_ROUND_CORNER)" }
         if (this.shape == shape) return
-        this@AvatarGroup.shape = shape
-        children.forEach { (it as Avatar).setShape(this@AvatarGroup.shape) }
+        check(shape == SHAPE_CIRCLE || shape == SHAPE_ROUND_CORNER) { "shape(current=$shape) should be one of two values: SHAPE_CIRCLE($SHAPE_CIRCLE) or SHAPE_ROUND_CORNER($SHAPE_ROUND_CORNER)" }
+        this.shape = shape
+        children.forEach { (it as Avatar).setShape(this.shape) }
     }
 
     /** @since 1.5.2 */
