@@ -41,13 +41,11 @@ import kotlin.math.roundToInt
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/11
-// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/badge/description/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/badge/badge-layout/
 
 /**
  * Badge Layout.
  *
- * @property iconResId The icon resources id.
- * @property iconPadding The padding of the [iconResId].
  * @since 0.5.3
  */
 class BadgeLayout @JvmOverloads constructor(
@@ -60,14 +58,22 @@ class BadgeLayout @JvmOverloads constructor(
     /** @since 1.5.2 */
     private val binding by viewBinding(BadgeLayoutBinding::bind)
 
-    /** @since 1.5.2 */
+    /**
+     * The icon resources id.
+     *
+     * @since 1.5.2
+     */
     private val badgeView
         get() = binding.badgeView
 
     /** @since 1.5.2 */
     private var iconResId by NotNUllVar<Int>()
 
-    /** @since 1.5.2 */
+    /**
+     * The padding of the [iconResId].
+     *
+     * @since 1.5.2
+     */
     private var iconPadding by NotNUllVar<Quadruple<Float, Float, Float, Float>>()
 
     /**

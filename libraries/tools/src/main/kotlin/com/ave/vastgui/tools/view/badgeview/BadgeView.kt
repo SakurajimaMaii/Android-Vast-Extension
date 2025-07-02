@@ -28,8 +28,6 @@ import android.graphics.Path
 import android.graphics.PointF
 import android.graphics.Rect
 import android.util.AttributeSet
-import android.view.GestureDetector
-import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.LinearInterpolator
@@ -40,8 +38,6 @@ import androidx.annotation.IntRange
 import androidx.annotation.StyleRes
 import androidx.core.content.withStyledAttributes
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.view.NestedScrollingChild
-import androidx.core.view.NestedScrollingChildHelper
 import androidx.core.view.ViewCompat
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.core.extension.cast
@@ -58,11 +54,10 @@ import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.roundToInt
 
-
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/11
-// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/badge/description/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/badge/badge-view/
 
 /**
  * Badge View.
@@ -74,8 +69,7 @@ class BadgeView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.Default_BadgeView_Style,
     @StyleRes defStyleRes: Int = R.style.BaseBadgeView
-) : View(context, attrs, defStyleAttr, defStyleRes),
-    NestedScrollingChild {
+) : View(context, attrs, defStyleAttr, defStyleRes) {
 
     /**
      * When the coordinate of first touch is smaller than
@@ -214,20 +208,6 @@ class BadgeView @JvmOverloads constructor(
     val textColor
         get() = textPaint.color
 
-    /** @since 1.5.2 */
-    private val nestedScrollingChildHelper = NestedScrollingChildHelper(this)
-
-    /** @since 1.5.2 */
-    private val gestureDetector: GestureDetector = GestureDetector(context, object : SimpleOnGestureListener() {
-        override fun onSingleTapUp(e: MotionEvent): Boolean {
-            return performClick()
-        }
-
-        override fun onLongPress(e: MotionEvent) {
-            performLongClick()
-        }
-    })
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         when (badgeMode) {
             BadgeMode.Unspecified -> setMeasuredDimension(0, 0)
@@ -326,9 +306,9 @@ class BadgeView @JvmOverloads constructor(
         } else if (badgeMode == BadgeMode.Bubble.Number && textNumber == INIT_NUMBER) {
             return super.onTouchEvent(event)
         } else {
-            gestureDetector.onTouchEvent(event)
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    parent.requestDisallowInterceptTouchEvent(true)
                     val distance = hypot((event.x - fixedBubbleCoordPointF.x).toDouble(), (event.y - fixedBubbleCoordPointF.y).toDouble())
                     badgeState = if (distance <= bubbleRadius + minOffsetDistance) {
                         startNestedScroll(ViewCompat.SCROLL_AXIS_HORIZONTAL or ViewCompat.SCROLL_AXIS_VERTICAL)
@@ -359,61 +339,11 @@ class BadgeView @JvmOverloads constructor(
                         startExplosionAnim()
                         stopNestedScroll()
                     }
+                    parent.requestDisallowInterceptTouchEvent(false)
                 }
             }
         }
         return true
-    }
-
-    /** @since 1.5.2 */
-    override fun setNestedScrollingEnabled(enabled: Boolean) {
-        nestedScrollingChildHelper.isNestedScrollingEnabled = enabled
-    }
-
-    /** @since 1.5.2 */
-    override fun isNestedScrollingEnabled(): Boolean {
-        return nestedScrollingChildHelper.isNestedScrollingEnabled
-    }
-
-    /** @since 1.5.2 */
-    override fun startNestedScroll(axes: Int): Boolean {
-        return nestedScrollingChildHelper.startNestedScroll(axes)
-    }
-
-    /** @since 1.5.2 */
-    override fun stopNestedScroll() {
-        nestedScrollingChildHelper.stopNestedScroll()
-    }
-
-    /** @since 1.5.2 */
-    override fun hasNestedScrollingParent(): Boolean {
-        return nestedScrollingChildHelper.hasNestedScrollingParent()
-    }
-
-    /** @since 1.5.2 */
-    override fun dispatchNestedScroll(dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int, dyUnconsumed: Int, offsetInWindow: IntArray?): Boolean {
-        return nestedScrollingChildHelper.dispatchNestedScroll(dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed, offsetInWindow)
-    }
-
-    /** @since 1.5.2 */
-    override fun dispatchNestedPreScroll(dx: Int, dy: Int, consumed: IntArray?, offsetInWindow: IntArray?): Boolean {
-        return nestedScrollingChildHelper.dispatchNestedPreScroll(dx, dy, consumed, offsetInWindow)
-    }
-
-    /** @since 1.5.2 */
-    override fun dispatchNestedFling(velocityX: Float, velocityY: Float, consumed: Boolean): Boolean {
-        return nestedScrollingChildHelper.dispatchNestedFling(velocityX, velocityY, consumed)
-    }
-
-    /** @since 1.5.2 */
-    override fun dispatchNestedPreFling(velocityX: Float, velocityY: Float): Boolean {
-        return nestedScrollingChildHelper.dispatchNestedPreFling(velocityX, velocityY)
-    }
-
-    /** @since 1.5.2 */
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        nestedScrollingChildHelper.onDetachedFromWindow()
     }
 
     /**
