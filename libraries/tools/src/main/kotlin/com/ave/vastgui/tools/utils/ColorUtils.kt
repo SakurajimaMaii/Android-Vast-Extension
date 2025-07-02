@@ -193,9 +193,9 @@ object ColorUtils {
      * @since 1.5.2
      */
     @JvmStatic
-    fun isColorHex(vararg colorHex: String): List<Pair<Int, Boolean>> {
+    fun isColorHex(vararg colorHex: String): List<Boolean> {
         if (colorHex.isEmpty()) return emptyList()
-        return colorHex.mapIndexed { index, hex -> index to COLOR_HEX_PATTERN.matches(hex) }
+        return colorHex.map { hex -> COLOR_HEX_PATTERN.matches(hex) }
     }
 
     /**
@@ -214,9 +214,9 @@ object ColorUtils {
      * @since 1.5.2
      */
     @JvmStatic
-    fun isColorInt(vararg colorInt: Int): List<Pair<Int, Boolean>> {
+    fun isColorInt(vararg colorInt: Int): List<Boolean> {
         if (colorInt.isEmpty()) return emptyList()
-        return colorInt.mapIndexed { index, color -> index to (color.toUInt() in 0u..0xFFFFFFFFu) }
+        return colorInt.map { color -> color.toUInt() in 0u..0xFFFFFFFFu }
     }
 
 }
