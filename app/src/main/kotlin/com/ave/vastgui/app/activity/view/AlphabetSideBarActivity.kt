@@ -161,11 +161,6 @@ class AlphabetSideBarActivity : ComponentActivity(R.layout.activity_alphabet_sid
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.recyclerView.gone()
-    }
-
     /** 检查数据库是否包含 **phonebook_label** 字段， 如果没有则用 [Phone.SORT_KEY_PRIMARY] 替代。 */
     private fun checkPhonebookLabel(): String {
         var cursor: Cursor? = null

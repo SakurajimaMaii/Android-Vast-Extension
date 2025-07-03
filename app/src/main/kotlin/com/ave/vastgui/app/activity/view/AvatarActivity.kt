@@ -16,6 +16,7 @@
 
 package com.ave.vastgui.app.activity.view
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.ViewGroup.LayoutParams
 import androidx.activity.ComponentActivity
@@ -44,7 +45,8 @@ class AvatarActivity : ComponentActivity(R.layout.activity_avatar) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val avatar = Avatar(this).apply {
-            setAvatar(R.drawable.img_avatar_sample_2)
+            srcColor = Color.BLUE
+            srcText = "你好"
         }
 
         binding.avatarGroupStart.addView(avatar, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))

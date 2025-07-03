@@ -164,7 +164,8 @@
         app:avatar_corner_radius="30dp"
         app:avatar_shape="round"
         app:avatar_size="150dp"
-        app:avatar_stroke_width="25dp" />
+        app:avatar_stroke_width="25dp"
+        app:avatar_text="111" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/viewSnapshot"

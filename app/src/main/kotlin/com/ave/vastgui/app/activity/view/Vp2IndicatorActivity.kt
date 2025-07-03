@@ -27,10 +27,10 @@ import com.ave.vastgui.app.fragment.ReceiverFragment
 import com.ave.vastgui.app.fragment.SenderFragment
 import com.ave.vastgui.app.fragment.VideosFragment
 import com.ave.vastgui.core.extension.defaultLogTag
-import com.ave.vastgui.tools.adapter.VastFragmentAdapter
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.color
-import com.ave.vastgui.tools.view.vp2indicator.Vp2IndicatorType
+import com.ave.vastgui.tools.view.viewpager2.adapter.BaseFragmentStateAdapter
+import com.ave.vastgui.tools.view.viewpager2.indicator.Vp2IndicatorView
 import com.ave.vastgui.tools.viewbinding.viewBinding
 import com.log.vastgui.android.lifecycle.LogLifecycle
 import kotlin.math.roundToInt
@@ -88,8 +88,8 @@ class Vp2IndicatorActivity : AppCompatActivity() {
         // 切换指示器风格
         binding.switchStyleBtn.text = String.format(getString(R.string.vp2_indicator_switch_style_fmt), binding.vp2indicator.indicatorStyle)
         binding.switchStyleBtn.setOnClickListener {
-            val style = Vp2IndicatorType.entries[(++styleIndex) % Vp2IndicatorType.entries.size]
-            if (style == Vp2IndicatorType.Bitmap) {
+            val style = Vp2IndicatorView.Style.entries[(++styleIndex) % Vp2IndicatorView.Style.entries.size]
+            if (style == Vp2IndicatorView.Style.BITMAP) {
                 binding.vp2indicator.setSelectedBitmap(R.drawable.ic_indicator_select)
                 binding.vp2indicator.setUnSelectedBitmap(R.drawable.ic_indicator_unselect)
             }
@@ -126,7 +126,7 @@ class Vp2IndicatorActivity : AppCompatActivity() {
         }
 
         binding.vp2.apply {
-            adapter = VastFragmentAdapter(this@Vp2IndicatorActivity, fragments)
+            adapter = BaseFragmentStateAdapter(this@Vp2IndicatorActivity, fragments)
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     binding.toolbar.title = fragments[position].defaultLogTag()
@@ -134,7 +134,7 @@ class Vp2IndicatorActivity : AppCompatActivity() {
             })
         }
         binding.vp2indicator.apply {
-            setIndicatorStyle(Vp2IndicatorType.Bitmap)
+            setIndicatorStyle(Vp2IndicatorView.Style.BITMAP)
             setBitmapSize(20f.DP.toInt(), 20f.DP.toInt())
             setIndicatorCircleRadius(8F.DP)
             attachToViewPager2(binding.vp2)

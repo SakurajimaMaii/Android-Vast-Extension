@@ -38,7 +38,7 @@
                 android:id="@+id/crop_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:crop_frame_type="rectangle" />
+                app:crop_frame_type="circle" />
         </FrameLayout>
 
         <com.google.android.material.button.MaterialButton

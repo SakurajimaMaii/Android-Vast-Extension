@@ -18,13 +18,16 @@ package com.ave.vastgui.app.activity.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityTextViewBinding
 import com.ave.vastgui.app.log.logFactory
+import com.ave.vastgui.tools.utils.ColorUtils
+import com.ave.vastgui.tools.utils.color
 import com.ave.vastgui.tools.view.textview.mailboxassociateview.MailBoxAssociateTokenizer
 import com.ave.vastgui.tools.view.textview.mailboxassociateview.defaultMailBoxAssociateViewAdapter
+import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.ave.vastgui.tools.viewbinding.viewBinding
 
 // Author: Vast Gui
@@ -40,7 +43,6 @@ class TextViewActivity : AppCompatActivity(R.layout.activity_text_view) {
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         binding.mailBoxAssociateView.apply {

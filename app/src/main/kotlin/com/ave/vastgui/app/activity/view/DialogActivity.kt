@@ -40,11 +40,9 @@ class DialogActivity : AppCompatActivity(R.layout.activity_dialog) {
         MaterialAlertDialogBuilder(this)
     }
 
-
     private val fullScreenDialogFragment by lazy { FullScreenDialogFragment(R.layout.dialog_fragment_full_screen) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         binding.dialogBtn.setOnClickListener {

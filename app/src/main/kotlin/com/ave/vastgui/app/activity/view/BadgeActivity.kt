@@ -29,7 +29,7 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/11
-// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/badge/description/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/badge/badge-view/
 
 class BadgeActivity : FragmentActivity(R.layout.activity_badge) {
 

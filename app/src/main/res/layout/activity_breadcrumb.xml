@@ -24,6 +24,7 @@
         android:id="@+id/bread_crumb_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         app:breadcrumb_interval_icon="@drawable/ic_breadcrumb_default_interval_icon"
         app:breadcrumb_interval_width="30dp"
         app:breadcrumb_text_color="@color/black"

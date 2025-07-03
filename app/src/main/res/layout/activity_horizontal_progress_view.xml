@@ -34,14 +34,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:padding="10dp" />
+        android:padding="10dp"
+        app:horizontal_text_progress_text_margin="5dp"
+        app:horizontal_text_progress_box_color="@color/amour" />
 
     <com.ave.vastgui.tools.view.progress.LineTextProgressView
         android:id="@+id/line_text_pv"
         android:layout_width="match_parent"
-        android:padding="10dp"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        app:linetext_progress_text_margin="5dp"
+        app:linetext_progress_box_color="@color/amour" />
 
     <ScrollView
         android:layout_width="match_parent"

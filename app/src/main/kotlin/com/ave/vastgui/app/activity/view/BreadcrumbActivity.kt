@@ -16,16 +16,20 @@
 
 package com.ave.vastgui.app.activity.view
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityBreadcrumbBinding
+import com.ave.vastgui.tools.graphics.BmpUtils
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.utils.DensityUtils.SP
 import com.ave.vastgui.tools.utils.color
 import com.ave.vastgui.tools.utils.drawable
 import com.ave.vastgui.tools.view.breadcrumb.BreadCrumb
+import com.ave.vastgui.tools.view.extension.viewSnapshot
 import com.ave.vastgui.tools.viewbinding.viewBinding
+import java.io.File
 import java.util.Stack
 
 // Author: Vast Gui
@@ -60,7 +64,6 @@ class BreadcrumbActivity : ComponentActivity(R.layout.activity_breadcrumb) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         binding.breadCrumbLayout.addItems(items).forEach { id ->
             breadcrumbIds.push(id)

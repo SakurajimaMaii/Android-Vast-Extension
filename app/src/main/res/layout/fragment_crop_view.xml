@@ -37,7 +37,12 @@
             <com.ave.vastgui.tools.view.cropview.CropView
                 android:id="@+id/crop_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                app:crop_frame_height="100dp"
+                app:crop_frame_size="200dp"
+                app:crop_frame_type="circle"
+                app:crop_frame_stroke_color="@color/red"
+                app:crop_frame_width="200dp" />
         </FrameLayout>
 
         <com.google.android.material.button.MaterialButton

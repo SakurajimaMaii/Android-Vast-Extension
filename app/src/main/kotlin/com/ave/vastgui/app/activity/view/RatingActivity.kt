@@ -24,8 +24,6 @@ import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
 import com.ave.vastgui.tools.view.ratingview.RatingView
-import com.ave.vastgui.tools.view.ratingview.StarOrientation
-import com.ave.vastgui.tools.view.ratingview.StarSelectMethod
 import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.ave.vastgui.tools.viewbinding.viewBinding
 
@@ -38,8 +36,7 @@ class RatingActivity : AppCompatActivity(R.layout.activity_rating) {
     private val binding by viewBinding(ActivityRatingBinding::bind)
     private val logcat = logFactory(RatingActivity::class.java)
 
-    private val orientation
-        get() = StarOrientation.entries
+    private val orientation = RatingView.Orientation.entries
 
     private var orientationIndex = 0
 
@@ -51,7 +48,7 @@ class RatingActivity : AppCompatActivity(R.layout.activity_rating) {
 
     private var bmpIndex = 0
 
-    private val method = StarSelectMethod.entries
+    private val touchModes = RatingView.TouchMode.entries
 
     private var methodIndex = 0
 
@@ -94,10 +91,10 @@ class RatingActivity : AppCompatActivity(R.layout.activity_rating) {
             binding.ratingView.setStarUnselectedBitmap(unselectBmp[index])
         }
 
-        binding.switchSelectMethodBtn.text = String.format(getString(R.string.rating_switch_method_fmt), binding.ratingView.starSelectMethod)
+        binding.switchSelectMethodBtn.text = String.format(getString(R.string.rating_switch_method_fmt), binding.ratingView.touchMode)
         binding.switchSelectMethodBtn.setOnClickListener {
-            binding.ratingView.setStarSelectMethod(method[(++methodIndex) % method.size])
-            binding.switchSelectMethodBtn.text = String.format(getString(R.string.rating_switch_method_fmt), binding.ratingView.starSelectMethod)
+            binding.ratingView.setStarTouchMode(touchModes[(++methodIndex) % touchModes.size])
+            binding.switchSelectMethodBtn.text = String.format(getString(R.string.rating_switch_method_fmt), binding.ratingView.touchMode)
         }
 
         // 切换图标尺寸

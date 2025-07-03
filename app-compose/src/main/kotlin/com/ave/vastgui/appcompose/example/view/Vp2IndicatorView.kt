@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import com.ave.vastgui.appcompose.ui.theme.AndroidVastExtensionTheme
-import com.ave.vastgui.tools.view.vp2indicator.Vp2IndicatorView
+import com.ave.vastgui.tools.view.viewpager2.indicator.Vp2IndicatorView
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com

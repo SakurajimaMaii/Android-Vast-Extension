@@ -33,13 +33,13 @@
             android:layout_margin="5dp"
             android:padding="5dp"
             app:star_count="5"
-            app:star_height="40dp"
-            app:star_interval_width="1dp"
+            app:star_interval_width="10dp"
             app:star_orientation="horizontal"
-            app:star_select_method="sliding"
+            app:star_touch_mode="sliding"
             app:star_selected="@drawable/ic_star_selected"
             app:star_unselected="@drawable/ic_star_unselected"
-            app:star_width="40dp" />
+            app:star_width="40dp"
+            app:star_height="40dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_star_btn"

@@ -43,6 +43,7 @@ import org.alee.component.skin.service.ThemeSkinService
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/25
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/masklayout/masklayout/
 
 /** [MaskLayoutActivity]. */
 @OptIn(ExperimentalView::class)

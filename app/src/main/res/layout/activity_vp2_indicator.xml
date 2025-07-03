@@ -156,11 +156,13 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.ave.vastgui.tools.view.vp2indicator.Vp2IndicatorView
+    <com.ave.vastgui.tools.view.viewpager2.indicator.Vp2IndicatorView
         android:id="@+id/vp2indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_margin="20dp"
-        app:indicator_item_count="4" />
+        app:indicator_item_count="4"
+        app:indicator_item_distance="10dp"
+        app:indicator_style="circle" />
 </FrameLayout>
