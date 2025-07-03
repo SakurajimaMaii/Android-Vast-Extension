@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.adapter
+package com.ave.vastgui.tools.view.viewpager2.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
 // Author: Vast Gui
@@ -27,28 +29,44 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/viewpager2/fragment-adapter/
 
 /**
- * Base fragment adapter for viewpager2.
+ * Base [androidx.viewpager2.adapter.FragmentStateAdapter] for [androidx.viewpager2.widget.ViewPager2].
  *
  * ```kotlin
  * // Use in activity
  * // vp2 is viewpager2
- * vp2.adapter = VastFragmentAdapter(this,ArrayList<Fragment>().apply {
+ * vp2.adapter = BaseFragmentStateAdapter(this,ArrayList<Fragment>().apply {
  *      add(BaseVbFragment())
  *      add(BaseVmFragment())
  *      add(BaseVbVmFragment())
  * })
  * ```
  *
- * @property activity The activity that owns the fragments.
- * @property fragments The fragments in the [activity].
+ * @since 1.5.2
  */
-open class VastFragmentAdapter(
-    protected val activity: FragmentActivity,
-    protected val fragments: MutableList<Fragment>
-) : FragmentStateAdapter(activity) {
+open class BaseFragmentStateAdapter : FragmentStateAdapter {
 
-    override fun getItemCount() = fragments.size
+    protected val fragments: MutableList<Fragment> = ArrayList()
 
-    override fun createFragment(position: Int) = fragments[position]
+    /** @since 1.5.2 */
+    constructor(activity: FragmentActivity, fragments: List<Fragment>) : super(activity) {
+        this.fragments.addAll(fragments)
+    }
+
+    /** @since 1.5.2 */
+    constructor(fragment: Fragment, fragments: List<Fragment>) : super(fragment) {
+        this.fragments.addAll(fragments)
+    }
+
+    /** @since 1.5.2 */
+    constructor(fragmentManager: FragmentManager, lifecycle: Lifecycle, fragments: List<Fragment>) : super(fragmentManager, lifecycle) {
+        this.fragments.addAll(fragments)
+    }
+
+    override fun getItemCount() = getFragments().size
+
+    override fun createFragment(position: Int) = getFragments()[position]
+
+    /** @since 1.5.2 */
+    fun getFragments(): List<Fragment> = fragments
 
 }
