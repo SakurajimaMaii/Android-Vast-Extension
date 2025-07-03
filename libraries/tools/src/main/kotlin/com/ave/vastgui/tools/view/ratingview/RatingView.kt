@@ -50,22 +50,6 @@ class RatingView @JvmOverloads constructor(
     defStyleRes: Int = R.style.BaseRatingView
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
-    /**
-     * Listener that the rating has changed.
-     *
-     * @since 0.5.6
-     */
-    interface OnStarRatingChangeListener {
-
-        /**
-         * Callback when rating changed
-         *
-         * @param rating Current rating.
-         * @since 0.5.6
-         */
-        fun onRatingChanged(rating: Float)
-    }
-
     /** @since 1.5.2 */
     @Suppress("PrivatePropertyName")
     private val DEFAULT_STAR_INTERVAL_WIDTH
@@ -159,26 +143,26 @@ class RatingView @JvmOverloads constructor(
         get() = _starCountNumber
 
     /** @since 1.5.2 */
-    private var _starSelectMethod: StarSelectMethod by Delegates.notNull()
+    private var _touchMode: TouchMode by Delegates.notNull()
 
     /**
      * The star selection method.
      *
      * @since 1.5.2
      */
-    val starSelectMethod: StarSelectMethod
-        get() = _starSelectMethod
+    val touchMode: TouchMode
+        get() = _touchMode
 
     /** @since 1.5.2 */
-    private var _starOrientation: StarOrientation by Delegates.notNull()
+    private var _orientation: Orientation by Delegates.notNull()
 
     /**
      * The star orientation.
      *
      * @since 1.5.2
      */
-    val starOrientation: StarOrientation
-        get() = _starOrientation
+    val orientation: Orientation
+        get() = _orientation
 
     /**
      * Star Bitmap width(in pixels).
@@ -197,8 +181,8 @@ class RatingView @JvmOverloads constructor(
         private set
 
     override fun onDraw(canvas: Canvas) {
-        when (_starOrientation) {
-            StarOrientation.Horizontal -> {
+        when (_orientation) {
+            Orientation.HORIZONTAL -> {
                 (1.._starCountNumber).forEach { index ->
                     val offset = (index - 1) * (_starIntervalWidth + starBitmapWidth)
                     canvas.drawBitmap(
@@ -226,7 +210,7 @@ class RatingView @JvmOverloads constructor(
                 }
             }
 
-            StarOrientation.Vertical -> {
+            Orientation.VERTICAL -> {
                 (1.._starCountNumber).forEach { index ->
                     val offset = (index - 1) * (_starIntervalWidth + starBitmapHeight)
                     canvas.drawBitmap(
@@ -257,8 +241,8 @@ class RatingView @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        when (_starOrientation) {
-            StarOrientation.Horizontal -> {
+        when (_orientation) {
+            Orientation.HORIZONTAL -> {
                 val requiredWidth = _starCountNumber * starBitmapWidth +
                         (_starCountNumber - 1) * _starIntervalWidth +
                         paddingStart + paddingEnd
@@ -268,7 +252,7 @@ class RatingView @JvmOverloads constructor(
                 setMeasuredDimension(width, height)
             }
 
-            StarOrientation.Vertical -> {
+            Orientation.VERTICAL -> {
                 val requiredWidth = starBitmapWidth + paddingStart + paddingEnd
                 val width = resolveSize(requiredWidth.toInt(), widthMeasureSpec)
                 val requiredHeight = _starCountNumber * starBitmapHeight +
@@ -282,14 +266,14 @@ class RatingView @JvmOverloads constructor(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (_starSelectMethod == StarSelectMethod.Sliding) {
+        if (_touchMode == TouchMode.SLIDING) {
             when (event.action) {
                 MotionEvent.ACTION_MOVE -> {
                     parent.requestDisallowInterceptTouchEvent(true)
-                    if (_starOrientation == StarOrientation.Horizontal) {
+                    if (_orientation == Orientation.HORIZONTAL) {
                         val newStarRating = event.x.coerceIn(0f, measuredWidth.toFloat()) / measuredWidth
                         setStarRating(newStarRating)
-                    } else if (_starOrientation == StarOrientation.Vertical) {
+                    } else if (_orientation == Orientation.VERTICAL) {
                         val newStarRating = event.y.coerceIn(0f, measuredHeight.toFloat()) / measuredHeight
                         setStarRating(newStarRating)
                     }
@@ -298,11 +282,11 @@ class RatingView @JvmOverloads constructor(
                 MotionEvent.ACTION_UP ->
                     parent.requestDisallowInterceptTouchEvent(false)
             }
-        } else if (_starSelectMethod == StarSelectMethod.Click) {
-            if (_starOrientation == StarOrientation.Horizontal) {
+        } else if (_touchMode == TouchMode.CLICK) {
+            if (_orientation == Orientation.HORIZONTAL) {
                 val newStarRating = round((event.x.coerceIn(0f, measuredWidth.toFloat()) / measuredWidth) * _starCountNumber) / _starCountNumber
                 setStarRating(newStarRating)
-            } else if (_starOrientation == StarOrientation.Vertical) {
+            } else if (_orientation == Orientation.VERTICAL) {
                 val newStarRating = round((event.x.coerceIn(0f, measuredHeight.toFloat()) / measuredHeight) * _starCountNumber) / _starCountNumber
                 setStarRating(newStarRating)
             }
@@ -326,12 +310,12 @@ class RatingView @JvmOverloads constructor(
     }
 
     /**
-     * Set Star Select Method
+     * Set star touch mode.
      *
-     * @param starSelectMethod Int
+     * @since 1.5.2
      */
-    fun setStarSelectMethod(starSelectMethod: StarSelectMethod) {
-        _starSelectMethod = starSelectMethod
+    fun setStarTouchMode(touchMode: TouchMode) {
+        _touchMode = touchMode
     }
 
     /**
@@ -347,11 +331,7 @@ class RatingView @JvmOverloads constructor(
         requestLayout()
     }
 
-    /**
-     * Set star bitmap interval(in pixels).
-     *
-     * @param starSpaceWidth Int
-     */
+    /** Set star bitmap interval(in pixels). */
     fun setStarIntervalWidth(@FloatRange(from = 0.0) starSpaceWidth: Float) {
         _starIntervalWidth = starSpaceWidth.coerceAtLeast(0f)
         requestLayout()
@@ -370,33 +350,21 @@ class RatingView @JvmOverloads constructor(
         invalidate()
     }
 
-    /**
-     * Set the bitmap of the be selected star by drawableId.
-     *
-     * @param drawableId Int
-     */
+    /** Set the bitmap of the be selected star by [drawableId]. */
     fun setStarSelectedBitmap(@DrawableRes drawableId: Int) {
         selectedBitmap = BmpUtils.getBitmapFromDrawable(drawableId, context)
         _selectedBitmap = BmpUtils.scaleBitmap(selectedBitmap, starBitmapWidth.toInt(), starBitmapHeight.toInt())
         invalidate()
     }
 
-    /**
-     * Set the bitmap of the be unselected star.
-     *
-     * @param bitmap Bitmap
-     */
+    /** Set the bitmap of the be unselected star. */
     fun setStarUnselectedBitmap(bitmap: Bitmap) {
         unselectedBitmap = bitmap
         _unselectedBitmap = BmpUtils.scaleBitmap(unselectedBitmap, starBitmapWidth.toInt(), starBitmapHeight.toInt())
         invalidate()
     }
 
-    /**
-     * Set the bitmap of the be unselected star by drawableId.
-     *
-     * @param drawableId Int
-     */
+    /** Set the bitmap of the be unselected star by [drawableId]. */
     fun setStarUnselectedBitmap(@DrawableRes drawableId: Int) {
         unselectedBitmap = BmpUtils.getBitmapFromDrawable(drawableId, context)
         _unselectedBitmap = BmpUtils.scaleBitmap(unselectedBitmap, starBitmapWidth.toInt(), starBitmapHeight.toInt())
@@ -408,8 +376,8 @@ class RatingView @JvmOverloads constructor(
      *
      * @since 0.5.3
      */
-    fun setStarOrientation(starOrientation: StarOrientation) {
-        _starOrientation = starOrientation
+    fun setStarOrientation(orientation: Orientation) {
+        _orientation = orientation
         requestLayout()
     }
 
@@ -428,32 +396,66 @@ class RatingView @JvmOverloads constructor(
             starBitmapWidth = getDimension(R.styleable.RatingView_star_width, DEFAULT_STAR_BITMAP_WIDTH)
             starBitmapHeight = getDimension(R.styleable.RatingView_star_height, DEFAULT_STAR_BITMAP_HEIGHT)
             _starCountNumber = getInt(R.styleable.RatingView_star_count, DEFAULT_STAR_COUNT)
-            _starSelectMethod = when (getInt(R.styleable.RatingView_star_select_method, DEFAULT_SELECT_METHOD)
+            _touchMode = when (getInt(R.styleable.RatingView_star_touch_mode, DEFAULT_SELECT_METHOD)
                 .also { Log.d("Test", "starSelectMethod=$it") }) {
-                StarSelectMethod.Unable.ordinal -> StarSelectMethod.Unable
-                StarSelectMethod.Click.ordinal -> StarSelectMethod.Click
-                StarSelectMethod.Sliding.ordinal -> StarSelectMethod.Sliding
-                else -> StarSelectMethod.Unable
+                TouchMode.UNABLE.ordinal -> TouchMode.UNABLE
+                TouchMode.CLICK.ordinal -> TouchMode.CLICK
+                TouchMode.SLIDING.ordinal -> TouchMode.SLIDING
+                else -> TouchMode.UNABLE
             }
             val rating = getFloat(R.styleable.RatingView_star_rating, DEFAULT_RATING).coerceIn(0f, 1f)
-            _rating = if (_starSelectMethod == StarSelectMethod.Click) {
+            _rating = if (_touchMode == TouchMode.CLICK) {
                 round(_starCountNumber * rating) / _starCountNumber
             } else {
                 rating
             }
-            selectedBitmap = BmpUtils
-                .getBitmapFromDrawable(getResourceId(R.styleable.RatingView_star_selected, R.drawable.ic_star_default_selected), context)
-            _selectedBitmap = BmpUtils
-                .scaleBitmap(selectedBitmap, starBitmapWidth.toInt(), starBitmapHeight.toInt())
-            unselectedBitmap = BmpUtils
-                .getBitmapFromDrawable(getResourceId(R.styleable.RatingView_star_unselected, R.drawable.ic_star_default_unselected), context)
-            _unselectedBitmap = BmpUtils
-                .scaleBitmap(unselectedBitmap, starBitmapWidth.toInt(), starBitmapHeight.toInt())
-            _starOrientation = when (getInt(R.styleable.RatingView_star_orientation, DEFAULT_ORIENTATION)) {
-                StarOrientation.Horizontal.ordinal -> StarOrientation.Horizontal
-                StarOrientation.Vertical.ordinal -> StarOrientation.Vertical
-                else -> StarOrientation.Horizontal
+            selectedBitmap = BmpUtils.getBitmapFromDrawable(getResourceId(R.styleable.RatingView_star_selected, R.drawable.ic_star_default_selected), context)
+            _selectedBitmap = BmpUtils.scaleBitmap(selectedBitmap, starBitmapWidth.toInt(), starBitmapHeight.toInt())
+            unselectedBitmap = BmpUtils.getBitmapFromDrawable(getResourceId(R.styleable.RatingView_star_unselected, R.drawable.ic_star_default_unselected), context)
+            _unselectedBitmap = BmpUtils.scaleBitmap(unselectedBitmap, starBitmapWidth.toInt(), starBitmapHeight.toInt())
+            _orientation = when (getInt(R.styleable.RatingView_star_orientation, DEFAULT_ORIENTATION)) {
+                Orientation.HORIZONTAL.ordinal -> Orientation.HORIZONTAL
+                Orientation.VERTICAL.ordinal -> Orientation.VERTICAL
+                else -> Orientation.HORIZONTAL
             }
         }
+    }
+
+    /**
+     * Listener that the rating has changed.
+     *
+     * @since 0.5.6
+     */
+    interface OnStarRatingChangeListener {
+
+        /**
+         * Callback when rating changed
+         *
+         * @param rating Current rating.
+         * @since 0.5.6
+         */
+        fun onRatingChanged(rating: Float)
+    }
+
+    /**
+     * Rating select mode.
+     *
+     * @since 1.5.2
+     */
+    enum class TouchMode {
+        UNABLE, CLICK, SLIDING
+    }
+
+    /**
+     * Rating orientation
+     *
+     * @since 1.5.2
+     */
+    enum class Orientation {
+        /** @since 1.5.2 */
+        HORIZONTAL,
+
+        /** @since 1.5.2 */
+        VERTICAL
     }
 }

@@ -101,6 +101,16 @@
         <attr name="icon_bottom_margin" format="dimension|reference" />
     </declare-styleable>
 
+    <declare-styleable name="BreadCrumbLayout">
+        <attr name="breadcrumb_item_max_width" format="dimension|reference" />
+        <attr name="breadcrumb_text_color" format="color|reference" />
+        <attr name="breadcrumb_text_size" format="dimension|reference" />
+        <attr name="breadcrumb_interval_width" format="dimension|reference" />
+        <attr name="breadcrumb_interval_icon" format="reference" />
+        <attr name="breadcrumb_interval_icon_width" format="dimension|reference" />
+        <attr name="breadcrumb_interval_icon_height" format="dimension|reference" />
+    </declare-styleable>
+
     <declare-styleable name="CropView">
         <attr name="crop_mask_layer_color" format="color|reference" />
         <attr name="crop_frame_type" format="enum">
@@ -225,8 +235,8 @@
         <attr name="star_unselected" format="reference" />
         <!--Star selected bitmap. -->
         <attr name="star_selected" format="reference" />
-        <!--StarBar select method. -->
-        <attr name="star_select_method" format="enum">
+        <!--StarBar touch mode. -->
+        <attr name="star_touch_mode" format="enum">
             <enum name="unable" value="0" />
             <enum name="click" value="1" />
             <enum name="sliding" value="2" />
@@ -250,16 +260,6 @@
         <attr name="indicator_circle_radius" format="dimension" />
         <attr name="indicator_item_count" format="integer" />
         <attr name="indicator_item_distance" format="dimension" />
-    </declare-styleable>
-
-    <declare-styleable name="BreadCrumbLayout">
-        <attr name="breadcrumb_item_max_width" format="dimension|reference" />
-        <attr name="breadcrumb_text_color" format="color|reference" />
-        <attr name="breadcrumb_text_size" format="dimension|reference" />
-        <attr name="breadcrumb_interval_width" format="dimension|reference" />
-        <attr name="breadcrumb_interval_icon" format="reference" />
-        <attr name="breadcrumb_interval_icon_width" format="dimension|reference" />
-        <attr name="breadcrumb_interval_icon_height" format="dimension|reference" />
     </declare-styleable>
 
     <!-- Theme default style. -->
