@@ -311,9 +311,11 @@ class CropView @JvmOverloads constructor(
      * @see ColorUtils.getColorIntWithTransparency
      * @since 0.5.3
      */
-    fun setCropMaskColor(@ColorInt color: Int, @IntRange(from = 0, to = 100) transparency: Int? = null) {
-        cropMaskColor = if (transparency == null) color
-        else ColorUtils.getColorIntWithTransparency(transparency, color)
+    fun setCropMaskColor(@ColorInt colorInt: Int, @IntRange(from = 0, to = 100) transparency: Int? = null) {
+        check(ColorUtils.isColorInt(colorInt)) {
+            "The value of mask color(current=${colorInt.toUInt().toString(16)}) is invalid"
+        }
+        cropMaskColor = if (transparency == null) colorInt else ColorUtils.getColorIntWithTransparency(transparency, colorInt)
         invalidate()
     }
 
@@ -324,6 +326,7 @@ class CropView @JvmOverloads constructor(
      * @since 0.5.0
      */
     fun setCropFrameType(type: CropFrameType) {
+        if (_cropFrameType == type) return
         _cropFrameType = type
         invalidate()
     }
@@ -368,7 +371,9 @@ class CropView @JvmOverloads constructor(
      * @since 0.5.0
      */
     fun setCropFrameStrokeColor(@ColorInt colorInt: Int) {
-        check(ColorUtils.isColorInt(colorInt)) { "The value of frame stroke color isn't a valid value." }
+        check(ColorUtils.isColorInt(colorInt)) {
+            "The value of frame stroke color(current=${colorInt.toUInt().toString(16)}) is invalid."
+        }
         _cropFrameStrokeColor = colorInt
         invalidate()
     }
