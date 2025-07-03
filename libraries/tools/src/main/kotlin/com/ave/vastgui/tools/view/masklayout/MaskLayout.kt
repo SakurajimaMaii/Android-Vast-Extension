@@ -34,6 +34,7 @@ import kotlin.system.measureTimeMillis
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/10/20
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/masklayout/masklayout/
 
 /**
  * Mask Layout.
@@ -47,31 +48,6 @@ class MaskLayout @JvmOverloads constructor(
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
-
-    interface MaskAnimationListener {
-        /**
-         * Callback when [MaskView] is already prepared. At this time, you should
-         * switch the display of page elements, such as adjusting the text color
-         * from black in day mode to white in dark night mode.
-         *
-         * **Warning: You cannot call method like
-         * [AppCompatDelegate.setDefaultNightMode] in this callback to modify the
-         * mode of the activity, because modifying the activity mode will cause
-         * activity recreate, leading to serious consequences such as animation
-         * abnormalities.**
-         *
-         * @since 0.5.6
-         */
-        fun onMaskComplete()
-
-        /**
-         * Callback when the mask animation has finished. At this time you can
-         * modify the app to dark night mode.
-         *
-         * @since 0.5.6
-         */
-        fun onMaskFinished()
-    }
 
     /** @since 1.5.2 */
     private var animationRunning: Boolean = false
@@ -140,6 +116,31 @@ class MaskLayout @JvmOverloads constructor(
                 view.getViewTreeObserver().removeOnGlobalLayoutListener(this)
             }
         })
+    }
+
+    interface MaskAnimationListener {
+        /**
+         * Callback when [MaskView] is already prepared. At this time, you should
+         * switch the display of page elements, such as adjusting the text color
+         * from black in day mode to white in dark night mode.
+         *
+         * **Warning: You cannot call method like
+         * [AppCompatDelegate.setDefaultNightMode] in this callback to modify the
+         * mode of the activity, because modifying the activity mode will cause
+         * activity recreate, leading to serious consequences such as animation
+         * abnormalities.**
+         *
+         * @since 0.5.6
+         */
+        fun onMaskComplete()
+
+        /**
+         * Callback when the mask animation has finished. At this time you can
+         * modify the app to dark night mode.
+         *
+         * @since 0.5.6
+         */
+        fun onMaskFinished()
     }
 
 }

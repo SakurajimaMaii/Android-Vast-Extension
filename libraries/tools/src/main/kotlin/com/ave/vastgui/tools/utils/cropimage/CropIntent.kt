@@ -19,7 +19,6 @@ package com.ave.vastgui.tools.utils.cropimage
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -32,8 +31,8 @@ import com.ave.vastgui.tools.content.ContextHelper
 
 class CropIntent : CropProperty() {
 
-    /** @since 0.4.0 */
-    var mOutputName: String? = null
+    /** @since 1.5.2 */
+    var outputName: String? = null
         private set
 
     private val intent = Intent("com.android.camera.action.CROP").apply {
@@ -79,7 +78,7 @@ class CropIntent : CropProperty() {
     }
 
     override fun setOutputName(name: String?) = apply {
-        mOutputName = name
+        outputName = name
     }
 
     @Deprecated("The format doesn't affect the output result.", level = DeprecationLevel.WARNING)

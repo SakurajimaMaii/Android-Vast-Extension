@@ -170,11 +170,11 @@ open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
             val bitmap: Bitmap? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 getBinding()
                     .cropViewLayout
-                    .getCroppedImageAboveApi28(outputX.toInt(), outputY.toInt())
+                    .getCroppedImageApi28(outputX.toInt(), outputY.toInt())
             } else {
                 getBinding()
                     .cropViewLayout
-                    .getCroppedImageUnderApi28(outputX.toInt(), outputY.toInt())
+                    .getCroppedImage(outputX.toInt(), outputY.toInt())
             }
 
             if (null == bitmap) {

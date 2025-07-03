@@ -32,6 +32,7 @@ import com.ave.vastgui.core.extension.NotNUllVar
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/10/21
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/masklayout/masklayout/
 
 /**
  * Mask View.

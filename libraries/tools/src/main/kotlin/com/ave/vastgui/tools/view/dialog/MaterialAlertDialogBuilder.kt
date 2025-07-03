@@ -29,52 +29,68 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 // Date: 2022/10/3
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/dialog/material-alert-dialog-builder/
 
+/** @since 0.1.0 */
 class MaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(context) {
 
-    private var mView: View? = null
+    /** @since 1.5.2 */
+    private var view: View? = null
 
-    /** Sets a custom view to be the contents of the dialog. */
+    /**
+     * Sets a custom view to be the contents of the dialog.
+     *
+     * @since 0.1.0
+     */
     override fun setView(layoutResId: Int) = apply {
         setView(layoutResId, context, null)
     }
 
-    /** Sets a custom view to be the contents of the dialog. */
+    /**
+     * Sets a custom view to be the contents of the dialog.
+     *
+     * @since 0.1.0
+     */
     override fun setView(view: View?) = apply {
-        mView = view
+        this.view = view
         super.setView(view)
     }
 
-    /** Sets a custom view to be the contents of the dialog. */
-    fun setView(
-        @LayoutRes layoutId: Int,
-        context: Context,
-        root: ViewGroup?
-    ) = apply {
-        mView = LayoutInflater.from(context).inflate(layoutId, root)
-        super.setView(mView)
+    /**
+     * Sets a custom view to be the contents of the dialog.
+     *
+     * @since 0.1.0
+     */
+    fun setView(@LayoutRes layoutId: Int, context: Context, root: ViewGroup?) = apply {
+        view = LayoutInflater.from(context).inflate(layoutId, root)
+        super.setView(view)
     }
 
-    /** Get the layout of the Dialog. */
-    fun getView() = mView
+    /**
+     * Get the layout of the Dialog.
+     *
+     * @since 0.1.0
+     */
+    fun getView() = view
 
     /**
      * Get the layout of the Dialog.
      *
      * @return the not null layout.
      * @throws IllegalStateException
+     * @since 0.1.0
      */
     fun requireView(): View {
-        if (null == mView) {
+        if (null == view) {
             throw IllegalStateException("View is null.")
         }
-        return mView!!
+        return view!!
     }
 
     /**
      * Find view from the custom view of the Dialog.
      *
-     * @param id view id.
      * @param T view class.
+     * @param id view id.
+     * @since 0.1.0
      */
     fun <T : View> findViewById(@IdRes id: Int): T {
         val view = requireView().findViewById<T>(id)

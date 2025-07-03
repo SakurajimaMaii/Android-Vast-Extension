@@ -65,7 +65,7 @@ class CropPhotoContract @JvmOverloads constructor(private val authority: String?
 
     override fun createIntent(context: Context, input: CropIntent): Intent {
         val directory = getImageFile().sharedPictures()
-        val name = input.mOutputName ?: getImageFile().getDefaultFileName(".jpg")
+        val name = input.outputName ?: getImageFile().getDefaultFileName(".jpg")
         uri = File(directory, name).asImageFile().let { image ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 image.uri { put(Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES) }
