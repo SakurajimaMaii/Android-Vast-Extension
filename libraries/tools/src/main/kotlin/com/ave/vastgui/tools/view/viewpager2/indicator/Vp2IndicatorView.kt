@@ -46,7 +46,7 @@ import kotlin.math.roundToInt
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/1
-// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/viewpager2/vp2-indicator-view/vp2-indicator-view/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/viewpager2/indicator/vp2-indicator-view/
 
 /**
  * [Vp2IndicatorView].

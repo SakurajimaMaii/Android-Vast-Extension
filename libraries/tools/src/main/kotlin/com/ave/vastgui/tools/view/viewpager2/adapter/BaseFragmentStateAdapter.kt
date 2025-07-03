@@ -26,7 +26,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 // Email: guihy2019@gmail.com
 // Date: 2022/4/10 19:47
 // Description: Base fragment adapter for viewpager2 when activity is [AppCompatActivity].
-// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/viewpager2/fragment-adapter/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/viewpager2/adapter/base-fragment-state-adapter/
 
 /**
  * Base [androidx.viewpager2.adapter.FragmentStateAdapter] for [androidx.viewpager2.widget.ViewPager2].
