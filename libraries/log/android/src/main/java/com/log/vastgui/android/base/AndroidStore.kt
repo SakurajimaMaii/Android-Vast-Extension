@@ -20,7 +20,6 @@ import android.os.Build
 import androidx.annotation.IntRange
 import com.ave.vastgui.core.io.FileComparator
 import com.log.vastgui.android.base.AndroidStore.Companion.LOG_EXTENSION
-import com.log.vastgui.android.base.LogScope.ExceptionStorage
 import com.log.vastgui.core.base.LogFormat
 import com.log.vastgui.core.base.LogInfo
 import com.log.vastgui.core.base.LogLevel
@@ -41,7 +40,7 @@ import java.util.Locale
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/5/13 23:36
-// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/log/store/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/log/log-android/log/store/
 
 /**
  * Android LogStore.

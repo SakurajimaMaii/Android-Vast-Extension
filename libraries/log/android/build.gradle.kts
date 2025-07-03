@@ -83,7 +83,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "log-android"
-                version = "1.3.10"
+                version = "1.3.11"
 
                 afterEvaluate {
                     from(components["release"])

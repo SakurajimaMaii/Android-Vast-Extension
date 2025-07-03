@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/5/13 20:48
-// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/log/logger/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/log/log-android/log/logger/
 
 /**
  * Android Logger.

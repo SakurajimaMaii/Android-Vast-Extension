@@ -28,7 +28,6 @@ import kotlin.coroutines.CoroutineContext
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/5/18 22:47
-// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/log
 
 /**
  * Provide a [CoroutineScope] for log use.
