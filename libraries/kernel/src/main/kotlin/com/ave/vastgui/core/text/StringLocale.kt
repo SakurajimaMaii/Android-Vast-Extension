@@ -21,6 +21,7 @@ import java.util.regex.Pattern
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2025/3/9
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/core/text/string-locale/
 
 /**
  * Chinese pattern, click
