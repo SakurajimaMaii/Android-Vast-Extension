@@ -13,7 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.ave.vastgui.core.text
+
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2025/3/12
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/core/text/ascii-util/
 
 /**
  * Ascii/Unicode utils.
@@ -95,12 +101,11 @@ object AsciiUtil {
      * @since 0.1.4
      */
     fun full2half(char: Char): Char {
-        return if (char == UNICODE_SPACE)
-            ASCII_SPACE
-        else if (char in UNICODE_START..UNICODE_END)
-            (char.code - ASCII_UNICODE_STEP.code).toChar()
-        else
-            char
+        return when (char) {
+            UNICODE_SPACE -> ASCII_SPACE
+            in UNICODE_START..UNICODE_END -> (char.code - ASCII_UNICODE_STEP.code).toChar()
+            else -> char
+        }
     }
 
     /**
@@ -109,12 +114,11 @@ object AsciiUtil {
      * @since 0.1.4
      */
     fun half2full(char: Char): Char {
-        return if (char == ASCII_SPACE)
-            UNICODE_SPACE
-        else if (char in ASCII_BEGIN..ASCII_END)
-            (char.code + ASCII_UNICODE_STEP.code).toChar()
-        else
-            char
+        return when (char) {
+            ASCII_SPACE -> UNICODE_SPACE
+            in ASCII_BEGIN..ASCII_END -> (char.code + ASCII_UNICODE_STEP.code).toChar()
+            else -> char
+        }
     }
 
     /**
@@ -124,7 +128,7 @@ object AsciiUtil {
      */
     fun full2half(src: String?): String? {
         if(src.isNullOrBlank()) return null
-        return src.forEach(::full2half).toString()
+        return String(src.map(::full2half).toCharArray())
     }
 
     /**
@@ -134,6 +138,6 @@ object AsciiUtil {
      */
     fun half2full(src: String?): String? {
         if(src.isNullOrBlank()) return null
-        return src.forEach(::half2full).toString()
+        return String(src.map(::half2full).toCharArray())
     }
 }
