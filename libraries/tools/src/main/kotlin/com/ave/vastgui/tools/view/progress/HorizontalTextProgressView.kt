@@ -268,7 +268,7 @@ class HorizontalTextProgressView @JvmOverloads constructor(
             _text = getString(R.styleable.HorizontalTextProgressView_progress_text) ?: ""
             textPaint.color = getColor(R.styleable.HorizontalTextProgressView_progress_text_color, color(R.color.md_theme_onPrimary))
             textPaint.textSize = getDimension(R.styleable.HorizontalTextProgressView_progress_text_size, DEFAULT_TEXT_SIZE)
-            boxPaint.color = getColor(R.styleable.HorizontalTextProgressView_progress_color, color(R.color.md_theme_primary))
+            boxPaint.color = getColor(R.styleable.HorizontalTextProgressView_horizontal_text_progress_box_color, color(R.color.md_theme_primary))
             progressPaint.color = getColor(R.styleable.HorizontalTextProgressView_progress_color, color(R.color.md_theme_primary))
             backgroundPaint.color = getColor(R.styleable.HorizontalTextProgressView_progress_background_color, color(R.color.md_theme_primaryContainer))
             _progressHeight = getDimension(R.styleable.HorizontalTextProgressView_horizontal_text_progress_height, dimension(R.dimen.default_horizontal_text_progress_height))
