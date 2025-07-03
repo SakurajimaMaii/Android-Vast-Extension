@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ave.vastgui.tools.view.vp2indicator
+package com.ave.vastgui.tools.view.viewpager2.indicator
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -22,8 +22,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.VectorDrawable
 import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.ColorInt
@@ -32,16 +30,14 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.core.content.ContextCompat
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
+import androidx.core.content.withStyledAttributes
 import androidx.viewpager2.widget.ViewPager2
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.graphics.BmpUtils
-import com.ave.vastgui.tools.utils.dimension
-import androidx.core.content.withStyledAttributes
 import com.ave.vastgui.tools.utils.ColorUtils
 import com.ave.vastgui.tools.utils.color
+import com.ave.vastgui.tools.utils.dimension
 import com.ave.vastgui.tools.utils.integer
 import com.ave.vastgui.tools.view.extension.gone
 import com.ave.vastgui.tools.view.extension.visible
@@ -118,7 +114,8 @@ class Vp2IndicatorView @JvmOverloads constructor(
     private val bmpPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     /**
-     * The [ViewPager2] that the [Vp2IndicatorView] will attach to.
+     * The [androidx.viewpager2.widget.ViewPager2] that the [Vp2IndicatorView]
+     * will attach to.
      *
      * @since 1.5.2
      */
@@ -204,11 +201,11 @@ class Vp2IndicatorView @JvmOverloads constructor(
         private set
 
     /**
-     * Indicator style. By default the value is [Vp2IndicatorType.Circle].
+     * Indicator style. By default the value is [Style.CIRCLE].
      *
      * @since 1.5.2
      */
-    var indicatorStyle: Vp2IndicatorType = Vp2IndicatorType.Circle
+    var indicatorStyle: Style = Style.CIRCLE
         private set
 
     /**
@@ -237,7 +234,7 @@ class Vp2IndicatorView @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         when (indicatorStyle) {
-            Vp2IndicatorType.Circle -> {
+            Style.CIRCLE -> {
                 val neededMinimumWidth = (2 * indicatorCircleRadius * indicatorItemCount) +
                         (indicatorItemDistance * (indicatorItemCount - 1)) +
                         paddingStart + paddingEnd
@@ -247,7 +244,7 @@ class Vp2IndicatorView @JvmOverloads constructor(
                 setMeasuredDimension(width, height)
             }
 
-            Vp2IndicatorType.Bitmap -> {
+            Style.BITMAP -> {
                 val neededMinimumWidth = (bmpWidth * indicatorItemCount) +
                         (indicatorItemDistance * (indicatorItemCount - 1)) +
                         paddingStart + paddingEnd
@@ -262,7 +259,7 @@ class Vp2IndicatorView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         when (indicatorStyle) {
-            Vp2IndicatorType.Circle -> {
+            Style.CIRCLE -> {
                 val itemStart = paddingStart + indicatorCircleRadius
                 val cy = (paddingTop + measuredHeight - paddingBottom) / 2f
                 for (i in 0 until indicatorItemCount) {
@@ -274,7 +271,7 @@ class Vp2IndicatorView @JvmOverloads constructor(
                 }
             }
 
-            Vp2IndicatorType.Bitmap -> {
+            Style.BITMAP -> {
                 val selectedBitmap = BmpUtils.scaleBitmap(selectedBmp!!, bmpWidth, bmpHeight)
                 val unselectedBitmap = BmpUtils.scaleBitmap(unselectedBmp!!, bmpWidth, bmpHeight)
                 bmpSrcRect.set(0, 0, bmpWidth, bmpHeight)
@@ -293,11 +290,11 @@ class Vp2IndicatorView @JvmOverloads constructor(
     /**
      * Set indicator style.
      *
-     * @since 0.5.0
+     * @since 1.5.2
      */
-    fun setIndicatorStyle(style: Vp2IndicatorType) {
+    fun setIndicatorStyle(style: Style) {
         if (indicatorStyle == style) return
-        if (style == Vp2IndicatorType.Bitmap && (selectedBmp == null || unselectedBmp == null)) {
+        if (style == Style.BITMAP && (selectedBmp == null || unselectedBmp == null)) {
             return
         }
         indicatorStyle = style
@@ -356,8 +353,10 @@ class Vp2IndicatorView @JvmOverloads constructor(
     }
 
     /**
-     * Set selected bitmap, now supports [BitmapDrawable] , [VectorDrawable] ,
-     * [VectorDrawableCompat]
+     * Set selected bitmap, now supports
+     * [android.graphics.drawable.BitmapDrawable] ,
+     * [android.graphics.drawable.VectorDrawable] ,
+     * [androidx.vectordrawable.graphics.drawable.VectorDrawableCompat]
      *
      * @since 0.5.0
      */
@@ -367,8 +366,10 @@ class Vp2IndicatorView @JvmOverloads constructor(
     }
 
     /**
-     * Set Unselected bitmap, now supports [BitmapDrawable] , [VectorDrawable]
-     * , [VectorDrawableCompat]
+     * Set Unselected bitmap, now supports
+     * [android.graphics.drawable.BitmapDrawable] ,
+     * [android.graphics.drawable.VectorDrawable] ,
+     * [androidx.vectordrawable.graphics.drawable.VectorDrawableCompat]
      *
      * @since 0.5.0
      */
@@ -445,7 +446,7 @@ class Vp2IndicatorView @JvmOverloads constructor(
             currentSelectedPosition = viewPager2!!.currentItem
             verifyItemCount()
         }
-        vp2.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+        vp2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 if (pagerAdapter != null) {
                     currentSelectedPosition = viewPager2!!.currentItem
@@ -472,10 +473,10 @@ class Vp2IndicatorView @JvmOverloads constructor(
 
     init {
         context.withStyledAttributes(attrs, R.styleable.Vp2IndicatorView, defStyleAttr, defStyleRes) {
-            indicatorStyle = when (getInt(R.styleable.Vp2IndicatorView_indicator_style, Vp2IndicatorType.Circle.ordinal)) {
-                Vp2IndicatorType.Circle.ordinal -> Vp2IndicatorType.Circle
-                Vp2IndicatorType.Bitmap.ordinal -> Vp2IndicatorType.Bitmap
-                else -> Vp2IndicatorType.Circle
+            indicatorStyle = when (getInt(R.styleable.Vp2IndicatorView_indicator_style, Style.CIRCLE.ordinal)) {
+                Style.CIRCLE.ordinal -> Style.CIRCLE
+                Style.BITMAP.ordinal -> Style.BITMAP
+                else -> Style.CIRCLE
             }
             _selectedColor = getColor(R.styleable.Vp2IndicatorView_indicator_selected_color, color(R.color.md_theme_primary))
             _unselectedColor = getColor(R.styleable.Vp2IndicatorView_indicator_unselected_color, color(R.color.md_theme_primaryContainer))
@@ -486,5 +487,26 @@ class Vp2IndicatorView @JvmOverloads constructor(
             indicatorItemDistance = getDimension(R.styleable.Vp2IndicatorView_indicator_item_distance, DEFAULT_INDICATOR_ITEM_DISTANCE)
         }
         verifyItemCount()
+    }
+
+    /**
+     * Vp2 indicator type
+     *
+     * @since 1.5.2
+     */
+    enum class Style {
+        /**
+         * Circle
+         *
+         * @since 1.5.2
+         */
+        CIRCLE,
+
+        /**
+         * Circle
+         *
+         * @since 1.5.2
+         */
+        BITMAP
     }
 }
