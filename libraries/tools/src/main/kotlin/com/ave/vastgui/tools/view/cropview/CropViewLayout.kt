@@ -29,15 +29,12 @@ import android.os.Build
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.annotation.RequiresApi
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
 import androidx.exifinterface.media.ExifInterface
 import com.ave.vastgui.tools.R
@@ -184,7 +181,7 @@ class CropViewLayout @JvmOverloads constructor(
     /**
      * @see CropView.setCropMaskColor
      * @see CropView.cropMaskColor
-     * @since 0.5.0
+     * @since 1.5.2
      */
     @get:ColorInt
     @setparam:ColorInt
@@ -195,7 +192,7 @@ class CropViewLayout @JvmOverloads constructor(
     /**
      * @see CropView.setCropFrameType
      * @see CropView.cropMaskColor
-     * @since 0.5.0
+     * @since 1.5.2
      */
     var cropFrameType: CropFrameType
         set(value) = cropView.setCropFrameType(value)
@@ -204,7 +201,7 @@ class CropViewLayout @JvmOverloads constructor(
     /**
      * @see CropView.setCropFrameStrokeColor
      * @see CropView.cropFrameStrokeColor
-     * @since 0.5.0
+     * @since 1.5.2
      */
     @get:ColorInt
     @setparam:ColorInt
@@ -310,10 +307,10 @@ class CropViewLayout @JvmOverloads constructor(
     /**
      * Get cropped image above api28
      *
-     * @since 0.5.0
+     * @since 1.5.2
      */
     @RequiresApi(Build.VERSION_CODES.P)
-    fun getCroppedImageAboveApi28(requireWidth: Int, requireHeight: Int): Bitmap? {
+    fun getCroppedImageApi28(requireWidth: Int, requireHeight: Int): Bitmap? {
         var cropBitmap: Bitmap? = null
         var scaleCropBitmap: Bitmap? = null
         val rect: Rect = cropView.getCropFrameRect()
@@ -333,10 +330,10 @@ class CropViewLayout @JvmOverloads constructor(
     /**
      * Get cropped image under api28
      *
-     * @since 0.5.0
+     * @since 1.5.2
      */
     @Suppress("DEPRECATION")
-    fun getCroppedImageUnderApi28(requireWidth: Int, requireHeight: Int): Bitmap? {
+    fun getCroppedImage(requireWidth: Int, requireHeight: Int): Bitmap? {
         var cropBitmap: Bitmap? = null
         var scaleCropBitmap: Bitmap? = null
         srcImageView.isDrawingCacheEnabled = true
