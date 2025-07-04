@@ -18,7 +18,9 @@ package com.ave.vastgui.app.adapter
 
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
-import coil.load
+import coil3.load
+import coil3.request.crossfade
+import coil3.request.placeholder
 import com.ave.vastgui.app.R
 import com.ave.vastgui.tools.utils.DateUtils
 import com.ave.vastgui.tools.view.avatar.Avatar

@@ -19,7 +19,9 @@ package com.ave.vastgui.app.adapter.holder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import coil.load
+import coil3.load
+import coil3.request.crossfade
+import coil3.request.placeholder
 import com.ave.vastgui.adapter.base.ItemHolder
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.adapter.entity.Images
