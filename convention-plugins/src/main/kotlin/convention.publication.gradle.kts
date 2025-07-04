@@ -47,10 +47,16 @@ fun getExtraString(name: String) = ext[name]?.toString()
 publishing {
     // Configure maven central repository
     repositories {
+        // maven {
+        //     name = "ossrh"
+        //     setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+        //     credentials(PasswordCredentials::class)
+        // }
+
+        // NOTE https://jreleaser.org/guide/latest/examples/maven/staging-artifacts.html
+        // NOTE https://central.sonatype.org/publish/publish-portal-upload/
         maven {
-            name = "ossrh"
-            setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            credentials(PasswordCredentials::class)
+            setUrl(layout.buildDirectory.dir("staging"))
         }
     }
 
