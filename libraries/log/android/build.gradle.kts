@@ -1,8 +1,5 @@
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
-import java.net.URL
-
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +14,21 @@ import java.net.URL
  * limitations under the License.
  */
 
+import java.net.URI
+
 plugins {
     kotlin("android")
     id("com.android.library")
     id("convention.publication")
+    id("org.jetbrains.dokka")
 }
 
 android {
     namespace = "com.log.vastgui.android"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = 21
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -55,6 +55,7 @@ android {
 }
 
 kotlin.sourceSets.all {
+    languageSettings.optIn("com.ave.vastgui.core.annotation.ExperimentalApi")
     languageSettings.optIn("com.log.vastgui.core.annotation.LogApi")
 }
 
@@ -80,7 +81,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "log-android"
-                version = "1.3.10"
+                version = "1.3.11"
 
                 afterEvaluate {
                     from(components["release"])
@@ -90,13 +91,13 @@ if (mavenPropertiesFile.exists()) {
     }
 }
 
-tasks.withType<DokkaTaskPartial> {
+dokka {
     moduleName.set("log-android")
     dokkaSourceSets.configureEach {
         sourceLink {
             // FIXME https://github.com/Kotlin/dokka/issues/2876
             localDirectory.set(projectDir.resolve("src"))
-            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/log/android/src"))
+            remoteUrl.set(URI("https://github.com/SakurajimaMaii/Android-Vast-Extension/tree/develop/libraries/log/android/src"))
             remoteLineSuffix.set("#L")
         }
     }

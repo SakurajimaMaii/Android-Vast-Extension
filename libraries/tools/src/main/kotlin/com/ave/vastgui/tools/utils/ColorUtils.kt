@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,13 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
 import kotlin.math.roundToInt
+import androidx.core.graphics.toColorInt
+import kotlin.toUInt
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-resources/color-utils/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/app-resources/color-utils/
 
 object ColorUtils {
 
@@ -64,8 +66,8 @@ object ColorUtils {
      */
     @JvmStatic
     fun colorHex2Int(colorHex: String, default: String = "#00000000"): Int =
-        if (isColorHex(colorHex)) Color.parseColor(colorHex)
-        else if (isColorHex(default)) Color.parseColor(default)
+        if (isColorHex(colorHex)) colorHex.toColorInt()
+        else if (isColorHex(default)) default.toColorInt()
         else throw IllegalArgumentException("$colorHex $default are all illegal color values.")
 
     /**
@@ -152,16 +154,12 @@ object ColorUtils {
      * @throws IllegalArgumentException
      */
     @JvmStatic
-    fun getColorWithTransparency(
-        @IntRange(from = 0, to = 100) transparency: Int,
-        colorInt: Int
-    ): String {
-        if (colorInt.toUInt() in 0u..0xFFFFFFFFu)
-            throw IllegalArgumentException("$colorInt(hex=${colorInt.toString(16)}) is illegal color values.")
+    fun getColorWithTransparency(@IntRange(from = 0, to = 100) transparency: Int, colorInt: Int): String {
+        if (colorInt.toUInt() !in 0u..0xFFFFFFFFu)
+            throw IllegalArgumentException("$colorInt(hex=${colorInt.toUInt().toString(16)} in UInt) is illegal color values.")
         val color = Color.rgb(Color.red(colorInt), Color.green(colorInt), Color.blue(colorInt))
         val colorHex = colorInt2Hex(color)
-        return StringBuilder(colorHex).replace(1, 3, ColorTransparency[transparency.coerceIn(0, 100)]!!)
-            .toString().uppercase()
+        return StringBuilder(colorHex).replace(1, 3, ColorTransparency[transparency.coerceIn(0, 100)]!!).toString().uppercase()
     }
 
     /**
@@ -173,21 +171,52 @@ object ColorUtils {
      * @throws IllegalArgumentException
      * @since 0.5.3
      */
-    fun getColorIntWithTransparency(
-        @IntRange(from = 0, to = 100) transparency: Int,
-        colorInt: Int
-    ) = colorHex2Int(getColorWithTransparency(transparency, colorInt))
+    @JvmStatic
+    fun getColorIntWithTransparency(@IntRange(from = 0, to = 100) transparency: Int, colorInt: Int) =
+        colorHex2Int(getColorWithTransparency(transparency, colorInt))
 
     /**
-     * Return true if the color hex string is right,false otherwise.
+     * Return true if the [colorHex] string is right, false otherwise.
      *
      * @param colorHex color hex string.
-     * @return true if the color hex string is right,false otherwise.
+     * @return true if the color hex string is right, false otherwise.
      * @since 1.5.1
      */
     @JvmStatic
-    fun isColorHex(vararg colorHex: String): Boolean {
-        return colorHex.all { COLOR_HEX_PATTERN.matches(it) }
+    fun isColorHex(colorHex: String): Boolean {
+        return COLOR_HEX_PATTERN.matches(colorHex)
+    }
+
+    /**
+     * Returns a list of whether the colorHex for each index is a valid value.
+     *
+     * @since 1.5.2
+     */
+    @JvmStatic
+    fun isColorHex(vararg colorHex: String): List<Boolean> {
+        if (colorHex.isEmpty()) return emptyList()
+        return colorHex.map { hex -> COLOR_HEX_PATTERN.matches(hex) }
+    }
+
+    /**
+     * Return true if the [colorInt] string is right, false otherwise.
+     *
+     * @since 1.5.2
+     */
+    @JvmStatic
+    fun isColorInt(colorInt: Int): Boolean {
+        return colorInt.toUInt() in 0u..0xFFFFFFFFu
+    }
+
+    /**
+     * Returns a list of whether the colorInt for each index is a valid value.
+     *
+     * @since 1.5.2
+     */
+    @JvmStatic
+    fun isColorInt(vararg colorInt: Int): List<Boolean> {
+        if (colorInt.isEmpty()) return emptyList()
+        return colorInt.map { color -> color.toUInt() in 0u..0xFFFFFFFFu }
     }
 
 }

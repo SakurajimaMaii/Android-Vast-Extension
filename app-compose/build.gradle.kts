@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,8 @@ plugins {
     kotlin("android")
     kotlin("plugin.serialization")
     id("com.android.application")
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -28,7 +29,7 @@ android {
     defaultConfig {
         applicationId = "com.ave.vastgui.appcompose"
         minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        targetSdk = libs.versions.compileSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
@@ -83,10 +84,6 @@ android {
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.7"
-    }
-
     sourceSets {
         getByName("main").java.srcDirs("src/main/kotlin")
     }
@@ -95,6 +92,7 @@ android {
 dependencies {
     debugImplementation(libs.ui.test.manifest.compose)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+    implementation(libs.activity.ktx)
     implementation(libs.activity.compose)
     implementation(libs.adapter.rxjava3)
     implementation(libs.coil.compose)
@@ -104,6 +102,7 @@ dependencies {
     implementation(libs.fragment.ktx)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.lifecycle.common.jvm)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.material.compose)
@@ -114,6 +113,7 @@ dependencies {
     implementation(libs.runtime.livedata.compose)
     implementation(libs.slf4j.api)
     implementation(libs.ui.compose)
+    implementation(libs.ui.compose.tooling)
     implementation(libs.ui.graphics.compose)
     implementation(libs.ui.tooling.preview.compose)
     implementation(projects.libraries.kernel)

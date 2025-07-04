@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,42 +21,106 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityRatingBinding
 import com.ave.vastgui.app.log.logFactory
-import com.ave.vastgui.tools.utils.AppUtils
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
 import com.ave.vastgui.tools.view.ratingview.RatingView
-import com.ave.vastgui.tools.view.ratingview.StarSelectMethod
 import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.ave.vastgui.tools.viewbinding.viewBinding
 
 // Author: Vast Gui
 // Email: sakurajimamai2020@qq.com
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/rating/rating-view/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/rating/rating-view/
 
 class RatingActivity : AppCompatActivity(R.layout.activity_rating) {
 
-    private val mBinding by viewBinding(ActivityRatingBinding::bind)
-    private val mLogger = logFactory(RatingActivity::class.java)
+    private val binding by viewBinding(ActivityRatingBinding::bind)
+    private val logcat = logFactory(RatingActivity::class.java)
+
+    private val orientation = RatingView.Orientation.entries
+
+    private var orientationIndex = 0
+
+    private val selectBmp: Array<Int>
+        get() = arrayOf(R.drawable.ic_star_selected, com.ave.vastgui.tools.R.drawable.ic_star_default_selected)
+
+    private val unselectBmp: Array<Int>
+        get() = arrayOf(R.drawable.ic_star_unselected, com.ave.vastgui.tools.R.drawable.ic_star_default_unselected)
+
+    private var bmpIndex = 0
+
+    private val touchModes = RatingView.TouchMode.entries
+
+    private var methodIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mBinding.image.setImageBitmap(AppUtils.getAppBitmap())
-
-        mBinding.ratingView.refreshWithInvalidate {
+        binding.ratingView.refreshWithInvalidate {
             setStarCountNumber(5)
             setStarBitmapSize(40F.DP, 40F.DP)
             setStarIntervalWidth(10F.DP)
-            setStarSelectMethod(StarSelectMethod.UNABLE)
             setStarRating(0.8f)
             setOnStarRatingChangeListener(object : RatingView.OnStarRatingChangeListener {
                 override fun onRatingChanged(rating: Float) {
-                    mLogger.d("当前星星评级为 $rating")
+                    logcat.d("当前星星评级为 $rating")
                 }
             })
         }
 
-        mBinding.ratingView.setOnClickListener {
+        binding.addStarBtn.setOnClickListener {
+            with(binding.ratingView) {
+                setStarCountNumber(starCountNumber + 1)
+                logcat.d { "当前星星总数 $starCountNumber" }
+            }
+        }
+
+        binding.removeStarBtn.setOnClickListener {
+            with(binding.ratingView) {
+                setStarCountNumber(starCountNumber - 1)
+                logcat.d { "当前星星总数 $starCountNumber" }
+            }
+        }
+
+        binding.switchStarOrientationBtn.setOnClickListener {
+            binding.ratingView.setStarOrientation(orientation[(++orientationIndex) % orientation.size])
+        }
+
+        binding.switchStarBitmapBtn.setOnClickListener {
+            val index = (++bmpIndex) % selectBmp.size
+            binding.ratingView.setStarSelectedBitmap(selectBmp[index])
+            binding.ratingView.setStarUnselectedBitmap(unselectBmp[index])
+        }
+
+        binding.switchSelectMethodBtn.text = String.format(getString(R.string.rating_switch_method_fmt), binding.ratingView.touchMode)
+        binding.switchSelectMethodBtn.setOnClickListener {
+            binding.ratingView.setStarTouchMode(touchModes[(++methodIndex) % touchModes.size])
+            binding.switchSelectMethodBtn.text = String.format(getString(R.string.rating_switch_method_fmt), binding.ratingView.touchMode)
+        }
+
+        // 切换图标尺寸
+        binding.changeStarSizeSlider.setLabelFormatter { String.format(getString(R.string.rating_size_fmt), it) }
+        binding.changeStarSizeSlider.addOnChangeListener { _, value, _ ->
+            binding.ratingView.setStarBitmapSize(value.DP, value.DP)
+        }
+
+        // 切换图标间距
+        binding.changeStarInternalSlider.setLabelFormatter { String.format(getString(R.string.rating_internal_fmt), it) }
+        binding.changeStarInternalSlider.addOnChangeListener { _, value, _ ->
+            binding.ratingView.setStarIntervalWidth(value.DP)
+        }
+
+        binding.changeRatingSlider.value = binding.ratingView.rating
+        binding.changeRatingSlider.addOnChangeListener { _, value, _ ->
+            binding.ratingView.setStarRating(value)
+        }
+
+        binding.ratingView.setOnStarRatingChangeListener(object : RatingView.OnStarRatingChangeListener {
+            override fun onRatingChanged(rating: Float) {
+                binding.changeRatingSlider.value = rating
+            }
+        })
+
+        binding.ratingView.setOnClickListener {
             SimpleToast.showShortMsg("这是一个点击事件")
         }
     }

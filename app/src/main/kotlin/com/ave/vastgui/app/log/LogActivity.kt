@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import com.ave.vastgui.tools.activity.widget.screenConfig
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/5
-// Documentation: https://ave.entropy2020.cn/documents/tools/log/description/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/log/description/
 
 class LogActivity : VastVbVmActivity<ActivityLogBinding, SharedVM>() {
 
@@ -33,7 +33,7 @@ class LogActivity : VastVbVmActivity<ActivityLogBinding, SharedVM>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        screenConfig(mEnableActionBar = false, mEnableFullScreen = false)
+        screenConfig(enableActionBar = false, enableFullScreen = false)
 
         getBinding().getSentence.setOnClickListener {
             getViewModel().getSentenceWithHandle()

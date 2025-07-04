@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,33 +16,41 @@
 
 package com.ave.vastgui.app.activity.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.ActivityTextViewBinding
-import com.ave.vastgui.tools.activity.widget.screenConfig
+import com.ave.vastgui.app.log.logFactory
+import com.ave.vastgui.tools.utils.ColorUtils
+import com.ave.vastgui.tools.utils.color
 import com.ave.vastgui.tools.view.textview.mailboxassociateview.MailBoxAssociateTokenizer
 import com.ave.vastgui.tools.view.textview.mailboxassociateview.defaultMailBoxAssociateViewAdapter
+import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.ave.vastgui.tools.viewbinding.viewBinding
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/textview/mail-box-associate-view/
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/textview/marquee-text-view/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/textview/mail-box-associate-view/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/textview/marquee-text-view/
 
-class TextViewActivity : AppCompatActivity() {
+class TextViewActivity : AppCompatActivity(R.layout.activity_text_view) {
 
-    private val mBinding by viewBinding(ActivityTextViewBinding::inflate)
+    private val logger = logFactory(TextViewActivity::class.java)
 
+    private val binding by viewBinding(ActivityTextViewBinding::bind)
+
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        screenConfig(mEnableActionBar = true, mEnableFullScreen = false)
 
-        mBinding.mailBoxAssociateView.apply {
+        binding.mailBoxAssociateView.apply {
             setAdapter(defaultMailBoxAssociateViewAdapter())
             setTokenizer(MailBoxAssociateTokenizer())
         }
 
-        mBinding.marqueeTextView.setMarqueeNum(2)
+        binding.marqueeTextView.setMarqueeNum(2)
     }
 
 }

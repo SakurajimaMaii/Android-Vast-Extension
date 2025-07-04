@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2021-2024 VastGui
+  ~ Copyright 2021-2025 VastGui
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="BaseAlphabetSideBar">
         <item name="alphabetsidebar_location">@integer/default_alphabetsidebar_location</item>
@@ -60,6 +60,15 @@
         <item name="icon_start_margin">5dp</item>
         <item name="icon_end_margin">5dp</item>
         <item name="icon_bottom_margin">5dp</item>
+    </style>
+    
+    <style name="BaseBreadCrumbLayout">
+        <item name="breadcrumb_item_max_width">@dimen/default_breadcrumb_item_max_width</item>
+        <item name="breadcrumb_text_color">@color/md_theme_onSurface</item>
+        <item name="breadcrumb_text_size">@dimen/default_breadcrumb_text_size</item>
+        <item name="breadcrumb_interval_icon">@drawable/ic_breadcrumb_default_interval_icon</item>
+        <item name="breadcrumb_interval_icon_width">@dimen/default_breadcrumb_icon_size</item>
+        <item name="breadcrumb_interval_icon_height">@dimen/default_breadcrumb_icon_size</item>
     </style>
 
     <style name="BaseCropView">
@@ -136,7 +145,7 @@
         <item name="star_interval_width">@dimen/default_star_interval_width</item>
         <item name="star_height">@dimen/default_star_height</item>
         <item name="star_width">@dimen/default_star_width</item>
-        <item name="star_select_method">@integer/default_rating_select_method</item>
+        <item name="star_touch_mode">@integer/default_rating_select_method</item>
         <item name="star_count">@integer/default_rating_star_count</item>
         <item name="star_orientation">@integer/default_rating_star_orientation</item>
         <item name="star_selected">@drawable/ic_star_default_selected</item>
@@ -147,8 +156,19 @@
         <item name="indicator_style">circle</item>
         <item name="indicator_selected_color">@color/md_theme_primary</item>
         <item name="indicator_unselected_color">@color/md_theme_primaryContainer</item>
+        <item name="indicator_bitmap_width">@dimen/default_indicator_bitmap_width</item>
+        <item name="indicator_bitmap_height">@dimen/default_indicator_bitmap_height</item>
         <item name="indicator_circle_radius">@dimen/default_indicator_circle_radius</item>
         <item name="indicator_item_distance">@dimen/default_indicator_item_distance</item>
         <item name="indicator_item_count">@integer/default_indicator_item_count</item>
+    </style>
+
+    <!-- https://juejin.cn/post/7296308638686789642 -->
+    <style name="FullScreenDialogFragmentStyle" parent="Theme.Material3.DayNight.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@color/transparent</item>-->
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
     </style>
 </resources>

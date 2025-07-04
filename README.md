@@ -10,7 +10,7 @@
 
 ## Document
 
-Please click [Android-Vast-Extension](https://ave.entropy2020.cn/) to get detailed documentation
+Please click [Android-Vast-Extension](https://sakurajimamaii.github.io/AVE-DOC/) to get detailed documentation
 instructions.
 
 ## Star

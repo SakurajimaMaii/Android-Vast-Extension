@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
-import java.net.URL
+import java.net.URI
 
 plugins {
     kotlin("android")
@@ -80,7 +79,7 @@ kotlin.sourceSets.all {
 dependencies {
     api(libs.security.crypto)
     api(libs.zxing.core)
-    api(projects.libraries.log.core)
+    compileOnly(projects.libraries.log.okhttp)
     implementation(libs.activity.ktx)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.versionedparcelable)
@@ -111,6 +110,8 @@ dependencies {
     implementation(projects.libraries.kernel)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.junit.ktx)
+    androidTestImplementation(libs.androidx.rules)
     testImplementation(libs.junit)
 }
 
@@ -125,7 +126,7 @@ if (mavenPropertiesFile.exists()) {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "VastTools"
-                version = "1.5.1"
+                version = "1.5.2"
 
                 afterEvaluate {
                     from(components["release"])
@@ -135,11 +136,11 @@ if (mavenPropertiesFile.exists()) {
     }
 }
 
-tasks.withType<DokkaTaskPartial> {
+dokka {
     dokkaSourceSets.configureEach {
         sourceLink {
             localDirectory.set(projectDir.resolve("src"))
-            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/tools/src"))
+            remoteUrl.set(URI("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/tools/src"))
             remoteLineSuffix.set("#L")
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.ave.vastgui.tools.view.avatar
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.FloatRange
 import androidx.annotation.IntDef
@@ -25,25 +26,20 @@ import androidx.annotation.StyleRes
 import androidx.core.view.children
 import com.ave.vastgui.core.extension.cast
 import com.ave.vastgui.tools.R
+import androidx.core.content.withStyledAttributes
+import com.ave.vastgui.tools.utils.color
+import com.ave.vastgui.tools.utils.dimension
+import com.ave.vastgui.tools.view.avatar.Avatar.Companion.SHAPE_CIRCLE
+import com.ave.vastgui.tools.view.avatar.Avatar.Companion.SHAPE_ROUND_CORNER
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/26
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/avatar/avatargroup/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/avatar/avatargroup/
 
 /**
  * AvatarGroup.
  *
- * @property mOverlapFrom The avatar overlay method.
- * @property mOverlapDistance The length of the overlap between two
- *     avatars.
- * @property mShape The Shape of avatar. Current support circle and round
- *     rectangle.
- * @property mAvatarSize The avatar size of avatar.
- * @property mTextSize The text size shown when the avatar image is null.
- * @property mStrokeWidth The stroke width of avatar.
- * @property mCornerRadius The corner radius of avatar when the shape is
- *     SHAPE_ROUND_CORNER.
  * @since 0.5.4
  */
 class AvatarGroup @JvmOverloads constructor(
@@ -53,45 +49,102 @@ class AvatarGroup @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = R.style.BaseAvatarGroup
 ) : ViewGroup(context, attrs, defStyleAttr, defStyleRes) {
 
-    companion object {
-        const val START = 0
-        const val END = 1
-    }
-
     @IntDef(flag = true, value = [START, END])
     @Retention(AnnotationRetention.SOURCE)
     annotation class OverlapFrom
 
-    private val mDefaultAvatarSize =
-        resources.getDimension(R.dimen.default_avatar_size)
-    private val mDefaultAvatarOverlapDistance =
-        resources.getDimension(R.dimen.default_avatar_overlap_distance)
-    private val mDefaultTextSize =
-        resources.getDimension(R.dimen.default_avatar_text_size)
-    private val mDefaultStrokeWidth =
-        resources.getDimension(R.dimen.default_avatar_stroke_width)
-    private val mDefaultCornerRadius =
-        resources.getDimension(R.dimen.default_avatar_corner_radius)
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_AVATAR_SIZE = dimension(R.dimen.default_avatar_size)
 
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_AVATAR_OVERLAP_DISTANCE = dimension(R.dimen.default_avatar_overlap_distance)
+
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_TEXT_SIZE = dimension(R.dimen.default_avatar_text_size)
+
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_STROKE_WIDTH = dimension(R.dimen.default_avatar_stroke_width)
+
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_CORNER_RADIUS = dimension(R.dimen.default_avatar_corner_radius)
+
+    /**
+     * The avatar overlay method.
+     *
+     * @since 1.5.2
+     */
     @get:OverlapFrom
-    var mOverlapFrom: Int = START
+    var overlapFrom: Int = START
         private set
 
-    var mOverlapDistance: Float = mDefaultAvatarOverlapDistance
+    /**
+     * The length of the overlap between two avatars. The range is `[0,
+     * avatarSize]`.
+     *
+     * @since 1.5.2
+     */
+    var overlapDistance: Float = DEFAULT_AVATAR_OVERLAP_DISTANCE
         private set
 
-    @get:Avatar.SHAPE
-    var mShape: Int = Avatar.SHAPE_CIRCLE
+    /**
+     * The Shape of avatar. Current support [SHAPE_CIRCLE] and
+     * [SHAPE_ROUND_CORNER].
+     *
+     * @since 1.5.2
+     */
+    @get:Avatar.Shape
+    var shape: Int = SHAPE_CIRCLE
         private set
 
-    var mAvatarSize: Float = mDefaultAvatarSize
+    /**
+     * The avatar size of avatar.
+     *
+     * @since 1.5.2
+     */
+    var size: Float = DEFAULT_AVATAR_SIZE
         private set
 
-    var mTextSize: Float = mDefaultTextSize
+    /**
+     * The text size shown when the avatar image is null.
+     *
+     * @since 1.5.2
+     */
+    var textSize: Float = DEFAULT_TEXT_SIZE
+        set(value) {
+            field = value.coerceAtLeast(0f)
+            children.forEach { (it as Avatar).srcTextSize = field }
+        }
 
-    var mStrokeWidth: Float = mDefaultStrokeWidth
+    /**
+     * The corner radius of avatar when the shape is [SHAPE_ROUND_CORNER].
+     *
+     * @since 1.5.2
+     */
+    var cornerRadius: Float = DEFAULT_CORNER_RADIUS
+        set(value) {
+            field = value.coerceAtLeast(0f)
+            children.forEach { (it as Avatar).cornerRadius = field }
+        }
 
-    var mCornerRadius: Float = mDefaultCornerRadius
+    /** @since 1.5.2 */
+    private var _strokeWidth: Float = DEFAULT_STROKE_WIDTH
+
+    /**
+     * The stroke width of avatar.
+     *
+     * @since 1.5.2
+     */
+    var strokeWidth: Float
+        get() = _strokeWidth
+        set(value) {
+            _strokeWidth = value.coerceAtLeast(0f)
+            requestLayout()
+        }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -99,15 +152,14 @@ class AvatarGroup @JvmOverloads constructor(
         var childHeight = 0
         children.forEach pointer@{ view ->
             try {
-                cast<Avatar>(view).apply {
-                    mAvatarSize = this@AvatarGroup.mAvatarSize
-                    setShape(this@AvatarGroup.mShape)
-                    mTextSize = this@AvatarGroup.mTextSize
-                    mStrokeWidth = this@AvatarGroup.mStrokeWidth
-                    mCornerRadius = this@AvatarGroup.mCornerRadius
-                    mAvatar?.let { avatar -> setAvatar(avatar) }
-                }
-            } catch (exception: Exception) {
+                val avatar = cast<Avatar>(view)
+                avatar.size = size
+                avatar.setShape(shape)
+                avatar.srcTextSize = textSize
+                avatar.strokeWidth = _strokeWidth
+                avatar.cornerRadius = cornerRadius
+            } catch (ex: Exception) {
+                ex.printStackTrace()
                 removeView(view)
                 return@pointer
             }
@@ -116,7 +168,7 @@ class AvatarGroup @JvmOverloads constructor(
             childHeight = childHeight.coerceAtLeast(view.measuredHeight)
         }
         val width = resolveSize(
-            childCount * childWidth - (childCount - 1) * mOverlapDistance.toInt()
+            childCount * childWidth - (childCount - 1) * overlapDistance.toInt()
                     + paddingStart + paddingEnd,
             widthMeasureSpec
         )
@@ -128,28 +180,68 @@ class AvatarGroup @JvmOverloads constructor(
         var left = paddingStart
         children.forEachIndexed { index, child ->
             val avatar = cast<Avatar>(child)
-            avatar.layout(
-                left,
-                paddingTop,
-                left + avatar.measuredWidth,
-                paddingTop + avatar.measuredHeight
-            )
-            left += avatar.measuredWidth - mOverlapDistance.toInt()
-            when (mOverlapFrom) {
+            avatar.layout(left, paddingTop, left + avatar.measuredWidth, paddingTop + avatar.measuredHeight)
+            left += avatar.measuredWidth - overlapDistance.toInt()
+            when (overlapFrom) {
                 START -> avatar.z = (childCount - index).toFloat()
                 END -> avatar.z = index.toFloat()
             }
-            avatar.setBackgroundColor(context.getColor(R.color.transparent))
+            avatar.setBackgroundColor(color(R.color.transparent))
         }
     }
 
+    /** @since 1.5.2 */
+    override fun addView(child: View?) {
+        if (child == null) return
+        check(child is Avatar) { "AvatarGroup only supports Avatar as children." }
+        super.addView(child)
+        child.syncWithGroup()
+    }
+
+    /** @since 1.5.2 */
+    override fun addView(child: View?, params: LayoutParams?) {
+        if (child == null) return
+        check(child is Avatar) { "AvatarGroup only supports Avatar as children." }
+        super.addView(child, params)
+        child.syncWithGroup()
+    }
+
+    /** @since 1.5.2 */
+    override fun addView(child: View?, index: Int) {
+        if (child == null) return
+        check(child is Avatar) { "AvatarGroup only supports Avatar as children." }
+        super.addView(child, index)
+        child.syncWithGroup()
+    }
+
+    /** @since 1.5.2 */
+    override fun addView(child: View?, index: Int, params: LayoutParams?) {
+        if (child == null) return
+        check(child is Avatar) { "AvatarGroup only supports Avatar as children." }
+        super.addView(child, index, params)
+        child.syncWithGroup()
+    }
+
+    /** @since 1.5.2 */
+    override fun addView(child: View?, width: Int, height: Int) {
+        if (child == null) return
+        check(child is Avatar) { "AvatarGroup only supports Avatar as children." }
+        super.addView(child, width, height)
+        child.syncWithGroup()
+    }
+
     /**
-     * Set [mOverlapFrom].
+     * Set [overlapFrom].
      *
      * @since 0.5.4
      */
     fun setOverlapFrom(@OverlapFrom overlapFrom: Int) {
-        mOverlapFrom = overlapFrom
+        if (this.overlapFrom == overlapFrom) return
+        check(overlapFrom == START || overlapFrom == END) {
+            "overlapFrom(current=$overlapFrom) should be one of two values: START($START) or END($END)"
+        }
+        this.overlapFrom = overlapFrom
+        requestLayout()
     }
 
     /**
@@ -158,54 +250,60 @@ class AvatarGroup @JvmOverloads constructor(
      * @since 0.5.4
      */
     fun setOverlapDistance(@FloatRange(from = 0.0) distance: Float) {
-        mOverlapDistance = distance.coerceAtMost(mAvatarSize / 2f)
+        if (overlapDistance == distance) return
+        check(distance in 0f..size) {
+            "overlapDistance(current=$distance) should in the range of [0, ${size}]"
+        }
+        overlapDistance = distance
+        requestLayout()
     }
 
     /**
-     * Set size for each avatar. At the same time, [mOverlapDistance] will be
-     * adjusted to ensure that its length is reasonable.
+     * Set size for each avatar.
      *
-     * @since 0.5.4
+     * @since 1.5.2
      */
-    fun setAvatarSize(@FloatRange(from = 0.0) size: Float) {
-        mAvatarSize = size
-        mOverlapDistance = mOverlapDistance.coerceAtMost(mAvatarSize / 2f)
+    fun setSize(@FloatRange(from = 0.0) size: Float) {
+        this.size = size.coerceAtLeast(0f)
+        requestLayout()
     }
 
     /**
-     * Set mode.
+     * Set [shape].
      *
      * @since 0.5.4
      */
-    fun setShape(@Avatar.SHAPE shape: Int) {
-        mShape = shape
+    fun setShape(@Avatar.Shape shape: Int) {
+        if (this.shape == shape) return
+        check(shape == SHAPE_CIRCLE || shape == SHAPE_ROUND_CORNER) { "shape(current=$shape) should be one of two values: SHAPE_CIRCLE($SHAPE_CIRCLE) or SHAPE_ROUND_CORNER($SHAPE_ROUND_CORNER)" }
+        this.shape = shape
+        children.forEach { (it as Avatar).setShape(this.shape) }
+    }
+
+    /** @since 1.5.2 */
+    private fun Avatar.syncWithGroup() {
+        size = size
+        setShape(shape)
+        srcTextSize = textSize
+        strokeWidth = _strokeWidth
+        cornerRadius = cornerRadius
     }
 
     init {
-        val typeArray = context.obtainStyledAttributes(
-            attrs,
-            R.styleable.AvatarGroup,
-            defStyleAttr,
-            defStyleRes
-        )
-        mAvatarSize =
-            typeArray.getDimension(R.styleable.AvatarGroup_avatar_size, mDefaultAvatarSize)
-        mShape =
-            typeArray.getInt(R.styleable.AvatarGroup_avatar_shape, Avatar.SHAPE_CIRCLE)
-        mTextSize =
-            typeArray.getDimension(R.styleable.AvatarGroup_avatar_text_size, mDefaultTextSize)
-        mStrokeWidth =
-            typeArray.getDimension(R.styleable.AvatarGroup_avatar_stroke_width, mDefaultStrokeWidth)
-        mCornerRadius =
-            typeArray.getDimension(R.styleable.AvatarGroup_avatar_corner_radius, mDefaultCornerRadius)
-        mOverlapFrom =
-            typeArray.getInt(R.styleable.AvatarGroup_avatar_overlap_from, START)
-        mOverlapDistance =
-            typeArray.getDimension(
-                R.styleable.AvatarGroup_avatar_overlap_distance,
-                mDefaultAvatarOverlapDistance
-            )
-        typeArray.recycle()
+        context.withStyledAttributes(attrs, R.styleable.AvatarGroup, defStyleAttr, defStyleRes) {
+            overlapFrom = getInt(R.styleable.AvatarGroup_avatar_overlap_from, START)
+            overlapDistance = getDimension(R.styleable.AvatarGroup_avatar_overlap_distance, DEFAULT_AVATAR_OVERLAP_DISTANCE)
+            shape = getInt(R.styleable.AvatarGroup_avatar_shape, SHAPE_CIRCLE)
+            size = getDimension(R.styleable.AvatarGroup_avatar_size, DEFAULT_AVATAR_SIZE)
+            textSize = getDimension(R.styleable.AvatarGroup_avatar_text_size, DEFAULT_TEXT_SIZE)
+            cornerRadius = getDimension(R.styleable.AvatarGroup_avatar_corner_radius, DEFAULT_CORNER_RADIUS)
+            _strokeWidth = getDimension(R.styleable.AvatarGroup_avatar_stroke_width, DEFAULT_STROKE_WIDTH)
+        }
+    }
+
+    companion object {
+        const val START = 0
+        const val END = 1
     }
 
 }

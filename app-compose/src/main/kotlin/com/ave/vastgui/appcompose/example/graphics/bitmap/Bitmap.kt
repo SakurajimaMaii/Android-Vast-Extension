@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,31 +35,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ave.vastgui.appcompose.R
 import com.ave.vastgui.tools.graphics.BmpUtils
+import com.ave.vastgui.tools.graphics.MergePosition
 import com.ave.vastgui.tools.graphics.MergeScale
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/8/31
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/graphics/bitmap/bitmap/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/graphics/bitmap/bitmap/
 
+@Preview(showBackground = true)
 @Composable
 fun MergeBitmap() {
-    val mergeBitmap = BmpUtils.mergeBitmapTB(
+    val mergeBitmap = BmpUtils.mergeBitmap(
         getColorBitmap(Color(0xFF6ab04c).toArgb(), 200, 200),
         getColorBitmap(Color(0xFFeb4d4b).toArgb(), 300, 300),
-        MergeScale.SMALL_ENLARGE
+        MergePosition.CENTER
     )
     Image(bitmap = mergeBitmap.asImageBitmap(), contentDescription = "测试图片")
 }
 
+@Preview(showBackground = true)
 @Composable
 fun Base64Bitmap() {
-    val base64 = "......"
+    val context = LocalContext.current
+    val bitmap = BmpUtils.getBitmapFromDrawable(R.drawable.ic_github, context)
+    val base64 = BmpUtils.getBase64FromBitmap(bitmap) ?: return
     val base64Bitmap = BmpUtils.getBitmapFromBase64(base64)
     Image(bitmap = base64Bitmap.asImageBitmap(), contentDescription = "测试图片")
 }
 
+@Preview(showBackground = true)
 @Composable
 fun GetBitmap() {
     val context = LocalContext.current

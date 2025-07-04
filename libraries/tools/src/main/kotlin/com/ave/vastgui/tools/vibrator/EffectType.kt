@@ -1,0 +1,35 @@
+/*
+ * Copyright 2021-2025 VastGui
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.ave.vastgui.tools.vibrator
+
+import android.os.Build
+import android.os.VibrationEffect
+import androidx.annotation.IntDef
+
+// Author: Vast Gui
+// Email: guihy2019@gmail.com
+// Date: 2025/5/1
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/hardware/vibrator/
+
+/** @since 1.5.2 */
+enum class EffectType(val value: Int) {
+    UNKNOW(-1),
+    TICK(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) VibrationEffect.EFFECT_TICK else UNKNOW.value),
+    CLICK(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) VibrationEffect.EFFECT_CLICK else UNKNOW.value),
+    HEAVY_CLICK(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) VibrationEffect.EFFECT_HEAVY_CLICK else UNKNOW.value),
+    DOUBLE_CLICK(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) VibrationEffect.EFFECT_DOUBLE_CLICK else UNKNOW.value)
+}

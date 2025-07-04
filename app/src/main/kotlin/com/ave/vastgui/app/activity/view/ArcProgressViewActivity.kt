@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,109 +22,156 @@ import android.graphics.Shader
 import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityArcProgressViewBinding
 import com.ave.vastgui.app.log.logFactory
+import com.ave.vastgui.core.annotation.ExperimentalApi
 import com.ave.vastgui.tools.activity.VastVbActivity
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
+import com.ave.vastgui.tools.io.appInternalFilesDir
+import com.ave.vastgui.tools.io.destroy
 import com.ave.vastgui.tools.utils.ColorUtils
 import com.ave.vastgui.tools.utils.DensityUtils.DP
-import com.ave.vastgui.tools.utils.download.DLManager
-import com.ave.vastgui.tools.utils.download.DLTask
+import com.ave.vastgui.tools.utils.DensityUtils.SP
+import com.ave.vastgui.tools.utils.download.DownloadTask
+import com.ave.vastgui.tools.utils.download.core.DownloadState
+import com.ave.vastgui.tools.utils.download.interfaces.OnDownloadListener
 import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
+import com.log.vastgui.okhttp.Okhttp3Interceptor
+import okhttp3.OkHttpClient
 import java.io.File
 
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
 // Date: 2022/4/14 18:42
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/progress/arc-progress-view/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/progress/arc-progress-view/
 
 class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>() {
 
-    private val mLogger = logFactory.getLogCat(ArcProgressViewActivity::class.java)
-    private lateinit var downloadTask: DLTask
+    private val logger = logFactory.getLogCat(ArcProgressViewActivity::class.java)
+
+    private val colors = intArrayOf(
+        ColorUtils.colorHex2Int("#F60C0C"),
+        ColorUtils.colorHex2Int("#F3B913"),
+        ColorUtils.colorHex2Int("#E7F716"),
+        ColorUtils.colorHex2Int("#3DF30B"),
+        ColorUtils.colorHex2Int("#0DF6EF"),
+        ColorUtils.colorHex2Int("#0829FB"),
+        ColorUtils.colorHex2Int("#B709F4")
+    )
+
+    private var progressColorIndex = 0
+
+    private var progressBackgroundColorIndex = 0
+
+    private val pos = floatArrayOf(1f / 7, 2f / 7, 3f / 7, 4f / 7, 5f / 7, 6f / 7, 1f)
+
+    private val shaders = arrayOf(null, LinearGradient(-700f, 0f, 700f, 0f, colors, pos, Shader.TileMode.CLAMP))
+
+    private var shaderIndex = 0
+
+    private var textColorIndex = 0
+
+    private var startpointColorIndex = 0
+
+    private var endpointColorIndex = 0
+
+    private lateinit var downloadTask: DownloadTask
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requestMultiplePermissions(arrayOf(Manifest.permission.ACCESS_NETWORK_STATE))
-
-        val colors = intArrayOf(
-            ColorUtils.colorHex2Int("#F60C0C"),
-            ColorUtils.colorHex2Int("#F3B913"),
-            ColorUtils.colorHex2Int("#E7F716"),
-            ColorUtils.colorHex2Int("#3DF30B"),
-            ColorUtils.colorHex2Int("#0DF6EF"),
-            ColorUtils.colorHex2Int("#0829FB"),
-            ColorUtils.colorHex2Int("#B709F4")
-        )
-        val pos = floatArrayOf(1f / 7, 2f / 7, 3f / 7, 4f / 7, 5f / 7, 6f / 7, 1f)
-
-        getBinding().arcProgressView.apply {
-            mProgressShader = LinearGradient(
-                -700f, 0f, 700f, 0f,
-                colors, pos,
-                Shader.TileMode.CLAMP
-            )
-            mEndpointCircleRadius = 15f.DP.coerceAtLeast(recommendedRadius())
-            mProgressWidth = 15f.DP
-            mEndpointCircleColor = ColorUtils.colorHex2Int("#eb4d4b")
+        getBinding().switchProgressColorBtn.setOnClickListener {
+            getBinding().arcProgressView.progressColor = colors[(progressColorIndex++) % colors.size]
         }
 
-        getBinding().download.setOnClickListener {
-            mLogger.i("开始下载")
-            downloadApk()
+        getBinding().switchProgressBackgroundColorBtn.setOnClickListener {
+            getBinding().arcProgressView.progressBackgroundColor = colors[(progressBackgroundColorIndex++) % colors.size]
         }
 
-        getBinding().pause.setOnClickListener {
-            downloadTask.pause()
+        getBinding().switchProgressShaderBtn.setOnClickListener {
+            getBinding().arcProgressView.progressShader = shaders[(++shaderIndex) % shaders.size]
         }
 
-        getBinding().resume.setOnClickListener {
-            downloadTask.resume()
+        getBinding().switchTextShowBtn.setOnClickListener {
+            getBinding().arcProgressView.showText = !getBinding().arcProgressView.showText
         }
 
-        getBinding().cancel.setOnClickListener {
-            downloadTask.cancel()
+        getBinding().switchTextColorBtn.setOnClickListener {
+            getBinding().arcProgressView.textColor = colors[(textColorIndex++) % colors.size]
         }
+
+        getBinding().switchStartpointColorBtn.setOnClickListener {
+            getBinding().arcProgressView.startpointCircleColor = colors[(startpointColorIndex++) % colors.size]
+        }
+
+        getBinding().switchEndpointColorBtn.setOnClickListener {
+            getBinding().arcProgressView.endpointCircleColor = colors[(endpointColorIndex++) % colors.size]
+        }
+
+        getBinding().progressTextSizeSlider.addOnChangeListener { _, value, _ ->
+            getBinding().arcProgressView.textSize = value.SP
+        }
+
+        getBinding().progressRadiusSlider.addOnChangeListener { _, value, _ ->
+            getBinding().arcProgressView.progressRadius = value.DP
+        }
+
+        getBinding().progressWidthSlider.addOnChangeListener { _, value, _ ->
+            getBinding().arcProgressView.progressWidth = value.DP
+        }
+
+        getBinding().progressEndpointRadiusSlider.addOnChangeListener { _, value, _ ->
+            getBinding().arcProgressView.endpointCircleRadius = value.DP
+        }
+
+        getBinding().progressSlider.valueTo = getBinding().arcProgressView.maximumProgress
+        getBinding().progressSlider.value = getBinding().arcProgressView.currentProgress
+        getBinding().progressSlider.addOnChangeListener { _, value, _ ->
+            getBinding().arcProgressView.currentProgress = value
+        }
+
     }
 
+    @OptIn(ExperimentalApi::class)
     private fun downloadApk() {
-        val root = FileMgr.appInternalFilesDir()
-        val name = "Tabby.exe"
+        val root = appInternalFilesDir()
+        val name = "opencv.rar"
         val file = File(root, name)
-        downloadTask = DLManager
-            .createTaskConfig()
-            .setDownloadUrl("https://objects.githubusercontent.com/github-production-release-asset-2e65be/77213120/e661ad3b-76f6-46cd-b2f3-abe38de4fc4a?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20240717%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240717T073421Z&X-Amz-Expires=300&X-Amz-Signature=bda89807f32bebb4b862b4d12ecc0834e6fca742b814288fbcac3e37f26f16ab&X-Amz-SignedHeaders=host&actor_id=46998172&key_id=0&repo_id=77213120&response-content-disposition=attachment%3B%20filename%3Dtabby-1.0.210-setup-x64.exe&response-content-type=application%2Foctet-stream")
-            .setSaveDir(root.path)
-            .setSaveName("Tabby.exe")
-            .setListener {
-                onDownloading = {
+        val client = OkHttpClient
+            .Builder()
+            .addInterceptor(Okhttp3Interceptor(logger))
+            .build()
+        downloadTask = DownloadTask.Builder()
+            .setClient(client)
+            .setSubTaskCount(16)
+            .setDownloadUrl("http://192.168.0.109:7777/static/opencv.rar")
+            .setFile(file)
+            .setListener(object : OnDownloadListener {
+                override fun onSuccess(state: DownloadState.Success) = runOnUiThread {
                     getBinding().arcProgressView.refreshWithInvalidate {
-                        mCurrentProgress =
-                            it.rate * getBinding().arcProgressView.mMaximumProgress
+                        currentProgress = getBinding().arcProgressView.maximumProgress
                     }
                 }
-                onFailure = {
-                    mLogger.e("download failed:" + it.exception.stackTraceToString())
-                }
-                onSuccess = {
-                    mLogger.i("download success.")
+
+                override fun onDownload(state: DownloadState.Download) = runOnUiThread {
                     getBinding().arcProgressView.refreshWithInvalidate {
-                        mCurrentProgress = getBinding().arcProgressView.mMaximumProgress
+                        currentProgress =
+                            state.rate * getBinding().arcProgressView.maximumProgress
                     }
                 }
-                onCancel = {
-                    mLogger.i("download cancel.")
+
+                override fun onFailure(state: DownloadState.Failure) = runOnUiThread {
+                    logger.e("任务下载失败" + state.exception.stackTraceToString())
+                }
+
+                override fun onTerminate() = runOnUiThread {
+                    logger.i("任务被取消")
                     getBinding().arcProgressView.refreshWithInvalidate {
                         resetProgress()
                     }
                 }
-            }
+            })
             .build()
-        if (file.exists()) {
-            if (FileMgr.deleteFile(file).isSuccess) {
-                downloadTask.start()
-            }
-        } else {
+        if (file.exists() && file.destroy().isSuccess) {
+            logger.i("任务下载开始")
             downloadTask.start()
         }
     }

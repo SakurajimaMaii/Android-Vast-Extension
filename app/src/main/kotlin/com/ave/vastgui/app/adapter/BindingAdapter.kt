@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,9 @@ package com.ave.vastgui.app.adapter
 
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
-import coil.load
+import coil3.load
+import coil3.request.crossfade
+import coil3.request.placeholder
 import com.ave.vastgui.app.R
 import com.ave.vastgui.tools.utils.DateUtils
 import com.ave.vastgui.tools.view.avatar.Avatar
@@ -39,7 +41,7 @@ object BindingAdapter {
     @BindingAdapter("avatar_text")
     fun setAvatarText(view: Avatar, text: String?) {
         view.refreshWithInvalidate {
-            mText = text?.first().toString()
+            srcText = text?.first().toString()
         }
     }
 
@@ -60,7 +62,7 @@ object BindingAdapter {
         // 参考 https://github.com/CoderAlee/PaintedSkin/issues/30
         view.load(url) {
             crossfade(true)
-            placeholder(R.drawable.background)
+            placeholder(R.drawable.img_horizontal_pv_background)
         }
     }
 

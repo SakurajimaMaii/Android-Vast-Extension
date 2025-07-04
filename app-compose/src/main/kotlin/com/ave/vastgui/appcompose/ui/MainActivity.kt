@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,10 @@
 
 package com.ave.vastgui.appcompose.ui
 
+import android.content.ContentValues
 import android.os.Bundle
+import android.provider.MediaStore.Images.Media
+import android.webkit.MimeTypeMap
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,11 +32,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.ave.vastgui.appcompose.R
 import com.ave.vastgui.appcompose.datastore.ThemeDs
 import com.ave.vastgui.appcompose.ui.theme.AndroidVastExtensionTheme
+import com.ave.vastgui.tools.graphics.BmpUtils
+import com.ave.vastgui.tools.io.appInternalFilesDir
+import com.ave.vastgui.tools.io.mimeType
+import com.ave.vastgui.tools.io.mkFile
+import com.ave.vastgui.tools.utils.DateUtils
 import kotlinx.coroutines.launch
+import org.slf4j.LoggerFactory
+import java.io.File
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
+
+    private val logger = LoggerFactory.getLogger("MainActivity")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +68,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,15 @@
 package com.ave.vastgui.tools.utils
 
 import android.os.Build
+import android.provider.Settings
+import com.ave.vastgui.tools.content.ContextHelper
 import java.util.Locale
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: Help you to get the system information.
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/information-get/system-utils/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/information-get/system-utils/
 
 object SystemUtils {
     /**
@@ -63,9 +65,18 @@ object SystemUtils {
 
     /**
      * @return the consumer-visible brand with which the product/hardware will
-     *     be associated, if any.
+     * be associated, if any.
      */
     @JvmStatic
     val deviceBrand: String
         get() = Build.BRAND
+
+    /**
+     * Whether Airplane Mode is on.
+     *
+     * @since 1.5.2
+     */
+    @JvmStatic
+    val isAirplaneMode: Boolean
+        get() = Settings.System.getInt(ContextHelper.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) == 1
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2022 VastGui guihy2019@gmail.com
+  ~ Copyright 2021-2025 VastGui
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,34 +15,137 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activity.view.HorizontalProgressViewActivity">
+    android:orientation="vertical">
 
     <com.ave.vastgui.tools.view.progress.HorizontalProgressView
-        android:id="@+id/horizontalProgressView"
+        android:id="@+id/horizontal_pv"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="10dp" />
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        app:progress_current_value="50" />
 
     <com.ave.vastgui.tools.view.progress.HorizontalTextProgressView
-        android:id="@+id/horizontalTextProgressView"
+        android:id="@+id/horizontal_text_pv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        app:horizontal_text_progress_text_margin="5dp"
+        app:horizontal_text_progress_box_color="@color/amour" />
 
     <com.ave.vastgui.tools.view.progress.LineTextProgressView
-        android:id="@+id/lineTextProgressView"
+        android:id="@+id/line_text_pv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        app:linetext_progress_text_margin="5dp"
+        app:linetext_progress_box_color="@color/amour" />
 
-    <androidx.appcompat.widget.AppCompatSeekBar
-        android:id="@+id/bottom_seekbar"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context=".activity.view.HorizontalProgressViewActivity">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/horizontal_pv_switch_background_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/horizontal_pv_switch_background" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/horizontal_pv_switch_progress_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/horizontal_pv_switch_progress" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/horizontal_pv_switch_progress_color_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/progress_switch_progress_color" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/horizontal_pv_switch_background_color_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/progress_switch_progress_background_color" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/horizontal_pv_switch_text_box_color_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/horizontal_tpv_switch_text_box_color" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/progress_change_progress"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/progress_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:valueFrom="0"
+                android:valueTo="100"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/horizontal_tpv_change_text_margin"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/text_margin_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:stepSize="1"
+                android:valueFrom="0"
+                android:valueTo="5"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/horizontal_tpv_change_progress_height"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/progress_height_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:stepSize="5"
+                android:valueFrom="10"
+                android:valueTo="50"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

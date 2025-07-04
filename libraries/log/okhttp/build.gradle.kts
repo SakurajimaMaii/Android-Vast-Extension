@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-import java.net.URL
+import java.net.URI
 
 plugins {
     kotlin("jvm")
     id("java-library")
     id("convention.publication")
+    id("org.jetbrains.dokka")
 }
 
 group = "io.github.sakurajimamaii"
@@ -84,13 +84,13 @@ if (mavenPropertiesFile.exists()) {
     }
 }
 
-tasks.withType<DokkaTaskPartial> {
+dokka {
     moduleName.set("log-okhttp")
     dokkaSourceSets.configureEach {
         sourceLink {
             // FIXME https://github.com/Kotlin/dokka/issues/2876
             localDirectory.set(projectDir.resolve("src"))
-            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/okhttp/src"))
+            remoteUrl.set(URI("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/okhttp/src"))
             remoteLineSuffix.set("#L")
         }
     }

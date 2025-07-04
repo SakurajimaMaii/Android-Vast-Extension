@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2021-2025 VastGui
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.ave.vastgui.tools.view.breadcrumb.BreadCrumbLayout
+        android:id="@+id/bread_crumb_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:breadcrumb_interval_icon="@drawable/ic_breadcrumb_default_interval_icon"
+        app:breadcrumb_interval_width="30dp"
+        app:breadcrumb_text_color="@color/black"
+        app:breadcrumb_text_size="16sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_item_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/bread_crumb_add" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/remove_item_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/bread_crumb_remove" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/switch_text_color_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/bread_crumb_switch_text_color" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/switch_internal_icon_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/bread_crumb_switch_internal_icon" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/bread_crumb_change_text_size"
+        android:textStyle="bold" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/text_size_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:valueFrom="10"
+        android:valueTo="20"
+        app:thumbHeight="20dp"
+        app:trackHeight="10dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/bread_crumb_change_internal_icon_size"
+        android:textStyle="bold" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/internal_icon_size_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:valueFrom="10"
+        android:valueTo="30"
+        app:thumbHeight="20dp"
+        app:trackHeight="10dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/bread_crumb_change_item_width"
+        android:textStyle="bold" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/item_width_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:value="100"
+        android:valueFrom="100"
+        android:valueTo="300"
+        app:thumbHeight="20dp"
+        app:trackHeight="10dp" />
+</LinearLayout>

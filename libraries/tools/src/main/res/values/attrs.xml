@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2021-2024 VastGui
+  ~ Copyright 2021-2025 VastGui
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -72,6 +72,7 @@
         <attr name="dot_radius" format="dimension|reference" />
         <attr name="bubble_radius" format="dimension|reference" />
         <attr name="bubble_text" format="string|reference" />
+        <attr name="bubble_text_num" format="integer|reference" />
         <attr name="bubble_text_max_num" format="integer|reference" />
         <attr name="bubble_text_color" format="color|reference" />
         <attr name="bubble_text_size" format="dimension|reference" />
@@ -80,9 +81,16 @@
     <declare-styleable name="BadgeLayout">
         <attr name="badge_mode" />
         <attr name="badge_color" />
+        <attr name="badge_position" format="enum">
+            <enum name="left_top" value="0" />
+            <enum name="left_bottom" value="1" />
+            <enum name="right_top" value="2" />
+            <enum name="right_bottom" value="3" />
+        </attr>
         <attr name="dot_radius" />
         <attr name="bubble_radius" />
         <attr name="bubble_text" />
+        <attr name="bubble_text_num" />
         <attr name="bubble_text_max_num" />
         <attr name="bubble_text_color" />
         <attr name="bubble_text_size" />
@@ -93,6 +101,16 @@
         <attr name="icon_bottom_margin" format="dimension|reference" />
     </declare-styleable>
 
+    <declare-styleable name="BreadCrumbLayout">
+        <attr name="breadcrumb_item_max_width" format="dimension|reference" />
+        <attr name="breadcrumb_text_color" format="color|reference" />
+        <attr name="breadcrumb_text_size" format="dimension|reference" />
+        <attr name="breadcrumb_interval_width" format="dimension|reference" />
+        <attr name="breadcrumb_interval_icon" format="reference" />
+        <attr name="breadcrumb_interval_icon_width" format="dimension|reference" />
+        <attr name="breadcrumb_interval_icon_height" format="dimension|reference" />
+    </declare-styleable>
+
     <declare-styleable name="CropView">
         <attr name="crop_mask_layer_color" format="color|reference" />
         <attr name="crop_frame_type" format="enum">
@@ -101,6 +119,7 @@
             <enum name="grid9" value="2" />
             <enum name="rectangle" value="3" />
         </attr>
+        <attr name="crop_frame_size" format="dimension|reference" />
         <attr name="crop_frame_width" format="dimension|reference" />
         <attr name="crop_frame_height" format="dimension|reference" />
         <attr name="crop_frame_stroke_color" format="dimension|reference" />
@@ -109,6 +128,7 @@
     <declare-styleable name="CropViewLayout">
         <attr name="crop_mask_layer_color" />
         <attr name="crop_frame_type" />
+        <attr name="crop_frame_size" />
         <attr name="crop_frame_width" />
         <attr name="crop_frame_height" />
         <attr name="crop_frame_stroke_color" />
@@ -175,6 +195,7 @@
         <attr name="progress_text_color" />
         <attr name="progress_background_color" />
         <attr name="progress_color" />
+        <attr name="linetext_progress_box_width" format="dimension|reference" />
         <attr name="linetext_progress_box_color" format="color|reference" />
         <attr name="linetext_progress_height" format="dimension|reference" />
         <attr name="linetext_progress_text_margin" format="dimension|reference" />
@@ -214,17 +235,16 @@
         <attr name="star_unselected" format="reference" />
         <!--Star selected bitmap. -->
         <attr name="star_selected" format="reference" />
-        <!--StarBar select method. -->
-        <attr name="star_select_method" format="enum">
+        <!--StarBar touch mode. -->
+        <attr name="star_touch_mode" format="enum">
             <enum name="unable" value="0" />
             <enum name="click" value="1" />
             <enum name="sliding" value="2" />
         </attr>
         <!--Star orientation. -->
         <attr name="star_orientation" format="enum">
-            <enum name="unspecified" value="0" />
-            <enum name="horizontal" value="1" />
-            <enum name="vertical" value="2" />
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
         </attr>
     </declare-styleable>
 
@@ -235,6 +255,8 @@
         </attr>
         <attr name="indicator_selected_color" format="color|reference" />
         <attr name="indicator_unselected_color" format="color|reference" />
+        <attr name="indicator_bitmap_width" format="dimension|reference" />
+        <attr name="indicator_bitmap_height" format="dimension|reference" />
         <attr name="indicator_circle_radius" format="dimension" />
         <attr name="indicator_item_count" format="integer" />
         <attr name="indicator_item_distance" format="dimension" />
@@ -246,6 +268,7 @@
     <attr name="Default_AvatarGroup_Style" format="reference" />
     <attr name="Default_BadgeView_Style" format="reference" />
     <attr name="Default_BadgeLayout_Style" format="reference" />
+    <attr name="Default_BreadCrumbLayout_Style" format="reference" />
     <attr name="Default_CropView_Style" format="reference" />
     <attr name="Default_CropViewLayout_Style" format="reference" />
     <attr name="Default_MarqueeTextView_Style" format="reference" />

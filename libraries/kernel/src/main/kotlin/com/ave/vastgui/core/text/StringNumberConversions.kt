@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import java.math.MathContext
 // Email: guihy2019@gmail.com
 // Date: 2024/4/27
 // Description: String conversions.
-// Documentation: https://ave.entropy2020.cn/documents/core/text/string-number-conversions/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/core/text/string-number-conversions/
 
 /**
  * Parses the string as an [Int] number and returns the result.

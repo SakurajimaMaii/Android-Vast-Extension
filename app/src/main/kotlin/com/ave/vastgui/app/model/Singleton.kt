@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import com.ave.vastgui.core.extension.SingletonHolder
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/14
-// Documentation: https://ave.entropy2020.cn/documents/core/extension/singleton-holder/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/core/extension/singleton-holder/
 
 class Singleton private constructor(name: String) {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import androidx.annotation.ChecksSdkIntAtLeast
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2024/3/27 23:59
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/os/extension/build/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/os/extension/build/
 
 /** @since 1.2.1 */
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.UPSIDE_DOWN_CAKE)

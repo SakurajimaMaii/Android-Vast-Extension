@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package com.ave.vastgui.tools.view.badgeview
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/11
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/badge/description/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/badge/description/
 
 /**
  * Badge mode
@@ -27,12 +27,19 @@ package com.ave.vastgui.tools.view.badgeview
  * @since 0.5.3
  */
 sealed class BadgeMode(val code: Int) {
-    internal object UNSPECIFIED : BadgeMode(-1)
-    object DOT : BadgeMode(0)
-    sealed class BUBBLE(code: Int) : BadgeMode(code) {
-        object TEXT : BUBBLE(1)
-        object NUMBER : BUBBLE(2)
-    }
 
-    override fun toString(): String = this::class.java.simpleName
+    /** @since 1.5.2 */
+    internal data object Unspecified : BadgeMode(-1)
+
+    /** @since 1.5.2 */
+    data object Dot : BadgeMode(0)
+
+    /** @since 1.5.2 */
+    sealed class Bubble(code: Int) : BadgeMode(code) {
+        /** @since 1.5.2 */
+        data object Text : Bubble(1)
+
+        /** @since 1.5.2 */
+        data object Number : Bubble(2)
+    }
 }

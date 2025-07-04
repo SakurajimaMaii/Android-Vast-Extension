@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2021-2024 VastGui
+  ~ Copyright 2021-2025 VastGui
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -68,6 +68,7 @@
         <item name="Default_AvatarGroup_Style">@style/BaseAvatarGroup</item>
         <item name="Default_BadgeView_Style">@style/BaseBadgeView</item>
         <item name="Default_BadgeLayout_Style">@style/BaseBadgeLayout</item>
+        <item name="Default_BreadCrumbLayout_Style">@style/BaseBreadCrumbLayout</item>
         <item name="Default_CropView_Style">@style/BaseCropView</item>
         <item name="Default_CropViewLayout_Style">@style/BaseCropViewLayout</item>
         <item name="Default_MarqueeTextView_Style">@style/BaseMarqueeTextView</item>

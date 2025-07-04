@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,16 @@ package com.ave.vastgui.tools.utils
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Resources
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.VectorDrawable
+import android.view.View
 import androidx.annotation.ArrayRes
+import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
+import androidx.annotation.IntegerRes
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
@@ -34,7 +39,7 @@ import com.ave.vastgui.tools.content.ContextHelper
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/6/19
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/app-resources/resource-utils/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/app-resources/resource-utils/
 
 /**
  * Using the context provided by [ContextHelper.getAppContext] and [method]
@@ -46,10 +51,10 @@ import com.ave.vastgui.tools.content.ContextHelper
  * }
  * ```
  *
+ * @param T Resource Type.
  * @param callback The default value if [findByContext] can't get the
  * resource by method.
  * @param method Method of providing resources
- * @param T Resource Type.
  * @since 0.5.2
  */
 @Throws(Exception::class)
@@ -75,10 +80,10 @@ inline fun <T : Any> findByContext(
  * }
  * ```
  *
+ * @param T Resource Type.
  * @param callback The default value if [findByResources] can't get the
  * resource by method.
  * @param method Method of providing resources
- * @param T Resource Type.
  * @since 0.5.2
  */
 @Throws(Exception::class)
@@ -96,34 +101,113 @@ inline fun <T : Any> findByResources(
 }
 
 /** @since 1.5.0 */
-fun Context.drawable(@DrawableRes resId: Int): Drawable? = runCatching {
-    AppCompatResources.getDrawable(this, resId)
-}.getOrNull()
+fun Context.drawable(@DrawableRes resId: Int): Drawable? =
+    runCatching { AppCompatResources.getDrawable(this, resId) }.getOrNull()
 
 /** @since 1.5.0 */
 fun Context.vectorDrawable(@DrawableRes resId: Int): VectorDrawable? =
-    runCatching {
-        val drawable: Drawable? = AppCompatResources.getDrawable(this, resId)
-        return drawable as? VectorDrawable
-    }.getOrNull()
+    runCatching { return AppCompatResources.getDrawable(this, resId) as? VectorDrawable }.getOrNull()
 
 /** @since 1.5.0 */
-fun Context.color(@ColorRes resId: Int): Int? = runCatching {
-    ContextCompat.getColor(this, resId)
-}.getOrNull()
+@JvmOverloads
+fun Context.color(@ColorRes resId: Int, @ColorInt default: Int = Color.WHITE): Int =
+    runCatching { ContextCompat.getColor(this, resId) }.getOrDefault(default)
 
 /** @since 1.5.0 */
-fun Context.colorStateList(@ColorRes resId: Int): ColorStateList? =
-    runCatching {
-        AppCompatResources.getColorStateList(this, resId)
-    }.getOrNull()
+@JvmOverloads
+fun Context.colorStateList(@ColorRes resId: Int, @ColorInt default: Int = Color.WHITE): ColorStateList =
+    runCatching { AppCompatResources.getColorStateList(this, resId) }.getOrDefault(ColorStateList.valueOf(default))
 
 /** @since 1.5.0 */
-fun Context.string(@StringRes resId: Int): String? = runCatching {
-    ContextCompat.getString(this, resId)
-}.getOrNull()
+@JvmOverloads
+fun Context.string(@StringRes resId: Int, default: String = ""): String =
+    runCatching { ContextCompat.getString(this, resId) }.getOrDefault(default)
 
 /** @since 1.5.0 */
-fun Context.stringArray(@ArrayRes resId: Int): Array<String> = runCatching {
-    resources.getStringArray(resId)
-}.getOrDefault(emptyArray())
+@JvmOverloads
+fun Context.stringArray(@ArrayRes resId: Int, default: Array<String> = emptyArray()): Array<String> =
+    runCatching { resources.getStringArray(resId) }.getOrDefault(default)
+
+/**
+ * @since 1.5.2
+ */
+@JvmOverloads
+fun Context.dimension(@DimenRes resId: Int, default: Float = 0f) =
+    runCatching { resources.getDimension(resId) }.getOrDefault(default)
+
+/**
+ * @since 1.5.2
+ */
+@JvmOverloads
+fun Context.dimensionPixelSize(@DimenRes resId: Int, default: Int = 0) =
+    runCatching { resources.getDimensionPixelSize(resId) }.getOrDefault(default)
+
+/**
+ * @since 1.5.2
+ */
+@JvmOverloads
+fun Context.dimensionPixelOffset(@DimenRes resId: Int, default: Int = 0) =
+    runCatching { resources.getDimensionPixelOffset(resId) }.getOrDefault(default)
+
+/**
+ * @since 1.5.2
+ */
+@JvmOverloads
+fun Context.integer(@IntegerRes resId: Int, default: Int = 0) =
+    runCatching { resources.getInteger(resId) }.getOrDefault(default)
+
+/** @since 1.5.0 */
+fun View.drawable(@DrawableRes resId: Int): Drawable? =
+    runCatching { AppCompatResources.getDrawable(context, resId) }.getOrNull()
+
+/** @since 1.5.0 */
+fun View.vectorDrawable(@DrawableRes resId: Int): VectorDrawable? =
+    runCatching { return AppCompatResources.getDrawable(context, resId) as? VectorDrawable }.getOrNull()
+
+/** @since 1.5.0 */
+@JvmOverloads
+fun View.color(@ColorRes resId: Int, @ColorInt default: Int = Color.WHITE): Int =
+    runCatching { ContextCompat.getColor(context, resId) }.getOrDefault(default)
+
+/** @since 1.5.0 */
+@JvmOverloads
+fun View.colorStateList(@ColorRes resId: Int, @ColorInt default: Int = Color.WHITE): ColorStateList =
+    runCatching { AppCompatResources.getColorStateList(context, resId) }.getOrDefault(ColorStateList.valueOf(default))
+
+/** @since 1.5.0 */
+@JvmOverloads
+fun View.string(@StringRes resId: Int, default: String = ""): String =
+    runCatching { ContextCompat.getString(context, resId) }.getOrDefault(default)
+
+/** @since 1.5.0 */
+@JvmOverloads
+fun View.stringArray(@ArrayRes resId: Int, default: Array<String> = emptyArray()): Array<String> =
+    runCatching { resources.getStringArray(resId) }.getOrDefault(default)
+
+/**
+ * @since 1.5.2
+ */
+@JvmOverloads
+fun View.dimension(@DimenRes resId: Int, default: Float = 0f) =
+    runCatching { resources.getDimension(resId) }.getOrDefault(default)
+
+/**
+ * @since 1.5.2
+ */
+@JvmOverloads
+fun View.dimensionPixelSize(@DimenRes resId: Int, default: Int = 0) =
+    runCatching { resources.getDimensionPixelSize(resId) }.getOrDefault(default)
+
+/**
+ * @since 1.5.2
+ */
+@JvmOverloads
+fun View.dimensionPixelOffset(@DimenRes resId: Int, default: Int = 0) =
+    runCatching { resources.getDimensionPixelOffset(resId) }.getOrDefault(default)
+
+/**
+ * @since 1.5.2
+ */
+@JvmOverloads
+fun View.integer(@IntegerRes resId: Int, default: Int = 0) =
+    runCatching { resources.getInteger(resId) }.getOrDefault(default)

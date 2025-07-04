@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,19 @@
 package com.ave.vastgui.tools.utils.permission
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.ave.vastgui.tools.utils.AppUtils
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/4/5
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/permission/permission/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/permission/permission/
 
 const val DENIED = "DENIED"
 const val EXPLAINED = "EXPLAINED"
@@ -125,17 +127,24 @@ inline fun ComponentActivity.requestPermission(
     builder: PermissionBuilder.() -> Unit = {}
 ) {
     if (permission.isEmpty()) return
-    val mBuilder = PermissionBuilder().also(builder)
+    val builder = PermissionBuilder().also(builder)
+    val declaredPermissions = packageManager
+        .getPackageInfo(AppUtils.getPackageName(), PackageManager.GET_PERMISSIONS)
+        .requestedPermissions?.toSet() ?: emptySet()
+    if (!declaredPermissions.contains(permission)) {
+        builder.noDeclare(permission)
+        return
+    }
     singlePermissionLauncher()?.launch(permission) { result ->
         when {
-            result -> mBuilder.granted(permission)
+            result -> builder.granted(permission)
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
                 if (shouldShowRequestPermissionRationale(permission)) {
-                    mBuilder.denied(permission)
+                    builder.denied(permission)
                 }
             }
 
-            else -> mBuilder.noMoreAsk(permission)
+            else -> builder.noMoreAsk(permission)
         }
     }
 }
@@ -151,14 +160,13 @@ inline fun ComponentActivity.requestMultiplePermissions(
     permissions: Array<String>,
     builder: MultiPermissionBuilder.() -> Unit = {}
 ) {
-    val mBuilder = MultiPermissionBuilder().also(builder)
+    val builder = MultiPermissionBuilder().also(builder)
     val declaredPermissions = packageManager
         .getPackageInfo(AppUtils.getPackageName(), PackageManager.GET_PERMISSIONS)
-        .requestedPermissions
-        .toSet()
+        .requestedPermissions?.toSet() ?: emptySet()
     val requestPermissions = permissions.filter { !declaredPermissions.contains(it) }
     if (requestPermissions.isNotEmpty()) {
-        mBuilder.noDeclare(requestPermissions)
+        builder.noDeclare(requestPermissions)
         return
     }
     multiPermissionLauncher()?.launch(permissions) { result: Map<String, Boolean> ->
@@ -169,15 +177,15 @@ inline fun ComponentActivity.requestMultiplePermissions(
                     val map = deniedList.groupBy { permission ->
                         if (shouldShowRequestPermissionRationale(permission)) DENIED else EXPLAINED
                     }
-                    map[DENIED]?.let { mBuilder.denied(it) }
-                    map[EXPLAINED]?.let { mBuilder.noMoreAsk(it) }
+                    map[DENIED]?.let { builder.denied(it) }
+                    map[EXPLAINED]?.let { builder.noMoreAsk(it) }
                 } else {
-                    mBuilder.denied(deniedList)
-                    mBuilder.noMoreAsk(emptyList())
+                    builder.denied(deniedList)
+                    builder.noMoreAsk(emptyList())
                 }
             }
 
-            else -> mBuilder.allGranted()
+            else -> builder.allGranted()
         }
     }
 }
@@ -195,6 +203,13 @@ inline fun Fragment.requestPermission(
 ) {
     if (permission.isEmpty()) return
     val mBuilder = PermissionBuilder().also(builder)
+    val declaredPermissions = requireActivity().packageManager
+        .getPackageInfo(AppUtils.getPackageName(), PackageManager.GET_PERMISSIONS)
+        .requestedPermissions?.toSet() ?: emptySet()
+    if (!declaredPermissions.contains(permission)) {
+        mBuilder.noDeclare(permission)
+        return
+    }
     requireActivity().singlePermissionLauncher()?.launch(permission) { result ->
         when {
             result -> mBuilder.granted(permission)
@@ -218,8 +233,7 @@ inline fun Fragment.requestMultiplePermissions(
     val mBuilder = MultiPermissionBuilder().also(builder)
     val declaredPermissions = requireActivity().packageManager
         .getPackageInfo(AppUtils.getPackageName(), PackageManager.GET_PERMISSIONS)
-        .requestedPermissions
-        .toSet()
+        .requestedPermissions?.toSet() ?: emptySet()
     val requestPermissions = permissions.filter { !declaredPermissions.contains(it) }
     if (requestPermissions.isNotEmpty()) {
         mBuilder.noDeclare(requestPermissions)
@@ -254,6 +268,15 @@ class PermissionBuilder {
     var granted: (permission: String) -> Unit = {}
     var denied: (permission: String) -> Unit = {}
     var noMoreAsk: (permission: String) -> Unit = {}
+
+    /**
+     * The permission are not declared in AndroidManifest.xml.
+     *
+     * @since 1.5.2
+     */
+    var noDeclare: (String) -> Unit = { permission ->
+        throw RuntimeException("Please declare the following permission: $permission")
+    }
 }
 
 /**
@@ -288,5 +311,41 @@ class MultiPermissionBuilder {
      *
      * @since 0.5.6
      */
-    var noDeclare: (List<String>) -> Unit = {}
+    var noDeclare: (List<String>) -> Unit = { permissions ->
+        throw RuntimeException("Please declare the following permissions: ${permissions.joinToString(",")}")
+    }
 }
+
+// region Check granted
+
+/**
+ * Is permission granted
+ *
+ * @since 1.5.2
+ */
+fun Context.isPermissionGranted(permission: String) =
+    ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+
+/**
+ * Is permission denied
+ *
+ * @since 1.5.2
+ */
+fun Context.isPermissionDenied(permission: String) = !isPermissionGranted(permission)
+
+/**
+ * Is permission granted
+ *
+ * @since 1.5.2
+ */
+fun Fragment.isPermissionGranted(permission: String) =
+    ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED
+
+/**
+ * Is permission denied
+ *
+ * @since 1.5.2
+ */
+fun Fragment.isPermissionDenied(permission: String) = !isPermissionGranted(permission)
+
+// endregion

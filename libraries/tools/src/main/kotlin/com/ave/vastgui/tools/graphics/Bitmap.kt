@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import android.graphics.Bitmap
 import android.graphics.Bitmap.Config
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
-import android.graphics.Matrix
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.util.Base64
@@ -32,16 +31,19 @@ import androidx.core.graphics.drawable.toBitmap
 import com.ave.vastgui.tools.content.ContextHelper
 import com.ave.vastgui.tools.graphics.MergeScale.BIG_REDUCE
 import com.ave.vastgui.tools.graphics.MergeScale.SMALL_ENLARGE
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
+import com.ave.vastgui.tools.io.mkFile
+import com.ave.vastgui.tools.io.Policy
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import androidx.core.graphics.scale
+import androidx.core.graphics.createBitmap
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2021/11/8 15:27
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/graphics/bitmap/bitmap/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/graphics/bitmap/bitmap/
 
 /**
  * Merge position when using [BmpUtils.mergeBitmap].
@@ -57,9 +59,9 @@ enum class MergePosition {
  * [BmpUtils.mergeBitmapTB].
  *
  * @property SMALL_ENLARGE Meaning that the smaller image is stretched
- *     proportionally.
+ * proportionally.
  * @property BIG_REDUCE Meaning that the larger image is compressed
- *     proportionally.
+ * proportionally.
  * @since 0.5.2
  */
 enum class MergeScale {
@@ -81,11 +83,7 @@ object BmpUtils {
     @JvmStatic
     @JvmOverloads
     @Throws(IllegalArgumentException::class)
-    fun mergeBitmap(
-        topBitmap: Bitmap,
-        bottomBitmap: Bitmap,
-        position: MergePosition = MergePosition.LT
-    ): Bitmap {
+    fun mergeBitmap(topBitmap: Bitmap, bottomBitmap: Bitmap, position: MergePosition = MergePosition.LT): Bitmap {
         if (bottomBitmap.isRecycled || topBitmap.isRecycled)
             throw IllegalArgumentException("One of the topBitmap or bottomBitmap is recycled.")
         if (topBitmap.width > bottomBitmap.width || topBitmap.height > bottomBitmap.height)
@@ -142,11 +140,7 @@ object BmpUtils {
     @JvmStatic
     @JvmOverloads
     @Throws(IllegalArgumentException::class)
-    fun mergeBitmapLR(
-        leftBitmap: Bitmap,
-        rightBitmap: Bitmap,
-        scale: MergeScale = SMALL_ENLARGE
-    ): Bitmap {
+    fun mergeBitmapLR(leftBitmap: Bitmap, rightBitmap: Bitmap, scale: MergeScale = SMALL_ENLARGE): Bitmap {
         if (leftBitmap.isRecycled || rightBitmap.isRecycled) {
             throw IllegalArgumentException("One of the topBitmap or bottomBitmap is recycled.")
         }
@@ -162,25 +156,17 @@ object BmpUtils {
 
         // Bitmap after merged.
         val tempBitmapL: Bitmap = if (leftBitmap.height != height) {
-            Bitmap.createScaledBitmap(
-                leftBitmap,
-                (height * 1f / leftBitmap.height * leftBitmap.width).toInt(),
-                height,
-                false
-            )
+            leftBitmap.scale((height * 1f / leftBitmap.height * leftBitmap.width).toInt(), height, false)
         } else leftBitmap
         val tempBitmapR: Bitmap = if (rightBitmap.height != height) {
-            Bitmap.createScaledBitmap(
-                rightBitmap,
-                (height * 1f / rightBitmap.height * rightBitmap.width).toInt(), height, false
-            )
+            rightBitmap.scale((height * 1f / rightBitmap.height * rightBitmap.width).toInt(), height, false)
         } else rightBitmap
 
         // The width of the merged bitmap.
         val width = tempBitmapL.width + tempBitmapR.width
 
         // Define the output bitmap.
-        val bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888)
+        val bitmap = createBitmap(width, height)
         val canvas = Canvas(bitmap)
 
         // Parameters that need to be drawn for the two bitmaps after scaling.
@@ -208,11 +194,7 @@ object BmpUtils {
     @JvmStatic
     @JvmOverloads
     @Throws(IllegalArgumentException::class)
-    fun mergeBitmapTB(
-        topBitmap: Bitmap,
-        bottomBitmap: Bitmap,
-        scale: MergeScale = SMALL_ENLARGE
-    ): Bitmap {
+    fun mergeBitmapTB(topBitmap: Bitmap, bottomBitmap: Bitmap, scale: MergeScale = SMALL_ENLARGE): Bitmap {
         if (topBitmap.isRecycled || bottomBitmap.isRecycled) {
             throw IllegalArgumentException("One of the topBitmap or bottomBitmap is recycled.")
         }
@@ -226,20 +208,14 @@ object BmpUtils {
         }
 
         val tempBitmapT: Bitmap = if (topBitmap.width != width) {
-            Bitmap.createScaledBitmap(
-                topBitmap, width,
-                (topBitmap.height * 1f / topBitmap.width * width).toInt(), false
-            )
+            topBitmap.scale(width, (topBitmap.height * 1f / topBitmap.width * width).toInt(), false)
         } else topBitmap
         val tempBitmapB: Bitmap = if (bottomBitmap.width != width) {
-            Bitmap.createScaledBitmap(
-                bottomBitmap, width,
-                (bottomBitmap.height * 1f / bottomBitmap.width * width).toInt(), false
-            )
+            bottomBitmap.scale(width, (bottomBitmap.height * 1f / bottomBitmap.width * width).toInt(), false)
         } else bottomBitmap
 
         val height = tempBitmapT.height + tempBitmapB.height
-        val bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888)
+        val bitmap = createBitmap(width, height)
         val canvas = Canvas(bitmap)
         val topRect = Rect(0, 0, tempBitmapT.width, tempBitmapT.height)
         val bottomRect = Rect(0, 0, tempBitmapB.width, tempBitmapB.height)
@@ -256,35 +232,36 @@ object BmpUtils {
      * @param file The file to store the bitmap.
      * @param format The format of the compressed image.
      * @param quality Hint to the compressor, 0-100. The value is interpreted
-     *     differently depending on the [Bitmap.CompressFormat].
+     * differently depending on the [Bitmap.CompressFormat].
      * @return The file path after storage, or null if the storage fails.
      */
     @JvmStatic
     @JvmOverloads
-    fun saveBitmapAsFile(
-        bitmap: Bitmap,
-        file: File,
-        format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
-        @IntRange(from = 0, to = 100) quality: Int = 100
-    ): File? {
-        val saveResult = FileMgr.saveFile(file)
-        if (saveResult.isFailure) return null
-        val fos = FileOutputStream(file)
-        return try {
-            if (bitmap.compress(format, quality, fos)) {
+    fun saveBitmapAsFile(bitmap: Bitmap, file: File, format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG, @IntRange(from = 0, to = 100) quality: Int = 100): File? {
+        try {
+            val saveResult = file.mkFile(Policy.EXCEPTION)
+            if (saveResult.isFailure) {
+                throw RuntimeException(saveResult.exceptionOrNull())
+            }
+
+            FileOutputStream(file).use { fos ->
+                if (!bitmap.compress(format, quality, fos)) {
+                    throw RuntimeException("Bitmap compress failed!")
+                }
                 fos.flush()
-                fos.close()
-                file
-            } else null
-        } catch (e: IOException) {
-            null
+            }
+
+            return file
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+            return null
         }
     }
 
     /** Get bitmap from base64. */
     @JvmStatic
-    fun getBitmapFromBase64(base64: String): Bitmap {
-        val decode: ByteArray = Base64.decode(base64.split(",")[1], Base64.DEFAULT)
+    fun getBitmapFromBase64(base64: String, flags: Int = Base64.DEFAULT): Bitmap {
+        val decode: ByteArray = Base64.decode(base64, flags)
         return BitmapFactory.decodeByteArray(decode, 0, decode.size)
     }
 
@@ -296,20 +273,28 @@ object BmpUtils {
      * @since 1.3.1
      */
     @JvmStatic
-    fun getBase64FromBitmap(bitmap: Bitmap): String? {
-        var base64: String?
-        ByteArrayOutputStream().use {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
-            it.flush()
-            it.close()
-            base64 = Base64.encodeToString(it.toByteArray(), Base64.DEFAULT)
+    fun getBase64FromBitmap(bitmap: Bitmap, flags: Int = Base64.DEFAULT): String? {
+        return try {
+            val output = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output)
+            Base64.encodeToString(output.toByteArray(), flags)
+                .also { output.close() }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            null
         }
-        return base64
     }
 
     /**
      * Scale bitmap
      *
+     * @param filter Whether or not bilinear filtering should be used when
+     * scaling the bitmap. If this is true then bilinear filtering will be
+     * used when scaling which has better image quality at the cost of worse
+     * performance. If this is false then nearest-neighbor scaling is used
+     * instead which will have worse image quality but is faster. Recommended
+     * default is to set filter to 'true' as the cost of bilinear filtering
+     * is typically minimal and the improved image quality is significant.
      * @since 0.5.0
      */
     @JvmStatic
@@ -317,25 +302,17 @@ object BmpUtils {
     fun scaleBitmap(
         bitmap: Bitmap,
         @IntRange(from = 0) reqWidth: Int,
-        @IntRange(from = 0) reqHeight: Int
-    ): Bitmap {
-        if (bitmap.isRecycled) throw IllegalArgumentException("Parameter bitmap is recycled.")
-        val width = bitmap.width
-        val height = bitmap.height
-        val matrix = Matrix()
-        val scaleWidth = reqWidth.toFloat() / width
-        val scaleHeight = reqHeight.toFloat() / height
-        matrix.postScale(scaleWidth, scaleHeight)
-        return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false)
-    }
+        @IntRange(from = 0) reqHeight: Int,
+        filter: Boolean = true
+    ): Bitmap = bitmap.scale(reqWidth, reqHeight, filter)
 
     /**
      * Convert drawable to bitmap.
      *
      * @param context In some cases, you may need to set context. For example,
-     *     VectorDrawable's fillColor uses `?attr/colorPrimaryContainer` as the
-     *     attribute value. Otherwise, the fillColor will not be obtained
-     *     correctly.
+     * VectorDrawable's fillColor uses `?attr/colorPrimaryContainer` as
+     * the attribute value. Otherwise, the fillColor will not be obtained
+     * correctly.
      * @throws RuntimeException
      * @since 0.2.0
      */
@@ -344,11 +321,12 @@ object BmpUtils {
     @Throws(RuntimeException::class)
     fun getBitmapFromDrawable(
         @DrawableRes id: Int,
-        context: Context = ContextHelper.getAppContext()
+        context: Context = ContextHelper.getAppContext(),
+        config: Config? = null
     ): Bitmap {
         val drawable = ContextCompat.getDrawable(context, id)
             ?: throw RuntimeException("Can't get the drawable by $id.")
-        return getBitmapFromDrawable(drawable)
+        return getBitmapFromDrawable(drawable, config)
     }
 
     /**
@@ -364,6 +342,12 @@ object BmpUtils {
 
     /**
      * Get bitmap width and height.
+     *
+     * ```kotlin
+     * val (w, h) = BmpUtils.getBitmapWidthHeight { options ->
+     *     BitmapFactory.decodeFile(path, options)
+     * }
+     * ```
      *
      * @param decoder Decode a bitmap with option.
      * @since 0.5.2

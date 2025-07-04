@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,38 +28,35 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.IntDef
 import androidx.annotation.StyleRes
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.getResourceIdOrThrow
-import com.ave.vastgui.core.extension.NotNUllVar
+import androidx.core.content.withStyledAttributes
+import androidx.lifecycle.AtomicReference
 import com.ave.vastgui.tools.R
 import com.ave.vastgui.tools.graphics.BmpUtils
+import com.ave.vastgui.tools.utils.ColorUtils
+import com.ave.vastgui.tools.utils.color
+import com.ave.vastgui.tools.utils.dimension
+import com.ave.vastgui.tools.view.avatar.Avatar.Companion.SHAPE_CIRCLE
+import com.ave.vastgui.tools.view.avatar.Avatar.Companion.SHAPE_ROUND_CORNER
 import java.io.File
 import java.io.FileInputStream
+import kotlin.math.max
+import kotlin.math.roundToInt
+import kotlin.properties.Delegates
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/25
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/avatar/avatar/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/avatar/avatar/
 // Reference: https://github.com/jhbxyz/ArticleRecord/blob/master/articles/%E8%87%AA%E5%AE%9A%E4%B9%89View/2%E5%9C%86%E5%BD%A2%E5%A4%B4%E5%83%8F.md
 
 /**
  * Avatar.
  *
- * @property mShape The Shape of avatar. Current support circle and round
- *     rectangle.
- * @property mAvatarSize The avatar size of avatar.
- * @property mAvatar The bitmap of the avatar image.
- * @property mBackground The color shown when the [mAvatar] is null.
- * @property mText The text shown when the [mAvatar] is null.
- * @property mTextSize The text size shown when the [mAvatar] is null.
- * @property mTextColor The text color shown when the [mAvatar] is null.
- * @property mStrokeWidth The stroke width of avatar.
- * @property mStrokeColor The stroke color of avatar.
- * @property mCornerRadius The corner radius of avatar when the shape is
- *     SHAPE_ROUND_CORNER.
  * @since 0.5.4
  */
 class Avatar @JvmOverloads constructor(
@@ -69,166 +66,289 @@ class Avatar @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = R.style.BaseAvatar
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
-    companion object {
-        const val SHAPE_CIRCLE = 0
-        const val SHAPE_ROUND_CORNER = 1
-    }
-
-    @IntDef(flag = true, value = [SHAPE_CIRCLE, SHAPE_ROUND_CORNER])
+    /** @since 1.5.2 */
+    @IntDef(value = [SHAPE_CIRCLE, SHAPE_ROUND_CORNER])
     @Retention(AnnotationRetention.SOURCE)
-    annotation class SHAPE
+    annotation class Shape
 
-    private val mDefaultText = "A"
-    private val mDefaultAvatarSize =
-        resources.getDimension(R.dimen.default_avatar_size)
-    private val mDefaultTextSize =
-        resources.getDimension(R.dimen.default_avatar_text_size)
-    private val mDefaultStrokeWidth =
-        resources.getDimension(R.dimen.default_avatar_stroke_width)
-    private val mDefaultCornerRadius =
-        resources.getDimension(R.dimen.default_avatar_corner_radius)
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_AVATAR_SIZE = dimension(R.dimen.default_avatar_size)
 
-    private val mXfermodeSrcIn =
-        PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
-    private val mAvatarPath = Path()
-    private val mAvatarSrcRect = Rect()
-    private val mAvatarDstRectF = RectF()
-    private val mAvatarPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val mTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_TEXT_SIZE = dimension(R.dimen.default_avatar_text_size)
+
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_STROKE_WIDTH = dimension(R.dimen.default_avatar_stroke_width)
+
+    /** @since 1.5.2 */
+    @Suppress("PrivatePropertyName")
+    private val DEFAULT_CORNER_RADIUS = dimension(R.dimen.default_avatar_corner_radius)
+
+    /** @since 1.5.2 */
+    private val xfermodeSrcIn = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+
+    /** @since 1.5.2 */
+    private val strokePath = Path()
+
+    /** @since 1.5.2 */
+    private val srcBmpSrcRect = Rect()
+
+    /** @since 1.5.2 */
+    private val srcBmpDstRectF = RectF()
+
+    /** @since 1.5.2 */
+    private val strokeDstRectF = RectF()
+
+    /** @since 1.5.2 */
+    private val srcBmpPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    /** @since 1.5.2 */
+    private val srcTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
     }
-    private val mBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val mStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+
+    /** @since 1.5.2 */
+    private val srcColorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+    }
+
+    /** @since 1.5.2 */
+    private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
     }
 
-    @get:SHAPE
-    var mShape: Int = SHAPE_CIRCLE
+    /**
+     * The Shape of avatar. Current support [SHAPE_CIRCLE] and round
+     * [SHAPE_ROUND_CORNER].
+     *
+     * @since 1.5.2
+     */
+    @get:Shape
+    var shape: Int = SHAPE_CIRCLE
         private set
 
-    var mAvatarSize: Float = mDefaultAvatarSize
+    /** @since 1.5.2 */
+    private var _size = DEFAULT_AVATAR_SIZE
 
-    var mAvatar: Bitmap? = null
-        private set
-
-    var mBackground: Int
+    /**
+     * The avatar size.
+     *
+     * @since 1.5.2
+     */
+    var size: Float
+        get() = _size
         set(value) {
-            mBackgroundPaint.color = value
+            if (_size == value) return
+            _size = value.coerceAtLeast(0f)
+            requestLayout()
         }
-        get() = mBackgroundPaint.color
 
-    var mText by NotNUllVar<String>()
+    private var _srcBmp: AtomicReference<Bitmap> = AtomicReference<Bitmap>()
 
-    var mTextSize: Float
+    /**
+     * The bitmap image of the avatar.
+     *
+     * @since 1.5.2
+     */
+    val srcBmp: Bitmap
+        get() = _srcBmp.get()
+
+    /**
+     * The color shown when [srcBmp] is null.
+     *
+     * @since 1.5.2
+     */
+    @get:ColorInt
+    @setparam:ColorInt
+    var srcColor: Int
+        get() = srcColorPaint.color
         set(value) {
-            mTextPaint.textSize = value
+            if (srcColorPaint.color == value) return
+            check(ColorUtils.isColorInt(value)) { "The value of srcColor(current=$value) isn't a valid value." }
+            srcColorPaint.color = value
+            invalidate()
         }
-        get() = mTextPaint.textSize
 
-    var mTextColor: Int
+    /** @since 1.5.2 */
+    private var _srcText: String by Delegates.notNull()
+
+    /**
+     * The text shown when [srcBmp] is null.
+     *
+     * @since 1.5.2
+     */
+    var srcText: String
+        get() = _srcText
         set(value) {
-            mTextPaint.color = value
+            if (_srcText == value) return
+            _srcText = value
+            invalidate()
         }
-        get() = mTextPaint.color
 
-    var mStrokeWidth: Float
+    /**
+     * The font size of [srcText] shown when the [srcBmp] is null.
+     *
+     * @since 1.5.2
+     */
+    var srcTextSize: Float
         set(value) {
-            mStrokePaint.strokeWidth = value
+            if (srcTextPaint.textSize == value) return
+            srcTextPaint.textSize = value.coerceAtLeast(0f)
+            invalidate()
         }
-        get() = mStrokePaint.strokeWidth
+        get() = srcTextPaint.textSize
 
-    var mStrokeColor: Int
+    /**
+     * The font color of [srcText] shown when the [srcBmp] is null.
+     *
+     * @since 1.5.2
+     */
+    @get:ColorInt
+    @setparam:ColorInt
+    var srcTextColor: Int
         set(value) {
-            mStrokePaint.color = value
+            if (srcTextPaint.color == value) return
+            check(ColorUtils.isColorInt(value)) { "The value of srcTextColor(current=$value) isn't a valid value." }
+            srcTextPaint.color = value
+            invalidate()
         }
-        get() = mStrokePaint.color
+        get() = srcTextPaint.color
 
-    var mCornerRadius: Float = mDefaultCornerRadius
+    /**
+     * The stroke width of avatar.
+     *
+     * @since 1.5.2
+     */
+    var strokeWidth: Float
+        get() = strokePaint.strokeWidth
+        set(value) {
+            if (strokePaint.strokeWidth == value) return
+            strokePaint.strokeWidth = value.coerceAtLeast(0f)
+            requestLayout()
+        }
+
+    /**
+     * The stroke color of avatar.
+     *
+     * @since 1.5.2
+     */
+    @get:ColorInt
+    @setparam:ColorInt
+    var strokeColor: Int
+        get() = strokePaint.color
+        set(value) {
+            if (strokePaint.color == value) return
+            check(ColorUtils.isColorInt(value)) { "The value of strokeColor(current=$value) isn't a valid value." }
+            strokePaint.color = value
+            invalidate()
+        }
+
+    /** @since 1.5.2 */
+    private var _cornerRadius: Float = DEFAULT_CORNER_RADIUS
+
+    /**
+     * The corner radius of avatar when the shape is [SHAPE_ROUND_CORNER].
+     *
+     * @since 1.5.2
+     */
+    var cornerRadius: Float
+        get() = _cornerRadius
+        set(value) {
+            if (_cornerRadius == value) return
+            _cornerRadius = value.coerceAtLeast(0f)
+            invalidate()
+        }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val neededWidth = mAvatarSize + mStrokeWidth
-        val neededHeight = mAvatarSize + mStrokeWidth
-        val width = resolveSize(neededWidth.toInt(), widthMeasureSpec)
-        val height = resolveSize(neededHeight.toInt(), heightMeasureSpec)
-        val textSize = mTextPaint.textSize
-        mTextPaint.textSize = textSize.coerceAtMost(width * 0.7f)
-        mCornerRadius = mCornerRadius.coerceAtMost(width * 0.5f)
+        val neededMinimumWidth = max(_size + 2 * strokeWidth, suggestedMinimumWidth.toFloat())
+        val neededMinimumHeight = max(_size + 2 * strokeWidth, suggestedMinimumHeight.toFloat())
+        val width = resolveSize(neededMinimumWidth.roundToInt(), widthMeasureSpec)
+        val height = resolveSize(neededMinimumHeight.roundToInt(), heightMeasureSpec)
         setMeasuredDimension(width, height)
     }
 
     override fun onDraw(canvas: Canvas) {
-        mAvatarDstRectF.set(
-            (measuredWidth - mAvatarSize) / 2f,
-            (measuredHeight - mAvatarSize) / 2f,
-            (measuredWidth + mAvatarSize) / 2f,
-            (measuredHeight + mAvatarSize) / 2f
-        )
-        mAvatarSrcRect.set(0, 0, mAvatarSize.toInt(), mAvatarSize.toInt())
-        when (mShape) {
-            SHAPE_CIRCLE -> mAvatarPath.addCircle(
-                width / 2f,
-                height / 2f,
-                mAvatarSize / 2f,
-                Path.Direction.CW
-            )
-
-            SHAPE_ROUND_CORNER -> {
-                mAvatarPath.addRoundRect(
-                    mAvatarDstRectF,
-                    mCornerRadius,
-                    mCornerRadius,
-                    Path.Direction.CW
-                )
-            }
-        }
-        canvas.drawPath(mAvatarPath, mStrokePaint)
-        if (null != mAvatar) {
+        if (_srcBmp.get() != null) {
             canvas.apply {
-                val count = saveLayer(mAvatarDstRectF, null)
-                drawPath(mAvatarPath, mAvatarPaint)
-                mAvatarPaint.xfermode = mXfermodeSrcIn
+                srcBmpDstRectF.set((measuredWidth - _size) / 2f, (measuredHeight - _size) / 2f,
+                    (measuredWidth + _size) / 2f, (measuredHeight + _size) / 2f)
+                val count = saveLayer(srcBmpDstRectF.left - strokeWidth, srcBmpDstRectF.top - strokeWidth,
+                    srcBmpDstRectF.right + strokeWidth, srcBmpDstRectF.bottom + strokeWidth, null)
+                strokePath.reset()
+                when (shape) {
+                    SHAPE_CIRCLE ->
+                        strokePath.addCircle(measuredWidth / 2f, measuredHeight / 2f, _size / 2f, Path.Direction.CW)
+
+                    SHAPE_ROUND_CORNER -> {
+                        strokeDstRectF.set((measuredWidth - _size) / 2f,
+                            (measuredHeight - _size) / 2f,
+                            (measuredWidth + _size) / 2f,
+                            (measuredHeight + _size) / 2f)
+                        strokePath.addRoundRect(strokeDstRectF, _cornerRadius - strokeWidth / 2f, _cornerRadius - strokeWidth / 2f, Path.Direction.CW)
+                    }
+                }
+                drawPath(strokePath, srcBmpPaint)
+                srcBmpPaint.xfermode = xfermodeSrcIn
                 // Use public void drawBitmap(@NonNull Bitmap bitmap, @Nullable Rect src,
                 // @NonNull RectF dst, @Nullable Paint paint)
                 // Because this function ignores the density associated with the bitmap.
                 // This is because the source and destination rectangle coordinate spaces
                 // are in their respective densities, so must already have the appropriate
                 // scaling factor applied.
-                drawBitmap(mAvatar!!, mAvatarSrcRect, mAvatarDstRectF, mAvatarPaint)
-                mAvatarPaint.xfermode = null
+                srcBmpSrcRect.set(0, 0, _size.toInt(), _size.toInt())
+                _srcBmp.set(BmpUtils.scaleBitmap(_srcBmp.get(), _size.toInt(), _size.toInt()))
+                drawBitmap(_srcBmp.get(), srcBmpSrcRect, srcBmpDstRectF, srcBmpPaint)
+                srcBmpPaint.xfermode = null
                 restoreToCount(count)
             }
         } else {
-            when (mShape) {
-                SHAPE_CIRCLE -> canvas.drawCircle(
-                    measuredWidth / 2f,
-                    measuredHeight / 2f,
-                    mAvatarSize / 2f,
-                    mBackgroundPaint
-                )
+            when (shape) {
+                SHAPE_CIRCLE ->
+                    canvas.drawCircle(measuredWidth / 2f, measuredHeight / 2f, _size / 2f, srcColorPaint)
 
-                SHAPE_ROUND_CORNER -> canvas.drawRoundRect(
-                    mAvatarDstRectF, mCornerRadius, mCornerRadius, mBackgroundPaint
-                )
+                SHAPE_ROUND_CORNER -> {
+                    strokeDstRectF.set((measuredWidth - _size) / 2f,
+                        (measuredHeight - _size) / 2f,
+                        (measuredWidth + _size) / 2f,
+                        (measuredHeight + _size) / 2f)
+                    canvas.drawRoundRect(strokeDstRectF, _cornerRadius - strokeWidth / 2f, _cornerRadius - strokeWidth / 2f, srcColorPaint)
+                }
             }
 
-            canvas.drawText(
-                mText,
-                measuredWidth / 2f,
-                measuredHeight / 2f + getBaseLine(),
-                mTextPaint
-            )
+            canvas.drawText(_srcText, measuredWidth / 2f, measuredHeight / 2f + getBaseLine(), srcTextPaint)
         }
-        mAvatarPath.reset()
-    }
 
+        strokePath.reset()
+        when (shape) {
+            SHAPE_CIRCLE ->
+                strokePath.addCircle(measuredWidth / 2f, measuredHeight / 2f, (_size + strokeWidth) / 2f, Path.Direction.CW)
+
+            SHAPE_ROUND_CORNER -> {
+                strokeDstRectF.set((measuredWidth - _size - strokeWidth) / 2f,
+                    (measuredHeight - _size - strokeWidth) / 2f,
+                    (measuredWidth + _size + strokeWidth) / 2f,
+                    (measuredHeight + _size + strokeWidth) / 2f)
+                strokePath.addRoundRect(strokeDstRectF, _cornerRadius, _cornerRadius, Path.Direction.CW)
+            }
+        }
+        canvas.drawPath(strokePath, strokePaint)
+    }
 
     /**
      * Set shape of avatar.
      *
      * @since 0.5.4
      */
-    fun setShape(@SHAPE shape: Int) {
-        mShape = shape
+    fun setShape(@Shape shape: Int) {
+        if (this.shape == shape) return
+        check(shape == SHAPE_CIRCLE || shape == SHAPE_ROUND_CORNER) {
+            "shape(current=$shape) should be one of two values: SHAPE_CIRCLE($SHAPE_CIRCLE) or SHAPE_ROUND_CORNER($SHAPE_ROUND_CORNER)"
+        }
+        this.shape = shape
+        invalidate()
     }
 
     /**
@@ -237,7 +357,8 @@ class Avatar @JvmOverloads constructor(
      * @since 0.5.4
      */
     fun setAvatar(bitmap: Bitmap) {
-        mAvatar = BmpUtils.scaleBitmap(bitmap, mAvatarSize.toInt(), mAvatarSize.toInt())
+        _srcBmp.set(bitmap)
+        invalidate()
     }
 
     /**
@@ -246,13 +367,13 @@ class Avatar @JvmOverloads constructor(
      * @since 0.5.4
      */
     fun setAvatar(@DrawableRes resId: Int) {
-        val avatar = try {
-            BmpUtils.getBitmapFromDrawable(resId, context)
+        try {
+            _srcBmp.set(BmpUtils.getBitmapFromDrawable(resId, context))
+            invalidate()
         } catch (exception: Exception) {
             exception.printStackTrace()
             return
         }
-        mAvatar = BmpUtils.scaleBitmap(avatar, mAvatarSize.toInt(), mAvatarSize.toInt())
     }
 
     /**
@@ -261,13 +382,13 @@ class Avatar @JvmOverloads constructor(
      * @since 0.5.4
      */
     fun setAvatar(file: File) {
-        val avatar = try {
-            BitmapFactory.decodeStream(FileInputStream(file))
+        try {
+            _srcBmp.set(BitmapFactory.decodeStream(FileInputStream(file)))
+            invalidate()
         } catch (exception: Exception) {
             exception.printStackTrace()
             return
         }
-        mAvatar = BmpUtils.scaleBitmap(avatar, mAvatarSize.toInt(), mAvatarSize.toInt())
     }
 
     /**
@@ -276,55 +397,32 @@ class Avatar @JvmOverloads constructor(
      * @since 0.5.4
      */
     private fun getBaseLine(): Float {
-        val fontMetrics = mTextPaint.fontMetrics
+        val fontMetrics = srcTextPaint.fontMetrics
         val height = fontMetrics.bottom - fontMetrics.top
         return height / 2f - fontMetrics.bottom
     }
 
     init {
-        val typeArray = context.obtainStyledAttributes(
-            attrs,
-            R.styleable.Avatar,
-            defStyleAttr,
-            defStyleRes
-        )
-        mAvatarSize =
-            typeArray.getDimension(R.styleable.Avatar_avatar_size, mDefaultAvatarSize)
-        mAvatar = try {
-            val avatar = BmpUtils.getBitmapFromDrawable(
-                typeArray.getResourceIdOrThrow(R.styleable.Avatar_avatar_src),
-                context
-            )
-            BmpUtils.scaleBitmap(avatar, mAvatarSize.toInt(), mAvatarSize.toInt())
-        } catch (exception: Exception) {
-            null
+        context.withStyledAttributes(attrs, R.styleable.Avatar, defStyleAttr, defStyleRes) {
+            _size = getDimension(R.styleable.Avatar_avatar_size, DEFAULT_AVATAR_SIZE)
+            _srcBmp.set(runCatching { BmpUtils.getBitmapFromDrawable(getResourceIdOrThrow(R.styleable.Avatar_avatar_src), context) }.getOrNull())
+            shape = getInt(R.styleable.Avatar_avatar_shape, SHAPE_CIRCLE)
+            srcColorPaint.color = getColor(R.styleable.Avatar_avatar_background, color(R.color.md_theme_primary))
+            _srcText = getString(R.styleable.Avatar_avatar_text) ?: DEFAULT_TEXT
+            srcTextPaint.textSize = getDimension(R.styleable.Avatar_avatar_text_size, DEFAULT_TEXT_SIZE)
+            srcTextPaint.color = getColor(R.styleable.Avatar_avatar_text_color, color(R.color.md_theme_onPrimary))
+            strokePaint.strokeWidth = getDimension(R.styleable.Avatar_avatar_stroke_width, DEFAULT_STROKE_WIDTH)
+            strokePaint.color = getColor(R.styleable.Avatar_avatar_stroke_color, color(R.color.md_theme_primaryContainer))
+            _cornerRadius = getDimension(R.styleable.Avatar_avatar_corner_radius, DEFAULT_CORNER_RADIUS)
         }
-        mShape =
-            typeArray.getInt(R.styleable.Avatar_avatar_shape, SHAPE_CIRCLE)
-        mBackground =
-            typeArray.getColor(
-                R.styleable.Avatar_avatar_background,
-                ContextCompat.getColor(context, R.color.md_theme_primary)
-            )
-        mText =
-            typeArray.getString(R.styleable.Avatar_avatar_text) ?: mDefaultText
-        mTextSize =
-            typeArray.getDimension(R.styleable.Avatar_avatar_text_size, mDefaultTextSize)
-        mTextColor =
-            typeArray.getColor(
-                R.styleable.Avatar_avatar_text_color,
-                ContextCompat.getColor(context, R.color.md_theme_onPrimary)
-            )
-        mStrokeWidth =
-            typeArray.getDimension(R.styleable.Avatar_avatar_stroke_width, mDefaultStrokeWidth)
-        mStrokeColor =
-            typeArray.getColor(
-                R.styleable.Avatar_avatar_stroke_color,
-                ContextCompat.getColor(context, R.color.md_theme_primaryContainer)
-            )
-        mCornerRadius =
-            typeArray.getDimension(R.styleable.Avatar_avatar_corner_radius, mDefaultCornerRadius)
-        typeArray.recycle()
+    }
+
+    companion object {
+        const val SHAPE_CIRCLE = 0
+        const val SHAPE_ROUND_CORNER = 1
+
+        /** @since 1.5.2 */
+        private const val DEFAULT_TEXT = "A"
     }
 
 }

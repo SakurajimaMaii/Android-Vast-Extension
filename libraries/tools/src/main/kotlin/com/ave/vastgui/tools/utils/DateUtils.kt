@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,12 +29,14 @@ import java.util.TimeZone
 // Email: guihy2019@gmail.com
 // Date: 2022/3/10 15:27
 // Description: Help you get time and other related information.
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/information-get/date-utils/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/information-get/date-utils/
 
 /** Date utils. */
 object DateUtils {
 
     const val TAG = "DateUtils"
+
+    // region Date Format
 
     const val FORMAT_YYYYhMMhDD = "yyyy-MM-dd"
     const val FORMAT_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss"
@@ -52,7 +54,10 @@ object DateUtils {
     const val FORMAT_MMCDDC = "MM月dd日"
     const val FORMAT_YYYYCMMCDDC = "yyyy年MM月dd日"
 
-    // GMT Format
+    // endregion
+
+    // region Gmt
+
     const val GMT_PLUS_ZONE = "GMT+00:00"
     const val GMT_PLUS_ONE = "GMT+01:00"
     const val GMT_PLUS_TWO = "GMT+02:00"
@@ -78,6 +83,17 @@ object DateUtils {
     const val GMT_MINUS_TEN = "GMT-10:00"
     const val GMT_MINUS_ELEVEN = "GMT-11:00"
     const val GMT_MINUS_TWELVE = "GMT-12:00"
+
+    // endregion
+
+    /** @since 1.5.2 */
+    const val SHORT = TimeZone.SHORT
+
+    /** @since 1.5.2 */
+    const val LONG = TimeZone.LONG
+
+    /** @since 1.5.2 */
+    const val NUMBER = 2
 
     /**
      * Get current time.
@@ -116,13 +132,22 @@ object DateUtils {
     /**
      * Get the default time zone for this host in string.
      *
-     * @param style either [TimeZone.LONG] or [TimeZone.SHORT].
+     * @param style [LONG] , [SHORT] or [NUMBER] .
+     * @return Refer to the following examples:
+     * - [LONG] : 中国夏令时间
+     * - [SHORT] : GMT+08:00
+     * - [NUMBER] : 8
      * @since 0.5.3
      */
     @JvmStatic
     @JvmOverloads
-    fun getCurrentTimeZone(style: Int = TimeZone.SHORT): String {
-        return TimeZone.getDefault().getDisplayName(true, style, Locale.getDefault())
+    fun getCurrentTimeZone(style: Int = SHORT): String {
+        if (style == NUMBER) {
+            val offsetMills = TimeZone.getDefault().getOffset(System.currentTimeMillis())
+            return (offsetMills / (1000 * 60 * 60)).toString()
+        } else {
+            return TimeZone.getDefault().getDisplayName(true, style, Locale.getDefault())
+        }
     }
 
     /**
@@ -130,7 +155,7 @@ object DateUtils {
      *
      * @param timeStringFormat The pattern describing the date and time format.
      * @return If [timeString] parsing fails, it returns [callback].Otherwise,
-     *     it returns date object.
+     * it returns date object.
      * @throws ParseException
      * @since 0.5.1
      */
@@ -310,7 +335,7 @@ object DateUtils {
      *
      * @param dateFormat The pattern describing the date and time format.
      * @return [SimpleDateFormat] using the [dateFormat] and the
-     *     [Locale.getDefault].
+     * [Locale.getDefault].
      * @since 0.0.1
      */
     private fun datetimeFormat(dateFormat: String): SimpleDateFormat {

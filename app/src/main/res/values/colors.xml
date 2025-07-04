@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2022 VastGui guihy2019@gmail.com
+  ~ Copyright 2021-2025 VastGui
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -67,7 +67,6 @@
     <color name="orangered">#FF4500</color><!--红橙色 -->
     <color name="deeppink">#FF1493</color><!--深粉红色 -->
     <color name="fuchsia">#FF00FF</color><!--紫红色 -->
-       
     <color name="red">#FF0000</color><!--红色 -->
     <color name="oldlace">#FDF5E6</color><!--老花色 -->
     <color name="lightgoldenrodyellow">#FAFAD2</color><!--亮金黄色 -->

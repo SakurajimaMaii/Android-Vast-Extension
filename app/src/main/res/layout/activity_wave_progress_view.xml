@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2022 VastGui guihy2019@gmail.com
+  ~ Copyright 2021-2025 VastGui
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -30,61 +30,195 @@
         android:layout_margin="10dp"
         app:progress_current_value="50" />
 
-    <com.ave.vastgui.tools.view.progress.WaveProgressView
-        android:id="@+id/imageProgressView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="10dp"
-        app:progress_current_value="50"
-        app:wave_progress_image="@drawable/ic_github" />
-
-    <com.google.android.material.textview.MaterialTextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="start"
-        android:text="@string/set_progress" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <com.google.android.material.slider.Slider
-        android:id="@+id/progressSlider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:contentDescription="@string/set_progress"
-        android:valueFrom="0.0"
-        android:valueTo="100.0" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="start"
-        android:text="@string/set_space" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/switch_icon_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/wave_progress_switch_image" />
 
-    <com.google.android.material.slider.Slider
-        android:id="@+id/spaceSlider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:contentDescription="@string/set_space"
-        android:valueFrom="0.0"
-        android:valueTo="100.0" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/switch_text_color_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/progress_switch_text_color" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="start"
-        android:text="@string/set_stroke" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/switch_text_show_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/progress_switch_text_show" />
 
-    <com.google.android.material.slider.Slider
-        android:id="@+id/strokeSlider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:contentDescription="@string/set_stroke"
-        android:valueFrom="0.0"
-        android:valueTo="100.0" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/switch_stroke_color_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/wave_progress_switch_stroke_color" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/wave_progress_change_update"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/progress_change_update_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:value="-1"
+                android:stepSize="25"
+                android:valueFrom="-1"
+                android:valueTo="299"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/progress_change_text_size"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/progress_text_size_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:value="8"
+                android:valueFrom="8"
+                android:valueTo="16"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="start"
+                android:text="@string/wave_progress_set_progress"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/progressSlider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/wave_progress_set_progress"
+                android:valueFrom="0.0"
+                android:valueTo="100.0"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="start"
+                android:text="@string/wave_progress_set_space"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/spaceSlider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/wave_progress_set_space"
+                android:valueFrom="0.0"
+                android:valueTo="100.0"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="start"
+                android:text="@string/wave_progress_set_stroke"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/strokeSlider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/wave_progress_set_stroke"
+                android:valueFrom="0.0"
+                android:valueTo="100.0"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="start"
+                android:text="@string/wave_progress_change_wave_speed"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/change_wave_speed_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/wave_progress_set_stroke"
+                android:valueFrom="2.0"
+                android:valueTo="6.0"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="start"
+                android:text="@string/wave_progress_change_wave_width"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/change_wave_width_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/wave_progress_set_stroke"
+                android:valueFrom="50.0"
+                android:valueTo="100.0"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="start"
+                android:text="@string/wave_progress_change_wave_height"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/change_wave_height_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/wave_progress_set_stroke"
+                android:valueFrom="20.0"
+                android:valueTo="30.0"
+                app:thumbHeight="20dp"
+                app:trackHeight="10dp" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

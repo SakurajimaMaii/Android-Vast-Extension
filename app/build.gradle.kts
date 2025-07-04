@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ android {
     defaultConfig {
         applicationId = "com.ave.vastgui.app"
         minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        targetSdk = libs.versions.compileSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
@@ -105,6 +105,7 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.constraintlayout)
     implementation(libs.converter.gson)
+    implementation(libs.core.ktx)
     implementation(libs.core.splashscreen)
     implementation(libs.dialogx)
     implementation(libs.dialogxiosstyle)
@@ -129,9 +130,15 @@ dependencies {
     implementation(libs.security.crypto)
     implementation(projects.libraries.adapter)
     implementation(projects.libraries.kernel)
+    implementation(projects.libraries.log.core)
     implementation(projects.libraries.log.mars)
     implementation(projects.libraries.log.okhttp)
     implementation(projects.libraries.log.android)
     implementation(projects.libraries.netstatelayout)
     implementation(projects.libraries.tools)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.junit.ktx)
+    androidTestImplementation(libs.androidx.rules)
+    testImplementation(libs.junit)
 }

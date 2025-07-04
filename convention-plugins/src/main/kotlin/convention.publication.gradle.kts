@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,25 +25,17 @@ plugins {
 ext["signing.keyId"] = null
 ext["signing.password"] = null
 ext["signing.secretKeyRingFile"] = null
-ext["ossrhUsername"] = null
-ext["ossrhPassword"] = null
 
 // Grabbing secrets from local.properties file or from environment variables, which could be used on CI
 val secretPropsFile: File = project.rootProject.file("maven.properties")
 if (secretPropsFile.exists()) {
-    secretPropsFile.reader().use {
-        Properties().apply {
-            load(it)
-        }
-    }.onEach { (name, value) ->
-        ext[name.toString()] = value
-    }
+    secretPropsFile.reader()
+        .use { Properties().apply { load(it) } }
+        .onEach { (name, value) -> ext[name.toString()] = value }
 } else {
     ext["signing.keyId"] = System.getenv("SIGNING_KEY_ID")
     ext["signing.password"] = System.getenv("SIGNING_PASSWORD")
     ext["signing.secretKeyRingFile"] = System.getenv("SIGNING_SECRET_KEY_RING_FILE")
-    ext["ossrhUsername"] = System.getenv("OSSRH_USERNAME")
-    ext["ossrhPassword"] = System.getenv("OSSRH_PASSWORD")
 }
 
 val javadocJar by tasks.registering(Jar::class) {
@@ -55,13 +47,16 @@ fun getExtraString(name: String) = ext[name]?.toString()
 publishing {
     // Configure maven central repository
     repositories {
+        // maven {
+        //     name = "ossrh"
+        //     setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+        //     credentials(PasswordCredentials::class)
+        // }
+
+        // NOTE https://jreleaser.org/guide/latest/examples/maven/staging-artifacts.html
+        // NOTE https://central.sonatype.org/publish/publish-portal-upload/
         maven {
-            name = "sonatype"
-            setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            credentials {
-                username = getExtraString("ossrhUsername")
-                password = getExtraString("ossrhPassword")
-            }
+            setUrl(layout.buildDirectory.dir("staging"))
         }
     }
 

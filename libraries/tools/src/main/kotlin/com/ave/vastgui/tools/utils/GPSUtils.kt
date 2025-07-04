@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import com.ave.vastgui.tools.content.ContextHelper
 // Author: Vast Gui 
 // Email: guihy2019@gmail.com
 // Date: 2022/4/13 17:41
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/hardware/gps-utils/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/hardware/location/
 
 /**
  * Determine if GPS is turned on.
@@ -34,6 +34,11 @@ import com.ave.vastgui.tools.content.ContextHelper
  * @return True if GPS is turned on, false otherwise.
  * @since 0.5.3
  */
+@Deprecated(
+    level = DeprecationLevel.WARNING,
+    replaceWith = ReplaceWith("isLocationEnabled()", "com.ave.vastgui.tools.utils.isLocationEnabled"),
+    message = "Use the LocationManagerCompat instead."
+)
 fun isGPSOpen(): Boolean {
     val locationManager: LocationManager = cast(
         ContextHelper.getAppContext()

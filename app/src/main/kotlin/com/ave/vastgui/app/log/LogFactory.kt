@@ -1,11 +1,11 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,8 +16,8 @@
 
 package com.ave.vastgui.app.log
 
-import com.ave.vastgui.tools.log.android
-import com.ave.vastgui.tools.manager.filemgr.FileMgr
+import com.ave.vastgui.tools.io.appInternalFilesDir
+import com.log.vastgui.android.base.android
 import com.log.vastgui.core.LogFactory
 import com.log.vastgui.core.base.LogStore
 import com.log.vastgui.core.base.Logger
@@ -38,10 +38,10 @@ import java.io.File
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/7/5
-// Documentation: https://ave.entropy2020.cn/documents/tools/log/description/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/log/description/
 
-val logDir = File(FileMgr.appInternalFilesDir(), "log")
-val logCache = File(FileMgr.appInternalFilesDir(), "log-cache")
+val logDir = File(appInternalFilesDir(), "log")
+val logCache = File(appInternalFilesDir(), "log-cache")
 val marsLogger = Logger.mars(logDir, logCache)
 
 val gson = GsonConverter.getInstance(true)
@@ -81,6 +81,11 @@ val logFactory: LogFactory = getLogFactory {
     }
     install(LogStorage) {
         levelSet = allLogLevel
-        logStore = LogStore.android(logFormat = LineFormat)
+        logStore = LogStore.android(
+            fileRoot = logDir,
+            fileNamePrefix = "log",
+            fileMaxSize = 1000 * 1024L,
+            logFormat = LineFormat
+        )
     }
 }

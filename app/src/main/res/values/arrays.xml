@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2021-2025 VastGui
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <array name="color_array">
+        <item>#FFFFF0</item><!--象牙色 -->
+        <item>#FFFFE0</item><!--亮黄色 -->
+        <item>#FFFF00</item><!--黄色 -->
+        <item>#FFFAFA</item><!--雪白色 -->
+        <item>#FFFAF0</item><!--花白色 -->
+        <item>#FFFACD</item><!--柠檬绸色 -->
+        <item>#FFF8DC</item><!--米绸色 -->
+        <item>#FFF5EE</item><!--海贝色 -->
+        <item>#FFF0F5</item><!--淡紫红 -->
+        <item>#FFEFD5</item><!--番木色 -->
+        <item>#FFEBCD</item><!--白杏色 -->
+        <item>#FFE4E1</item><!--浅玫瑰色 -->
+        <item>#FFE4C4</item><!--桔黄色 -->
+        <item>#FFE4B5</item><!--鹿皮色 -->
+        <item>#FFDEAD</item><!--纳瓦白 -->
+        <item>#FFDAB9</item><!--桃色 -->
+        <item>#FFD700</item><!--金色 -->
+        <item>#FFC0CB</item><!--粉红色 -->
+        <item>#FFB6C1</item><!--亮粉红色 -->
+        <item>#FFA500</item><!--橙色 -->
+        <item>#FFA07A</item><!--亮肉色 -->
+        <item>#FF8C00</item><!--暗桔黄色 -->
+        <item>#FF7F50</item><!--珊瑚色 -->
+        <item>#FF69B4</item><!--热粉红色 -->
+        <item>#FF6347</item><!--西红柿色 -->
+        <item>#FF4500</item><!--红橙色 -->
+        <item>#FF1493</item><!--深粉红色 -->
+        <item>#FF00FF</item><!--紫红色 -->
+        <item>#FF0000</item><!--红色 -->
+        <item>#FDF5E6</item><!--老花色 -->
+        <item>#FAFAD2</item><!--亮金黄色 -->
+        <item>#FAF0E6</item><!--亚麻色 -->
+        <item>#FAEBD7</item><!--古董白 -->
+        <item>#FA8072</item><!--鲜肉色 -->
+        <item>#F8F8FF</item><!--幽灵白 -->
+        <item>#F5FFFA</item><!--薄荷色 -->
+        <item>#F5F5F5</item><!--烟白色 -->
+        <item>#F5F5DC</item><!--米色 -->
+        <item>#F5DEB3</item><!--浅黄色 -->
+        <item>#F4A460</item><!--沙褐色 -->
+        <item>#F0FFFF</item><!--天蓝色 -->
+        <item>#F0FFF0</item><!--蜜色 -->
+        <item>#F0F8FF</item><!--艾利斯兰 -->
+        <item>#F0E68C</item><!--黄褐色 -->
+        <item>#F08080</item><!--亮珊瑚色 -->
+        <item>#EEE8AA</item><!--苍麒麟色 -->
+        <item>#EE82EE</item><!--紫罗兰色 -->
+        <item>#E9967A</item><!--暗肉色 -->
+        <item>#E6E6FA</item><!--淡紫色 -->
+        <item>#E0FFFF</item><!--亮青色 -->
+        <item>#DEB887</item><!--实木色 -->
+        <item>#DDA0DD</item><!--洋李色 -->
+        <item>#DCDCDC</item><!--淡灰色 -->
+        <item>#DC143C</item><!--暗深红色 -->
+        <item>#DB7093</item><!--苍紫罗兰色 -->
+        <item>#DAA520</item><!--金麒麟色 -->
+        <item>#DA70D6</item><!--淡紫色 -->
+        <item>#D8BFD8</item><!--蓟色 -->
+        <item>#D3D3D3</item><!--亮灰色 -->
+        <item>#D2B48C</item><!--茶色 -->
+        <item>#D2691E</item><!--巧可力色 -->
+        <item>#CD853F</item><!--秘鲁色 -->
+        <item>#CD5C5C</item><!--印第安红 -->
+        <item>#C71585</item><!--中紫罗兰色 -->
+        <item>#C0C0C0</item><!--银色 -->
+        <item>#BDB76B</item><!--暗黄褐色 -->
+        <item>#BC8F8F</item><!--褐玫瑰红 -->
+        <item>#BA55D3</item><!--中粉紫色 -->
+        <item>#B8860B</item><!--暗金黄色 -->
+        <item>#B22222</item><!--火砖色 -->
+        <item>#B0E0E6</item><!--粉蓝色 -->
+        <item>#B0C4DE</item><!--亮钢兰色 -->
+        <item>#AFEEEE</item><!--苍宝石绿 -->
+        <item>#ADFF2F</item><!--黄绿色 -->
+        <item>#ADD8E6</item><!--亮蓝色 -->
+        <item>#A9A9A9</item><!--暗灰色 -->
+        <item>#A52A2A</item><!--褐色 -->
+        <item>#A0522D</item><!--赭色 -->
+        <item>#9932CC</item><!--暗紫色 -->
+        <item>#98FB98</item><!--苍绿色 -->
+        <item>#9400D3</item><!--暗紫罗兰色 -->
+        <item>#9370DB</item><!--中紫色 -->
+        <item>#90EE90</item><!--亮绿色 -->
+        <item>#8FBC8F</item><!--暗海兰色 -->
+        <item>#8B4513</item><!--重褐色 -->
+        <item>#8B008B</item><!--暗洋红 -->
+        <item>#8B0000</item><!--暗红色 -->
+        <item>#8A2BE2</item><!--紫罗兰蓝色 -->
+        <item>#87CEFA</item><!--亮天蓝色 -->
+        <item>#87CEEB</item><!--天蓝色 -->
+        <item>#808080</item><!--灰色 -->
+        <item>#808000</item><!--橄榄色 -->
+        <item>#800080</item><!--紫色 -->
+        <item>#800000</item><!--粟色 -->
+        <item>#7FFFD4</item><!--碧绿色 -->
+        <item>#7FFF00</item><!--黄绿色 -->
+        <item>#7CFC00</item><!--草绿色 -->
+        <item>#7B68EE</item><!--中暗蓝色 -->
+        <item>#778899</item><!--亮蓝灰 -->
+        <item>#708090</item><!--灰石色 -->
+        <item>#6B8E23</item><!--深绿褐色 -->
+        <item>#6A5ACD</item><!--石蓝色 -->
+        <item>#696969</item><!--暗灰色 -->
+        <item>#66CDAA</item><!--中绿色 -->
+        <item>#6495ED</item><!--菊兰色 -->
+        <item>#5F9EA0</item><!--军兰色 -->
+        <item>#556B2F</item><!--暗橄榄绿 -->
+        <item>#4B0082</item><!--靛青色 -->
+        <item>#48D1CC</item><!--中绿宝石 -->
+        <item>#483D8B</item><!--暗灰蓝色 -->
+        <item>#4682B4</item><!--钢兰色 -->
+        <item>#4169E1</item><!--皇家蓝 -->
+        <item>#40E0D0</item><!--青绿色 -->
+        <item>#3CB371</item><!--中海蓝 -->
+        <item>#32CD32</item><!--橙绿色 -->
+        <item>#2F4F4F</item><!--暗瓦灰色 -->
+        <item>#2E8B57</item><!--海绿色 -->
+        <item>#228B22</item><!--森林绿 -->
+        <item>#20B2AA</item><!--亮海蓝色 -->
+        <item>#1E90FF</item><!--闪兰色 -->
+        <item>#191970</item><!--中灰兰色 -->
+        <item>#00FFFF</item><!--浅绿色 -->
+        <item>#00FFFF</item><!--青色 -->
+        <item>#00FF7F</item><!--春绿色 -->
+        <item>#00FF00</item><!--酸橙色 -->
+        <item>#00FA9A</item><!--中春绿色 -->
+        <item>#00CED1</item><!--暗宝石绿 -->
+        <item>#00BFFF</item><!--深天蓝色 -->
+        <item>#008B8B</item><!--暗青色 -->
+        <item>#008080</item><!--水鸭色 -->
+        <item>#008000</item><!--绿色 -->
+        <item>#006400</item><!--暗绿色 -->
+        <item>#0000FF</item><!--蓝色 -->
+        <item>#0000CD</item><!--中兰色 -->
+        <item>#00008B</item><!--暗蓝色 -->
+        <item>#000080</item><!--海军色 -->
+        <item>#99cc33</item><!--草绿色 -->
+        <item>#cccccc</item><!--灰色cc -->
+        <item>#8f8f8f</item><!--灰色8f -->
+    </array>
+</resources>

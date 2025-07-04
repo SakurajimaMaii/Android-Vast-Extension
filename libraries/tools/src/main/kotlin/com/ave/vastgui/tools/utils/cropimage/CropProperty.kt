@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,12 @@ import android.net.Uri
 import android.os.Build
 import androidx.annotation.IntRange
 import com.ave.vastgui.tools.activity.result.contract.CropPhotoContract
-import com.ave.vastgui.tools.manager.mediafilemgr.ImageMgr
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/23
 
-abstract class CropProperty {
+sealed class CropProperty {
 
     /** Set the data uri. */
     abstract fun setData(uri: Uri): CropProperty
@@ -77,27 +76,22 @@ abstract class CropProperty {
     /**
      * Set the [name] for the output image.
      *
-     * @param name Output image name. If null, the
-     *     ImageMgr.getDefaultFileName(".jpg") will be set as the default
-     *     value.
-     * @throws RuntimeException
-     * @see ImageMgr
+     * @param name Output image name.
      * @since 0.4.0
      */
     abstract fun setOutputName(name: String?): CropProperty
 
     /**
      * Set the output image format.
-     *
-     * @param format For example: [Bitmap.CompressFormat.JPEG.toString]
      */
-    protected abstract fun setOutputFormat(format: String): CropProperty
+    @Deprecated(message = "The format doesn't affect the output result.", level = DeprecationLevel.WARNING)
+    abstract fun setOutputFormat(format: String): CropProperty
 
     /**
      * Set the return-data.
      *
      * @param value True if you want to save the return data in the [Bitmap],
-     *     false otherwise.
+     * false otherwise.
      */
     abstract fun setReturnData(value: Boolean): CropProperty
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-import java.net.URL
+import java.net.URI
 
 plugins {
     kotlin("jvm")
@@ -80,12 +79,12 @@ if (mavenPropertiesFile.exists()) {
     }
 }
 
-tasks.withType<DokkaTaskPartial> {
+dokka {
     moduleName.set("log-core")
     dokkaSourceSets.configureEach {
         sourceLink {
             localDirectory.set(projectDir.resolve("src"))
-            remoteUrl.set(URL("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/core/src"))
+            remoteUrl.set(URI("https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/libraries/log/core/src"))
             remoteLineSuffix.set("#L")
         }
     }

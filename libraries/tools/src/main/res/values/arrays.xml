@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2021-2024 VastGui
+  ~ Copyright 2021-2025 VastGui
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -25,10 +25,16 @@
         <item>\&#064;qq.com</item>
         <item>\&#064;163.com</item>
         <item>\&#064;126.com</item>
-        <item>\&#064;gmail.com</item>
-        <item>\&#064;139.com</item>
-        <item>\&#064;hotmail.com</item>
         <item>\&#064;sina.com</item>
-        <item>\&#064;me.com</item>
+        <item>\&#064;sohu.com</item>
+        <item>\&#064;aliyun.com</item>
+        <item>\&#064;yeah.net</item>
+        <item>\&#064;gmail.com</item>
+        <item>\&#064;outlook.com</item>
+        <item>\&#064;yahoo.com</item>
+        <item>\&#064;hotmail.com</item>
+        <item>\&#064;icloud.com</item>
+        <item>\&#064;protonmail.com</item>
+        <item>\&#064;aol.com</item>
     </string-array>
 </resources>

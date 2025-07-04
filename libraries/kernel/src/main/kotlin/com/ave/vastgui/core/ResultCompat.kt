@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,10 @@
  */
 
 package com.ave.vastgui.core
+
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -69,10 +73,42 @@ class ResultCompat<T>(val result: Result<T>) {
     /** @see Result.getOrNull */
     fun getOrNull(): T? = result.getOrNull()
 
+    /**
+     * @see Result.getOrThrow
+     * @since 0.1.4
+     */
+    fun getOrThrow(): T = result.getOrThrow()
+
     /** @see Result.exceptionOrNull */
     fun exceptionOrNull(): Throwable? = result.exceptionOrNull()
 
     override fun toString(): String =
         if (isSuccess) "ResultCompat(value = ${getOrNull()})"
         else "ResultCompat(error = ${exceptionOrNull()?.message})"
+}
+
+/**
+ * @see Result.onSuccess
+ * @since 0.1.4
+ */
+@OptIn(ExperimentalContracts::class)
+inline fun <T> ResultCompat<T>.onSuccess(action: (value: T) -> Unit): ResultCompat<T> {
+    contract {
+        callsInPlace(action, InvocationKind.AT_MOST_ONCE)
+    }
+    if (isSuccess) result.onSuccess { action(it) }
+    return this
+}
+
+/**
+ * @see Result.onFailure
+ * @since 0.1.4
+ */
+@OptIn(ExperimentalContracts::class)
+inline fun <T> ResultCompat<T>.onFailure(action: (exception: Throwable) -> Unit): ResultCompat<T> {
+    contract {
+        callsInPlace(action, InvocationKind.AT_MOST_ONCE)
+    }
+    exceptionOrNull()?.let { action(it) }
+    return this
 }

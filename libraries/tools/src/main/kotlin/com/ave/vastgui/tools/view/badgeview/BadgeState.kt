@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package com.ave.vastgui.tools.view.badgeview
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/9/12
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/ui/badge/description/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/badge/description/
 
 /**
  * Badge state.
@@ -27,38 +27,38 @@ package com.ave.vastgui.tools.view.badgeview
  * @since 0.5.3
  */
 sealed class BadgeState {
-    internal object UNSPECIFIED : BadgeState()
+
+    /** @since 1.5.2 */
+    internal object UnspecifiedState : BadgeState()
 
     /**
      * Dot state.
      *
-     * @property SHOW Show the badge dot.
-     * @property HIDE Hide the badge dot.
-     * @since 0.5.3
+     * @property Show Show the badge dot.
+     * @property Hide Hide the badge dot.
+     * @since 1.5.2
      */
-    sealed class DOT : BadgeState() {
-        object SHOW : DOT()
-        object HIDE : DOT()
+    sealed class DotState : BadgeState() {
+        data object Show : DotState()
+        data object Hide : DotState()
     }
 
     /**
      * Bubble State.
      *
-     * @property DEFAULT The default state of badge.
-     * @property CONNECT The fixed point and the current moving point are also
-     *     connected using a Bezier curve.
-     * @property APART The current moving point and the fixed point are
-     *     separated and are not connected by a Bezier curve.
-     * @property HIDE The moving point will be hided and start explosion
-     *     animation.
-     * @since 0.5.3
+     * @property Default The default state of badge.
+     * @property Connect The fixed point and the current moving point are also
+     * connected using a Bezier curve.
+     * @property Apart The current moving point and the fixed point are
+     * separated and are not connected by a Bezier curve.
+     * @property Hide The moving point will be hided and start explosion
+     * animation.
+     * @since 1.5.2
      */
-    sealed class BUBBLE : BadgeState() {
-        object DEFAULT : BUBBLE()
-        object CONNECT : BUBBLE()
-        object APART : BUBBLE()
-        object HIDE : BUBBLE()
+    sealed class BubbleState : BadgeState() {
+        data object Default : BubbleState()
+        data object Connect : BubbleState()
+        data object Apart : BubbleState()
+        data object Hide : BubbleState()
     }
-
-    override fun toString(): String = this::class.java.toString()
 }

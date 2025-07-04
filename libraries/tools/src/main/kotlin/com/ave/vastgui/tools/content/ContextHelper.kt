@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,13 @@
 package com.ave.vastgui.tools.content
 
 import android.app.Application
+import android.content.ContentResolver
 import android.content.Context
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2022/6/20
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/context-helper/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/context-helper/
 
 /** Help utils to get context. */
 object ContextHelper {
@@ -62,5 +63,12 @@ object ContextHelper {
         if (!ContextHelper::application.isInitialized) {
             throw UninitializedPropertyAccessException("application is not init, please call ToolsConfig.init()")
         } else application.applicationContext
+
+    /**
+     * Get [ContentResolver] by [getAppContext]
+     *
+     * @since 1.5.2
+     */
+    fun getContentResolver(): ContentResolver = getAppContext().contentResolver
 
 }

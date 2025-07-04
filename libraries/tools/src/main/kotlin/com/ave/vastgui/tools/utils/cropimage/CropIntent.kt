@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 VastGui
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.ave.vastgui.tools.utils.cropimage
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -28,12 +27,12 @@ import com.ave.vastgui.tools.content.ContextHelper
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
 // Date: 2023/3/23
-// Documentation: https://ave.entropy2020.cn/documents/tools/core-topics/intent/crop-intent/
+// Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/intent/crop-intent/
 
 class CropIntent : CropProperty() {
 
-    /** @since 0.4.0 */
-    var mOutputName: String? = null
+    /** @since 1.5.2 */
+    var outputName: String? = null
         private set
 
     private val intent = Intent("com.android.camera.action.CROP").apply {
@@ -79,11 +78,14 @@ class CropIntent : CropProperty() {
     }
 
     override fun setOutputName(name: String?) = apply {
-        mOutputName = name
+        outputName = name
     }
 
+    @Deprecated("The format doesn't affect the output result.", level = DeprecationLevel.WARNING)
     override fun setOutputFormat(format: String) = apply {
-        intent.putExtra("outputFormat", format)
+        if (false) {
+            intent.putExtra("outputFormat", format)
+        }
     }
 
     override fun setReturnData(value: Boolean) = apply {
@@ -96,7 +98,6 @@ class CropIntent : CropProperty() {
 
     /** Return crop intent. */
     fun getIntent(): Intent {
-        setOutputFormat(Bitmap.CompressFormat.JPEG.toString())
         return intent
     }
 

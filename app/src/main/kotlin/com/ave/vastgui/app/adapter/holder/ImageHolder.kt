@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 VastGui guihy2019@gmail.com
+ * Copyright 2021-2025 VastGui
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,9 @@ package com.ave.vastgui.app.adapter.holder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import coil.load
+import coil3.load
+import coil3.request.crossfade
+import coil3.request.placeholder
 import com.ave.vastgui.adapter.base.ItemHolder
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.adapter.entity.Images
@@ -37,7 +39,7 @@ class DefaultImageHolder(itemView: View) : ItemHolder<Images.Image>(itemView) {
     override fun onBindData(item: Images.Image) {
         image.load(item.url) {
             crossfade(true)
-            placeholder(R.drawable.background)
+            placeholder(R.drawable.img_horizontal_pv_background)
         }
         title.text = item.title
     }
@@ -61,7 +63,7 @@ class ComicImageHolder(itemView: View) : ItemHolder<Images.Image>(itemView) {
     override fun onBindData(item: Images.Image) {
         image.load(item.url) {
             crossfade(true)
-            placeholder(R.drawable.background)
+            placeholder(R.drawable.img_horizontal_pv_background)
         }
         title.text = item.title
     }
