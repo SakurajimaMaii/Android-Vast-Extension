@@ -16,8 +16,6 @@
 
 import java.net.URI
 
-
-
 plugins {
     kotlin("android")
     id("com.android.library")
