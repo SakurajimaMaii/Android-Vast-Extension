@@ -31,10 +31,10 @@ import com.ave.vastgui.core.extension.NotNUllVar
 import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.core.utils.Quadruple
 import com.ave.vastgui.tools.R
-import com.ave.vastgui.tools.databinding.BadgeLayoutBinding
 import com.ave.vastgui.tools.utils.DensityUtils.DP
 import com.ave.vastgui.tools.viewbinding.viewBinding
 import androidx.core.content.withStyledAttributes
+import com.ave.vastgui.tools.databinding.LayoutBadgeBinding
 import com.ave.vastgui.tools.utils.color
 import kotlin.math.roundToInt
 
@@ -56,7 +56,7 @@ class BadgeLayout @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     /** @since 1.5.2 */
-    private val binding by viewBinding(BadgeLayoutBinding::bind)
+    private val binding by viewBinding(LayoutBadgeBinding::bind)
 
     /**
      * The icon resources id.
@@ -259,7 +259,7 @@ class BadgeLayout @JvmOverloads constructor(
     }
 
     init {
-        inflate(context, R.layout.badge_layout, this)
+        inflate(context, R.layout.layout_badge, this)
         context.withStyledAttributes(attrs, R.styleable.BadgeLayout, defStyleAttr, defStyleRes) {
             badgeMode = when (getInt(R.styleable.BadgeLayout_badge_mode, BadgeMode.Unspecified.code)) {
                 BadgeMode.Dot.code -> BadgeMode.Dot

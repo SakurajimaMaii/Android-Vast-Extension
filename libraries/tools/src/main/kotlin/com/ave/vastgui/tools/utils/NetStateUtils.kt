@@ -83,6 +83,7 @@ object NetStateUtils {
      * [ACCESS_NETWORK_STATE].
      * @since 1.5.2
      */
+    @Suppress("DEPRECATION")
     @JvmStatic
     @kotlin.jvm.Throws(SecurityException::class)
     internal fun Context.getActiveNetworkInfo(): NetworkInfo? {

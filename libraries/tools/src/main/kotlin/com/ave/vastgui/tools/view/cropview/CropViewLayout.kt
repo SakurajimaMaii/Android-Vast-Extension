@@ -35,21 +35,21 @@ import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.annotation.RequiresApi
+import androidx.core.content.withStyledAttributes
+import androidx.core.graphics.createBitmap
 import androidx.core.view.children
 import androidx.exifinterface.media.ExifInterface
 import com.ave.vastgui.tools.R
-import com.ave.vastgui.tools.databinding.CropLayoutBinding
+import com.ave.vastgui.tools.databinding.LayoutCropBinding
 import com.ave.vastgui.tools.graphics.BmpUtils
 import com.ave.vastgui.tools.utils.ScreenSizeUtils
+import com.ave.vastgui.tools.utils.color
+import com.ave.vastgui.tools.utils.dimension
 import com.ave.vastgui.tools.viewbinding.viewBinding
 import java.io.File
 import java.io.IOException
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
-import androidx.core.content.withStyledAttributes
-import com.ave.vastgui.tools.utils.color
-import com.ave.vastgui.tools.utils.dimension
-import androidx.core.graphics.createBitmap
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -81,7 +81,7 @@ class CropViewLayout @JvmOverloads constructor(
     private val DEFAULT_CROP_FRAME_HEIGHT = dimension(R.dimen.default_crop_frame_height)
 
     /** @since 1.5.2 */
-    private val binding by viewBinding(CropLayoutBinding::bind, R.id.crop_layout_root)
+    private val binding by viewBinding(LayoutCropBinding::bind, R.id.crop_layout_root)
 
     /**
      * The imageview is used to show original image.
@@ -573,7 +573,7 @@ class CropViewLayout @JvmOverloads constructor(
     }
 
     init {
-        inflate(context, R.layout.crop_layout, this)
+        inflate(context, R.layout.layout_crop, this)
         context.withStyledAttributes(attrs, R.styleable.CropViewLayout, defStyleAttr, defStyleRes) {
             cropMaskColor = getColor(R.styleable.CropViewLayout_crop_mask_layer_color, color(R.color.default_crop_frame_mask_color))
             cropFrameType =

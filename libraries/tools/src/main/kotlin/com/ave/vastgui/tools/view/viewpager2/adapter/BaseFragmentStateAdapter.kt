@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import kotlin.collections.toList
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
@@ -62,11 +63,8 @@ open class BaseFragmentStateAdapter : FragmentStateAdapter {
         this.fragments.addAll(fragments)
     }
 
-    override fun getItemCount() = getFragments().size
+    override fun getItemCount() = fragments.toList().size
 
-    override fun createFragment(position: Int) = getFragments()[position]
-
-    /** @since 1.5.2 */
-    fun getFragments(): List<Fragment> = fragments
+    override fun createFragment(position: Int) = fragments.toList()[position]
 
 }
