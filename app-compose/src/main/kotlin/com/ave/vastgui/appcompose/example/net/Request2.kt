@@ -49,7 +49,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.ave.vastgui.appcompose.R
 import com.ave.vastgui.core.extension.nothing_to_do
 import com.ave.vastgui.tools.network.request.Request2

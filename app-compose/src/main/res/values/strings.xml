@@ -19,4 +19,5 @@
     <string name="compose_shortcut_short_label1" translatable="false">短标签</string>
     <string name="compose_shortcut_long_label1" translatable="false">长标签</string>
     <string name="compose_disabled_message1" translatable="false">快捷方式不可用信息</string>
+    <string name="title_activity_location">LocationActivity</string>
 </resources>
