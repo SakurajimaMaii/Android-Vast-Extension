@@ -118,15 +118,29 @@ dependencies {
 extra["PUBLISH_ARTIFACT_ID"] = "VastTools"
 extra["PUBLISH_DESCRIPTION"] = "Easy Quick Android Tools for you to faster project development."
 extra["PUBLISH_URL"] = "https://github.com/SakurajimaMaii/Android-Vast-Extension"
+extra["GROUP"] = "io.github.sakurajimamaii"
 
 val mavenPropertiesFile = File(rootDir, "maven.properties")
 if (mavenPropertiesFile.exists()) {
     publishing {
+        repositories {
+            // NOTE https://central.sonatype.org/publish/publish-portal-snapshots/
+            maven {
+                name = "snapshots"
+                setUrl("https://central.sonatype.com/repository/maven-snapshots/")
+                credentials(PasswordCredentials::class)
+                // Only search this repository for the specific dependency
+                content {
+                    includeModule("io.github.sakurajimamaii", "VastTools")
+                }
+            }
+        }
+
         publications {
             register<MavenPublication>("release") {
                 groupId = "io.github.sakurajimamaii"
                 artifactId = "VastTools"
-                version = "1.5.2"
+                version = "1.5.3-SNAPSHOT"
 
                 afterEvaluate {
                     from(components["release"])

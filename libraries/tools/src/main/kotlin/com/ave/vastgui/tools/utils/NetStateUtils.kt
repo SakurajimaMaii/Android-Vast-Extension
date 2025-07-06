@@ -136,8 +136,7 @@ object NetStateUtils {
             @Suppress("DEPRECATION")
             return networkInfo.isConnected and networkInfo.isAvailable
         }
-        val networkCapabilities = context.getActiveNetworkCapabilities()
-        if (null != networkCapabilities) {
+        return context.getActiveNetworkCapabilities()?.let { networkCapabilities ->
             when {
                 networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
                 networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
@@ -147,8 +146,7 @@ object NetStateUtils {
                 networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
                 else -> false
             }
-        }
-        return false
+        } ?: false
     }
 
     /**

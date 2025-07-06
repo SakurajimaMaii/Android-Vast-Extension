@@ -46,6 +46,11 @@ class NetStateUtilsTest {
     }
 
     @Test
+    fun isNetworkAvailable() {
+        Assert.assertTrue(NetStateUtils.isNetworkAvailable(context))
+    }
+
+    @Test
     fun isMobile() {
         Assert.assertTrue(NetStateUtils.isMobile(context))
     }
