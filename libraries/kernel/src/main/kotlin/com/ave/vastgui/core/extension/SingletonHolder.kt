@@ -41,16 +41,16 @@ package com.ave.vastgui.core.extension
  * }
  * ```
  *
- * @param T the singleton class.
- * @param A the parameters class.
+ * @param O the singleton class.
+ * @param I the parameters class.
  * @property creator the constructor of the T.
  * @since 0.0.3
  */
-open class SingletonHolder<out T, in A>(private val creator: A.() -> T) {
+open class SingletonHolder<out O, in I>(private val creator: I.() -> O) {
 
-    private var instance: T? = null
+    private var instance: O? = null
 
-    fun getInstance(arg: A): T =
+    fun getInstance(arg: I): O =
         instance ?: synchronized(this) {
             instance ?: creator(arg).apply { instance = this }
         }
