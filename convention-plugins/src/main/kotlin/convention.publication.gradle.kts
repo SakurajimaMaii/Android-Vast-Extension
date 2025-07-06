@@ -56,6 +56,7 @@ publishing {
         // NOTE https://jreleaser.org/guide/latest/examples/maven/staging-artifacts.html
         // NOTE https://central.sonatype.org/publish/publish-portal-upload/
         maven {
+            name = "staging"
             setUrl(layout.buildDirectory.dir("staging"))
         }
     }
