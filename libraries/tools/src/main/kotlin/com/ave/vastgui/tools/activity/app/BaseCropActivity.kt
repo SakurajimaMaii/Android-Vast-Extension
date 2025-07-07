@@ -24,22 +24,22 @@ import android.os.Environment
 import android.provider.MediaStore.Images.Media
 import android.webkit.MimeTypeMap
 import com.ave.vastgui.tools.R
-import com.ave.vastgui.tools.activity.VastVbActivity
-import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.ACTION
-import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.AUTHORITY
-import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.FRAME_TYPE
-import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.OUTPUT_X
-import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.OUTPUT_Y
-import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.PREVIEW_HEIGHT
-import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.PREVIEW_WIDTH
-import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_DESTINATION_IMAGE_ERROR
-import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_FRAME_TYPE_ERROR
-import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_GET_CROP_IMAGE_ERROR
-import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_NULL_DATA_ERROR
-import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_PARAMETER_ERROR
-import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_PERMISSION_ERROR
-import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RESULT_SOURCE_IMAGE_ERROR
-import com.ave.vastgui.tools.activity.app.VastCropActivity.Companion.RETURN_DATA
+import com.ave.vastgui.tools.activity.BaseVbActivity
+import com.ave.vastgui.tools.activity.app.BaseCropActivity.Companion.ACTION
+import com.ave.vastgui.tools.activity.app.BaseCropActivity.Companion.AUTHORITY
+import com.ave.vastgui.tools.activity.app.BaseCropActivity.Companion.FRAME_TYPE
+import com.ave.vastgui.tools.activity.app.BaseCropActivity.Companion.OUTPUT_X
+import com.ave.vastgui.tools.activity.app.BaseCropActivity.Companion.OUTPUT_Y
+import com.ave.vastgui.tools.activity.app.BaseCropActivity.Companion.PREVIEW_HEIGHT
+import com.ave.vastgui.tools.activity.app.BaseCropActivity.Companion.PREVIEW_WIDTH
+import com.ave.vastgui.tools.activity.app.BaseCropActivity.Companion.RESULT_DESTINATION_IMAGE_ERROR
+import com.ave.vastgui.tools.activity.app.BaseCropActivity.Companion.RESULT_FRAME_TYPE_ERROR
+import com.ave.vastgui.tools.activity.app.BaseCropActivity.Companion.RESULT_GET_CROP_IMAGE_ERROR
+import com.ave.vastgui.tools.activity.app.BaseCropActivity.Companion.RESULT_NULL_DATA_ERROR
+import com.ave.vastgui.tools.activity.app.BaseCropActivity.Companion.RESULT_PARAMETER_ERROR
+import com.ave.vastgui.tools.activity.app.BaseCropActivity.Companion.RESULT_PERMISSION_ERROR
+import com.ave.vastgui.tools.activity.app.BaseCropActivity.Companion.RESULT_SOURCE_IMAGE_ERROR
+import com.ave.vastgui.tools.activity.app.BaseCropActivity.Companion.RETURN_DATA
 import com.ave.vastgui.tools.databinding.ActivityCropBinding
 import com.ave.vastgui.tools.io.Policy
 import com.ave.vastgui.tools.io.asImageFile
@@ -60,9 +60,9 @@ import java.io.IOException
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/cropview/crop-view/
 
 /**
- * [VastCropActivity].
+ * [BaseCropActivity].
  *
- * @property ACTION The action of [VastCropActivity].
+ * @property ACTION The action of [BaseCropActivity].
  * @property PREVIEW_WIDTH The width of the crop preview frame.
  * @property PREVIEW_HEIGHT The height of the crop preview frame.
  * @property OUTPUT_X The width of output image in pixels.
@@ -74,7 +74,7 @@ import java.io.IOException
  * @property FRAME_TYPE See [CropFrameType].
  * @property originalImage The temporary file of the original image, it is
  * saved in the app internal cache file directory and it will be deleted
- * when the [VastCropActivity] is destroy.
+ * when the [BaseCropActivity] is destroy.
  * @property RESULT_NULL_DATA_ERROR Return when the [Intent.getData] is
  * empty.
  * @property RESULT_FRAME_TYPE_ERROR Return when the value of [FRAME_TYPE]
@@ -88,9 +88,9 @@ import java.io.IOException
  * @property RESULT_PARAMETER_ERROR Return when the parameter is error.
  * @property RESULT_DESTINATION_IMAGE_ERROR Return when get the destination
  * image.
- * @since 0.5.0
+ * @since 1.5.3
  */
-open class VastCropActivity : VastVbActivity<ActivityCropBinding>() {
+open class BaseCropActivity : BaseVbActivity<ActivityCropBinding>() {
 
     /** @since 1.5.2 */
     @Suppress("PrivatePropertyName")

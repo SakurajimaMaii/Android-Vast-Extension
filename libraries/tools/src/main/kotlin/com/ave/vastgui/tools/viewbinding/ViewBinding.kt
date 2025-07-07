@@ -69,8 +69,9 @@ import kotlin.reflect.KProperty
  * }
  * ```
  *
+ * @see <a
+ * href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt">Example</a>
  * @since 0.5.2
- * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt">Example</a>
  */
 @JvmName("viewBindingActivity")
 @Suppress("UnusedReceiverParameter")
@@ -100,8 +101,9 @@ inline fun <V : ViewBinding> Activity.viewBinding(
  * }
  * ```
  *
+ * @see <a
+ * href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt">Example</a>
  * @since 0.5.2
- * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt">Example</a>
  */
 @JvmName("viewBindingActivity")
 @Suppress("UnusedReceiverParameter")
@@ -121,8 +123,9 @@ inline fun <V : ViewBinding> ComponentActivity.viewBinding(
  * }
  * ```
  *
+ * @see <a
+ * href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt">Example</a>
  * @since 0.5.2
- * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt">Example</a>
  */
 @JvmName("viewBindingActivity")
 @Suppress("UnusedReceiverParameter")
@@ -146,8 +149,9 @@ inline fun <V : ViewBinding> ComponentActivity.viewBinding(
  * }
  * ```
  *
+ * @see <a
+ * href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt">Example</a>
  * @since 0.5.2
- * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbActivity.kt">Example</a>
  */
 @JvmName("viewBindingActivity")
 @Suppress("UnusedReceiverParameter")
@@ -169,8 +173,9 @@ inline fun <V : ViewBinding> ComponentActivity.viewBinding(
  * }
  * ```
  *
+ * @see <a
+ * href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbFragment.kt">Example</a>
  * @since 0.5.2
- * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbFragment.kt">Example</a>
  */
 @JvmName("viewBindingFragment")
 inline fun <F : Fragment, V : ViewBinding> Fragment.viewBinding(
@@ -197,8 +202,9 @@ inline fun <F : Fragment, V : ViewBinding> Fragment.viewBinding(
  * }
  * ```
  *
+ * @see <a
+ * href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbFragment.kt">Example</a>
  * @since 0.5.2
- * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbFragment.kt">Example</a>
  */
 @JvmName("viewBindingFragment")
 inline fun <F : Fragment, V : ViewBinding> Fragment.viewBinding(
@@ -232,8 +238,9 @@ inline fun <F : Fragment, V : ViewBinding> Fragment.viewBinding(
  * }
  * ```
  *
+ * @see <a
+ * href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbViewGroup.kt">Example</a>
  * @since 0.5.2
- * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbViewGroup.kt">Example</a>
  */
 @JvmName("viewBindingViewGroup")
 inline fun <V : ViewBinding> ViewGroup.viewBinding(
@@ -261,8 +268,9 @@ inline fun <V : ViewBinding> ViewGroup.viewBinding(
  * }
  * ```
  *
+ * @see <a
+ * href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbViewGroup.kt">Example</a>
  * @since 0.5.2
- * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbViewGroup.kt">Example</a>
  */
 @JvmName("viewBindingViewGroup")
 @Suppress("UnusedReceiverParameter")
@@ -285,8 +293,9 @@ inline fun <V : ViewBinding> ViewGroup.viewBinding(
  * }
  * ```
  *
+ * @see <a
+ * href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbAdapter.kt">Example</a>
  * @since 0.5.2
- * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbAdapter.kt">Example</a>
  */
 @JvmName("viewBindingViewHolder")
 @Suppress("UnusedReceiverParameter")
@@ -309,8 +318,9 @@ inline fun <V : ViewBinding> RecyclerView.ViewHolder.viewBinding(
  * }
  * ```
  *
+ * @see <a
+ * href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbAdapter.kt">Example</a>
  * @since 0.5.2
- * @see <a href="https://github.com/SakurajimaMaii/Android-Vast-Extension/blob/develop/app/src/main/kotlin/com/ave/vastgui/app/activity/vbdelegate/VbAdapter.kt">Example</a>
  */
 @JvmName("viewBindingViewHolder")
 @Suppress("UnusedReceiverParameter")
@@ -481,7 +491,7 @@ fun DialogFragment.getRootView(viewBindingRootId: Int): View {
  * Creates an instance of the binding class for the activity to use.
  *
  * @param base The Activity base class you define. The default value is
- *     null.
+ * null.
  * @receiver Currently need to get the Activity of ViewBinding.
  * @since 0.5.2
  */
@@ -493,7 +503,7 @@ fun <I : Activity, O : ViewBinding> I.reflectViewBinding(base: Class<I>? = null)
  * Creates an instance of the binding class for the fragment to use.
  *
  * @param base The Fragment base class you define. The default value is
- *     null.
+ * null.
  * @receiver Currently need to get the Fragment of ViewBinding.
  * @since 0.5.2
  */
@@ -506,7 +516,7 @@ fun <I : Fragment, O : ViewBinding> I.reflectViewBinding(
  * Creates an instance of the binding class for the fragment to use.
  *
  * @param base The Fragment base class you define. The default value is
- *     null.
+ * null.
  * @receiver Currently need to get the Fragment of ViewBinding.
  * @since 0.5.2
  */
@@ -519,21 +529,20 @@ fun <I : Fragment, O : ViewBinding> I.reflectViewBinding(base: Class<I>? = null)
  *
  * @since 0.5.2
  */
-private fun <VB : ViewBinding> reflectViewBinding(
-    current: Class<*>, layoutInflater: LayoutInflater, base: Class<*>?
-): VB {
+private fun <VB : ViewBinding> reflectViewBinding(current: Class<*>,
+                                                  layoutInflater: LayoutInflater,
+                                                  base: Class<*>?): VB {
     return try {
         if (base?.isAssignableFrom(current) == false) {
             throw RuntimeException("Can't get the viewBinding type.")
         }
         val genericSuperclass = current.genericSuperclass
         if (genericSuperclass is ParameterizedType) {
-            val actualTypeArguments =
-                genericSuperclass.actualTypeArguments
+            val actualTypeArguments = genericSuperclass.actualTypeArguments
             for (actualTypeArgument in actualTypeArguments) {
                 val tClass: Class<*> = try {
                     actualTypeArgument as Class<*>
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     continue
                 }
                 if (ViewBinding::class.java.isAssignableFrom(tClass)) {
@@ -542,7 +551,7 @@ private fun <VB : ViewBinding> reflectViewBinding(
                 }
             }
         }
-        reflectViewBinding(current.superclass, layoutInflater, base)
+        reflectViewBinding(current.superclass!!, layoutInflater, base)
     } catch (e: Exception) {
         throw RuntimeException(e.message, e)
     }
@@ -553,38 +562,30 @@ private fun <VB : ViewBinding> reflectViewBinding(
  *
  * @since 0.5.2
  */
-private fun <VB : ViewBinding> reflectViewBinding(
-    current: Class<*>,
-    from: LayoutInflater,
-    container: ViewGroup?,
-    base: Class<*>?
-): VB {
+private fun <VB : ViewBinding> reflectViewBinding(current: Class<*>,
+                                                  from: LayoutInflater,
+                                                  container: ViewGroup?,
+                                                  base: Class<*>?): VB {
     return try {
         if (base?.isAssignableFrom(current) == false) {
             throw RuntimeException("Can't get the viewBinding type.")
         }
         val genericSuperclass = current.genericSuperclass
         if (genericSuperclass is ParameterizedType) {
-            val actualTypeArguments =
-                genericSuperclass.actualTypeArguments
+            val actualTypeArguments = genericSuperclass.actualTypeArguments
             for (actualTypeArgument in actualTypeArguments) {
                 val tClass: Class<*> = try {
                     actualTypeArgument as Class<*>
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     continue
                 }
                 if (ViewBinding::class.java.isAssignableFrom(tClass)) {
-                    val inflate = tClass.getMethod(
-                        "inflate",
-                        LayoutInflater::class.java,
-                        ViewGroup::class.java,
-                        Boolean::class.java
-                    )
+                    val inflate = tClass.getMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.java)
                     return cast(inflate.invoke(null, from, container, false))
                 }
             }
         }
-        reflectViewBinding(current.superclass, from, container, base)
+        reflectViewBinding(current.superclass!!, from, container, base)
     } catch (e: Exception) {
         throw RuntimeException(e.message, e)
     }
@@ -595,23 +596,20 @@ private fun <VB : ViewBinding> reflectViewBinding(
  *
  * @since 0.5.2
  */
-private fun <VB : ViewBinding> reflectViewBinding(
-    current: Class<*>,
-    view: View,
-    base: Class<*>?
-): VB {
+private fun <VB : ViewBinding> reflectViewBinding(current: Class<*>,
+                                                  view: View,
+                                                  base: Class<*>?): VB {
     return try {
         if (base?.isAssignableFrom(current) == false) {
             throw RuntimeException("Can't get the viewBinding type.")
         }
         val genericSuperclass = current.genericSuperclass
         if (genericSuperclass is ParameterizedType) {
-            val actualTypeArguments =
-                genericSuperclass.actualTypeArguments
+            val actualTypeArguments = genericSuperclass.actualTypeArguments
             for (actualTypeArgument in actualTypeArguments) {
                 val tClass: Class<*> = try {
                     actualTypeArgument as Class<*>
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     continue
                 }
                 if (ViewBinding::class.java.isAssignableFrom(tClass)) {
@@ -620,7 +618,7 @@ private fun <VB : ViewBinding> reflectViewBinding(
                 }
             }
         }
-        reflectViewBinding(current.superclass, view, base)
+        reflectViewBinding(current.superclass!!, view, base)
     } catch (e: Exception) {
         throw RuntimeException(e.message, e)
     }

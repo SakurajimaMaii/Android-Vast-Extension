@@ -19,7 +19,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.app.VastCropActivity">
+    tools:context=".activity.app.BaseCropActivity">
 
     <com.ave.vastgui.tools.view.cropview.CropViewLayout
         android:id="@+id/cropViewLayout"

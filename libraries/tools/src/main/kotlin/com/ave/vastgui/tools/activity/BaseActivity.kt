@@ -19,7 +19,6 @@ package com.ave.vastgui.tools.activity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.activity.widget.screenConfig
 import com.google.android.material.snackbar.Snackbar
 import com.ave.vastgui.tools.lifecycle.createViewModel as viewModelInstance
@@ -30,28 +29,39 @@ import com.ave.vastgui.tools.lifecycle.createViewModel as viewModelInstance
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/app-entry-points/activities/activity/
 
 /**
- * The parent class for [VastVmActivity] , [VastVbActivity] ,
- * [VastVbVmActivity].
+ * The parent class for [BaseVmActivity] , [BaseVbActivity] ,
+ * [BaseVbVmActivity].
+ *
+ * @since 1.5.3
  */
-sealed class VastActivity : AppCompatActivity() {
+sealed class BaseActivity : AppCompatActivity() {
 
     /**
-     * True if you want to show the ActionBar,false otherwise,
+     * True if you want to show the ActionBar, false otherwise,
      *
      * @see enableActionBar
+     * @since 1.5.3
      */
-    protected var mEnableActionBar = true
+    private var _enableActionBar = true
+
+    /** @since 1.5.3 */
+    protected val enableActionBar: Boolean
+        get() = _enableActionBar
 
     /**
-     * True if you want to set fullscreen,false otherwise.
+     * True if you want to set fullscreen, false otherwise.
      *
      * @see enableFullScreen
+     * @since 1.5.3
      */
-    protected var mEnableFullScreen = false
+    private var _enableFullScreen = false
 
+    /** @since 1.5.3 */
+    protected val enableFullScreen: Boolean
+        get() = _enableFullScreen
+
+    /** @since 1.5.3 */
     protected fun getContext() = this
-
-    protected fun getDefaultTag(): String = this.defaultLogTag()
 
     /**
      * True if you want to show the ActionBar,false otherwise.
@@ -63,10 +73,13 @@ sealed class VastActivity : AppCompatActivity() {
      *      ... //Other setting
      * }
      * ```
+     *
+     * @since 1.5.3
      */
+    @Suppress("DEPRECATION")
     protected fun enableActionBar(enable: Boolean) {
-        mEnableActionBar = enable
-        screenConfig(mEnableActionBar, mEnableFullScreen)
+        _enableActionBar = enable
+        screenConfig(_enableActionBar, _enableFullScreen)
     }
 
     /**
@@ -80,10 +93,13 @@ sealed class VastActivity : AppCompatActivity() {
      *      ... //Other setting
      * }
      * ```
+     *
+     * @since 1.5.3
      */
+    @Suppress("DEPRECATION")
     protected fun enableFullScreen(enable: Boolean) {
-        mEnableFullScreen = enable
-        screenConfig(mEnableActionBar, mEnableFullScreen)
+        _enableFullScreen = enable
+        screenConfig(_enableActionBar, _enableFullScreen)
     }
 
     /**
@@ -91,6 +107,7 @@ sealed class VastActivity : AppCompatActivity() {
      * [IllegalStateException].
      *
      * @throws IllegalStateException
+     * @since 1.5.3
      */
     protected open fun getBinding(): ViewBinding {
         throw IllegalStateException("You should not call getBinding().")
@@ -101,12 +118,17 @@ sealed class VastActivity : AppCompatActivity() {
      * [IllegalStateException].
      *
      * @throws IllegalStateException
+     * @since 1.5.3
      */
     protected open fun getViewModel(): ViewModel {
         throw IllegalStateException("You should not call getViewModel().")
     }
 
-    /** Get default [Snackbar] for activity. */
+    /**
+     * Get default [Snackbar] for activity.
+     *
+     * @since 1.5.3
+     */
     protected open fun getSnackbar(): Snackbar {
         throw IllegalStateException("You should not call getSnackbar().")
     }
@@ -123,8 +145,9 @@ sealed class VastActivity : AppCompatActivity() {
      * ```
      *
      * @param modelClass by default, Activity or Fragment will get the
-     *     [ViewModel] by `modelClass.newInstance()`.
+     * [ViewModel] by `modelClass.newInstance()`.
      * @return the [ViewModel] of the Activity or Fragment.
+     * @since 1.5.3
      */
     protected open fun createViewModel(modelClass: Class<out ViewModel>): ViewModel {
         return viewModelInstance(modelClass)

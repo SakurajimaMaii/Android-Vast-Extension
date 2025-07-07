@@ -16,25 +16,27 @@
 
 package com.ave.vastgui.tools.activity
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 import com.ave.vastgui.core.extension.NotNUllVar
-import com.ave.vastgui.tools.lifecycle.reflectViewModel
+import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.viewbinding.reflectViewBinding
 import com.google.android.material.snackbar.Snackbar
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/3/10 16:13
+// Date: 2022/3/10 16:05
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/app-entry-points/activities/activity/
 
 /**
- * VastVbVmActivity.
+ * VastVbActivity.
  *
+ * If your Activity contains to 0 or more ViewModels, I recommend you use
+ * [BaseVbActivity].
+ *
+ * Here is an example in kotlin:
  * ```kotlin
- * class MainActivity : VastVbVmActivity<ActivityMainBinding,MainViewModel>() {
+ * class MainActivity : BaseVbActivity<ActivityMainBinding>() {
  *     override fun onCreate(savedInstanceState: Bundle?) {
  *          super.onCreate(savedInstanceState)
  *          // Something to do
@@ -43,42 +45,27 @@ import com.google.android.material.snackbar.Snackbar
  * ```
  *
  * @param VB [ViewBinding] of the activity layout.
- * @param VM [ViewModel] of the activity.
  */
-abstract class VastVbVmActivity<VB : ViewBinding, VM : ViewModel> : VastActivity() {
+abstract class BaseVbActivity<VB : ViewBinding>() : BaseActivity() {
 
-    // Snackbar
-    private var mSnackbar by NotNUllVar<Snackbar>()
+    /** @since 1.5.3 */
+    private var snackbar by NotNUllVar<Snackbar>()
 
-    // ViewBinding
-    private val mBinding: VB by lazy {
-        reflectViewBinding(VastVbVmActivity::class.java)
+    /** @since 1.5.3 */
+    private val binding: VB by lazy {
+        reflectViewBinding(BaseVbActivity::class.java)
     }
 
-    // ViewModel
-    private val mViewModel: VM by lazy {
-        reflectViewModel(this.javaClass, this, VastVbVmActivity::class.java) {
-            return@reflectViewModel createViewModel(it)
-        }
-    }
-
-    @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getBinding().root)
-        mSnackbar = Snackbar.make(mBinding.root, getDefaultTag(), Snackbar.LENGTH_SHORT)
+        setContentView(binding.root)
+        snackbar = Snackbar.make(binding.root, defaultLogTag(), Snackbar.LENGTH_SHORT)
     }
 
     override fun getBinding(): VB {
-        return mBinding
+        return binding
     }
 
-    override fun getViewModel(): VM {
-        return mViewModel
-    }
-
-    override fun getSnackbar(): Snackbar {
-        return mSnackbar
-    }
+    override fun getSnackbar() = snackbar
 
 }
