@@ -72,7 +72,7 @@
         </provider>
 
         <activity
-            android:name="com.ave.vastgui.tools.activity.app.VastCropActivity"
+            android:name="com.ave.vastgui.tools.activity.app.BaseCropActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

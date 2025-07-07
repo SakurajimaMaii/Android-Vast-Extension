@@ -36,7 +36,7 @@ import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.app.net.OpenApi
 import com.ave.vastgui.app.net.OpenApiService
 import com.ave.vastgui.app.viewmodel.NetVM
-import com.ave.vastgui.tools.activity.VastVbVmActivity
+import com.ave.vastgui.tools.activity.BaseVbVmActivity
 import com.ave.vastgui.tools.network.request.create
 import com.ave.vastgui.tools.view.dialog.MaterialAlertDialogBuilder
 import com.ave.vastgui.tools.view.toast.SimpleToast.showShortMsg
@@ -65,7 +65,7 @@ class ImagePagingAdapter(context: Context) : BasePagingAdapter<Images.Image>(
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion), ImageDiffUtil
 )
 
-class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
+class ImageActivity : BaseVbVmActivity<ActivityImageBinding, NetVM>() {
 
     private val logcat = logFactory.getLogCat(this::class.java)
 

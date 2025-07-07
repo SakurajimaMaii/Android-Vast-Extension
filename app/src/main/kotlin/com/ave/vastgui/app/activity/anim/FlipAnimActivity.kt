@@ -19,7 +19,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import com.ave.vastgui.app.databinding.ActivityFlipAnimBinding
-import com.ave.vastgui.tools.activity.VastVbActivity
+import com.ave.vastgui.tools.activity.BaseVbActivity
 import com.ave.vastgui.tools.anim.flipXAnimation
 
 // Author: Vast Gui
@@ -27,7 +27,7 @@ import com.ave.vastgui.tools.anim.flipXAnimation
 // Date: 2023/9/2
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/animation/flip-animation/
 
-class FlipAnimActivity : VastVbActivity<ActivityFlipAnimBinding>() {
+class FlipAnimActivity : BaseVbActivity<ActivityFlipAnimBinding>() {
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {

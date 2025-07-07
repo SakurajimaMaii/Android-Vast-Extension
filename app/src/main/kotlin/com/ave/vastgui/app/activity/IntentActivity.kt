@@ -20,7 +20,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityIntentBinding
-import com.ave.vastgui.tools.activity.VastVbActivity
+import com.ave.vastgui.tools.activity.BaseVbActivity
 import com.ave.vastgui.tools.utils.IntentUtils
 import com.ave.vastgui.tools.utils.IntentUtils.createAlarm
 import com.ave.vastgui.tools.utils.IntentUtils.dialPhoneNumber
@@ -32,7 +32,7 @@ import com.ave.vastgui.tools.utils.IntentUtils.searchWeb
 import com.ave.vastgui.tools.utils.IntentUtils.sendMmsMessage
 import com.ave.vastgui.tools.utils.permission.requestPermission
 
-class IntentActivity : VastVbActivity<ActivityIntentBinding>() {
+class IntentActivity : BaseVbActivity<ActivityIntentBinding>() {
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {

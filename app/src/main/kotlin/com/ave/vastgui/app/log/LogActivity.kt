@@ -19,7 +19,7 @@ package com.ave.vastgui.app.log
 import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityLogBinding
 import com.ave.vastgui.app.viewmodel.SharedVM
-import com.ave.vastgui.tools.activity.VastVbVmActivity
+import com.ave.vastgui.tools.activity.BaseVbVmActivity
 import com.ave.vastgui.tools.activity.widget.screenConfig
 
 // Author: Vast Gui
@@ -27,7 +27,7 @@ import com.ave.vastgui.tools.activity.widget.screenConfig
 // Date: 2023/7/5
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/log/description/
 
-class LogActivity : VastVbVmActivity<ActivityLogBinding, SharedVM>() {
+class LogActivity : BaseVbVmActivity<ActivityLogBinding, SharedVM>() {
 
     private val logger = logFactory.getLogCat(LogActivity::class.java)
 

@@ -23,7 +23,6 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.Telephony
 import android.view.View
-import android.widget.TextView
 import androidx.core.database.getStringOrNull
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,7 +34,7 @@ import com.ave.vastgui.app.adapter.entity.Message
 import com.ave.vastgui.app.adapter.entity.MessageDiffUtil
 import com.ave.vastgui.app.databinding.ActivityMessageBinding
 import com.ave.vastgui.app.fragment.MessageBottomSheet
-import com.ave.vastgui.tools.activity.VastVbActivity
+import com.ave.vastgui.tools.activity.BaseVbActivity
 import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,7 +45,7 @@ import kotlinx.coroutines.withContext
 // Date: 2024/1/4
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/adapter/
 
-class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
+class MessageActivity : BaseVbActivity<ActivityMessageBinding>(),
     OnItemClickListener<Message> {
 
     private val mMessageRv by lazy { getBinding().messageRv }

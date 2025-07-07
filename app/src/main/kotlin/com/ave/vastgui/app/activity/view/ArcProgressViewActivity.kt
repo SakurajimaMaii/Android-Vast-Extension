@@ -16,14 +16,13 @@
 
 package com.ave.vastgui.app.activity.view
 
-import android.Manifest
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityArcProgressViewBinding
 import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.core.annotation.ExperimentalApi
-import com.ave.vastgui.tools.activity.VastVbActivity
+import com.ave.vastgui.tools.activity.BaseVbActivity
 import com.ave.vastgui.tools.io.appInternalFilesDir
 import com.ave.vastgui.tools.io.destroy
 import com.ave.vastgui.tools.utils.ColorUtils
@@ -32,7 +31,6 @@ import com.ave.vastgui.tools.utils.DensityUtils.SP
 import com.ave.vastgui.tools.utils.download.DownloadTask
 import com.ave.vastgui.tools.utils.download.core.DownloadState
 import com.ave.vastgui.tools.utils.download.interfaces.OnDownloadListener
-import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 import com.ave.vastgui.tools.view.extension.refreshWithInvalidate
 import com.log.vastgui.okhttp.Okhttp3Interceptor
 import okhttp3.OkHttpClient
@@ -43,7 +41,7 @@ import java.io.File
 // Date: 2022/4/14 18:42
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/ui/progress/arc-progress-view/
 
-class ArcProgressViewActivity : VastVbActivity<ActivityArcProgressViewBinding>() {
+class ArcProgressViewActivity : BaseVbActivity<ActivityArcProgressViewBinding>() {
 
     private val logger = logFactory.getLogCat(ArcProgressViewActivity::class.java)
 

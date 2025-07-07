@@ -27,7 +27,7 @@ import com.ave.vastgui.app.viewmodel.NetVM
 import com.ave.vastgui.netstatelayout.NetStateMgr
 import com.ave.vastgui.netstatelayout.listener.OnLoadingErrorListener
 import com.ave.vastgui.netstatelayout.listener.OnNetErrorListener
-import com.ave.vastgui.tools.activity.VastVmActivity
+import com.ave.vastgui.tools.activity.BaseVmActivity
 import com.ave.vastgui.tools.utils.NetStateUtils
 import com.ave.vastgui.tools.viewbinding.viewBinding
 
@@ -36,7 +36,7 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 // Date: 2024/1/3 11:31
 
 class NetStateLayoutActivity(override val layoutId: Int = R.layout.activity_net_state_layout) :
-    VastVmActivity<NetVM>(), OnNetErrorListener, OnLoadingErrorListener {
+    BaseVmActivity<NetVM>(), OnNetErrorListener, OnLoadingErrorListener {
 
     private val mBinding by viewBinding(ActivityNetStateLayoutBinding::bind)
     private val mNetStateLayout by lazy {

@@ -26,7 +26,7 @@ import com.ave.vastgui.app.activity.vbdelegate.ArticleAdpt
 import com.ave.vastgui.app.databinding.ActivityReflectBinding
 import com.ave.vastgui.app.net.WanAndroidApi
 import com.ave.vastgui.app.net.WanAndroidApiService
-import com.ave.vastgui.tools.activity.VastVbVmActivity
+import com.ave.vastgui.tools.activity.BaseVbVmActivity
 import com.ave.vastgui.tools.network.request.create
 import kotlinx.coroutines.launch
 
@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/architecture-components/ui-layer-libraries/view-bind/vb-reflection/
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/architecture-components/ui-layer-libraries/lifecycle-aware-components/vm-reflection/
 
-class ReflectActivity1 : VastVbVmActivity<ActivityReflectBinding, ReflectViewModel1>() {
+class ReflectActivity1 : BaseVbVmActivity<ActivityReflectBinding, ReflectViewModel1>() {
 
     private lateinit var mAdpt: ArticleAdpt
 

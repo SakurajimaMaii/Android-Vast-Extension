@@ -21,7 +21,7 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.GradientDrawable.RECTANGLE
 import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityGradientDrawableBinding
-import com.ave.vastgui.tools.activity.VastVbActivity
+import com.ave.vastgui.tools.activity.BaseVbActivity
 import com.ave.vastgui.tools.graphics.setGradient
 import com.ave.vastgui.tools.utils.ColorUtils.colorHex2Int
 
@@ -47,7 +47,7 @@ private val colorList = IntArray(6).apply {
     set(5, colorHex2Int("#0575E6"))
 }
 
-class GradientDrawableActivity : VastVbActivity<ActivityGradientDrawableBinding>() {
+class GradientDrawableActivity : BaseVbActivity<ActivityGradientDrawableBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

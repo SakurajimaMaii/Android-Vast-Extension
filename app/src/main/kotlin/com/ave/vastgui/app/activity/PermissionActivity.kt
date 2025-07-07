@@ -18,7 +18,7 @@ package com.ave.vastgui.app.activity
 
 import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityPermissionBinding
-import com.ave.vastgui.tools.activity.VastVbActivity
+import com.ave.vastgui.tools.activity.BaseVbActivity
 import com.ave.vastgui.tools.utils.permission.Permission
 import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 
@@ -26,7 +26,7 @@ import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 // Email: guihy2019@gmail.com
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/core-topics/permission/permission/
 
-class PermissionActivity : VastVbActivity<ActivityPermissionBinding>() {
+class PermissionActivity : BaseVbActivity<ActivityPermissionBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
