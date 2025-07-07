@@ -45,17 +45,23 @@ import com.google.android.material.snackbar.Snackbar
 abstract class BaseVmActivity<VM : ViewModel> : BaseActivity() {
 
     /** @since 1.5.3 */
-    private var snackbar by NotNUllVar<Snackbar>()
+    private var _snackBar by NotNUllVar<Snackbar>()
+
+    override val snackBar: Snackbar
+        get() = _snackBar
 
     /** @since 1.5.3 */
     abstract val layoutId: Int
 
     /** @since 1.5.3 */
-    private val viewModel: VM by lazy {
+    private val _viewModel: VM by lazy {
         reflectViewModel(this.javaClass, this, BaseVmActivity::class.java) {
             return@reflectViewModel createViewModel(it)
         }
     }
+
+    override val viewModel: VM
+        get() = _viewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,25 +70,12 @@ abstract class BaseVmActivity<VM : ViewModel> : BaseActivity() {
         } else {
             throw RuntimeException("Please set correct layout id for the layoutId .")
         }
-        snackbar = Snackbar.make(
+        _snackBar = Snackbar.make(
             this,
             findViewById(android.R.id.content),
             defaultLogTag(),
             Snackbar.LENGTH_SHORT
         )
-    }
-
-    override fun getViewModel(): VM {
-        return viewModel
-    }
-
-    /**
-     * Get default [Snackbar] for activity.
-     *
-     * @since 0.5.7
-     */
-    override fun getSnackbar(): Snackbar {
-        return snackbar
     }
 
 }

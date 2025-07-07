@@ -50,37 +50,34 @@ import com.google.android.material.snackbar.Snackbar
 abstract class BaseVbVmActivity<VB : ViewBinding, VM : ViewModel> : BaseActivity() {
 
     /** @since 1.5.3 */
-    private var snackbar by NotNUllVar<Snackbar>()
+    private var _snackBar by NotNUllVar<Snackbar>()
+
+    override val snackBar: Snackbar
+        get() = _snackBar
 
     /** @since 1.5.3 */
-    private val binding: VB by lazy {
+    private val _binding: VB by lazy {
         reflectViewBinding(BaseVbVmActivity::class.java)
     }
 
+    override val binding: VB
+        get() = _binding
+
     /** @since 1.5.3 */
-    private val viewModel: VM by lazy {
+    private val _viewModel: VM by lazy {
         reflectViewModel(this.javaClass, this, BaseVbVmActivity::class.java) {
             return@reflectViewModel createViewModel(it)
         }
     }
 
+    override val viewModel: VM
+        get() = _viewModel
+
     @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getBinding().root)
-        snackbar = Snackbar.make(binding.root, defaultLogTag(), Snackbar.LENGTH_SHORT)
-    }
-
-    override fun getBinding(): VB {
-        return binding
-    }
-
-    override fun getViewModel(): VM {
-        return viewModel
-    }
-
-    override fun getSnackbar(): Snackbar {
-        return snackbar
+        setContentView(binding.root)
+        _snackBar = Snackbar.make(_binding.root, defaultLogTag(), Snackbar.LENGTH_SHORT)
     }
 
 }

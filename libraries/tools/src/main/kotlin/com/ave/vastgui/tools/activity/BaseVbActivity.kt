@@ -49,23 +49,23 @@ import com.google.android.material.snackbar.Snackbar
 abstract class BaseVbActivity<VB : ViewBinding>() : BaseActivity() {
 
     /** @since 1.5.3 */
-    private var snackbar by NotNUllVar<Snackbar>()
+    private var _snackBar by NotNUllVar<Snackbar>()
+
+    override val snackBar: Snackbar
+        get() = _snackBar
 
     /** @since 1.5.3 */
-    private val binding: VB by lazy {
+    private val _binding: VB by lazy {
         reflectViewBinding(BaseVbActivity::class.java)
     }
 
+    override val binding: VB
+        get() = _binding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        snackbar = Snackbar.make(binding.root, defaultLogTag(), Snackbar.LENGTH_SHORT)
+        setContentView(_binding.root)
+        _snackBar = Snackbar.make(_binding.root, defaultLogTag(), Snackbar.LENGTH_SHORT)
     }
-
-    override fun getBinding(): VB {
-        return binding
-    }
-
-    override fun getSnackbar() = snackbar
 
 }

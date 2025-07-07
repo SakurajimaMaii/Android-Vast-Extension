@@ -114,7 +114,7 @@ open class BaseCropActivity : BaseVbActivity<ActivityCropBinding>() {
         // Set size.
         val previewWidth = intent.getFloatExtra(PREVIEW_WIDTH, DEFAULT_PREVIEW_WIDTH)
         val previewHeight = intent.getFloatExtra(PREVIEW_HEIGHT, DEFAULT_PREVIEW_HEIGHT)
-        getBinding().cropViewLayout.apply {
+        binding.cropViewLayout.apply {
             setCropFrameSize(previewWidth, previewHeight)
         }
 
@@ -122,10 +122,10 @@ open class BaseCropActivity : BaseVbActivity<ActivityCropBinding>() {
         val frameType = intent.getStringExtra(FRAME_TYPE)
         if (null == frameType) finish(RESULT_FRAME_TYPE_ERROR)
         when (frameType) {
-            FRAME_TYPE_CIRCLE -> getBinding().cropViewLayout.cropFrameType = CropFrameType.CIRCLE
-            FRAME_TYPE_SQUARE -> getBinding().cropViewLayout.cropFrameType = CropFrameType.SQUARE
-            FRAME_TYPE_GRID9 -> getBinding().cropViewLayout.cropFrameType = CropFrameType.GRID9
-            FRAME_TYPE_RECTANGLE -> getBinding().cropViewLayout.cropFrameType =
+            FRAME_TYPE_CIRCLE -> binding.cropViewLayout.cropFrameType = CropFrameType.CIRCLE
+            FRAME_TYPE_SQUARE -> binding.cropViewLayout.cropFrameType = CropFrameType.SQUARE
+            FRAME_TYPE_GRID9 -> binding.cropViewLayout.cropFrameType = CropFrameType.GRID9
+            FRAME_TYPE_RECTANGLE -> binding.cropViewLayout.cropFrameType =
                 CropFrameType.RECTANGLE
         }
 
@@ -157,10 +157,10 @@ open class BaseCropActivity : BaseVbActivity<ActivityCropBinding>() {
             ) {
                 outputStream.write(buffer, 0, readLength)
             }
-            getBinding().cropViewLayout.setImageSrc(originalImage!!)
+            binding.cropViewLayout.setImageSrc(originalImage!!)
         } ?: finish(RESULT_SOURCE_IMAGE_ERROR)
 
-        getBinding().activityCropBottomBar.cropSure.setOnClickListener {
+        binding.activityCropBottomBar.cropSure.setOnClickListener {
             val outputX = intent.getFloatExtra(OUTPUT_X, DEFAULT_OUTPUT_X)
             val outputY = intent.getFloatExtra(OUTPUT_Y, DEFAULT_OUTPUT_Y)
             if (outputX == DEFAULT_OUTPUT_X || outputY == DEFAULT_OUTPUT_Y) {
@@ -168,11 +168,11 @@ open class BaseCropActivity : BaseVbActivity<ActivityCropBinding>() {
             }
             val authority = intent.getStringExtra(AUTHORITY) ?: DEFAULT_AUTHORITY
             val bitmap: Bitmap? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                getBinding()
+                binding
                     .cropViewLayout
                     .getCroppedImageApi28(outputX.toInt(), outputY.toInt())
             } else {
-                getBinding()
+                binding
                     .cropViewLayout
                     .getCroppedImage(outputX.toInt(), outputY.toInt())
             }
@@ -188,7 +188,7 @@ open class BaseCropActivity : BaseVbActivity<ActivityCropBinding>() {
             }
         }
 
-        getBinding().activityCropBottomBar.cropExit.setOnClickListener {
+        binding.activityCropBottomBar.cropExit.setOnClickListener {
             finish(RESULT_CANCELED)
         }
     }

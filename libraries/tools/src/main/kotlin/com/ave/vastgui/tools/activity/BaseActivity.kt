@@ -16,6 +16,7 @@
 
 package com.ave.vastgui.tools.activity
 
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
@@ -61,7 +62,28 @@ sealed class BaseActivity : AppCompatActivity() {
         get() = _enableFullScreen
 
     /** @since 1.5.3 */
-    protected fun getContext() = this
+    protected open val snackBar: Snackbar
+        get() = throw IllegalStateException("You should not call getSnackbar().")
+
+    /**
+     * Get the [ViewBinding]. By default, it will throw a
+     * [IllegalStateException].
+     *
+     * @throws IllegalStateException
+     * @since 1.5.3
+     */
+    protected open val binding: ViewBinding
+        get() = throw IllegalStateException("You should not call getViewModel().")
+
+    /**
+     * Get the [ViewModel]. By default, it will throw a
+     * [IllegalStateException].
+     *
+     * @throws IllegalStateException
+     * @since 1.5.3
+     */
+    protected open val viewModel: ViewModel
+        get() = throw IllegalStateException("You should not call getViewModel().")
 
     /**
      * True if you want to show the ActionBar,false otherwise.
@@ -100,37 +122,6 @@ sealed class BaseActivity : AppCompatActivity() {
     protected fun enableFullScreen(enable: Boolean) {
         _enableFullScreen = enable
         screenConfig(_enableActionBar, _enableFullScreen)
-    }
-
-    /**
-     * Get the [ViewBinding]. By default, it will throw a
-     * [IllegalStateException].
-     *
-     * @throws IllegalStateException
-     * @since 1.5.3
-     */
-    protected open fun getBinding(): ViewBinding {
-        throw IllegalStateException("You should not call getBinding().")
-    }
-
-    /**
-     * Get the [ViewModel]. By default, it will throw a
-     * [IllegalStateException].
-     *
-     * @throws IllegalStateException
-     * @since 1.5.3
-     */
-    protected open fun getViewModel(): ViewModel {
-        throw IllegalStateException("You should not call getViewModel().")
-    }
-
-    /**
-     * Get default [Snackbar] for activity.
-     *
-     * @since 1.5.3
-     */
-    protected open fun getSnackbar(): Snackbar {
-        throw IllegalStateException("You should not call getSnackbar().")
     }
 
     /**
