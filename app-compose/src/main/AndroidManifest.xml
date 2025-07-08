@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2021-2025 VastGui
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,10 +45,10 @@
             android:name=".ui.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.AndroidVastExtension">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".ui.LoggerActivity"
@@ -60,6 +59,15 @@
 
             <!--                <category android:name="android.intent.category.LAUNCHER" />-->
             <!--            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".ui.MultiSensorActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AndroidVastExtension">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

@@ -16,7 +16,7 @@
 
 package com.ave.vastgui.appcompose.log
 
-import com.ave.vastgui.tools.log.android
+import com.log.vastgui.android.base.android
 import com.log.vastgui.core.LogFactory
 import com.log.vastgui.core.base.Logger
 import com.log.vastgui.core.base.allLogLevel

@@ -117,6 +117,7 @@ dependencies {
     implementation(libs.ui.graphics.compose)
     implementation(libs.ui.tooling.preview.compose)
     implementation(projects.libraries.kernel)
+    implementation(projects.libraries.log.android)
     implementation(projects.libraries.log.core)
     implementation(projects.libraries.log.slf4j)
     implementation(projects.libraries.tools)
