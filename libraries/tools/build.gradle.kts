@@ -87,7 +87,6 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.appcompat.resources)
     implementation(libs.constraintlayout)
-    implementation(libs.converter.gson)
     implementation(libs.core.ktx)
     implementation(libs.core.runtime)
     implementation(libs.datastore.preferences)
