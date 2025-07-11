@@ -32,12 +32,12 @@ class FlipAnimActivity : BaseVbActivity<ActivityFlipAnimBinding>() {
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getBinding().textview1.setOnLongClickListener {
-            flipXAnimation(getBinding().textview1, getBinding().textview2)
+        binding.textview1.setOnLongClickListener {
+            flipXAnimation(binding.textview1, binding.textview2)
             false
         }
-        getBinding().textview2.setOnLongClickListener {
-            flipXAnimation(getBinding().textview1, getBinding().textview2)
+        binding.textview2.setOnLongClickListener {
+            flipXAnimation(binding.textview1, binding.textview2)
             false
         }
     }

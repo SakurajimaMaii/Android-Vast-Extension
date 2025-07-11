@@ -49,7 +49,7 @@ class ReflectActivity1 : BaseVbVmActivity<ActivityReflectBinding, ReflectViewMod
     private fun initView() {
         // 初始化文章列表
         mAdpt = ArticleAdpt()
-        getBinding().articles.apply {
+        binding.articles.apply {
             adapter = mAdpt
             layoutManager = LinearLayoutManager(this@ReflectActivity1)
         }

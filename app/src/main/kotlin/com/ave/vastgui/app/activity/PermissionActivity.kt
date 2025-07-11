@@ -32,16 +32,16 @@ class PermissionActivity : BaseVbActivity<ActivityPermissionBinding>() {
         super.onCreate(savedInstanceState)
         requestMultiplePermissions(Permission.ACCESS_BACKGROUND_LOCATION) {
             allGranted = {
-                getBinding().permissionInfo.text = "权限已经被授予"
+                binding.permissionInfo.text = "权限已经被授予"
             }
             denied = {
-                getBinding().permissionInfo.text = "$it 权限已经被拒绝"
+                binding.permissionInfo.text = "$it 权限已经被拒绝"
             }
             noMoreAsk = {
-                getBinding().permissionInfo.text = "$it 权限已经被拒绝且不会再询问"
+                binding.permissionInfo.text = "$it 权限已经被拒绝且不会再询问"
             }
             noDeclare = {
-                getBinding().permissionInfo.text = "$it \n权限没有在应用清单声明"
+                binding.permissionInfo.text = "$it \n权限没有在应用清单声明"
             }
         }
     }

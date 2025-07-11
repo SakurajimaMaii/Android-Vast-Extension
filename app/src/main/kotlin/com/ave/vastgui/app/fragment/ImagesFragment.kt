@@ -28,7 +28,7 @@ import com.ave.vastgui.app.databinding.FragmentImagesBinding
 import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.app.net.OpenApi
 import com.ave.vastgui.app.net.OpenApiService
-import com.ave.vastgui.tools.fragment.VastVbFragment
+import com.ave.vastgui.tools.fragment.BaseVbFragment
 import com.ave.vastgui.tools.network.request.create
 import kotlinx.coroutines.launch
 
@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 // Date: 2024/1/2 20:33
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/app-entry-points/fragments/fragment/
 
-class ImagesFragment : VastVbFragment<FragmentImagesBinding>() {
+class ImagesFragment : BaseVbFragment<FragmentImagesBinding>() {
 
     private val mAdapter by lazy { BaseBindAdapter<Images.Image>(requireContext(), BR.image) }
     private val mLogger = logFactory.getLogCat(VideosFragment::class.java)

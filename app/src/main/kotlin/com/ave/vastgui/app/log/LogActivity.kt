@@ -35,12 +35,12 @@ class LogActivity : BaseVbVmActivity<ActivityLogBinding, SharedVM>() {
         super.onCreate(savedInstanceState)
         screenConfig(enableActionBar = false, enableFullScreen = false)
 
-        getBinding().getSentence.setOnClickListener {
-            getViewModel().getSentenceWithHandle()
+        binding.getSentence.setOnClickListener {
+            viewModel.getSentenceWithHandle()
         }
 
-        getViewModel().sentence.observe(this) { sentence ->
-            getBinding().showSentence.text = sentence.result.name
+        viewModel.sentence.observe(this) { sentence ->
+            binding.showSentence.text = sentence.result.name
             logger.d("获取到的名言是 ${sentence.result.name} ，来自于 ${sentence.result.from}")
         }
     }

@@ -65,14 +65,14 @@ class NetStateLayoutActivity(override val layoutId: Int = R.layout.activity_net_
         if (!NetStateUtils.isNetworkAvailable(this)) {
             mNetStateLayout.showNetError(RuntimeException("网络不可用"))
         } else {
-            getSnackbar().setText("网络可用").show()
+            snackBar.setText("网络可用").show()
         }
 
         mBinding.anslBtn.setOnClickListener {
-            getViewModel().getVideos(0, 10)
+            viewModel.getVideos(0, 10)
         }
 
-        getViewModel().videos.observeState(this) {
+        viewModel.videos.observeState(this) {
             onFailed = { code, message ->
                 mNetStateLayout.showLoadingError(code, message)
             }
@@ -84,7 +84,7 @@ class NetStateLayoutActivity(override val layoutId: Int = R.layout.activity_net_
             }
         }
 
-        getViewModel().videos.observe(this) {
+        viewModel.videos.observe(this) {
             mBinding.anslSentences.text = it.message
         }
     }

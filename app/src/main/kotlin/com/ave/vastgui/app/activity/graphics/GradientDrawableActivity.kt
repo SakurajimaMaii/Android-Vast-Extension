@@ -52,7 +52,7 @@ class GradientDrawableActivity : BaseVbActivity<ActivityGradientDrawableBinding>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        getBinding().image.setImageDrawable(GradientDrawable().apply {
+        binding.image.setImageDrawable(GradientDrawable().apply {
             shape = RECTANGLE
             cornerRadius = 50f
             setGradient(
@@ -62,8 +62,8 @@ class GradientDrawableActivity : BaseVbActivity<ActivityGradientDrawableBinding>
             )
         })
 
-        getBinding().btn.background = GradientDrawable()
-        (getBinding().btn.background.mutate() as GradientDrawable).apply {
+        binding.btn.background = GradientDrawable()
+        (binding.btn.background.mutate() as GradientDrawable).apply {
             shape = RECTANGLE
             cornerRadius = 30f
             color = ColorStateList(states, colorList)

@@ -48,7 +48,7 @@ import kotlinx.coroutines.withContext
 class MessageActivity : BaseVbActivity<ActivityMessageBinding>(),
     OnItemClickListener<Message> {
 
-    private val mMessageRv by lazy { getBinding().messageRv }
+    private val mMessageRv by lazy { binding.messageRv }
     private val mAdapter by lazy {
         BaseBindListAdapter(this, BR.message, MessageDiffUtil)
     }
@@ -90,28 +90,28 @@ class MessageActivity : BaseVbActivity<ActivityMessageBinding>(),
                 }
             }
             denied = {
-                getSnackbar().setText("权限${it}已被拒绝").show()
+                snackBar.setText("权限${it}已被拒绝").show()
             }
             noMoreAsk = {
-                getSnackbar().setText("权限${it}已被拒绝，且不会再询问").show()
+                snackBar.setText("权限${it}已被拒绝，且不会再询问").show()
             }
         }
 
         mAdapter.setOnItemClickListener(this)
         mAdapter.setLoadingView(R.layout.page_loading)
-        getBinding().load.setOnClickListener {
+        binding.load.setOnClickListener {
             lifecycleScope.launch {
                 mAdapter.submitListWithLoading()
                 mAdapter.submitList(readSms(), R.layout.item_message)
             }
         }
-        getBinding().clear.setOnClickListener {
+        binding.clear.setOnClickListener {
             mAdapter.submitList(emptyList<Message>())
         }
-        getBinding().setEmpty.setOnClickListener {
+        binding.setEmpty.setOnClickListener {
             mAdapter.setEmptyView(R.layout.page_empty_box)
         }
-        getBinding().removeEmpty.setOnClickListener {
+        binding.removeEmpty.setOnClickListener {
             mAdapter.setEmptyView(null)
         }
     }

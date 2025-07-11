@@ -19,6 +19,11 @@ package com.ave.vastgui.app.activity.view
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.ave.vastgui.app.databinding.ActivityArcProgressViewBinding
 import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.core.annotation.ExperimentalApi
@@ -74,56 +79,59 @@ class ArcProgressViewActivity : BaseVbActivity<ActivityArcProgressViewBinding>()
     private lateinit var downloadTask: DownloadTask
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        enableActionBar = false
 
-        getBinding().switchProgressColorBtn.setOnClickListener {
-            getBinding().arcProgressView.progressColor = colors[(progressColorIndex++) % colors.size]
+        binding.switchProgressColorBtn.setOnClickListener {
+            enableSystemBar = !enableSystemBar
+            // binding.arcProgressView.progressColor = colors[(progressColorIndex++) % colors.size]
         }
 
-        getBinding().switchProgressBackgroundColorBtn.setOnClickListener {
-            getBinding().arcProgressView.progressBackgroundColor = colors[(progressBackgroundColorIndex++) % colors.size]
+        binding.switchProgressBackgroundColorBtn.setOnClickListener {
+            binding.arcProgressView.progressBackgroundColor = colors[(progressBackgroundColorIndex++) % colors.size]
         }
 
-        getBinding().switchProgressShaderBtn.setOnClickListener {
-            getBinding().arcProgressView.progressShader = shaders[(++shaderIndex) % shaders.size]
+        binding.switchProgressShaderBtn.setOnClickListener {
+            binding.arcProgressView.progressShader = shaders[(++shaderIndex) % shaders.size]
         }
 
-        getBinding().switchTextShowBtn.setOnClickListener {
-            getBinding().arcProgressView.showText = !getBinding().arcProgressView.showText
+        binding.switchTextShowBtn.setOnClickListener {
+            binding.arcProgressView.showText = !binding.arcProgressView.showText
         }
 
-        getBinding().switchTextColorBtn.setOnClickListener {
-            getBinding().arcProgressView.textColor = colors[(textColorIndex++) % colors.size]
+        binding.switchTextColorBtn.setOnClickListener {
+            binding.arcProgressView.textColor = colors[(textColorIndex++) % colors.size]
         }
 
-        getBinding().switchStartpointColorBtn.setOnClickListener {
-            getBinding().arcProgressView.startpointCircleColor = colors[(startpointColorIndex++) % colors.size]
+        binding.switchStartpointColorBtn.setOnClickListener {
+            binding.arcProgressView.startpointCircleColor = colors[(startpointColorIndex++) % colors.size]
         }
 
-        getBinding().switchEndpointColorBtn.setOnClickListener {
-            getBinding().arcProgressView.endpointCircleColor = colors[(endpointColorIndex++) % colors.size]
+        binding.switchEndpointColorBtn.setOnClickListener {
+            binding.arcProgressView.endpointCircleColor = colors[(endpointColorIndex++) % colors.size]
         }
 
-        getBinding().progressTextSizeSlider.addOnChangeListener { _, value, _ ->
-            getBinding().arcProgressView.textSize = value.SP
+        binding.progressTextSizeSlider.addOnChangeListener { _, value, _ ->
+            binding.arcProgressView.textSize = value.SP
         }
 
-        getBinding().progressRadiusSlider.addOnChangeListener { _, value, _ ->
-            getBinding().arcProgressView.progressRadius = value.DP
+        binding.progressRadiusSlider.addOnChangeListener { _, value, _ ->
+            binding.arcProgressView.progressRadius = value.DP
         }
 
-        getBinding().progressWidthSlider.addOnChangeListener { _, value, _ ->
-            getBinding().arcProgressView.progressWidth = value.DP
+        binding.progressWidthSlider.addOnChangeListener { _, value, _ ->
+            binding.arcProgressView.progressWidth = value.DP
         }
 
-        getBinding().progressEndpointRadiusSlider.addOnChangeListener { _, value, _ ->
-            getBinding().arcProgressView.endpointCircleRadius = value.DP
+        binding.progressEndpointRadiusSlider.addOnChangeListener { _, value, _ ->
+            binding.arcProgressView.endpointCircleRadius = value.DP
         }
 
-        getBinding().progressSlider.valueTo = getBinding().arcProgressView.maximumProgress
-        getBinding().progressSlider.value = getBinding().arcProgressView.currentProgress
-        getBinding().progressSlider.addOnChangeListener { _, value, _ ->
-            getBinding().arcProgressView.currentProgress = value
+        binding.progressSlider.valueTo = binding.arcProgressView.maximumProgress
+        binding.progressSlider.value = binding.arcProgressView.currentProgress
+        binding.progressSlider.addOnChangeListener { _, value, _ ->
+            binding.arcProgressView.currentProgress = value
         }
 
     }
@@ -144,15 +152,15 @@ class ArcProgressViewActivity : BaseVbActivity<ActivityArcProgressViewBinding>()
             .setFile(file)
             .setListener(object : OnDownloadListener {
                 override fun onSuccess(state: DownloadState.Success) = runOnUiThread {
-                    getBinding().arcProgressView.refreshWithInvalidate {
-                        currentProgress = getBinding().arcProgressView.maximumProgress
+                    binding.arcProgressView.refreshWithInvalidate {
+                        currentProgress = binding.arcProgressView.maximumProgress
                     }
                 }
 
                 override fun onDownload(state: DownloadState.Download) = runOnUiThread {
-                    getBinding().arcProgressView.refreshWithInvalidate {
+                    binding.arcProgressView.refreshWithInvalidate {
                         currentProgress =
-                            state.rate * getBinding().arcProgressView.maximumProgress
+                            state.rate * binding.arcProgressView.maximumProgress
                     }
                 }
 
@@ -162,7 +170,7 @@ class ArcProgressViewActivity : BaseVbActivity<ActivityArcProgressViewBinding>()
 
                 override fun onTerminate() = runOnUiThread {
                     logger.i("任务被取消")
-                    getBinding().arcProgressView.refreshWithInvalidate {
+                    binding.arcProgressView.refreshWithInvalidate {
                         resetProgress()
                     }
                 }
