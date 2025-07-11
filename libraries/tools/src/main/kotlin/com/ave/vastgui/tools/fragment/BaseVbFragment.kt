@@ -42,7 +42,7 @@ import com.ave.vastgui.tools.viewbinding.reflectViewBinding
  *
  * @param VB [ViewBinding] of the fragment layout.
  */
-abstract class VastVbFragment<VB : ViewBinding> : VastFragment() {
+abstract class BaseVbFragment<VB : ViewBinding> : BaseFragment() {
 
     // ViewBinding
     private var mBinding: VB? = null
@@ -52,7 +52,7 @@ abstract class VastVbFragment<VB : ViewBinding> : VastFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mBinding = reflectViewBinding(container, VastVbFragment::class.java)
+        mBinding = reflectViewBinding(container, BaseVbFragment::class.java)
         return getBinding().root
     }
 

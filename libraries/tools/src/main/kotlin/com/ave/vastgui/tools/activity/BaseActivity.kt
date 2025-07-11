@@ -16,11 +16,12 @@
 
 package com.ave.vastgui.tools.activity
 
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import com.ave.vastgui.tools.activity.widget.screenConfig
 import com.google.android.material.snackbar.Snackbar
 import com.ave.vastgui.tools.lifecycle.createViewModel as viewModelInstance
 
@@ -37,29 +38,30 @@ import com.ave.vastgui.tools.lifecycle.createViewModel as viewModelInstance
  */
 sealed class BaseActivity : AppCompatActivity() {
 
-    /**
-     * True if you want to show the ActionBar, false otherwise,
-     *
-     * @see enableActionBar
-     * @since 1.5.3
-     */
-    private var _enableActionBar = true
-
     /** @since 1.5.3 */
-    protected val enableActionBar: Boolean
-        get() = _enableActionBar
+    protected var enableActionBar: Boolean = true
+        set(value) {
+            field = value
+            if (field) supportActionBar?.show() else supportActionBar?.hide()
+        }
 
     /**
-     * True if you want to set fullscreen, false otherwise.
+     * When [enableSystemBar] is `true` , the behavior of system bars is set to
+     * [WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE] And
+     * hides the status bar and navigation bar, when `false` sets, the behavior
+     * of system bars is set to [WindowInsetsControllerCompat.BEHAVIOR_DEFAULT]
+     * and displays the status bar and navigation bar.
      *
-     * @see enableFullScreen
      * @since 1.5.3
      */
-    private var _enableFullScreen = false
-
-    /** @since 1.5.3 */
-    protected val enableFullScreen: Boolean
-        get() = _enableFullScreen
+    protected var enableSystemBar: Boolean = false
+        set(value) {
+            field = value
+            with(WindowCompat.getInsetsController(window, window.decorView)) {
+                systemBarsBehavior = if (field) WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE else WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
+                if (field) hide(WindowInsetsCompat.Type.systemBars()) else show(WindowInsetsCompat.Type.systemBars())
+            }
+        }
 
     /** @since 1.5.3 */
     protected open val snackBar: Snackbar
@@ -84,45 +86,6 @@ sealed class BaseActivity : AppCompatActivity() {
      */
     protected open val viewModel: ViewModel
         get() = throw IllegalStateException("You should not call getViewModel().")
-
-    /**
-     * True if you want to show the ActionBar,false otherwise.
-     *
-     * ```kotlin
-     * override fun onCreate(savedInstanceState: Bundle?) {
-     *      super.onCreate(savedInstanceState)
-     *      enableActionBar(true)
-     *      ... //Other setting
-     * }
-     * ```
-     *
-     * @since 1.5.3
-     */
-    @Suppress("DEPRECATION")
-    protected fun enableActionBar(enable: Boolean) {
-        _enableActionBar = enable
-        screenConfig(_enableActionBar, _enableFullScreen)
-    }
-
-    /**
-     * True if you want to set fullscreen,false otherwise. If you set
-     * [enableFullScreen] to true,the ActionBar will not be shown.
-     *
-     * ```kotlin
-     * override fun onCreate(savedInstanceState: Bundle?) {
-     *      super.onCreate(savedInstanceState)
-     *      enableFullScreen(true)
-     *      ... //Other setting
-     * }
-     * ```
-     *
-     * @since 1.5.3
-     */
-    @Suppress("DEPRECATION")
-    protected fun enableFullScreen(enable: Boolean) {
-        _enableFullScreen = enable
-        screenConfig(_enableActionBar, _enableFullScreen)
-    }
 
     /**
      * Return a [ViewModel].

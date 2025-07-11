@@ -27,7 +27,7 @@ import com.ave.vastgui.tools.lifecycle.createViewModel as viewModelInstance
 // Date: 2022/9/14 17:11
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/app-entry-points/fragments/fragment/
 
-abstract class VastFragment : Fragment() {
+abstract class BaseFragment : Fragment() {
 
     protected fun getDefaultTag(): String {
         return defaultLogTag()
