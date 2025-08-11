@@ -37,8 +37,6 @@ class MultiSensor internal constructor(context: Context) {
     val rotation: Sensor? =
         sensor?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
 
-    companion object : SingletonHolder<MultiSensor, Context>(::MultiSensor) {
-
-    }
+    companion object : SingletonHolder<MultiSensor, Context>(::MultiSensor)
 
 }
