@@ -1,11 +1,13 @@
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
+import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.ave.vastgui.tools.sensor.MultiSensor
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.CountDownLatch
 
 /*
  * Copyright 2021-2025 VastGui
@@ -29,24 +31,26 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class SensorTests {
-
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @Test
     fun gravity() {
+        val countDownLatch = CountDownLatch(1)
         val multiSensor = MultiSensor.getInstance(context)
         val gravity = multiSensor.gravity
+        Log.d("Test", "重力传感器是否为空：${gravity == null}")
         if (gravity != null) {
             multiSensor.sensor?.registerListener(object : SensorEventListener {
                 override fun onSensorChanged(event: SensorEvent) {
-                    println("event=" + event.values.joinToString(","))
+                    Log.d("Test", "event=${event.values.joinToString(",")}")
+                    countDownLatch.countDown()
                 }
 
                 override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
-
+                    Log.d("Test", "sensor=${sensor} accuracy=${accuracy}")
                 }
             }, gravity, 1000)
         }
+        countDownLatch.await()
     }
-
 }
