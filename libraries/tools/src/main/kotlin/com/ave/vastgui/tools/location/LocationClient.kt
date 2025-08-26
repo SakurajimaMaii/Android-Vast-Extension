@@ -51,6 +51,18 @@ class LocationClient private constructor(context: Context) {
         ContextCompat.getSystemService(this.context, LocationManager::class.java)
 
     /**
+     * @see [LocationManager.getProviders]
+     * @since 1.5.3
+     */
+    fun getProviders(enabledOnly: Boolean): List<String> {
+        return try {
+            locationManager?.getProviders(enabledOnly) ?: emptyList()
+        } catch (_: Throwable) {
+            emptyList()
+        }
+    }
+
+    /**
      * Try to get the last known location from available location providers.
      *
      * This will never activate sensors to compute a new location, and will
