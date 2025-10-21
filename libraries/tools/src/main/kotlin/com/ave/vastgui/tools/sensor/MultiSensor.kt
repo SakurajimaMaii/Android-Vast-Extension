@@ -26,16 +26,24 @@ import com.ave.vastgui.core.extension.SingletonHolder
 // Email: guihy2019@gmail.com
 // Date: 2025/7/8
 
+/** @since 1.5.3 */
 class MultiSensor internal constructor(context: Context) {
 
-    val sensor = ContextCompat
-        .getSystemService(context, SensorManager::class.java)
+    val manager = ContextCompat.getSystemService(context, SensorManager::class.java)
 
     val gravity: Sensor? =
-        sensor?.getDefaultSensor(Sensor.TYPE_GRAVITY)
+        manager?.getDefaultSensor(Sensor.TYPE_GRAVITY)
+
+    val linearAcceleration: Sensor? =
+        manager?.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
 
     val rotation: Sensor? =
-        sensor?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+        manager?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+
+    fun requireManager(): SensorManager {
+        assert(manager != null) { "The sensorManager is null." }
+        return manager!!
+    }
 
     companion object : SingletonHolder<MultiSensor, Context>(::MultiSensor)
 

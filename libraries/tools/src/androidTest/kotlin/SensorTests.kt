@@ -1,13 +1,18 @@
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.ave.vastgui.tools.sensor.DefaultSensorEventListener
 import com.ave.vastgui.tools.sensor.MultiSensor
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+
 
 /*
  * Copyright 2021-2025 VastGui
@@ -34,23 +39,63 @@ class SensorTests {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @Test
+    fun list() {
+        val multiSensor = MultiSensor.getInstance(context)
+        Log.d(TAG, multiSensor.manager?.getSensorList(Sensor.TYPE_ALL)?.joinToString(",") ?: "")
+    }
+
+    @Test
     fun gravity() {
         val countDownLatch = CountDownLatch(1)
         val multiSensor = MultiSensor.getInstance(context)
         val gravity = multiSensor.gravity
-        Log.d("Test", "重力传感器是否为空：${gravity == null}")
+        Log.d(TAG, "重力传感器是否为空：${gravity == null}")
         if (gravity != null) {
-            multiSensor.sensor?.registerListener(object : SensorEventListener {
+            multiSensor.manager?.registerListener(object : SensorEventListener {
                 override fun onSensorChanged(event: SensorEvent) {
-                    Log.d("Test", "event=${event.values.joinToString(",")}")
+                    Log.d(TAG, "event=${event.values.joinToString(",")}")
                     countDownLatch.countDown()
                 }
 
                 override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
-                    Log.d("Test", "sensor=${sensor} accuracy=${accuracy}")
+                    Log.d(TAG, "sensor=${sensor} accuracy=${accuracy}")
                 }
             }, gravity, 1000)
+        } else {
+            countDownLatch.countDown()
         }
-        countDownLatch.await()
+        countDownLatch.await(5000, TimeUnit.MILLISECONDS)
+    }
+
+    @Test
+    fun linearAcceleration() {
+        val countDownLatch = CountDownLatch(1)
+        val multiSensor = MultiSensor.getInstance(context)
+        val linearAcceleration = multiSensor.linearAcceleration
+        Log.d(TAG, "线性加速度是否为空：${linearAcceleration == null}")
+        Log.d(TAG, "线性加速度：${linearAcceleration?.isWakeUpSensor}")
+        if (linearAcceleration != null && multiSensor.manager != null) {
+            val listener = object : DefaultSensorEventListener {
+                override fun onSensorChanged(event: SensorEvent) {
+                    Log.d(TAG, "event=${event.values.joinToString(",")}")
+                    countDownLatch.countDown()
+                }
+
+                override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
+                    Log.d(TAG, "sensor=${sensor} accuracy=${accuracy}")
+                }
+            }
+            multiSensor.manager.unregisterListener(listener)
+            val result = multiSensor.manager.registerListener(listener,
+                linearAcceleration, 1000, Handler(Looper.getMainLooper()))
+            Log.d(TAG, "线性加速度回调注册结果：$result")
+        } else {
+            countDownLatch.countDown()
+        }
+        countDownLatch.await(5000, TimeUnit.MILLISECONDS)
+    }
+
+    companion object {
+        private const val TAG = "SensorTests"
     }
 }
