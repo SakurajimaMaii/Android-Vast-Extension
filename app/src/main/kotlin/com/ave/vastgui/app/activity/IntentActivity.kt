@@ -20,7 +20,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
 import com.ave.vastgui.app.databinding.ActivityIntentBinding
-import com.ave.vastgui.tools.activity.VastVbActivity
+import com.ave.vastgui.tools.activity.BaseVbActivity
 import com.ave.vastgui.tools.utils.IntentUtils
 import com.ave.vastgui.tools.utils.IntentUtils.createAlarm
 import com.ave.vastgui.tools.utils.IntentUtils.dialPhoneNumber
@@ -32,66 +32,66 @@ import com.ave.vastgui.tools.utils.IntentUtils.searchWeb
 import com.ave.vastgui.tools.utils.IntentUtils.sendMmsMessage
 import com.ave.vastgui.tools.utils.permission.requestPermission
 
-class IntentActivity : VastVbActivity<ActivityIntentBinding>() {
+class IntentActivity : BaseVbActivity<ActivityIntentBinding>() {
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        getBinding().callBtn.setOnClickListener {
+        binding.callBtn.setOnClickListener {
             requestPermission(Manifest.permission.CALL_PHONE) {
                 granted = {
-                    dialPhoneNumber(getContext(), "12345678910")
+                    dialPhoneNumber(this@IntentActivity, "12345678910")
                 }
                 denied = {
-                    getSnackbar().setText("权限 $it 被拒绝，下次需要时会再次请求。")
+                    snackBar.setText("权限 $it 被拒绝，下次需要时会再次请求。")
                 }
             }
         }
 
-        getBinding().searchWeb.setOnClickListener {
+        binding.searchWeb.setOnClickListener {
             requestPermission(Manifest.permission.INTERNET) {
                 granted = {
-                    searchWeb(getContext(), "12345678910")
+                    searchWeb(this@IntentActivity, "12345678910")
                 }
                 denied = {
-                    getSnackbar().setText("权限 $it 被拒绝，下次需要时会再次请求。")
+                    snackBar.setText("权限 $it 被拒绝，下次需要时会再次请求。")
                 }
             }
         }
 
-        getBinding().openWebPage.setOnClickListener {
+        binding.openWebPage.setOnClickListener {
             openWebPage(this, "http://www.baidu.com")
         }
 
-        getBinding().sendMmsMessage.setOnClickListener {
+        binding.sendMmsMessage.setOnClickListener {
             sendMmsMessage(this, "123456", "1238489")
         }
 
-        getBinding().sendEmail.setOnClickListener {
+        binding.sendEmail.setOnClickListener {
             openEmail(this, arrayOf("12345678910@qq.com"))
         }
 
-        getBinding().createAlarm.setOnClickListener {
+        binding.createAlarm.setOnClickListener {
             requestPermission(Manifest.permission.SET_ALARM) {
                 granted = {
                     val alarmConfig = IntentUtils.AlarmConfig()
                         .setMsg("你好")
                         .setHour(12)
                         .setMinutes(30)
-                    createAlarm(getContext(), alarmConfig)
+                    createAlarm(this@IntentActivity, alarmConfig)
                 }
                 denied = {
-                    getSnackbar().setText("权限 $it 被拒绝，下次需要时会再次请求。")
+                    snackBar.setText("权限 $it 被拒绝，下次需要时会再次请求。")
                 }
             }
         }
 
-        getBinding().wifiSetting.setOnClickListener {
+        binding.wifiSetting.setOnClickListener {
             openWirelessSettings(this)
         }
 
-        getBinding().appDetailSetting.setOnClickListener {
+        binding.appDetailSetting.setOnClickListener {
             openApplicationDetailsSettings(this)
         }
     }

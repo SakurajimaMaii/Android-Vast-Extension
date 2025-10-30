@@ -23,7 +23,6 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.Telephony
 import android.view.View
-import android.widget.TextView
 import androidx.core.database.getStringOrNull
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,7 +34,7 @@ import com.ave.vastgui.app.adapter.entity.Message
 import com.ave.vastgui.app.adapter.entity.MessageDiffUtil
 import com.ave.vastgui.app.databinding.ActivityMessageBinding
 import com.ave.vastgui.app.fragment.MessageBottomSheet
-import com.ave.vastgui.tools.activity.VastVbActivity
+import com.ave.vastgui.tools.activity.BaseVbActivity
 import com.ave.vastgui.tools.utils.permission.requestMultiplePermissions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,10 +45,10 @@ import kotlinx.coroutines.withContext
 // Date: 2024/1/4
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/adapter/
 
-class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
+class MessageActivity : BaseVbActivity<ActivityMessageBinding>(),
     OnItemClickListener<Message> {
 
-    private val mMessageRv by lazy { getBinding().messageRv }
+    private val mMessageRv by lazy { binding.messageRv }
     private val mAdapter by lazy {
         BaseBindListAdapter(this, BR.message, MessageDiffUtil)
     }
@@ -91,28 +90,28 @@ class MessageActivity : VastVbActivity<ActivityMessageBinding>(),
                 }
             }
             denied = {
-                getSnackbar().setText("权限${it}已被拒绝").show()
+                snackBar.setText("权限${it}已被拒绝").show()
             }
             noMoreAsk = {
-                getSnackbar().setText("权限${it}已被拒绝，且不会再询问").show()
+                snackBar.setText("权限${it}已被拒绝，且不会再询问").show()
             }
         }
 
         mAdapter.setOnItemClickListener(this)
         mAdapter.setLoadingView(R.layout.page_loading)
-        getBinding().load.setOnClickListener {
+        binding.load.setOnClickListener {
             lifecycleScope.launch {
                 mAdapter.submitListWithLoading()
                 mAdapter.submitList(readSms(), R.layout.item_message)
             }
         }
-        getBinding().clear.setOnClickListener {
+        binding.clear.setOnClickListener {
             mAdapter.submitList(emptyList<Message>())
         }
-        getBinding().setEmpty.setOnClickListener {
+        binding.setEmpty.setOnClickListener {
             mAdapter.setEmptyView(R.layout.page_empty_box)
         }
-        getBinding().removeEmpty.setOnClickListener {
+        binding.removeEmpty.setOnClickListener {
             mAdapter.setEmptyView(null)
         }
     }

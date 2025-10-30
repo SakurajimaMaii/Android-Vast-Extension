@@ -32,7 +32,7 @@ import androidx.fragment.app.Fragment
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.FragmentCropBinding
 import com.ave.vastgui.app.log.logFactory
-import com.ave.vastgui.tools.activity.app.VastCropActivity
+import com.ave.vastgui.tools.activity.app.BaseCropActivity
 import com.ave.vastgui.tools.activity.result.contract.CropPhotoContract
 import com.ave.vastgui.tools.activity.result.contract.PickPhotoContract
 import com.ave.vastgui.tools.activity.result.contract.TakePhotoContract
@@ -68,7 +68,7 @@ class CropFragment : Fragment(R.layout.fragment_crop) {
     private val openWithCropActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             logcat.d { "调用自定义裁剪返回代码 ${result.resultCode}" }
-            if (result.resultCode == VastCropActivity.RESULT_OK) {
+            if (result.resultCode == BaseCropActivity.RESULT_OK) {
                 binding.image.setImageURI(result.data?.data)
             }
         }
@@ -144,16 +144,16 @@ class CropFragment : Fragment(R.layout.fragment_crop) {
         }
     }
 
-    /** 使用 [VastCropActivity] 来调用裁剪。 */
+    /** 使用 [BaseCropActivity] 来调用裁剪。 */
     private fun cropImageWithActivity(uri: Uri) {
-        val intent = Intent(requireContext(), VastCropActivity::class.java).apply {
+        val intent = Intent(requireContext(), BaseCropActivity::class.java).apply {
             data = uri
-            putExtra(VastCropActivity.AUTHORITY, "com.ave.vastgui.app")
-            putExtra(VastCropActivity.FRAME_TYPE, VastCropActivity.FRAME_TYPE_RECTANGLE)
-            putExtra(VastCropActivity.PREVIEW_WIDTH, 300f.DP)
-            putExtra(VastCropActivity.PREVIEW_HEIGHT, 300f.DP)
-            putExtra(VastCropActivity.OUTPUT_X, 400f)
-            putExtra(VastCropActivity.OUTPUT_Y, 400f)
+            putExtra(BaseCropActivity.AUTHORITY, "com.ave.vastgui.app")
+            putExtra(BaseCropActivity.FRAME_TYPE, BaseCropActivity.FRAME_TYPE_RECTANGLE)
+            putExtra(BaseCropActivity.PREVIEW_WIDTH, 300f.DP)
+            putExtra(BaseCropActivity.PREVIEW_HEIGHT, 300f.DP)
+            putExtra(BaseCropActivity.OUTPUT_X, 400f)
+            putExtra(BaseCropActivity.OUTPUT_Y, 400f)
         }
         openWithCropActivity.launch(intent)
     }

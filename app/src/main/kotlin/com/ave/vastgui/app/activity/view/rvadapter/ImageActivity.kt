@@ -36,7 +36,7 @@ import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.app.net.OpenApi
 import com.ave.vastgui.app.net.OpenApiService
 import com.ave.vastgui.app.viewmodel.NetVM
-import com.ave.vastgui.tools.activity.VastVbVmActivity
+import com.ave.vastgui.tools.activity.BaseVbVmActivity
 import com.ave.vastgui.tools.network.request.create
 import com.ave.vastgui.tools.view.dialog.MaterialAlertDialogBuilder
 import com.ave.vastgui.tools.view.toast.SimpleToast.showShortMsg
@@ -65,7 +65,7 @@ class ImagePagingAdapter(context: Context) : BasePagingAdapter<Images.Image>(
     mutableListOf(DefaultImageHolder.Companion, ComicImageHolder.Companion), ImageDiffUtil
 )
 
-class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
+class ImageActivity : BaseVbVmActivity<ActivityImageBinding, NetVM>() {
 
     private val logcat = logFactory.getLogCat(this::class.java)
 
@@ -86,7 +86,7 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
         MaterialAlertDialogBuilder(view.context).setMessage("这是一个点击事件").show()
     }
     private val showSnackBar = OnItemClickListener<Images.Image> { _, _, _ ->
-        getSnackbar().setText("列表项被点击").show()
+        snackBar.setText("列表项被点击").show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,17 +105,17 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
     }
 
     private fun testBaseBindAdapter() {
-        getBinding().images.layoutManager = LinearLayoutManager(this)
-        getBinding().images.adapter = mImageBindAdapter.apply {
+        binding.images.layoutManager = LinearLayoutManager(this)
+        binding.images.adapter = mImageBindAdapter.apply {
             setEmptyView(R.layout.page_empty_default)
         }
-        getBinding().clear.setOnClickListener {
+        binding.clear.setOnClickListener {
             mImageBindAdapter.clear()
         }
-        getBinding().removeFirst.setOnClickListener {
+        binding.removeFirst.setOnClickListener {
             mImageBindAdapter.removeAt(0)
         }
-        getBinding().load.setOnClickListener {
+        binding.load.setOnClickListener {
             lifecycleScope.launch {
                 val images = OpenApi()
                     .create(OpenApiService::class.java).getImages(0, 10)
@@ -124,7 +124,7 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
                 mImageBindAdapter.add(images, R.layout.item_image_default)
             }
         }
-        getBinding().insert.setOnClickListener {
+        binding.insert.setOnClickListener {
             val image = Images.Image(
                 8008,
                 "王者荣耀司马懿 暗渊魔法",
@@ -133,23 +133,23 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
             )
             mImageBindAdapter.add(image, R.layout.item_image_default, 3)
         }
-        getBinding().addEmpty1.setOnClickListener {
+        binding.addEmpty1.setOnClickListener {
             mImageBindAdapter.setEmptyView(R.layout.page_empty_default)
         }
-        getBinding().addEmpty2.setOnClickListener {
+        binding.addEmpty2.setOnClickListener {
             mImageBindAdapter.setEmptyView(R.layout.page_empty_box)
         }
-        getBinding().removeEmpty.setOnClickListener {
+        binding.removeEmpty.setOnClickListener {
             mImageBindAdapter.setEmptyView(null)
         }
     }
 
     private fun testBaseListAdapter() {
-        getBinding().images.layoutManager = LinearLayoutManager(this)
-        getBinding().images.adapter = mImageListAdapter.apply {
+        binding.images.layoutManager = LinearLayoutManager(this)
+        binding.images.adapter = mImageListAdapter.apply {
             setLoadingView(R.layout.page_loading)
         }
-        getBinding().load.setOnClickListener {
+        binding.load.setOnClickListener {
             lifecycleScope.launch {
                 mImageListAdapter.submitListWithLoading()
                 val list = OpenApi().create(OpenApiService::class.java)
@@ -158,10 +158,10 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
                 mImageListAdapter.submitList(list, R.layout.item_image_default)
             }
         }
-        getBinding().clear.setOnClickListener {
+        binding.clear.setOnClickListener {
             mImageListAdapter.submitList(emptyList<Images.Image>())
         }
-        getBinding().addEmpty1.setOnClickListener {
+        binding.addEmpty1.setOnClickListener {
             mImageListAdapter.setEmptyView(R.layout.page_empty_default) {
                 setOnItemClickListener { _, _, _ ->
                     showShortMsg("这是第一个空白界面")
@@ -171,7 +171,7 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
                 }
             }
         }
-        getBinding().addEmpty2.setOnClickListener {
+        binding.addEmpty2.setOnClickListener {
             mImageListAdapter.setEmptyView(R.layout.page_empty_box) {
                 setOnItemClickListener { _, _, _ ->
                     showShortMsg("这是第二个空白界面")
@@ -181,10 +181,10 @@ class ImageActivity : VastVbVmActivity<ActivityImageBinding, NetVM>() {
     }
 
     private fun testBasePagingAdapter() {
-        getBinding().images.layoutManager = LinearLayoutManager(this)
-        getBinding().images.adapter = mImagePagingAdapter
+        binding.images.layoutManager = LinearLayoutManager(this)
+        binding.images.adapter = mImagePagingAdapter
         lifecycleScope.launch {
-            getViewModel().imageFlow.collect {
+            viewModel.imageFlow.collect {
                 mImagePagingAdapter.submitData(it)
             }
         }

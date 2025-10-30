@@ -19,6 +19,7 @@ package com.ave.vastgui.tools.activity
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import com.ave.vastgui.core.extension.NotNUllVar
+import com.ave.vastgui.core.extension.defaultLogTag
 import com.ave.vastgui.tools.lifecycle.reflectViewModel
 import com.google.android.material.snackbar.Snackbar
 
@@ -28,10 +29,10 @@ import com.google.android.material.snackbar.Snackbar
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/app-entry-points/activities/activity/
 
 /**
- * [VastVmActivity].
+ * [BaseVmActivity].
  *
  * ```kotlin
- * class MainActivity : VastVmActivity<MainViewModel>() {
+ * class MainActivity : BaseVmActivity<MainViewModel>() {
  *     override fun initView(savedInstanceState: Bundle?) {
  *          super.onCreate(savedInstanceState)
  *          // Something to do
@@ -41,20 +42,26 @@ import com.google.android.material.snackbar.Snackbar
  *
  * @param VM [ViewModel] of the activity.
  */
-abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
+abstract class BaseVmActivity<VM : ViewModel> : BaseActivity() {
 
-    // Snackbar
-    private var mSnackbar by NotNUllVar<Snackbar>()
+    /** @since 1.5.3 */
+    private var _snackBar by NotNUllVar<Snackbar>()
 
-    // The layout resource id for this activity.
+    override val snackBar: Snackbar
+        get() = _snackBar
+
+    /** @since 1.5.3 */
     abstract val layoutId: Int
 
-    // ViewModel
-    private val mViewModel: VM by lazy {
-        reflectViewModel(this.javaClass, this, VastVmActivity::class.java) {
+    /** @since 1.5.3 */
+    private val _viewModel: VM by lazy {
+        reflectViewModel(this.javaClass, this, BaseVmActivity::class.java) {
             return@reflectViewModel createViewModel(it)
         }
     }
+
+    override val viewModel: VM
+        get() = _viewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,25 +70,12 @@ abstract class VastVmActivity<VM : ViewModel> : VastActivity() {
         } else {
             throw RuntimeException("Please set correct layout id for the layoutId .")
         }
-        mSnackbar = Snackbar.make(
+        _snackBar = Snackbar.make(
             this,
             findViewById(android.R.id.content),
-            getDefaultTag(),
+            defaultLogTag(),
             Snackbar.LENGTH_SHORT
         )
-    }
-
-    override fun getViewModel(): VM {
-        return mViewModel
-    }
-
-    /**
-     * Get default [Snackbar] for activity.
-     *
-     * @since 0.5.7
-     */
-    override fun getSnackbar(): Snackbar {
-        return mSnackbar
     }
 
 }

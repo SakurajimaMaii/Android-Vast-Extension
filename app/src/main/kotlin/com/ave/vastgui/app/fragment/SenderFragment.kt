@@ -21,7 +21,7 @@ import android.view.View
 import com.ave.vastgui.app.R
 import com.ave.vastgui.app.databinding.FragmentSenderBinding
 import com.ave.vastgui.app.viewmodel.SharedVM
-import com.ave.vastgui.tools.fragment.VastVmFragment
+import com.ave.vastgui.tools.fragment.BaseVmFragment
 import com.ave.vastgui.tools.viewbinding.viewBinding
 
 // Author: SakurajimaMai
@@ -29,7 +29,7 @@ import com.ave.vastgui.tools.viewbinding.viewBinding
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/app-entry-points/fragments/fragment/
 
 class SenderFragment(override val layoutId: Int = R.layout.fragment_sender) :
-    VastVmFragment<SharedVM>() {
+    BaseVmFragment<SharedVM>() {
 
     private val mBinding by viewBinding(FragmentSenderBinding::bind)
 

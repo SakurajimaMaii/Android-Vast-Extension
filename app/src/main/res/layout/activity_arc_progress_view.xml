@@ -21,6 +21,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.ave.vastgui.app.activity.view.ArcProgressViewActivity">
+
     <com.ave.vastgui.tools.view.progress.ArcProgressView
         android:id="@+id/arcProgressView"
         android:layout_width="wrap_content"

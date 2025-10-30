@@ -27,7 +27,7 @@ import com.ave.vastgui.app.databinding.FragmentVideosBinding
 import com.ave.vastgui.app.log.logFactory
 import com.ave.vastgui.app.viewmodel.SharedVM
 import com.ave.vastgui.tools.bean.UserBean
-import com.ave.vastgui.tools.fragment.VastVbVmFragment
+import com.ave.vastgui.tools.fragment.BaseVbVmFragment
 import com.ave.vastgui.tools.view.toast.SimpleToast
 import com.log.vastgui.android.lifecycle.LogLifecycle
 import com.log.vastgui.android.lifecycle.LogLifecycleEvent
@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/VastAdapter/
 
 @LogLifecycle("MyFragment", [LogLifecycleEvent.ON_CREATE, LogLifecycleEvent.ON_RESUME])
-class VideosFragment : VastVbVmFragment<FragmentVideosBinding, SharedVM>() {
+class VideosFragment : BaseVbVmFragment<FragmentVideosBinding, SharedVM>() {
 
     private val mAdapter by lazy {
         BaseBindPagingAdapter(requireContext(), BR.video, VideoDiffUtil)

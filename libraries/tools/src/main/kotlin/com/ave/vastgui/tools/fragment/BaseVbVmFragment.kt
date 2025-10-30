@@ -21,59 +21,70 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
+import androidx.viewbinding.ViewBinding
 import com.ave.vastgui.tools.lifecycle.reflectViewModel
+import com.ave.vastgui.tools.viewbinding.reflectViewBinding
 
 // Author: Vast Gui
 // Email: guihy2019@gmail.com
-// Date: 2022/3/10 16:18
+// Date: 2022/3/10 16:11
 // Documentation: https://sakurajimamaii.github.io/AVE-DOC/documents/tools/app-entry-points/fragments/fragment/
 
 /**
- * VastVmActivity.
+ * VastVbVmFragment.
  *
  * ```kotlin
- * // Because don't using the ViewBinding,so just set the layoutId to layout id.
- * class SampleVmFragment(override val layoutId: Int = R.layout.fragment_sample_vm) : VastVmFragment<SampleSharedVM>()
- * {
- *     override fun initView(view: View, savedInstanceState: Bundle?) {
+ * // Use in kotlin
+ * class SampleVbVmFragment : VastVbVmFragment<FragmentSampleVbVmBinding, SampleSharedVM>() {
+ *      override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
  *          // Something to do
- *     }
+ *      }
  * }
  * ```
  *
+ * @param VB [ViewBinding] of the fragment layout.
  * @param VM [ViewModel] of the fragment.
  */
-abstract class VastVmFragment<VM : ViewModel> : VastFragment() {
+abstract class BaseVbVmFragment<VB : ViewBinding, VM : ViewModel> : BaseFragment() {
 
-    /**
-     * When you are not using view binding, you should set [layoutId] to the
-     * corresponding view resource id of this Fragment.
-     */
-    protected abstract val layoutId: Int
+    // ViewBinding
+    private var mBinding: VB? = null
 
     // ViewModel
     private val mViewModel: VM by lazy {
         reflectViewModel(
             this.javaClass,
             if (!setVmBySelf()) requireActivity() else this,
-            VastVmFragment::class.java
+            BaseVbVmFragment::class.java
         ) {
             return@reflectViewModel createViewModel(it)
         }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(layoutId, container, false)
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        mBinding = reflectViewBinding(container, BaseVbVmFragment::class.java)
+        return getBinding().root
+    }
+
+    override fun onDestroyView() {
+        clearBinding()
+        super.onDestroyView()
+    }
+
+    override fun setVmBySelf(): Boolean = false
+
+    override fun getBinding(): VB {
+        return mBinding ?: throw RuntimeException("ViewBinding is null.")
+    }
+
+    override fun clearBinding() {
+        mBinding = null
     }
 
     override fun getViewModel(): VM {
         return mViewModel
     }
-
-    override fun setVmBySelf(): Boolean = false
 
 }
